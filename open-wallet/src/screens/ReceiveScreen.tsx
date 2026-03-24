@@ -12,16 +12,19 @@ import {
   StyleSheet,
   SafeAreaView,
   Alert,
+  Share,
 } from 'react-native';
+import QRCode from 'react-native-qrcode-svg';
 import * as Clipboard from 'expo-clipboard';
 import { useWalletStore } from '../store/walletStore';
 import { ChainId } from '../core/abstractions/types';
 
-// Placeholder addresses (will come from HD wallet derivation)
+// Placeholder addresses — will come from HD wallet derivation
 const PLACEHOLDER_ADDRESSES: Record<string, string> = {
-  bitcoin: 'bc1q...',
-  ethereum: '0x...',
-  solana: '...',
+  bitcoin: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
+  ethereum: '0x71C7656EC7ab88b098defB751B7401B5f6d8976F',
+  solana: '7EcDhSYGxXyscszYEp35KHN8vvw3svAuLKTzXwCFLtV',
+  cosmos: 'cosmos1xy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
 };
 
 export function ReceiveScreen() {
@@ -33,6 +36,13 @@ export function ReceiveScreen() {
   const copyAddress = async () => {
     await Clipboard.setStringAsync(address);
     Alert.alert('Copied', 'Address copied to clipboard');
+  };
+
+  const shareAddress = async () => {
+    await Share.share({
+      message: address,
+      title: `My ${selectedChain} address`,
+    });
   };
 
   return (
@@ -62,21 +72,28 @@ export function ReceiveScreen() {
         ))}
       </View>
 
-      {/* QR Code placeholder */}
+      {/* QR Code */}
       <View style={styles.qrContainer}>
-        <View style={styles.qrPlaceholder}>
-          <Text style={styles.qrText}>QR</Text>
+        <View style={styles.qrWrapper}>
+          <QRCode
+            value={address}
+            size={200}
+            backgroundColor="#ffffff"
+            color="#0a0a0f"
+          />
         </View>
-        <Text style={styles.qrHint}>Scan to send {selectedChain.toUpperCase()}</Text>
+        <Text style={styles.qrHint}>
+          Scan to send {selectedChain.charAt(0).toUpperCase() + selectedChain.slice(1)}
+        </Text>
       </View>
 
       {/* Address */}
-      <TouchableOpacity style={styles.addressCard} onPress={copyAddress}>
+      <TouchableOpacity style={styles.addressCard} onPress={copyAddress} onLongPress={shareAddress}>
         <Text style={styles.addressLabel}>Your {selectedChain} address</Text>
-        <Text style={styles.address} numberOfLines={1} ellipsizeMode="middle">
+        <Text style={styles.address} numberOfLines={2} ellipsizeMode="middle">
           {address}
         </Text>
-        <Text style={styles.copyHint}>Tap to copy</Text>
+        <Text style={styles.copyHint}>Tap to copy • Long press to share</Text>
       </TouchableOpacity>
 
       {mode === 'pro' && (
@@ -106,6 +123,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 8,
     marginBottom: 24,
+    flexWrap: 'wrap',
   },
   chainButton: {
     backgroundColor: '#16161f',
@@ -128,18 +146,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 24,
   },
-  qrPlaceholder: {
-    width: 200,
-    height: 200,
+  qrWrapper: {
+    padding: 16,
     backgroundColor: '#ffffff',
-    borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  qrText: {
-    color: '#000',
-    fontSize: 24,
-    fontWeight: '700',
+    borderRadius: 20,
   },
   qrHint: {
     color: '#606070',
@@ -161,9 +171,11 @@ const styles = StyleSheet.create({
   },
   address: {
     color: '#f0f0f5',
-    fontSize: 14,
+    fontSize: 13,
     fontFamily: 'monospace',
     marginBottom: 8,
+    textAlign: 'center',
+    lineHeight: 20,
   },
   copyHint: {
     color: '#22c55e',

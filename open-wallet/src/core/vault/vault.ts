@@ -5,48 +5,52 @@
  *   User Password
  *        │
  *        ▼
- *     Argon2id ──► Master Key (256-bit)
+ *     Argon2id (memory-hard, GPU/ASIC resistant) ──► Master Key (256-bit)
  *        │
  *        ▼
  *     AES-256-GCM encryption
  *        │
  *        ▼
- *     Encrypted Vault (stored on device)
+ *     Encrypted Vault (stored via expo-secure-store on device)
  *        │
  *        Contains: seed phrase, derived keys, metadata
  *
  * PQC Enhancement (when Rust/native module is available):
  *   Master Key is additionally wrapped with ML-KEM-1024
  *   so the vault is secure even if AES is broken by quantum computers.
- *   For now, we use AES-256-GCM which is considered quantum-resistant
- *   for symmetric encryption (Grover's algorithm only halves the key
- *   strength, so 256-bit → 128-bit equivalent, still secure).
+ *   AES-256-GCM is considered quantum-resistant for symmetric encryption
+ *   (Grover's algorithm only halves key strength: 256→128 bit, still secure).
  *
- * The PQC key encapsulation layer will be added when we integrate
- * the Rust native module via UniFFI. The vault interface is designed
- * so this swap is seamless.
+ * Biometric unlock: after first password unlock, master key can be cached
+ * in expo-secure-store behind biometric protection (Face ID / fingerprint).
  */
 
 import * as Crypto from 'expo-crypto';
+import * as SecureStore from 'expo-secure-store';
+import * as LocalAuthentication from 'expo-local-authentication';
+import argon2 from 'argon2-browser';
 
-// Vault data structure stored on device
-interface VaultData {
+// ─── Types ────────────────────────────────────────────────
+
+export interface VaultData {
   version: number;
   salt: string; // hex
   iv: string; // hex
   ciphertext: string; // hex
   authTag: string; // hex
+  kdf: 'argon2id';
   argon2Params: {
-    memory: number;
+    memory: number; // KiB
     iterations: number;
     parallelism: number;
+    hashLen: number;
   };
-  pqcWrapped: boolean; // true when ML-KEM layer is active
+  pqcWrapped: boolean;
   createdAt: number;
   lastUnlockedAt: number;
 }
 
-interface VaultContents {
+export interface VaultContents {
   mnemonic: string;
   accounts: Array<{
     id: string;
@@ -77,25 +81,46 @@ export interface IVaultCrypto {
 
 /**
  * Key derivation interface — swappable.
- * Today: PBKDF2 via SubtleCrypto (Argon2id when native module available)
- * Future: Argon2id via Rust native module
+ * Today: Argon2id via argon2-browser (WASM)
+ * Future: Argon2id via Rust native module (faster)
  */
 export interface IKeyDerivation {
   deriveKey(password: string, salt: Uint8Array): Promise<Uint8Array>;
 }
 
-// ─── Default implementations (upgrade path built in) ───
+// ─── Argon2id Key Derivation (Best Available) ───
 
-class SubtleCryptoVault implements IVaultCrypto {
+class Argon2idKeyDerivation implements IKeyDerivation {
+  // OWASP recommended Argon2id parameters for password hashing
+  private memory = 65536; // 64 MiB
+  private iterations = 3;
+  private parallelism = 4;
+  private hashLen = 32; // 256-bit key
+
+  async deriveKey(password: string, salt: Uint8Array): Promise<Uint8Array> {
+    const result = await argon2.hash({
+      pass: password,
+      salt,
+      type: argon2.ArgonType.Argon2id,
+      mem: this.memory,
+      time: this.iterations,
+      parallelism: this.parallelism,
+      hashLen: this.hashLen,
+    });
+
+    return result.hash;
+  }
+}
+
+// ─── AES-256-GCM Encryption ───
+
+class Aes256GcmCrypto implements IVaultCrypto {
   async encrypt(plaintext: Uint8Array, key: Uint8Array): Promise<{
     ciphertext: Uint8Array;
     iv: Uint8Array;
     authTag: Uint8Array;
   }> {
-    const iv = new Uint8Array(12);
-    // Use expo-crypto for random bytes
-    const randomBytes = await Crypto.getRandomBytesAsync(12);
-    iv.set(randomBytes);
+    const iv = new Uint8Array(await Crypto.getRandomBytesAsync(12));
 
     const cryptoKey = await globalThis.crypto.subtle.importKey(
       'raw',
@@ -111,7 +136,7 @@ class SubtleCryptoVault implements IVaultCrypto {
       plaintext.buffer as ArrayBuffer
     );
 
-    // AES-GCM appends auth tag to ciphertext
+    // AES-GCM appends 16-byte auth tag to ciphertext
     const encryptedArray = new Uint8Array(encrypted);
     const ciphertext = encryptedArray.slice(0, encryptedArray.length - 16);
     const authTag = encryptedArray.slice(encryptedArray.length - 16);
@@ -133,7 +158,6 @@ class SubtleCryptoVault implements IVaultCrypto {
       ['decrypt']
     );
 
-    // Reconstruct ciphertext + auth tag
     const combined = new Uint8Array(ciphertext.length + authTag.length);
     combined.set(ciphertext, 0);
     combined.set(authTag, ciphertext.length);
@@ -148,38 +172,10 @@ class SubtleCryptoVault implements IVaultCrypto {
   }
 }
 
-class Pbkdf2KeyDerivation implements IKeyDerivation {
-  // PBKDF2 as fallback until Argon2id native module is available
-  // Parameters are aggressive to compensate for PBKDF2's weaker memory-hardness
-  private iterations = 600_000; // OWASP recommendation for PBKDF2-SHA256
-
-  async deriveKey(password: string, salt: Uint8Array): Promise<Uint8Array> {
-    const encoder = new TextEncoder();
-    const encoded = encoder.encode(password);
-    const keyMaterial = await globalThis.crypto.subtle.importKey(
-      'raw',
-      encoded.buffer as ArrayBuffer,
-      'PBKDF2',
-      false,
-      ['deriveBits']
-    );
-
-    const derivedBits = await globalThis.crypto.subtle.deriveBits(
-      {
-        name: 'PBKDF2',
-        salt: salt.buffer as ArrayBuffer,
-        iterations: this.iterations,
-        hash: 'SHA-256',
-      },
-      keyMaterial,
-      256 // 256-bit key
-    );
-
-    return new Uint8Array(derivedBits);
-  }
-}
-
 // ─── Vault ─────────────────────────────────────────────────
+
+const SECURE_STORE_VAULT_KEY = 'open_wallet_vault';
+const SECURE_STORE_BIOMETRIC_KEY = 'open_wallet_biometric_key';
 
 export class Vault {
   private crypto: IVaultCrypto;
@@ -187,8 +183,8 @@ export class Vault {
   private masterKey: Uint8Array | null = null;
 
   constructor(crypto?: IVaultCrypto, kdf?: IKeyDerivation) {
-    this.crypto = crypto ?? new SubtleCryptoVault();
-    this.kdf = kdf ?? new Pbkdf2KeyDerivation();
+    this.crypto = crypto ?? new Aes256GcmCrypto();
+    this.kdf = kdf ?? new Argon2idKeyDerivation();
   }
 
   /**
@@ -205,51 +201,121 @@ export class Vault {
 
   /**
    * Create a new vault with the given password and contents.
-   * Returns the encrypted vault data to be stored on device.
+   * Stores encrypted vault in expo-secure-store (OS keychain).
    */
   async create(password: string, contents: VaultContents): Promise<VaultData> {
-    const salt = await Crypto.getRandomBytesAsync(32);
-    const masterKey = await this.kdf.deriveKey(password, new Uint8Array(salt));
+    const salt = new Uint8Array(await Crypto.getRandomBytesAsync(32));
+    const masterKey = await this.kdf.deriveKey(password, salt);
 
     const plaintext = new TextEncoder().encode(JSON.stringify(contents));
     const { ciphertext, iv, authTag } = await this.crypto.encrypt(plaintext, masterKey);
 
     this.masterKey = masterKey;
 
-    return {
-      version: 1,
-      salt: this.toHex(new Uint8Array(salt)),
-      iv: this.toHex(iv),
-      ciphertext: this.toHex(ciphertext),
-      authTag: this.toHex(authTag),
+    const vaultData: VaultData = {
+      version: 2,
+      salt: toHex(salt),
+      iv: toHex(iv),
+      ciphertext: toHex(ciphertext),
+      authTag: toHex(authTag),
+      kdf: 'argon2id',
       argon2Params: {
         memory: 65536,
         iterations: 3,
         parallelism: 4,
+        hashLen: 32,
       },
-      pqcWrapped: false, // will be true after Rust PQC integration
+      pqcWrapped: false,
       createdAt: Date.now(),
       lastUnlockedAt: Date.now(),
     };
+
+    // Persist to OS keychain via expo-secure-store
+    await SecureStore.setItemAsync(
+      SECURE_STORE_VAULT_KEY,
+      JSON.stringify(vaultData)
+    );
+
+    return vaultData;
   }
 
   /**
    * Unlock an existing vault with the password.
-   * Returns the decrypted contents.
    */
-  async unlock(password: string, vaultData: VaultData): Promise<VaultContents> {
-    const salt = this.fromHex(vaultData.salt);
+  async unlock(password: string, vaultData?: VaultData): Promise<VaultContents> {
+    // Load from secure store if not provided
+    if (!vaultData) {
+      const stored = await SecureStore.getItemAsync(SECURE_STORE_VAULT_KEY);
+      if (!stored) throw new Error('No vault found on device');
+      vaultData = JSON.parse(stored);
+    }
+
+    const salt = fromHex(vaultData!.salt);
     const masterKey = await this.kdf.deriveKey(password, salt);
 
-    const ciphertext = this.fromHex(vaultData.ciphertext);
-    const iv = this.fromHex(vaultData.iv);
-    const authTag = this.fromHex(vaultData.authTag);
+    const ciphertext = fromHex(vaultData!.ciphertext);
+    const iv = fromHex(vaultData!.iv);
+    const authTag = fromHex(vaultData!.authTag);
 
     const plaintext = await this.crypto.decrypt(ciphertext, masterKey, iv, authTag);
     this.masterKey = masterKey;
 
-    const contents: VaultContents = JSON.parse(new TextDecoder().decode(plaintext));
-    return contents;
+    return JSON.parse(new TextDecoder().decode(plaintext));
+  }
+
+  /**
+   * Enable biometric unlock — stores master key behind Face ID / fingerprint.
+   * Only call after successful password unlock.
+   */
+  async enableBiometricUnlock(): Promise<boolean> {
+    if (!this.masterKey) throw new Error('Vault must be unlocked first');
+
+    const compatible = await LocalAuthentication.hasHardwareAsync();
+    if (!compatible) return false;
+
+    const enrolled = await LocalAuthentication.isEnrolledAsync();
+    if (!enrolled) return false;
+
+    // Store master key in secure store with biometric protection
+    await SecureStore.setItemAsync(
+      SECURE_STORE_BIOMETRIC_KEY,
+      toHex(this.masterKey),
+      { requireAuthentication: true }
+    );
+
+    return true;
+  }
+
+  /**
+   * Unlock vault using biometrics (Face ID / fingerprint).
+   */
+  async unlockWithBiometrics(): Promise<VaultContents> {
+    const auth = await LocalAuthentication.authenticateAsync({
+      promptMessage: 'Unlock Open Wallet',
+      fallbackLabel: 'Use password',
+    });
+
+    if (!auth.success) throw new Error('Biometric authentication failed');
+
+    const masterKeyHex = await SecureStore.getItemAsync(SECURE_STORE_BIOMETRIC_KEY, {
+      requireAuthentication: true,
+    });
+
+    if (!masterKeyHex) throw new Error('No biometric key stored. Unlock with password first.');
+
+    this.masterKey = fromHex(masterKeyHex);
+
+    // Load vault data and decrypt
+    const stored = await SecureStore.getItemAsync(SECURE_STORE_VAULT_KEY);
+    if (!stored) throw new Error('No vault found on device');
+
+    const vaultData: VaultData = JSON.parse(stored);
+    const ciphertext = fromHex(vaultData.ciphertext);
+    const iv = fromHex(vaultData.iv);
+    const authTag = fromHex(vaultData.authTag);
+
+    const plaintext = await this.crypto.decrypt(ciphertext, this.masterKey, iv, authTag);
+    return JSON.parse(new TextDecoder().decode(plaintext));
   }
 
   /**
@@ -262,11 +328,26 @@ export class Vault {
     }
   }
 
-  /**
-   * Check if the vault is currently unlocked.
-   */
   isUnlocked(): boolean {
     return this.masterKey !== null;
+  }
+
+  /**
+   * Check if a vault exists on this device.
+   */
+  async exists(): Promise<boolean> {
+    const stored = await SecureStore.getItemAsync(SECURE_STORE_VAULT_KEY);
+    return stored !== null;
+  }
+
+  /**
+   * Check if biometric unlock is available and configured.
+   */
+  async isBiometricAvailable(): Promise<boolean> {
+    const compatible = await LocalAuthentication.hasHardwareAsync();
+    const enrolled = await LocalAuthentication.isEnrolledAsync();
+    const keyStored = await SecureStore.getItemAsync(SECURE_STORE_BIOMETRIC_KEY);
+    return compatible && enrolled && keyStored !== null;
   }
 
   /**
@@ -275,26 +356,26 @@ export class Vault {
   async changePassword(
     oldPassword: string,
     newPassword: string,
-    vaultData: VaultData
+    vaultData?: VaultData
   ): Promise<VaultData> {
     const contents = await this.unlock(oldPassword, vaultData);
     this.lock();
     return this.create(newPassword, contents);
   }
+}
 
-  // ─── Helpers ───
+// ─── Hex Helpers ───
 
-  private toHex(bytes: Uint8Array): string {
-    return Array.from(bytes)
-      .map((b) => b.toString(16).padStart(2, '0'))
-      .join('');
+function toHex(bytes: Uint8Array): string {
+  return Array.from(bytes)
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+function fromHex(hex: string): Uint8Array {
+  const bytes = new Uint8Array(hex.length / 2);
+  for (let i = 0; i < bytes.length; i++) {
+    bytes[i] = parseInt(hex.substr(i * 2, 2), 16);
   }
-
-  private fromHex(hex: string): Uint8Array {
-    const bytes = new Uint8Array(hex.length / 2);
-    for (let i = 0; i < bytes.length; i++) {
-      bytes[i] = parseInt(hex.substr(i * 2, 2), 16);
-    }
-    return bytes;
-  }
+  return bytes;
 }

@@ -1,21 +1,30 @@
 /**
- * Ethereum Chain Provider — Server Implementation.
+ * Ethereum Chain Provider — Server Implementation (viem).
  *
- * Uses ethers.js with JSON-RPC provider (Infura/Alchemy/public nodes).
+ * Uses viem (modern, type-safe, tree-shakeable) instead of ethers.js.
+ * viem is ~35x faster for ABI encoding and 30% lighter.
+ *
  * Will be replaced by MobileEthereumProvider when phones can run
- * light clients with sufficient performance.
+ * Helios light client with sufficient performance.
  */
 
-import { ethers } from 'ethers';
+import {
+  createPublicClient,
+  http,
+  formatEther,
+  parseEther,
+  isAddress,
+  type PublicClient,
+  type Chain,
+} from 'viem';
+import { mainnet } from 'viem/chains';
 import {
   IChainProvider,
-  IDexProvider,
 } from '../../abstractions/interfaces';
 import {
   Balance,
   Token,
   Transaction,
-  SwapQuote,
   SignedTransaction,
   ProviderMeta,
 } from '../../abstractions/types';
@@ -27,31 +36,44 @@ const ETH_TOKEN: Token = {
   decimals: 18,
 };
 
+// ERC-20 balanceOf ABI fragment
+const erc20BalanceOfAbi = [
+  {
+    inputs: [{ name: 'account', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+] as const;
+
 export class ServerEthereumProvider implements IChainProvider {
   readonly meta: ProviderMeta = {
     name: 'ServerEthereumProvider',
     backendType: 'server',
-    version: '0.1.0',
+    version: '0.2.0',
     capabilities: ['balance', 'send', 'history', 'erc20'],
   };
 
   readonly chainId = 'ethereum' as const;
-  private provider: ethers.JsonRpcProvider;
+  private client: PublicClient;
 
   constructor(rpcUrl?: string) {
-    // Default to public endpoint; user should configure their own
-    this.provider = new ethers.JsonRpcProvider(
-      rpcUrl ?? 'https://eth.llamarpc.com'
-    );
+    this.client = createPublicClient({
+      chain: mainnet,
+      transport: http(rpcUrl ?? 'https://eth.llamarpc.com'),
+    });
   }
 
   async getBalance(address: string, token?: Token): Promise<Balance> {
     if (!token || token.symbol === 'ETH') {
-      const balance = await this.provider.getBalance(address);
+      const balance = await this.client.getBalance({
+        address: address as `0x${string}`,
+      });
       return {
         token: ETH_TOKEN,
         amount: balance,
-        usdValue: undefined, // oracle provider handles pricing
+        usdValue: undefined,
       };
     }
 
@@ -60,9 +82,12 @@ export class ServerEthereumProvider implements IChainProvider {
       throw new Error(`No contract address for token ${token.symbol}`);
     }
 
-    const abi = ['function balanceOf(address) view returns (uint256)'];
-    const contract = new ethers.Contract(token.contractAddress, abi, this.provider);
-    const balance = await contract.balanceOf(address);
+    const balance = await this.client.readContract({
+      address: token.contractAddress as `0x${string}`,
+      abi: erc20BalanceOfAbi,
+      functionName: 'balanceOf',
+      args: [address as `0x${string}`],
+    });
 
     return {
       token,
@@ -72,16 +97,20 @@ export class ServerEthereumProvider implements IChainProvider {
   }
 
   async getTransactionHistory(address: string, _limit?: number): Promise<Transaction[]> {
-    // Basic implementation — in production, use an indexer like Etherscan API
-    // This is intentionally simple; the indexer will be a separate provider
+    // viem doesn't have built-in tx history — requires indexer (Etherscan, Alchemy)
+    // This will be a separate IndexerProvider in production
     return [];
   }
 
   async getTransaction(hash: string): Promise<Transaction | null> {
-    const tx = await this.provider.getTransaction(hash);
+    const tx = await this.client.getTransaction({
+      hash: hash as `0x${string}`,
+    });
     if (!tx) return null;
 
-    const receipt = await tx.wait();
+    const receipt = await this.client.getTransactionReceipt({
+      hash: hash as `0x${string}`,
+    });
 
     return {
       id: tx.hash,
@@ -90,36 +119,38 @@ export class ServerEthereumProvider implements IChainProvider {
       to: tx.to ?? '',
       amount: tx.value,
       token: ETH_TOKEN,
-      fee: receipt ? receipt.gasUsed * receipt.gasPrice : undefined,
-      status: receipt?.status === 1 ? 'confirmed' : 'failed',
+      fee: receipt ? receipt.gasUsed * receipt.effectiveGasPrice : undefined,
+      status: receipt?.status === 'success' ? 'confirmed' : 'failed',
       timestamp: Date.now(),
-      blockNumber: receipt?.blockNumber,
+      blockNumber: receipt?.blockNumber ? Number(receipt.blockNumber) : undefined,
       hash: tx.hash,
     };
   }
 
   async broadcastTransaction(signedTx: SignedTransaction): Promise<string> {
-    const hexTx = '0x' + Buffer.from(signedTx.rawTransaction).toString('hex');
-    const response = await this.provider.broadcastTransaction(hexTx);
-    return response.hash;
+    const hexTx = ('0x' + Buffer.from(signedTx.rawTransaction).toString('hex')) as `0x${string}`;
+    const hash = await this.client.sendRawTransaction({
+      serializedTransaction: hexTx,
+    });
+    return hash;
   }
 
   async estimateFee(from: string, to: string, amount: bigint, _token?: Token): Promise<bigint> {
-    const feeData = await this.provider.getFeeData();
-    const gasEstimate = await this.provider.estimateGas({
-      from,
-      to,
+    const gasEstimate = await this.client.estimateGas({
+      account: from as `0x${string}`,
+      to: to as `0x${string}`,
       value: amount,
     });
-    const gasPrice = feeData.gasPrice ?? BigInt(0);
+    const gasPrice = await this.client.getGasPrice();
     return gasEstimate * gasPrice;
   }
 
   async getBlockHeight(): Promise<number> {
-    return this.provider.getBlockNumber();
+    const block = await this.client.getBlockNumber();
+    return Number(block);
   }
 
   isAddressValid(address: string): boolean {
-    return ethers.isAddress(address);
+    return isAddress(address);
   }
 }

@@ -1,2 +1,2 @@
 export { Vault } from './vault';
-export type { IVaultCrypto, IKeyDerivation } from './vault';
+export type { IVaultCrypto, IKeyDerivation, VaultData, VaultContents } from './vault';
