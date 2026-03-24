@@ -3,6 +3,10 @@
  * This wraps the entire application.
  */
 
+// MUST be first import — polyfills crypto.getRandomValues for React Native
+// Required by @scure/bip39, @noble/hashes, viem, and all crypto operations
+import 'react-native-get-random-values';
+
 import React from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
