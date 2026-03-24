@@ -40,16 +40,21 @@ export class HDWallet {
 
   /**
    * Generate a new wallet with a fresh mnemonic.
-   * Default: 24 words (256-bit entropy) for maximum security.
+   * Does NOT derive seed yet (expensive) — only generates words.
+   * Seed is derived lazily when keys are needed.
    */
   static generate(config?: HDWalletConfig): HDWallet {
     const strength = config?.strength ?? 256;
     const mnemonic = generateMnemonic(wordlist, strength);
-    return HDWallet.fromMnemonic(mnemonic);
+    const wallet = new HDWallet();
+    wallet.mnemonic = mnemonic;
+    // Seed not derived here — done lazily in deriveKey/derivePrivateKey
+    return wallet;
   }
 
   /**
    * Restore wallet from existing mnemonic phrase.
+   * Derives seed immediately since caller will need keys.
    */
   static fromMnemonic(mnemonic: string): HDWallet {
     if (!validateMnemonic(mnemonic, wordlist)) {
@@ -59,6 +64,16 @@ export class HDWallet {
     wallet.mnemonic = mnemonic;
     wallet.seed = mnemonicToSeedSync(mnemonic);
     return wallet;
+  }
+
+  /**
+   * Ensure seed is derived (lazy initialization).
+   */
+  private ensureSeed(): void {
+    if (!this.seed && this.mnemonic) {
+      this.seed = mnemonicToSeedSync(this.mnemonic);
+    }
+    if (!this.seed) throw new Error('Wallet not initialized');
   }
 
   /**
@@ -75,7 +90,7 @@ export class HDWallet {
    * Uses BIP-44 path: m/44'/<coin_type>'/<account>'/0/0
    */
   deriveKey(chainId: ChainId, accountIndex: number = 0): KeyPair {
-    if (!this.seed) throw new Error('Wallet not initialized');
+    this.ensureSeed();
 
     const coinType = COIN_TYPES[chainId];
     if (coinType === undefined) {
@@ -87,7 +102,7 @@ export class HDWallet {
       ? `m/44'/501'/${accountIndex}'/0'`
       : `m/44'/${coinType}'/${accountIndex}'/0/0`;
 
-    const hdkey = HDKey.fromMasterSeed(this.seed);
+    const hdkey = HDKey.fromMasterSeed(this.seed!);
     const derived = hdkey.derive(path);
 
     if (!derived.publicKey) {
@@ -107,7 +122,7 @@ export class HDWallet {
    * NEVER expose this outside the crypto module.
    */
   derivePrivateKey(chainId: ChainId, accountIndex: number = 0): Uint8Array {
-    if (!this.seed) throw new Error('Wallet not initialized');
+    this.ensureSeed();
 
     const coinType = COIN_TYPES[chainId];
     if (coinType === undefined) {
@@ -118,7 +133,7 @@ export class HDWallet {
       ? `m/44'/501'/${accountIndex}'/0'`
       : `m/44'/${coinType}'/${accountIndex}'/0/0`;
 
-    const hdkey = HDKey.fromMasterSeed(this.seed);
+    const hdkey = HDKey.fromMasterSeed(this.seed!);
     const derived = hdkey.derive(path);
 
     if (!derived.privateKey) throw new Error('Key derivation failed');

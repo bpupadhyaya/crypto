@@ -34,16 +34,19 @@ export function OnboardingScreen() {
 
   const handleCreateWallet = () => {
     setLoading(true);
-    try {
-      const wallet = HDWallet.generate({ strength: 256 });
-      setMnemonic(wallet.getMnemonic());
-      wallet.destroy(); // will re-derive from mnemonic after password set
-      setStep('backup');
-    } catch (_error) {
-      Alert.alert('Error', 'Failed to generate wallet. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+    // Use setTimeout to let the loading spinner render before blocking the thread
+    setTimeout(() => {
+      try {
+        const wallet = HDWallet.generate({ strength: 256 });
+        setMnemonic(wallet.getMnemonic());
+        wallet.destroy();
+        setStep('backup');
+      } catch (_error) {
+        Alert.alert('Error', 'Failed to generate wallet. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    }, 50);
   };
 
   const handleSetPassword = async () => {
@@ -58,6 +61,9 @@ export function OnboardingScreen() {
 
     setLoading(true);
     const phraseToUse = step === 'password' && restoreInput ? restoreInput : mnemonic;
+
+    // Yield to UI so loading spinner renders before heavy crypto
+    await new Promise((r) => setTimeout(r, 100));
 
     try {
       // Step 1: Create and encrypt vault
