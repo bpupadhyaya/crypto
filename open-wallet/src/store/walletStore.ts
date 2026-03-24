@@ -54,6 +54,10 @@ interface WalletState {
   // ─── Vault ───
   hasVault: boolean;
   setHasVault: (has: boolean) => void;
+
+  // ─── Temporary (not persisted, cleared after PIN setup) ───
+  tempVaultPassword: string | null;
+  setTempVaultPassword: (pw: string | null) => void;
 }
 
 export const useWalletStore = create<WalletState>()(
@@ -108,6 +112,10 @@ export const useWalletStore = create<WalletState>()(
       // Vault
       hasVault: false,
       setHasVault: (has) => set({ hasVault: has }),
+
+      // Temporary
+      tempVaultPassword: null,
+      setTempVaultPassword: (pw) => set({ tempVaultPassword: pw }),
     }),
     {
       name: 'open-wallet-store',

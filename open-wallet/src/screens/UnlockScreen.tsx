@@ -88,9 +88,14 @@ export function UnlockScreen() {
       const valid = await authManager.verifyPin(pin);
       if (valid) {
         setPinError(null);
-        // PIN verified — now unlock vault with password from secure store
-        // For now, PIN verification alone gates access
-        // In production: PIN would be used to derive a key that decrypts the vault
+        // PIN verified — retrieve vault password and decrypt
+        const vaultPassword = await authManager.getVaultPassword(pin);
+        if (vaultPassword) {
+          const contents = await vault.unlock(vaultPassword);
+          deriveAddresses(contents.mnemonic);
+        }
+        // Even without vault password (e.g., older setup), addresses
+        // are persisted in Zustand store from initial creation
         setStatus('unlocked');
       } else {
         const remaining = await authManager.getRemainingAttempts();

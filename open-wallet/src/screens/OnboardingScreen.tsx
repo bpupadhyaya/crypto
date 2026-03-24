@@ -30,7 +30,7 @@ export function OnboardingScreen() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const { setStatus, setHasVault, setAddresses } = useWalletStore();
+  const { setStatus, setHasVault, setAddresses, setTempVaultPassword } = useWalletStore();
 
   const handleCreateWallet = () => {
     setLoading(true);
@@ -90,7 +90,8 @@ export function OnboardingScreen() {
 
       wallet.destroy();
       setHasVault(true);
-      setStatus('pin_setup' as any); // route to PIN setup
+      setTempVaultPassword(password); // pass to PIN setup for encrypted storage
+      setStatus('pin_setup' as any);
     } catch (error) {
       Alert.alert('Error', 'Failed to create vault. Please try again.');
     } finally {

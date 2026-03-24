@@ -22,7 +22,7 @@ export function PinSetupScreen() {
   const [step, setStep] = useState<SetupStep>('create');
   const [firstPin, setFirstPin] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const { setStatus, setBiometricEnabled } = useWalletStore();
+  const { setStatus, setBiometricEnabled, tempVaultPassword, setTempVaultPassword } = useWalletStore();
 
   const handlePinCreate = (pin: string) => {
     setFirstPin(pin);
@@ -39,7 +39,8 @@ export function PinSetupScreen() {
     }
 
     try {
-      await authManager.setupPin(pin);
+      await authManager.setupPin(pin, tempVaultPassword ?? undefined);
+      setTempVaultPassword(null); // clear from memory
       setError(null);
 
       // Check if biometric is available

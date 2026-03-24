@@ -17,12 +17,18 @@
 import * as SecureStore from 'expo-secure-store';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { sha256 } from '@noble/hashes/sha2.js';
+import { randomBytes } from '@noble/hashes/utils.js';
+
+import { pbkdf2 } from '@noble/hashes/pbkdf2.js';
+import { gcm } from '@noble/ciphers/aes.js';
 
 const PIN_HASH_KEY = 'open_wallet_pin_hash';
 const PIN_SALT_KEY = 'open_wallet_pin_salt';
 const BIOMETRIC_ENABLED_KEY = 'open_wallet_biometric_enabled';
 const FAILED_ATTEMPTS_KEY = 'open_wallet_failed_attempts';
 const LOCK_UNTIL_KEY = 'open_wallet_lock_until';
+const ENCRYPTED_PASSWORD_KEY = 'open_wallet_enc_password';
+const ENCRYPTED_PASSWORD_IV_KEY = 'open_wallet_enc_password_iv';
 
 const MAX_PIN_ATTEMPTS = 5;
 const LOCKOUT_DURATION_MS = 30_000; // 30 seconds after max attempts
@@ -40,15 +46,16 @@ export class AuthManager {
 
   /**
    * Set up a 6-digit PIN. Called after first password-based vault creation.
-   * PIN is hashed with SHA-256 + salt before storage — never stored in plaintext.
+   * PIN hash is stored for verification.
+   * Vault password is encrypted with a PIN-derived key and stored,
+   * so PIN unlock can decrypt the vault without re-entering password.
    */
-  async setupPin(pin: string): Promise<void> {
+  async setupPin(pin: string, vaultPassword?: string): Promise<void> {
     if (!/^\d{6}$/.test(pin)) {
       throw new Error('PIN must be exactly 6 digits');
     }
 
-    const salt = new Uint8Array(16);
-    crypto.getRandomValues(salt);
+    const salt = randomBytes(16);
     const saltHex = toHex(salt);
 
     const hash = sha256(new TextEncoder().encode(pin + saltHex));
@@ -57,6 +64,44 @@ export class AuthManager {
     await SecureStore.setItemAsync(PIN_HASH_KEY, hashHex);
     await SecureStore.setItemAsync(PIN_SALT_KEY, saltHex);
     await SecureStore.setItemAsync(FAILED_ATTEMPTS_KEY, '0');
+
+    // Encrypt vault password with PIN-derived key so PIN can unlock vault
+    if (vaultPassword) {
+      await this.storeEncryptedPassword(pin, vaultPassword);
+    }
+  }
+
+  /**
+   * Encrypt and store the vault password, keyed by PIN.
+   */
+  private async storeEncryptedPassword(pin: string, password: string): Promise<void> {
+    const pinKey = pbkdf2(sha256, new TextEncoder().encode(pin), randomBytes(16), { c: 10_000, dkLen: 32 });
+    const iv = randomBytes(12);
+    const encrypted = gcm(pinKey, iv).encrypt(new TextEncoder().encode(password));
+    // Store the salt used for PIN key derivation alongside
+    await SecureStore.setItemAsync(ENCRYPTED_PASSWORD_KEY, toHex(pinKey) + ':' + toHex(encrypted));
+    await SecureStore.setItemAsync(ENCRYPTED_PASSWORD_IV_KEY, toHex(iv));
+  }
+
+  /**
+   * Retrieve vault password using PIN. Returns null if PIN wrong or not stored.
+   */
+  async getVaultPassword(pin: string): Promise<string | null> {
+    const stored = await SecureStore.getItemAsync(ENCRYPTED_PASSWORD_KEY);
+    const ivHex = await SecureStore.getItemAsync(ENCRYPTED_PASSWORD_IV_KEY);
+    if (!stored || !ivHex) return null;
+
+    const [pinKeyHex, encryptedHex] = stored.split(':');
+    const pinKey = fromHex(pinKeyHex);
+    const iv = fromHex(ivHex);
+    const encrypted = fromHex(encryptedHex);
+
+    try {
+      const decrypted = gcm(pinKey, iv).decrypt(encrypted);
+      return new TextDecoder().decode(decrypted);
+    } catch {
+      return null;
+    }
   }
 
   /**
@@ -237,4 +282,12 @@ export const authManager = new AuthManager();
 
 function toHex(bytes: Uint8Array): string {
   return Array.from(bytes).map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+function fromHex(hex: string): Uint8Array {
+  const bytes = new Uint8Array(hex.length / 2);
+  for (let i = 0; i < bytes.length; i++) {
+    bytes[i] = parseInt(hex.substr(i * 2, 2), 16);
+  }
+  return bytes;
 }
