@@ -57,11 +57,12 @@ export function OnboardingScreen() {
     }
 
     setLoading(true);
-    try {
-      const vault = new Vault();
-      const phraseToUse = step === 'password' && restoreInput ? restoreInput : mnemonic;
+    const phraseToUse = step === 'password' && restoreInput ? restoreInput : mnemonic;
 
-      await vault.create(password, {
+    try {
+      // Step 1: Create and encrypt vault
+      const vaultInstance = new Vault();
+      await vaultInstance.create(password, {
         mnemonic: phraseToUse,
         accounts: [{
           id: 'default',
@@ -75,8 +76,15 @@ export function OnboardingScreen() {
         }],
         settings: {},
       });
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error);
+      Alert.alert('Vault Error', `Vault creation failed: ${msg}`);
+      setLoading(false);
+      return;
+    }
 
-      // Derive addresses from mnemonic
+    try {
+      // Step 2: Derive addresses
       const wallet = HDWallet.fromMnemonic(phraseToUse);
       const ethSigner = EthereumSigner.fromWallet(wallet);
       const btcSigner = BitcoinSigner.fromWallet(wallet);
@@ -87,16 +95,18 @@ export function OnboardingScreen() {
         bitcoin: btcSigner.getAddress(),
         solana: solSigner.getAddress(),
       });
-
       wallet.destroy();
-      setHasVault(true);
-      setTempVaultPassword(password); // pass to PIN setup for encrypted storage
-      setStatus('pin_setup' as any);
     } catch (error) {
-      Alert.alert('Error', 'Failed to create vault. Please try again.');
-    } finally {
+      const msg = error instanceof Error ? error.message : String(error);
+      Alert.alert('Key Error', `Address derivation failed: ${msg}`);
       setLoading(false);
+      return;
     }
+
+    setHasVault(true);
+    setTempVaultPassword(password);
+    setLoading(false);
+    setStatus('pin_setup' as any);
   };
 
   const handleRestore = () => {

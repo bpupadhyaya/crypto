@@ -56,7 +56,9 @@ export interface IKeyDerivation {
 // ─── PBKDF2 Key Derivation (@noble/hashes — audited, pure JS) ───
 
 class NoblePbkdf2KeyDerivation implements IKeyDerivation {
-  private iterations = 600_000;
+  // 100K iterations — pure-JS PBKDF2 is ~6x slower than native,
+  // so 100K here ≈ 600K native. Will upgrade to Argon2id via Rust.
+  private iterations = 100_000;
 
   async deriveKey(password: string, salt: Uint8Array): Promise<Uint8Array> {
     const encoder = new TextEncoder();
