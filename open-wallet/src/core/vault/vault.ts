@@ -28,7 +28,6 @@
 import * as Crypto from 'expo-crypto';
 import * as SecureStore from 'expo-secure-store';
 import * as LocalAuthentication from 'expo-local-authentication';
-import argon2 from 'argon2-browser';
 
 // ─── Types ────────────────────────────────────────────────
 
@@ -88,27 +87,42 @@ export interface IKeyDerivation {
   deriveKey(password: string, salt: Uint8Array): Promise<Uint8Array>;
 }
 
-// ─── Argon2id Key Derivation (Best Available) ───
+// ─── Key Derivation ───
+//
+// React Native cannot run WASM (argon2-browser), so we use PBKDF2 with
+// aggressive parameters as the default KDF. The IKeyDerivation interface
+// allows swapping to native Argon2id when the Rust module is integrated.
+//
+// PBKDF2-SHA256 with 600K iterations is OWASP-recommended when Argon2
+// is not available. AES-256-GCM remains quantum-safe (Grover halves
+// key strength: 256→128 bit equivalent, still secure).
 
-class Argon2idKeyDerivation implements IKeyDerivation {
-  // OWASP recommended Argon2id parameters for password hashing
-  private memory = 65536; // 64 MiB
-  private iterations = 3;
-  private parallelism = 4;
-  private hashLen = 32; // 256-bit key
+class Pbkdf2KeyDerivation implements IKeyDerivation {
+  private iterations = 600_000; // OWASP recommendation for PBKDF2-SHA256
 
   async deriveKey(password: string, salt: Uint8Array): Promise<Uint8Array> {
-    const result = await argon2.hash({
-      pass: password,
-      salt,
-      type: argon2.ArgonType.Argon2id,
-      mem: this.memory,
-      time: this.iterations,
-      parallelism: this.parallelism,
-      hashLen: this.hashLen,
-    });
+    const encoder = new TextEncoder();
+    const encoded = encoder.encode(password);
+    const keyMaterial = await globalThis.crypto.subtle.importKey(
+      'raw',
+      encoded.buffer as ArrayBuffer,
+      'PBKDF2',
+      false,
+      ['deriveBits']
+    );
 
-    return result.hash;
+    const derivedBits = await globalThis.crypto.subtle.deriveBits(
+      {
+        name: 'PBKDF2',
+        salt: salt.buffer as ArrayBuffer,
+        iterations: this.iterations,
+        hash: 'SHA-256',
+      },
+      keyMaterial,
+      256
+    );
+
+    return new Uint8Array(derivedBits);
   }
 }
 
@@ -184,7 +198,7 @@ export class Vault {
 
   constructor(crypto?: IVaultCrypto, kdf?: IKeyDerivation) {
     this.crypto = crypto ?? new Aes256GcmCrypto();
-    this.kdf = kdf ?? new Argon2idKeyDerivation();
+    this.kdf = kdf ?? new Pbkdf2KeyDerivation();
   }
 
   /**

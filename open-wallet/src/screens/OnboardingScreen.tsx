@@ -16,6 +16,9 @@ import {
 } from 'react-native';
 import { HDWallet } from '../core/wallet/hdwallet';
 import { Vault } from '../core/vault/vault';
+import { EthereumSigner } from '../core/chains/ethereum-signer';
+import { BitcoinSigner } from '../core/chains/bitcoin-signer';
+import { SolanaSigner } from '../core/chains/solana-signer';
 import { useWalletStore } from '../store/walletStore';
 
 type OnboardingStep = 'welcome' | 'create' | 'backup' | 'restore' | 'password';
@@ -27,7 +30,7 @@ export function OnboardingScreen() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const { setStatus } = useWalletStore();
+  const { setStatus, setHasVault, setAddresses } = useWalletStore();
 
   const handleCreateWallet = () => {
     setLoading(true);
@@ -73,7 +76,20 @@ export function OnboardingScreen() {
         settings: {},
       });
 
-      // In production: save vault data to secure storage
+      // Derive addresses from mnemonic
+      const wallet = HDWallet.fromMnemonic(phraseToUse);
+      const ethSigner = EthereumSigner.fromWallet(wallet);
+      const btcSigner = BitcoinSigner.fromWallet(wallet);
+      const solSigner = SolanaSigner.fromWallet(wallet);
+
+      setAddresses({
+        ethereum: ethSigner.getAddress(),
+        bitcoin: btcSigner.getAddress(),
+        solana: solSigner.getAddress(),
+      });
+
+      wallet.destroy();
+      setHasVault(true);
       setStatus('unlocked');
     } catch (error) {
       Alert.alert('Error', 'Failed to create vault. Please try again.');
