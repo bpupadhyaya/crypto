@@ -174,6 +174,13 @@ export function OnboardingScreen() {
           >
             <Text style={styles.primaryButtonText}>I've Saved It</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.secondaryButton}
+            onPress={() => { setMnemonic(''); setStep('welcome'); }}
+          >
+            <Text style={styles.secondaryButtonText}>Cancel</Text>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     );
