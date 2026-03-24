@@ -1,15 +1,19 @@
 /**
  * Balance display — adapts to Simple and Pro mode.
- * Simple: Large number, local currency, minimal info
- * Pro: Detailed breakdown by chain, 24h change, allocation %
+ * Simple: Large total, token count
+ * Pro: Detailed breakdown by token with allocation %
  */
 
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useWalletStore } from '../store/walletStore';
+import { SUPPORTED_TOKENS } from '../core/tokens/registry';
 
 export function BalanceCard() {
   const { mode, totalUsdValue, balances } = useWalletStore();
+
+  // Filter out any malformed balances
+  const validBalances = (balances ?? []).filter((b) => b?.token?.symbol);
 
   if (mode === 'simple') {
     return (
@@ -19,13 +23,13 @@ export function BalanceCard() {
           ${totalUsdValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
         </Text>
         <Text style={styles.simpleHint}>
-          {balances.length} token{balances.length !== 1 ? 's' : ''}
+          {SUPPORTED_TOKENS.length} tokens supported
         </Text>
       </View>
     );
   }
 
-  // Pro mode — detailed breakdown
+  // Pro mode
   return (
     <View style={styles.proCard}>
       <View style={styles.proHeader}>
@@ -34,28 +38,29 @@ export function BalanceCard() {
           ${totalUsdValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
         </Text>
       </View>
-      <View style={styles.proBreakdown}>
-        {balances.map((balance) => (
-          <View key={`${balance.token.chainId}-${balance.token.symbol}`} style={styles.proRow}>
-            <Text style={styles.proTokenSymbol}>{balance.token.symbol}</Text>
-            <Text style={styles.proTokenChain}>{balance.token.chainId}</Text>
-            <Text style={styles.proTokenValue}>
-              ${(balance.usdValue ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </Text>
-            <Text style={styles.proTokenAllocation}>
-              {totalUsdValue > 0
-                ? ((balance.usdValue ?? 0) / totalUsdValue * 100).toFixed(1)
-                : '0.0'}%
-            </Text>
-          </View>
-        ))}
-      </View>
+      {validBalances.length > 0 && (
+        <View style={styles.proBreakdown}>
+          {validBalances.map((balance) => (
+            <View key={`${balance.token.chainId}-${balance.token.symbol}`} style={styles.proRow}>
+              <Text style={styles.proTokenSymbol}>{balance.token.symbol}</Text>
+              <Text style={styles.proTokenChain}>{balance.token.chainId}</Text>
+              <Text style={styles.proTokenValue}>
+                ${(balance.usdValue ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </Text>
+              <Text style={styles.proTokenAllocation}>
+                {totalUsdValue > 0
+                  ? ((balance.usdValue ?? 0) / totalUsdValue * 100).toFixed(1)
+                  : '0.0'}%
+              </Text>
+            </View>
+          ))}
+        </View>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  // ─── Simple Mode ───
   simpleCard: {
     backgroundColor: '#16161f',
     borderRadius: 24,
@@ -64,23 +69,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginTop: 16,
   },
-  simpleLabel: {
-    color: '#a0a0b0',
-    fontSize: 16,
-    marginBottom: 8,
-  },
-  simpleAmount: {
-    color: '#f0f0f5',
-    fontSize: 48,
-    fontWeight: '800',
-  },
-  simpleHint: {
-    color: '#606070',
-    fontSize: 14,
-    marginTop: 8,
-  },
-
-  // ─── Pro Mode ───
+  simpleLabel: { color: '#a0a0b0', fontSize: 16, marginBottom: 8 },
+  simpleAmount: { color: '#f0f0f5', fontSize: 48, fontWeight: '800' },
+  simpleHint: { color: '#606070', fontSize: 14, marginTop: 8 },
   proCard: {
     backgroundColor: '#16161f',
     borderRadius: 16,
@@ -88,52 +79,17 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginTop: 16,
   },
-  proHeader: {
-    marginBottom: 16,
-  },
-  proLabel: {
-    color: '#a0a0b0',
-    fontSize: 13,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  proAmount: {
-    color: '#f0f0f5',
-    fontSize: 32,
-    fontWeight: '700',
-    marginTop: 4,
-  },
+  proHeader: { marginBottom: 16 },
+  proLabel: { color: '#a0a0b0', fontSize: 13, textTransform: 'uppercase', letterSpacing: 1 },
+  proAmount: { color: '#f0f0f5', fontSize: 32, fontWeight: '700', marginTop: 4 },
   proBreakdown: {
     borderTopWidth: 1,
     borderTopColor: 'rgba(255,255,255,0.06)',
     paddingTop: 12,
   },
-  proRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 8,
-  },
-  proTokenSymbol: {
-    color: '#f0f0f5',
-    fontSize: 14,
-    fontWeight: '600',
-    width: 60,
-  },
-  proTokenChain: {
-    color: '#606070',
-    fontSize: 12,
-    width: 80,
-  },
-  proTokenValue: {
-    color: '#a0a0b0',
-    fontSize: 14,
-    flex: 1,
-    textAlign: 'right',
-  },
-  proTokenAllocation: {
-    color: '#606070',
-    fontSize: 12,
-    width: 50,
-    textAlign: 'right',
-  },
+  proRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 8 },
+  proTokenSymbol: { color: '#f0f0f5', fontSize: 14, fontWeight: '600', width: 60 },
+  proTokenChain: { color: '#606070', fontSize: 12, width: 80 },
+  proTokenValue: { color: '#a0a0b0', fontSize: 14, flex: 1, textAlign: 'right' },
+  proTokenAllocation: { color: '#606070', fontSize: 12, width: 50, textAlign: 'right' },
 });

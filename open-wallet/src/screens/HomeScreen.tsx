@@ -1,6 +1,5 @@
 /**
- * Home Screen — Main wallet view with live data.
- * Uses React Query hooks for real-time balance and price updates.
+ * Home Screen — Main wallet view with token list.
  */
 
 import React from 'react';
@@ -9,20 +8,27 @@ import { useQueryClient } from '@tanstack/react-query';
 import { BalanceCard } from '../components/BalanceCard';
 import { ActionButtons } from '../components/ActionButtons';
 import { useWalletStore } from '../store/walletStore';
-import { usePortfolio } from '../hooks/useBalances';
+import { SUPPORTED_TOKENS, type TokenInfo } from '../core/tokens/registry';
+
+function TokenRow({ token }: { token: TokenInfo }) {
+  return (
+    <View style={styles.tokenRow}>
+      <View style={[styles.tokenDot, { backgroundColor: token.color }]} />
+      <View style={styles.tokenInfo}>
+        <Text style={styles.tokenSymbol}>{token.symbol}</Text>
+        <Text style={styles.tokenName}>{token.name}</Text>
+      </View>
+      <View style={styles.tokenValues}>
+        <Text style={styles.tokenBalance}>0.00</Text>
+        <Text style={styles.tokenUsd}>$0.00</Text>
+      </View>
+    </View>
+  );
+}
 
 export function HomeScreen() {
   const { mode, addresses } = useWalletStore();
-  const { balances, totalUsdValue, isLoading } = usePortfolio(addresses);
   const queryClient = useQueryClient();
-  const { setBalances } = useWalletStore();
-
-  // Sync balances to store for other screens
-  React.useEffect(() => {
-    if (balances.length > 0) {
-      setBalances(balances);
-    }
-  }, [balances]);
 
   const onRefresh = () => {
     queryClient.invalidateQueries({ queryKey: ['balance'] });
@@ -36,34 +42,25 @@ export function HomeScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={isLoading} onRefresh={onRefresh} tintColor="#22c55e" />
+          <RefreshControl refreshing={false} onRefresh={onRefresh} tintColor="#22c55e" />
         }
       >
-        {/* Balance */}
         <BalanceCard />
-
-        {/* Actions */}
         <ActionButtons />
 
-        {/* Chain Filter (Pro mode only) */}
-        {mode === 'pro' && (
-          <View style={styles.chainFilter}>
-            <Text style={styles.sectionTitle}>Chains</Text>
-            <View style={styles.chainRow}>
-              {['all', 'bitcoin', 'ethereum', 'solana', 'cosmos'].map((chain) => (
-                <View key={chain} style={styles.chainChip}>
-                  <Text style={styles.chainChipText}>
-                    {chain === 'all' ? 'All' : chain.charAt(0).toUpperCase() + chain.slice(1)}
-                  </Text>
-                </View>
-              ))}
-            </View>
+        {/* Token List */}
+        <View style={styles.tokenSection}>
+          <Text style={styles.sectionTitle}>Tokens</Text>
+          <View style={styles.tokenList}>
+            {SUPPORTED_TOKENS.map((token) => (
+              <TokenRow key={`${token.chainId}-${token.symbol}`} token={token} />
+            ))}
           </View>
-        )}
+        </View>
 
         {/* Addresses (Pro mode) */}
         {mode === 'pro' && Object.keys(addresses).length > 0 && (
-          <View style={styles.addressesCard}>
+          <View style={styles.card}>
             <Text style={styles.sectionTitle}>Your Addresses</Text>
             {Object.entries(addresses).map(([chain, addr]) => (
               <View key={chain} style={styles.addressRow}>
@@ -78,29 +75,6 @@ export function HomeScreen() {
           </View>
         )}
 
-        {/* Migration Status (Pro mode) */}
-        {mode === 'pro' && (
-          <View style={styles.migrationCard}>
-            <Text style={styles.sectionTitle}>Network Status</Text>
-            <View style={styles.statusRow}>
-              <Text style={styles.statusLabel}>Backend</Text>
-              <View style={styles.statusBadge}>
-                <Text style={styles.statusBadgeText}>Server</Text>
-              </View>
-            </View>
-            <View style={styles.statusRow}>
-              <Text style={styles.statusLabel}>Target</Text>
-              <View style={[styles.statusBadge, { backgroundColor: 'rgba(34,197,94,0.15)' }]}>
-                <Text style={[styles.statusBadgeText, { color: '#22c55e' }]}>Mobile P2P</Text>
-              </View>
-            </View>
-            <View style={styles.progressBar}>
-              <View style={[styles.progressFill, { width: '5%' }]} />
-            </View>
-            <Text style={styles.progressText}>5% — Server validation active</Text>
-          </View>
-        )}
-
         <View style={{ height: 100 }} />
       </ScrollView>
     </SafeAreaView>
@@ -111,21 +85,34 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0a0a0f' },
   scroll: { flex: 1 },
   scrollContent: { paddingBottom: 20 },
-  sectionTitle: { color: '#a0a0b0', fontSize: 13, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12 },
-  chainFilter: { marginHorizontal: 16, marginTop: 24 },
-  chainRow: { flexDirection: 'row', gap: 8 },
-  chainChip: { backgroundColor: '#16161f', borderRadius: 20, paddingVertical: 8, paddingHorizontal: 16 },
-  chainChipText: { color: '#a0a0b0', fontSize: 13 },
-  addressesCard: { backgroundColor: '#16161f', borderRadius: 16, padding: 16, marginHorizontal: 16, marginTop: 24 },
-  addressRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 6 },
+  sectionTitle: {
+    color: '#a0a0b0', fontSize: 13, fontWeight: '600',
+    textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12,
+  },
+  tokenSection: { marginHorizontal: 16, marginTop: 24 },
+  tokenList: {
+    backgroundColor: '#16161f', borderRadius: 16, overflow: 'hidden',
+  },
+  tokenRow: {
+    flexDirection: 'row', alignItems: 'center',
+    paddingHorizontal: 16, paddingVertical: 14,
+    borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.04)',
+  },
+  tokenDot: { width: 10, height: 10, borderRadius: 5, marginRight: 12 },
+  tokenInfo: { flex: 1 },
+  tokenSymbol: { color: '#f0f0f5', fontSize: 15, fontWeight: '600' },
+  tokenName: { color: '#606070', fontSize: 12, marginTop: 1 },
+  tokenValues: { alignItems: 'flex-end' },
+  tokenBalance: { color: '#a0a0b0', fontSize: 14, fontWeight: '500' },
+  tokenUsd: { color: '#606070', fontSize: 12, marginTop: 1 },
+  card: {
+    backgroundColor: '#16161f', borderRadius: 16, padding: 16,
+    marginHorizontal: 16, marginTop: 24,
+  },
+  addressRow: {
+    flexDirection: 'row', justifyContent: 'space-between',
+    alignItems: 'center', paddingVertical: 6,
+  },
   addressChain: { color: '#a0a0b0', fontSize: 13, width: 80 },
   addressText: { color: '#606070', fontSize: 11, fontFamily: 'monospace', flex: 1, textAlign: 'right' },
-  migrationCard: { backgroundColor: '#16161f', borderRadius: 16, padding: 20, marginHorizontal: 16, marginTop: 24 },
-  statusRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
-  statusLabel: { color: '#606070', fontSize: 13 },
-  statusBadge: { backgroundColor: 'rgba(59,130,246,0.15)', borderRadius: 8, paddingVertical: 4, paddingHorizontal: 10 },
-  statusBadgeText: { color: '#3b82f6', fontSize: 12, fontWeight: '600' },
-  progressBar: { height: 4, backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: 2, marginTop: 12 },
-  progressFill: { height: 4, backgroundColor: '#22c55e', borderRadius: 2 },
-  progressText: { color: '#606070', fontSize: 11, marginTop: 6 },
 });
