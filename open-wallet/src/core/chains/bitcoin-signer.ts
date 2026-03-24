@@ -29,15 +29,20 @@ export class BitcoinSigner {
   private privateKey: Uint8Array;
   private publicKey: Uint8Array;
 
-  constructor(privateKey: Uint8Array) {
+  constructor(privateKey: Uint8Array, publicKey: Uint8Array) {
     this.privateKey = privateKey;
-    // Derive compressed public key from private key
-    this.publicKey = btc.utils.pubSchnorr(privateKey);
+    // Must be 33-byte compressed SEC1 public key (from HD derivation)
+    // NOT 32-byte Schnorr key — p2wpkh requires compressed format
+    if (publicKey.length !== 33) {
+      throw new Error(`BTC public key must be 33 bytes (compressed), got ${publicKey.length}`);
+    }
+    this.publicKey = publicKey;
   }
 
   static fromWallet(wallet: HDWallet, accountIndex: number = 0): BitcoinSigner {
     const privateKey = wallet.derivePrivateKey('bitcoin', accountIndex);
-    return new BitcoinSigner(privateKey);
+    const keyPair = wallet.deriveKey('bitcoin', accountIndex);
+    return new BitcoinSigner(privateKey, keyPair.publicKey);
   }
 
   /**
