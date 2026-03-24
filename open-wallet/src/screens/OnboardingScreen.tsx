@@ -90,7 +90,7 @@ export function OnboardingScreen() {
 
       wallet.destroy();
       setHasVault(true);
-      setStatus('unlocked');
+      setStatus('pin_setup' as any); // route to PIN setup
     } catch (error) {
       Alert.alert('Error', 'Failed to create vault. Please try again.');
     } finally {

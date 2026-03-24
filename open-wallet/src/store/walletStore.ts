@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ChainId, Balance, WalletAccount } from '../core/abstractions/types';
 
 export type AppMode = 'simple' | 'pro';
-export type WalletStatus = 'locked' | 'unlocked' | 'onboarding';
+export type WalletStatus = 'locked' | 'unlocked' | 'onboarding' | 'pin_setup';
 
 interface WalletState {
   // ─── App Mode ───
