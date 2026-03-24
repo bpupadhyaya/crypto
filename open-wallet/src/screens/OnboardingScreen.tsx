@@ -29,14 +29,14 @@ export function OnboardingScreen() {
   const [loading, setLoading] = useState(false);
   const { setStatus } = useWalletStore();
 
-  const handleCreateWallet = async () => {
+  const handleCreateWallet = () => {
     setLoading(true);
     try {
-      const wallet = await HDWallet.generate({ strength: 256 });
+      const wallet = HDWallet.generate({ strength: 256 });
       setMnemonic(wallet.getMnemonic());
       wallet.destroy(); // will re-derive from mnemonic after password set
       setStep('backup');
-    } catch (error) {
+    } catch (_error) {
       Alert.alert('Error', 'Failed to generate wallet. Please try again.');
     } finally {
       setLoading(false);

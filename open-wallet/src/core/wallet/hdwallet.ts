@@ -1,29 +1,33 @@
 /**
  * HD Wallet — BIP-39 / BIP-44 hierarchical deterministic wallet.
  *
- * Generates a single seed phrase that derives keys for ALL chains:
- *   m/44'/0'/0'/0/0  → Bitcoin
- *   m/44'/60'/0'/0/0 → Ethereum
- *   m/44'/501'/0'/0' → Solana
- *   m/44'/1815'/0'/0/0 → Cardano (future)
- *   m/44'/118'/0'/0/0 → Cosmos/Open Chain
+ * Uses @scure/bip39 + @scure/bip32 (audited by Cure53, by Paul Miller
+ * who also authored noble-curves used by viem). These are the gold standard
+ * for JS crypto libraries — audited, tree-shakeable, no dependencies.
  *
- * The seed phrase is the master secret. It is encrypted by the PQC vault
- * and never stored in plaintext.
+ * Key derivation paths (BIP-44):
+ *   m/44'/0'/0'/0/0    → Bitcoin
+ *   m/44'/60'/0'/0/0   → Ethereum
+ *   m/44'/501'/0'/0'   → Solana
+ *   m/44'/1815'/0'/0/0 → Cardano (future)
+ *   m/44'/118'/0'/0/0  → Cosmos/Open Chain
+ *
+ * The seed phrase is encrypted by the PQC vault and never stored in plaintext.
  */
 
-import * as bip39 from 'bip39';
-import HDKey from 'hdkey';
+import { generateMnemonic, mnemonicToSeedSync, validateMnemonic } from '@scure/bip39';
+import { wordlist } from '@scure/bip39/wordlists/english.js';
+import { HDKey } from '@scure/bip32';
 import { ChainId, KeyPair } from '../abstractions/types';
 
-// BIP-44 coin types
+// BIP-44 coin types (https://github.com/satoshilabs/slips/blob/master/slip-0044.md)
 const COIN_TYPES: Record<string, number> = {
   bitcoin: 0,
   ethereum: 60,
   solana: 501,
   cardano: 1815,
   cosmos: 118,
-  openchain: 9999, // our custom coin type (will register with SLIP-44)
+  openchain: 9999, // custom — will register with SLIP-44
 };
 
 export interface HDWalletConfig {
@@ -31,34 +35,34 @@ export interface HDWalletConfig {
 }
 
 export class HDWallet {
-  private seed: Buffer | null = null;
+  private seed: Uint8Array | null = null;
   private mnemonic: string | null = null;
 
   /**
    * Generate a new wallet with a fresh mnemonic.
    * Default: 24 words (256-bit entropy) for maximum security.
    */
-  static async generate(config?: HDWalletConfig): Promise<HDWallet> {
+  static generate(config?: HDWalletConfig): HDWallet {
     const strength = config?.strength ?? 256;
-    const mnemonic = bip39.generateMnemonic(strength);
+    const mnemonic = generateMnemonic(wordlist, strength);
     return HDWallet.fromMnemonic(mnemonic);
   }
 
   /**
    * Restore wallet from existing mnemonic phrase.
    */
-  static async fromMnemonic(mnemonic: string): Promise<HDWallet> {
-    if (!bip39.validateMnemonic(mnemonic)) {
+  static fromMnemonic(mnemonic: string): HDWallet {
+    if (!validateMnemonic(mnemonic, wordlist)) {
       throw new Error('Invalid mnemonic phrase');
     }
     const wallet = new HDWallet();
     wallet.mnemonic = mnemonic;
-    wallet.seed = await bip39.mnemonicToSeed(mnemonic) as unknown as Buffer;
+    wallet.seed = mnemonicToSeedSync(mnemonic);
     return wallet;
   }
 
   /**
-   * Get the mnemonic phrase. Only call this when needed (e.g., backup).
+   * Get the mnemonic phrase. Only call when needed (e.g., backup).
    * The vault should encrypt this immediately after.
    */
   getMnemonic(): string {
@@ -79,20 +83,19 @@ export class HDWallet {
     }
 
     // Solana uses hardened derivation at all levels
-    if (chainId === 'solana') {
-      return this.deriveSolanaKey(accountIndex);
-    }
+    const path = chainId === 'solana'
+      ? `m/44'/501'/${accountIndex}'/0'`
+      : `m/44'/${coinType}'/${accountIndex}'/0/0`;
 
-    const path = `m/44'/${coinType}'/${accountIndex}'/0/0`;
-    const hdkey = HDKey.fromMasterSeed(Buffer.from(this.seed));
+    const hdkey = HDKey.fromMasterSeed(this.seed);
     const derived = hdkey.derive(path);
 
-    if (!derived.privateKey || !derived.publicKey) {
+    if (!derived.publicKey) {
       throw new Error('Key derivation failed');
     }
 
     return {
-      publicKey: new Uint8Array(derived.publicKey),
+      publicKey: derived.publicKey,
       chainId,
       address: '', // chain-specific address encoding done by chain providers
       derivationPath: path,
@@ -111,38 +114,15 @@ export class HDWallet {
       throw new Error(`Unsupported chain: ${chainId}`);
     }
 
-    if (chainId === 'solana') {
-      // Solana uses Ed25519 with different derivation
-      const path = `m/44'/501'/${accountIndex}'/0'`;
-      const hdkey = HDKey.fromMasterSeed(Buffer.from(this.seed));
-      const derived = hdkey.derive(path);
-      if (!derived.privateKey) throw new Error('Key derivation failed');
-      return new Uint8Array(derived.privateKey);
-    }
+    const path = chainId === 'solana'
+      ? `m/44'/501'/${accountIndex}'/0'`
+      : `m/44'/${coinType}'/${accountIndex}'/0/0`;
 
-    const path = `m/44'/${coinType}'/${accountIndex}'/0/0`;
-    const hdkey = HDKey.fromMasterSeed(Buffer.from(this.seed));
+    const hdkey = HDKey.fromMasterSeed(this.seed);
     const derived = hdkey.derive(path);
 
     if (!derived.privateKey) throw new Error('Key derivation failed');
-    return new Uint8Array(derived.privateKey);
-  }
-
-  private deriveSolanaKey(accountIndex: number): KeyPair {
-    if (!this.seed) throw new Error('Wallet not initialized');
-
-    const path = `m/44'/501'/${accountIndex}'/0'`;
-    const hdkey = HDKey.fromMasterSeed(Buffer.from(this.seed));
-    const derived = hdkey.derive(path);
-
-    if (!derived.publicKey) throw new Error('Key derivation failed');
-
-    return {
-      publicKey: new Uint8Array(derived.publicKey),
-      chainId: 'solana',
-      address: '', // will be base58-encoded by Solana provider
-      derivationPath: path,
-    };
+    return derived.privateKey;
   }
 
   /**
@@ -151,6 +131,13 @@ export class HDWallet {
    */
   static registerCoinType(chainId: ChainId, coinType: number): void {
     COIN_TYPES[chainId] = coinType;
+  }
+
+  /**
+   * Get all supported chain IDs.
+   */
+  static getSupportedChains(): ChainId[] {
+    return Object.keys(COIN_TYPES);
   }
 
   /**
