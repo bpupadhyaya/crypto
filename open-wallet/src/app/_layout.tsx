@@ -3,8 +3,11 @@
  * This wraps the entire application.
  */
 
-// MUST be first import — polyfills crypto.getRandomValues for React Native
-// Required by @scure/bip39, @noble/hashes, viem, and all crypto operations
+// MUST be first imports — polyfills for React Native (Hermes engine)
+// Buffer: used by viem, ethers, bitcoinjs — not available in Hermes
+import { Buffer } from 'buffer';
+(globalThis as any).Buffer = Buffer;
+// crypto.getRandomValues: used by @scure/bip39, @noble/hashes, viem
 import 'react-native-get-random-values';
 
 import React from 'react';
