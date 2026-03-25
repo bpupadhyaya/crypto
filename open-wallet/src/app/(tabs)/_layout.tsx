@@ -6,6 +6,7 @@ import React from 'react';
 import { Tabs } from 'expo-router';
 import { View, Text, StyleSheet } from 'react-native';
 import { OfflineBanner } from '../../components/OfflineBanner';
+import { ToastContainer } from '../../components/Toast';
 
 const ICONS: Record<string, string> = { Home: '◉', Send: '↑', Swap: '⇄', Receive: '↓', Settings: '⚙' };
 
@@ -30,6 +31,7 @@ export default React.memo(function TabLayout() {
   return (
     <View style={{ flex: 1, backgroundColor: '#0a0a0f' }}>
     <OfflineBanner />
+    <ToastContainer />
     <Tabs screenOptions={SCREEN_OPTIONS}>
       <Tabs.Screen name="index" options={{ title: 'Home', headerTitle: 'Open Wallet', tabBarIcon: ({ focused }) => <TabIcon label="Home" focused={focused} /> }} />
       <Tabs.Screen name="send" options={{ title: 'Send', tabBarIcon: ({ focused }) => <TabIcon label="Send" focused={focused} /> }} />
