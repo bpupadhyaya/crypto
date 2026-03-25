@@ -38,6 +38,12 @@ interface WalletState {
   contacts: Array<{ id: string; name: string; address: string; chain: string }>;
   addContact: (contact: { id: string; name: string; address: string; chain: string }) => void;
   removeContact: (id: string) => void;
+
+  // ─── Multi-Account ───
+  accounts: Array<{ name: string; index: number }>;
+  activeAccountIndex: number;
+  addAccountEntry: (name: string) => void;
+  switchAccount: (index: number) => void;
 }
 
 const DEFAULT_TOKENS = ['BTC', 'ETH', 'USDT', 'XRP', 'USDC', 'SOL', 'ADA', 'LINK', 'AVAX', 'SUI', 'POL', 'DOT', 'DOGE', 'BNB', 'TON'];
@@ -75,6 +81,13 @@ export const useWalletStore = create<WalletState>((set) => ({
   contacts: [],
   addContact: (contact) => { set((s) => ({ contacts: [...s.contacts, contact] })); schedulePersist(); },
   removeContact: (id) => { set((s) => ({ contacts: s.contacts.filter((c) => c.id !== id) })); schedulePersist(); },
+  accounts: [{ name: 'Main Account', index: 0 }],
+  activeAccountIndex: 0,
+  addAccountEntry: (name) => {
+    set((s) => ({ accounts: [...s.accounts, { name, index: s.accounts.length }] }));
+    schedulePersist();
+  },
+  switchAccount: (index) => { set({ activeAccountIndex: index }); schedulePersist(); },
 }));
 
 // ─── Non-blocking persistence ───
@@ -96,7 +109,7 @@ async function doPersist() {
     await asyncStorageModule.setItem('ow-store', JSON.stringify({
       mode: s.mode, locale: s.locale, biometricEnabled: s.biometricEnabled,
       addresses: s.addresses, hasVault: s.hasVault, enabledTokens: s.enabledTokens,
-      contacts: s.contacts,
+      contacts: s.contacts, accounts: s.accounts, activeAccountIndex: s.activeAccountIndex,
     }));
   } catch {}
 }
@@ -118,6 +131,8 @@ async function doPersist() {
         hasVault: d.hasVault ?? false,
         enabledTokens: d.enabledTokens ?? DEFAULT_TOKENS,
         contacts: d.contacts ?? [],
+        accounts: d.accounts ?? [{ name: 'Main Account', index: 0 }],
+        activeAccountIndex: d.activeAccountIndex ?? 0,
         status: d.hasVault ? 'locked' : 'onboarding',
       });
     }
