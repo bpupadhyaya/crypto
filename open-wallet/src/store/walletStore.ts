@@ -33,6 +33,11 @@ interface WalletState {
   setHasVault: (has: boolean) => void;
   tempVaultPassword: string | null;
   setTempVaultPassword: (pw: string | null) => void;
+
+  // ─── Address Book ───
+  contacts: Array<{ id: string; name: string; address: string; chain: string }>;
+  addContact: (contact: { id: string; name: string; address: string; chain: string }) => void;
+  removeContact: (id: string) => void;
 }
 
 const DEFAULT_TOKENS = ['BTC', 'ETH', 'USDT', 'XRP', 'USDC', 'SOL', 'ADA', 'LINK', 'AVAX', 'SUI', 'POL', 'DOT', 'DOGE', 'BNB', 'TON'];
@@ -67,6 +72,9 @@ export const useWalletStore = create<WalletState>((set) => ({
   setHasVault: (has) => { set({ hasVault: has }); schedulePersist(); },
   tempVaultPassword: null,
   setTempVaultPassword: (pw) => set({ tempVaultPassword: pw }),
+  contacts: [],
+  addContact: (contact) => { set((s) => ({ contacts: [...s.contacts, contact] })); schedulePersist(); },
+  removeContact: (id) => { set((s) => ({ contacts: s.contacts.filter((c) => c.id !== id) })); schedulePersist(); },
 }));
 
 // ─── Non-blocking persistence ───
@@ -88,6 +96,7 @@ async function doPersist() {
     await asyncStorageModule.setItem('ow-store', JSON.stringify({
       mode: s.mode, locale: s.locale, biometricEnabled: s.biometricEnabled,
       addresses: s.addresses, hasVault: s.hasVault, enabledTokens: s.enabledTokens,
+      contacts: s.contacts,
     }));
   } catch {}
 }
@@ -108,6 +117,7 @@ async function doPersist() {
         addresses: d.addresses ?? {},
         hasVault: d.hasVault ?? false,
         enabledTokens: d.enabledTokens ?? DEFAULT_TOKENS,
+        contacts: d.contacts ?? [],
         status: d.hasVault ? 'locked' : 'onboarding',
       });
     }

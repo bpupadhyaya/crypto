@@ -11,8 +11,9 @@ import { useWalletStore } from '../store/walletStore';
 import { authManager } from '../core/auth/auth';
 import { PinPad } from '../components/PinPad';
 import { MOBILE_PROVIDERS_STATUS } from '../core/providers/mobile/stub';
+import { BackupScreen } from './BackupScreen';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup';
 
 export function SettingsScreen() {
   const { mode, setMode, setStatus, biometricEnabled, setBiometricEnabled } = useWalletStore();
@@ -119,6 +120,10 @@ export function SettingsScreen() {
     );
   }
 
+  if (view === 'backup') {
+    return <BackupScreen onClose={() => setView('main')} />;
+  }
+
   // ─── Main Settings ───
 
   const migrationServices = Object.entries(MOBILE_PROVIDERS_STATUS).map(([name, status]) => ({
@@ -178,6 +183,11 @@ export function SettingsScreen() {
             <Text style={st.label}>PQC Status</Text>
             <Text style={st.valueYellow}>Vault Ready • Chain Pending</Text>
           </View>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('backup')}>
+            <Text style={st.label}>Backup / Recovery Phrase</Text>
+            <Text style={st.value}>›</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Network Migration */}
