@@ -14,11 +14,6 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import { HDWallet } from '../core/wallet/hdwallet';
-import { Vault } from '../core/vault/vault';
-import { EthereumSigner } from '../core/chains/ethereum-signer';
-import { BitcoinSigner } from '../core/chains/bitcoin-signer';
-import { SolanaSigner } from '../core/chains/solana-signer';
 import { useWalletStore } from '../store/walletStore';
 
 type OnboardingStep = 'welcome' | 'create' | 'backup' | 'restore' | 'password';
@@ -32,21 +27,19 @@ export function OnboardingScreen() {
   const [loading, setLoading] = useState(false);
   const { setStatus, setHasVault, setAddresses, setTempVaultPassword } = useWalletStore();
 
-  const handleCreateWallet = () => {
+  const handleCreateWallet = async () => {
     setLoading(true);
-    // Use setTimeout to let the loading spinner render before blocking the thread
-    setTimeout(() => {
-      try {
-        const wallet = HDWallet.generate({ strength: 256 });
-        setMnemonic(wallet.getMnemonic());
-        wallet.destroy();
-        setStep('backup');
-      } catch (_error) {
-        Alert.alert('Error', 'Failed to generate wallet. Please try again.');
-      } finally {
-        setLoading(false);
-      }
-    }, 50);
+    try {
+      const { HDWallet } = await import('../core/wallet/hdwallet');
+      const wallet = HDWallet.generate({ strength: 256 });
+      setMnemonic(wallet.getMnemonic());
+      wallet.destroy();
+      setStep('backup');
+    } catch (_error) {
+      Alert.alert('Error', 'Failed to generate wallet. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSetPassword = async () => {
@@ -62,11 +55,9 @@ export function OnboardingScreen() {
     setLoading(true);
     const phraseToUse = step === 'password' && restoreInput ? restoreInput : mnemonic;
 
-    // Yield to UI so loading spinner renders before heavy crypto
-    await new Promise((r) => setTimeout(r, 100));
-
     try {
-      // Step 1: Create and encrypt vault
+      // Step 1: Create and encrypt vault (lazy import — not loaded at startup)
+      const { Vault } = await import('../core/vault/vault');
       const vaultInstance = new Vault();
       await vaultInstance.create(password, {
         mnemonic: phraseToUse,
@@ -90,7 +81,12 @@ export function OnboardingScreen() {
     }
 
     try {
-      // Step 2: Derive addresses
+      // Step 2: Derive addresses (lazy import — heavy libs loaded only here)
+      const { HDWallet } = await import('../core/wallet/hdwallet');
+      const { EthereumSigner } = await import('../core/chains/ethereum-signer');
+      const { BitcoinSigner } = await import('../core/chains/bitcoin-signer');
+      const { SolanaSigner } = await import('../core/chains/solana-signer');
+
       const wallet = HDWallet.fromMnemonic(phraseToUse);
       const ethSigner = EthereumSigner.fromWallet(wallet);
       const btcSigner = BitcoinSigner.fromWallet(wallet);

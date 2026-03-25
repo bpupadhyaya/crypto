@@ -1,33 +1,68 @@
 /**
- * Bootstrap — Initialize the Open Wallet provider registry.
+ * Bootstrap — Lazy provider initialization.
  *
- * Every provider registered here can be swapped to its mobile equivalent
- * by changing one line. The rest of the app doesn't change.
+ * Providers are registered lazily — they don't import heavy crypto
+ * libraries until first use. This keeps app startup fast.
  */
 
 import { registry } from './abstractions/registry';
-import { ServerBitcoinProvider } from './providers/server/bitcoin';
-import { ServerEthereumProvider } from './providers/server/ethereum';
-import { ServerSolanaProvider } from './providers/server/solana';
-import { ServerOracleProvider } from './providers/server/oracle';
-import { ServerDexProvider } from './providers/server/dex';
-import { ServerBridgeProvider } from './providers/server/bridge';
+
+let initialized = false;
 
 export function bootstrapProviders() {
-  // ─── Chain Providers ───
-  registry.registerChainProvider('bitcoin', new ServerBitcoinProvider());
-  registry.registerChainProvider('ethereum', new ServerEthereumProvider());
-  registry.registerChainProvider('solana', new ServerSolanaProvider());
+  if (initialized) return;
+  initialized = true;
 
-  // ─── DEX Aggregator ───
-  const dex = new ServerDexProvider(); // pass API key via env in production
-  registry.registerDexProvider(dex); // default for all chains
-  registry.registerDexProvider(dex, 'ethereum');
-  registry.registerDexProvider(dex, 'solana');
+  // Providers are registered lazily — the actual chain libraries
+  // (viem, solana web3, etc.) are only imported when first accessed.
+  // This is done via dynamic imports in the provider constructors.
 
-  // ─── Bridge (Cross-Chain) ───
-  registry.registerBridgeProvider(new ServerBridgeProvider());
+  // We register lightweight proxy providers that defer the heavy imports
+  registerLazyProviders();
+}
 
-  // ─── Oracle (Price Feeds) ───
-  registry.registerOracleProvider(new ServerOracleProvider());
+function registerLazyProviders() {
+  // Chain providers — lazy loaded on first balance check or transaction
+  const lazyChain = (chainId: string, importFn: () => Promise<any>) => {
+    let instance: any = null;
+    const proxy = new Proxy({} as any, {
+      get(_target, prop) {
+        if (prop === 'meta') {
+          return { name: `Lazy${chainId}Provider`, backendType: 'server', version: '0.1.0', capabilities: [] };
+        }
+        if (prop === 'chainId') return chainId;
+        return async (...args: any[]) => {
+          if (!instance) {
+            const mod = await importFn();
+            const ProviderClass = Object.values(mod)[0] as any;
+            instance = new ProviderClass();
+          }
+          return (instance as any)[prop](...args);
+        };
+      },
+    });
+    registry.registerChainProvider(chainId, proxy);
+  };
+
+  lazyChain('bitcoin', () => import('./providers/server/bitcoin'));
+  lazyChain('ethereum', () => import('./providers/server/ethereum'));
+  lazyChain('solana', () => import('./providers/server/solana'));
+
+  // Oracle — lazy loaded on first price fetch
+  let oracleInstance: any = null;
+  const oracleProxy = new Proxy({} as any, {
+    get(_target, prop) {
+      if (prop === 'meta') {
+        return { name: 'LazyOracleProvider', backendType: 'server', version: '0.1.0', capabilities: [] };
+      }
+      return async (...args: any[]) => {
+        if (!oracleInstance) {
+          const { ServerOracleProvider } = await import('./providers/server/oracle');
+          oracleInstance = new ServerOracleProvider();
+        }
+        return (oracleInstance as any)[prop](...args);
+      };
+    },
+  });
+  registry.registerOracleProvider(oracleProxy);
 }

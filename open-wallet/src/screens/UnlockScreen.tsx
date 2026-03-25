@@ -20,16 +20,9 @@ import {
 } from 'react-native';
 import { PinPad } from '../components/PinPad';
 import { authManager } from '../core/auth/auth';
-import { Vault } from '../core/vault/vault';
-import { HDWallet } from '../core/wallet/hdwallet';
-import { EthereumSigner } from '../core/chains/ethereum-signer';
-import { BitcoinSigner } from '../core/chains/bitcoin-signer';
-import { SolanaSigner } from '../core/chains/solana-signer';
 import { useWalletStore } from '../store/walletStore';
 
 type UnlockMode = 'loading' | 'biometric' | 'pin' | 'password';
-
-const vault = new Vault();
 
 export function UnlockScreen() {
   const [mode, setMode] = useState<UnlockMode>('loading');
@@ -58,7 +51,12 @@ export function UnlockScreen() {
     setMode(pinConfigured ? 'pin' : 'password');
   };
 
-  const deriveAddresses = (mnemonic: string) => {
+  const deriveAddresses = async (mnemonic: string) => {
+    const { HDWallet } = await import('../core/wallet/hdwallet');
+    const { EthereumSigner } = await import('../core/chains/ethereum-signer');
+    const { BitcoinSigner } = await import('../core/chains/bitcoin-signer');
+    const { SolanaSigner } = await import('../core/chains/solana-signer');
+
     const wallet = HDWallet.fromMnemonic(mnemonic);
     const ethSigner = EthereumSigner.fromWallet(wallet);
     const btcSigner = BitcoinSigner.fromWallet(wallet);
@@ -72,13 +70,13 @@ export function UnlockScreen() {
   };
 
   const unlockVaultWithStoredCredentials = async () => {
-    // Biometric success — unlock vault using stored master key
     try {
+      const { Vault } = await import('../core/vault/vault');
+      const vault = new Vault();
       const contents = await vault.unlockWithBiometrics();
-      deriveAddresses(contents.mnemonic);
+      await deriveAddresses(contents.mnemonic);
       setStatus('unlocked');
     } catch {
-      // Biometric vault unlock failed — fall to PIN
       setMode('pin');
     }
   };
@@ -91,8 +89,10 @@ export function UnlockScreen() {
         // PIN verified — retrieve vault password and decrypt
         const vaultPassword = await authManager.getVaultPassword(pin);
         if (vaultPassword) {
+          const { Vault } = await import('../core/vault/vault');
+          const vault = new Vault();
           const contents = await vault.unlock(vaultPassword);
-          deriveAddresses(contents.mnemonic);
+          await deriveAddresses(contents.mnemonic);
         }
         // Even without vault password (e.g., older setup), addresses
         // are persisted in Zustand store from initial creation
@@ -113,8 +113,10 @@ export function UnlockScreen() {
     if (!password.trim()) return;
     setLoading(true);
     try {
+      const { Vault } = await import('../core/vault/vault');
+      const vault = new Vault();
       const contents = await vault.unlock(password);
-      deriveAddresses(contents.mnemonic);
+      await deriveAddresses(contents.mnemonic);
       setStatus('unlocked');
     } catch {
       Alert.alert('Wrong Password', 'The password you entered is incorrect.');
