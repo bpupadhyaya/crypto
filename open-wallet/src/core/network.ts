@@ -19,7 +19,7 @@ const TESTNET_CONFIG: NetworkConfig = {
     addressPrefix: 'tb1',
   },
   ethereum: {
-    rpcUrl: 'https://rpc.sepolia.org',
+    rpcUrl: 'https://ethereum-sepolia-rpc.publicnode.com',
     chainId: 11155111,
     chainName: 'Sepolia',
   },

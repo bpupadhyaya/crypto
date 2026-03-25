@@ -31,7 +31,7 @@ export class EthereumSigner {
     this.client = createWalletClient({
       account: this.account,
       chain: this.chain,
-      transport: http(rpcUrl ?? config.rpcUrl),
+      transport: http(rpcUrl ?? config.rpcUrl, { timeout: 10_000 }),
     });
   }
 

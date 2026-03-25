@@ -22,6 +22,31 @@ import { registry } from '../core/abstractions/registry';
 import { isTestnet } from '../core/network';
 import type { ChainId } from '../core/abstractions/types';
 
+// ─── Module-level caches to avoid repeated expensive operations ───
+let cachedVaultContents: { mnemonic: string; password: string } | null = null;
+let signerModules: {
+  Vault?: any; HDWallet?: any;
+  EthereumSigner?: any; SolanaSigner?: any; BitcoinSigner?: any;
+} = {};
+
+// Pre-warm signer imports in background (non-blocking)
+setTimeout(async () => {
+  try {
+    const [vault, hd, eth, sol, btc] = await Promise.all([
+      import('../core/vault/vault'),
+      import('../core/wallet/hdwallet'),
+      import('../core/chains/ethereum-signer'),
+      import('../core/chains/solana-signer'),
+      import('../core/chains/bitcoin-signer'),
+    ]);
+    signerModules = {
+      Vault: vault.Vault, HDWallet: hd.HDWallet,
+      EthereumSigner: eth.EthereumSigner, SolanaSigner: sol.SolanaSigner,
+      BitcoinSigner: btc.BitcoinSigner,
+    };
+  } catch {}
+}, 100);
+
 export function SendScreen() {
   const { mode, supportedChains, addresses } = useWalletStore();
   const [selectedChain, setSelectedChain] = useState<ChainId>('ethereum');
@@ -33,6 +58,19 @@ export function SendScreen() {
   const [showScanner, setShowScanner] = useState(false);
 
   const senderAddress = addresses[selectedChain] ?? '';
+
+  // Testnet sample addresses for easy testing (EIP-55 checksummed)
+  const testAddresses: Record<string, string> = {
+    ethereum: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
+    bitcoin: 'tb1qw508d6qejxtdg4y5r3zarvary0c5xw7kxpjzsx',
+    solana: 'GKvqsuNcnwWqPzzuhLmGi4rzzh55FhJtGizkhHaEJqiV',
+    cosmos: 'cosmos1fl48vsnmsdzcv85q5d2q4z5ajdha8yu34mf0eh',
+  };
+
+  const fillTestAddress = useCallback(() => {
+    setRecipient(testAddresses[selectedChain] ?? '');
+    setAmount('0.001');
+  }, [selectedChain]);
 
   // Validate address (basic check — no heavy imports)
   const isAddressValid = useMemo(() => {
@@ -94,29 +132,36 @@ export function SendScreen() {
       const password = vaultPassword ?? store.tempVaultPassword;
       if (!password) throw new Error('Wallet not unlocked. Please sign in again.');
 
-      // 1. Unlock vault → get mnemonic
-      const { Vault } = await import('../core/vault/vault');
-      const vault = new Vault();
-      const contents = await vault.unlock(password);
+      // 1. Unlock vault → get mnemonic (cached after first unlock)
+      let mnemonic: string;
+      if (cachedVaultContents && cachedVaultContents.password === password) {
+        mnemonic = cachedVaultContents.mnemonic;
+      } else {
+        const VaultClass = signerModules.Vault ?? (await import('../core/vault/vault')).Vault;
+        const vault = new VaultClass();
+        const contents = await vault.unlock(password);
+        mnemonic = contents.mnemonic;
+        cachedVaultContents = { mnemonic, password };
+      }
 
       // 2. Restore HD wallet
-      const { HDWallet } = await import('../core/wallet/hdwallet');
-      const wallet = HDWallet.fromMnemonic(contents.mnemonic);
+      const HDWalletClass = signerModules.HDWallet ?? (await import('../core/wallet/hdwallet')).HDWallet;
+      const wallet = HDWalletClass.fromMnemonic(mnemonic);
 
       let txHash: string;
 
       // 3. Sign & broadcast based on chain
       if (selectedChain === 'ethereum') {
-        const { EthereumSigner } = await import('../core/chains/ethereum-signer');
-        const signer = EthereumSigner.fromWallet(wallet, store.activeAccountIndex);
+        const EthSigner = signerModules.EthereumSigner ?? (await import('../core/chains/ethereum-signer')).EthereumSigner;
+        const signer = EthSigner.fromWallet(wallet, store.activeAccountIndex);
         txHash = await signer.sendTransaction(recipient.trim(), amount.trim());
       } else if (selectedChain === 'solana') {
-        const { SolanaSigner } = await import('../core/chains/solana-signer');
-        const signer = SolanaSigner.fromWallet(wallet, store.activeAccountIndex);
+        const SolSigner = signerModules.SolanaSigner ?? (await import('../core/chains/solana-signer')).SolanaSigner;
+        const signer = SolSigner.fromWallet(wallet, store.activeAccountIndex);
         txHash = await signer.sendSOL(recipient.trim(), parseFloat(amount));
       } else if (selectedChain === 'bitcoin') {
-        const { BitcoinSigner } = await import('../core/chains/bitcoin-signer');
-        const signer = BitcoinSigner.fromWallet(wallet, store.activeAccountIndex);
+        const BtcSigner = signerModules.BitcoinSigner ?? (await import('../core/chains/bitcoin-signer')).BitcoinSigner;
+        const signer = BtcSigner.fromWallet(wallet, store.activeAccountIndex);
         const decimals = 8;
         const amountSats = BigInt(Math.round(parseFloat(amount) * 10 ** decimals));
         // Use medium fee rate (10 sat/vbyte for testnet, real estimate for mainnet)
@@ -148,6 +193,7 @@ export function SendScreen() {
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Transaction failed';
       Alert.alert('Send Failed', msg);
+      throw err; // Re-throw so ConfirmTransactionScreen resets to review
     } finally {
       setSending(false);
     }
@@ -209,9 +255,16 @@ export function SendScreen() {
         {/* Recipient */}
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <Text style={styles.fieldLabel}>To</Text>
-          <TouchableOpacity onPress={() => setShowScanner(true)}>
-            <Text style={{ color: '#3b82f6', fontSize: 13, fontWeight: '600' }}>Scan QR</Text>
-          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', gap: 12 }}>
+            {isTestnet() && (
+              <TouchableOpacity onPress={fillTestAddress}>
+                <Text style={{ color: '#eab308', fontSize: 13, fontWeight: '600' }}>Test Address</Text>
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity onPress={() => setShowScanner(true)}>
+              <Text style={{ color: '#3b82f6', fontSize: 13, fontWeight: '600' }}>Scan QR</Text>
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.inputWrapper}>
           <TextInput

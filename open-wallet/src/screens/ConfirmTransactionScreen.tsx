@@ -36,8 +36,9 @@ export const ConfirmTransactionScreen = React.memo(({ tx, onConfirm, onCancel }:
     setStep('executing');
     try {
       await onConfirm(password);
-    } catch (err) {
-      Alert.alert('Failed', err instanceof Error ? err.message : 'Transaction failed');
+    } catch {
+      // Error already handled by onConfirm (SendScreen shows its own alert)
+      // Just reset the UI state
       setStep('review');
     }
   }, [onConfirm]);

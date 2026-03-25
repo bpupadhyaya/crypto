@@ -63,7 +63,7 @@ export class ServerEthereumProvider implements IChainProvider {
     const config = getNetworkConfig().ethereum;
     this.client = createPublicClient({
       chain: isTestnet() ? sepolia : mainnet,
-      transport: http(rpcUrl ?? config.rpcUrl),
+      transport: http(rpcUrl ?? config.rpcUrl, { timeout: 10_000 }),
     });
   }
 
