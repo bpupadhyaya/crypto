@@ -3,6 +3,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { Alert } from 'react-native';
 import { useWalletStore } from '../store/walletStore';
 import { SUPPORTED_TOKENS } from '../core/tokens/registry';
 
@@ -80,6 +81,23 @@ export function usePrices() {
       })
       .catch(() => { if (mountedRef.current) setLoading(false); });
   }, [enabledTokens]);
+
+  // Check price alerts
+  useEffect(() => {
+    const alerts = useWalletStore.getState().priceAlerts;
+    for (const alert of alerts) {
+      if (!alert.enabled || alert.triggered) continue;
+      const price = prices[alert.symbol];
+      if (!price) continue;
+      const hit = alert.direction === 'above' ? price >= alert.targetPrice : price <= alert.targetPrice;
+      if (hit) {
+        useWalletStore.setState((s) => ({
+          priceAlerts: s.priceAlerts.map((a) => a.id === alert.id ? { ...a, triggered: true } : a),
+        }));
+        Alert.alert('Price Alert', `${alert.symbol} is now $${price.toLocaleString()} (${alert.direction} $${alert.targetPrice.toLocaleString()})`);
+      }
+    }
+  }, [prices]);
 
   return { prices, loading, lastUpdated, refresh };
 }

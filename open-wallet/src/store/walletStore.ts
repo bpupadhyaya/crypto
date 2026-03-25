@@ -44,6 +44,12 @@ interface WalletState {
   activeAccountIndex: number;
   addAccountEntry: (name: string) => void;
   switchAccount: (index: number) => void;
+
+  // ─── Price Alerts ───
+  priceAlerts: Array<{ id: string; symbol: string; targetPrice: number; direction: 'above' | 'below'; enabled: boolean; triggered: boolean }>;
+  addPriceAlert: (alert: { id: string; symbol: string; targetPrice: number; direction: 'above' | 'below'; enabled: boolean; triggered: boolean }) => void;
+  removePriceAlert: (id: string) => void;
+  togglePriceAlert: (id: string) => void;
 }
 
 const DEFAULT_TOKENS = ['BTC', 'ETH', 'USDT', 'XRP', 'USDC', 'SOL', 'ADA', 'LINK', 'AVAX', 'SUI', 'POL', 'DOT', 'DOGE', 'BNB', 'TON'];
@@ -83,11 +89,12 @@ export const useWalletStore = create<WalletState>((set) => ({
   removeContact: (id) => { set((s) => ({ contacts: s.contacts.filter((c) => c.id !== id) })); schedulePersist(); },
   accounts: [{ name: 'Main Account', index: 0 }],
   activeAccountIndex: 0,
-  addAccountEntry: (name) => {
-    set((s) => ({ accounts: [...s.accounts, { name, index: s.accounts.length }] }));
-    schedulePersist();
-  },
+  addAccountEntry: (name) => { set((s) => ({ accounts: [...s.accounts, { name, index: s.accounts.length }] })); schedulePersist(); },
   switchAccount: (index) => { set({ activeAccountIndex: index }); schedulePersist(); },
+  priceAlerts: [],
+  addPriceAlert: (alert) => { set((s) => ({ priceAlerts: [...s.priceAlerts, alert] })); schedulePersist(); },
+  removePriceAlert: (id) => { set((s) => ({ priceAlerts: s.priceAlerts.filter((a) => a.id !== id) })); schedulePersist(); },
+  togglePriceAlert: (id) => { set((s) => ({ priceAlerts: s.priceAlerts.map((a) => a.id === id ? { ...a, enabled: !a.enabled } : a) })); schedulePersist(); },
 }));
 
 // ─── Non-blocking persistence ───
@@ -109,7 +116,7 @@ async function doPersist() {
     await asyncStorageModule.setItem('ow-store', JSON.stringify({
       mode: s.mode, locale: s.locale, biometricEnabled: s.biometricEnabled,
       addresses: s.addresses, hasVault: s.hasVault, enabledTokens: s.enabledTokens,
-      contacts: s.contacts, accounts: s.accounts, activeAccountIndex: s.activeAccountIndex,
+      contacts: s.contacts, accounts: s.accounts, activeAccountIndex: s.activeAccountIndex, priceAlerts: s.priceAlerts,
     }));
   } catch {}
 }
@@ -137,6 +144,7 @@ async function doPersist() {
         contacts: d.contacts ?? [],
         accounts: d.accounts ?? [{ name: 'Main Account', index: 0 }],
         activeAccountIndex: d.activeAccountIndex ?? 0,
+        priceAlerts: d.priceAlerts ?? [],
         ...(shouldSetStatus ? { status: d.hasVault ? 'locked' : 'onboarding' } : {}),
       });
     }
