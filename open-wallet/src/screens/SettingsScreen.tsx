@@ -13,11 +13,12 @@ import {
   Switch,
   Alert,
 } from 'react-native';
+import { router } from 'expo-router';
 import { useWalletStore } from '../store/walletStore';
 import { MOBILE_PROVIDERS_STATUS } from '../core/providers/mobile/stub';
 
 export function SettingsScreen() {
-  const { mode, setMode, locale, setLocale } = useWalletStore();
+  const { mode, setMode, setStatus } = useWalletStore();
   const [biometricEnabled, setBiometricEnabled] = useState(false);
 
   const migrationServices = Object.entries(MOBILE_PROVIDERS_STATUS).map(([name, status]) => ({
@@ -181,6 +182,26 @@ export function SettingsScreen() {
           </View>
         </View>
 
+        {/* ─── Sign Out ─── */}
+        <TouchableOpacity
+          style={styles.signOutButton}
+          onPress={() => {
+            Alert.alert('Sign Out', 'Lock your wallet? You can unlock with PIN or password.', [
+              { text: 'Cancel', style: 'cancel' },
+              {
+                text: 'Sign Out',
+                style: 'destructive',
+                onPress: () => {
+                  setStatus('locked');
+                  router.replace('/');
+                },
+              },
+            ]);
+          }}
+        >
+          <Text style={styles.signOutText}>Sign Out</Text>
+        </TouchableOpacity>
+
         <View style={{ height: 40 }} />
       </ScrollView>
     </SafeAreaView>
@@ -279,5 +300,17 @@ const styles = StyleSheet.create({
     color: '#606070',
     fontSize: 11,
     marginTop: 4,
+  },
+  signOutButton: {
+    backgroundColor: '#ef444420',
+    borderRadius: 16,
+    paddingVertical: 16,
+    alignItems: 'center',
+    marginTop: 24,
+  },
+  signOutText: {
+    color: '#ef4444',
+    fontSize: 16,
+    fontWeight: '700',
   },
 });
