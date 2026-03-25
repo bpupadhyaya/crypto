@@ -24,21 +24,24 @@ const BTC_TOKEN: Token = {
   decimals: 8,
 };
 
-// Using mempool.space API — open source, no API key needed
-const API_BASE = 'https://mempool.space/api';
+import { getNetworkConfig } from '../../network';
 
 export class ServerBitcoinProvider implements IChainProvider {
   readonly meta: ProviderMeta = {
     name: 'ServerBitcoinProvider',
     backendType: 'server',
-    version: '0.1.0',
+    version: '0.2.0',
     capabilities: ['balance', 'send', 'history', 'utxo'],
   };
 
   readonly chainId = 'bitcoin' as const;
 
+  private get apiBase(): string {
+    return getNetworkConfig().bitcoin.apiBase;
+  }
+
   async getBalance(address: string, _token?: Token): Promise<Balance> {
-    const response = await fetch(`${API_BASE}/address/${address}`);
+    const response = await fetch(`${this.apiBase}/address/${address}`);
     if (!response.ok) throw new Error(`Failed to fetch balance for ${address}`);
 
     const data = await response.json();
@@ -53,7 +56,7 @@ export class ServerBitcoinProvider implements IChainProvider {
   }
 
   async getTransactionHistory(address: string, limit: number = 20): Promise<Transaction[]> {
-    const response = await fetch(`${API_BASE}/address/${address}/txs`);
+    const response = await fetch(`${this.apiBase}/address/${address}/txs`);
     if (!response.ok) return [];
 
     const txs = await response.json();
@@ -74,7 +77,7 @@ export class ServerBitcoinProvider implements IChainProvider {
   }
 
   async getTransaction(hash: string): Promise<Transaction | null> {
-    const response = await fetch(`${API_BASE}/tx/${hash}`);
+    const response = await fetch(`${this.apiBase}/tx/${hash}`);
     if (!response.ok) return null;
 
     const tx = await response.json();
@@ -96,7 +99,7 @@ export class ServerBitcoinProvider implements IChainProvider {
 
   async broadcastTransaction(signedTx: SignedTransaction): Promise<string> {
     const hexTx = Buffer.from(signedTx.rawTransaction).toString('hex');
-    const response = await fetch(`${API_BASE}/tx`, {
+    const response = await fetch(`${this.apiBase}/tx`, {
       method: 'POST',
       body: hexTx,
     });
@@ -110,7 +113,7 @@ export class ServerBitcoinProvider implements IChainProvider {
   }
 
   async estimateFee(_from: string, _to: string, _amount: bigint): Promise<bigint> {
-    const response = await fetch(`${API_BASE}/v1/fees/recommended`);
+    const response = await fetch(`${this.apiBase}/v1/fees/recommended`);
     if (!response.ok) throw new Error('Failed to fetch fee estimates');
 
     const fees = await response.json();
@@ -121,15 +124,18 @@ export class ServerBitcoinProvider implements IChainProvider {
   }
 
   async getBlockHeight(): Promise<number> {
-    const response = await fetch(`${API_BASE}/blocks/tip/height`);
+    const response = await fetch(`${this.apiBase}/blocks/tip/height`);
     if (!response.ok) throw new Error('Failed to fetch block height');
     return parseInt(await response.text(), 10);
   }
 
   isAddressValid(address: string): boolean {
-    // Basic validation — supports legacy, segwit, and taproot
-    if (/^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$/.test(address)) return true; // Legacy
-    if (/^bc1[qpzry9x8gf2tvdw0s3jn54khce6mua7l]{39,59}$/.test(address)) return true; // Bech32/Bech32m
+    // Mainnet: legacy (1/3), segwit (bc1q/bc1p)
+    if (/^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$/.test(address)) return true;
+    if (/^bc1[qpzry9x8gf2tvdw0s3jn54khce6mua7l]{39,59}$/.test(address)) return true;
+    // Testnet: legacy (m/n/2), segwit (tb1q/tb1p)
+    if (/^[mn2][a-km-zA-HJ-NP-Z1-9]{25,34}$/.test(address)) return true;
+    if (/^tb1[qpzry9x8gf2tvdw0s3jn54khce6mua7l]{39,62}$/.test(address)) return true;
     return false;
   }
 }

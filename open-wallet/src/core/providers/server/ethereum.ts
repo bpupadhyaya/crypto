@@ -17,7 +17,7 @@ import {
   type PublicClient,
   type Chain,
 } from 'viem';
-import { mainnet } from 'viem/chains';
+import { mainnet, sepolia } from 'viem/chains';
 import {
   IChainProvider,
 } from '../../abstractions/interfaces';
@@ -28,6 +28,7 @@ import {
   SignedTransaction,
   ProviderMeta,
 } from '../../abstractions/types';
+import { getNetworkConfig, isTestnet } from '../../network';
 
 const ETH_TOKEN: Token = {
   symbol: 'ETH',
@@ -59,9 +60,10 @@ export class ServerEthereumProvider implements IChainProvider {
   private client: PublicClient;
 
   constructor(rpcUrl?: string) {
+    const config = getNetworkConfig().ethereum;
     this.client = createPublicClient({
-      chain: mainnet,
-      transport: http(rpcUrl ?? 'https://eth.llamarpc.com'),
+      chain: isTestnet() ? sepolia : mainnet,
+      transport: http(rpcUrl ?? config.rpcUrl),
     });
   }
 
@@ -96,10 +98,36 @@ export class ServerEthereumProvider implements IChainProvider {
     };
   }
 
-  async getTransactionHistory(address: string, _limit?: number): Promise<Transaction[]> {
-    // viem doesn't have built-in tx history — requires indexer (Etherscan, Alchemy)
-    // This will be a separate IndexerProvider in production
-    return [];
+  async getTransactionHistory(address: string, limit: number = 20): Promise<Transaction[]> {
+    // Use Etherscan-compatible API for tx history (free, no key for basic queries)
+    const baseUrl = isTestnet()
+      ? 'https://api-sepolia.etherscan.io/api'
+      : 'https://api.etherscan.io/api';
+
+    try {
+      const url = `${baseUrl}?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=${limit}&sort=desc`;
+      const response = await fetch(url);
+      if (!response.ok) return [];
+
+      const data = await response.json();
+      if (data.status !== '1' || !Array.isArray(data.result)) return [];
+
+      return data.result.map((tx: any) => ({
+        id: tx.hash,
+        chainId: 'ethereum' as const,
+        from: tx.from,
+        to: tx.to,
+        amount: BigInt(tx.value),
+        token: ETH_TOKEN,
+        fee: BigInt(tx.gasUsed) * BigInt(tx.gasPrice),
+        status: tx.txreceipt_status === '1' ? 'confirmed' as const : 'failed' as const,
+        timestamp: parseInt(tx.timeStamp, 10) * 1000,
+        blockNumber: parseInt(tx.blockNumber, 10),
+        hash: tx.hash,
+      }));
+    } catch {
+      return [];
+    }
   }
 
   async getTransaction(hash: string): Promise<Transaction | null> {

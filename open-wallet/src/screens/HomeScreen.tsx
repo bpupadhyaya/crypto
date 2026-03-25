@@ -6,6 +6,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { View, Text, TextInput, FlatList, StyleSheet, SafeAreaView, TouchableOpacity, RefreshControl } from 'react-native';
 import { PieChart } from '../components/PieChart';
 import { useWalletStore } from '../store/walletStore';
+import { isTestnet } from '../core/network';
 import { SUPPORTED_TOKENS, type TokenInfo } from '../core/tokens/registry';
 import { ManageTokensScreen } from './ManageTokensScreen';
 import { TokenDetailScreen } from './TokenDetailScreen';
@@ -94,8 +95,16 @@ export function HomeScreen() {
     return `Updated ${Math.floor(secs / 3600)}h ago`;
   }, [lastUpdated]);
 
+  const networkMode = useWalletStore((s) => s.networkMode);
+  const showTestnetBanner = networkMode === 'testnet';
+
   const header = useMemo(() => (
     <>
+      {showTestnetBanner && (
+        <View style={s.testnetBanner}>
+          <Text style={s.testnetText}>TESTNET MODE — No real funds</Text>
+        </View>
+      )}
       <View style={s.chartCard}>
         <PieChart
           slices={MOCK_ALLOCATIONS}
@@ -127,7 +136,7 @@ export function HomeScreen() {
       />
       {lastUpdatedText ? <Text style={s.lastUpdated}>{lastUpdatedText}</Text> : null}
     </>
-  ), [totalUsdValue, openManage, lastUpdatedText]);
+  ), [totalUsdValue, openManage, lastUpdatedText, showTestnetBanner]);
 
   if (selectedToken) {
     return (
@@ -162,6 +171,8 @@ export function HomeScreen() {
 
 const s = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0a0a0f' },
+  testnetBanner: { backgroundColor: '#eab30820', paddingVertical: 6, alignItems: 'center', marginHorizontal: 16, borderRadius: 8, marginTop: 8 },
+  testnetText: { color: '#eab308', fontSize: 12, fontWeight: '700', letterSpacing: 1 },
   list: { paddingBottom: 100 },
   chartCard: { backgroundColor: '#16161f', borderRadius: 24, padding: 24, alignItems: 'center', marginHorizontal: 16, marginTop: 16 },
   legend: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 12, marginTop: 16 },

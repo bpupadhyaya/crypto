@@ -15,8 +15,7 @@
 import * as btc from '@scure/btc-signer';
 import { hex } from '@scure/base';
 import { HDWallet } from '../wallet/hdwallet';
-
-const MEMPOOL_API = 'https://mempool.space/api';
+import { getNetworkConfig, isTestnet } from '../network';
 
 interface UTXO {
   txid: string;
@@ -46,10 +45,12 @@ export class BitcoinSigner {
   }
 
   /**
-   * Get the P2WPKH (native segwit, bc1q...) address.
+   * Get the P2WPKH (native segwit) address.
+   * Returns bc1q... on mainnet, tb1q... on testnet.
    */
   getAddress(): string {
-    const payment = btc.p2wpkh(this.publicKey);
+    const network = isTestnet() ? btc.TEST_NETWORK : btc.NETWORK;
+    const payment = btc.p2wpkh(this.publicKey, network);
     return payment.address!;
   }
 
@@ -103,13 +104,15 @@ export class BitcoinSigner {
       });
     }
 
+    const network = isTestnet() ? btc.TEST_NETWORK : btc.NETWORK;
+
     // Output to recipient
-    tx.addOutputAddress(toAddress, amountSats);
+    tx.addOutputAddress(toAddress, amountSats, network);
 
     // Change output (back to self)
     const change = inputTotal - amountSats - fee;
     if (change > 546n) { // dust threshold
-      tx.addOutputAddress(this.getAddress(), change);
+      tx.addOutputAddress(this.getAddress(), change, network);
     }
 
     // 4. Sign
@@ -121,7 +124,8 @@ export class BitcoinSigner {
 
   private async fetchUTXOs(): Promise<UTXO[]> {
     const address = this.getAddress();
-    const response = await fetch(`${MEMPOOL_API}/address/${address}/utxo`);
+    const apiBase = getNetworkConfig().bitcoin.apiBase;
+    const response = await fetch(`${apiBase}/address/${address}/utxo`);
     if (!response.ok) throw new Error('Failed to fetch UTXOs');
     return response.json();
   }

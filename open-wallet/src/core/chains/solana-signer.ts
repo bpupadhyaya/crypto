@@ -12,21 +12,20 @@ import {
   SystemProgram,
   Transaction,
   LAMPORTS_PER_SOL,
-  clusterApiUrl,
   sendAndConfirmTransaction,
 } from '@solana/web3.js';
 import { HDWallet } from '../wallet/hdwallet';
+import { getNetworkConfig } from '../network';
 
 export class SolanaSigner {
   private keypair: Keypair;
   private connection: Connection;
 
   constructor(privateKey: Uint8Array, rpcUrl?: string) {
-    // Solana expects a 64-byte keypair (32 private + 32 public)
-    // @solana/web3.js Keypair.fromSeed takes a 32-byte seed
     this.keypair = Keypair.fromSeed(privateKey.slice(0, 32));
+    const config = getNetworkConfig().solana;
     this.connection = new Connection(
-      rpcUrl ?? clusterApiUrl('mainnet-beta'),
+      rpcUrl ?? config.rpcUrl,
       'confirmed',
     );
   }

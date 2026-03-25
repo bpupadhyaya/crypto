@@ -22,6 +22,7 @@ import {
   SignedTransaction,
   ProviderMeta,
 } from '../../abstractions/types';
+import { getNetworkConfig } from '../../network';
 
 const SOL_TOKEN: Token = {
   symbol: 'SOL',
@@ -42,8 +43,9 @@ export class ServerSolanaProvider implements IChainProvider {
   private connection: Connection;
 
   constructor(rpcUrl?: string) {
+    const config = getNetworkConfig().solana;
     this.connection = new Connection(
-      rpcUrl ?? clusterApiUrl('mainnet-beta'),
+      rpcUrl ?? config.rpcUrl,
       'confirmed'
     );
   }

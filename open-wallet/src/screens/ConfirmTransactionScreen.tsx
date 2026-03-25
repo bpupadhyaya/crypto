@@ -24,7 +24,7 @@ interface TxDetails {
 
 interface Props {
   tx: TxDetails;
-  onConfirm: () => Promise<void>;
+  onConfirm: (vaultPassword?: string) => Promise<void>;
   onCancel: () => void;
 }
 
@@ -32,42 +32,44 @@ export const ConfirmTransactionScreen = React.memo(({ tx, onConfirm, onCancel }:
   const [step, setStep] = useState<'review' | 'auth' | 'executing'>('review');
   const [pinError, setPinError] = useState<string | null>(null);
 
+  const executeWithPassword = useCallback(async (password?: string) => {
+    setStep('executing');
+    try {
+      await onConfirm(password);
+    } catch (err) {
+      Alert.alert('Failed', err instanceof Error ? err.message : 'Transaction failed');
+      setStep('review');
+    }
+  }, [onConfirm]);
+
   const handleConfirm = useCallback(async () => {
     // Try biometric first
     const bioResult = await authManager.authenticateWithBiometric('Confirm transaction');
     if (bioResult.success) {
-      setStep('executing');
-      try {
-        await onConfirm();
-      } catch (err) {
-        Alert.alert('Failed', err instanceof Error ? err.message : 'Transaction failed');
-        setStep('review');
-      }
+      // Biometric succeeded — try to get vault password from store
+      const store = (await import('../store/walletStore')).useWalletStore.getState();
+      await executeWithPassword(store.tempVaultPassword ?? undefined);
       return;
     }
     // Biometric failed or not available — show PIN
     setStep('auth');
-  }, [onConfirm]);
+  }, [executeWithPassword]);
 
   const handlePinAuth = useCallback(async (pin: string) => {
     try {
       const valid = await authManager.verifyPin(pin);
       if (valid) {
         setPinError(null);
-        setStep('executing');
-        try {
-          await onConfirm();
-        } catch (err) {
-          Alert.alert('Failed', err instanceof Error ? err.message : 'Transaction failed');
-          setStep('review');
-        }
+        // Use PIN to decrypt vault password
+        const vaultPassword = await authManager.getVaultPassword(pin);
+        await executeWithPassword(vaultPassword ?? undefined);
       } else {
         setPinError('Wrong PIN');
       }
     } catch (err) {
       setPinError(err instanceof Error ? err.message : 'Auth failed');
     }
-  }, [onConfirm]);
+  }, [executeWithPassword]);
 
   // ─── PIN Auth ───
   if (step === 'auth') {

@@ -3,7 +3,7 @@
  * Wired to real transaction signers (BTC/ETH/SOL).
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import {
   View,
   Text,
@@ -18,6 +18,8 @@ import {
 import { useWalletStore } from '../store/walletStore';
 import { ConfirmTransactionScreen } from './ConfirmTransactionScreen';
 import { QRScanner } from '../components/QRScanner';
+import { registry } from '../core/abstractions/registry';
+import { isTestnet } from '../core/network';
 import type { ChainId } from '../core/abstractions/types';
 
 export function SendScreen() {
@@ -47,6 +49,27 @@ export function SendScreen() {
     return symbols[selectedChain] ?? selectedChain.toUpperCase();
   }, [selectedChain]);
 
+  // Estimate fee when amount and recipient are set
+  const estimateFee = useCallback(async () => {
+    if (!recipient.trim() || !amount.trim() || parseFloat(amount) <= 0 || isAddressValid !== true) return;
+    try {
+      const provider = registry.getChainProvider(selectedChain);
+      const decimals = selectedChain === 'bitcoin' ? 8 : selectedChain === 'ethereum' ? 18 : 9;
+      const rawAmount = BigInt(Math.round(parseFloat(amount) * 10 ** decimals));
+      const fee = await provider.estimateFee(senderAddress, recipient.trim(), rawAmount);
+      const feeHuman = Number(fee) / 10 ** decimals;
+      setEstimatedFee(feeHuman < 0.000001 ? '<0.000001' : feeHuman.toFixed(6));
+    } catch {
+      setEstimatedFee(null);
+    }
+  }, [recipient, amount, selectedChain, senderAddress, isAddressValid]);
+
+  // Trigger fee estimation when inputs change
+  React.useEffect(() => {
+    const timer = setTimeout(estimateFee, 500);
+    return () => clearTimeout(timer);
+  }, [estimateFee]);
+
   const handleSend = () => {
     if (!recipient.trim()) {
       Alert.alert('Missing Address', 'Please enter a recipient address.');
@@ -63,13 +86,71 @@ export function SendScreen() {
     setShowConfirm(true);
   };
 
-  const executeSend = async () => {
-    // In production: unlock vault → get signer → sign & broadcast
-    await new Promise((r) => setTimeout(r, 1500));
-    Alert.alert('Sent', `${amount} ${chainSymbol} sent successfully`);
-    setAmount('');
-    setRecipient('');
-    setShowConfirm(false);
+  const executeSend = async (vaultPassword?: string) => {
+    try {
+      setSending(true);
+      // Use password passed from auth flow, fall back to store
+      const store = useWalletStore.getState();
+      const password = vaultPassword ?? store.tempVaultPassword;
+      if (!password) throw new Error('Wallet not unlocked. Please sign in again.');
+
+      // 1. Unlock vault → get mnemonic
+      const { Vault } = await import('../core/vault/vault');
+      const vault = new Vault();
+      const contents = await vault.unlock(password);
+
+      // 2. Restore HD wallet
+      const { HDWallet } = await import('../core/wallet/hdwallet');
+      const wallet = HDWallet.fromMnemonic(contents.mnemonic);
+
+      let txHash: string;
+
+      // 3. Sign & broadcast based on chain
+      if (selectedChain === 'ethereum') {
+        const { EthereumSigner } = await import('../core/chains/ethereum-signer');
+        const signer = EthereumSigner.fromWallet(wallet, store.activeAccountIndex);
+        txHash = await signer.sendTransaction(recipient.trim(), amount.trim());
+      } else if (selectedChain === 'solana') {
+        const { SolanaSigner } = await import('../core/chains/solana-signer');
+        const signer = SolanaSigner.fromWallet(wallet, store.activeAccountIndex);
+        txHash = await signer.sendSOL(recipient.trim(), parseFloat(amount));
+      } else if (selectedChain === 'bitcoin') {
+        const { BitcoinSigner } = await import('../core/chains/bitcoin-signer');
+        const signer = BitcoinSigner.fromWallet(wallet, store.activeAccountIndex);
+        const decimals = 8;
+        const amountSats = BigInt(Math.round(parseFloat(amount) * 10 ** decimals));
+        // Use medium fee rate (10 sat/vbyte for testnet, real estimate for mainnet)
+        const feeRate = isTestnet() ? 10 : 20;
+        const rawTx = await signer.createTransaction(recipient.trim(), amountSats, feeRate);
+        // Broadcast via provider
+        const provider = registry.getChainProvider('bitcoin');
+        txHash = await provider.broadcastTransaction({
+          chainId: 'bitcoin',
+          rawTransaction: rawTx,
+          hash: '',
+        });
+      } else {
+        throw new Error(`Unsupported chain: ${selectedChain}`);
+      }
+
+      // 4. Clean up private key material
+      wallet.destroy();
+
+      // 5. Show success
+      Alert.alert(
+        'Transaction Sent',
+        `${amount} ${chainSymbol} sent successfully!\n\nTx: ${txHash.slice(0, 16)}...${txHash.slice(-8)}`,
+        [{ text: 'OK' }]
+      );
+      setAmount('');
+      setRecipient('');
+      setShowConfirm(false);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Transaction failed';
+      Alert.alert('Send Failed', msg);
+    } finally {
+      setSending(false);
+    }
   };
 
   if (showScanner) {

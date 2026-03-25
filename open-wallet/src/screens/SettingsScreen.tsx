@@ -19,7 +19,7 @@ import { AddressBookScreen } from './AddressBookScreen';
 type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts';
 
 export function SettingsScreen() {
-  const { mode, setMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency } = useWalletStore();
+  const { mode, setMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork } = useWalletStore();
   const [view, setView] = useState<SettingsView>('main');
   const [pinToChange, setPinToChange] = useState('');
   const [biometricAvailable, setBiometricAvailable] = useState(false);
@@ -176,6 +176,43 @@ export function SettingsScreen() {
           </TouchableOpacity>
         </View>
 
+        {/* Network */}
+        <Text style={st.section}>Network</Text>
+        <View style={st.card}>
+          <View style={st.row}>
+            <Text style={st.label}>Network</Text>
+            <View style={st.modeToggle}>
+              {(['testnet', 'mainnet'] as const).map((n) => (
+                <TouchableOpacity
+                  key={n}
+                  style={[st.modeBtn, networkMode === n && (n === 'testnet' ? st.networkTestnet : st.networkMainnet)]}
+                  onPress={() => {
+                    if (n === 'mainnet') {
+                      Alert.alert('Switch to Mainnet', 'Real funds will be used. Are you sure?', [
+                        { text: 'Cancel', style: 'cancel' },
+                        { text: 'Switch', onPress: () => setNetwork(n) },
+                      ]);
+                    } else {
+                      setNetwork(n);
+                    }
+                  }}
+                >
+                  <Text style={[st.modeBtnText, networkMode === n && st.modeBtnTextActive]}>
+                    {n === 'testnet' ? 'Testnet' : 'Mainnet'}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+          <View style={st.divider} />
+          <View style={st.row}>
+            <Text style={st.label}>Chains</Text>
+            <Text style={st.value}>
+              {networkMode === 'testnet' ? 'BTC Testnet · Sepolia · Devnet' : 'BTC · Ethereum · Solana'}
+            </Text>
+          </View>
+        </View>
+
         {/* Security */}
         <Text style={st.section}>Security</Text>
         <View style={st.card}>
@@ -277,6 +314,8 @@ const st = StyleSheet.create({
   modeToggle: { flexDirection: 'row', gap: 4 },
   modeBtn: { paddingVertical: 6, paddingHorizontal: 16, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.06)' },
   modeBtnActive: { backgroundColor: '#22c55e' },
+  networkTestnet: { backgroundColor: '#eab308' },
+  networkMainnet: { backgroundColor: '#ef4444' },
   modeBtnText: { color: '#a0a0b0', fontSize: 13, fontWeight: '600' },
   modeBtnTextActive: { color: '#0a0a0f' },
   progressBar: { height: 4, backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: 2, marginHorizontal: 16, marginBottom: 8 },

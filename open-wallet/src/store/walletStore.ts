@@ -6,6 +6,7 @@
 
 import { create } from 'zustand';
 import type { ChainId, Balance } from '../core/abstractions/types';
+import { type NetworkMode, setNetworkMode } from '../core/network';
 
 export type AppMode = 'simple' | 'pro';
 export type WalletStatus = 'locked' | 'unlocked' | 'onboarding' | 'pin_setup';
@@ -13,6 +14,8 @@ export type WalletStatus = 'locked' | 'unlocked' | 'onboarding' | 'pin_setup';
 interface WalletState {
   mode: AppMode;
   setMode: (mode: AppMode) => void;
+  networkMode: NetworkMode;
+  setNetworkMode: (mode: NetworkMode) => void;
   status: WalletStatus;
   setStatus: (status: WalletStatus) => void;
   balances: Balance[];
@@ -59,6 +62,8 @@ const DEFAULT_TOKENS = ['BTC', 'ETH', 'USDT', 'XRP', 'USDC', 'SOL', 'ADA', 'LINK
 export const useWalletStore = create<WalletState>((set) => ({
   mode: 'simple',
   setMode: (mode) => { set({ mode }); schedulePersist(); },
+  networkMode: 'testnet' as NetworkMode,
+  setNetworkMode: (mode) => { setNetworkMode(mode); set({ networkMode: mode }); schedulePersist(); },
   status: 'onboarding',
   setStatus: (status) => set({ status }),
   balances: [],
@@ -118,7 +123,7 @@ async function doPersist() {
     }
     const s = useWalletStore.getState();
     await asyncStorageModule.setItem('ow-store', JSON.stringify({
-      mode: s.mode, locale: s.locale, currency: s.currency, biometricEnabled: s.biometricEnabled,
+      mode: s.mode, networkMode: s.networkMode, locale: s.locale, currency: s.currency, biometricEnabled: s.biometricEnabled,
       addresses: s.addresses, hasVault: s.hasVault, enabledTokens: s.enabledTokens,
       contacts: s.contacts, accounts: s.accounts, activeAccountIndex: s.activeAccountIndex, priceAlerts: s.priceAlerts,
     }));
@@ -138,8 +143,12 @@ async function doPersist() {
       const currentStatus = useWalletStore.getState().status;
       // Only set status from storage if user hasn't already changed it
       const shouldSetStatus = currentStatus === 'onboarding' && !useWalletStore.getState().hasVault;
+      // Restore network mode
+      const restoredNetworkMode = d.networkMode ?? 'testnet';
+      setNetworkMode(restoredNetworkMode);
       useWalletStore.setState({
         mode: d.mode ?? 'simple',
+        networkMode: restoredNetworkMode,
         locale: d.locale ?? 'en',
         currency: d.currency ?? 'usd',
         biometricEnabled: d.biometricEnabled ?? false,

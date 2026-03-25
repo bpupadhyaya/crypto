@@ -12,22 +12,26 @@ import {
   type WalletClient,
   type Account,
 } from 'viem';
-import { mainnet } from 'viem/chains';
+import { mainnet, sepolia } from 'viem/chains';
 import { privateKeyToAccount } from 'viem/accounts';
 import { HDWallet } from '../wallet/hdwallet';
+import { getNetworkConfig, isTestnet } from '../network';
 
 export class EthereumSigner {
   private account: Account;
   private client: WalletClient;
+  private chain;
 
   constructor(privateKey: Uint8Array, rpcUrl?: string) {
     const hexKey = ('0x' + Buffer.from(privateKey).toString('hex')) as `0x${string}`;
     this.account = privateKeyToAccount(hexKey);
+    const config = getNetworkConfig().ethereum;
+    this.chain = isTestnet() ? sepolia : mainnet;
 
     this.client = createWalletClient({
       account: this.account,
-      chain: mainnet,
-      transport: http(rpcUrl ?? 'https://eth.llamarpc.com'),
+      chain: this.chain,
+      transport: http(rpcUrl ?? config.rpcUrl),
     });
   }
 
@@ -45,7 +49,7 @@ export class EthereumSigner {
       account: this.account,
       to: to as `0x${string}`,
       value: parseEther(amountEth),
-      chain: mainnet,
+      chain: this.chain,
     });
     return hash;
   }
@@ -59,7 +63,7 @@ export class EthereumSigner {
       account: this.account,
       to: tokenAddress as `0x${string}`,
       data: this.encodeERC20Transfer(to, amount),
-      chain: mainnet,
+      chain: this.chain,
     });
     return hash;
   }
