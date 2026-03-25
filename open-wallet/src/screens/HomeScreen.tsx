@@ -3,7 +3,7 @@
  */
 
 import React, { useState, useMemo, useCallback } from 'react';
-import { View, Text, FlatList, StyleSheet, SafeAreaView, TouchableOpacity, RefreshControl } from 'react-native';
+import { View, Text, TextInput, FlatList, StyleSheet, SafeAreaView, TouchableOpacity, RefreshControl } from 'react-native';
 import { PieChart } from '../components/PieChart';
 import { useWalletStore } from '../store/walletStore';
 import { SUPPORTED_TOKENS, type TokenInfo } from '../core/tokens/registry';
@@ -63,14 +63,21 @@ const ActionBtn = React.memo(({ icon, label, color }: { icon: string; label: str
 export function HomeScreen() {
   const [showManage, setShowManage] = useState(false);
   const [selectedToken, setSelectedToken] = useState<TokenInfo | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const enabledTokens = useWalletStore((s) => s.enabledTokens);
   const totalUsdValue = useWalletStore((s) => s.totalUsdValue);
   const { prices, loading: pricesLoading, lastUpdated, refresh: refreshPrices } = usePrices();
 
-  const filteredTokens = useMemo(
-    () => SUPPORTED_TOKENS.filter((t) => enabledTokens.includes(t.symbol)),
-    [enabledTokens]
-  );
+  const filteredTokens = useMemo(() => {
+    let tokens = SUPPORTED_TOKENS.filter((t) => enabledTokens.includes(t.symbol));
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      tokens = tokens.filter((t) =>
+        t.symbol.toLowerCase().includes(q) || t.name.toLowerCase().includes(q)
+      );
+    }
+    return tokens;
+  }, [enabledTokens, searchQuery]);
 
   const renderItem = useCallback(({ item }: { item: TokenInfo }) => (
     <TokenRow token={item} price={prices[item.symbol]} onPress={() => setSelectedToken(item)} />
@@ -109,6 +116,15 @@ export function HomeScreen() {
           <Text style={s.manageLink}>Manage</Text>
         </TouchableOpacity>
       </View>
+      <TextInput
+        style={s.searchInput}
+        placeholder="Search tokens..."
+        placeholderTextColor="#606070"
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+        autoCorrect={false}
+        autoCapitalize="none"
+      />
       {lastUpdatedText ? <Text style={s.lastUpdated}>{lastUpdatedText}</Text> : null}
     </>
   ), [totalUsdValue, openManage, lastUpdatedText]);
@@ -161,6 +177,7 @@ const s = StyleSheet.create({
   sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 24, marginBottom: 8, marginHorizontal: 16 },
   sectionTitle: { color: '#a0a0b0', fontSize: 13, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 1 },
   manageLink: { color: '#3b82f6', fontSize: 13, fontWeight: '600' },
+  searchInput: { backgroundColor: '#16161f', borderRadius: 12, paddingHorizontal: 16, paddingVertical: 10, marginHorizontal: 16, marginBottom: 8, color: '#f0f0f5', fontSize: 14 },
   lastUpdated: { color: '#606070', fontSize: 11, marginLeft: 16, marginBottom: 4 },
   tokenRow: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 14, backgroundColor: '#16161f', borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.04)', marginHorizontal: 16 },
   tokenDot: { width: 10, height: 10, borderRadius: 5, marginRight: 12 },
