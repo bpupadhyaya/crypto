@@ -3,11 +3,13 @@
  * Renders shell instantly, data fills in async.
  */
 
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, Text, FlatList, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
 import { PieChart } from '../components/PieChart';
 import { useWalletStore } from '../store/walletStore';
 import { SUPPORTED_TOKENS, type TokenInfo } from '../core/tokens/registry';
+import { ManageTokensScreen } from './ManageTokensScreen';
+import { usePrices } from '../hooks/usePrices';
 
 // Mock allocations for display (will be real when balances are fetched)
 const MOCK_ALLOCATIONS = [
@@ -18,7 +20,7 @@ const MOCK_ALLOCATIONS = [
   { label: 'Others', value: 15, color: '#606070' },
 ];
 
-const TokenRow = React.memo(({ token }: { token: TokenInfo }) => (
+const TokenRow = React.memo(({ token, price }: { token: TokenInfo; price?: number }) => (
   <View style={s.tokenRow}>
     <View style={[s.tokenDot, { backgroundColor: token.color }]} />
     <View style={s.tokenInfo}>
@@ -27,15 +29,17 @@ const TokenRow = React.memo(({ token }: { token: TokenInfo }) => (
     </View>
     <View style={s.tokenValues}>
       <Text style={s.tokenBalance}>0.00</Text>
-      <Text style={s.tokenUsd}>$0.00</Text>
+      <Text style={s.tokenUsd}>
+        {price ? `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '—'}
+      </Text>
     </View>
   </View>
 ));
 
 const keyExtractor = (item: TokenInfo) => `${item.chainId}-${item.symbol}`;
-const renderToken = ({ item }: { item: TokenInfo }) => <TokenRow token={item} />;
+// renderToken is defined inside HomeScreen to access prices
 
-function Header() {
+function Header({ onManage }: { onManage: () => void }) {
   const { totalUsdValue } = useWalletStore();
   const [showChart, setShowChart] = React.useState(false);
 
@@ -81,7 +85,12 @@ function Header() {
         <ActionBtn icon="⇄" label="Swap" color="#3b82f6" />
       </View>
 
-      <Text style={s.sectionTitle}>Tokens</Text>
+      <View style={s.sectionHeader}>
+        <Text style={s.sectionTitle}>Tokens</Text>
+        <TouchableOpacity onPress={onManage}>
+          <Text style={s.manageLink}>Manage</Text>
+        </TouchableOpacity>
+      </View>
     </>
   );
 }
@@ -98,13 +107,27 @@ function ActionBtn({ icon, label, color }: { icon: string; label: string; color:
 }
 
 export function HomeScreen() {
+  const [showManage, setShowManage] = useState(false);
+  const { enabledTokens } = useWalletStore();
+
+  const filteredTokens = useMemo(
+    () => SUPPORTED_TOKENS.filter((t) => enabledTokens.includes(t.symbol)),
+    [enabledTokens]
+  );
+
+  if (showManage) {
+    return <ManageTokensScreen onClose={() => setShowManage(false)} />;
+  }
+
+  const { prices } = usePrices();
+
   return (
     <SafeAreaView style={s.container}>
       <FlatList
-        data={SUPPORTED_TOKENS}
+        data={filteredTokens}
         keyExtractor={keyExtractor}
-        renderItem={renderToken}
-        ListHeaderComponent={Header}
+        renderItem={({ item }) => <TokenRow token={item} price={prices[item.symbol]} />}
+        ListHeaderComponent={() => <Header onManage={() => setShowManage(true)} />}
         showsVerticalScrollIndicator={false}
         initialNumToRender={10}
         maxToRenderPerBatch={10}
@@ -142,11 +165,15 @@ const s = StyleSheet.create({
   },
   actionIcon: { fontSize: 24, fontWeight: '700' },
   actionLabel: { color: '#f0f0f5', fontSize: 14, fontWeight: '600' },
+  sectionHeader: {
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    marginTop: 24, marginBottom: 8, marginHorizontal: 16,
+  },
   sectionTitle: {
     color: '#a0a0b0', fontSize: 13, fontWeight: '600',
     textTransform: 'uppercase', letterSpacing: 1,
-    marginTop: 24, marginBottom: 8, marginLeft: 16,
   },
+  manageLink: { color: '#3b82f6', fontSize: 13, fontWeight: '600' },
   tokenRow: {
     flexDirection: 'row', alignItems: 'center',
     paddingHorizontal: 16, paddingVertical: 14,

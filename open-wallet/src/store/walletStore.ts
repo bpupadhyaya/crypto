@@ -51,6 +51,10 @@ interface WalletState {
   // ─── Supported Chains ───
   supportedChains: ChainId[];
 
+  // ─── Enabled Tokens ───
+  enabledTokens: string[];
+  toggleToken: (symbol: string, enabled: boolean) => void;
+
   // ─── Vault ───
   hasVault: boolean;
   setHasVault: (has: boolean) => void;
@@ -109,6 +113,15 @@ export const useWalletStore = create<WalletState>()(
       // Chains
       supportedChains: ['bitcoin', 'ethereum', 'solana', 'cosmos'],
 
+      // Enabled tokens (default: all)
+      enabledTokens: ['BTC', 'ETH', 'USDT', 'XRP', 'USDC', 'SOL', 'ADA', 'LINK', 'AVAX', 'SUI', 'POL', 'DOT', 'DOGE', 'BNB', 'TON'],
+      toggleToken: (symbol, enabled) =>
+        set((state) => ({
+          enabledTokens: enabled
+            ? [...state.enabledTokens, symbol]
+            : state.enabledTokens.filter((s) => s !== symbol),
+        })),
+
       // Vault
       hasVault: false,
       setHasVault: (has) => set({ hasVault: has }),
@@ -128,6 +141,7 @@ export const useWalletStore = create<WalletState>()(
         activeChainId: state.activeChainId,
         addresses: state.addresses,
         hasVault: state.hasVault,
+        enabledTokens: state.enabledTokens,
       }),
     }
   )

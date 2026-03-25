@@ -1,10 +1,10 @@
 /**
- * PIN Pad — 6-digit numeric keypad for quick unlock.
- * Clean, accessible design. Haptic feedback ready.
+ * PIN Pad — 6-digit numeric keypad.
+ * Optimized for fast, responsive input.
  */
 
-import React, { useState, useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useCallback, useRef } from 'react';
+import { View, Text, Pressable, StyleSheet, Platform } from 'react-native';
 
 interface PinPadProps {
   title: string;
@@ -16,31 +16,29 @@ interface PinPadProps {
 
 export function PinPad({ title, subtitle, onComplete, error, maxLength = 6 }: PinPadProps) {
   const [pin, setPin] = useState('');
+  const processingRef = useRef(false);
 
   const handlePress = useCallback((digit: string) => {
-    const newPin = pin + digit;
-    setPin(newPin);
-    if (newPin.length === maxLength) {
-      onComplete(newPin);
-      // Reset after a short delay (in case of error, user sees full dots briefly)
-      setTimeout(() => setPin(''), 300);
-    }
-  }, [pin, maxLength, onComplete]);
+    if (processingRef.current) return;
+
+    setPin((prev) => {
+      const newPin = prev + digit;
+      if (newPin.length === maxLength) {
+        processingRef.current = true;
+        // Immediate callback, reset after
+        setTimeout(() => {
+          onComplete(newPin);
+          setPin('');
+          processingRef.current = false;
+        }, 100);
+      }
+      return newPin.length <= maxLength ? newPin : prev;
+    });
+  }, [maxLength, onComplete]);
 
   const handleDelete = useCallback(() => {
     setPin((prev) => prev.slice(0, -1));
   }, []);
-
-  const dots = Array.from({ length: maxLength }, (_, i) => (
-    <View
-      key={i}
-      style={[
-        styles.dot,
-        i < pin.length && styles.dotFilled,
-        error && i < pin.length && styles.dotError,
-      ]}
-    />
-  ));
 
   const keys = [
     ['1', '2', '3'],
@@ -50,43 +48,51 @@ export function PinPad({ title, subtitle, onComplete, error, maxLength = 6 }: Pi
   ];
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
-      {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
+    <View style={s.container}>
+      <Text style={s.title}>{title}</Text>
+      {subtitle && <Text style={s.subtitle}>{subtitle}</Text>}
 
       {/* Dots */}
-      <View style={styles.dotsRow}>{dots}</View>
+      <View style={s.dotsRow}>
+        {Array.from({ length: maxLength }, (_, i) => (
+          <View
+            key={i}
+            style={[
+              s.dot,
+              i < pin.length && s.dotFilled,
+              error && i < pin.length && s.dotError,
+            ]}
+          />
+        ))}
+      </View>
 
-      {/* Error message */}
-      {error && <Text style={styles.error}>{error}</Text>}
+      {error && <Text style={s.error}>{error}</Text>}
 
-      {/* Keypad */}
-      <View style={styles.keypad}>
-        {keys.map((row, rowIndex) => (
-          <View key={rowIndex} style={styles.keyRow}>
+      {/* Keypad — using Pressable for faster response than TouchableOpacity */}
+      <View style={s.keypad}>
+        {keys.map((row, ri) => (
+          <View key={ri} style={s.keyRow}>
             {row.map((key) => {
-              if (key === '') return <View key="empty" style={styles.keyEmpty} />;
+              if (key === '') return <View key="empty" style={s.keyEmpty} />;
               if (key === 'del') {
                 return (
-                  <TouchableOpacity
+                  <Pressable
                     key="del"
-                    style={styles.key}
+                    style={({ pressed }) => [s.key, pressed && s.keyPressed]}
                     onPress={handleDelete}
-                    activeOpacity={0.5}
                   >
-                    <Text style={styles.keyTextDel}>←</Text>
-                  </TouchableOpacity>
+                    <Text style={s.keyTextDel}>←</Text>
+                  </Pressable>
                 );
               }
               return (
-                <TouchableOpacity
+                <Pressable
                   key={key}
-                  style={styles.key}
+                  style={({ pressed }) => [s.key, pressed && s.keyPressed]}
                   onPress={() => handlePress(key)}
-                  activeOpacity={0.5}
                 >
-                  <Text style={styles.keyText}>{key}</Text>
-                </TouchableOpacity>
+                  <Text style={s.keyText}>{key}</Text>
+                </Pressable>
               );
             })}
           </View>
@@ -96,82 +102,20 @@ export function PinPad({ title, subtitle, onComplete, error, maxLength = 6 }: Pi
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#0a0a0f',
-    paddingHorizontal: 40,
-  },
-  title: {
-    color: '#f0f0f5',
-    fontSize: 24,
-    fontWeight: '800',
-    marginBottom: 8,
-  },
-  subtitle: {
-    color: '#a0a0b0',
-    fontSize: 14,
-    marginBottom: 32,
-  },
-  dotsRow: {
-    flexDirection: 'row',
-    gap: 16,
-    marginBottom: 16,
-  },
-  dot: {
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    borderWidth: 2,
-    borderColor: '#606070',
-  },
-  dotFilled: {
-    backgroundColor: '#22c55e',
-    borderColor: '#22c55e',
-  },
-  dotError: {
-    backgroundColor: '#ef4444',
-    borderColor: '#ef4444',
-  },
-  error: {
-    color: '#ef4444',
-    fontSize: 13,
-    marginBottom: 16,
-    fontWeight: '600',
-  },
-  keypad: {
-    marginTop: 24,
-    width: '100%',
-  },
-  keyRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginBottom: 12,
-  },
-  key: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    backgroundColor: '#16161f',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 12,
-  },
-  keyEmpty: {
-    width: 72,
-    height: 72,
-    marginHorizontal: 12,
-  },
-  keyText: {
-    color: '#f0f0f5',
-    fontSize: 28,
-    fontWeight: '600',
-  },
-  keyTextDel: {
-    color: '#a0a0b0',
-    fontSize: 24,
-    fontWeight: '600',
-  },
+const s = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#0a0a0f', paddingHorizontal: 40 },
+  title: { color: '#f0f0f5', fontSize: 24, fontWeight: '800', marginBottom: 8 },
+  subtitle: { color: '#a0a0b0', fontSize: 14, marginBottom: 32 },
+  dotsRow: { flexDirection: 'row', gap: 16, marginBottom: 16 },
+  dot: { width: 16, height: 16, borderRadius: 8, borderWidth: 2, borderColor: '#606070' },
+  dotFilled: { backgroundColor: '#22c55e', borderColor: '#22c55e' },
+  dotError: { backgroundColor: '#ef4444', borderColor: '#ef4444' },
+  error: { color: '#ef4444', fontSize: 13, marginBottom: 16, fontWeight: '600' },
+  keypad: { marginTop: 24, width: '100%' },
+  keyRow: { flexDirection: 'row', justifyContent: 'center', marginBottom: 12 },
+  key: { width: 72, height: 72, borderRadius: 36, backgroundColor: '#16161f', justifyContent: 'center', alignItems: 'center', marginHorizontal: 12 },
+  keyPressed: { backgroundColor: '#22c55e30', transform: [{ scale: 0.95 }] },
+  keyEmpty: { width: 72, height: 72, marginHorizontal: 12 },
+  keyText: { color: '#f0f0f5', fontSize: 28, fontWeight: '600' },
+  keyTextDel: { color: '#a0a0b0', fontSize: 24, fontWeight: '600' },
 });
