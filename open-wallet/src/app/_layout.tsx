@@ -11,7 +11,6 @@ import 'react-native-get-random-values';
 import React, { useEffect } from 'react';
 import { Slot } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useWalletStore } from '../store/walletStore';
 
 // Direct imports — no lazy loading, no dynamic imports, no Suspense
@@ -21,10 +20,6 @@ import { UnlockScreen } from '../screens/UnlockScreen';
 import { PinSetupScreen } from '../screens/PinSetupScreen';
 
 let providersInitialized = false;
-
-const queryClient = new QueryClient({
-  defaultOptions: { queries: { staleTime: 30_000, retry: 1, gcTime: 60_000 } },
-});
 
 export default function RootLayout() {
   const { status, hasVault } = useWalletStore();
@@ -47,11 +42,11 @@ export default function RootLayout() {
     return <><StatusBar style="light" /><OnboardingScreen /></>;
   }
 
-  // Unlocked — use expo-router only for tabs (minimal overhead)
+  // Unlocked — use expo-router only for tabs
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <StatusBar style="light" />
       <Slot />
-    </QueryClientProvider>
+    </>
   );
 }

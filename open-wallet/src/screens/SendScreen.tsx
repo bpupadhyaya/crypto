@@ -15,9 +15,7 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import { useQuery } from '@tanstack/react-query';
 import { useWalletStore } from '../store/walletStore';
-import { registry } from '../core/abstractions/registry';
 import type { ChainId } from '../core/abstractions/types';
 
 export function SendScreen() {
@@ -26,39 +24,18 @@ export function SendScreen() {
   const [recipient, setRecipient] = useState('');
   const [amount, setAmount] = useState('');
   const [sending, setSending] = useState(false);
+  const [estimatedFee, setEstimatedFee] = useState<string | null>(null);
 
   const senderAddress = addresses[selectedChain] ?? '';
 
-  // Estimate fee
-  const { data: estimatedFee } = useQuery({
-    queryKey: ['fee-estimate', selectedChain, recipient, amount],
-    queryFn: async () => {
-      if (!recipient || !amount || parseFloat(amount) <= 0) return null;
-      try {
-        const provider = registry.getChainProvider(selectedChain);
-        const token = { symbol: selectedChain.toUpperCase(), name: '', chainId: selectedChain, decimals: selectedChain === 'bitcoin' ? 8 : selectedChain === 'solana' ? 9 : 18 };
-        const decimals = token.decimals;
-        const amountRaw = BigInt(Math.floor(parseFloat(amount) * Math.pow(10, decimals)));
-        const fee = await provider.estimateFee(senderAddress, recipient, amountRaw);
-        const feeHuman = Number(fee) / Math.pow(10, decimals);
-        return feeHuman.toFixed(6);
-      } catch {
-        return null;
-      }
-    },
-    enabled: !!recipient && !!amount && parseFloat(amount) > 0,
-    staleTime: 15_000,
-  });
-
-  // Validate address
+  // Validate address (basic check — no heavy imports)
   const isAddressValid = useMemo(() => {
-    if (!recipient.trim()) return null; // not yet entered
-    try {
-      const provider = registry.getChainProvider(selectedChain);
-      return provider.isAddressValid(recipient.trim());
-    } catch {
-      return null;
-    }
+    if (!recipient.trim()) return null;
+    const addr = recipient.trim();
+    if (selectedChain === 'ethereum') return /^0x[0-9a-fA-F]{40}$/.test(addr);
+    if (selectedChain === 'bitcoin') return /^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,62}$/.test(addr);
+    if (selectedChain === 'solana') return addr.length >= 32 && addr.length <= 44;
+    return addr.length > 10;
   }, [recipient, selectedChain]);
 
   const chainSymbol = useMemo(() => {
