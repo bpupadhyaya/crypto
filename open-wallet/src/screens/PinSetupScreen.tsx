@@ -90,6 +90,7 @@ export function PinSetupScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <PinPad
+        key={step} // Force remount to clear PIN dots when step changes
         title={step === 'create' ? 'Set Your PIN' : 'Confirm PIN'}
         subtitle={step === 'create' ? 'Choose a 6-digit PIN for quick unlock' : 'Enter the same PIN again'}
         onComplete={step === 'create' ? handlePinCreate : handlePinConfirm}

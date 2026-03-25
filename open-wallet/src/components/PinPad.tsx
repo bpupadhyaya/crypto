@@ -1,10 +1,10 @@
 /**
  * PIN Pad — 6-digit numeric keypad.
- * Optimized for fast, responsive input.
+ * Uses ref-based pin tracking to avoid React state batching bugs.
  */
 
 import React, { useState, useCallback, useRef } from 'react';
-import { View, Text, Pressable, StyleSheet, Platform } from 'react-native';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
 
 interface PinPadProps {
   title: string;
@@ -15,27 +15,36 @@ interface PinPadProps {
 }
 
 export function PinPad({ title, subtitle, onComplete, error, maxLength = 6 }: PinPadProps) {
-  const [pin, setPin] = useState('');
-  const processingRef = useRef(false);
+  const pinRef = useRef('');
+  const [displayLength, setDisplayLength] = useState(0);
+  const lockedRef = useRef(false);
 
   const handlePress = useCallback((digit: string) => {
-    if (processingRef.current) return;
+    if (lockedRef.current) return;
+    if (pinRef.current.length >= maxLength) return;
 
-    setPin((prev) => {
-      const newPin = prev + digit;
-      if (newPin.length === maxLength) {
-        processingRef.current = true;
-        // Call immediately — no delay
-        onComplete(newPin);
-        setPin('');
-        processingRef.current = false;
-      }
-      return newPin.length <= maxLength ? newPin : prev;
-    });
+    pinRef.current += digit;
+    setDisplayLength(pinRef.current.length);
+
+    if (pinRef.current.length === maxLength) {
+      lockedRef.current = true;
+      const finalPin = pinRef.current;
+      // Small delay so user sees the last dot fill
+      setTimeout(() => {
+        onComplete(finalPin);
+        pinRef.current = '';
+        setDisplayLength(0);
+        lockedRef.current = false;
+      }, 150);
+    }
   }, [maxLength, onComplete]);
 
   const handleDelete = useCallback(() => {
-    setPin((prev) => prev.slice(0, -1));
+    if (lockedRef.current) return;
+    if (pinRef.current.length === 0) return;
+
+    pinRef.current = pinRef.current.slice(0, -1);
+    setDisplayLength(pinRef.current.length);
   }, []);
 
   const keys = [
@@ -50,15 +59,14 @@ export function PinPad({ title, subtitle, onComplete, error, maxLength = 6 }: Pi
       <Text style={s.title}>{title}</Text>
       {subtitle && <Text style={s.subtitle}>{subtitle}</Text>}
 
-      {/* Dots */}
       <View style={s.dotsRow}>
         {Array.from({ length: maxLength }, (_, i) => (
           <View
             key={i}
             style={[
               s.dot,
-              i < pin.length && s.dotFilled,
-              error && i < pin.length && s.dotError,
+              i < displayLength && s.dotFilled,
+              error && i < displayLength && s.dotError,
             ]}
           />
         ))}
@@ -66,7 +74,6 @@ export function PinPad({ title, subtitle, onComplete, error, maxLength = 6 }: Pi
 
       {error && <Text style={s.error}>{error}</Text>}
 
-      {/* Keypad — using Pressable for faster response than TouchableOpacity */}
       <View style={s.keypad}>
         {keys.map((row, ri) => (
           <View key={ri} style={s.keyRow}>

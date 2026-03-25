@@ -24,6 +24,8 @@ interface WalletState {
   setAddresses: (addresses: Partial<Record<ChainId, string>>) => void;
   locale: string;
   setLocale: (locale: string) => void;
+  currency: string;
+  setCurrency: (currency: string) => void;
   biometricEnabled: boolean;
   setBiometricEnabled: (enabled: boolean) => void;
   supportedChains: ChainId[];
@@ -68,6 +70,8 @@ export const useWalletStore = create<WalletState>((set) => ({
   setAddresses: (addresses) => { set({ addresses }); schedulePersist(); },
   locale: 'en',
   setLocale: (locale) => { set({ locale }); schedulePersist(); },
+  currency: 'usd',
+  setCurrency: (currency) => { set({ currency }); schedulePersist(); },
   biometricEnabled: false,
   setBiometricEnabled: (enabled) => { set({ biometricEnabled: enabled }); schedulePersist(); },
   supportedChains: ['bitcoin', 'ethereum', 'solana', 'cosmos'],
@@ -114,7 +118,7 @@ async function doPersist() {
     }
     const s = useWalletStore.getState();
     await asyncStorageModule.setItem('ow-store', JSON.stringify({
-      mode: s.mode, locale: s.locale, biometricEnabled: s.biometricEnabled,
+      mode: s.mode, locale: s.locale, currency: s.currency, biometricEnabled: s.biometricEnabled,
       addresses: s.addresses, hasVault: s.hasVault, enabledTokens: s.enabledTokens,
       contacts: s.contacts, accounts: s.accounts, activeAccountIndex: s.activeAccountIndex, priceAlerts: s.priceAlerts,
     }));
@@ -137,6 +141,7 @@ async function doPersist() {
       useWalletStore.setState({
         mode: d.mode ?? 'simple',
         locale: d.locale ?? 'en',
+        currency: d.currency ?? 'usd',
         biometricEnabled: d.biometricEnabled ?? false,
         addresses: d.addresses ?? {},
         hasVault: d.hasVault ?? false,

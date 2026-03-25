@@ -8,16 +8,17 @@ export interface TokenInfo extends Token {
   coingeckoId: string;
   isNative: boolean;
   color: string;
+  stakingApy?: number; // annual percentage yield if stakeable
 }
 
 export const SUPPORTED_TOKENS: TokenInfo[] = [
   { symbol: 'BTC', name: 'Bitcoin', chainId: 'bitcoin', decimals: 8, coingeckoId: 'bitcoin', isNative: true, color: '#f7931a' },
-  { symbol: 'ETH', name: 'Ethereum', chainId: 'ethereum', decimals: 18, coingeckoId: 'ethereum', isNative: true, color: '#627eea' },
-  { symbol: 'SOL', name: 'Solana', chainId: 'solana', decimals: 9, coingeckoId: 'solana', isNative: true, color: '#9945ff' },
-  { symbol: 'ADA', name: 'Cardano', chainId: 'cardano', decimals: 6, coingeckoId: 'cardano', isNative: true, color: '#0033ad' },
+  { symbol: 'ETH', name: 'Ethereum', chainId: 'ethereum', decimals: 18, coingeckoId: 'ethereum', isNative: true, color: '#627eea', stakingApy: 3.5 },
+  { symbol: 'SOL', name: 'Solana', chainId: 'solana', decimals: 9, coingeckoId: 'solana', isNative: true, color: '#9945ff', stakingApy: 6.8 },
+  { symbol: 'ADA', name: 'Cardano', chainId: 'cardano', decimals: 6, coingeckoId: 'cardano', isNative: true, color: '#0033ad', stakingApy: 4.2 },
   { symbol: 'XRP', name: 'XRP', chainId: 'xrp', decimals: 6, coingeckoId: 'ripple', isNative: true, color: '#23292f' },
   { symbol: 'DOGE', name: 'Dogecoin', chainId: 'dogecoin', decimals: 8, coingeckoId: 'dogecoin', isNative: true, color: '#c3a634' },
-  { symbol: 'DOT', name: 'Polkadot', chainId: 'polkadot', decimals: 10, coingeckoId: 'polkadot', isNative: true, color: '#e6007a' },
+  { symbol: 'DOT', name: 'Polkadot', chainId: 'polkadot', decimals: 10, coingeckoId: 'polkadot', isNative: true, color: '#e6007a', stakingApy: 11.5 },
   { symbol: 'AVAX', name: 'Avalanche', chainId: 'avalanche', decimals: 18, coingeckoId: 'avalanche-2', isNative: true, color: '#e84142' },
   { symbol: 'LINK', name: 'Chainlink', chainId: 'ethereum', decimals: 18, contractAddress: '0x514910771AF9Ca656af840dff83E8264EcF986CA', coingeckoId: 'chainlink', isNative: false, color: '#2a5ada' },
   { symbol: 'SUI', name: 'Sui', chainId: 'sui', decimals: 9, coingeckoId: 'sui', isNative: true, color: '#4da2ff' },

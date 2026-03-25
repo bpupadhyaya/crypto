@@ -131,6 +131,15 @@ export const TokenDetailScreen = React.memo(({ token, price, onClose }: Props) =
           </TouchableOpacity>
         </View>
 
+        {/* Staking APY */}
+        {token.stakingApy && (
+          <View style={s.stakingCard}>
+            <Text style={s.stakingLabel}>Staking APY</Text>
+            <Text style={s.stakingApy}>{token.stakingApy}%</Text>
+            <Text style={s.stakingNote}>Estimated annual yield</Text>
+          </View>
+        )}
+
         {/* Info */}
         <View style={s.infoCard}>
           <InfoRow label="Network" value={token.chainId} />
@@ -179,6 +188,10 @@ const s = StyleSheet.create({
   actions: { flexDirection: 'row', gap: 12, marginHorizontal: 16, marginTop: 16 },
   actionBtn: { flex: 1, paddingVertical: 14, borderRadius: 12, alignItems: 'center' },
   actionText: { fontSize: 15, fontWeight: '700' },
+  stakingCard: { backgroundColor: '#22c55e10', borderRadius: 16, padding: 20, marginHorizontal: 16, marginTop: 16, alignItems: 'center' },
+  stakingLabel: { color: '#22c55e', fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1 },
+  stakingApy: { color: '#22c55e', fontSize: 32, fontWeight: '800', marginTop: 4 },
+  stakingNote: { color: '#606070', fontSize: 12, marginTop: 4 },
   infoCard: { backgroundColor: '#16161f', borderRadius: 16, padding: 4, marginHorizontal: 16, marginTop: 16 },
   infoRow: { flexDirection: 'row', justifyContent: 'space-between', padding: 14, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.04)' },
   infoLabel: { color: '#606070', fontSize: 14 },
