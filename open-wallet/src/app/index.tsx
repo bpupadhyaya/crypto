@@ -1,17 +1,32 @@
 /**
- * Entry point — routes based on wallet state:
- *   - No vault → Onboarding (create/restore wallet)
- *   - Vault created, needs PIN → PIN setup + optional biometric
- *   - Vault exists, locked → Unlock (biometric → PIN → password)
- *   - Unlocked → Main tabs
+ * Entry point — fast routing based on wallet state.
+ * All screens are lazy-loaded.
  */
 
 import React, { useEffect } from 'react';
 import { router } from 'expo-router';
 import { useWalletStore } from '../store/walletStore';
-import { OnboardingScreen } from '../screens/OnboardingScreen';
-import { UnlockScreen } from '../screens/UnlockScreen';
-import { PinSetupScreen } from '../screens/PinSetupScreen';
+
+const OnboardingScreen = React.lazy(() =>
+  import('../screens/OnboardingScreen').then(m => ({ default: m.OnboardingScreen }))
+);
+const UnlockScreen = React.lazy(() =>
+  import('../screens/UnlockScreen').then(m => ({ default: m.UnlockScreen }))
+);
+const PinSetupScreen = React.lazy(() =>
+  import('../screens/PinSetupScreen').then(m => ({ default: m.PinSetupScreen }))
+);
+
+import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+
+function Loading() {
+  return (
+    <View style={s.loading}>
+      <Text style={s.logo}>OW</Text>
+      <ActivityIndicator color="#22c55e" style={{ marginTop: 16 }} />
+    </View>
+  );
+}
 
 export default function Index() {
   const { status, hasVault } = useWalletStore();
@@ -22,16 +37,20 @@ export default function Index() {
     }
   }, [status]);
 
-  // Just created vault → set up PIN + biometric
-  if (status === 'pin_setup') {
-    return <PinSetupScreen />;
-  }
-
-  // Vault exists but locked → unlock (biometric → PIN → password)
-  if (hasVault && status !== 'unlocked') {
-    return <UnlockScreen />;
-  }
-
-  // No vault → onboarding
-  return <OnboardingScreen />;
+  return (
+    <React.Suspense fallback={<Loading />}>
+      {status === 'pin_setup' ? (
+        <PinSetupScreen />
+      ) : hasVault && status !== 'unlocked' ? (
+        <UnlockScreen />
+      ) : (
+        <OnboardingScreen />
+      )}
+    </React.Suspense>
+  );
 }
+
+const s = StyleSheet.create({
+  loading: { flex: 1, backgroundColor: '#0a0a0f', justifyContent: 'center', alignItems: 'center' },
+  logo: { color: '#22c55e', fontSize: 40, fontWeight: '900' },
+});
