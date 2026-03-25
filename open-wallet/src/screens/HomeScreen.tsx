@@ -8,6 +8,7 @@ import { PieChart } from '../components/PieChart';
 import { useWalletStore } from '../store/walletStore';
 import { SUPPORTED_TOKENS, type TokenInfo } from '../core/tokens/registry';
 import { ManageTokensScreen } from './ManageTokensScreen';
+import { TokenDetailScreen } from './TokenDetailScreen';
 import { usePrices } from '../hooks/usePrices';
 
 // Static — never recreated
@@ -21,8 +22,8 @@ const MOCK_ALLOCATIONS = [
 
 const keyExtractor = (item: TokenInfo) => item.symbol;
 
-const TokenRow = React.memo(({ token, price }: { token: TokenInfo; price?: number }) => (
-  <View style={s.tokenRow}>
+const TokenRow = React.memo(({ token, price, onPress }: { token: TokenInfo; price?: number; onPress: () => void }) => (
+  <TouchableOpacity style={s.tokenRow} onPress={onPress} activeOpacity={0.7}>
     <View style={[s.tokenDot, { backgroundColor: token.color }]} />
     <View style={s.tokenInfo}>
       <Text style={s.tokenSymbol}>{token.symbol}</Text>
@@ -34,7 +35,7 @@ const TokenRow = React.memo(({ token, price }: { token: TokenInfo; price?: numbe
         {price ? `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '—'}
       </Text>
     </View>
-  </View>
+  </TouchableOpacity>
 ));
 
 // Memoized legend (static data, never changes)
@@ -61,6 +62,7 @@ const ActionBtn = React.memo(({ icon, label, color }: { icon: string; label: str
 
 export function HomeScreen() {
   const [showManage, setShowManage] = useState(false);
+  const [selectedToken, setSelectedToken] = useState<TokenInfo | null>(null);
   const enabledTokens = useWalletStore((s) => s.enabledTokens);
   const totalUsdValue = useWalletStore((s) => s.totalUsdValue);
   const { prices } = usePrices();
@@ -71,7 +73,7 @@ export function HomeScreen() {
   );
 
   const renderItem = useCallback(({ item }: { item: TokenInfo }) => (
-    <TokenRow token={item} price={prices[item.symbol]} />
+    <TokenRow token={item} price={prices[item.symbol]} onPress={() => setSelectedToken(item)} />
   ), [prices]);
 
   const openManage = useCallback(() => setShowManage(true), []);
@@ -102,6 +104,15 @@ export function HomeScreen() {
     </>
   ), [totalUsdValue, openManage]);
 
+  if (selectedToken) {
+    return (
+      <TokenDetailScreen
+        token={selectedToken}
+        price={prices[selectedToken.symbol] ?? 0}
+        onClose={() => setSelectedToken(null)}
+      />
+    );
+  }
   if (showManage) return <ManageTokensScreen onClose={closeManage} />;
 
   return (
