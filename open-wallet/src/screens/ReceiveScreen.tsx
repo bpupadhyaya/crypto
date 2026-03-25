@@ -4,7 +4,7 @@
  * Pro mode: Chain selector, multiple addresses, copy button
  */
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   View,
   Text,
@@ -72,15 +72,12 @@ export function ReceiveScreen() {
         ))}
       </View>
 
-      {/* QR Code */}
+      {/* QR Code — memoized to avoid SVG re-render */}
       <View style={styles.qrContainer}>
         <View style={styles.qrWrapper}>
-          <QRCode
-            value={address}
-            size={200}
-            backgroundColor="#ffffff"
-            color="#0a0a0f"
-          />
+          {useMemo(() => (
+            <QRCode value={address} size={200} backgroundColor="#ffffff" color="#0a0a0f" />
+          ), [address])}
         </View>
         <Text style={styles.qrHint}>
           Scan to send {selectedChain.charAt(0).toUpperCase() + selectedChain.slice(1)}

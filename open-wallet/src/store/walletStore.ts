@@ -1,11 +1,11 @@
 /**
- * Global wallet state — Zustand store.
- * Uses in-memory state for instant startup.
- * Persists to AsyncStorage in background (non-blocking).
+ * Global wallet state — Zustand.
+ * Selectors prevent unnecessary re-renders.
+ * Persistence is non-blocking, debounced.
  */
 
 import { create } from 'zustand';
-import { ChainId, Balance } from '../core/abstractions/types';
+import type { ChainId, Balance } from '../core/abstractions/types';
 
 export type AppMode = 'simple' | 'pro';
 export type WalletStatus = 'locked' | 'unlocked' | 'onboarding' | 'pin_setup';
@@ -35,79 +35,80 @@ interface WalletState {
   setTempVaultPassword: (pw: string | null) => void;
 }
 
+const DEFAULT_TOKENS = ['BTC', 'ETH', 'USDT', 'XRP', 'USDC', 'SOL', 'ADA', 'LINK', 'AVAX', 'SUI', 'POL', 'DOT', 'DOGE', 'BNB', 'TON'];
+
 export const useWalletStore = create<WalletState>((set) => ({
   mode: 'simple',
-  setMode: (mode) => { set({ mode }); persistState(); },
+  setMode: (mode) => { set({ mode }); schedulePersist(); },
   status: 'onboarding',
   setStatus: (status) => set({ status }),
   balances: [],
-  setBalances: (balances) => set({
-    balances,
-    totalUsdValue: balances.reduce((sum, b) => sum + (b.usdValue ?? 0), 0),
-  }),
+  setBalances: (balances) => set({ balances, totalUsdValue: balances.reduce((sum, b) => sum + (b.usdValue ?? 0), 0) }),
   totalUsdValue: 0,
   activeChainId: 'all',
   setActiveChain: (chainId) => set({ activeChainId: chainId }),
   addresses: {},
-  setAddresses: (addresses) => { set({ addresses }); persistState(); },
+  setAddresses: (addresses) => { set({ addresses }); schedulePersist(); },
   locale: 'en',
-  setLocale: (locale) => { set({ locale }); persistState(); },
+  setLocale: (locale) => { set({ locale }); schedulePersist(); },
   biometricEnabled: false,
-  setBiometricEnabled: (enabled) => { set({ biometricEnabled: enabled }); persistState(); },
+  setBiometricEnabled: (enabled) => { set({ biometricEnabled: enabled }); schedulePersist(); },
   supportedChains: ['bitcoin', 'ethereum', 'solana', 'cosmos'],
-  enabledTokens: ['BTC', 'ETH', 'USDT', 'XRP', 'USDC', 'SOL', 'ADA', 'LINK', 'AVAX', 'SUI', 'POL', 'DOT', 'DOGE', 'BNB', 'TON'],
+  enabledTokens: DEFAULT_TOKENS,
   toggleToken: (symbol, enabled) => {
     set((state) => ({
       enabledTokens: enabled
         ? [...state.enabledTokens, symbol]
         : state.enabledTokens.filter((s) => s !== symbol),
     }));
-    persistState();
+    schedulePersist();
   },
   hasVault: false,
-  setHasVault: (has) => { set({ hasVault: has }); persistState(); },
+  setHasVault: (has) => { set({ hasVault: has }); schedulePersist(); },
   tempVaultPassword: null,
   setTempVaultPassword: (pw) => set({ tempVaultPassword: pw }),
 }));
 
-// ─── Lightweight persistence (non-blocking) ───
+// ─── Non-blocking persistence ───
 
+let asyncStorageModule: any = null;
 let persistTimer: ReturnType<typeof setTimeout> | null = null;
 
-function persistState() {
+function schedulePersist() {
   if (persistTimer) clearTimeout(persistTimer);
-  persistTimer = setTimeout(async () => {
-    try {
-      const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
-      const state = useWalletStore.getState();
-      const data = {
-        mode: state.mode,
-        locale: state.locale,
-        biometricEnabled: state.biometricEnabled,
-        addresses: state.addresses,
-        hasVault: state.hasVault,
-        enabledTokens: state.enabledTokens,
-      };
-      await AsyncStorage.setItem('open-wallet-store', JSON.stringify(data));
-    } catch {}
-  }, 500); // debounce 500ms
+  persistTimer = setTimeout(doPersist, 500);
 }
 
-// Restore state on first import (non-blocking)
+async function doPersist() {
+  try {
+    if (!asyncStorageModule) {
+      asyncStorageModule = (await import('@react-native-async-storage/async-storage')).default;
+    }
+    const s = useWalletStore.getState();
+    await asyncStorageModule.setItem('ow-store', JSON.stringify({
+      mode: s.mode, locale: s.locale, biometricEnabled: s.biometricEnabled,
+      addresses: s.addresses, hasVault: s.hasVault, enabledTokens: s.enabledTokens,
+    }));
+  } catch {}
+}
+
+// Restore on boot (non-blocking)
 (async () => {
   try {
-    const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
-    const stored = await AsyncStorage.getItem('open-wallet-store');
-    if (stored) {
-      const data = JSON.parse(stored);
+    if (!asyncStorageModule) {
+      asyncStorageModule = (await import('@react-native-async-storage/async-storage')).default;
+    }
+    const raw = await asyncStorageModule.getItem('ow-store');
+    if (raw) {
+      const d = JSON.parse(raw);
       useWalletStore.setState({
-        mode: data.mode ?? 'simple',
-        locale: data.locale ?? 'en',
-        biometricEnabled: data.biometricEnabled ?? false,
-        addresses: data.addresses ?? {},
-        hasVault: data.hasVault ?? false,
-        enabledTokens: data.enabledTokens ?? ['BTC', 'ETH', 'USDT', 'XRP', 'USDC', 'SOL', 'ADA', 'LINK', 'AVAX', 'SUI', 'POL', 'DOT', 'DOGE', 'BNB', 'TON'],
-        status: data.hasVault ? 'locked' : 'onboarding',
+        mode: d.mode ?? 'simple',
+        locale: d.locale ?? 'en',
+        biometricEnabled: d.biometricEnabled ?? false,
+        addresses: d.addresses ?? {},
+        hasVault: d.hasVault ?? false,
+        enabledTokens: d.enabledTokens ?? DEFAULT_TOKENS,
+        status: d.hasVault ? 'locked' : 'onboarding',
       });
     }
   } catch {}

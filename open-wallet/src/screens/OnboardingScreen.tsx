@@ -3,7 +3,7 @@
  * Create new wallet or restore from seed phrase.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   View,
   Text,
@@ -14,7 +14,6 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import * as Clipboard from 'expo-clipboard';
 import { useWalletStore } from '../store/walletStore';
 
 type OnboardingStep = 'welcome' | 'create' | 'backup' | 'restore' | 'password';
@@ -185,7 +184,7 @@ export function OnboardingScreen() {
           {__DEV__ && (
             <TouchableOpacity
               style={[styles.secondaryButton, { marginBottom: 8 }]}
-              onPress={() => { Clipboard.setStringAsync(mnemonic); Alert.alert('Copied', 'Seed phrase copied (dev only)'); }}
+              onPress={async () => { const Clipboard = await import('expo-clipboard'); Clipboard.setStringAsync(mnemonic); Alert.alert('Copied', 'Seed phrase copied (dev only)'); }}
             >
               <Text style={[styles.secondaryButtonText, { color: '#eab308' }]}>Copy (Dev Only)</Text>
             </TouchableOpacity>
