@@ -17,6 +17,7 @@ import {
 } from 'react-native';
 import { useWalletStore } from '../store/walletStore';
 import { ConfirmTransactionScreen } from './ConfirmTransactionScreen';
+import { QRScanner } from '../components/QRScanner';
 import type { ChainId } from '../core/abstractions/types';
 
 export function SendScreen() {
@@ -27,6 +28,7 @@ export function SendScreen() {
   const [sending, setSending] = useState(false);
   const [estimatedFee, setEstimatedFee] = useState<string | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showScanner, setShowScanner] = useState(false);
 
   const senderAddress = addresses[selectedChain] ?? '';
 
@@ -69,6 +71,15 @@ export function SendScreen() {
     setRecipient('');
     setShowConfirm(false);
   };
+
+  if (showScanner) {
+    return (
+      <QRScanner
+        onScan={(data) => { setRecipient(data); setShowScanner(false); }}
+        onClose={() => setShowScanner(false)}
+      />
+    );
+  }
 
   if (showConfirm) {
     return (
@@ -115,7 +126,12 @@ export function SendScreen() {
         )}
 
         {/* Recipient */}
-        <Text style={styles.fieldLabel}>To</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Text style={styles.fieldLabel}>To</Text>
+          <TouchableOpacity onPress={() => setShowScanner(true)}>
+            <Text style={{ color: '#3b82f6', fontSize: 13, fontWeight: '600' }}>Scan QR</Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.inputWrapper}>
           <TextInput
             style={[

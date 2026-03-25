@@ -37,6 +37,12 @@
       "expo-secure-store",
       "expo-localization",
       [
+        "expo-camera",
+        {
+          "cameraPermission": "Open Wallet needs camera access to scan QR codes for recipient addresses."
+        }
+      ],
+      [
         "expo-local-authentication",
         {
           "faceIDPermission": "Open Wallet uses Face ID to unlock your wallet securely."

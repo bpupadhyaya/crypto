@@ -12,11 +12,14 @@ import { authManager } from '../core/auth/auth';
 import { PinPad } from '../components/PinPad';
 import { MOBILE_PROVIDERS_STATUS } from '../core/providers/mobile/stub';
 import { BackupScreen } from './BackupScreen';
+import { SUPPORTED_CURRENCIES } from '../utils/currency';
+import { PriceAlertsScreen } from './PriceAlertsScreen';
+import { AddressBookScreen } from './AddressBookScreen';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts';
 
 export function SettingsScreen() {
-  const { mode, setMode, setStatus, biometricEnabled, setBiometricEnabled } = useWalletStore();
+  const { mode, setMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency } = useWalletStore();
   const [view, setView] = useState<SettingsView>('main');
   const [pinToChange, setPinToChange] = useState('');
   const [biometricAvailable, setBiometricAvailable] = useState(false);
@@ -120,9 +123,9 @@ export function SettingsScreen() {
     );
   }
 
-  if (view === 'backup') {
-    return <BackupScreen onClose={() => setView('main')} />;
-  }
+  if (view === 'backup') return <BackupScreen onClose={() => setView('main')} />;
+  if (view === 'alerts') return <PriceAlertsScreen onClose={() => setView('main')} />;
+  if (view === 'contacts') return <AddressBookScreen onClose={() => setView('main')} />;
 
   // ─── Main Settings ───
 
@@ -150,6 +153,27 @@ export function SettingsScreen() {
               ))}
             </View>
           </View>
+          <View style={st.divider} />
+          <View style={st.row}>
+            <Text style={st.label}>Currency</Text>
+            <View style={st.currencyRow}>
+              {SUPPORTED_CURRENCIES.slice(0, 5).map((c) => (
+                <TouchableOpacity key={c.code} style={[st.currencyChip, currency === c.code && st.currencyActive]} onPress={() => setCurrency(c.code)}>
+                  <Text style={[st.currencyText, currency === c.code && st.currencyTextActive]}>{c.symbol}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('alerts')}>
+            <Text style={st.label}>Price Alerts</Text>
+            <Text style={st.value}>›</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('contacts')}>
+            <Text style={st.label}>Address Book</Text>
+            <Text style={st.value}>›</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Security */}
@@ -260,6 +284,11 @@ const st = StyleSheet.create({
   migrationRow: { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 6 },
   migrationName: { color: '#a0a0b0', fontSize: 13 },
   migrationYear: { color: '#606070', fontSize: 12 },
+  currencyRow: { flexDirection: 'row', gap: 4 },
+  currencyChip: { paddingVertical: 4, paddingHorizontal: 10, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.06)' },
+  currencyActive: { backgroundColor: '#22c55e' },
+  currencyText: { color: '#a0a0b0', fontSize: 13, fontWeight: '600' },
+  currencyTextActive: { color: '#0a0a0f' },
   signOutBtn: { backgroundColor: '#ef444420', borderRadius: 16, paddingVertical: 16, alignItems: 'center', marginTop: 24 },
   signOutText: { color: '#ef4444', fontSize: 16, fontWeight: '700' },
   backBtn: { paddingVertical: 20, alignItems: 'center' },
