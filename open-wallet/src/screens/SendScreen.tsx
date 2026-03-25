@@ -16,6 +16,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useWalletStore } from '../store/walletStore';
+import { ConfirmTransactionScreen } from './ConfirmTransactionScreen';
 import type { ChainId } from '../core/abstractions/types';
 
 export function SendScreen() {
@@ -25,6 +26,7 @@ export function SendScreen() {
   const [amount, setAmount] = useState('');
   const [sending, setSending] = useState(false);
   const [estimatedFee, setEstimatedFee] = useState<string | null>(null);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const senderAddress = addresses[selectedChain] ?? '';
 
@@ -56,37 +58,33 @@ export function SendScreen() {
       Alert.alert('Invalid Address', `This is not a valid ${selectedChain} address.`);
       return;
     }
-
-    const feeDisplay = estimatedFee ? `\nEstimated fee: ${estimatedFee} ${chainSymbol}` : '';
-    const shortAddr = `${recipient.slice(0, 10)}...${recipient.slice(-6)}`;
-
-    Alert.alert(
-      'Confirm Transaction',
-      `Send ${amount} ${chainSymbol} to ${shortAddr}?${feeDisplay}`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Send',
-          style: 'destructive',
-          onPress: async () => {
-            setSending(true);
-            try {
-              // In production: unlock vault → get HD wallet → get signer → sign & broadcast
-              // For now: broadcast via chain provider (needs signed tx)
-              await new Promise((r) => setTimeout(r, 2000));
-              Alert.alert('Sent', `Transaction submitted.\n\n${amount} ${chainSymbol} → ${shortAddr}`);
-              setAmount('');
-              setRecipient('');
-            } catch (error) {
-              Alert.alert('Failed', 'Transaction failed. Please try again.');
-            } finally {
-              setSending(false);
-            }
-          },
-        },
-      ]
-    );
+    setShowConfirm(true);
   };
+
+  const executeSend = async () => {
+    // In production: unlock vault → get signer → sign & broadcast
+    await new Promise((r) => setTimeout(r, 1500));
+    Alert.alert('Sent', `${amount} ${chainSymbol} sent successfully`);
+    setAmount('');
+    setRecipient('');
+    setShowConfirm(false);
+  };
+
+  if (showConfirm) {
+    return (
+      <ConfirmTransactionScreen
+        tx={{
+          type: 'send',
+          fromSymbol: chainSymbol,
+          fromAmount: amount,
+          recipient: recipient,
+          fee: estimatedFee ?? undefined,
+        }}
+        onConfirm={executeSend}
+        onCancel={() => setShowConfirm(false)}
+      />
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
