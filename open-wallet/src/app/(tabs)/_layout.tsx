@@ -4,7 +4,8 @@
 
 import React from 'react';
 import { Tabs } from 'expo-router';
-import { Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import { OfflineBanner } from '../../components/OfflineBanner';
 
 const ICONS: Record<string, string> = { Home: '◉', Send: '↑', Swap: '⇄', Receive: '↓', Settings: '⚙' };
 
@@ -27,6 +28,8 @@ const SCREEN_OPTIONS = {
 
 export default React.memo(function TabLayout() {
   return (
+    <View style={{ flex: 1, backgroundColor: '#0a0a0f' }}>
+    <OfflineBanner />
     <Tabs screenOptions={SCREEN_OPTIONS}>
       <Tabs.Screen name="index" options={{ title: 'Home', headerTitle: 'Open Wallet', tabBarIcon: ({ focused }) => <TabIcon label="Home" focused={focused} /> }} />
       <Tabs.Screen name="send" options={{ title: 'Send', tabBarIcon: ({ focused }) => <TabIcon label="Send" focused={focused} /> }} />
@@ -34,6 +37,7 @@ export default React.memo(function TabLayout() {
       <Tabs.Screen name="receive" options={{ title: 'Receive', tabBarIcon: ({ focused }) => <TabIcon label="Receive" focused={focused} /> }} />
       <Tabs.Screen name="settings" options={{ title: 'Settings', tabBarIcon: ({ focused }) => <TabIcon label="Settings" focused={focused} /> }} />
     </Tabs>
+    </View>
   );
 });
 

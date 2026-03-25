@@ -19,19 +19,12 @@ import * as Clipboard from 'expo-clipboard';
 import { useWalletStore } from '../store/walletStore';
 import { ChainId } from '../core/abstractions/types';
 
-// Placeholder addresses — will come from HD wallet derivation
-const PLACEHOLDER_ADDRESSES: Record<string, string> = {
-  bitcoin: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
-  ethereum: '0x71C7656EC7ab88b098defB751B7401B5f6d8976F',
-  solana: '7EcDhSYGxXyscszYEp35KHN8vvw3svAuLKTzXwCFLtV',
-  cosmos: 'cosmos1xy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
-};
-
 export function ReceiveScreen() {
-  const { mode, supportedChains } = useWalletStore();
+  const { mode, supportedChains, addresses } = useWalletStore();
   const [selectedChain, setSelectedChain] = useState<ChainId>('ethereum');
 
-  const address = PLACEHOLDER_ADDRESSES[selectedChain] ?? 'Address not available';
+  // Use real derived addresses from wallet, fallback to "not available"
+  const address = addresses[selectedChain] ?? 'Address not generated yet';
 
   const copyAddress = async () => {
     await Clipboard.setStringAsync(address);

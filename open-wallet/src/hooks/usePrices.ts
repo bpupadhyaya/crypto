@@ -2,7 +2,7 @@
  * Live prices — lightweight, debounced, cached.
  */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useWalletStore } from '../store/walletStore';
 import { SUPPORTED_TOKENS } from '../core/tokens/registry';
 
@@ -16,6 +16,8 @@ let lastFetchTime = 0;
 export function usePrices() {
   const enabledTokens = useWalletStore((s) => s.enabledTokens);
   const [prices, setPrices] = useState<Record<string, number>>(cachedPrices);
+  const [lastUpdated, setLastUpdated] = useState<number>(lastFetchTime);
+  const [loading, setLoading] = useState(false);
   const mountedRef = useRef(true);
 
   useEffect(() => {
@@ -31,8 +33,9 @@ export function usePrices() {
       const ids = tokens.map((t) => t.coingeckoId).join(',');
 
       try {
+        if (mountedRef.current) setLoading(true);
         const response = await fetch(`${COINGECKO_API}?ids=${ids}&vs_currencies=usd`);
-        if (!response.ok) return;
+        if (!response.ok) { if (mountedRef.current) setLoading(false); return; }
 
         const data = await response.json();
         const newPrices: Record<string, number> = { ...cachedPrices };
@@ -45,8 +48,12 @@ export function usePrices() {
 
         cachedPrices = newPrices;
         lastFetchTime = Date.now();
-        if (mountedRef.current) setPrices(newPrices);
-      } catch {}
+        if (mountedRef.current) {
+          setPrices(newPrices);
+          setLastUpdated(lastFetchTime);
+          setLoading(false);
+        }
+      } catch { if (mountedRef.current) setLoading(false); }
     };
 
     fetchPrices();
@@ -54,5 +61,25 @@ export function usePrices() {
     return () => { mountedRef.current = false; clearInterval(interval); };
   }, [enabledTokens]);
 
-  return { prices };
+  const refresh = useCallback(() => {
+    lastFetchTime = 0; // force refetch
+    const tokens = SUPPORTED_TOKENS.filter((t) => enabledTokens.includes(t.symbol));
+    if (tokens.length === 0) return;
+    const ids = tokens.map((t) => t.coingeckoId).join(',');
+    setLoading(true);
+    fetch(`${COINGECKO_API}?ids=${ids}&vs_currencies=usd`)
+      .then((r) => r.json())
+      .then((data) => {
+        const newPrices: Record<string, number> = { ...cachedPrices };
+        for (const token of tokens) {
+          if (data[token.coingeckoId]?.usd) newPrices[token.symbol] = data[token.coingeckoId].usd;
+        }
+        cachedPrices = newPrices;
+        lastFetchTime = Date.now();
+        if (mountedRef.current) { setPrices(newPrices); setLastUpdated(lastFetchTime); setLoading(false); }
+      })
+      .catch(() => { if (mountedRef.current) setLoading(false); });
+  }, [enabledTokens]);
+
+  return { prices, loading, lastUpdated, refresh };
 }

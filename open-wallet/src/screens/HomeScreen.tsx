@@ -3,7 +3,7 @@
  */
 
 import React, { useState, useMemo, useCallback } from 'react';
-import { View, Text, FlatList, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, SafeAreaView, TouchableOpacity, RefreshControl } from 'react-native';
 import { PieChart } from '../components/PieChart';
 import { useWalletStore } from '../store/walletStore';
 import { SUPPORTED_TOKENS, type TokenInfo } from '../core/tokens/registry';
@@ -65,7 +65,7 @@ export function HomeScreen() {
   const [selectedToken, setSelectedToken] = useState<TokenInfo | null>(null);
   const enabledTokens = useWalletStore((s) => s.enabledTokens);
   const totalUsdValue = useWalletStore((s) => s.totalUsdValue);
-  const { prices } = usePrices();
+  const { prices, loading: pricesLoading, lastUpdated, refresh: refreshPrices } = usePrices();
 
   const filteredTokens = useMemo(
     () => SUPPORTED_TOKENS.filter((t) => enabledTokens.includes(t.symbol)),
@@ -78,6 +78,14 @@ export function HomeScreen() {
 
   const openManage = useCallback(() => setShowManage(true), []);
   const closeManage = useCallback(() => setShowManage(false), []);
+
+  const lastUpdatedText = useMemo(() => {
+    if (!lastUpdated) return '';
+    const secs = Math.floor((Date.now() - lastUpdated) / 1000);
+    if (secs < 60) return 'Updated just now';
+    if (secs < 3600) return `Updated ${Math.floor(secs / 60)}m ago`;
+    return `Updated ${Math.floor(secs / 3600)}h ago`;
+  }, [lastUpdated]);
 
   const header = useMemo(() => (
     <>
@@ -101,8 +109,9 @@ export function HomeScreen() {
           <Text style={s.manageLink}>Manage</Text>
         </TouchableOpacity>
       </View>
+      {lastUpdatedText ? <Text style={s.lastUpdated}>{lastUpdatedText}</Text> : null}
     </>
-  ), [totalUsdValue, openManage]);
+  ), [totalUsdValue, openManage, lastUpdatedText]);
 
   if (selectedToken) {
     return (
@@ -127,6 +136,9 @@ export function HomeScreen() {
         maxToRenderPerBatch={10}
         removeClippedSubviews
         contentContainerStyle={s.list}
+        refreshControl={
+          <RefreshControl refreshing={pricesLoading} onRefresh={refreshPrices} tintColor="#22c55e" />
+        }
       />
     </SafeAreaView>
   );
@@ -149,6 +161,7 @@ const s = StyleSheet.create({
   sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 24, marginBottom: 8, marginHorizontal: 16 },
   sectionTitle: { color: '#a0a0b0', fontSize: 13, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 1 },
   manageLink: { color: '#3b82f6', fontSize: 13, fontWeight: '600' },
+  lastUpdated: { color: '#606070', fontSize: 11, marginLeft: 16, marginBottom: 4 },
   tokenRow: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 14, backgroundColor: '#16161f', borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.04)', marginHorizontal: 16 },
   tokenDot: { width: 10, height: 10, borderRadius: 5, marginRight: 12 },
   tokenInfo: { flex: 1 },
