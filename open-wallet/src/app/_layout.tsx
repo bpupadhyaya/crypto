@@ -1,53 +1,86 @@
 /**
- * Root Layout — Minimal, fast startup.
- * Heavy modules (i18n, crypto, providers) are lazy-loaded.
+ * Root Layout — Controls what's shown based on wallet status.
+ * No routing for auth state — just conditional rendering (fastest, most reliable).
  */
 
-// Polyfills — must be first
 import { Buffer } from 'buffer';
 (globalThis as any).Buffer = Buffer;
 import 'react-native-get-random-values';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { useWalletStore } from '../store/walletStore';
 
-// Lazy init — don't block startup
 let providersInitialized = false;
 function ensureProviders() {
   if (providersInitialized) return;
   providersInitialized = true;
   import('../core/bootstrap').then((m) => m.bootstrapProviders());
 }
-
-// i18n — lazy, non-blocking
 import('../i18n').catch(() => {});
 
 const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: { staleTime: 30_000, retry: 1, gcTime: 60_000 },
-  },
+  defaultOptions: { queries: { staleTime: 30_000, retry: 1, gcTime: 60_000 } },
 });
 
-function ErrorFallback({ error, resetErrorBoundary }: { error: unknown; resetErrorBoundary: () => void }) {
-  const msg = error instanceof Error ? error.message : 'An unexpected error occurred';
+const OnboardingScreen = React.lazy(() =>
+  import('../screens/OnboardingScreen').then(m => ({ default: m.OnboardingScreen }))
+);
+const UnlockScreen = React.lazy(() =>
+  import('../screens/UnlockScreen').then(m => ({ default: m.UnlockScreen }))
+);
+const PinSetupScreen = React.lazy(() =>
+  import('../screens/PinSetupScreen').then(m => ({ default: m.PinSetupScreen }))
+);
+
+function Loading() {
   return (
-    <View style={s.errorContainer}>
-      <Text style={s.errorIcon}>!</Text>
-      <Text style={s.errorTitle}>Something went wrong</Text>
-      <Text style={s.errorMessage}>{msg}</Text>
-      <TouchableOpacity style={s.retryBtn} onPress={resetErrorBoundary}>
-        <Text style={s.retryText}>Try Again</Text>
-      </TouchableOpacity>
+    <View style={s.loading}>
+      <Text style={s.logo}>OW</Text>
+      <ActivityIndicator color="#22c55e" style={{ marginTop: 16 }} />
     </View>
   );
 }
 
-export default function RootLayout() {
-  React.useEffect(() => { ensureProviders(); }, []);
+function AuthGate() {
+  const { status, hasVault } = useWalletStore();
 
+  if (status === 'unlocked') {
+    return null; // Let Stack/tabs render
+  }
+
+  return (
+    <React.Suspense fallback={<Loading />}>
+      {status === 'pin_setup' ? (
+        <PinSetupScreen />
+      ) : hasVault ? (
+        <UnlockScreen />
+      ) : (
+        <OnboardingScreen />
+      )}
+    </React.Suspense>
+  );
+}
+
+export default function RootLayout() {
+  const { status } = useWalletStore();
+
+  useEffect(() => { ensureProviders(); }, []);
+
+  // If not unlocked, show auth screens (no routing needed)
+  if (status !== 'unlocked') {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <StatusBar style="light" />
+        <AuthGate />
+      </QueryClientProvider>
+    );
+  }
+
+  // Unlocked — show tabs
   return (
     <QueryClientProvider client={queryClient}>
       <StatusBar style="light" />
@@ -55,10 +88,9 @@ export default function RootLayout() {
         screenOptions={{
           headerShown: false,
           contentStyle: { backgroundColor: '#0a0a0f' },
-          animation: 'none', // fastest transition
+          animation: 'none',
         }}
       >
-        <Stack.Screen name="index" />
         <Stack.Screen name="(tabs)" />
       </Stack>
     </QueryClientProvider>
@@ -66,10 +98,6 @@ export default function RootLayout() {
 }
 
 const s = StyleSheet.create({
-  errorContainer: { flex: 1, backgroundColor: '#0a0a0f', justifyContent: 'center', alignItems: 'center', padding: 24 },
-  errorIcon: { color: '#f97316', fontSize: 48, fontWeight: '900', marginBottom: 16 },
-  errorTitle: { color: '#f0f0f5', fontSize: 22, fontWeight: '700', marginBottom: 8 },
-  errorMessage: { color: '#a0a0b0', fontSize: 14, textAlign: 'center', marginBottom: 24, lineHeight: 20 },
-  retryBtn: { backgroundColor: '#22c55e', borderRadius: 16, paddingVertical: 14, paddingHorizontal: 32 },
-  retryText: { color: '#0a0a0f', fontSize: 16, fontWeight: '700' },
+  loading: { flex: 1, backgroundColor: '#0a0a0f', justifyContent: 'center', alignItems: 'center' },
+  logo: { color: '#22c55e', fontSize: 40, fontWeight: '900' },
 });

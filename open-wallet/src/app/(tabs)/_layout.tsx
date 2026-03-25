@@ -1,11 +1,10 @@
 /**
- * Tab Layout — Redirects to login if signed out.
+ * Tab Layout — Simple, fast. Auth is handled by root layout.
  */
 
-import React, { useEffect } from 'react';
-import { Tabs, router } from 'expo-router';
+import React from 'react';
+import { Tabs } from 'expo-router';
 import { Text, StyleSheet } from 'react-native';
-import { useWalletStore } from '../../store/walletStore';
 
 const ICONS: Record<string, string> = {
   Home: '◉', Send: '↑', Swap: '⇄', Receive: '↓', Settings: '⚙',
@@ -16,15 +15,6 @@ function TabIcon({ label, focused }: { label: string; focused: boolean }) {
 }
 
 export default function TabLayout() {
-  const { status } = useWalletStore();
-
-  // Redirect to login/unlock when signed out
-  useEffect(() => {
-    if (status !== 'unlocked') {
-      router.replace('/');
-    }
-  }, [status]);
-
   return (
     <Tabs
       screenOptions={{
