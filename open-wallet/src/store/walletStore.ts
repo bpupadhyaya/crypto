@@ -115,6 +115,7 @@ async function doPersist() {
 }
 
 // Restore on boot (non-blocking)
+// CRITICAL: never overwrite status if user has already interacted
 (async () => {
   try {
     if (!asyncStorageModule) {
@@ -123,6 +124,9 @@ async function doPersist() {
     const raw = await asyncStorageModule.getItem('ow-store');
     if (raw) {
       const d = JSON.parse(raw);
+      const currentStatus = useWalletStore.getState().status;
+      // Only set status from storage if user hasn't already changed it
+      const shouldSetStatus = currentStatus === 'onboarding' && !useWalletStore.getState().hasVault;
       useWalletStore.setState({
         mode: d.mode ?? 'simple',
         locale: d.locale ?? 'en',
@@ -133,7 +137,7 @@ async function doPersist() {
         contacts: d.contacts ?? [],
         accounts: d.accounts ?? [{ name: 'Main Account', index: 0 }],
         activeAccountIndex: d.activeAccountIndex ?? 0,
-        status: d.hasVault ? 'locked' : 'onboarding',
+        ...(shouldSetStatus ? { status: d.hasVault ? 'locked' : 'onboarding' } : {}),
       });
     }
   } catch {}
