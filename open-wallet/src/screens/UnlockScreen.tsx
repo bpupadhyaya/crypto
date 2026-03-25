@@ -25,31 +25,28 @@ import { useWalletStore } from '../store/walletStore';
 type UnlockMode = 'loading' | 'biometric' | 'pin' | 'password';
 
 export function UnlockScreen() {
-  const [mode, setMode] = useState<UnlockMode>('loading');
+  // Show PIN immediately — fastest path. Check biometric in background.
+  const [mode, setMode] = useState<UnlockMode>('pin');
   const [password, setPassword] = useState('');
   const [pinError, setPinError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const { setStatus, setAddresses } = useWalletStore();
+  const { setStatus, setAddresses, biometricEnabled } = useWalletStore();
 
   useEffect(() => {
-    initAuth();
-  }, []);
-
-  const initAuth = async () => {
-    const bestMethod = await authManager.getBestAuthMethod();
-
-    if (bestMethod === 'biometric') {
-      const result = await authManager.authenticateWithBiometric();
-      if (result.success) {
-        await unlockVaultWithStoredCredentials();
-        return;
-      }
-      // Biometric failed — fall to PIN
+    // Try biometric in background (non-blocking)
+    if (biometricEnabled) {
+      authManager.authenticateWithBiometric().then(async (result) => {
+        if (result.success) {
+          await unlockVaultWithStoredCredentials();
+        }
+      }).catch(() => {});
     }
 
-    const pinConfigured = await authManager.isPinConfigured();
-    setMode(pinConfigured ? 'pin' : 'password');
-  };
+    // Check if PIN is configured — if not, show password
+    authManager.isPinConfigured().then((configured) => {
+      if (!configured) setMode('password');
+    });
+  }, []);
 
   const deriveAddresses = async (mnemonic: string) => {
     const { HDWallet } = await import('../core/wallet/hdwallet');
@@ -125,18 +122,6 @@ export function UnlockScreen() {
     }
   };
 
-  // ─── Loading ───
-  if (mode === 'loading') {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.center}>
-          <Text style={styles.logo}>OW</Text>
-          <ActivityIndicator color="#22c55e" size="large" style={{ marginTop: 24 }} />
-        </View>
-      </SafeAreaView>
-    );
-  }
-
   // ─── PIN Pad ───
   if (mode === 'pin') {
     return (
@@ -151,7 +136,11 @@ export function UnlockScreen() {
           <TouchableOpacity onPress={() => setMode('password')}>
             <Text style={styles.linkText}>Use password instead</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={initAuth}>
+          <TouchableOpacity onPress={() => {
+            authManager.authenticateWithBiometric().then(async (result) => {
+              if (result.success) await unlockVaultWithStoredCredentials();
+            }).catch(() => {});
+          }}>
             <Text style={styles.linkText}>Try biometric</Text>
           </TouchableOpacity>
         </View>

@@ -37,17 +37,30 @@ const renderToken = ({ item }: { item: TokenInfo }) => <TokenRow token={item} />
 
 function Header() {
   const { totalUsdValue } = useWalletStore();
+  const [showChart, setShowChart] = React.useState(false);
+
+  // Defer pie chart render to after first paint (keeps screen transition fast)
+  React.useEffect(() => {
+    const timer = requestAnimationFrame(() => setShowChart(true));
+    return () => cancelAnimationFrame(timer);
+  }, []);
 
   return (
     <>
       {/* Pie Chart + Balance */}
       <View style={s.chartCard}>
-        <PieChart
-          slices={MOCK_ALLOCATIONS}
-          size={180}
-          centerLabel="Total"
-          centerValue={`$${totalUsdValue.toFixed(2)}`}
-        />
+        {showChart ? (
+          <PieChart
+            slices={MOCK_ALLOCATIONS}
+            size={180}
+            centerLabel="Total"
+            centerValue={`$${totalUsdValue.toFixed(2)}`}
+          />
+        ) : (
+          <View style={{ width: 180, height: 180, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={s.balanceDeferred}>${totalUsdValue.toFixed(2)}</Text>
+          </View>
+        )}
 
         {/* Legend */}
         <View style={s.legend}>
@@ -105,6 +118,7 @@ export function HomeScreen() {
 const s = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0a0a0f' },
   list: { paddingBottom: 100 },
+  balanceDeferred: { color: '#f0f0f5', fontSize: 24, fontWeight: '800' },
   chartCard: {
     backgroundColor: '#16161f', borderRadius: 24, padding: 24,
     alignItems: 'center', marginHorizontal: 16, marginTop: 16,
