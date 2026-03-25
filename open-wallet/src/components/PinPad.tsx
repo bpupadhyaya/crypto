@@ -25,12 +25,10 @@ export function PinPad({ title, subtitle, onComplete, error, maxLength = 6 }: Pi
       const newPin = prev + digit;
       if (newPin.length === maxLength) {
         processingRef.current = true;
-        // Immediate callback, reset after
-        setTimeout(() => {
-          onComplete(newPin);
-          setPin('');
-          processingRef.current = false;
-        }, 100);
+        // Call immediately — no delay
+        onComplete(newPin);
+        setPin('');
+        processingRef.current = false;
       }
       return newPin.length <= maxLength ? newPin : prev;
     });

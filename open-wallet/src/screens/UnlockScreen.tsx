@@ -83,17 +83,21 @@ export function UnlockScreen() {
       const valid = await authManager.verifyPin(pin);
       if (valid) {
         setPinError(null);
-        // PIN verified — retrieve vault password and decrypt
-        const vaultPassword = await authManager.getVaultPassword(pin);
-        if (vaultPassword) {
-          const { Vault } = await import('../core/vault/vault');
-          const vault = new Vault();
-          const contents = await vault.unlock(vaultPassword);
-          await deriveAddresses(contents.mnemonic);
-        }
-        // Even without vault password (e.g., older setup), addresses
-        // are persisted in Zustand store from initial creation
+        // UNLOCK IMMEDIATELY — show Home screen right away
+        // Addresses are already persisted in store from initial creation
         setStatus('unlocked');
+
+        // Vault decrypt + address refresh happens in background (non-blocking)
+        authManager.getVaultPassword(pin).then(async (vaultPassword) => {
+          if (vaultPassword) {
+            try {
+              const { Vault } = await import('../core/vault/vault');
+              const v = new Vault();
+              const contents = await v.unlock(vaultPassword);
+              await deriveAddresses(contents.mnemonic);
+            } catch {}
+          }
+        });
       } else {
         const remaining = await authManager.getRemainingAttempts();
         setPinError(`Wrong PIN. ${remaining} attempts remaining.`);

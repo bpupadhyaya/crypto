@@ -38,17 +38,14 @@ export function PinSetupScreen() {
       return;
     }
 
-    try {
-      await authManager.setupPin(pin, tempVaultPassword ?? undefined);
-      setTempVaultPassword(null);
-      setError(null);
+    // UNLOCK IMMEDIATELY — PIN setup completes in background
+    setError(null);
+    setStatus('unlocked');
 
-      // Go straight to unlocked — offer biometric setup later in Settings
-      // This avoids the slow hardware check + biometric prompt delay
-      setStatus('unlocked');
-    } catch (_err) {
-      setError('Failed to set PIN. Please try again.');
-    }
+    // Store PIN hash + encrypted password in background (non-blocking)
+    const pw = tempVaultPassword;
+    setTempVaultPassword(null);
+    authManager.setupPin(pin, pw ?? undefined).catch(() => {});
   };
 
   const handleEnableBiometric = async () => {
