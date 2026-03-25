@@ -13,7 +13,6 @@ import {
   Switch,
   Alert,
 } from 'react-native';
-import { router } from 'expo-router';
 import { useWalletStore } from '../store/walletStore';
 import { MOBILE_PROVIDERS_STATUS } from '../core/providers/mobile/stub';
 
@@ -193,7 +192,7 @@ export function SettingsScreen() {
                 style: 'destructive',
                 onPress: () => {
                   setStatus('locked');
-                  router.replace('/');
+                  // Tabs layout detects status change and redirects to unlock
                 },
               },
             ]);

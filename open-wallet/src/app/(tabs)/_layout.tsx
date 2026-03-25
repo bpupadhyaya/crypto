@@ -1,10 +1,11 @@
 /**
- * Tab Layout — Minimal, fast rendering.
+ * Tab Layout — Redirects to login if signed out.
  */
 
-import React from 'react';
-import { Tabs } from 'expo-router';
+import React, { useEffect } from 'react';
+import { Tabs, router } from 'expo-router';
 import { Text, StyleSheet } from 'react-native';
+import { useWalletStore } from '../../store/walletStore';
 
 const ICONS: Record<string, string> = {
   Home: '◉', Send: '↑', Swap: '⇄', Receive: '↓', Settings: '⚙',
@@ -15,6 +16,15 @@ function TabIcon({ label, focused }: { label: string; focused: boolean }) {
 }
 
 export default function TabLayout() {
+  const { status } = useWalletStore();
+
+  // Redirect to login/unlock when signed out
+  useEffect(() => {
+    if (status !== 'unlocked') {
+      router.replace('/');
+    }
+  }, [status]);
+
   return (
     <Tabs
       screenOptions={{
@@ -26,7 +36,7 @@ export default function TabLayout() {
         tabBarInactiveTintColor: '#606070',
         tabBarLabelStyle: s.tabLabel,
         animation: 'none',
-        lazy: true, // only render tab when first tapped
+        lazy: true,
       }}
     >
       <Tabs.Screen name="index" options={{ title: 'Home', headerTitle: 'Open Wallet', tabBarIcon: ({ focused }) => <TabIcon label="Home" focused={focused} /> }} />
