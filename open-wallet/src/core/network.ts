@@ -11,6 +11,7 @@ interface NetworkConfig {
   bitcoin: { apiBase: string; addressPrefix: string };
   ethereum: { rpcUrl: string; chainId: number; chainName: string };
   solana: { rpcUrl: string; cluster: 'devnet' | 'testnet' | 'mainnet-beta' };
+  openchain: { rpcUrl: string; restUrl: string; chainId: string; addressPrefix: string };
 }
 
 const TESTNET_CONFIG: NetworkConfig = {
@@ -27,6 +28,12 @@ const TESTNET_CONFIG: NetworkConfig = {
     rpcUrl: 'https://api.devnet.solana.com',
     cluster: 'devnet',
   },
+  openchain: {
+    rpcUrl: 'http://localhost:26657',
+    restUrl: 'http://localhost:1317',
+    chainId: 'openchain-testnet-1',
+    addressPrefix: 'openchain',
+  },
 };
 
 const MAINNET_CONFIG: NetworkConfig = {
@@ -42,6 +49,12 @@ const MAINNET_CONFIG: NetworkConfig = {
   solana: {
     rpcUrl: 'https://api.mainnet-beta.solana.com',
     cluster: 'mainnet-beta',
+  },
+  openchain: {
+    rpcUrl: 'https://rpc.openchain.network', // future mainnet RPC
+    restUrl: 'https://api.openchain.network', // future mainnet REST
+    chainId: 'openchain-1',
+    addressPrefix: 'openchain',
   },
 };
 

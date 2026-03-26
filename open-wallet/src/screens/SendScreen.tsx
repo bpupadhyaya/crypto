@@ -97,6 +97,7 @@ export function SendScreen() {
     bitcoin: 'tb1qw508d6qejxtdg4y5r3zarvary0c5xw7kxpjzsx',
     solana: 'GKvqsuNcnwWqPzzuhLmGi4rzzh55FhJtGizkhHaEJqiV',
     cosmos: 'cosmos1fl48vsnmsdzcv85q5d2q4z5ajdha8yu34mf0eh',
+    openchain: 'openchain1uex2f65j96r2x0zh52y0npgqc2edc5t068ul88',
   };
 
   const fillTestAddress = useCallback(() => {
@@ -109,13 +110,15 @@ export function SendScreen() {
     if (!recipient.trim()) return null;
     const addr = recipient.trim();
     if (selectedChain === 'ethereum') return /^0x[0-9a-fA-F]{40}$/.test(addr);
-    if (selectedChain === 'bitcoin') return /^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,62}$/.test(addr);
+    if (selectedChain === 'bitcoin') return /^(bc1|tb1|[13mn2])[a-zA-HJ-NP-Z0-9]{25,62}$/.test(addr);
     if (selectedChain === 'solana') return addr.length >= 32 && addr.length <= 44;
+    if (selectedChain === 'openchain') return /^openchain[a-z0-9]{39}$/.test(addr);
+    if (selectedChain === 'cosmos') return /^cosmos[a-z0-9]{39}$/.test(addr);
     return addr.length > 10;
   }, [recipient, selectedChain]);
 
   const chainSymbol = useMemo(() => {
-    const symbols: Record<string, string> = { bitcoin: 'BTC', ethereum: 'ETH', solana: 'SOL', cosmos: 'ATOM' };
+    const symbols: Record<string, string> = { bitcoin: 'BTC', ethereum: 'ETH', solana: 'SOL', cosmos: 'ATOM', openchain: 'OTK' };
     return symbols[selectedChain] ?? selectedChain.toUpperCase();
   }, [selectedChain]);
 

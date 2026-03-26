@@ -16,6 +16,7 @@ const NATIVE_TOKENS: Record<ChainId, Token> = {
   ethereum: { symbol: 'ETH', name: 'Ethereum', chainId: 'ethereum', decimals: 18 },
   solana: { symbol: 'SOL', name: 'Solana', chainId: 'solana', decimals: 9 },
   cosmos: { symbol: 'ATOM', name: 'Cosmos', chainId: 'cosmos', decimals: 6 },
+  openchain: { symbol: 'OTK', name: 'Open Token', chainId: 'openchain', decimals: 6 },
 };
 
 // ─── Balance Hook ───

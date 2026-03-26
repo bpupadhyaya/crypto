@@ -27,6 +27,7 @@ export const SUPPORTED_TOKENS: TokenInfo[] = [
   { symbol: 'TON', name: 'Toncoin', chainId: 'ton', decimals: 9, coingeckoId: 'the-open-network', isNative: true, color: '#0098ea' },
   { symbol: 'USDT', name: 'Tether', chainId: 'ethereum', decimals: 6, contractAddress: '0xdAC17F958D2ee523a2206206994597C13D831ec7', coingeckoId: 'tether', isNative: false, color: '#26a17b' },
   { symbol: 'USDC', name: 'USD Coin', chainId: 'ethereum', decimals: 6, contractAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', coingeckoId: 'usd-coin', isNative: false, color: '#2775ca' },
+  { symbol: 'OTK', name: 'Open Token', chainId: 'openchain', decimals: 6, coingeckoId: 'open-token', isNative: true, color: '#22c55e', stakingApy: 5.0 },
 ];
 
 // Pre-built Maps for O(1) lookups

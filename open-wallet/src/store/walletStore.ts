@@ -60,7 +60,7 @@ interface WalletState {
   togglePriceAlert: (id: string) => void;
 }
 
-const DEFAULT_TOKENS = ['BTC', 'ETH', 'USDT', 'XRP', 'USDC', 'SOL', 'ADA', 'LINK', 'AVAX', 'SUI', 'POL', 'DOT', 'DOGE', 'BNB', 'TON'];
+const DEFAULT_TOKENS = ['OTK', 'BTC', 'ETH', 'USDT', 'XRP', 'USDC', 'SOL', 'ADA', 'LINK', 'AVAX', 'SUI', 'POL', 'DOT', 'DOGE', 'BNB', 'TON'];
 
 export const useWalletStore = create<WalletState>((set) => ({
   mode: 'simple',
@@ -84,7 +84,7 @@ export const useWalletStore = create<WalletState>((set) => ({
   setCurrency: (currency) => { set({ currency }); schedulePersist(); },
   biometricEnabled: false,
   setBiometricEnabled: (enabled) => { set({ biometricEnabled: enabled }); schedulePersist(); },
-  supportedChains: ['bitcoin', 'ethereum', 'solana', 'cosmos'],
+  supportedChains: ['bitcoin', 'ethereum', 'solana', 'cosmos', 'openchain'],
   enabledTokens: DEFAULT_TOKENS,
   toggleToken: (symbol, enabled) => {
     set((state) => ({

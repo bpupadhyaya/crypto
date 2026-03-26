@@ -51,6 +51,7 @@ function registerLazyProviders() {
   lazyChain('bitcoin', () => import('./providers/server/bitcoin'));
   lazyChain('ethereum', () => import('./providers/server/ethereum'));
   lazyChain('solana', () => import('./providers/server/solana'));
+  lazyChain('openchain', () => import('./providers/server/openchain'));
 
   // Oracle — lazy loaded on first price fetch (not network-dependent)
   let oracleInstance: any = null;
