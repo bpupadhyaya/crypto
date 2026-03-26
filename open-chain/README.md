@@ -1,31 +1,50 @@
-# Open Chain
+# openchain
+**openchain** is a blockchain built using Cosmos SDK and Tendermint and created with [Ignite CLI](https://ignite.com/cli).
 
-A sovereign, mobile-first, post-quantum-ready blockchain for the Open Wallet ecosystem.
+## Get started
 
-## Mission
-Provide planet-scale financial infrastructure that every human can participate in — as a user and as a validator.
+```
+ignite chain serve
+```
 
-## Architecture
-- **Framework:** Cosmos SDK + CometBFT
-- **Consensus:** Delegated Proof of Stake with probabilistic mobile validator selection
-- **Interoperability:** IBC (50+ Cosmos chains), Axelar/THORChain bridges for BTC/ETH/SOL
-- **PQC:** Hybrid ML-DSA-65 + Ed25519 on-chain signatures (native quantum resistance)
-- **Scalability:** Geographic sharding (regional zones) + sovereign rollups per country
-- **ZK Proofs:** Plonky2/Nova recursive SNARKs — entire chain state in ~50KB proof
+`serve` command installs dependencies, builds, initializes, and starts your blockchain in development.
 
-## Progressive Mobile-First Strategy
-- 2026-2028: Server validators (standard Cosmos)
-- 2028-2032: Hybrid phone + server validation
-- 2032+: 100% mobile peer-to-peer validation
+### Configure
 
-## Modules
-- Auth (PQC signatures)
-- Bank
-- Staking
-- DEX (concentrated liquidity AMM)
-- Bridge (IBC + external chain adapters)
-- Governance (DAO)
-- Fee (near-zero fixed fees)
+Your blockchain in development can be configured with `config.yml`. To learn more, see the [Ignite CLI docs](https://docs.ignite.com).
 
-## License
-Open Source
+### Web Frontend
+
+Additionally, Ignite CLI offers a frontend scaffolding feature (based on Vue) to help you quickly build a web frontend for your blockchain:
+
+Use: `ignite scaffold vue`
+This command can be run within your scaffolded blockchain project.
+
+
+For more information see the [monorepo for Ignite front-end development](https://github.com/ignite/web).
+
+## Release
+To release a new version of your blockchain, create and push a new tag with `v` prefix. A new draft release with the configured targets will be created.
+
+```
+git tag v0.1
+git push origin v0.1
+```
+
+After a draft release is created, make your final changes from the release page and publish it.
+
+### Install
+To install the latest version of your blockchain node's binary, execute the following command on your machine:
+
+```
+curl https://get.ignite.com/username/openchain@latest! | sudo bash
+```
+`username/openchain` should match the `username` and `repo_name` of the Github repository to which the source code was pushed. Learn more about [the install process](https://github.com/ignite/installer).
+
+## Learn more
+
+- [Ignite CLI](https://ignite.com/cli)
+- [Tutorials](https://docs.ignite.com/guide)
+- [Ignite CLI docs](https://docs.ignite.com)
+- [Cosmos SDK docs](https://docs.cosmos.network)
+- [Developer Chat](https://discord.com/invite/ignitecli)
