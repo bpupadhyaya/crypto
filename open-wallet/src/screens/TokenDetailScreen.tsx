@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   View, Text, TouchableOpacity, ScrollView,
-  StyleSheet, SafeAreaView, ActivityIndicator,
+  StyleSheet, SafeAreaView, ActivityIndicator, Alert,
 } from 'react-native';
 import { LineChart } from '../components/LineChart';
 import { useTheme } from '../hooks/useTheme';
@@ -25,9 +25,10 @@ interface Props {
   token: TokenInfo;
   price: number;
   onClose: () => void;
+  onSend?: (chainId: string) => void;
 }
 
-export const TokenDetailScreen = React.memo(({ token, price, onClose }: Props) => {
+export const TokenDetailScreen = React.memo(({ token, price, onClose, onSend }: Props) => {
   const [chartData, setChartData] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedTimeframe, setSelectedTimeframe] = useState(7);
@@ -167,13 +168,15 @@ export const TokenDetailScreen = React.memo(({ token, price, onClose }: Props) =
 
         {/* Quick Actions */}
         <View style={s.actions}>
-          <TouchableOpacity style={[s.actionBtn, { backgroundColor: t.accent.orange + '20' }]}>
+          <TouchableOpacity style={[s.actionBtn, { backgroundColor: t.accent.orange + '20' }]} onPress={() => {
+            if (onSend) { onSend(token.chainId); } else { Alert.alert('Send', `Go to the Send tab and select ${token.symbol} to send.`); }
+          }}>
             <Text style={[s.actionText, { color: t.accent.orange }]}>Send</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[s.actionBtn, { backgroundColor: t.accent.green + '20' }]}>
+          <TouchableOpacity style={[s.actionBtn, { backgroundColor: t.accent.green + '20' }]} onPress={() => Alert.alert('Receive', `Go to the Receive tab to see your ${token.symbol} address.`)}>
             <Text style={[s.actionText, { color: t.accent.green }]}>Receive</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[s.actionBtn, { backgroundColor: t.accent.blue + '20' }]}>
+          <TouchableOpacity style={[s.actionBtn, { backgroundColor: t.accent.blue + '20' }]} onPress={() => Alert.alert('Swap', `Go to the Swap tab to exchange ${token.symbol}.`)}>
             <Text style={[s.actionText, { color: t.accent.blue }]}>Swap</Text>
           </TouchableOpacity>
         </View>

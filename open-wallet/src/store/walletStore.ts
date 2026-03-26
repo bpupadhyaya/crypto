@@ -135,6 +135,12 @@ async function doPersist() {
   } catch {}
 }
 
+// Ensure OTK is always in the enabled tokens list (migration for existing users)
+function ensureOTK(tokens: string[]): string[] {
+  if (!tokens.includes('OTK')) return ['OTK', ...tokens];
+  return tokens;
+}
+
 // Restore on boot (non-blocking)
 // CRITICAL: never overwrite status if user has already interacted
 (async () => {
@@ -160,7 +166,7 @@ async function doPersist() {
         biometricEnabled: d.biometricEnabled ?? false,
         addresses: d.addresses ?? {},
         hasVault: d.hasVault ?? false,
-        enabledTokens: d.enabledTokens ?? DEFAULT_TOKENS,
+        enabledTokens: ensureOTK(d.enabledTokens ?? DEFAULT_TOKENS),
         contacts: d.contacts ?? [],
         accounts: d.accounts ?? [{ name: 'Main Account', index: 0 }],
         activeAccountIndex: d.activeAccountIndex ?? 0,

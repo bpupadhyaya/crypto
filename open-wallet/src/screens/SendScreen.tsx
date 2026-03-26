@@ -166,7 +166,7 @@ export function SendScreen() {
       const provider = registry.getChainProvider(selectedChain);
       if (senderAddress) {
         const balance = await provider.getBalance(senderAddress);
-        const decimals = selectedChain === 'bitcoin' ? 8 : selectedChain === 'ethereum' ? 18 : 9;
+        const decimals = selectedChain === 'bitcoin' ? 8 : selectedChain === 'ethereum' ? 18 : selectedChain === 'openchain' ? 6 : selectedChain === 'cosmos' ? 6 : 9;
         const humanBalance = Number(balance.amount) / 10 ** decimals;
         if (humanBalance < parseFloat(amount)) {
           Alert.alert(
@@ -233,6 +233,11 @@ export function SendScreen() {
           rawTransaction: rawTx,
           hash: '',
         });
+      } else if (selectedChain === 'openchain' || selectedChain === 'cosmos') {
+        // Cosmos SDK chains (Open Chain, Cosmos Hub) — use @cosmjs/stargate
+        const { CosmosSigner } = await import('../core/chains/cosmos-signer');
+        const signer = CosmosSigner.fromWallet(wallet, store.activeAccountIndex, selectedChain as 'openchain' | 'cosmos');
+        txHash = await signer.sendTokens(recipient.trim(), amount.trim());
       } else {
         throw new Error(`Unsupported chain: ${selectedChain}`);
       }
