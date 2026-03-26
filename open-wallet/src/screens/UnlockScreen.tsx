@@ -7,7 +7,7 @@
  *   3. If PIN fails 5x → locked for 30s, then require full password
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
   Text,
@@ -21,6 +21,7 @@ import {
 import { PinPad } from '../components/PinPad';
 import { authManager } from '../core/auth/auth';
 import { useWalletStore } from '../store/walletStore';
+import { useTheme } from '../hooks/useTheme';
 
 type UnlockMode = 'loading' | 'biometric' | 'pin' | 'password';
 
@@ -31,6 +32,22 @@ export function UnlockScreen() {
   const [pinError, setPinError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const { setStatus, setAddresses, biometricEnabled } = useWalletStore();
+  const t = useTheme();
+
+  const styles = useMemo(() => StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.bg.primary },
+    center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+    passwordContent: { flex: 1, justifyContent: 'center', paddingHorizontal: 24 },
+    logo: { color: t.accent.green, fontSize: 40, fontWeight: '900', textAlign: 'center', marginBottom: 8 },
+    title: { color: t.text.primary, fontSize: 28, fontWeight: '800', textAlign: 'center' },
+    subtitle: { color: t.text.secondary, fontSize: 15, textAlign: 'center', marginTop: 8, marginBottom: 32 },
+    input: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, color: t.text.primary, fontSize: 16, marginBottom: 16 },
+    unlockButton: { backgroundColor: t.accent.green, borderRadius: 16, paddingVertical: 18, alignItems: 'center' },
+    buttonDisabled: { opacity: 0.6 },
+    unlockButtonText: { color: t.bg.primary, fontSize: 17, fontWeight: '700' },
+    linkText: { color: t.accent.blue, fontSize: 14, textAlign: 'center' },
+    bottomActions: { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 40, paddingBottom: 40 },
+  }), [t]);
 
   useEffect(() => {
     // Try biometric in background (non-blocking)
@@ -163,7 +180,7 @@ export function UnlockScreen() {
         <TextInput
           style={styles.input}
           placeholder="Password"
-          placeholderTextColor="#606070"
+          placeholderTextColor={t.text.muted}
           secureTextEntry
           value={password}
           onChangeText={setPassword}
@@ -177,7 +194,7 @@ export function UnlockScreen() {
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator color="#0a0a0f" />
+            <ActivityIndicator color={t.bg.primary} />
           ) : (
             <Text style={styles.unlockButtonText}>Unlock</Text>
           )}
@@ -190,18 +207,3 @@ export function UnlockScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0a0a0f' },
-  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  passwordContent: { flex: 1, justifyContent: 'center', paddingHorizontal: 24 },
-  logo: { color: '#22c55e', fontSize: 40, fontWeight: '900', textAlign: 'center', marginBottom: 8 },
-  title: { color: '#f0f0f5', fontSize: 28, fontWeight: '800', textAlign: 'center' },
-  subtitle: { color: '#a0a0b0', fontSize: 15, textAlign: 'center', marginTop: 8, marginBottom: 32 },
-  input: { backgroundColor: '#16161f', borderRadius: 16, padding: 16, color: '#f0f0f5', fontSize: 16, marginBottom: 16 },
-  unlockButton: { backgroundColor: '#22c55e', borderRadius: 16, paddingVertical: 18, alignItems: 'center' },
-  buttonDisabled: { opacity: 0.6 },
-  unlockButtonText: { color: '#0a0a0f', fontSize: 17, fontWeight: '700' },
-  linkText: { color: '#3b82f6', fontSize: 14, textAlign: 'center' },
-  bottomActions: { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 40, paddingBottom: 40 },
-});

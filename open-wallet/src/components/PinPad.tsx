@@ -3,8 +3,9 @@
  * Uses ref-based pin tracking to avoid React state batching bugs.
  */
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useMemo } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { useTheme } from '../hooks/useTheme';
 
 interface PinPadProps {
   title: string;
@@ -18,6 +19,25 @@ export function PinPad({ title, subtitle, onComplete, error, maxLength = 6 }: Pi
   const pinRef = useRef('');
   const [displayLength, setDisplayLength] = useState(0);
   const lockedRef = useRef(false);
+  const t = useTheme();
+
+  const s = useMemo(() => StyleSheet.create({
+    container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: t.bg.primary, paddingHorizontal: 40 },
+    title: { color: t.text.primary, fontSize: 24, fontWeight: '800', marginBottom: 8 },
+    subtitle: { color: t.text.secondary, fontSize: 14, marginBottom: 32 },
+    dotsRow: { flexDirection: 'row', gap: 16, marginBottom: 16 },
+    dot: { width: 16, height: 16, borderRadius: 8, borderWidth: 2, borderColor: t.text.muted },
+    dotFilled: { backgroundColor: t.accent.green, borderColor: t.accent.green },
+    dotError: { backgroundColor: t.accent.red, borderColor: t.accent.red },
+    error: { color: t.accent.red, fontSize: 13, marginBottom: 16, fontWeight: '600' },
+    keypad: { marginTop: 24, width: '100%' },
+    keyRow: { flexDirection: 'row', justifyContent: 'center', marginBottom: 12 },
+    key: { width: 72, height: 72, borderRadius: 36, backgroundColor: t.bg.card, justifyContent: 'center', alignItems: 'center', marginHorizontal: 12 },
+    keyPressed: { backgroundColor: t.accent.green + '30', transform: [{ scale: 0.95 }] },
+    keyEmpty: { width: 72, height: 72, marginHorizontal: 12 },
+    keyText: { color: t.text.primary, fontSize: 28, fontWeight: '600' },
+    keyTextDel: { color: t.text.secondary, fontSize: 24, fontWeight: '600' },
+  }), [t]);
 
   const handlePress = useCallback((digit: string) => {
     if (lockedRef.current) return;
@@ -106,21 +126,3 @@ export function PinPad({ title, subtitle, onComplete, error, maxLength = 6 }: Pi
     </View>
   );
 }
-
-const s = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#0a0a0f', paddingHorizontal: 40 },
-  title: { color: '#f0f0f5', fontSize: 24, fontWeight: '800', marginBottom: 8 },
-  subtitle: { color: '#a0a0b0', fontSize: 14, marginBottom: 32 },
-  dotsRow: { flexDirection: 'row', gap: 16, marginBottom: 16 },
-  dot: { width: 16, height: 16, borderRadius: 8, borderWidth: 2, borderColor: '#606070' },
-  dotFilled: { backgroundColor: '#22c55e', borderColor: '#22c55e' },
-  dotError: { backgroundColor: '#ef4444', borderColor: '#ef4444' },
-  error: { color: '#ef4444', fontSize: 13, marginBottom: 16, fontWeight: '600' },
-  keypad: { marginTop: 24, width: '100%' },
-  keyRow: { flexDirection: 'row', justifyContent: 'center', marginBottom: 12 },
-  key: { width: 72, height: 72, borderRadius: 36, backgroundColor: '#16161f', justifyContent: 'center', alignItems: 'center', marginHorizontal: 12 },
-  keyPressed: { backgroundColor: '#22c55e30', transform: [{ scale: 0.95 }] },
-  keyEmpty: { width: 72, height: 72, marginHorizontal: 12 },
-  keyText: { color: '#f0f0f5', fontSize: 28, fontWeight: '600' },
-  keyTextDel: { color: '#a0a0b0', fontSize: 24, fontWeight: '600' },
-});

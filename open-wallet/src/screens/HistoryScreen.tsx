@@ -4,7 +4,7 @@
  * Pro mode: detailed view with fees, block confirmations, chain icons
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   View,
   Text,
@@ -17,7 +17,9 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { registry } from '../core/abstractions/registry';
 import { useWalletStore } from '../store/walletStore';
+import { useTheme } from '../hooks/useTheme';
 import type { Transaction, ChainId } from '../core/abstractions/types';
+import type { Theme } from '../utils/theme';
 
 const CHAIN_COLORS: Record<string, string> = {
   bitcoin: '#f7931a',
@@ -55,10 +57,22 @@ function useTransactionHistory() {
   });
 }
 
-function TransactionItem({ tx, mode }: { tx: Transaction; mode: string }) {
+function TransactionItem({ tx, mode, t }: { tx: Transaction; mode: string; t: Theme & { isDark: boolean } }) {
   const isSent = tx.from.toLowerCase() !== ''; // simplified — would compare to user's address
   const chainColor = CHAIN_COLORS[tx.chainId] ?? '#666';
-  const statusColor = tx.status === 'confirmed' ? '#22c55e' : tx.status === 'failed' ? '#ef4444' : '#eab308';
+  const statusColor = tx.status === 'confirmed' ? t.accent.green : tx.status === 'failed' ? t.accent.red : t.accent.yellow;
+
+  const s = useMemo(() => StyleSheet.create({
+    txItem: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 14 },
+    txLeft: { flexDirection: 'row', alignItems: 'center', flex: 1 },
+    txChainDot: { width: 8, height: 8, borderRadius: 4, marginRight: 12 },
+    txType: { color: t.text.primary, fontSize: 15, fontWeight: '600' },
+    txAddress: { color: t.text.muted, fontSize: 12, marginTop: 2, maxWidth: 160 },
+    txRight: { alignItems: 'flex-end' },
+    txMeta: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 2 },
+    txTime: { color: t.text.muted, fontSize: 11 },
+    txFee: { color: t.text.muted, fontSize: 10, marginTop: 2 },
+  }), [t]);
 
   const formatAmount = (amount: bigint, decimals: number) => {
     const num = Number(amount) / Math.pow(10, decimals);
@@ -82,31 +96,31 @@ function TransactionItem({ tx, mode }: { tx: Transaction; mode: string }) {
   };
 
   return (
-    <TouchableOpacity style={styles.txItem}>
-      <View style={styles.txLeft}>
-        <View style={[styles.txChainDot, { backgroundColor: chainColor }]} />
+    <TouchableOpacity style={s.txItem}>
+      <View style={s.txLeft}>
+        <View style={[s.txChainDot, { backgroundColor: chainColor }]} />
         <View>
-          <Text style={styles.txType}>
+          <Text style={s.txType}>
             {isSent ? '↑ Sent' : '↓ Received'} {tx.token.symbol}
           </Text>
-          <Text style={styles.txAddress} numberOfLines={1}>
+          <Text style={s.txAddress} numberOfLines={1}>
             {isSent ? `To: ${tx.to.slice(0, 8)}...${tx.to.slice(-6)}` : `From: ${tx.from.slice(0, 8)}...${tx.from.slice(-6)}`}
           </Text>
         </View>
       </View>
-      <View style={styles.txRight}>
-        <Text style={[styles.txAmount, { color: isSent ? '#ef4444' : '#22c55e' }]}>
+      <View style={s.txRight}>
+        <Text style={[{ fontSize: 15, fontWeight: '700' }, { color: isSent ? t.accent.red : t.accent.green }]}>
           {isSent ? '-' : '+'}{formatAmount(tx.amount, tx.token.decimals)} {tx.token.symbol}
         </Text>
-        <View style={styles.txMeta}>
-          <Text style={[styles.txStatus, { color: statusColor }]}>
+        <View style={s.txMeta}>
+          <Text style={[{ fontSize: 11, fontWeight: '600' }, { color: statusColor }]}>
             {tx.status === 'confirmed' ? '✓' : tx.status === 'failed' ? '✗' : '○'}{' '}
             {tx.status}
           </Text>
-          <Text style={styles.txTime}>{formatTime(tx.timestamp)}</Text>
+          <Text style={s.txTime}>{formatTime(tx.timestamp)}</Text>
         </View>
         {mode === 'pro' && tx.fee && (
-          <Text style={styles.txFee}>
+          <Text style={s.txFee}>
             Fee: {formatAmount(tx.fee, tx.token.decimals)} {tx.token.symbol}
           </Text>
         )}
@@ -118,18 +132,29 @@ function TransactionItem({ tx, mode }: { tx: Transaction; mode: string }) {
 export function HistoryScreen() {
   const { mode } = useWalletStore();
   const { data: transactions, isLoading, refetch } = useTransactionHistory();
+  const t = useTheme();
+
+  const styles = useMemo(() => StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.bg.primary },
+    separator: { height: 1, backgroundColor: t.border, marginHorizontal: 16 },
+    empty: { alignItems: 'center', paddingHorizontal: 40 },
+    emptyContainer: { flex: 1, justifyContent: 'center' },
+    emptyIcon: { color: t.text.muted, fontSize: 48, marginBottom: 16 },
+    emptyTitle: { color: t.text.secondary, fontSize: 18, fontWeight: '700', marginBottom: 8 },
+    emptyDesc: { color: t.text.muted, fontSize: 14, textAlign: 'center', lineHeight: 20 },
+  }), [t]);
 
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
         data={transactions ?? []}
         keyExtractor={(tx) => tx.id}
-        renderItem={({ item }) => <TransactionItem tx={item} mode={mode} />}
+        renderItem={({ item }) => <TransactionItem tx={item} mode={mode} t={t} />}
         refreshControl={
           <RefreshControl
             refreshing={isLoading}
             onRefresh={refetch}
-            tintColor="#22c55e"
+            tintColor={t.accent.green}
           />
         }
         ListEmptyComponent={
@@ -147,92 +172,3 @@ export function HistoryScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0a0a0f' },
-  txItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-  },
-  txLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  txChainDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginRight: 12,
-  },
-  txType: {
-    color: '#f0f0f5',
-    fontSize: 15,
-    fontWeight: '600',
-  },
-  txAddress: {
-    color: '#606070',
-    fontSize: 12,
-    marginTop: 2,
-    maxWidth: 160,
-  },
-  txRight: {
-    alignItems: 'flex-end',
-  },
-  txAmount: {
-    fontSize: 15,
-    fontWeight: '700',
-  },
-  txMeta: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginTop: 2,
-  },
-  txStatus: {
-    fontSize: 11,
-    fontWeight: '600',
-  },
-  txTime: {
-    color: '#606070',
-    fontSize: 11,
-  },
-  txFee: {
-    color: '#606070',
-    fontSize: 10,
-    marginTop: 2,
-  },
-  separator: {
-    height: 1,
-    backgroundColor: 'rgba(255,255,255,0.04)',
-    marginHorizontal: 16,
-  },
-  empty: {
-    alignItems: 'center',
-    paddingHorizontal: 40,
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  emptyIcon: {
-    color: '#606070',
-    fontSize: 48,
-    marginBottom: 16,
-  },
-  emptyTitle: {
-    color: '#a0a0b0',
-    fontSize: 18,
-    fontWeight: '700',
-    marginBottom: 8,
-  },
-  emptyDesc: {
-    color: '#606070',
-    fontSize: 14,
-    textAlign: 'center',
-    lineHeight: 20,
-  },
-});

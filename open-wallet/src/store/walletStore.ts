@@ -7,6 +7,7 @@
 import { create } from 'zustand';
 import type { ChainId, Balance } from '../core/abstractions/types';
 import { type NetworkMode, setNetworkMode } from '../core/network';
+import type { ThemeMode } from '../utils/theme';
 
 export type AppMode = 'simple' | 'pro';
 export type WalletStatus = 'locked' | 'unlocked' | 'onboarding' | 'pin_setup';
@@ -16,6 +17,8 @@ interface WalletState {
   setMode: (mode: AppMode) => void;
   networkMode: NetworkMode;
   setNetworkMode: (mode: NetworkMode) => void;
+  themeMode: ThemeMode;
+  setThemeMode: (mode: ThemeMode) => void;
   status: WalletStatus;
   setStatus: (status: WalletStatus) => void;
   balances: Balance[];
@@ -64,6 +67,8 @@ export const useWalletStore = create<WalletState>((set) => ({
   setMode: (mode) => { set({ mode }); schedulePersist(); },
   networkMode: 'testnet' as NetworkMode,
   setNetworkMode: (mode) => { setNetworkMode(mode); set({ networkMode: mode }); schedulePersist(); },
+  themeMode: 'dark' as ThemeMode,
+  setThemeMode: (mode) => { set({ themeMode: mode }); schedulePersist(); },
   status: 'onboarding',
   setStatus: (status) => set({ status }),
   balances: [],
@@ -123,7 +128,7 @@ async function doPersist() {
     }
     const s = useWalletStore.getState();
     await asyncStorageModule.setItem('ow-store', JSON.stringify({
-      mode: s.mode, networkMode: s.networkMode, locale: s.locale, currency: s.currency, biometricEnabled: s.biometricEnabled,
+      mode: s.mode, networkMode: s.networkMode, themeMode: s.themeMode, locale: s.locale, currency: s.currency, biometricEnabled: s.biometricEnabled,
       addresses: s.addresses, hasVault: s.hasVault, enabledTokens: s.enabledTokens,
       contacts: s.contacts, accounts: s.accounts, activeAccountIndex: s.activeAccountIndex, priceAlerts: s.priceAlerts,
     }));
@@ -149,6 +154,7 @@ async function doPersist() {
       useWalletStore.setState({
         mode: d.mode ?? 'simple',
         networkMode: restoredNetworkMode,
+        themeMode: d.themeMode ?? 'dark',
         locale: d.locale ?? 'en',
         currency: d.currency ?? 'usd',
         biometricEnabled: d.biometricEnabled ?? false,

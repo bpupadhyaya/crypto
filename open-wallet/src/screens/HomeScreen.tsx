@@ -11,6 +11,8 @@ import { SUPPORTED_TOKENS, type TokenInfo } from '../core/tokens/registry';
 import { ManageTokensScreen } from './ManageTokensScreen';
 import { TokenDetailScreen } from './TokenDetailScreen';
 import { usePrices } from '../hooks/usePrices';
+import { useTheme } from '../hooks/useTheme';
+import type { Theme } from '../utils/theme';
 
 // Static — never recreated
 const MOCK_ALLOCATIONS = [
@@ -23,43 +25,75 @@ const MOCK_ALLOCATIONS = [
 
 const keyExtractor = (item: TokenInfo) => item.symbol;
 
-const TokenRow = React.memo(({ token, price, onPress }: { token: TokenInfo; price?: number; onPress: () => void }) => (
-  <TouchableOpacity style={s.tokenRow} onPress={onPress} activeOpacity={0.7}>
-    <View style={[s.tokenDot, { backgroundColor: token.color }]} />
-    <View style={s.tokenInfo}>
-      <Text style={s.tokenSymbol}>{token.symbol}</Text>
-      <Text style={s.tokenName}>{token.name}</Text>
-    </View>
-    <View style={s.tokenValues}>
-      <Text style={s.tokenBalance}>0.00</Text>
-      <Text style={s.tokenUsd}>
-        {price ? `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '—'}
-      </Text>
-    </View>
-  </TouchableOpacity>
-));
+const TokenRow = React.memo(({ token, price, onPress, t }: { token: TokenInfo; price?: number; onPress: () => void; t: Theme & { isDark: boolean } }) => {
+  const s = useMemo(() => StyleSheet.create({
+    tokenRow: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 14, backgroundColor: t.bg.card, borderBottomWidth: 1, borderBottomColor: t.border, marginHorizontal: 16 },
+    tokenDot: { width: 10, height: 10, borderRadius: 5, marginRight: 12 },
+    tokenInfo: { flex: 1 },
+    tokenSymbol: { color: t.text.primary, fontSize: 15, fontWeight: '600' },
+    tokenName: { color: t.text.muted, fontSize: 12, marginTop: 1 },
+    tokenValues: { alignItems: 'flex-end' },
+    tokenBalance: { color: t.text.secondary, fontSize: 14, fontWeight: '500' },
+    tokenUsd: { color: t.text.muted, fontSize: 12, marginTop: 1 },
+  }), [t]);
+
+  return (
+    <TouchableOpacity style={s.tokenRow} onPress={onPress} activeOpacity={0.7}>
+      <View style={[s.tokenDot, { backgroundColor: token.color }]} />
+      <View style={s.tokenInfo}>
+        <Text style={s.tokenSymbol}>{token.symbol}</Text>
+        <Text style={s.tokenName}>{token.name}</Text>
+      </View>
+      <View style={s.tokenValues}>
+        <Text style={s.tokenBalance}>0.00</Text>
+        <Text style={s.tokenUsd}>
+          {price ? `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '—'}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
+});
 
 // Memoized legend (static data, never changes)
-const Legend = React.memo(() => (
-  <View style={s.legend}>
-    {MOCK_ALLOCATIONS.map((slice) => (
-      <View key={slice.label} style={s.legendItem}>
-        <View style={[s.legendDot, { backgroundColor: slice.color }]} />
-        <Text style={s.legendLabel}>{slice.label}</Text>
-        <Text style={s.legendValue}>{slice.value}%</Text>
-      </View>
-    ))}
-  </View>
-));
+const Legend = React.memo(({ t }: { t: Theme }) => {
+  const s = useMemo(() => StyleSheet.create({
+    legend: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 12, marginTop: 16 },
+    legendItem: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+    legendDot: { width: 8, height: 8, borderRadius: 4 },
+    legendLabel: { color: t.text.secondary, fontSize: 12 },
+    legendValue: { color: t.text.muted, fontSize: 11 },
+  }), [t]);
 
-const ActionBtn = React.memo(({ icon, label, color }: { icon: string; label: string; color: string }) => (
-  <TouchableOpacity style={s.actionBtn} activeOpacity={0.7}>
-    <View style={[s.actionCircle, { backgroundColor: color + '20' }]}>
-      <Text style={[s.actionIcon, { color }]}>{icon}</Text>
+  return (
+    <View style={s.legend}>
+      {MOCK_ALLOCATIONS.map((slice) => (
+        <View key={slice.label} style={s.legendItem}>
+          <View style={[s.legendDot, { backgroundColor: slice.color }]} />
+          <Text style={s.legendLabel}>{slice.label}</Text>
+          <Text style={s.legendValue}>{slice.value}%</Text>
+        </View>
+      ))}
     </View>
-    <Text style={s.actionLabel}>{label}</Text>
-  </TouchableOpacity>
-));
+  );
+});
+
+const ActionBtn = React.memo(({ icon, label, color, t }: { icon: string; label: string; color: string; t: Theme }) => {
+  const s = useMemo(() => StyleSheet.create({
+    actionBtn: { alignItems: 'center', flex: 1 },
+    actionCircle: { width: 56, height: 56, borderRadius: 28, justifyContent: 'center', alignItems: 'center', marginBottom: 6 },
+    actionIcon: { fontSize: 24, fontWeight: '700' },
+    actionLabel: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
+  }), [t]);
+
+  return (
+    <TouchableOpacity style={s.actionBtn} activeOpacity={0.7}>
+      <View style={[s.actionCircle, { backgroundColor: color + '20' }]}>
+        <Text style={[s.actionIcon, { color }]}>{icon}</Text>
+      </View>
+      <Text style={s.actionLabel}>{label}</Text>
+    </TouchableOpacity>
+  );
+});
 
 export function HomeScreen() {
   const [showManage, setShowManage] = useState(false);
@@ -68,21 +102,36 @@ export function HomeScreen() {
   const enabledTokens = useWalletStore((s) => s.enabledTokens);
   const totalUsdValue = useWalletStore((s) => s.totalUsdValue);
   const { prices, loading: pricesLoading, lastUpdated, refresh: refreshPrices } = usePrices();
+  const t = useTheme();
+
+  const s = useMemo(() => StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.bg.primary },
+    testnetBanner: { backgroundColor: t.accent.yellow + '20', paddingVertical: 6, alignItems: 'center', marginHorizontal: 16, borderRadius: 8, marginTop: 8 },
+    testnetText: { color: t.accent.yellow, fontSize: 12, fontWeight: '700', letterSpacing: 1 },
+    list: { paddingBottom: 100 },
+    chartCard: { backgroundColor: t.bg.card, borderRadius: 24, padding: 24, alignItems: 'center', marginHorizontal: 16, marginTop: 16 },
+    actions: { flexDirection: 'row', justifyContent: 'space-evenly', paddingHorizontal: 16, marginTop: 20 },
+    sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 24, marginBottom: 8, marginHorizontal: 16 },
+    sectionTitle: { color: t.text.secondary, fontSize: 13, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 1 },
+    manageLink: { color: t.accent.blue, fontSize: 13, fontWeight: '600' },
+    searchInput: { backgroundColor: t.bg.card, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 10, marginHorizontal: 16, marginBottom: 8, color: t.text.primary, fontSize: 14 },
+    lastUpdated: { color: t.text.muted, fontSize: 11, marginLeft: 16, marginBottom: 4 },
+  }), [t]);
 
   const filteredTokens = useMemo(() => {
-    let tokens = SUPPORTED_TOKENS.filter((t) => enabledTokens.includes(t.symbol));
+    let tokens = SUPPORTED_TOKENS.filter((tk) => enabledTokens.includes(tk.symbol));
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
-      tokens = tokens.filter((t) =>
-        t.symbol.toLowerCase().includes(q) || t.name.toLowerCase().includes(q)
+      tokens = tokens.filter((tk) =>
+        tk.symbol.toLowerCase().includes(q) || tk.name.toLowerCase().includes(q)
       );
     }
     return tokens;
   }, [enabledTokens, searchQuery]);
 
   const renderItem = useCallback(({ item }: { item: TokenInfo }) => (
-    <TokenRow token={item} price={prices[item.symbol]} onPress={() => setSelectedToken(item)} />
-  ), [prices]);
+    <TokenRow token={item} price={prices[item.symbol]} onPress={() => setSelectedToken(item)} t={t} />
+  ), [prices, t]);
 
   const openManage = useCallback(() => setShowManage(true), []);
   const closeManage = useCallback(() => setShowManage(false), []);
@@ -112,12 +161,12 @@ export function HomeScreen() {
           centerLabel="Total"
           centerValue={`$${totalUsdValue.toFixed(2)}`}
         />
-        <Legend />
+        <Legend t={t} />
       </View>
       <View style={s.actions}>
-        <ActionBtn icon="↑" label="Send" color="#f97316" />
-        <ActionBtn icon="↓" label="Receive" color="#22c55e" />
-        <ActionBtn icon="⇄" label="Swap" color="#3b82f6" />
+        <ActionBtn icon="↑" label="Send" color={t.accent.orange} t={t} />
+        <ActionBtn icon="↓" label="Receive" color={t.accent.green} t={t} />
+        <ActionBtn icon="⇄" label="Swap" color={t.accent.blue} t={t} />
       </View>
       <View style={s.sectionHeader}>
         <Text style={s.sectionTitle}>Tokens</Text>
@@ -128,7 +177,7 @@ export function HomeScreen() {
       <TextInput
         style={s.searchInput}
         placeholder="Search tokens..."
-        placeholderTextColor="#606070"
+        placeholderTextColor={t.text.muted}
         value={searchQuery}
         onChangeText={setSearchQuery}
         autoCorrect={false}
@@ -136,7 +185,7 @@ export function HomeScreen() {
       />
       {lastUpdatedText ? <Text style={s.lastUpdated}>{lastUpdatedText}</Text> : null}
     </>
-  ), [totalUsdValue, openManage, lastUpdatedText, showTestnetBanner]);
+  ), [totalUsdValue, openManage, lastUpdatedText, showTestnetBanner, s, t, searchQuery]);
 
   if (selectedToken) {
     return (
@@ -162,40 +211,9 @@ export function HomeScreen() {
         removeClippedSubviews
         contentContainerStyle={s.list}
         refreshControl={
-          <RefreshControl refreshing={pricesLoading} onRefresh={refreshPrices} tintColor="#22c55e" />
+          <RefreshControl refreshing={pricesLoading} onRefresh={refreshPrices} tintColor={t.accent.green} />
         }
       />
     </SafeAreaView>
   );
 }
-
-const s = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0a0a0f' },
-  testnetBanner: { backgroundColor: '#eab30820', paddingVertical: 6, alignItems: 'center', marginHorizontal: 16, borderRadius: 8, marginTop: 8 },
-  testnetText: { color: '#eab308', fontSize: 12, fontWeight: '700', letterSpacing: 1 },
-  list: { paddingBottom: 100 },
-  chartCard: { backgroundColor: '#16161f', borderRadius: 24, padding: 24, alignItems: 'center', marginHorizontal: 16, marginTop: 16 },
-  legend: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 12, marginTop: 16 },
-  legendItem: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  legendDot: { width: 8, height: 8, borderRadius: 4 },
-  legendLabel: { color: '#a0a0b0', fontSize: 12 },
-  legendValue: { color: '#606070', fontSize: 11 },
-  actions: { flexDirection: 'row', justifyContent: 'space-evenly', paddingHorizontal: 16, marginTop: 20 },
-  actionBtn: { alignItems: 'center', flex: 1 },
-  actionCircle: { width: 56, height: 56, borderRadius: 28, justifyContent: 'center', alignItems: 'center', marginBottom: 6 },
-  actionIcon: { fontSize: 24, fontWeight: '700' },
-  actionLabel: { color: '#f0f0f5', fontSize: 14, fontWeight: '600' },
-  sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 24, marginBottom: 8, marginHorizontal: 16 },
-  sectionTitle: { color: '#a0a0b0', fontSize: 13, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 1 },
-  manageLink: { color: '#3b82f6', fontSize: 13, fontWeight: '600' },
-  searchInput: { backgroundColor: '#16161f', borderRadius: 12, paddingHorizontal: 16, paddingVertical: 10, marginHorizontal: 16, marginBottom: 8, color: '#f0f0f5', fontSize: 14 },
-  lastUpdated: { color: '#606070', fontSize: 11, marginLeft: 16, marginBottom: 4 },
-  tokenRow: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 14, backgroundColor: '#16161f', borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.04)', marginHorizontal: 16 },
-  tokenDot: { width: 10, height: 10, borderRadius: 5, marginRight: 12 },
-  tokenInfo: { flex: 1 },
-  tokenSymbol: { color: '#f0f0f5', fontSize: 15, fontWeight: '600' },
-  tokenName: { color: '#606070', fontSize: 12, marginTop: 1 },
-  tokenValues: { alignItems: 'flex-end' },
-  tokenBalance: { color: '#a0a0b0', fontSize: 14, fontWeight: '500' },
-  tokenUsd: { color: '#606070', fontSize: 12, marginTop: 1 },
-});

@@ -3,8 +3,9 @@
  * Appears at the top of the screen with a slide animation.
  */
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { useTheme } from '../hooks/useTheme';
 
 type ToastType = 'success' | 'error' | 'info' | 'warning';
 
@@ -24,25 +25,35 @@ export function showToast(type: ToastType, title: string, message?: string, dura
   toastListeners.forEach((fn) => fn(toast));
 }
 
-const COLORS: Record<ToastType, { bg: string; border: string }> = {
-  success: { bg: '#22c55e15', border: '#22c55e' },
-  error: { bg: '#ef444415', border: '#ef4444' },
-  info: { bg: '#3b82f615', border: '#3b82f6' },
-  warning: { bg: '#eab30815', border: '#eab308' },
-};
-
 const ICONS: Record<ToastType, string> = {
   success: '✓', error: '✕', info: 'ℹ', warning: '⚠',
 };
 
 export const ToastContainer = React.memo(() => {
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
+  const t = useTheme();
+
+  const COLORS: Record<ToastType, { bg: string; border: string }> = useMemo(() => ({
+    success: { bg: t.accent.green + '15', border: t.accent.green },
+    error: { bg: t.accent.red + '15', border: t.accent.red },
+    info: { bg: t.accent.blue + '15', border: t.accent.blue },
+    warning: { bg: t.accent.yellow + '15', border: t.accent.yellow },
+  }), [t]);
+
+  const s = useMemo(() => StyleSheet.create({
+    container: { position: 'absolute', top: 60, left: 16, right: 16, zIndex: 9999 },
+    toast: { flexDirection: 'row', alignItems: 'center', borderRadius: 12, padding: 14, marginBottom: 8, borderLeftWidth: 4 },
+    icon: { fontSize: 18, fontWeight: '700', marginRight: 12 },
+    textContainer: { flex: 1 },
+    title: { color: t.text.primary, fontSize: 14, fontWeight: '700' },
+    message: { color: t.text.secondary, fontSize: 12, marginTop: 2 },
+  }), [t]);
 
   useEffect(() => {
     const listener = (toast: ToastMessage) => {
       setToasts((prev) => [...prev, toast]);
       setTimeout(() => {
-        setToasts((prev) => prev.filter((t) => t.id !== toast.id));
+        setToasts((prev) => prev.filter((ti) => ti.id !== toast.id));
       }, toast.duration ?? 3000);
     };
     toastListeners.push(listener);
@@ -50,7 +61,7 @@ export const ToastContainer = React.memo(() => {
   }, []);
 
   const dismiss = useCallback((id: string) => {
-    setToasts((prev) => prev.filter((t) => t.id !== id));
+    setToasts((prev) => prev.filter((ti) => ti.id !== id));
   }, []);
 
   if (toasts.length === 0) return null;
@@ -76,13 +87,4 @@ export const ToastContainer = React.memo(() => {
       })}
     </View>
   );
-});
-
-const s = StyleSheet.create({
-  container: { position: 'absolute', top: 60, left: 16, right: 16, zIndex: 9999 },
-  toast: { flexDirection: 'row', alignItems: 'center', borderRadius: 12, padding: 14, marginBottom: 8, borderLeftWidth: 4 },
-  icon: { fontSize: 18, fontWeight: '700', marginRight: 12 },
-  textContainer: { flex: 1 },
-  title: { color: '#f0f0f5', fontSize: 14, fontWeight: '700' },
-  message: { color: '#a0a0b0', fontSize: 12, marginTop: 2 },
 });

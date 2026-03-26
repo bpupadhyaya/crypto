@@ -2,7 +2,7 @@
  * Price Alerts — Notify when a token hits a target price.
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, FlatList,
   StyleSheet, SafeAreaView, Alert, Switch,
@@ -10,6 +10,7 @@ import {
 import { useWalletStore } from '../store/walletStore';
 import { SUPPORTED_TOKENS } from '../core/tokens/registry';
 import { usePrices } from '../hooks/usePrices';
+import { useTheme } from '../hooks/useTheme';
 
 export interface PriceAlert {
   id: string;
@@ -30,11 +31,47 @@ export const PriceAlertsScreen = React.memo(({ onClose }: Props) => {
   const removeAlert = useWalletStore((s) => s.removePriceAlert);
   const toggleAlert = useWalletStore((s) => s.togglePriceAlert);
   const { prices } = usePrices();
+  const t = useTheme();
 
   const [showAdd, setShowAdd] = useState(false);
   const [selectedSymbol, setSelectedSymbol] = useState('BTC');
   const [targetPrice, setTargetPrice] = useState('');
   const [direction, setDirection] = useState<'above' | 'below'>('above');
+
+  const s = useMemo(() => StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.bg.primary },
+    header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
+    back: { color: t.accent.blue, fontSize: 16, fontWeight: '600' },
+    title: { color: t.text.primary, fontSize: 18, fontWeight: '800' },
+    addBtn: { color: t.accent.green, fontSize: 15, fontWeight: '700' },
+    addForm: { backgroundColor: t.bg.card, marginHorizontal: 16, borderRadius: 16, padding: 16, marginBottom: 16 },
+    tokenRow: { flexDirection: 'row', gap: 6, marginBottom: 12, flexWrap: 'wrap' },
+    tokenChip: { backgroundColor: t.bg.primary, borderRadius: 20, paddingVertical: 6, paddingHorizontal: 14 },
+    tokenActive: { backgroundColor: t.accent.green },
+    tokenText: { color: t.text.secondary, fontSize: 13 },
+    tokenTextActive: { color: t.bg.primary, fontWeight: '700' },
+    currentPrice: { color: t.text.muted, fontSize: 13, marginBottom: 12 },
+    directionRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
+    dirBtn: { flex: 1, backgroundColor: t.bg.primary, borderRadius: 12, paddingVertical: 10, alignItems: 'center' },
+    dirActive: { backgroundColor: t.accent.green + '20' },
+    dirActiveRed: { backgroundColor: t.accent.red + '20' },
+    dirText: { color: t.text.secondary, fontSize: 14, fontWeight: '600' },
+    dirTextActive: { color: t.accent.green },
+    dirTextActiveRed: { color: t.accent.red },
+    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginBottom: 12 },
+    saveBtn: { backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
+    saveBtnText: { color: t.bg.primary, fontSize: 15, fontWeight: '700' },
+    alertRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: t.border },
+    alertInfo: { flex: 1 },
+    alertSymbol: { color: t.text.primary, fontSize: 16, fontWeight: '600' },
+    alertTarget: { color: t.text.secondary, fontSize: 14, marginTop: 2 },
+    alertTriggered: { color: t.accent.green, fontSize: 12, fontWeight: '700', marginTop: 2 },
+    alertActions: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+    deleteBtn: { color: t.accent.red, fontSize: 18, fontWeight: '700' },
+    empty: { alignItems: 'center' },
+    emptyText: { color: t.text.secondary, fontSize: 16, fontWeight: '600' },
+    emptyHint: { color: t.text.muted, fontSize: 13, marginTop: 4 },
+  }), [t]);
 
   const handleAdd = useCallback(() => {
     const price = parseFloat(targetPrice);
@@ -107,7 +144,7 @@ export const PriceAlertsScreen = React.memo(({ onClose }: Props) => {
           <TextInput
             style={s.input}
             placeholder="Target price (USD)"
-            placeholderTextColor="#606070"
+            placeholderTextColor={t.text.muted}
             value={targetPrice}
             onChangeText={setTargetPrice}
             keyboardType="decimal-pad"
@@ -135,8 +172,8 @@ export const PriceAlertsScreen = React.memo(({ onClose }: Props) => {
               <Switch
                 value={item.enabled}
                 onValueChange={() => toggleAlert(item.id)}
-                trackColor={{ false: '#333', true: '#22c55e40' }}
-                thumbColor={item.enabled ? '#22c55e' : '#666'}
+                trackColor={{ false: '#333', true: t.accent.green + '40' }}
+                thumbColor={item.enabled ? t.accent.green : '#666'}
               />
               <TouchableOpacity onPress={() => removeAlert(item.id)}>
                 <Text style={s.deleteBtn}>✕</Text>
@@ -154,39 +191,4 @@ export const PriceAlertsScreen = React.memo(({ onClose }: Props) => {
       />
     </SafeAreaView>
   );
-});
-
-const s = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0a0a0f' },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-  back: { color: '#3b82f6', fontSize: 16, fontWeight: '600' },
-  title: { color: '#f0f0f5', fontSize: 18, fontWeight: '800' },
-  addBtn: { color: '#22c55e', fontSize: 15, fontWeight: '700' },
-  addForm: { backgroundColor: '#16161f', marginHorizontal: 16, borderRadius: 16, padding: 16, marginBottom: 16 },
-  tokenRow: { flexDirection: 'row', gap: 6, marginBottom: 12, flexWrap: 'wrap' },
-  tokenChip: { backgroundColor: '#0a0a0f', borderRadius: 20, paddingVertical: 6, paddingHorizontal: 14 },
-  tokenActive: { backgroundColor: '#22c55e' },
-  tokenText: { color: '#a0a0b0', fontSize: 13 },
-  tokenTextActive: { color: '#0a0a0f', fontWeight: '700' },
-  currentPrice: { color: '#606070', fontSize: 13, marginBottom: 12 },
-  directionRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
-  dirBtn: { flex: 1, backgroundColor: '#0a0a0f', borderRadius: 12, paddingVertical: 10, alignItems: 'center' },
-  dirActive: { backgroundColor: '#22c55e20' },
-  dirActiveRed: { backgroundColor: '#ef444420' },
-  dirText: { color: '#a0a0b0', fontSize: 14, fontWeight: '600' },
-  dirTextActive: { color: '#22c55e' },
-  dirTextActiveRed: { color: '#ef4444' },
-  input: { backgroundColor: '#0a0a0f', borderRadius: 12, padding: 14, color: '#f0f0f5', fontSize: 15, marginBottom: 12 },
-  saveBtn: { backgroundColor: '#22c55e', borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
-  saveBtnText: { color: '#0a0a0f', fontSize: 15, fontWeight: '700' },
-  alertRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.04)' },
-  alertInfo: { flex: 1 },
-  alertSymbol: { color: '#f0f0f5', fontSize: 16, fontWeight: '600' },
-  alertTarget: { color: '#a0a0b0', fontSize: 14, marginTop: 2 },
-  alertTriggered: { color: '#22c55e', fontSize: 12, fontWeight: '700', marginTop: 2 },
-  alertActions: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  deleteBtn: { color: '#ef4444', fontSize: 18, fontWeight: '700' },
-  empty: { alignItems: 'center' },
-  emptyText: { color: '#a0a0b0', fontSize: 16, fontWeight: '600' },
-  emptyHint: { color: '#606070', fontSize: 13, marginTop: 4 },
 });

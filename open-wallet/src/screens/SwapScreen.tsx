@@ -22,6 +22,7 @@ import {
 import { useWalletStore } from '../store/walletStore';
 import { ConfirmTransactionScreen } from './ConfirmTransactionScreen';
 import { NATIVE_TOKENS } from '../hooks/useBalances';
+import { useTheme } from '../hooks/useTheme';
 import type { Token, ChainId } from '../core/abstractions/types';
 
 const POPULAR_TOKENS: Token[] = [
@@ -45,6 +46,7 @@ export function SwapScreen() {
   const [amountStr, setAmountStr] = useState('');
   const [slippageBps, setSlippageBps] = useState(50);
   const [swapping, setSwapping] = useState(false);
+  const t = useTheme();
 
   const fromToken = useMemo(() => findToken(fromSymbol), [fromSymbol]);
   const toToken = useMemo(() => findToken(toSymbol), [toSymbol]);
@@ -59,6 +61,42 @@ export function SwapScreen() {
   }, [amountStr, isCrossChain]);
   const quoteLoading = false;
   const estimatedOutput = quote?.estimatedOutput ?? null;
+
+  const styles = useMemo(() => StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.bg.primary, paddingHorizontal: 24 },
+    title: { color: t.text.primary, fontSize: 24, fontWeight: '800', marginTop: 16 },
+    subtitle: { color: t.text.muted, fontSize: 13, marginTop: 4, marginBottom: 20 },
+    swapCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16 },
+    cardLabel: { color: t.text.muted, fontSize: 12, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 },
+    tokenRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+    tokenSelector: { backgroundColor: t.border, borderRadius: 12, paddingVertical: 10, paddingHorizontal: 16 },
+    tokenText: { color: t.text.primary, fontSize: 18, fontWeight: '700' },
+    chainBadge: { color: t.text.muted, fontSize: 10, textTransform: 'uppercase', marginTop: 2 },
+    amountInput: { color: t.text.primary, fontSize: 24, fontWeight: '600', textAlign: 'right', flex: 1, marginLeft: 16 },
+    outputArea: { flex: 1, marginLeft: 16, alignItems: 'flex-end' },
+    estimatedAmount: { color: t.text.secondary, fontSize: 24, fontWeight: '600', textAlign: 'right' },
+    flipButton: { alignSelf: 'center', backgroundColor: t.accent.green, width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center', marginVertical: -12, zIndex: 1 },
+    flipIcon: { color: t.bg.primary, fontSize: 20, fontWeight: '800' },
+    quoteDetails: { backgroundColor: t.bg.card, borderRadius: 12, padding: 16, marginTop: 16 },
+    detailRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
+    detailLabel: { color: t.text.muted, fontSize: 13 },
+    detailValue: { color: t.text.secondary, fontSize: 13, maxWidth: '60%' },
+    slippageSection: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 16 },
+    slippageRow: { flexDirection: 'row', gap: 6 },
+    slippageChip: { backgroundColor: t.border, borderRadius: 8, paddingVertical: 4, paddingHorizontal: 10 },
+    slippageChipActive: { backgroundColor: t.accent.green + '33' },
+    slippageText: { color: t.text.muted, fontSize: 12 },
+    slippageTextActive: { color: t.accent.green, fontWeight: '600' },
+    quickTokens: { marginTop: 20 },
+    quickLabel: { color: t.text.muted, fontSize: 12, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 },
+    quickRow: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
+    quickChip: { backgroundColor: t.bg.card, borderRadius: 20, paddingVertical: 8, paddingHorizontal: 16 },
+    quickChipActive: { borderWidth: 1, borderColor: t.accent.green + '30' },
+    quickChipText: { color: t.text.secondary, fontSize: 14 },
+    swapButton: { backgroundColor: t.accent.blue, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginTop: 24 },
+    swapButtonDisabled: { opacity: 0.6 },
+    swapButtonText: { color: '#ffffff', fontSize: 17, fontWeight: '700' },
+  }), [t]);
 
   const flipTokens = () => {
     setFromSymbol(toSymbol);
@@ -122,7 +160,7 @@ export function SwapScreen() {
             <TextInput
               style={styles.amountInput}
               placeholder="0.00"
-              placeholderTextColor="#606070"
+              placeholderTextColor={t.text.muted}
               value={amountStr}
               onChangeText={setAmountStr}
               keyboardType="decimal-pad"
@@ -145,7 +183,7 @@ export function SwapScreen() {
             </TouchableOpacity>
             <View style={styles.outputArea}>
               {quoteLoading && amountStr ? (
-                <ActivityIndicator color="#22c55e" size="small" />
+                <ActivityIndicator color={t.accent.green} size="small" />
               ) : (
                 <Text style={styles.estimatedAmount}>
                   {estimatedOutput ?? '—'}
@@ -193,13 +231,13 @@ export function SwapScreen() {
         <View style={styles.quickTokens}>
           <Text style={styles.quickLabel}>Swap to</Text>
           <View style={styles.quickRow}>
-            {POPULAR_TOKENS.filter((t) => t.symbol !== fromSymbol).map((token) => (
+            {POPULAR_TOKENS.filter((tk) => tk.symbol !== fromSymbol).map((token) => (
               <TouchableOpacity
                 key={token.symbol}
                 style={[styles.quickChip, toSymbol === token.symbol && styles.quickChipActive]}
                 onPress={() => setToSymbol(token.symbol)}
               >
-                <Text style={[styles.quickChipText, toSymbol === token.symbol && { color: '#22c55e' }]}>
+                <Text style={[styles.quickChipText, toSymbol === token.symbol && { color: t.accent.green }]}>
                   {token.symbol}
                 </Text>
               </TouchableOpacity>
@@ -227,39 +265,3 @@ export function SwapScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0a0a0f', paddingHorizontal: 24 },
-  title: { color: '#f0f0f5', fontSize: 24, fontWeight: '800', marginTop: 16 },
-  subtitle: { color: '#606070', fontSize: 13, marginTop: 4, marginBottom: 20 },
-  swapCard: { backgroundColor: '#16161f', borderRadius: 16, padding: 16 },
-  cardLabel: { color: '#606070', fontSize: 12, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 },
-  tokenRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  tokenSelector: { backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 12, paddingVertical: 10, paddingHorizontal: 16 },
-  tokenText: { color: '#f0f0f5', fontSize: 18, fontWeight: '700' },
-  chainBadge: { color: '#606070', fontSize: 10, textTransform: 'uppercase', marginTop: 2 },
-  amountInput: { color: '#f0f0f5', fontSize: 24, fontWeight: '600', textAlign: 'right', flex: 1, marginLeft: 16 },
-  outputArea: { flex: 1, marginLeft: 16, alignItems: 'flex-end' },
-  estimatedAmount: { color: '#a0a0b0', fontSize: 24, fontWeight: '600', textAlign: 'right' },
-  flipButton: { alignSelf: 'center', backgroundColor: '#22c55e', width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center', marginVertical: -12, zIndex: 1 },
-  flipIcon: { color: '#0a0a0f', fontSize: 20, fontWeight: '800' },
-  quoteDetails: { backgroundColor: '#16161f', borderRadius: 12, padding: 16, marginTop: 16 },
-  detailRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
-  detailLabel: { color: '#606070', fontSize: 13 },
-  detailValue: { color: '#a0a0b0', fontSize: 13, maxWidth: '60%' },
-  slippageSection: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 16 },
-  slippageRow: { flexDirection: 'row', gap: 6 },
-  slippageChip: { backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: 8, paddingVertical: 4, paddingHorizontal: 10 },
-  slippageChipActive: { backgroundColor: 'rgba(34,197,94,0.2)' },
-  slippageText: { color: '#606070', fontSize: 12 },
-  slippageTextActive: { color: '#22c55e', fontWeight: '600' },
-  quickTokens: { marginTop: 20 },
-  quickLabel: { color: '#606070', fontSize: 12, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 },
-  quickRow: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
-  quickChip: { backgroundColor: '#16161f', borderRadius: 20, paddingVertical: 8, paddingHorizontal: 16 },
-  quickChipActive: { borderWidth: 1, borderColor: '#22c55e30' },
-  quickChipText: { color: '#a0a0b0', fontSize: 14 },
-  swapButton: { backgroundColor: '#3b82f6', borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginTop: 24 },
-  swapButtonDisabled: { opacity: 0.6 },
-  swapButtonText: { color: '#ffffff', fontSize: 17, fontWeight: '700' },
-});

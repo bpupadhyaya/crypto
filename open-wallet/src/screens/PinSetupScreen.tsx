@@ -3,7 +3,7 @@
  * Sets up 6-digit PIN + offers biometric enrollment.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   View,
   Text,
@@ -15,6 +15,7 @@ import {
 import { PinPad } from '../components/PinPad';
 import { authManager } from '../core/auth/auth';
 import { useWalletStore } from '../store/walletStore';
+import { useTheme } from '../hooks/useTheme';
 
 type SetupStep = 'create' | 'confirm' | 'biometric';
 
@@ -23,6 +24,55 @@ export function PinSetupScreen() {
   const [firstPin, setFirstPin] = useState('');
   const [error, setError] = useState<string | null>(null);
   const { setStatus, setBiometricEnabled, tempVaultPassword, setTempVaultPassword } = useWalletStore();
+  const t = useTheme();
+
+  const styles = useMemo(() => StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.bg.primary },
+    biometricContent: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingHorizontal: 32,
+    },
+    biometricIcon: {
+      fontSize: 64,
+      marginBottom: 24,
+    },
+    biometricTitle: {
+      color: t.text.primary,
+      fontSize: 24,
+      fontWeight: '800',
+      marginBottom: 12,
+    },
+    biometricDesc: {
+      color: t.text.secondary,
+      fontSize: 15,
+      textAlign: 'center',
+      lineHeight: 22,
+      marginBottom: 40,
+    },
+    enableButton: {
+      backgroundColor: t.accent.green,
+      borderRadius: 16,
+      paddingVertical: 18,
+      paddingHorizontal: 48,
+      width: '100%',
+      alignItems: 'center',
+    },
+    enableButtonText: {
+      color: t.bg.primary,
+      fontSize: 17,
+      fontWeight: '700',
+    },
+    skipButton: {
+      paddingVertical: 18,
+      marginTop: 8,
+    },
+    skipButtonText: {
+      color: t.text.muted,
+      fontSize: 16,
+    },
+  }), [t]);
 
   const handlePinCreate = (pin: string) => {
     setFirstPin(pin);
@@ -99,51 +149,3 @@ export function PinSetupScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0a0a0f' },
-  biometricContent: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 32,
-  },
-  biometricIcon: {
-    fontSize: 64,
-    marginBottom: 24,
-  },
-  biometricTitle: {
-    color: '#f0f0f5',
-    fontSize: 24,
-    fontWeight: '800',
-    marginBottom: 12,
-  },
-  biometricDesc: {
-    color: '#a0a0b0',
-    fontSize: 15,
-    textAlign: 'center',
-    lineHeight: 22,
-    marginBottom: 40,
-  },
-  enableButton: {
-    backgroundColor: '#22c55e',
-    borderRadius: 16,
-    paddingVertical: 18,
-    paddingHorizontal: 48,
-    width: '100%',
-    alignItems: 'center',
-  },
-  enableButtonText: {
-    color: '#0a0a0f',
-    fontSize: 17,
-    fontWeight: '700',
-  },
-  skipButton: {
-    paddingVertical: 18,
-    marginTop: 8,
-  },
-  skipButtonText: {
-    color: '#606070',
-    fontSize: 16,
-  },
-});

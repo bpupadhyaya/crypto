@@ -2,12 +2,13 @@
  * Address Book — Save and manage frequent recipient addresses.
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, FlatList,
   StyleSheet, SafeAreaView, Alert,
 } from 'react-native';
 import { useWalletStore } from '../store/walletStore';
+import { useTheme } from '../hooks/useTheme';
 
 export interface Contact {
   id: string;
@@ -29,6 +30,32 @@ export const AddressBookScreen = React.memo(({ onSelect, onClose }: Props) => {
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [chain, setChain] = useState('ethereum');
+  const t = useTheme();
+
+  const s = useMemo(() => StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.bg.primary },
+    header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
+    back: { color: t.accent.blue, fontSize: 16, fontWeight: '600' },
+    title: { color: t.text.primary, fontSize: 18, fontWeight: '800' },
+    addBtn: { color: t.accent.green, fontSize: 15, fontWeight: '700' },
+    addForm: { backgroundColor: t.bg.card, marginHorizontal: 16, borderRadius: 16, padding: 16, marginBottom: 16 },
+    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginBottom: 10 },
+    chainRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
+    chainChip: { backgroundColor: t.bg.primary, borderRadius: 20, paddingVertical: 6, paddingHorizontal: 14 },
+    chainActive: { backgroundColor: t.accent.green },
+    chainText: { color: t.text.secondary, fontSize: 13 },
+    chainTextActive: { color: t.bg.primary, fontWeight: '700' },
+    saveBtn: { backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
+    saveBtnText: { color: t.bg.primary, fontSize: 15, fontWeight: '700' },
+    contactRow: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: t.border },
+    contactInfo: { flex: 1 },
+    contactName: { color: t.text.primary, fontSize: 16, fontWeight: '600' },
+    contactAddress: { color: t.text.muted, fontSize: 12, marginTop: 2, maxWidth: 250 },
+    contactChain: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    empty: { alignItems: 'center' },
+    emptyText: { color: t.text.secondary, fontSize: 16, fontWeight: '600' },
+    emptyHint: { color: t.text.muted, fontSize: 13, marginTop: 4 },
+  }), [t]);
 
   const handleAdd = useCallback(() => {
     if (!name.trim() || !address.trim()) {
@@ -62,8 +89,8 @@ export const AddressBookScreen = React.memo(({ onSelect, onClose }: Props) => {
 
       {showAdd && (
         <View style={s.addForm}>
-          <TextInput style={s.input} placeholder="Name" placeholderTextColor="#606070" value={name} onChangeText={setName} />
-          <TextInput style={s.input} placeholder="Address" placeholderTextColor="#606070" value={address} onChangeText={setAddress} autoCapitalize="none" />
+          <TextInput style={s.input} placeholder="Name" placeholderTextColor={t.text.muted} value={name} onChangeText={setName} />
+          <TextInput style={s.input} placeholder="Address" placeholderTextColor={t.text.muted} value={address} onChangeText={setAddress} autoCapitalize="none" />
           <View style={s.chainRow}>
             {['ethereum', 'bitcoin', 'solana'].map((c) => (
               <TouchableOpacity key={c} style={[s.chainChip, chain === c && s.chainActive]} onPress={() => setChain(c)}>
@@ -105,29 +132,4 @@ export const AddressBookScreen = React.memo(({ onSelect, onClose }: Props) => {
       />
     </SafeAreaView>
   );
-});
-
-const s = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0a0a0f' },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-  back: { color: '#3b82f6', fontSize: 16, fontWeight: '600' },
-  title: { color: '#f0f0f5', fontSize: 18, fontWeight: '800' },
-  addBtn: { color: '#22c55e', fontSize: 15, fontWeight: '700' },
-  addForm: { backgroundColor: '#16161f', marginHorizontal: 16, borderRadius: 16, padding: 16, marginBottom: 16 },
-  input: { backgroundColor: '#0a0a0f', borderRadius: 12, padding: 14, color: '#f0f0f5', fontSize: 15, marginBottom: 10 },
-  chainRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
-  chainChip: { backgroundColor: '#0a0a0f', borderRadius: 20, paddingVertical: 6, paddingHorizontal: 14 },
-  chainActive: { backgroundColor: '#22c55e' },
-  chainText: { color: '#a0a0b0', fontSize: 13 },
-  chainTextActive: { color: '#0a0a0f', fontWeight: '700' },
-  saveBtn: { backgroundColor: '#22c55e', borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
-  saveBtnText: { color: '#0a0a0f', fontSize: 15, fontWeight: '700' },
-  contactRow: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.04)' },
-  contactInfo: { flex: 1 },
-  contactName: { color: '#f0f0f5', fontSize: 16, fontWeight: '600' },
-  contactAddress: { color: '#606070', fontSize: 12, marginTop: 2, maxWidth: 250 },
-  contactChain: { color: '#a0a0b0', fontSize: 12, fontWeight: '600' },
-  empty: { alignItems: 'center' },
-  emptyText: { color: '#a0a0b0', fontSize: 16, fontWeight: '600' },
-  emptyHint: { color: '#606070', fontSize: 13, marginTop: 4 },
 });

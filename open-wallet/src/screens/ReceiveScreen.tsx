@@ -17,14 +17,101 @@ import {
 import QRCode from 'react-native-qrcode-svg';
 import * as Clipboard from 'expo-clipboard';
 import { useWalletStore } from '../store/walletStore';
+import { useTheme } from '../hooks/useTheme';
 import { ChainId } from '../core/abstractions/types';
 
 export function ReceiveScreen() {
   const { mode, supportedChains, addresses } = useWalletStore();
   const [selectedChain, setSelectedChain] = useState<ChainId>('ethereum');
+  const t = useTheme();
 
   // Use real derived addresses from wallet, fallback to "not available"
   const address = addresses[selectedChain] ?? 'Address not generated yet';
+
+  const styles = useMemo(() => StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: t.bg.primary,
+      paddingHorizontal: 24,
+    },
+    title: {
+      color: t.text.primary,
+      fontSize: 24,
+      fontWeight: '800',
+      marginTop: 16,
+      marginBottom: 20,
+    },
+    chainSelector: {
+      flexDirection: 'row',
+      gap: 8,
+      marginBottom: 24,
+      flexWrap: 'wrap',
+    },
+    chainButton: {
+      backgroundColor: t.bg.card,
+      borderRadius: 20,
+      paddingVertical: 8,
+      paddingHorizontal: 16,
+    },
+    chainButtonActive: {
+      backgroundColor: t.accent.green,
+    },
+    chainButtonText: {
+      color: t.text.secondary,
+      fontSize: 14,
+    },
+    chainButtonTextActive: {
+      color: t.bg.primary,
+      fontWeight: '700',
+    },
+    qrContainer: {
+      alignItems: 'center',
+      marginBottom: 24,
+    },
+    qrWrapper: {
+      padding: 16,
+      backgroundColor: '#ffffff',
+      borderRadius: 20,
+    },
+    qrHint: {
+      color: t.text.muted,
+      fontSize: 13,
+      marginTop: 12,
+    },
+    addressCard: {
+      backgroundColor: t.bg.card,
+      borderRadius: 16,
+      padding: 20,
+      alignItems: 'center',
+    },
+    addressLabel: {
+      color: t.text.muted,
+      fontSize: 12,
+      marginBottom: 8,
+      textTransform: 'uppercase',
+      letterSpacing: 1,
+    },
+    address: {
+      color: t.text.primary,
+      fontSize: 13,
+      fontFamily: 'monospace',
+      marginBottom: 8,
+      textAlign: 'center',
+      lineHeight: 20,
+    },
+    copyHint: {
+      color: t.accent.green,
+      fontSize: 13,
+      fontWeight: '600',
+    },
+    warningText: {
+      color: t.accent.orange,
+      fontSize: 12,
+      marginTop: 16,
+      textAlign: 'center',
+      lineHeight: 18,
+    },
+  }), [t]);
 
   const copyAddress = async () => {
     await Clipboard.setStringAsync(address);
@@ -95,88 +182,3 @@ export function ReceiveScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0a0a0f',
-    paddingHorizontal: 24,
-  },
-  title: {
-    color: '#f0f0f5',
-    fontSize: 24,
-    fontWeight: '800',
-    marginTop: 16,
-    marginBottom: 20,
-  },
-  chainSelector: {
-    flexDirection: 'row',
-    gap: 8,
-    marginBottom: 24,
-    flexWrap: 'wrap',
-  },
-  chainButton: {
-    backgroundColor: '#16161f',
-    borderRadius: 20,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-  },
-  chainButtonActive: {
-    backgroundColor: '#22c55e',
-  },
-  chainButtonText: {
-    color: '#a0a0b0',
-    fontSize: 14,
-  },
-  chainButtonTextActive: {
-    color: '#0a0a0f',
-    fontWeight: '700',
-  },
-  qrContainer: {
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  qrWrapper: {
-    padding: 16,
-    backgroundColor: '#ffffff',
-    borderRadius: 20,
-  },
-  qrHint: {
-    color: '#606070',
-    fontSize: 13,
-    marginTop: 12,
-  },
-  addressCard: {
-    backgroundColor: '#16161f',
-    borderRadius: 16,
-    padding: 20,
-    alignItems: 'center',
-  },
-  addressLabel: {
-    color: '#606070',
-    fontSize: 12,
-    marginBottom: 8,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  address: {
-    color: '#f0f0f5',
-    fontSize: 13,
-    fontFamily: 'monospace',
-    marginBottom: 8,
-    textAlign: 'center',
-    lineHeight: 20,
-  },
-  copyHint: {
-    color: '#22c55e',
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  warningText: {
-    color: '#f97316',
-    fontSize: 12,
-    marginTop: 16,
-    textAlign: 'center',
-    lineHeight: 18,
-  },
-});

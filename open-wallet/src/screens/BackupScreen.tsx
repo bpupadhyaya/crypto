@@ -3,7 +3,7 @@
  * Requires re-authentication before showing sensitive data.
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
   View, Text, TouchableOpacity, ScrollView,
   StyleSheet, SafeAreaView, Alert,
@@ -11,6 +11,7 @@ import {
 import { PinPad } from '../components/PinPad';
 import { authManager } from '../core/auth/auth';
 import { useWalletStore } from '../store/walletStore';
+import { useTheme } from '../hooks/useTheme';
 
 type BackupStep = 'auth' | 'show' | 'verify';
 
@@ -23,6 +24,24 @@ export const BackupScreen = React.memo(({ onClose }: Props) => {
   const [mnemonic, setMnemonic] = useState<string[]>([]);
   const [pinError, setPinError] = useState<string | null>(null);
   const { setStatus, setHasVault } = useWalletStore();
+  const t = useTheme();
+
+  const s = useMemo(() => StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.bg.primary },
+    scroll: { padding: 24 },
+    title: { color: t.text.primary, fontSize: 24, fontWeight: '800', marginBottom: 12 },
+    warning: { color: t.accent.red, fontSize: 14, lineHeight: 20, marginBottom: 24, backgroundColor: t.accent.red + '10', padding: 16, borderRadius: 12 },
+    wordGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 32 },
+    wordItem: { flexDirection: 'row', alignItems: 'center', backgroundColor: t.bg.card, borderRadius: 10, paddingVertical: 8, paddingHorizontal: 12, width: '30%' },
+    wordNumber: { color: t.text.muted, fontSize: 12, marginRight: 6, width: 20 },
+    wordText: { color: t.text.primary, fontSize: 14, fontWeight: '500' },
+    doneBtn: { backgroundColor: t.accent.green, borderRadius: 16, paddingVertical: 18, alignItems: 'center' },
+    doneBtnText: { color: t.bg.primary, fontSize: 17, fontWeight: '700' },
+    deleteBtn: { backgroundColor: t.accent.red + '20', borderRadius: 16, paddingVertical: 16, alignItems: 'center', marginTop: 24 },
+    deleteText: { color: t.accent.red, fontSize: 16, fontWeight: '700' },
+    cancelBtn: { paddingVertical: 20, alignItems: 'center' },
+    cancelText: { color: t.accent.blue, fontSize: 16 },
+  }), [t]);
 
   const handlePinAuth = useCallback(async (pin: string) => {
     try {
@@ -129,21 +148,4 @@ export const BackupScreen = React.memo(({ onClose }: Props) => {
       </ScrollView>
     </SafeAreaView>
   );
-});
-
-const s = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0a0a0f' },
-  scroll: { padding: 24 },
-  title: { color: '#f0f0f5', fontSize: 24, fontWeight: '800', marginBottom: 12 },
-  warning: { color: '#ef4444', fontSize: 14, lineHeight: 20, marginBottom: 24, backgroundColor: '#ef444410', padding: 16, borderRadius: 12 },
-  wordGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 32 },
-  wordItem: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#16161f', borderRadius: 10, paddingVertical: 8, paddingHorizontal: 12, width: '30%' },
-  wordNumber: { color: '#606070', fontSize: 12, marginRight: 6, width: 20 },
-  wordText: { color: '#f0f0f5', fontSize: 14, fontWeight: '500' },
-  doneBtn: { backgroundColor: '#22c55e', borderRadius: 16, paddingVertical: 18, alignItems: 'center' },
-  doneBtnText: { color: '#0a0a0f', fontSize: 17, fontWeight: '700' },
-  deleteBtn: { backgroundColor: '#ef444420', borderRadius: 16, paddingVertical: 16, alignItems: 'center', marginTop: 24 },
-  deleteText: { color: '#ef4444', fontSize: 16, fontWeight: '700' },
-  cancelBtn: { paddingVertical: 20, alignItems: 'center' },
-  cancelText: { color: '#3b82f6', fontSize: 16 },
 });

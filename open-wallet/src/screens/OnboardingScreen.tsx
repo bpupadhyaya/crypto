@@ -15,6 +15,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useWalletStore } from '../store/walletStore';
+import { useTheme } from '../hooks/useTheme';
 
 type OnboardingStep = 'welcome' | 'create' | 'backup' | 'restore' | 'password';
 
@@ -26,6 +27,130 @@ export function OnboardingScreen() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const { setStatus, setHasVault, setAddresses, setTempVaultPassword } = useWalletStore();
+  const t = useTheme();
+
+  const styles = useMemo(() => StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: t.bg.primary,
+    },
+    content: {
+      flex: 1,
+      justifyContent: 'center',
+      paddingHorizontal: 24,
+    },
+    logo: {
+      color: t.accent.green,
+      fontSize: 48,
+      fontWeight: '900',
+      textAlign: 'center',
+      marginBottom: 8,
+    },
+    title: {
+      color: t.text.primary,
+      fontSize: 32,
+      fontWeight: '800',
+      textAlign: 'center',
+    },
+    subtitle: {
+      color: t.text.secondary,
+      fontSize: 16,
+      textAlign: 'center',
+      marginTop: 12,
+      lineHeight: 24,
+    },
+    buttonGroup: {
+      marginTop: 48,
+      gap: 12,
+    },
+    primaryButton: {
+      backgroundColor: t.accent.green,
+      borderRadius: 16,
+      paddingVertical: 18,
+      alignItems: 'center',
+      marginTop: 16,
+    },
+    primaryButtonText: {
+      color: t.bg.primary,
+      fontSize: 17,
+      fontWeight: '700',
+    },
+    secondaryButton: {
+      borderWidth: 1,
+      borderColor: t.border,
+      borderRadius: 16,
+      paddingVertical: 18,
+      alignItems: 'center',
+      marginTop: 8,
+    },
+    secondaryButtonText: {
+      color: t.text.secondary,
+      fontSize: 17,
+      fontWeight: '600',
+    },
+    footer: {
+      color: t.text.muted,
+      fontSize: 12,
+      textAlign: 'center',
+      marginTop: 32,
+    },
+    stepTitle: {
+      color: t.text.primary,
+      fontSize: 24,
+      fontWeight: '800',
+      marginBottom: 12,
+    },
+    stepDesc: {
+      color: t.text.secondary,
+      fontSize: 15,
+      lineHeight: 22,
+      marginBottom: 24,
+    },
+    wordGrid: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: 8,
+      marginBottom: 24,
+    },
+    wordItem: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: t.bg.card,
+      borderRadius: 10,
+      paddingVertical: 8,
+      paddingHorizontal: 12,
+      width: '30%',
+    },
+    wordNumber: {
+      color: t.text.muted,
+      fontSize: 12,
+      marginRight: 6,
+      width: 20,
+    },
+    wordText: {
+      color: t.text.primary,
+      fontSize: 14,
+      fontWeight: '500',
+    },
+    textArea: {
+      backgroundColor: t.bg.card,
+      borderRadius: 16,
+      padding: 16,
+      color: t.text.primary,
+      fontSize: 16,
+      minHeight: 120,
+      textAlignVertical: 'top',
+      marginBottom: 8,
+    },
+    input: {
+      backgroundColor: t.bg.card,
+      borderRadius: 16,
+      padding: 16,
+      color: t.text.primary,
+      fontSize: 16,
+      marginBottom: 12,
+    },
+  }), [t]);
 
   const handleCreateWallet = async () => {
     setLoading(true);
@@ -139,7 +264,7 @@ export function OnboardingScreen() {
               disabled={loading}
             >
               {loading ? (
-                <ActivityIndicator color="#0a0a0f" />
+                <ActivityIndicator color={t.bg.primary} />
               ) : (
                 <Text style={styles.primaryButtonText}>Create New Wallet</Text>
               )}
@@ -186,7 +311,7 @@ export function OnboardingScreen() {
               style={[styles.secondaryButton, { marginBottom: 8 }]}
               onPress={async () => { const Clipboard = await import('expo-clipboard'); Clipboard.setStringAsync(mnemonic); Alert.alert('Copied', 'Seed phrase copied (dev only)'); }}
             >
-              <Text style={[styles.secondaryButtonText, { color: '#eab308' }]}>Copy (Dev Only)</Text>
+              <Text style={[styles.secondaryButtonText, { color: t.accent.yellow }]}>Copy (Dev Only)</Text>
             </TouchableOpacity>
           )}
 
@@ -223,7 +348,7 @@ export function OnboardingScreen() {
             multiline
             numberOfLines={4}
             placeholder="Enter recovery phrase..."
-            placeholderTextColor="#606070"
+            placeholderTextColor={t.text.muted}
             value={restoreInput}
             onChangeText={setRestoreInput}
             autoCapitalize="none"
@@ -257,7 +382,7 @@ export function OnboardingScreen() {
         <TextInput
           style={styles.input}
           placeholder="Password (8+ characters)"
-          placeholderTextColor="#606070"
+          placeholderTextColor={t.text.muted}
           secureTextEntry
           value={password}
           onChangeText={setPassword}
@@ -266,7 +391,7 @@ export function OnboardingScreen() {
         <TextInput
           style={styles.input}
           placeholder="Confirm password"
-          placeholderTextColor="#606070"
+          placeholderTextColor={t.text.muted}
           secureTextEntry
           value={confirmPassword}
           onChangeText={setConfirmPassword}
@@ -278,7 +403,7 @@ export function OnboardingScreen() {
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator color="#0a0a0f" />
+            <ActivityIndicator color={t.bg.primary} />
           ) : (
             <Text style={styles.primaryButtonText}>Create Wallet</Text>
           )}
@@ -287,126 +412,3 @@ export function OnboardingScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0a0a0f',
-  },
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 24,
-  },
-  logo: {
-    color: '#22c55e',
-    fontSize: 48,
-    fontWeight: '900',
-    textAlign: 'center',
-    marginBottom: 8,
-  },
-  title: {
-    color: '#f0f0f5',
-    fontSize: 32,
-    fontWeight: '800',
-    textAlign: 'center',
-  },
-  subtitle: {
-    color: '#a0a0b0',
-    fontSize: 16,
-    textAlign: 'center',
-    marginTop: 12,
-    lineHeight: 24,
-  },
-  buttonGroup: {
-    marginTop: 48,
-    gap: 12,
-  },
-  primaryButton: {
-    backgroundColor: '#22c55e',
-    borderRadius: 16,
-    paddingVertical: 18,
-    alignItems: 'center',
-    marginTop: 16,
-  },
-  primaryButtonText: {
-    color: '#0a0a0f',
-    fontSize: 17,
-    fontWeight: '700',
-  },
-  secondaryButton: {
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.12)',
-    borderRadius: 16,
-    paddingVertical: 18,
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  secondaryButtonText: {
-    color: '#a0a0b0',
-    fontSize: 17,
-    fontWeight: '600',
-  },
-  footer: {
-    color: '#606070',
-    fontSize: 12,
-    textAlign: 'center',
-    marginTop: 32,
-  },
-  stepTitle: {
-    color: '#f0f0f5',
-    fontSize: 24,
-    fontWeight: '800',
-    marginBottom: 12,
-  },
-  stepDesc: {
-    color: '#a0a0b0',
-    fontSize: 15,
-    lineHeight: 22,
-    marginBottom: 24,
-  },
-  wordGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-    marginBottom: 24,
-  },
-  wordItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#16161f',
-    borderRadius: 10,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    width: '30%',
-  },
-  wordNumber: {
-    color: '#606070',
-    fontSize: 12,
-    marginRight: 6,
-    width: 20,
-  },
-  wordText: {
-    color: '#f0f0f5',
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  textArea: {
-    backgroundColor: '#16161f',
-    borderRadius: 16,
-    padding: 16,
-    color: '#f0f0f5',
-    fontSize: 16,
-    minHeight: 120,
-    textAlignVertical: 'top',
-    marginBottom: 8,
-  },
-  input: {
-    backgroundColor: '#16161f',
-    borderRadius: 16,
-    padding: 16,
-    color: '#f0f0f5',
-    fontSize: 16,
-    marginBottom: 12,
-  },
-});

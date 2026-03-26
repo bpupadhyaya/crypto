@@ -20,6 +20,7 @@ import { ConfirmTransactionScreen } from './ConfirmTransactionScreen';
 import { QRScanner } from '../components/QRScanner';
 import { registry } from '../core/abstractions/registry';
 import { isTestnet } from '../core/network';
+import { useTheme } from '../hooks/useTheme';
 import type { ChainId } from '../core/abstractions/types';
 
 // ─── Module-level caches to avoid repeated expensive operations ───
@@ -56,6 +57,37 @@ export function SendScreen() {
   const [estimatedFee, setEstimatedFee] = useState<string | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
+  const t = useTheme();
+
+  const styles = useMemo(() => StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.bg.primary, paddingHorizontal: 24 },
+    chainSelector: { flexDirection: 'row', gap: 8, marginBottom: 24, flexWrap: 'wrap', marginTop: 8 },
+    chainButton: { backgroundColor: t.bg.card, borderRadius: 20, paddingVertical: 8, paddingHorizontal: 16 },
+    chainButtonActive: { backgroundColor: t.accent.orange },
+    chainButtonText: { color: t.text.secondary, fontSize: 14 },
+    chainButtonTextActive: { color: t.bg.primary, fontWeight: '700' },
+    fromCard: { backgroundColor: t.bg.card, borderRadius: 12, padding: 12, marginBottom: 16 },
+    fromAddress: { color: t.text.muted, fontSize: 12, fontFamily: 'monospace' },
+    fieldLabel: { color: t.text.secondary, fontSize: 13, fontWeight: '600', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 },
+    inputWrapper: { position: 'relative', marginBottom: 16 },
+    input: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, color: t.text.primary, fontSize: 16, borderWidth: 1, borderColor: 'transparent' },
+    inputError: { borderColor: t.accent.red + '40' },
+    inputValid: { borderColor: t.accent.green + '40' },
+    validIcon: { position: 'absolute', right: 16, top: 16, color: t.accent.green, fontSize: 18, fontWeight: '700' },
+    invalidIcon: { position: 'absolute', right: 16, top: 16, color: t.accent.red, fontSize: 18, fontWeight: '700' },
+    amountRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 16 },
+    tokenBadge: { backgroundColor: t.bg.card, borderRadius: 12, paddingVertical: 16, paddingHorizontal: 16 },
+    tokenBadgeText: { color: t.text.secondary, fontSize: 14, fontWeight: '700' },
+    feeCard: { backgroundColor: t.bg.card, borderRadius: 12, padding: 16, marginBottom: 16 },
+    feeRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4 },
+    feeLabel: { color: t.text.muted, fontSize: 13 },
+    feeValue: { color: t.text.secondary, fontSize: 13 },
+    feeValueBold: { color: t.text.primary, fontSize: 13, fontWeight: '700' },
+    sendButton: { backgroundColor: t.accent.orange, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginTop: 8 },
+    sendButtonDisabled: { opacity: 0.6 },
+    sendButtonText: { color: t.bg.primary, fontSize: 17, fontWeight: '700' },
+    hint: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginTop: 16, lineHeight: 18 },
+  }), [t]);
 
   const senderAddress = addresses[selectedChain] ?? '';
 
@@ -108,7 +140,7 @@ export function SendScreen() {
     return () => clearTimeout(timer);
   }, [estimateFee]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!recipient.trim()) {
       Alert.alert('Missing Address', 'Please enter a recipient address.');
       return;
@@ -121,6 +153,30 @@ export function SendScreen() {
       Alert.alert('Invalid Address', `This is not a valid ${selectedChain} address.`);
       return;
     }
+    if (recipient.trim().toLowerCase() === senderAddress.toLowerCase()) {
+      Alert.alert('Same Address', 'You cannot send to your own address.');
+      return;
+    }
+
+    // Check balance before proceeding
+    try {
+      const provider = registry.getChainProvider(selectedChain);
+      if (senderAddress) {
+        const balance = await provider.getBalance(senderAddress);
+        const decimals = selectedChain === 'bitcoin' ? 8 : selectedChain === 'ethereum' ? 18 : 9;
+        const humanBalance = Number(balance.amount) / 10 ** decimals;
+        if (humanBalance < parseFloat(amount)) {
+          Alert.alert(
+            'Insufficient Balance',
+            `You have ${humanBalance.toFixed(6)} ${chainSymbol} but are trying to send ${amount} ${chainSymbol}.${isTestnet() ? '\n\nGet free testnet tokens from a faucet.' : ''}`
+          );
+          return;
+        }
+      }
+    } catch {
+      // Network error — let user proceed, will fail at broadcast
+    }
+
     setShowConfirm(true);
   };
 
@@ -191,7 +247,15 @@ export function SendScreen() {
       setRecipient('');
       setShowConfirm(false);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Transaction failed';
+      let msg = err instanceof Error ? err.message : 'Transaction failed';
+      // Make common errors more user-friendly
+      if (msg.includes('insufficient funds') || msg.includes('Insufficient')) {
+        msg = `Not enough ${chainSymbol} to cover this transaction and gas fees.${isTestnet() ? ' Get free testnet tokens from a faucet.' : ''}`;
+      } else if (msg.includes('timed out') || msg.includes('timeout') || msg.includes('too long')) {
+        msg = 'Network request timed out. Please check your connection and try again.';
+      } else if (msg.includes('nonce') || msg.includes('replacement')) {
+        msg = 'Transaction conflict. Please wait a moment and try again.';
+      }
       Alert.alert('Send Failed', msg);
       throw err; // Re-throw so ConfirmTransactionScreen resets to review
     } finally {
@@ -258,11 +322,11 @@ export function SendScreen() {
           <View style={{ flexDirection: 'row', gap: 12 }}>
             {isTestnet() && (
               <TouchableOpacity onPress={fillTestAddress}>
-                <Text style={{ color: '#eab308', fontSize: 13, fontWeight: '600' }}>Test Address</Text>
+                <Text style={{ color: t.accent.yellow, fontSize: 13, fontWeight: '600' }}>Test Address</Text>
               </TouchableOpacity>
             )}
             <TouchableOpacity onPress={() => setShowScanner(true)}>
-              <Text style={{ color: '#3b82f6', fontSize: 13, fontWeight: '600' }}>Scan QR</Text>
+              <Text style={{ color: t.accent.blue, fontSize: 13, fontWeight: '600' }}>Scan QR</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -274,7 +338,7 @@ export function SendScreen() {
               isAddressValid === true && styles.inputValid,
             ]}
             placeholder={`${chainSymbol} address`}
-            placeholderTextColor="#606070"
+            placeholderTextColor={t.text.muted}
             value={recipient}
             onChangeText={setRecipient}
             autoCapitalize="none"
@@ -290,7 +354,7 @@ export function SendScreen() {
           <TextInput
             style={[styles.input, { flex: 1 }]}
             placeholder="0.00"
-            placeholderTextColor="#606070"
+            placeholderTextColor={t.text.muted}
             value={amount}
             onChangeText={setAmount}
             keyboardType="decimal-pad"
@@ -325,7 +389,7 @@ export function SendScreen() {
           disabled={sending}
         >
           {sending ? (
-            <ActivityIndicator color="#0a0a0f" />
+            <ActivityIndicator color={t.bg.primary} />
           ) : (
             <Text style={styles.sendButtonText}>Send {chainSymbol}</Text>
           )}
@@ -340,33 +404,3 @@ export function SendScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0a0a0f', paddingHorizontal: 24 },
-  chainSelector: { flexDirection: 'row', gap: 8, marginBottom: 24, flexWrap: 'wrap', marginTop: 8 },
-  chainButton: { backgroundColor: '#16161f', borderRadius: 20, paddingVertical: 8, paddingHorizontal: 16 },
-  chainButtonActive: { backgroundColor: '#f97316' },
-  chainButtonText: { color: '#a0a0b0', fontSize: 14 },
-  chainButtonTextActive: { color: '#0a0a0f', fontWeight: '700' },
-  fromCard: { backgroundColor: '#16161f', borderRadius: 12, padding: 12, marginBottom: 16 },
-  fromAddress: { color: '#606070', fontSize: 12, fontFamily: 'monospace' },
-  fieldLabel: { color: '#a0a0b0', fontSize: 13, fontWeight: '600', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 },
-  inputWrapper: { position: 'relative', marginBottom: 16 },
-  input: { backgroundColor: '#16161f', borderRadius: 16, padding: 16, color: '#f0f0f5', fontSize: 16, borderWidth: 1, borderColor: 'transparent' },
-  inputError: { borderColor: '#ef444440' },
-  inputValid: { borderColor: '#22c55e40' },
-  validIcon: { position: 'absolute', right: 16, top: 16, color: '#22c55e', fontSize: 18, fontWeight: '700' },
-  invalidIcon: { position: 'absolute', right: 16, top: 16, color: '#ef4444', fontSize: 18, fontWeight: '700' },
-  amountRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 16 },
-  tokenBadge: { backgroundColor: '#16161f', borderRadius: 12, paddingVertical: 16, paddingHorizontal: 16 },
-  tokenBadgeText: { color: '#a0a0b0', fontSize: 14, fontWeight: '700' },
-  feeCard: { backgroundColor: '#16161f', borderRadius: 12, padding: 16, marginBottom: 16 },
-  feeRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4 },
-  feeLabel: { color: '#606070', fontSize: 13 },
-  feeValue: { color: '#a0a0b0', fontSize: 13 },
-  feeValueBold: { color: '#f0f0f5', fontSize: 13, fontWeight: '700' },
-  sendButton: { backgroundColor: '#f97316', borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginTop: 8 },
-  sendButtonDisabled: { opacity: 0.6 },
-  sendButtonText: { color: '#0a0a0f', fontSize: 17, fontWeight: '700' },
-  hint: { color: '#606070', fontSize: 12, textAlign: 'center', marginTop: 16, lineHeight: 18 },
-});

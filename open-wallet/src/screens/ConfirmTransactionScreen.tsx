@@ -3,13 +3,15 @@
  * Shows details + requires biometric or PIN before signing.
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
   View, Text, TouchableOpacity, StyleSheet,
   SafeAreaView, Alert, ActivityIndicator,
 } from 'react-native';
 import { authManager } from '../core/auth/auth';
 import { PinPad } from '../components/PinPad';
+import { useTheme } from '../hooks/useTheme';
+import type { Theme } from '../utils/theme';
 
 interface TxDetails {
   type: 'send' | 'swap' | 'bridge';
@@ -31,6 +33,39 @@ interface Props {
 export const ConfirmTransactionScreen = React.memo(({ tx, onConfirm, onCancel }: Props) => {
   const [step, setStep] = useState<'review' | 'auth' | 'executing'>('review');
   const [pinError, setPinError] = useState<string | null>(null);
+  const t = useTheme();
+
+  const s = useMemo(() => StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.bg.primary },
+    content: { flex: 1, justifyContent: 'center', paddingHorizontal: 24 },
+    typeBadge: { alignSelf: 'center', paddingVertical: 6, paddingHorizontal: 20, borderRadius: 20, marginBottom: 16 },
+    typeText: { fontSize: 14, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 24, fontWeight: '800', textAlign: 'center', marginBottom: 24 },
+    amountCard: { backgroundColor: t.bg.card, borderRadius: 20, padding: 24, alignItems: 'center', marginBottom: 16 },
+    amountLabel: { color: t.text.muted, fontSize: 13, textTransform: 'uppercase', letterSpacing: 1 },
+    amount: { color: t.text.primary, fontSize: 28, fontWeight: '800', marginTop: 4 },
+    arrow: { color: t.text.muted, fontSize: 20, marginVertical: 8 },
+    detailsCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 4, marginBottom: 16 },
+    detailRow: { flexDirection: 'row', justifyContent: 'space-between', padding: 14, borderBottomWidth: 1, borderBottomColor: t.border },
+    detailLabel: { color: t.text.muted, fontSize: 14 },
+    detailValue: { color: t.text.secondary, fontSize: 14, maxWidth: '60%', textAlign: 'right' },
+    warning: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginBottom: 24, lineHeight: 18 },
+    confirmBtn: { borderRadius: 16, paddingVertical: 18, alignItems: 'center' },
+    confirmText: { color: '#ffffff', fontSize: 17, fontWeight: '700' },
+    cancelBtn: { paddingVertical: 16, alignItems: 'center' },
+    cancelText: { color: t.text.muted, fontSize: 16 },
+    executing: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+    executingText: { color: t.text.secondary, fontSize: 16, marginTop: 16 },
+  }), [t]);
+
+  const DetailRow = useMemo(() => {
+    return React.memo(({ label, value }: { label: string; value: string }) => (
+      <View style={s.detailRow}>
+        <Text style={s.detailLabel}>{label}</Text>
+        <Text style={s.detailValue}>{value}</Text>
+      </View>
+    ));
+  }, [s]);
 
   const executeWithPassword = useCallback(async (password?: string) => {
     setStep('executing');
@@ -94,7 +129,7 @@ export const ConfirmTransactionScreen = React.memo(({ tx, onConfirm, onCancel }:
     return (
       <SafeAreaView style={s.container}>
         <View style={s.executing}>
-          <ActivityIndicator color="#22c55e" size="large" />
+          <ActivityIndicator color={t.accent.green} size="large" />
           <Text style={s.executingText}>Processing transaction...</Text>
         </View>
       </SafeAreaView>
@@ -103,7 +138,7 @@ export const ConfirmTransactionScreen = React.memo(({ tx, onConfirm, onCancel }:
 
   // ─── Review ───
   const typeLabel = tx.type === 'send' ? 'Send' : tx.type === 'swap' ? 'Swap' : 'Bridge';
-  const typeColor = tx.type === 'send' ? '#f97316' : tx.type === 'swap' ? '#3b82f6' : '#8b5cf6';
+  const typeColor = tx.type === 'send' ? t.accent.orange : tx.type === 'swap' ? t.accent.blue : t.accent.purple;
 
   return (
     <SafeAreaView style={s.container}>
@@ -150,34 +185,4 @@ export const ConfirmTransactionScreen = React.memo(({ tx, onConfirm, onCancel }:
       </View>
     </SafeAreaView>
   );
-});
-
-const DetailRow = React.memo(({ label, value }: { label: string; value: string }) => (
-  <View style={s.detailRow}>
-    <Text style={s.detailLabel}>{label}</Text>
-    <Text style={s.detailValue}>{value}</Text>
-  </View>
-));
-
-const s = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0a0a0f' },
-  content: { flex: 1, justifyContent: 'center', paddingHorizontal: 24 },
-  typeBadge: { alignSelf: 'center', paddingVertical: 6, paddingHorizontal: 20, borderRadius: 20, marginBottom: 16 },
-  typeText: { fontSize: 14, fontWeight: '700' },
-  title: { color: '#f0f0f5', fontSize: 24, fontWeight: '800', textAlign: 'center', marginBottom: 24 },
-  amountCard: { backgroundColor: '#16161f', borderRadius: 20, padding: 24, alignItems: 'center', marginBottom: 16 },
-  amountLabel: { color: '#606070', fontSize: 13, textTransform: 'uppercase', letterSpacing: 1 },
-  amount: { color: '#f0f0f5', fontSize: 28, fontWeight: '800', marginTop: 4 },
-  arrow: { color: '#606070', fontSize: 20, marginVertical: 8 },
-  detailsCard: { backgroundColor: '#16161f', borderRadius: 16, padding: 4, marginBottom: 16 },
-  detailRow: { flexDirection: 'row', justifyContent: 'space-between', padding: 14, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.04)' },
-  detailLabel: { color: '#606070', fontSize: 14 },
-  detailValue: { color: '#a0a0b0', fontSize: 14, maxWidth: '60%', textAlign: 'right' },
-  warning: { color: '#606070', fontSize: 12, textAlign: 'center', marginBottom: 24, lineHeight: 18 },
-  confirmBtn: { borderRadius: 16, paddingVertical: 18, alignItems: 'center' },
-  confirmText: { color: '#ffffff', fontSize: 17, fontWeight: '700' },
-  cancelBtn: { paddingVertical: 16, alignItems: 'center' },
-  cancelText: { color: '#606070', fontSize: 16 },
-  executing: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  executingText: { color: '#a0a0b0', fontSize: 16, marginTop: 16 },
 });

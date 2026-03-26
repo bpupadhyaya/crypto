@@ -2,7 +2,7 @@
  * Settings Screen — Security, PIN, biometric, mode, sign out.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   View, Text, TouchableOpacity, ScrollView,
   StyleSheet, SafeAreaView, Switch, Alert,
@@ -15,15 +15,51 @@ import { BackupScreen } from './BackupScreen';
 import { SUPPORTED_CURRENCIES } from '../utils/currency';
 import { PriceAlertsScreen } from './PriceAlertsScreen';
 import { AddressBookScreen } from './AddressBookScreen';
+import { useTheme } from '../hooks/useTheme';
 
 type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts';
 
 export function SettingsScreen() {
-  const { mode, setMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork } = useWalletStore();
+  const { mode, setMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode } = useWalletStore();
   const [view, setView] = useState<SettingsView>('main');
   const [pinToChange, setPinToChange] = useState('');
   const [biometricAvailable, setBiometricAvailable] = useState(false);
   const [pinConfigured, setPinConfigured] = useState(false);
+  const t = useTheme();
+
+  const st = useMemo(() => StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.bg.primary },
+    scroll: { paddingHorizontal: 16, paddingTop: 8 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 8, marginLeft: 4 },
+    card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 4 },
+    row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 },
+    label: { color: t.text.primary, fontSize: 15 },
+    value: { color: t.text.secondary, fontSize: 14 },
+    valueGreen: { color: t.accent.green, fontSize: 13, fontWeight: '600' },
+    valueYellow: { color: t.accent.yellow, fontSize: 13, fontWeight: '600' },
+    divider: { height: 1, backgroundColor: t.border, marginHorizontal: 16 },
+    modeToggle: { flexDirection: 'row', gap: 4 },
+    modeBtn: { paddingVertical: 6, paddingHorizontal: 16, borderRadius: 8, backgroundColor: t.border },
+    modeBtnActive: { backgroundColor: t.accent.green },
+    networkTestnet: { backgroundColor: t.accent.yellow },
+    networkMainnet: { backgroundColor: t.accent.red },
+    modeBtnText: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
+    modeBtnTextActive: { color: t.bg.primary },
+    progressBar: { height: 4, backgroundColor: t.border, borderRadius: 2, marginHorizontal: 16, marginBottom: 8 },
+    progressFill: { height: 4, backgroundColor: t.accent.green, borderRadius: 2 },
+    migrationRow: { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 6 },
+    migrationName: { color: t.text.secondary, fontSize: 13 },
+    migrationYear: { color: t.text.muted, fontSize: 12 },
+    currencyRow: { flexDirection: 'row', gap: 4 },
+    currencyChip: { paddingVertical: 4, paddingHorizontal: 10, borderRadius: 8, backgroundColor: t.border },
+    currencyActive: { backgroundColor: t.accent.green },
+    currencyText: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
+    currencyTextActive: { color: t.bg.primary },
+    signOutBtn: { backgroundColor: t.accent.red + '20', borderRadius: 16, paddingVertical: 16, alignItems: 'center', marginTop: 24 },
+    signOutText: { color: t.accent.red, fontSize: 16, fontWeight: '700' },
+    backBtn: { paddingVertical: 20, alignItems: 'center' },
+    backText: { color: t.accent.blue, fontSize: 16 },
+  }), [t]);
 
   useEffect(() => {
     authManager.isBiometricAvailable().then(({ available }) => setBiometricAvailable(available));
@@ -155,6 +191,19 @@ export function SettingsScreen() {
           </View>
           <View style={st.divider} />
           <View style={st.row}>
+            <Text style={st.label}>Theme</Text>
+            <View style={st.modeToggle}>
+              {(['dark', 'light', 'system'] as const).map((m) => (
+                <TouchableOpacity key={m} style={[st.modeBtn, themeMode === m && st.modeBtnActive]} onPress={() => setThemeMode(m)}>
+                  <Text style={[st.modeBtnText, themeMode === m && st.modeBtnTextActive]}>
+                    {m === 'dark' ? '🌙' : m === 'light' ? '☀️' : '⚙️'}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+          <View style={st.divider} />
+          <View style={st.row}>
             <Text style={st.label}>Currency</Text>
             <View style={st.currencyRow}>
               {SUPPORTED_CURRENCIES.slice(0, 5).map((c) => (
@@ -228,8 +277,8 @@ export function SettingsScreen() {
                 <Switch
                   value={biometricEnabled}
                   onValueChange={toggleBiometric}
-                  trackColor={{ false: '#333', true: '#22c55e40' }}
-                  thumbColor={biometricEnabled ? '#22c55e' : '#666'}
+                  trackColor={{ false: '#333', true: t.accent.green + '40' }}
+                  thumbColor={biometricEnabled ? t.accent.green : '#666'}
                 />
               </View>
               <View style={st.divider} />
@@ -299,37 +348,3 @@ export function SettingsScreen() {
     </SafeAreaView>
   );
 }
-
-const st = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0a0a0f' },
-  scroll: { paddingHorizontal: 16, paddingTop: 8 },
-  section: { color: '#a0a0b0', fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 8, marginLeft: 4 },
-  card: { backgroundColor: '#16161f', borderRadius: 16, padding: 4 },
-  row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 },
-  label: { color: '#f0f0f5', fontSize: 15 },
-  value: { color: '#a0a0b0', fontSize: 14 },
-  valueGreen: { color: '#22c55e', fontSize: 13, fontWeight: '600' },
-  valueYellow: { color: '#eab308', fontSize: 13, fontWeight: '600' },
-  divider: { height: 1, backgroundColor: 'rgba(255,255,255,0.04)', marginHorizontal: 16 },
-  modeToggle: { flexDirection: 'row', gap: 4 },
-  modeBtn: { paddingVertical: 6, paddingHorizontal: 16, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.06)' },
-  modeBtnActive: { backgroundColor: '#22c55e' },
-  networkTestnet: { backgroundColor: '#eab308' },
-  networkMainnet: { backgroundColor: '#ef4444' },
-  modeBtnText: { color: '#a0a0b0', fontSize: 13, fontWeight: '600' },
-  modeBtnTextActive: { color: '#0a0a0f' },
-  progressBar: { height: 4, backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: 2, marginHorizontal: 16, marginBottom: 8 },
-  progressFill: { height: 4, backgroundColor: '#22c55e', borderRadius: 2 },
-  migrationRow: { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 6 },
-  migrationName: { color: '#a0a0b0', fontSize: 13 },
-  migrationYear: { color: '#606070', fontSize: 12 },
-  currencyRow: { flexDirection: 'row', gap: 4 },
-  currencyChip: { paddingVertical: 4, paddingHorizontal: 10, borderRadius: 8, backgroundColor: 'rgba(255,255,255,0.06)' },
-  currencyActive: { backgroundColor: '#22c55e' },
-  currencyText: { color: '#a0a0b0', fontSize: 13, fontWeight: '600' },
-  currencyTextActive: { color: '#0a0a0f' },
-  signOutBtn: { backgroundColor: '#ef444420', borderRadius: 16, paddingVertical: 16, alignItems: 'center', marginTop: 24 },
-  signOutText: { color: '#ef4444', fontSize: 16, fontWeight: '700' },
-  backBtn: { paddingVertical: 20, alignItems: 'center' },
-  backText: { color: '#3b82f6', fontSize: 16 },
-});

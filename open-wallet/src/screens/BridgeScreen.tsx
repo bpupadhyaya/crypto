@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { useWalletStore } from '../store/walletStore';
 import { SUPPORTED_TOKENS, type TokenInfo } from '../core/tokens/registry';
+import { useTheme } from '../hooks/useTheme';
 
 const BRIDGE_CHAINS = ['bitcoin', 'ethereum', 'solana', 'avalanche', 'polygon', 'bsc'];
 const CHAIN_LABELS: Record<string, string> = {
@@ -22,15 +23,46 @@ export function BridgeScreen({ onClose }: { onClose: () => void }) {
   const [toChain, setToChain] = useState('solana');
   const [amount, setAmount] = useState('');
   const [bridging, setBridging] = useState(false);
+  const t = useTheme();
 
   const fromToken = useMemo(
-    () => SUPPORTED_TOKENS.find((t) => t.chainId === fromChain && t.isNative),
+    () => SUPPORTED_TOKENS.find((tk) => tk.chainId === fromChain && tk.isNative),
     [fromChain]
   );
   const toToken = useMemo(
-    () => SUPPORTED_TOKENS.find((t) => t.chainId === toChain && t.isNative),
+    () => SUPPORTED_TOKENS.find((tk) => tk.chainId === toChain && tk.isNative),
     [toChain]
   );
+
+  const s = useMemo(() => StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.bg.primary },
+    header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
+    back: { color: t.accent.blue, fontSize: 16, fontWeight: '600' },
+    title: { color: t.text.primary, fontSize: 18, fontWeight: '800' },
+    scroll: { paddingHorizontal: 20 },
+    subtitle: { color: t.text.muted, fontSize: 13, marginBottom: 20 },
+    label: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8, marginTop: 16 },
+    chainRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+    chainChip: { backgroundColor: t.bg.card, borderRadius: 20, paddingVertical: 8, paddingHorizontal: 14 },
+    chainChipActive: { backgroundColor: t.accent.purple },
+    chainText: { color: t.text.secondary, fontSize: 13 },
+    chainTextActive: { color: '#fff', fontWeight: '700' },
+    amountCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginTop: 16, flexDirection: 'row', alignItems: 'center' },
+    amountLabel: { color: t.text.secondary, fontSize: 16, fontWeight: '700', marginRight: 12 },
+    amountInput: { flex: 1, color: t.text.primary, fontSize: 24, fontWeight: '600', textAlign: 'right' },
+    flipBtn: { alignSelf: 'center', backgroundColor: t.accent.purple, width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center', marginVertical: -8, zIndex: 1 },
+    flipIcon: { color: '#fff', fontSize: 20, fontWeight: '800' },
+    receiveCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, alignItems: 'center', marginTop: 16 },
+    receiveLabel: { color: t.text.muted, fontSize: 12, textTransform: 'uppercase', letterSpacing: 1 },
+    receiveAmount: { color: t.text.primary, fontSize: 24, fontWeight: '700', marginTop: 8 },
+    receiveNote: { color: t.text.muted, fontSize: 12, marginTop: 4 },
+    routeCard: { flexDirection: 'row', justifyContent: 'space-between', backgroundColor: t.bg.card, borderRadius: 12, padding: 14, marginTop: 12 },
+    routeLabel: { color: t.text.muted, fontSize: 13 },
+    routeValue: { color: t.text.secondary, fontSize: 13 },
+    bridgeBtn: { backgroundColor: t.accent.purple, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginTop: 24 },
+    bridgeBtnDisabled: { opacity: 0.6 },
+    bridgeBtnText: { color: '#fff', fontSize: 17, fontWeight: '700' },
+  }), [t]);
 
   const flipChains = useCallback(() => {
     setFromChain(toChain);
@@ -94,7 +126,7 @@ export function BridgeScreen({ onClose }: { onClose: () => void }) {
           <TextInput
             style={s.amountInput}
             placeholder="0.00"
-            placeholderTextColor="#606070"
+            placeholderTextColor={t.text.muted}
             value={amount}
             onChangeText={setAmount}
             keyboardType="decimal-pad"
@@ -161,33 +193,3 @@ export function BridgeScreen({ onClose }: { onClose: () => void }) {
     </SafeAreaView>
   );
 }
-
-const s = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0a0a0f' },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-  back: { color: '#3b82f6', fontSize: 16, fontWeight: '600' },
-  title: { color: '#f0f0f5', fontSize: 18, fontWeight: '800' },
-  scroll: { paddingHorizontal: 20 },
-  subtitle: { color: '#606070', fontSize: 13, marginBottom: 20 },
-  label: { color: '#a0a0b0', fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8, marginTop: 16 },
-  chainRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  chainChip: { backgroundColor: '#16161f', borderRadius: 20, paddingVertical: 8, paddingHorizontal: 14 },
-  chainChipActive: { backgroundColor: '#8b5cf6' },
-  chainText: { color: '#a0a0b0', fontSize: 13 },
-  chainTextActive: { color: '#fff', fontWeight: '700' },
-  amountCard: { backgroundColor: '#16161f', borderRadius: 16, padding: 16, marginTop: 16, flexDirection: 'row', alignItems: 'center' },
-  amountLabel: { color: '#a0a0b0', fontSize: 16, fontWeight: '700', marginRight: 12 },
-  amountInput: { flex: 1, color: '#f0f0f5', fontSize: 24, fontWeight: '600', textAlign: 'right' },
-  flipBtn: { alignSelf: 'center', backgroundColor: '#8b5cf6', width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center', marginVertical: -8, zIndex: 1 },
-  flipIcon: { color: '#fff', fontSize: 20, fontWeight: '800' },
-  receiveCard: { backgroundColor: '#16161f', borderRadius: 16, padding: 20, alignItems: 'center', marginTop: 16 },
-  receiveLabel: { color: '#606070', fontSize: 12, textTransform: 'uppercase', letterSpacing: 1 },
-  receiveAmount: { color: '#f0f0f5', fontSize: 24, fontWeight: '700', marginTop: 8 },
-  receiveNote: { color: '#606070', fontSize: 12, marginTop: 4 },
-  routeCard: { flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '#16161f', borderRadius: 12, padding: 14, marginTop: 12 },
-  routeLabel: { color: '#606070', fontSize: 13 },
-  routeValue: { color: '#a0a0b0', fontSize: 13 },
-  bridgeBtn: { backgroundColor: '#8b5cf6', borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginTop: 24 },
-  bridgeBtnDisabled: { opacity: 0.6 },
-  bridgeBtnText: { color: '#fff', fontSize: 17, fontWeight: '700' },
-});
