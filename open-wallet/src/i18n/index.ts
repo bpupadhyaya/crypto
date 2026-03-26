@@ -23,6 +23,10 @@ import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { getLocales } from 'expo-localization';
 import en from './translations/en';
+import hi from './translations/hi';
+import es from './translations/es';
+import zh from './translations/zh';
+import vi from './translations/vi';
 
 const deviceLanguage = getLocales()[0]?.languageCode ?? 'en';
 
@@ -31,11 +35,10 @@ i18next
   .init({
     resources: {
       en: { translation: en },
-      // Add more languages as they are translated:
-      // hi: { translation: hi },
-      // vi: { translation: vi },
-      // zh: { translation: zh },
-      // es: { translation: es },
+      hi: { translation: hi },
+      es: { translation: es },
+      zh: { translation: zh },
+      vi: { translation: vi },
     },
     lng: deviceLanguage,
     fallbackLng: 'en',

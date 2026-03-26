@@ -17,9 +17,11 @@ import { PriceAlertsScreen } from './PriceAlertsScreen';
 import { AddressBookScreen } from './AddressBookScreen';
 import { HardwareWalletScreen } from './HardwareWalletScreen';
 import { WalletConnectScreen } from './WalletConnectScreen';
+import { StakingScreen } from './StakingScreen';
 import { useTheme } from '../hooks/useTheme';
+import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking';
 
 export function SettingsScreen() {
   const { mode, setMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode } = useWalletStore();
@@ -166,6 +168,7 @@ export function SettingsScreen() {
   if (view === 'contacts') return <AddressBookScreen onClose={() => setView('main')} />;
   if (view === 'hardware') return <HardwareWalletScreen onClose={() => setView('main')} />;
   if (view === 'walletconnect') return <WalletConnectScreen onClose={() => setView('main')} />;
+  if (view === 'staking') return <StakingScreen onClose={() => setView('main')} />;
 
   // ─── Main Settings ───
 
@@ -208,6 +211,31 @@ export function SettingsScreen() {
           </View>
           <View style={st.divider} />
           <View style={st.row}>
+            <Text style={st.label}>Language</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ maxWidth: 200 }}>
+              <View style={st.modeToggle}>
+                {[
+                  { code: 'en', label: 'EN' },
+                  { code: 'hi', label: 'हिं' },
+                  { code: 'es', label: 'ES' },
+                  { code: 'zh', label: '中' },
+                  { code: 'vi', label: 'VI' },
+                ].map((lang) => (
+                  <TouchableOpacity
+                    key={lang.code}
+                    style={[st.modeBtn, i18n.language === lang.code && st.modeBtnActive]}
+                    onPress={() => i18n.changeLanguage(lang.code)}
+                  >
+                    <Text style={[st.modeBtnText, i18n.language === lang.code && st.modeBtnTextActive]}>
+                      {lang.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
+          </View>
+          <View style={st.divider} />
+          <View style={st.row}>
             <Text style={st.label}>Currency</Text>
             <View style={st.currencyRow}>
               {SUPPORTED_CURRENCIES.slice(0, 5).map((c) => (
@@ -231,6 +259,11 @@ export function SettingsScreen() {
           <TouchableOpacity style={st.row} onPress={() => setView('walletconnect')}>
             <Text style={st.label}>WalletConnect</Text>
             <Text style={st.value}>Connect to dApps</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('staking')}>
+            <Text style={st.label}>Staking</Text>
+            <Text style={st.valueGreen}>5% APY</Text>
           </TouchableOpacity>
           <View style={st.divider} />
           <TouchableOpacity style={st.row} onPress={() => setView('contacts')}>
