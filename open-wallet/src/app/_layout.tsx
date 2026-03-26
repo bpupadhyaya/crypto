@@ -28,6 +28,7 @@ export default function RootLayout() {
     if (!providersInitialized) {
       providersInitialized = true;
       import('../core/bootstrap').then((m) => m.bootstrapProviders());
+      import('../core/notifications').then((m) => m.requestNotificationPermissions());
     }
   }, []);
 
