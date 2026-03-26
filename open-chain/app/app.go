@@ -194,6 +194,11 @@ func New(
 		panic(err)
 	}
 
+	// register Open Chain custom modules (OTK + UID)
+	if err := app.registerOpenChainModules(); err != nil {
+		panic(err)
+	}
+
 	/****  Module Options ****/
 
 	// create the simulation manager and define the order of the modules for deterministic simulations
