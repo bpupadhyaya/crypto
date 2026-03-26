@@ -12,7 +12,7 @@ export type ChainId =
   | 'openchain'
   | string; // extensible for future chains
 
-export type TokenSymbol = string; // 'BTC', 'ETH', 'SOL', 'USDC', 'OPEN', etc.
+export type TokenSymbol = string; // 'BTC', 'ETH', 'SOL', 'USDC', 'OTK', etc.
 
 export interface Token {
   symbol: TokenSymbol;

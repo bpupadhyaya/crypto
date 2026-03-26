@@ -1,6 +1,6 @@
 # The Human Constitution
 
-### A Charter for Open Chain, Open Token (OTC), and Open Wallet
+### A Charter for Open Chain, Open Token (OTK), and Open Wallet
 
 **Version:** 1.0 — Ratified by the Founding Contributors
 **Date:** March 25, 2026
@@ -42,7 +42,7 @@ Our ultimate purpose: **World peace through better-raised, better-educated, bett
 2. Every teacher's extra hour deserves recognition.
 3. Every community volunteer's effort deserves recognition.
 4. Every act of kindness, mentorship, and care deserves recognition.
-5. This recognition shall be expressed in **Open Token (OTC)** — the universal unit of human contribution.
+5. This recognition shall be expressed in **Open Token (OTK)** — the universal unit of human contribution.
 
 ### Section 3: The Path to Peace
 
@@ -79,45 +79,45 @@ Our ultimate purpose: **World peace through better-raised, better-educated, bett
 
 ---
 
-## Article III — Open Token (OTC)
+## Article III — Open Token (OTK)
 
-### Section 1: The Nature of OTC
+### Section 1: The Nature of OTK
 
-1. **Open Token (OTC)** is the native token of Open Chain. Ticker symbol: **OTC**.
-2. OTC represents quantified human contribution — not speculative financial value.
-3. OTC is **multi-dimensional**. A single number cannot capture the richness of human contribution. Therefore, OTC flows through distinct **Value Channels**:
+1. **Open Token (OTK)** is the native token of Open Chain. Ticker symbol: **OTK**.
+2. OTK represents quantified human contribution — not speculative financial value.
+3. OTK is **multi-dimensional**. A single number cannot capture the richness of human contribution. Therefore, OTK flows through distinct **Value Channels**:
 
 | Channel | Symbol | Represents |
 |---------|--------|------------|
-| **Nurture** | nOTC | Parenting, caregiving, emotional support, child-rearing |
-| **Education** | eOTC | Teaching, mentoring, knowledge transfer, skill development |
-| **Health** | hOTC | Healthcare, wellness, nutrition, physical development |
-| **Community** | cOTC | Neighborhood service, volunteer work, social cohesion |
-| **Economic** | xOTC | Financial transactions, trade, material value exchange |
-| **Governance** | gOTC | Civic participation, voting, policy contribution, leadership |
+| **Nurture** | nOTK | Parenting, caregiving, emotional support, child-rearing |
+| **Education** | eOTK | Teaching, mentoring, knowledge transfer, skill development |
+| **Health** | hOTK | Healthcare, wellness, nutrition, physical development |
+| **Community** | cOTK | Neighborhood service, volunteer work, social cohesion |
+| **Economic** | xOTK | Financial transactions, trade, material value exchange |
+| **Governance** | gOTK | Civic participation, voting, policy contribution, leadership |
 
 4. Each channel has independent flow rules, minting conditions, and attribution mechanisms.
-5. The **Total OTC** of a Universal ID is a weighted composite of all channels. Weights are determined by global governance (Article VI).
+5. The **Total OTK** of a Universal ID is a weighted composite of all channels. Weights are determined by global governance (Article VI).
 
 ### Section 2: Token Distribution
 
-1. **No pre-mine.** Zero OTC exists before the chain launches.
-2. **No venture capital allocation.** Zero OTC is reserved for investors.
-3. **No founder allocation.** Zero OTC is reserved for creators.
-4. **100% of OTC is earned** through verified contributions — from the first block, forever.
-5. A farmer in India earning nOTC for raising her children has the same opportunity as any other human being on Earth. There are no privileged positions.
+1. **No pre-mine.** Zero OTK exists before the chain launches.
+2. **No venture capital allocation.** Zero OTK is reserved for investors.
+3. **No founder allocation.** Zero OTK is reserved for creators.
+4. **100% of OTK is earned** through verified contributions — from the first block, forever.
+5. A farmer in India earning nOTK for raising her children has the same opportunity as any other human being on Earth. There are no privileged positions.
 
 ### Section 3: Minting Rules
 
-1. OTC is minted when **verifiable human outcomes** occur (see Article IV: Milestone Minting).
-2. OTC is **never minted from nothing**. Every token traces back to a real human contribution.
-3. The total supply of OTC grows with humanity's collective contribution. There is no arbitrary cap — as humanity does more good, more OTC exists to represent it.
+1. OTK is minted when **verifiable human outcomes** occur (see Article IV: Milestone Minting).
+2. OTK is **never minted from nothing**. Every token traces back to a real human contribution.
+3. The total supply of OTK grows with humanity's collective contribution. There is no arbitrary cap — as humanity does more good, more OTK exists to represent it.
 4. Inflation is bounded by the rate of verified human contribution, not by monetary policy.
 
 ### Section 4: The Gratitude Transaction
 
-1. Any Universal ID holder may send OTC to any other Universal ID as an expression of gratitude.
-2. A grown child sending nOTC to their parent's Universal ID is a **Gratitude Transaction** — a formal recognition of the value received during upbringing.
+1. Any Universal ID holder may send OTK to any other Universal ID as an expression of gratitude.
+2. A grown child sending nOTK to their parent's Universal ID is a **Gratitude Transaction** — a formal recognition of the value received during upbringing.
 3. Gratitude Transactions are voluntary, never compelled, and carry special significance on-chain (marked, visible, celebrated).
 4. The ability to return value to those who raised you is a fundamental feature, not an afterthought.
 
@@ -128,7 +128,7 @@ Our ultimate purpose: **World peace through better-raised, better-educated, bett
 ### Section 1: Architecture
 
 1. Every Universal ID has a **Living Ledger** — a continuous, lifelong on-chain record of value received and value given.
-2. The Living Ledger is organized by Value Channels (nOTC, eOTC, hOTC, cOTC, xOTC, gOTC).
+2. The Living Ledger is organized by Value Channels (nOTK, eOTK, hOTK, cOTK, xOTK, gOTK).
 3. Value flows in both directions — received and given — creating a complete picture of each person's relationship with humanity.
 4. The Living Ledger begins at Universal ID registration and continues indefinitely.
 
@@ -146,7 +146,7 @@ Value attribution follows concentric rings outward from the individual:
 Ring 1: Self (personal growth, self-education, health choices)
 ```
 
-1. When a positive human outcome is verified, OTC is minted and attributed across rings.
+1. When a positive human outcome is verified, OTK is minted and attributed across rings.
 2. **Ripple Attribution Formula:** `attribution = base_value / (ring_distance ^ 2)`
    - Parents (Ring 2) receive ~25x more attribution than national policy (Ring 6)
    - But national policy still receives credit — because good policy contributes to good outcomes
@@ -154,15 +154,15 @@ Ring 1: Self (personal growth, self-education, health choices)
 
 ### Section 3: Milestone Minting
 
-OTC is minted when verifiable human development milestones are achieved:
+OTK is minted when verifiable human development milestones are achieved:
 
-**Nurture Milestones (nOTC):**
+**Nurture Milestones (nOTK):**
 - Healthy birth
 - Child thriving at age 1, 2, 3, 5
 - Stable family environment maintained through adolescence
 - Young adult reports positive upbringing (self-attestation at age of agency)
 
-**Education Milestones (eOTC):**
+**Education Milestones (eOTK):**
 - Literacy achieved (reading at grade level)
 - Numeracy achieved
 - Primary education completed
@@ -170,19 +170,19 @@ OTC is minted when verifiable human development milestones are achieved:
 - Vocational or higher education completed
 - Lifelong learning milestones (new skills, certifications)
 
-**Health Milestones (hOTC):**
+**Health Milestones (hOTK):**
 - Vaccinations completed
 - Regular health checkups maintained
 - Physical fitness benchmarks met
 - Mental health support accessed when needed
 
-**Community Milestones (cOTC):**
+**Community Milestones (cOTK):**
 - Community service hours contributed
 - Mentorship provided to others
 - Conflict resolution facilitated
 - Resources shared with those in need
 
-**Governance Milestones (gOTC):**
+**Governance Milestones (gOTK):**
 - Participation in governance votes
 - Proposal creation and community engagement
 - Public service and leadership
@@ -191,7 +191,7 @@ OTC is minted when verifiable human development milestones are achieved:
 
 1. Milestones are verified by a **decentralized oracle network** — not a single authority.
 2. Oracles include schools, healthcare providers, community leaders, and peer attestations.
-3. No single oracle can mint OTC unilaterally. Milestones require **multi-source verification** (e.g., school records + parent attestation + peer confirmation).
+3. No single oracle can mint OTK unilaterally. Milestones require **multi-source verification** (e.g., school records + parent attestation + peer confirmation).
 4. **Privacy is paramount:** Only the achievement of a milestone is recorded on-chain, never the underlying data (no medical records, no grades, no personal details).
 
 ---
@@ -201,20 +201,20 @@ OTC is minted when verifiable human development milestones are achieved:
 ### Section 1: Negative Value
 
 1. Human society produces negative value — neglect, abuse, exploitation, deception, harm.
-2. Open Chain does not ignore this reality. **Negative OTC (-OTC)** represents harm done.
-3. -OTC is applied when verified negative outcomes occur, using the same ring-based attribution.
-4. The purpose of -OTC is not punishment — it is **visibility**. Making harm visible creates pressure for correction.
+2. Open Chain does not ignore this reality. **Negative OTK (-OTK)** represents harm done.
+3. -OTK is applied when verified negative outcomes occur, using the same ring-based attribution.
+4. The purpose of -OTK is not punishment — it is **visibility**. Making harm visible creates pressure for correction.
 
 ### Section 2: Community Consensus
 
-1. No individual can unilaterally assign -OTC to another. False accusations must be impossible.
+1. No individual can unilaterally assign -OTK to another. False accusations must be impossible.
 2. Negative attribution requires **community consensus** — multiple independent verifiers must agree.
 3. The accused has the right to contest, provide evidence, and have the matter resolved through governance.
-4. -OTC can be reversed if the determination was wrong.
+4. -OTK can be reversed if the determination was wrong.
 
 ### Section 3: Autonomous Correction
 
-1. When a community's aggregate OTC trends negative, it signals systemic problems that need attention.
+1. When a community's aggregate OTK trends negative, it signals systemic problems that need attention.
 2. This creates a **self-correcting feedback loop**: resources and attention flow toward communities in need.
 3. The system does not dictate solutions — it surfaces problems. Humans decide how to fix them.
 
@@ -225,12 +225,12 @@ OTC is minted when verifiable human development milestones are achieved:
 ### Section 1: One Human, One Vote
 
 1. Every Universal ID holder has exactly one vote in Open Chain governance.
-2. Voting power is **not proportional to OTC holdings**. A person with 1 OTC and a person with 1,000,000 OTC each have one vote.
+2. Voting power is **not proportional to OTK holdings**. A person with 1 OTK and a person with 1,000,000 OTK each have one vote.
 3. This is democracy — not plutocracy, not technocracy, not oligarchy.
 
 ### Section 2: What Can Be Governed
 
-1. **Channel weights** — How nOTC, eOTC, etc. are weighted in Total OTC.
+1. **Channel weights** — How nOTK, eOTK, etc. are weighted in Total OTK.
 2. **Milestone definitions** — What constitutes a verifiable milestone (may vary by region and culture).
 3. **Ripple attribution formula** — The parameters of ring-based attribution.
 4. **Oracle network membership** — Who qualifies as a verifier.
@@ -265,15 +265,15 @@ OTC is minted when verifiable human development milestones are achieved:
 2. It supports two modes:
    - **Simple Mode:** Accessible to anyone — icon-driven, multilingual, works on 2G networks
    - **Pro Mode:** Full features for advanced users
-3. Every human can manage their Universal ID, Living Ledger, OTC balances, and governance participation through Open Wallet.
+3. Every human can manage their Universal ID, Living Ledger, OTK balances, and governance participation through Open Wallet.
 4. Open Wallet is 100% open source. Anyone can inspect, verify, and build upon it.
 
-### Section 3: Open Token (OTC)
+### Section 3: Open Token (OTK)
 
-1. OTC is the native token of Open Chain with ticker symbol **OTC**.
+1. OTK is the native token of Open Chain with ticker symbol **OTK**.
 2. Near-zero fixed transaction fees — not percentage-based. Sending value should cost nearly nothing.
-3. Multi-channel architecture (nOTC, eOTC, hOTC, cOTC, xOTC, gOTC) implemented as chain-native modules.
-4. OTC is interoperable with other blockchain ecosystems via IBC bridges.
+3. Multi-channel architecture (nOTK, eOTK, hOTK, cOTK, xOTK, gOTK) implemented as chain-native modules.
+4. OTK is interoperable with other blockchain ecosystems via IBC bridges.
 
 ---
 
@@ -319,7 +319,7 @@ OTC is minted when verifiable human development milestones are achieved:
 
 1. Universal IDs carry no information about race, gender, religion, nationality, or any protected characteristic.
 2. The protocol cannot discriminate because it has no basis for discrimination.
-3. OTC is earned through contribution — nothing else.
+3. OTK is earned through contribution — nothing else.
 
 ---
 
@@ -382,4 +382,4 @@ Website: [equalinformation.com](https://equalinformation.com)
 **Document History:**
 | Version | Date | Description |
 |---------|------|-------------|
-| 1.0 | 2026-03-25 | Initial charter — Foundational Principles, Universal Identity, OTC, Living Ledger, Contribution Rings, Governance, Technical Architecture |
+| 1.0 | 2026-03-25 | Initial charter — Foundational Principles, Universal Identity, OTK, Living Ledger, Contribution Rings, Governance, Technical Architecture |

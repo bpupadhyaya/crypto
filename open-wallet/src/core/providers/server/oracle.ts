@@ -25,7 +25,7 @@ const COINGECKO_IDS: Record<string, string> = {
   ATOM: 'cosmos',
   USDC: 'usd-coin',
   USDT: 'tether',
-  OPEN: 'open-token', // placeholder
+  OTK: 'open-token', // placeholder — Open Token (OTK)
 };
 
 export class ServerOracleProvider implements IOracleProvider {
