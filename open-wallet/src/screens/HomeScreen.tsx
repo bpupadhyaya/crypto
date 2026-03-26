@@ -10,6 +10,7 @@ import { isTestnet } from '../core/network';
 import { SUPPORTED_TOKENS, type TokenInfo } from '../core/tokens/registry';
 import { ManageTokensScreen } from './ManageTokensScreen';
 import { TokenDetailScreen } from './TokenDetailScreen';
+import { BuySellScreen } from './BuySellScreen';
 import { usePrices } from '../hooks/usePrices';
 import { useTheme } from '../hooks/useTheme';
 import type { Theme } from '../utils/theme';
@@ -97,6 +98,7 @@ const ActionBtn = React.memo(({ icon, label, color, t }: { icon: string; label: 
 
 export function HomeScreen() {
   const [showManage, setShowManage] = useState(false);
+  const [showBuySell, setShowBuySell] = useState(false);
   const [selectedToken, setSelectedToken] = useState<TokenInfo | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const enabledTokens = useWalletStore((s) => s.enabledTokens);
@@ -167,6 +169,12 @@ export function HomeScreen() {
         <ActionBtn icon="↑" label="Send" color={t.accent.orange} t={t} />
         <ActionBtn icon="↓" label="Receive" color={t.accent.green} t={t} />
         <ActionBtn icon="⇄" label="Swap" color={t.accent.blue} t={t} />
+        <TouchableOpacity style={{ alignItems: 'center', flex: 1 }} onPress={() => setShowBuySell(true)}>
+          <View style={{ width: 56, height: 56, borderRadius: 28, justifyContent: 'center', alignItems: 'center', marginBottom: 6, backgroundColor: t.accent.purple + '20' }}>
+            <Text style={{ fontSize: 24, fontWeight: '700', color: t.accent.purple }}>$</Text>
+          </View>
+          <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: '600' }}>Buy</Text>
+        </TouchableOpacity>
       </View>
       <View style={s.sectionHeader}>
         <Text style={s.sectionTitle}>Tokens</Text>
@@ -186,6 +194,8 @@ export function HomeScreen() {
       {lastUpdatedText ? <Text style={s.lastUpdated}>{lastUpdatedText}</Text> : null}
     </>
   ), [totalUsdValue, openManage, lastUpdatedText, showTestnetBanner, s, t, searchQuery]);
+
+  if (showBuySell) return <BuySellScreen onClose={() => setShowBuySell(false)} />;
 
   if (selectedToken) {
     return (

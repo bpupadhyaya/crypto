@@ -15,9 +15,11 @@ import { BackupScreen } from './BackupScreen';
 import { SUPPORTED_CURRENCIES } from '../utils/currency';
 import { PriceAlertsScreen } from './PriceAlertsScreen';
 import { AddressBookScreen } from './AddressBookScreen';
+import { HardwareWalletScreen } from './HardwareWalletScreen';
+import { WalletConnectScreen } from './WalletConnectScreen';
 import { useTheme } from '../hooks/useTheme';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect';
 
 export function SettingsScreen() {
   const { mode, setMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode } = useWalletStore();
@@ -162,6 +164,8 @@ export function SettingsScreen() {
   if (view === 'backup') return <BackupScreen onClose={() => setView('main')} />;
   if (view === 'alerts') return <PriceAlertsScreen onClose={() => setView('main')} />;
   if (view === 'contacts') return <AddressBookScreen onClose={() => setView('main')} />;
+  if (view === 'hardware') return <HardwareWalletScreen onClose={() => setView('main')} />;
+  if (view === 'walletconnect') return <WalletConnectScreen onClose={() => setView('main')} />;
 
   // ─── Main Settings ───
 
@@ -217,6 +221,16 @@ export function SettingsScreen() {
           <TouchableOpacity style={st.row} onPress={() => setView('alerts')}>
             <Text style={st.label}>Price Alerts</Text>
             <Text style={st.value}>›</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('hardware')}>
+            <Text style={st.label}>Hardware Wallet</Text>
+            <Text style={st.value}>Ledger · Trezor</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('walletconnect')}>
+            <Text style={st.label}>WalletConnect</Text>
+            <Text style={st.value}>Connect to dApps</Text>
           </TouchableOpacity>
           <View style={st.divider} />
           <TouchableOpacity style={st.row} onPress={() => setView('contacts')}>
