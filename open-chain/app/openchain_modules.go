@@ -22,6 +22,7 @@ import (
 
 	storetypes "cosmossdk.io/store/types"
 
+	dextypes "openchain/x/dex/types"
 	otktypes "openchain/x/otk/types"
 	uidtypes "openchain/x/uid/types"
 )
@@ -37,6 +38,7 @@ func (app *App) registerOpenChainModules() error {
 	if err := app.RegisterStores(
 		storetypes.NewKVStoreKey(otktypes.StoreKey),
 		storetypes.NewKVStoreKey(uidtypes.StoreKey),
+		storetypes.NewKVStoreKey(dextypes.StoreKey),
 	); err != nil {
 		return fmt.Errorf("failed to register Open Chain module stores: %w", err)
 	}
