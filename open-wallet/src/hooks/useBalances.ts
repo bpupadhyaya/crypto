@@ -62,7 +62,7 @@ export function useAllBalances(addresses: Partial<Record<ChainId, string>>) {
 
   const balances = queries
     .map((q) => q.data)
-    .filter((b): b is Balance => b !== null);
+    .filter((b): b is Balance => b != null && b.token != null);
 
   const isLoading = queries.some((q) => q.isLoading);
   const isError = queries.some((q) => q.isError);
@@ -114,7 +114,7 @@ export function usePortfolio(addresses: Partial<Record<ChainId, string>>) {
   const { balances, isLoading: balancesLoading } = useAllBalances(addresses);
   const { data: prices, isLoading: pricesLoading } = useAllPrices();
 
-  const enrichedBalances: Balance[] = balances.map((balance) => {
+  const enrichedBalances: Balance[] = balances.filter((b) => b?.token).map((balance) => {
     const price = prices?.get(balance.token.symbol) ?? 0;
     const decimals = balance.token.decimals;
     const humanAmount = Number(balance.amount) / Math.pow(10, decimals);

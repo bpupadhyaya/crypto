@@ -11,7 +11,12 @@ import 'react-native-get-random-values';
 import React, { useEffect } from 'react';
 import { Slot } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useWalletStore } from '../store/walletStore';
+
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: 1, staleTime: 30_000 } },
+});
 
 // Direct imports — no lazy loading, no dynamic imports, no Suspense
 // These are lightweight screens (just UI components)
@@ -34,20 +39,20 @@ export default function RootLayout() {
 
   // Auth screens — rendered directly, no routing overhead
   if (status === 'pin_setup') {
-    return <><StatusBar style="light" /><PinSetupScreen /></>;
+    return <QueryClientProvider client={queryClient}><StatusBar style="light" /><PinSetupScreen /></QueryClientProvider>;
   }
   if (status !== 'unlocked' && hasVault) {
-    return <><StatusBar style="light" /><UnlockScreen /></>;
+    return <QueryClientProvider client={queryClient}><StatusBar style="light" /><UnlockScreen /></QueryClientProvider>;
   }
   if (status !== 'unlocked') {
-    return <><StatusBar style="light" /><OnboardingScreen /></>;
+    return <QueryClientProvider client={queryClient}><StatusBar style="light" /><OnboardingScreen /></QueryClientProvider>;
   }
 
   // Unlocked — use expo-router only for tabs
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <StatusBar style="light" />
       <Slot />
-    </>
+    </QueryClientProvider>
   );
 }

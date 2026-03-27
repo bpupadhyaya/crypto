@@ -13,6 +13,7 @@ import { TokenDetailScreen } from './TokenDetailScreen';
 import { BuySellScreen } from './BuySellScreen';
 import { HistoryScreen } from './HistoryScreen';
 import { usePrices } from '../hooks/usePrices';
+import { usePortfolio } from '../hooks/useBalances';
 import { useTheme } from '../hooks/useTheme';
 import type { Theme } from '../utils/theme';
 
@@ -105,12 +106,10 @@ export function HomeScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const enabledTokens = useWalletStore((s) => s.enabledTokens);
   const addresses = useWalletStore((s) => s.addresses);
-  const setBalances = useWalletStore((s) => s.setBalances);
   const { prices, loading: pricesLoading, lastUpdated, refresh: refreshPrices } = usePrices();
   const t = useTheme();
 
   // Fetch real on-chain balances
-  const { usePortfolio } = require('../hooks/useBalances');
   const { balances: portfolioBalances, totalUsdValue } = usePortfolio(addresses);
 
   const s = useMemo(() => StyleSheet.create({
