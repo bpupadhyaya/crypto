@@ -22,10 +22,11 @@ import { UniversalIDScreen } from './UniversalIDScreen';
 import { LivingLedgerScreen } from './LivingLedgerScreen';
 import { GratitudeScreen } from './GratitudeScreen';
 import { GovernanceScreen } from './GovernanceScreen';
+import { OracleScreen } from './OracleScreen';
 import { useTheme } from '../hooks/useTheme';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude' | 'governance';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle';
 
 export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode } = useWalletStore();
@@ -177,6 +178,7 @@ export function SettingsScreen() {
   if (view === 'ledger') return <LivingLedgerScreen onClose={() => setView('main')} onSendGratitude={() => setView('gratitude')} />;
   if (view === 'gratitude') return <GratitudeScreen onClose={() => setView('main')} />;
   if (view === 'governance') return <GovernanceScreen onClose={() => setView('main')} />;
+  if (view === 'oracle') return <OracleScreen onClose={() => setView('main')} />;
 
   // ─── Main Settings ───
 
@@ -413,6 +415,11 @@ export function SettingsScreen() {
           <TouchableOpacity style={st.row} onPress={() => setView('governance')}>
             <Text style={st.label}>Governance</Text>
             <Text style={{ color: t.accent.blue, fontSize: 14 }}>Vote</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('oracle')}>
+            <Text style={st.label}>Milestone Oracle</Text>
+            <Text style={{ color: t.accent.orange, fontSize: 14 }}>Verify</Text>
           </TouchableOpacity>
         </View>
 
