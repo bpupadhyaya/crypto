@@ -4,11 +4,21 @@
 
 import React from 'react';
 import { Tabs } from 'expo-router';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { OfflineBanner } from '../../components/OfflineBanner';
 import { ToastContainer } from '../../components/Toast';
+import { useWalletStore } from '../../store/walletStore';
 
 const ICONS: Record<string, string> = { Home: '◉', Send: '↑', Swap: '⇄', Receive: '↓', Settings: '⚙' };
+
+const LockButton = React.memo(() => {
+  const setStatus = useWalletStore((s) => s.setStatus);
+  return (
+    <TouchableOpacity onPress={() => setStatus('locked')} style={{ paddingRight: 16, paddingLeft: 8 }} hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}>
+      <Text style={{ fontSize: 20, color: '#606070' }}>🔒</Text>
+    </TouchableOpacity>
+  );
+});
 
 const TabIcon = React.memo(({ label, focused }: { label: string; focused: boolean }) => (
   <Text style={[st.icon, focused && st.iconActive]}>{ICONS[label] ?? '•'}</Text>
@@ -33,7 +43,12 @@ export default React.memo(function TabLayout() {
     <OfflineBanner />
     <ToastContainer />
     <Tabs screenOptions={SCREEN_OPTIONS}>
-      <Tabs.Screen name="index" options={{ title: 'Home', headerTitle: 'Open Wallet', tabBarIcon: ({ focused }) => <TabIcon label="Home" focused={focused} /> }} />
+      <Tabs.Screen name="index" options={{
+        title: 'Home',
+        headerTitle: 'Open Wallet',
+        tabBarIcon: ({ focused }) => <TabIcon label="Home" focused={focused} />,
+        headerRight: () => <LockButton />,
+      }} />
       <Tabs.Screen name="send" options={{ title: 'Send', tabBarIcon: ({ focused }) => <TabIcon label="Send" focused={focused} /> }} />
       <Tabs.Screen name="swap" options={{ title: 'Swap', tabBarIcon: ({ focused }) => <TabIcon label="Swap" focused={focused} /> }} />
       <Tabs.Screen name="receive" options={{ title: 'Receive', tabBarIcon: ({ focused }) => <TabIcon label="Receive" focused={focused} /> }} />
