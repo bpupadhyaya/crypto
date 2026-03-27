@@ -20,6 +20,8 @@ import { useWalletStore } from '../store/walletStore';
 import { ConfirmTransactionScreen } from './ConfirmTransactionScreen';
 import { useTheme } from '../hooks/useTheme';
 import { getAllSwapOptions, type SwapOption } from '../core/swap';
+import { checkRealTransactionAllowed, recordPaperTrade, getSwapFlow, getTrafficLightEmoji } from '../core/paperTrading';
+import { isTestnet } from '../core/network';
 import type { Token } from '../core/abstractions/types';
 
 const SWAP_TOKENS = ['BTC', 'ETH', 'SOL', 'USDT', 'USDC', 'OTK', 'ATOM'];
@@ -125,25 +127,56 @@ export function SwapScreen() {
     setSelectedOption(null);
   }, [fromSymbol, toSymbol]);
 
-  const handleSwap = useCallback(() => {
+  const [isPaperSwap, setIsPaperSwap] = useState(false);
+
+  const handleSwap = useCallback(async (paperMode: boolean = false) => {
     if (!selectedOption) {
       Alert.alert('Select Option', 'Please choose a swap method.');
       return;
     }
+    setIsPaperSwap(paperMode);
+
+    // Check paper trading for real swaps
+    if (!paperMode && !isTestnet()) {
+      const flow = getSwapFlow(selectedOption.id);
+      const check = await checkRealTransactionAllowed(flow);
+      if (!check.allowed) {
+        Alert.alert(
+          `${getTrafficLightEmoji(check.light)} Paper Trade Required`,
+          check.message,
+          [
+            { text: 'Do Paper Trade', onPress: () => { setIsPaperSwap(true); setShowConfirm(true); } },
+            { text: 'Cancel', style: 'cancel' },
+          ]
+        );
+        return;
+      }
+    }
+
     setShowConfirm(true);
   }, [selectedOption]);
 
   const executeSwap = useCallback(async () => {
-    // Simulate swap execution
     await new Promise((r) => setTimeout(r, 2000));
-    Alert.alert('Swap Initiated',
-      `${amountStr} ${fromSymbol} → ${selectedOption?.toAmount.toFixed(4)} ${toSymbol}\n\nVia: ${selectedOption?.name}\n\n${selectedOption?.id === 'ow-atomic' ? 'Atomic swap in progress. Your funds are cryptographically secured.' : 'Transaction submitted to the network.'}`
-    );
+
+    if (isPaperSwap) {
+      const flow = getSwapFlow(selectedOption?.id ?? '');
+      const status = await recordPaperTrade(flow);
+      Alert.alert(
+        `${getTrafficLightEmoji(status.light)} Paper Swap Complete`,
+        `${amountStr} ${fromSymbol} → ${selectedOption?.toAmount.toFixed(4)} ${toSymbol} (simulated)\n\nVia: ${selectedOption?.name}\nPaper trades: ${status.count}/3 recommended\n\n${status.light === 'green' ? 'Cleared for real swaps!' : 'Complete more paper trades for full access.'}`
+      );
+    } else {
+      Alert.alert('Swap Initiated',
+        `${amountStr} ${fromSymbol} → ${selectedOption?.toAmount.toFixed(4)} ${toSymbol}\n\nVia: ${selectedOption?.name}\n\n${selectedOption?.id === 'ow-atomic' ? 'Atomic swap in progress. Your funds are cryptographically secured.' : 'Transaction submitted to the network.'}`
+      );
+    }
     setAmountStr('');
     setOptions([]);
     setSelectedOption(null);
     setShowConfirm(false);
-  }, [amountStr, fromSymbol, toSymbol, selectedOption]);
+    setIsPaperSwap(false);
+  }, [amountStr, fromSymbol, toSymbol, selectedOption, isPaperSwap]);
 
   const getSecurityColor = (rating: number) => {
     if (rating >= 4.5) return t.accent.green;
@@ -306,13 +339,16 @@ export function SwapScreen() {
           </View>
         )}
 
-        {/* Swap button */}
+        {/* Swap buttons */}
         {selectedOption && (
-          <TouchableOpacity style={s.swapBtn} onPress={handleSwap}>
-            <Text style={s.swapBtnText}>
-              Swap via {selectedOption.name}
-            </Text>
-          </TouchableOpacity>
+          <>
+            <TouchableOpacity style={[s.swapBtn, { backgroundColor: t.accent.purple }]} onPress={() => handleSwap(true)}>
+              <Text style={s.swapBtnText}>📝 Paper Swap (Practice)</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[s.swapBtn, { marginTop: 10 }]} onPress={() => handleSwap(false)}>
+              <Text style={s.swapBtnText}>Swap via {selectedOption.name} (Real)</Text>
+            </TouchableOpacity>
+          </>
         )}
 
         <View style={{ height: 40 }} />

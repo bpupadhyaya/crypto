@@ -17,7 +17,7 @@ import {
 import { useWalletStore } from '../store/walletStore';
 import { useTheme } from '../hooks/useTheme';
 
-type OnboardingStep = 'welcome' | 'create' | 'backup' | 'restore' | 'password';
+type OnboardingStep = 'welcome' | 'create' | 'backup' | 'verify_recovery' | 'restore' | 'password';
 
 export function OnboardingScreen() {
   const [step, setStep] = useState<OnboardingStep>('welcome');
@@ -26,6 +26,7 @@ export function OnboardingScreen() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [verifyInput, setVerifyInput] = useState('');
   const { setStatus, setHasVault, setAddresses, setTempVaultPassword } = useWalletStore();
   const t = useTheme();
 
@@ -317,9 +318,15 @@ export function OnboardingScreen() {
 
           <TouchableOpacity
             style={styles.primaryButton}
-            onPress={() => setStep('password')}
+            onPress={() => {
+              Alert.alert(
+                'Verify Your Recovery Phrase',
+                'To confirm you saved your seed phrase correctly, we will now ask you to re-enter it.\n\nThis is mandatory — it guarantees you can recover your wallet if anything happens to your device.',
+                [{ text: 'Continue', onPress: () => setStep('verify_recovery') }]
+              );
+            }}
           >
-            <Text style={styles.primaryButtonText}>I've Saved It</Text>
+            <Text style={styles.primaryButtonText}>I've Saved It — Verify Now</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -328,6 +335,53 @@ export function OnboardingScreen() {
           >
             <Text style={styles.secondaryButtonText}>Cancel</Text>
           </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  // ─── Verify Recovery (Mandatory) ───
+  if (step === 'verify_recovery') {
+    const handleVerify = () => {
+      const inputWords = verifyInput.trim().toLowerCase().split(/\s+/);
+      const originalWords = mnemonic.trim().toLowerCase().split(/\s+/);
+      if (inputWords.length !== originalWords.length || inputWords.join(' ') !== originalWords.join(' ')) {
+        Alert.alert(
+          'Incorrect',
+          'The recovery phrase you entered does not match. Please check your saved phrase and try again.\n\nThis verification is mandatory to protect your funds.',
+        );
+        return;
+      }
+      Alert.alert(
+        '✅ Recovery Verified',
+        'Your recovery phrase is correct. Your wallet can be recovered from this phrase.\n\nNow set a password to encrypt your wallet on this device.',
+        [{ text: 'Continue', onPress: () => setStep('password') }]
+      );
+    };
+
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.content}>
+          <Text style={styles.title}>Verify Recovery Phrase</Text>
+          <Text style={[styles.subtitle, { marginBottom: 16 }]}>
+            Re-enter your {mnemonic.split(' ').length}-word recovery phrase to confirm you saved it correctly. This is mandatory.
+          </Text>
+          <TextInput
+            style={[styles.input, { minHeight: 120, textAlignVertical: 'top' }]}
+            placeholder="Enter your recovery phrase..."
+            placeholderTextColor={t.text.muted}
+            value={verifyInput}
+            onChangeText={setVerifyInput}
+            multiline
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+          <TouchableOpacity style={styles.primaryButton} onPress={handleVerify}>
+            <Text style={styles.primaryButtonText}>Verify & Continue</Text>
+          </TouchableOpacity>
+          <Text style={{ color: t.accent.yellow, fontSize: 12, textAlign: 'center', marginTop: 16, lineHeight: 18 }}>
+            ⚠️ If you cannot re-enter your recovery phrase, go back and save it again. Without it, your wallet cannot be recovered if your device is lost.
+          </Text>
         </View>
       </SafeAreaView>
     );

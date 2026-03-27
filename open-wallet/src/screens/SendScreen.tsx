@@ -21,6 +21,7 @@ import { QRScanner } from '../components/QRScanner';
 import { registry } from '../core/abstractions/registry';
 import { isTestnet } from '../core/network';
 import { useTheme } from '../hooks/useTheme';
+import { checkRealTransactionAllowed, recordPaperTrade, getSendFlow, getTrafficLightColor, getTrafficLightEmoji, type TrafficLight } from '../core/paperTrading';
 import type { ChainId } from '../core/abstractions/types';
 
 // ─── Module-level caches to avoid repeated expensive operations ───
@@ -56,6 +57,8 @@ export function SendScreen() {
   const [sending, setSending] = useState(false);
   const [estimatedFee, setEstimatedFee] = useState<string | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [isPaperMode, setIsPaperMode] = useState(false);
+  const [paperLight, setPaperLight] = useState<TrafficLight>('red');
   const [showScanner, setShowScanner] = useState(false);
   const t = useTheme();
 
@@ -180,12 +183,51 @@ export function SendScreen() {
       // Network error — let user proceed, will fail at broadcast
     }
 
+    // Check paper trading status (unless already in paper mode)
+    if (!isPaperMode && !isTestnet()) {
+      const flow = getSendFlow(selectedChain);
+      const check = await checkRealTransactionAllowed(flow);
+
+      if (!check.allowed) {
+        Alert.alert(
+          `${getTrafficLightEmoji(check.light)} Paper Trade Required`,
+          check.message,
+          [
+            { text: 'Do Paper Trade', onPress: () => setIsPaperMode(true) },
+            { text: 'Cancel', style: 'cancel' },
+          ]
+        );
+        return;
+      }
+
+      if (check.light === 'orange') {
+        setPaperLight('orange');
+      }
+    }
+
     setShowConfirm(true);
   };
 
   const executeSend = async (vaultPassword?: string) => {
     try {
       setSending(true);
+
+      // Paper trade mode — simulate without real transaction
+      if (isPaperMode) {
+        await new Promise((r) => setTimeout(r, 1500));
+        const flow = getSendFlow(selectedChain);
+        const status = await recordPaperTrade(flow);
+        Alert.alert(
+          `${getTrafficLightEmoji(status.light)} Paper Trade Complete`,
+          `${amount} ${chainSymbol} sent (simulated).\n\nPaper trades completed: ${status.count}/3 recommended.\n\n${status.light === 'green' ? 'You are now cleared for real transactions on this flow!' : status.light === 'orange' ? 'You can now use real funds, but we recommend more practice.' : 'Complete at least 1 more paper trade to unlock real transactions.'}`,
+        );
+        setAmount('');
+        setRecipient('');
+        setShowConfirm(false);
+        setIsPaperMode(false);
+        return;
+      }
+
       // Use password passed from auth flow, fall back to store
       const store = useWalletStore.getState();
       const password = vaultPassword ?? store.tempVaultPassword;
@@ -390,21 +432,35 @@ export function SendScreen() {
           </View>
         )}
 
-        {/* Send button */}
+        {/* Paper Trade button */}
+        <TouchableOpacity
+          style={[styles.sendButton, { backgroundColor: t.accent.purple, marginBottom: 10 }]}
+          onPress={() => { setIsPaperMode(true); handleSend(); }}
+        >
+          <Text style={styles.sendButtonText}>📝 Paper Trade (Practice)</Text>
+        </TouchableOpacity>
+
+        {/* Real Send button */}
         <TouchableOpacity
           style={[styles.sendButton, sending && styles.sendButtonDisabled]}
-          onPress={handleSend}
+          onPress={() => { setIsPaperMode(false); handleSend(); }}
           disabled={sending}
         >
           {sending ? (
             <ActivityIndicator color={t.bg.primary} />
           ) : (
-            <Text style={styles.sendButtonText}>Send {chainSymbol}</Text>
+            <Text style={styles.sendButtonText}>Send {chainSymbol} (Real)</Text>
           )}
         </TouchableOpacity>
 
+        {paperLight === 'orange' && (
+          <Text style={{ color: t.accent.orange, fontSize: 12, textAlign: 'center', marginTop: 8 }}>
+            🟡 You have less than 3 paper trades. We recommend more practice before real transactions.
+          </Text>
+        )}
+
         <Text style={styles.hint}>
-          Transactions are irreversible. Double-check the address and amount.
+          Paper trades simulate real transactions without moving real funds. Complete at least 1 paper trade per flow before real money transactions.
         </Text>
 
         <View style={{ height: 40 }} />
