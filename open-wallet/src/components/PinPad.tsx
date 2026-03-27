@@ -49,13 +49,11 @@ export function PinPad({ title, subtitle, onComplete, error, maxLength = 6 }: Pi
     if (pinRef.current.length === maxLength) {
       lockedRef.current = true;
       const finalPin = pinRef.current;
-      // Small delay so user sees the last dot fill
-      setTimeout(() => {
-        onComplete(finalPin);
-        pinRef.current = '';
-        setDisplayLength(0);
-        lockedRef.current = false;
-      }, 150);
+      // Complete immediately — no delay
+      onComplete(finalPin);
+      pinRef.current = '';
+      setDisplayLength(0);
+      lockedRef.current = false;
     }
   }, [maxLength, onComplete]);
 

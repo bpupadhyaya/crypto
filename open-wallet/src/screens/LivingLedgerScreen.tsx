@@ -100,7 +100,7 @@ function useLivingLedger(): { data: LedgerData; loading: boolean; error: string 
 
       // Demo mode — return realistic mock data immediately
       if (demoMode) {
-        await new Promise((r) => setTimeout(r, 400));
+        // No artificial delay
         if (!cancelled) {
           setData(DEMO_LEDGER);
           setLoading(false);
