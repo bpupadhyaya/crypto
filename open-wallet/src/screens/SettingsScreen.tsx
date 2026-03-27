@@ -21,10 +21,11 @@ import { StakingScreen } from './StakingScreen';
 import { UniversalIDScreen } from './UniversalIDScreen';
 import { LivingLedgerScreen } from './LivingLedgerScreen';
 import { GratitudeScreen } from './GratitudeScreen';
+import { GovernanceScreen } from './GovernanceScreen';
 import { useTheme } from '../hooks/useTheme';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude' | 'governance';
 
 export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode } = useWalletStore();
@@ -175,6 +176,7 @@ export function SettingsScreen() {
   if (view === 'uid') return <UniversalIDScreen onClose={() => setView('main')} />;
   if (view === 'ledger') return <LivingLedgerScreen onClose={() => setView('main')} onSendGratitude={() => setView('gratitude')} />;
   if (view === 'gratitude') return <GratitudeScreen onClose={() => setView('main')} />;
+  if (view === 'governance') return <GovernanceScreen onClose={() => setView('main')} />;
 
   // ─── Main Settings ───
 
@@ -406,6 +408,11 @@ export function SettingsScreen() {
           <TouchableOpacity style={st.row} onPress={() => setView('gratitude')}>
             <Text style={st.label}>Send Gratitude</Text>
             <Text style={{ color: t.accent.purple, fontSize: 14 }}>Send</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('governance')}>
+            <Text style={st.label}>Governance</Text>
+            <Text style={{ color: t.accent.blue, fontSize: 14 }}>Vote</Text>
           </TouchableOpacity>
         </View>
 
