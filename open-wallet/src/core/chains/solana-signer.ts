@@ -43,18 +43,34 @@ export class SolanaSigner {
    * Send native SOL.
    */
   async sendSOL(toAddress: string, amountSol: number): Promise<string> {
+    if (amountSol <= 0) throw new Error('Amount must be positive');
+
+    // Validate recipient address
+    let recipientPubkey: PublicKey;
+    try {
+      recipientPubkey = new PublicKey(toAddress);
+    } catch {
+      throw new Error('Invalid Solana address');
+    }
+
     const transaction = new Transaction().add(
       SystemProgram.transfer({
         fromPubkey: this.keypair.publicKey,
-        toPubkey: new PublicKey(toAddress),
+        toPubkey: recipientPubkey,
         lamports: Math.round(amountSol * LAMPORTS_PER_SOL),
       }),
     );
+
+    // Get recent blockhash (required for tx validity)
+    const { blockhash } = await this.connection.getLatestBlockhash('confirmed');
+    transaction.recentBlockhash = blockhash;
+    transaction.feePayer = this.keypair.publicKey;
 
     const signature = await sendAndConfirmTransaction(
       this.connection,
       transaction,
       [this.keypair],
+      { commitment: 'confirmed' },
     );
 
     return signature;
@@ -71,7 +87,9 @@ export class SolanaSigner {
   /**
    * Sign a raw message (for dApp connections).
    */
-  signMessage(message: Uint8Array): Uint8Array {
-    return this.keypair.secretKey; // simplified — use nacl.sign in production
+  signMessage(_message: Uint8Array): Uint8Array {
+    // TODO: Implement proper Ed25519 message signing for dApp connections
+    // For now, SOL send/receive works via sendAndConfirmTransaction
+    throw new Error('Message signing not yet implemented. Use sendSOL for transfers.');
   }
 }
