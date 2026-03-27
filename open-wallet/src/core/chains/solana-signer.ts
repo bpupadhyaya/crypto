@@ -85,6 +85,32 @@ export class SolanaSigner {
   }
 
   /**
+   * Sign and send a base64-encoded serialized transaction (e.g., from Jupiter).
+   */
+  async signAndSendSerializedTransaction(base64Tx: string): Promise<string> {
+    const config = getNetworkConfig();
+    const connection = new Connection(config.solana.rpcUrl, 'confirmed');
+
+    // Decode the base64 transaction
+    const buffer = Buffer.from(base64Tx, 'base64');
+    const transaction = Transaction.from(buffer);
+
+    // Sign with our keypair
+    transaction.sign(this.keypair);
+
+    // Send
+    const rawTx = transaction.serialize();
+    const txHash = await connection.sendRawTransaction(rawTx, {
+      skipPreflight: false,
+      preflightCommitment: 'confirmed',
+    });
+
+    // Confirm
+    await connection.confirmTransaction(txHash, 'confirmed');
+    return txHash;
+  }
+
+  /**
    * Sign a raw message (for dApp connections).
    */
   signMessage(_message: Uint8Array): Uint8Array {
