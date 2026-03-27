@@ -98,9 +98,62 @@ export function UniversalIDScreen({ onClose }: Props) {
       setUid(generatedUid);
 
       // Step 4: Submit to Open Chain (MsgRegisterUID)
-      // In production: broadcast tx to chain
-      // For testnet: simulate success
-      await new Promise(r => setTimeout(r, 2000));
+      const demoMode = useWalletStore.getState().demoMode;
+
+      if (demoMode) {
+        // Demo mode — simulate success
+        await new Promise((r) => setTimeout(r, 1500));
+      } else {
+        // Real broadcast via CosmosSigner
+        const store = useWalletStore.getState();
+        const password = store.tempVaultPassword;
+        if (!password) throw new Error('Wallet not unlocked. Please sign in again.');
+
+        // Unlock vault -> get mnemonic
+        const { Vault } = await import('../core/vault/vault');
+        const vault = new Vault();
+        const contents = await vault.unlock(password);
+        const mnemonic = contents.mnemonic;
+
+        // Restore HD wallet
+        const { HDWallet } = await import('../core/wallet/hdwallet');
+        const wallet = HDWallet.fromMnemonic(mnemonic);
+
+        // Create CosmosSigner for Open Chain
+        const { CosmosSigner } = await import('../core/chains/cosmos-signer');
+        const signer = CosmosSigner.fromWallet(wallet, store.activeAccountIndex, 'openchain');
+
+        // Build the MsgRegisterUID
+        const { SigningStargateClient } = await import('@cosmjs/stargate');
+        const { DirectSecp256k1Wallet } = await import('@cosmjs/proto-signing');
+        const { getNetworkConfig } = await import('../core/network');
+
+        const config = getNetworkConfig().openchain;
+        const privateKey = wallet.derivePrivateKey('openchain', store.activeAccountIndex);
+        const cosmWallet = await DirectSecp256k1Wallet.fromKey(privateKey, config.addressPrefix);
+        const [account] = await cosmWallet.getAccounts();
+
+        const client = await SigningStargateClient.connectWithSigner(config.rpcUrl, cosmWallet);
+
+        const msg = {
+          typeUrl: '/openchain.uid.v1.MsgRegisterUID',
+          value: {
+            creator: account.address,
+            proof_hash: hash,
+            guardian: '', // empty for self-sovereign adults
+          },
+        };
+
+        const fee = { amount: [{ denom: 'uotk', amount: '1000' }], gas: '200000' };
+        const result = await client.signAndBroadcast(account.address, [msg], fee, 'Register Universal ID via Open Wallet');
+
+        client.disconnect();
+        wallet.destroy();
+
+        if (result.code !== 0) {
+          throw new Error(`Transaction failed: ${result.rawLog}`);
+        }
+      }
 
       setStatus('registered');
 
