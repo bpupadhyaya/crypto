@@ -50,13 +50,18 @@ export function useAllBalances(addresses: Partial<Record<ChainId, string>>) {
       queryFn: async (): Promise<Balance | null> => {
         try {
           const provider = registry.getChainProvider(chainId);
-          return await provider.getBalance(address);
+          // Race with 5-second timeout to prevent UI blocking
+          const result = await Promise.race([
+            provider.getBalance(address),
+            new Promise<null>((resolve) => setTimeout(() => resolve(null), 5000)),
+          ]);
+          return result;
         } catch {
           return null;
         }
       },
       staleTime: 30_000,
-      refetchInterval: 30_000,
+      refetchInterval: 60_000, // reduce refetch frequency
     })),
   });
 
