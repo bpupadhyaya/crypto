@@ -33,11 +33,11 @@ export default function RootLayout() {
   useEffect(() => {
     if (!providersInitialized) {
       providersInitialized = true;
+      // All of these run in parallel during lock screen — non-blocking
       import('../core/bootstrap').then((m) => m.bootstrapProviders());
       import('../core/notifications').then((m) => m.requestNotificationPermissions());
+      import('../core/prewarmer').then((m) => m.startPrewarmer());
     }
-    // Start price service on app launch (even before unlock)
-    // so prices are cached by the time user reaches Home screen
     if (!priceServiceStarted) {
       priceServiceStarted = true;
       const enabledTokens = useWalletStore.getState().enabledTokens;

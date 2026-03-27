@@ -25,29 +25,11 @@ import { checkRealTransactionAllowed, recordPaperTrade, getSendFlow, getTrafficL
 import type { ChainId } from '../core/abstractions/types';
 
 // ─── Module-level caches to avoid repeated expensive operations ───
+import { prewarmedModules } from '../core/prewarmer';
 let cachedVaultContents: { mnemonic: string; password: string } | null = null;
-let signerModules: {
-  Vault?: any; HDWallet?: any;
-  EthereumSigner?: any; SolanaSigner?: any; BitcoinSigner?: any;
-} = {};
 
-// Pre-warm signer imports in background (non-blocking)
-setTimeout(async () => {
-  try {
-    const [vault, hd, eth, sol, btc] = await Promise.all([
-      import('../core/vault/vault'),
-      import('../core/wallet/hdwallet'),
-      import('../core/chains/ethereum-signer'),
-      import('../core/chains/solana-signer'),
-      import('../core/chains/bitcoin-signer'),
-    ]);
-    signerModules = {
-      Vault: vault.Vault, HDWallet: hd.HDWallet,
-      EthereumSigner: eth.EthereumSigner, SolanaSigner: sol.SolanaSigner,
-      BitcoinSigner: btc.BitcoinSigner,
-    };
-  } catch {}
-}, 100);
+// Uses pre-warmed modules from global prewarmer (started during lock screen)
+// Falls back to dynamic import if prewarmer hasn't finished yet
 
 export function SendScreen() {
   const { mode, supportedChains, addresses } = useWalletStore();
@@ -257,7 +239,7 @@ export function SendScreen() {
       if (cachedVaultContents && cachedVaultContents.password === password) {
         mnemonic = cachedVaultContents.mnemonic;
       } else {
-        const VaultClass = signerModules.Vault ?? (await import('../core/vault/vault')).Vault;
+        const VaultClass = prewarmedModules.Vault ?? (await import('../core/vault/vault')).Vault;
         const vault = new VaultClass();
         const contents = await vault.unlock(password);
         mnemonic = contents.mnemonic;
@@ -265,22 +247,22 @@ export function SendScreen() {
       }
 
       // 2. Restore HD wallet
-      const HDWalletClass = signerModules.HDWallet ?? (await import('../core/wallet/hdwallet')).HDWallet;
+      const HDWalletClass = prewarmedModules.HDWallet ?? (await import('../core/wallet/hdwallet')).HDWallet;
       const wallet = HDWalletClass.fromMnemonic(mnemonic);
 
       let txHash: string;
 
       // 3. Sign & broadcast based on chain
       if (selectedChain === 'ethereum') {
-        const EthSigner = signerModules.EthereumSigner ?? (await import('../core/chains/ethereum-signer')).EthereumSigner;
+        const EthSigner = prewarmedModules.EthereumSigner ?? (await import('../core/chains/ethereum-signer')).EthereumSigner;
         const signer = EthSigner.fromWallet(wallet, store.activeAccountIndex);
         txHash = await signer.sendTransaction(recipient.trim(), amount.trim());
       } else if (selectedChain === 'solana') {
-        const SolSigner = signerModules.SolanaSigner ?? (await import('../core/chains/solana-signer')).SolanaSigner;
+        const SolSigner = prewarmedModules.SolanaSigner ?? (await import('../core/chains/solana-signer')).SolanaSigner;
         const signer = SolSigner.fromWallet(wallet, store.activeAccountIndex);
         txHash = await signer.sendSOL(recipient.trim(), parseFloat(amount));
       } else if (selectedChain === 'bitcoin') {
-        const BtcSigner = signerModules.BitcoinSigner ?? (await import('../core/chains/bitcoin-signer')).BitcoinSigner;
+        const BtcSigner = prewarmedModules.BitcoinSigner ?? (await import('../core/chains/bitcoin-signer')).BitcoinSigner;
         const signer = BtcSigner.fromWallet(wallet, store.activeAccountIndex);
         const decimals = 8;
         const amountSats = BigInt(Math.round(parseFloat(amount) * 10 ** decimals));
