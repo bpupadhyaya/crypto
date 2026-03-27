@@ -1,85 +1,52 @@
 /**
- * Live prices — lightweight, debounced, cached.
+ * Live prices hook — reads from the global background price service.
+ *
+ * The price service runs independently of any component.
+ * This hook just subscribes to updates and returns the latest cache.
+ * Zero blocking, zero fetching on mount — prices are already there.
  */
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Alert } from 'react-native';
 import { useWalletStore } from '../store/walletStore';
-import { SUPPORTED_TOKENS } from '../core/tokens/registry';
-
-const COINGECKO_API = 'https://api.coingecko.com/api/v3/simple/price';
-const FETCH_INTERVAL = 60_000; // 60s (was 30s — reduces API load)
-
-// Module-level cache — survives component remounts
-let cachedPrices: Record<string, number> = {};
-let lastFetchTime = 0;
+import {
+  getPrices,
+  getLastFetchTime,
+  onPriceUpdate,
+  startPriceService,
+  refreshPricesNow,
+} from '../core/priceService';
 
 export function usePrices() {
   const enabledTokens = useWalletStore((s) => s.enabledTokens);
-  const [prices, setPrices] = useState<Record<string, number>>(cachedPrices);
-  const [lastUpdated, setLastUpdated] = useState<number>(lastFetchTime);
+  const [prices, setPrices] = useState<Record<string, number>>(getPrices);
+  const [lastUpdated, setLastUpdated] = useState<number>(getLastFetchTime);
   const [loading, setLoading] = useState(false);
-  const mountedRef = useRef(true);
 
   useEffect(() => {
-    mountedRef.current = true;
+    // Ensure the background service is running
+    startPriceService(enabledTokens);
 
-    const fetchPrices = async () => {
-      // Skip if fetched recently
-      if (Date.now() - lastFetchTime < FETCH_INTERVAL / 2) return;
+    // Subscribe to price updates from the background service
+    const unsub = onPriceUpdate(() => {
+      setPrices({ ...getPrices() });
+      setLastUpdated(getLastFetchTime());
+      setLoading(false);
+    });
 
-      const tokens = SUPPORTED_TOKENS.filter((t) => enabledTokens.includes(t.symbol));
-      if (tokens.length === 0) return;
+    // Seed with current cache (may already have data)
+    const current = getPrices();
+    if (Object.keys(current).length > 0) {
+      setPrices(current);
+      setLastUpdated(getLastFetchTime());
+    }
 
-      const ids = tokens.map((t) => t.coingeckoId).join(',');
-
-      try {
-        if (mountedRef.current) setLoading(true);
-        const response = await fetch(`${COINGECKO_API}?ids=${ids}&vs_currencies=usd`, { signal: AbortSignal.timeout(4000) });
-        if (!response.ok) { if (mountedRef.current) setLoading(false); return; }
-
-        const data = await response.json();
-        const newPrices: Record<string, number> = { ...cachedPrices };
-
-        for (const token of tokens) {
-          if (data[token.coingeckoId]?.usd) {
-            newPrices[token.symbol] = data[token.coingeckoId].usd;
-          }
-        }
-
-        cachedPrices = newPrices;
-        lastFetchTime = Date.now();
-        if (mountedRef.current) {
-          setPrices(newPrices);
-          setLastUpdated(lastFetchTime);
-          setLoading(false);
-        }
-      } catch { if (mountedRef.current) setLoading(false); }
-    };
-
-    fetchPrices();
-    const interval = setInterval(fetchPrices, FETCH_INTERVAL);
-    return () => { mountedRef.current = false; clearInterval(interval); };
+    return unsub;
   }, [enabledTokens]);
 
   const refresh = useCallback(() => {
-    lastFetchTime = 0; // force refetch
-    const tokens = SUPPORTED_TOKENS.filter((t) => enabledTokens.includes(t.symbol));
-    if (tokens.length === 0) return;
-    const ids = tokens.map((t) => t.coingeckoId).join(',');
     setLoading(true);
-    fetch(`${COINGECKO_API}?ids=${ids}&vs_currencies=usd`)
-      .then((r) => r.json())
-      .then((data) => {
-        const newPrices: Record<string, number> = { ...cachedPrices };
-        for (const token of tokens) {
-          if (data[token.coingeckoId]?.usd) newPrices[token.symbol] = data[token.coingeckoId].usd;
-        }
-        cachedPrices = newPrices;
-        lastFetchTime = Date.now();
-        if (mountedRef.current) { setPrices(newPrices); setLastUpdated(lastFetchTime); setLoading(false); }
-      })
-      .catch(() => { if (mountedRef.current) setLoading(false); });
+    refreshPricesNow(enabledTokens);
   }, [enabledTokens]);
 
   // Check price alerts

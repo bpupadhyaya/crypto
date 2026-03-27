@@ -25,6 +25,7 @@ import { UnlockScreen } from '../screens/UnlockScreen';
 import { PinSetupScreen } from '../screens/PinSetupScreen';
 
 let providersInitialized = false;
+let priceServiceStarted = false;
 
 export default function RootLayout() {
   const { status, hasVault } = useWalletStore();
@@ -36,6 +37,15 @@ export default function RootLayout() {
       import('../core/notifications').then((m) => m.requestNotificationPermissions());
     }
   }, []);
+
+  // Start background price service as soon as unlocked
+  useEffect(() => {
+    if (status === 'unlocked' && !priceServiceStarted) {
+      priceServiceStarted = true;
+      const enabledTokens = useWalletStore.getState().enabledTokens;
+      import('../core/priceService').then((m) => m.startPriceService(enabledTokens));
+    }
+  }, [status]);
 
   // Auth screens — rendered directly, no routing overhead
   if (status === 'pin_setup') {
