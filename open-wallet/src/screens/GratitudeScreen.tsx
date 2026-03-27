@@ -13,6 +13,10 @@ import {
   StyleSheet, SafeAreaView, TextInput, Alert, ActivityIndicator,
 } from 'react-native';
 import { useTheme } from '../hooks/useTheme';
+import { useWalletStore } from '../store/walletStore';
+import { ConfirmTransactionScreen } from './ConfirmTransactionScreen';
+import { checkRealTransactionAllowed, recordPaperTrade, getTrafficLightColor, getTrafficLightEmoji, type TrafficLight } from '../core/paperTrading';
+import { isTestnet } from '../core/network';
 
 interface Props {
   onClose: () => void;
@@ -40,6 +44,9 @@ export function GratitudeScreen({ onClose }: Props) {
   const [amount, setAmount] = useState('');
   const [message, setMessage] = useState('');
   const [sending, setSending] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [isPaperMode, setIsPaperMode] = useState(false);
+  const [paperLight, setPaperLight] = useState<TrafficLight>('red');
   const t = useTheme();
 
   const s = useMemo(() => StyleSheet.create({
@@ -69,10 +76,12 @@ export function GratitudeScreen({ onClose }: Props) {
     messageInput: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, minHeight: 100, textAlignVertical: 'top' },
     sendBtn: { backgroundColor: t.accent.purple, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginHorizontal: 20, marginTop: 24 },
     sendBtnText: { color: '#fff', fontSize: 17, fontWeight: '700' },
+    paperBtn: { backgroundColor: t.bg.card, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginHorizontal: 20, marginTop: 12 },
+    paperBtnText: { color: t.accent.purple, fontSize: 17, fontWeight: '700' },
     note: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginHorizontal: 24, marginTop: 16, lineHeight: 18 },
   }), [t]);
 
-  const handleSend = useCallback(async () => {
+  const handleSend = useCallback(async (paperMode: boolean) => {
     if (!recipientAddress.trim()) {
       Alert.alert('Recipient Required', 'Enter the Universal ID or address of the person you want to thank.');
       return;
@@ -82,19 +91,129 @@ export function GratitudeScreen({ onClose }: Props) {
       return;
     }
 
-    setSending(true);
+    setIsPaperMode(paperMode);
 
-    // Simulate gratitude transaction
-    setTimeout(() => {
-      setSending(false);
+    // Check paper trading status for real sends (unless already in paper mode)
+    if (!paperMode && !isTestnet()) {
+      const check = await checkRealTransactionAllowed('gratitude-openchain');
+
+      if (!check.allowed) {
+        Alert.alert(
+          `${getTrafficLightEmoji(check.light)} Paper Trade Required`,
+          check.message,
+          [
+            { text: 'Do Paper Trade', onPress: () => handleSend(true) },
+            { text: 'Cancel', style: 'cancel' },
+          ]
+        );
+        return;
+      }
+
+      if (check.light === 'orange') {
+        setPaperLight('orange');
+      }
+    }
+
+    setShowConfirm(true);
+  }, [recipientAddress, amount]);
+
+  const executeGratitude = useCallback(async (vaultPassword?: string) => {
+    try {
+      setSending(true);
       const selectedChannel = CHANNEL_OPTIONS.find(c => c.key === channel);
+      const gratitudeMessage = message || 'Thank you.';
+
+      // Paper trade mode — simulate without real transaction
+      if (isPaperMode) {
+        await new Promise((r) => setTimeout(r, 1500));
+        const status = await recordPaperTrade('gratitude-openchain');
+        Alert.alert(
+          `${getTrafficLightEmoji(status.light)} Paper Gratitude Complete`,
+          `${amount} ${selectedChannel?.label ?? ''} OTK sent (simulated).\n\n"${gratitudeMessage}"\n\nPaper trades completed: ${status.count}/3 recommended.\n\n${status.light === 'green' ? 'You are now cleared for real gratitude transactions!' : status.light === 'orange' ? 'You can now send real gratitude, but we recommend more practice.' : 'Complete at least 1 more paper trade to unlock real transactions.'}`,
+        );
+        setAmount('');
+        setRecipientAddress('');
+        setMessage('');
+        setShowConfirm(false);
+        setIsPaperMode(false);
+        return;
+      }
+
+      // Demo mode — simulate success
+      const demoMode = useWalletStore.getState().demoMode;
+      if (demoMode) {
+        await new Promise((r) => setTimeout(r, 1500));
+        Alert.alert(
+          'Gratitude Sent (Demo)',
+          `${amount} ${selectedChannel?.label ?? ''} OTK sent with love.\n\n"${gratitudeMessage}"\n\nThis is a demo transaction — no real funds were moved.`,
+          [{ text: 'Close', onPress: onClose }]
+        );
+        setShowConfirm(false);
+        return;
+      }
+
+      // Real transaction — unlock vault, sign, broadcast
+      const store = useWalletStore.getState();
+      const password = vaultPassword ?? store.tempVaultPassword;
+      if (!password) throw new Error('Wallet not unlocked. Please sign in again.');
+
+      // 1. Unlock vault -> get mnemonic
+      const { Vault } = await import('../core/vault/vault');
+      const vault = new Vault();
+      const contents = await vault.unlock(password);
+      const mnemonic = contents.mnemonic;
+
+      // 2. Restore HD wallet
+      const { HDWallet } = await import('../core/wallet/hdwallet');
+      const wallet = HDWallet.fromMnemonic(mnemonic);
+
+      // 3. Sign & broadcast via CosmosSigner (openchain)
+      const { CosmosSigner } = await import('../core/chains/cosmos-signer');
+      const signer = CosmosSigner.fromWallet(wallet, store.activeAccountIndex, 'openchain');
+      const txHash = await signer.sendTokens(recipientAddress.trim(), amount.trim());
+
+      // 4. Clean up private key material
+      wallet.destroy();
+
+      // 5. Show success with gratitude message
       Alert.alert(
         'Gratitude Sent',
-        `${amount} ${selectedChannel?.label ?? ''} OTK sent with love.\n\n"${message || 'Thank you.'}"\n\nThis gratitude transaction is now visible on Open Chain — a permanent record of your appreciation.`,
+        `${amount} ${selectedChannel?.label ?? ''} OTK sent with love.\n\n"${gratitudeMessage}"\n\nThis gratitude transaction is now visible on Open Chain — a permanent record of your appreciation.\n\nTx: ${txHash.slice(0, 16)}...${txHash.slice(-8)}`,
         [{ text: 'Close', onPress: onClose }]
       );
-    }, 2000);
-  }, [recipientAddress, amount, message, channel, onClose]);
+      setAmount('');
+      setRecipientAddress('');
+      setMessage('');
+      setShowConfirm(false);
+    } catch (err) {
+      let msg = err instanceof Error ? err.message : 'Transaction failed';
+      if (msg.includes('insufficient funds') || msg.includes('Insufficient')) {
+        msg = 'Not enough OTK to cover this gratitude transaction and gas fees.';
+      } else if (msg.includes('timed out') || msg.includes('timeout') || msg.includes('too long')) {
+        msg = 'Network request timed out. Please check your connection and try again.';
+      }
+      Alert.alert('Gratitude Send Failed', msg);
+      throw err; // Re-throw so ConfirmTransactionScreen resets to review
+    } finally {
+      setSending(false);
+    }
+  }, [recipientAddress, amount, message, channel, isPaperMode, onClose]);
+
+  // Show confirm/auth screen
+  if (showConfirm) {
+    return (
+      <ConfirmTransactionScreen
+        tx={{
+          type: 'send',
+          fromSymbol: 'OTK',
+          fromAmount: amount,
+          recipient: recipientAddress,
+        }}
+        onConfirm={executeGratitude}
+        onCancel={() => setShowConfirm(false)}
+      />
+    );
+  }
 
   return (
     <SafeAreaView style={s.container}>
@@ -185,13 +304,25 @@ export function GratitudeScreen({ onClose }: Props) {
           />
         </View>
 
-        <TouchableOpacity style={s.sendBtn} onPress={handleSend} disabled={sending}>
+        {/* Paper Trade button */}
+        <TouchableOpacity style={s.paperBtn} onPress={() => handleSend(true)}>
+          <Text style={s.paperBtnText}>Paper Trade (Practice)</Text>
+        </TouchableOpacity>
+
+        {/* Real Send button */}
+        <TouchableOpacity style={s.sendBtn} onPress={() => handleSend(false)} disabled={sending}>
           {sending ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={s.sendBtnText}>Send Gratitude</Text>
+            <Text style={s.sendBtnText}>Send Gratitude (Real)</Text>
           )}
         </TouchableOpacity>
+
+        {paperLight === 'orange' && (
+          <Text style={{ color: t.accent.orange, fontSize: 12, textAlign: 'center', marginTop: 8, marginHorizontal: 20 }}>
+            You have less than 3 paper trades. We recommend more practice before real gratitude transactions.
+          </Text>
+        )}
 
         <Text style={s.note}>
           Gratitude transactions carry special significance on Open Chain. They are marked, visible, and celebrated — a permanent record of the love and support you received.

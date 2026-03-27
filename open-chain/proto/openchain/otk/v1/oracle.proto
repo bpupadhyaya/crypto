@@ -1,0 +1,95 @@
+syntax = "proto3";
+package openchain.otk.v1;
+
+option go_package = "openchain/x/otk/types";
+
+import "cosmos/msg/v1/msg.proto";
+import "amino/amino.proto";
+import "google/api/annotations.proto";
+
+// MsgRegisterVerifier registers a new milestone verifier.
+message MsgRegisterVerifier {
+  option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "otk/MsgRegisterVerifier";
+
+  string creator  = 1;  // Address of the registrant
+  string uid      = 2;  // Universal ID of the verifier
+  string name     = 3;  // Human-readable name
+  repeated string channels = 4;  // Channels they can verify
+}
+
+message MsgRegisterVerifierResponse {}
+
+// MsgSubmitMilestone submits a milestone for verification.
+message MsgSubmitMilestone {
+  option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "otk/MsgSubmitMilestone";
+
+  string creator      = 1;
+  string milestone_id  = 2;
+  string uid           = 3;  // UID of the person achieving the milestone
+  string channel       = 4;
+  string description   = 5;
+  int64  mint_amount   = 6;
+}
+
+message MsgSubmitMilestoneResponse {}
+
+// MsgAttestMilestone records a verifier's attestation.
+message MsgAttestMilestone {
+  option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "otk/MsgAttestMilestone";
+
+  string creator       = 1;
+  string milestone_id  = 2;
+  string verifier_uid  = 3;
+  bool   approved      = 4;
+  string evidence      = 5;  // Hash of supporting evidence
+}
+
+message MsgAttestMilestoneResponse {}
+
+// QueryVerifier queries a verifier by UID.
+message QueryVerifierRequest {
+  string uid = 1;
+}
+
+message QueryVerifierResponse {
+  string uid          = 1;
+  string name         = 2;
+  repeated string channels = 3;
+  string status       = 4;
+  int64  attestations = 5;
+  int64  accuracy     = 6;
+}
+
+// QueryPendingMilestones lists pending milestones.
+message QueryPendingMilestonesRequest {
+  string channel = 1;  // Optional filter by channel
+}
+
+message QueryPendingMilestonesResponse {
+  repeated PendingMilestoneInfo milestones = 1;
+}
+
+message PendingMilestoneInfo {
+  string milestone_id  = 1;
+  string uid           = 2;
+  string channel       = 3;
+  string description   = 4;
+  int64  mint_amount   = 5;
+  int32  approvals     = 6;
+  int32  rejections    = 7;
+  int32  threshold     = 8;
+  string status        = 9;
+}
+
+// Oracle query service.
+service OracleQuery {
+  rpc Verifier(QueryVerifierRequest) returns (QueryVerifierResponse) {
+    option (google.api.http).get = "/openchain/otk/v1/verifier/{uid}";
+  }
+  rpc PendingMilestones(QueryPendingMilestonesRequest) returns (QueryPendingMilestonesResponse) {
+    option (google.api.http).get = "/openchain/otk/v1/pending_milestones";
+  }
+}

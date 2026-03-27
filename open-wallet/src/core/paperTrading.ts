@@ -32,7 +32,8 @@ export type TradeFlow =
   | 'swap-1inch'
   | 'swap-jupiter'
   | 'swap-lifi'
-  | 'swap-osmosis';
+  | 'swap-osmosis'
+  | 'gratitude-openchain';
 
 export type TrafficLight = 'red' | 'orange' | 'green';
 
@@ -133,6 +134,7 @@ export async function getAllPaperTradeStatuses(): Promise<PaperTradeStatus[]> {
     'send-bitcoin', 'send-ethereum', 'send-solana', 'send-openchain',
     'swap-ow-atomic', 'swap-ow-dex', 'swap-ow-orderbook',
     'swap-thorchain', 'swap-1inch', 'swap-jupiter', 'swap-lifi', 'swap-osmosis',
+    'gratitude-openchain',
   ];
   return Promise.all(flows.map(getPaperTradeStatus));
 }

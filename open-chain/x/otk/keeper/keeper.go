@@ -168,6 +168,20 @@ func (k Keeper) TransferValue(ctx sdk.Context, transfer types.ValueTransfer) err
 		sdk.NewAttribute("positive", fmt.Sprintf("%t", transfer.Positive)),
 	))
 
+	// Emit celebration event for gratitude transactions
+	if transfer.IsGratitude {
+		amount := transfer.Amount.Int64()
+		ctx.EventManager().EmitEvent(sdk.NewEvent(
+			"gratitude_celebration",
+			sdk.NewAttribute("from_uid", transfer.FromUID),
+			sdk.NewAttribute("to_uid", transfer.ToUID),
+			sdk.NewAttribute("channel", transfer.Channel),
+			sdk.NewAttribute("amount", fmt.Sprintf("%d", amount)),
+			sdk.NewAttribute("message", transfer.Memo),
+			sdk.NewAttribute("celebration_type", getCelebrationType(amount)),
+		))
+	}
+
 	return nil
 }
 
@@ -199,4 +213,81 @@ func (k Keeper) GetTotalValue(ctx sdk.Context, addr sdk.AccAddress) math.Int {
 		total = total.Add(coin.Amount)
 	}
 	return total
+}
+
+// HandleGratitude processes a gratitude transaction end-to-end:
+// validates UIDs, mints channel-specific OTK to recipient, records in
+// the Living Ledger, emits a celebration event, and returns tx info.
+func (k Keeper) HandleGratitude(ctx sdk.Context, fromUID, toUID, channel string, amount int64, message string) (string, error) {
+	// Validate sender has an active UID (parseable as an address)
+	fromAddr, err := sdk.AccAddressFromBech32(fromUID)
+	if err != nil {
+		return "", fmt.Errorf("sender does not have an active UID: %w", err)
+	}
+
+	// Validate recipient UID exists (parseable as an address)
+	toAddr, err := sdk.AccAddressFromBech32(toUID)
+	if err != nil {
+		return "", fmt.Errorf("recipient UID does not exist: %w", err)
+	}
+
+	// Resolve channel to denom for multi-channel minting
+	channelDenom := types.ChannelDenom(channel)
+	if channelDenom == "" {
+		return "", fmt.Errorf("unknown channel %q", channel)
+	}
+
+	mintAmount := math.NewInt(amount)
+
+	// Mint channel-specific OTK and aggregate OTK to recipient
+	channelCoin := sdk.NewCoin(channelDenom, mintAmount)
+	aggregateCoin := sdk.NewCoin(types.BaseDenom, mintAmount)
+	coins := sdk.NewCoins(channelCoin, aggregateCoin)
+
+	if err := k.bank.MintCoins(ctx, types.ModuleName, coins); err != nil {
+		return "", fmt.Errorf("failed to mint gratitude OTK: %w", err)
+	}
+	if err := k.bank.SendCoinsFromModuleToAccount(ctx, types.ModuleName, toAddr, coins); err != nil {
+		return "", fmt.Errorf("failed to send gratitude OTK: %w", err)
+	}
+
+	// Record in Living Ledger as gratitude
+	if err := k.RecordValueTransfer(ctx, fromUID, toUID, channel, amount, types.RingFamily, true); err != nil {
+		return "", fmt.Errorf("failed to record gratitude in ledger: %w", err)
+	}
+
+	// Update score index for both parties
+	k.UpdateScoreIndex(ctx, fromUID)
+	k.UpdateScoreIndex(ctx, toUID)
+
+	// Emit celebration event
+	ctx.EventManager().EmitEvent(sdk.NewEvent(
+		"gratitude_celebration",
+		sdk.NewAttribute("from_uid", fromUID),
+		sdk.NewAttribute("to_uid", toUID),
+		sdk.NewAttribute("channel", channel),
+		sdk.NewAttribute("amount", fmt.Sprintf("%d", amount)),
+		sdk.NewAttribute("message", message),
+		sdk.NewAttribute("celebration_type", getCelebrationType(amount)),
+	))
+
+	// Generate tx hash info from context
+	txHash := fmt.Sprintf("%X", ctx.TxBytes())
+	_ = fromAddr // used for validation above
+
+	return txHash, nil
+}
+
+// getCelebrationType returns the celebration tier for a gratitude amount.
+func getCelebrationType(amount int64) string {
+	if amount >= 1000000 {
+		return "legendary" // >= 1 OTK
+	}
+	if amount >= 100000 {
+		return "epic" // >= 0.1 OTK
+	}
+	if amount >= 10000 {
+		return "great" // >= 0.01 OTK
+	}
+	return "heartfelt"
 }

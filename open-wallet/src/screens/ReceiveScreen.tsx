@@ -20,9 +20,25 @@ import { useWalletStore } from '../store/walletStore';
 import { useTheme } from '../hooks/useTheme';
 import { ChainId } from '../core/abstractions/types';
 
+const CHAIN_LABELS: Record<string, string> = {
+  bitcoin: 'Bitcoin',
+  ethereum: 'Ethereum',
+  solana: 'Solana',
+  cosmos: 'Cosmos',
+  openchain: 'Open Chain',
+};
+
+const CHAIN_SYMBOLS: Record<string, string> = {
+  bitcoin: 'BTC',
+  ethereum: 'ETH',
+  solana: 'SOL',
+  cosmos: 'ATOM',
+  openchain: 'OTK',
+};
+
 export function ReceiveScreen() {
   const { mode, supportedChains, addresses } = useWalletStore();
-  const [selectedChain, setSelectedChain] = useState<ChainId>('ethereum');
+  const [selectedChain, setSelectedChain] = useState<ChainId>('solana');
   const t = useTheme();
 
   // Use real derived addresses from wallet, fallback to "not available"
@@ -121,7 +137,7 @@ export function ReceiveScreen() {
   const shareAddress = async () => {
     await Share.share({
       message: address,
-      title: `My ${selectedChain} address`,
+      title: `My ${CHAIN_LABELS[selectedChain] ?? selectedChain} address`,
     });
   };
 
@@ -146,7 +162,7 @@ export function ReceiveScreen() {
                 selectedChain === chain && styles.chainButtonTextActive,
               ]}
             >
-              {chain.charAt(0).toUpperCase() + chain.slice(1)}
+              {CHAIN_LABELS[chain] ?? chain.charAt(0).toUpperCase() + chain.slice(1)}
             </Text>
           </TouchableOpacity>
         ))}
@@ -160,13 +176,13 @@ export function ReceiveScreen() {
           ), [address])}
         </View>
         <Text style={styles.qrHint}>
-          Scan to send {selectedChain.charAt(0).toUpperCase() + selectedChain.slice(1)}
+          Scan to send {CHAIN_SYMBOLS[selectedChain] ?? selectedChain.toUpperCase()} ({CHAIN_LABELS[selectedChain] ?? selectedChain})
         </Text>
       </View>
 
       {/* Address */}
       <TouchableOpacity style={styles.addressCard} onPress={copyAddress} onLongPress={shareAddress}>
-        <Text style={styles.addressLabel}>Your {selectedChain} address</Text>
+        <Text style={styles.addressLabel}>Your {CHAIN_LABELS[selectedChain] ?? selectedChain} ({CHAIN_SYMBOLS[selectedChain] ?? selectedChain.toUpperCase()}) address</Text>
         <Text style={styles.address} numberOfLines={2} ellipsizeMode="middle">
           {address}
         </Text>
@@ -175,7 +191,7 @@ export function ReceiveScreen() {
 
       {mode === 'pro' && (
         <Text style={styles.warningText}>
-          Only send {selectedChain} and {selectedChain}-compatible tokens to this address.
+          Only send {CHAIN_SYMBOLS[selectedChain] ?? selectedChain.toUpperCase()} and {CHAIN_LABELS[selectedChain] ?? selectedChain}-compatible tokens to this address.
           Sending other tokens may result in permanent loss.
         </Text>
       )}

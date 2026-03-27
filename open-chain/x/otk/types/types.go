@@ -144,6 +144,13 @@ type Milestone struct {
 	Timestamp   int64            `json:"timestamp"`
 }
 
+// ContributorScore represents a UID's contribution score and rank.
+type ContributorScore struct {
+	UID   string `json:"uid"`
+	Score int64  `json:"score"`
+	Rank  int64  `json:"rank"`
+}
+
 // GenesisState defines the OTK module's genesis state.
 type GenesisState struct {
 	// No pre-mine. Genesis state is empty.

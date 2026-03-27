@@ -86,6 +86,10 @@ func (k Keeper) RecordValueTransfer(ctx sdk.Context, fromUID, toUID, channel str
 		sdk.NewAttribute("is_gratitude", fmt.Sprintf("%t", isGratitude)),
 	))
 
+	// Update score index for both parties
+	k.UpdateScoreIndex(ctx, fromUID)
+	k.UpdateScoreIndex(ctx, toUID)
+
 	return nil
 }
 
@@ -96,7 +100,14 @@ func (k Keeper) RecordMilestoneMint(ctx sdk.Context, uid, channel string, amount
 		return err
 	}
 	ledger.RecordMinted(channel, amount)
-	return k.SetLivingLedger(ctx, ledger)
+	if err := k.SetLivingLedger(ctx, ledger); err != nil {
+		return err
+	}
+
+	// Update score index after milestone mint
+	k.UpdateScoreIndex(ctx, uid)
+
+	return nil
 }
 
 // GetContributionScore returns the contribution score for a UID.
