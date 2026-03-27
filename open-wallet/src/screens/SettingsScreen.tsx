@@ -18,10 +18,13 @@ import { AddressBookScreen } from './AddressBookScreen';
 import { HardwareWalletScreen } from './HardwareWalletScreen';
 import { WalletConnectScreen } from './WalletConnectScreen';
 import { StakingScreen } from './StakingScreen';
+import { UniversalIDScreen } from './UniversalIDScreen';
+import { LivingLedgerScreen } from './LivingLedgerScreen';
+import { GratitudeScreen } from './GratitudeScreen';
 import { useTheme } from '../hooks/useTheme';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude';
 
 export function SettingsScreen() {
   const { mode, setMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode } = useWalletStore();
@@ -169,6 +172,9 @@ export function SettingsScreen() {
   if (view === 'hardware') return <HardwareWalletScreen onClose={() => setView('main')} />;
   if (view === 'walletconnect') return <WalletConnectScreen onClose={() => setView('main')} />;
   if (view === 'staking') return <StakingScreen onClose={() => setView('main')} />;
+  if (view === 'uid') return <UniversalIDScreen onClose={() => setView('main')} />;
+  if (view === 'ledger') return <LivingLedgerScreen onClose={() => setView('main')} onSendGratitude={() => setView('gratitude')} />;
+  if (view === 'gratitude') return <GratitudeScreen onClose={() => setView('main')} />;
 
   // ─── Main Settings ───
 
@@ -363,6 +369,25 @@ export function SettingsScreen() {
               <Text style={st.migrationYear}>~{svc.estimatedYear}</Text>
             </View>
           ))}
+        </View>
+
+        {/* Open Chain */}
+        <Text style={st.section}>Open Chain</Text>
+        <View style={st.card}>
+          <TouchableOpacity style={st.row} onPress={() => setView('uid')}>
+            <Text style={st.label}>Universal ID</Text>
+            <Text style={st.valueGreen}>Register</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('ledger')}>
+            <Text style={st.label}>Living Ledger</Text>
+            <Text style={st.value}>View</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('gratitude')}>
+            <Text style={st.label}>Send Gratitude</Text>
+            <Text style={{ color: t.accent.purple, fontSize: 14 }}>Send</Text>
+          </TouchableOpacity>
         </View>
 
         {/* About */}
