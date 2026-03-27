@@ -110,6 +110,13 @@ export async function checkRealTransactionAllowed(flow: TradeFlow): Promise<{
   light: TrafficLight;
   message: string;
 }> {
+  // In dev/test mode, paper trading is optional — always allow
+  const { isTestnet } = await import('./network');
+  if (isTestnet()) {
+    return { allowed: true, light: 'green', message: 'Testnet mode — paper trading optional.' };
+  }
+
+  // Production: mandatory paper trading
   const status = await getPaperTradeStatus(flow);
   return {
     allowed: status.canProceedReal,
