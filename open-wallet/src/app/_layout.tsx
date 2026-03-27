@@ -26,6 +26,35 @@ import { PinSetupScreen } from '../screens/PinSetupScreen';
 
 let providersInitialized = false;
 let priceServiceStarted = false;
+let balancePrefetched = false;
+
+// Pre-fetch balances during lock screen — seed React Query cache
+async function prefetchBalances() {
+  if (balancePrefetched) return;
+  balancePrefetched = true;
+  try {
+    const addresses = useWalletStore.getState().addresses;
+    const demoMode = useWalletStore.getState().demoMode;
+    if (demoMode) return; // Demo mode uses hardcoded balances, no prefetch needed
+
+    // Wait for providers to be ready (bootstrap runs in parallel)
+    await new Promise((r) => setTimeout(r, 1000));
+    const { registry } = await import('../core/abstractions/registry');
+
+    for (const [chainId, address] of Object.entries(addresses)) {
+      if (!address) continue;
+      try {
+        const provider = registry.getChainProvider(chainId);
+        const balance = await Promise.race([
+          provider.getBalance(address),
+          new Promise((_, reject) => setTimeout(() => reject('timeout'), 3000)),
+        ]);
+        // Seed React Query cache so useAllBalances returns instantly
+        queryClient.setQueryData(['balance', chainId, address], balance);
+      } catch {}
+    }
+  } catch {}
+}
 
 export default function RootLayout() {
   const { status, hasVault } = useWalletStore();
@@ -33,10 +62,12 @@ export default function RootLayout() {
   useEffect(() => {
     if (!providersInitialized) {
       providersInitialized = true;
-      // All of these run in parallel during lock screen — non-blocking
+      // All run in parallel during lock screen — non-blocking
       import('../core/bootstrap').then((m) => m.bootstrapProviders());
       import('../core/notifications').then((m) => m.requestNotificationPermissions());
       import('../core/prewarmer').then((m) => m.startPrewarmer());
+      // Pre-fetch balances after a brief delay (providers need to initialize first)
+      prefetchBalances();
     }
     if (!priceServiceStarted) {
       priceServiceStarted = true;
