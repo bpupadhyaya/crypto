@@ -6,7 +6,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"math"
+	"sync/atomic"
 
+	sdkmath "cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -14,6 +16,9 @@ import (
 
 	"openchain/x/dex/types"
 )
+
+// orderSeq is a per-process atomic counter for generating unique order IDs.
+var orderSeq atomic.Int64
 
 type Keeper struct {
 	cdc      codec.Codec
@@ -33,8 +38,8 @@ func (k Keeper) CreatePool(ctx sdk.Context, creator sdk.AccAddress, tokenA, toke
 
 	// Transfer tokens from creator to module
 	coins := sdk.NewCoins(
-		sdk.NewCoin(tokenA, sdk.NewInt(amountA)),
-		sdk.NewCoin(tokenB, sdk.NewInt(amountB)),
+		sdk.NewCoin(tokenA, sdkmath.NewInt(amountA)),
+		sdk.NewCoin(tokenB, sdkmath.NewInt(amountB)),
 	)
 	if err := k.bank.SendCoinsFromAccountToModule(ctx, creator, types.ModuleName, coins); err != nil {
 		return nil, fmt.Errorf("failed to deposit: %w", err)
@@ -51,7 +56,7 @@ func (k Keeper) CreatePool(ctx sdk.Context, creator sdk.AccAddress, tokenA, toke
 	k.setPool(ctx, pool)
 
 	// Mint LP tokens to creator
-	lpCoins := sdk.NewCoins(sdk.NewCoin(poolID+"-lp", sdk.NewInt(lpSupply)))
+	lpCoins := sdk.NewCoins(sdk.NewCoin(poolID+"-lp", sdkmath.NewInt(lpSupply)))
 	if err := k.bank.MintCoins(ctx, types.ModuleName, lpCoins); err != nil {
 		return nil, err
 	}
@@ -101,13 +106,13 @@ func (k Keeper) Swap(ctx sdk.Context, sender sdk.AccAddress, poolID string, inpu
 	}
 
 	// Transfer input from sender to module
-	inputCoins := sdk.NewCoins(sdk.NewCoin(inputDenom, sdk.NewInt(inputAmount)))
+	inputCoins := sdk.NewCoins(sdk.NewCoin(inputDenom, sdkmath.NewInt(inputAmount)))
 	if err := k.bank.SendCoinsFromAccountToModule(ctx, sender, types.ModuleName, inputCoins); err != nil {
 		return 0, err
 	}
 
 	// Transfer output from module to sender
-	outputCoins := sdk.NewCoins(sdk.NewCoin(outputDenom, sdk.NewInt(outputAmount)))
+	outputCoins := sdk.NewCoins(sdk.NewCoin(outputDenom, sdkmath.NewInt(outputAmount)))
 	if err := k.bank.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sender, outputCoins); err != nil {
 		return 0, err
 	}
@@ -131,10 +136,10 @@ func (k Keeper) Swap(ctx sdk.Context, sender sdk.AccAddress, poolID string, inpu
 
 // PlaceLimitOrder places a limit order on the order book.
 func (k Keeper) PlaceLimitOrder(ctx sdk.Context, maker sdk.AccAddress, sellDenom, buyDenom string, sellAmount, price int64) (*types.LimitOrder, error) {
-	orderID := fmt.Sprintf("order-%d-%d", ctx.BlockHeight(), ctx.TxIndex())
+	orderID := fmt.Sprintf("order-%d-%d", ctx.BlockHeight(), orderSeq.Add(1))
 
 	// Lock sell tokens
-	coins := sdk.NewCoins(sdk.NewCoin(sellDenom, sdk.NewInt(sellAmount)))
+	coins := sdk.NewCoins(sdk.NewCoin(sellDenom, sdkmath.NewInt(sellAmount)))
 	if err := k.bank.SendCoinsFromAccountToModule(ctx, maker, types.ModuleName, coins); err != nil {
 		return nil, fmt.Errorf("failed to lock tokens: %w", err)
 	}
@@ -175,13 +180,13 @@ func (k Keeper) FillOrder(ctx sdk.Context, taker sdk.AccAddress, orderID string)
 
 	// Transfer buy tokens from taker to maker
 	maker, _ := sdk.AccAddressFromBech32(order.Maker)
-	buyCoins := sdk.NewCoins(sdk.NewCoin(order.BuyDenom, sdk.NewInt(buyAmount)))
+	buyCoins := sdk.NewCoins(sdk.NewCoin(order.BuyDenom, sdkmath.NewInt(buyAmount)))
 	if err := k.bank.SendCoins(ctx, taker, maker, buyCoins); err != nil {
 		return fmt.Errorf("taker insufficient funds: %w", err)
 	}
 
 	// Release sell tokens from module to taker
-	sellCoins := sdk.NewCoins(sdk.NewCoin(order.SellDenom, sdk.NewInt(order.SellAmount)))
+	sellCoins := sdk.NewCoins(sdk.NewCoin(order.SellDenom, sdkmath.NewInt(order.SellAmount)))
 	if err := k.bank.SendCoinsFromModuleToAccount(ctx, types.ModuleName, taker, sellCoins); err != nil {
 		return err
 	}
@@ -212,7 +217,7 @@ func (k Keeper) CancelOrder(ctx sdk.Context, maker sdk.AccAddress, orderID strin
 	}
 
 	// Refund locked tokens
-	refund := sdk.NewCoins(sdk.NewCoin(order.SellDenom, sdk.NewInt(order.SellAmount)))
+	refund := sdk.NewCoins(sdk.NewCoin(order.SellDenom, sdkmath.NewInt(order.SellAmount)))
 	if err := k.bank.SendCoinsFromModuleToAccount(ctx, types.ModuleName, maker, refund); err != nil {
 		return err
 	}

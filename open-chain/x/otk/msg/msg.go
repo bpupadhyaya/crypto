@@ -115,7 +115,10 @@ func (m MsgGratitude) GetSigners() []sdk.AccAddress {
 
 func isValidChannel(ch string) bool {
 	switch ch {
-	case "xotk", "notk", "eotk", "hotk", "cotk", "gotk", "uotk":
+	case "economic", "nurture", "education", "health", "community", "governance":
+		return true
+	// Also accept denom form
+	case "uxotk", "unotk", "ueotk", "uhotk", "ucotk", "ugotk", "uotk":
 		return true
 	}
 	return false

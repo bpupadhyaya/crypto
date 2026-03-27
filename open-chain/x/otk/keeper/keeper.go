@@ -18,7 +18,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 
-	"github.com/bpupadhyaya/openchain/x/otk/types"
+	"openchain/x/otk/types"
 )
 
 // Keeper manages the OTK module state.
@@ -40,17 +40,30 @@ func NewKeeper(cdc codec.Codec, storeKey storetypes.StoreKey, bank bankkeeper.Ke
 // MintForMilestone mints OTK when a human development milestone is verified.
 // OTK is distributed across contribution rings using the ripple attribution formula.
 //
-// Example: Child reads at grade level (eOTK milestone, 200 OTK base)
-//   - Ring 2 (parents): 200/4 = 50 eOTK
-//   - Ring 3 (teachers): 200/9 = 22 eOTK
-//   - Ring 4 (community): 200/16 = 12 eOTK
-//   - Ring 5 (city): 200/25 = 8 eOTK
-//   - Ring 6 (country): 200/36 = 5 eOTK
-//   - Ring 7 (humanity): 200/49 = 4 eOTK
+// Multi-channel minting:
+//  1. Mint channel-specific denom (e.g., unotk for nurture channel)
+//  2. Also mint equivalent uotk (aggregate denom)
+//  3. Update the Living Ledger with channel breakdown
+//
+// Example: Child reads at grade level (education channel, 200 OTK base)
+//   - Ring 2 (parents): 200/4 = 50 ueotk + 50 uotk
+//   - Ring 3 (teachers): 200/9 = 22 ueotk + 22 uotk
+//   - Ring 4 (community): 200/16 = 12 ueotk + 12 uotk
+//   - Ring 5 (city): 200/25 = 8 ueotk + 8 uotk
+//   - Ring 6 (country): 200/36 = 5 ueotk + 5 uotk
+//   - Ring 7 (humanity): 200/49 = 4 ueotk + 4 uotk
 func (k Keeper) MintForMilestone(ctx sdk.Context, milestone types.Milestone, ringRecipients map[types.ContributionRing][]sdk.AccAddress) error {
 	if !milestone.Verified {
 		return fmt.Errorf("milestone %s not yet verified", milestone.ID)
 	}
+
+	// Resolve channel name to on-chain denom
+	channelDenom := types.ChannelDenom(milestone.Channel)
+	if channelDenom == "" {
+		return fmt.Errorf("unknown channel %q: no denom mapping found", milestone.Channel)
+	}
+
+	var totalMinted math.Int = math.ZeroInt()
 
 	for ring, recipients := range ringRecipients {
 		attribution := types.RippleAttribution(milestone.MintAmount, ring)
@@ -64,16 +77,25 @@ func (k Keeper) MintForMilestone(ctx sdk.Context, milestone types.Milestone, rin
 			continue
 		}
 
-		coins := sdk.NewCoins(sdk.NewCoin(milestone.Channel, perRecipient))
+		// Mint both channel-specific denom AND aggregate uotk
+		channelCoin := sdk.NewCoin(channelDenom, perRecipient)
+		aggregateCoin := sdk.NewCoin(types.BaseDenom, perRecipient)
+		coins := sdk.NewCoins(channelCoin, aggregateCoin)
 
 		for _, addr := range recipients {
 			if err := k.bank.MintCoins(ctx, types.ModuleName, coins); err != nil {
-				return fmt.Errorf("failed to mint %s for ring %d: %w", milestone.Channel, ring, err)
+				return fmt.Errorf("failed to mint %s+%s for ring %d: %w", channelDenom, types.BaseDenom, ring, err)
 			}
 			if err := k.bank.SendCoinsFromModuleToAccount(ctx, types.ModuleName, addr, coins); err != nil {
-				return fmt.Errorf("failed to send %s to %s: %w", milestone.Channel, addr, err)
+				return fmt.Errorf("failed to send %s+%s to %s: %w", channelDenom, types.BaseDenom, addr, err)
 			}
+			totalMinted = totalMinted.Add(perRecipient)
 		}
+	}
+
+	// Update the Living Ledger with channel breakdown
+	if err := k.RecordMilestoneMint(ctx, milestone.UID, milestone.Channel, totalMinted.Int64()); err != nil {
+		return fmt.Errorf("failed to update living ledger: %w", err)
 	}
 
 	// Emit event
@@ -82,7 +104,10 @@ func (k Keeper) MintForMilestone(ctx sdk.Context, milestone types.Milestone, rin
 		sdk.NewAttribute("milestone_id", milestone.ID),
 		sdk.NewAttribute("uid", milestone.UID),
 		sdk.NewAttribute("channel", milestone.Channel),
+		sdk.NewAttribute("channel_denom", channelDenom),
+		sdk.NewAttribute("aggregate_denom", types.BaseDenom),
 		sdk.NewAttribute("base_amount", milestone.MintAmount.String()),
+		sdk.NewAttribute("total_minted", totalMinted.String()),
 	))
 
 	return nil
@@ -91,9 +116,16 @@ func (k Keeper) MintForMilestone(ctx sdk.Context, milestone types.Milestone, rin
 // TransferValue records a value transfer between Universal IDs.
 // This is the core operation — representing any human contribution.
 func (k Keeper) TransferValue(ctx sdk.Context, transfer types.ValueTransfer) error {
-	// Positive value transfer: mint OTK for the recipient
-	// Negative value transfer: burn OTK from the source (correction)
-	coins := sdk.NewCoins(sdk.NewCoin(transfer.Channel, transfer.Amount))
+	// Resolve channel name to denom
+	channelDenom := types.ChannelDenom(transfer.Channel)
+	if channelDenom == "" {
+		return fmt.Errorf("unknown channel %q: no denom mapping found", transfer.Channel)
+	}
+
+	// Transfer both channel-specific and aggregate denoms
+	channelCoin := sdk.NewCoin(channelDenom, transfer.Amount)
+	aggregateCoin := sdk.NewCoin(types.BaseDenom, transfer.Amount)
+	coins := sdk.NewCoins(channelCoin, aggregateCoin)
 
 	if transfer.Positive {
 		// Mint and send to recipient
@@ -140,18 +172,31 @@ func (k Keeper) TransferValue(ctx sdk.Context, transfer types.ValueTransfer) err
 }
 
 // GetChannelBalance returns the balance for a specific value channel.
+// Accepts either a channel name ("nurture") or denom ("unotk").
 func (k Keeper) GetChannelBalance(ctx sdk.Context, addr sdk.AccAddress, channel string) math.Int {
-	coin := k.bank.GetBalance(ctx, addr, channel)
+	// If it's already a denom, use directly; otherwise resolve from channel name
+	denom := channel
+	if d := types.ChannelDenom(channel); d != "" {
+		denom = d
+	}
+	coin := k.bank.GetBalance(ctx, addr, denom)
+	return coin.Amount
+}
+
+// GetAggregateBalance returns the aggregate uotk balance for an address.
+func (k Keeper) GetAggregateBalance(ctx sdk.Context, addr sdk.AccAddress) math.Int {
+	coin := k.bank.GetBalance(ctx, addr, types.BaseDenom)
 	return coin.Amount
 }
 
 // GetTotalValue returns the weighted composite OTK value for an address.
-// Weights are governance-determined (default: equal weight).
+// This sums all channel-specific balances. The aggregate uotk balance
+// should equal this sum (1 OTK = sum of all channels).
 func (k Keeper) GetTotalValue(ctx sdk.Context, addr sdk.AccAddress) math.Int {
 	total := math.ZeroInt()
-	for _, channel := range types.AllChannels() {
-		balance := k.GetChannelBalance(ctx, addr, channel)
-		total = total.Add(balance)
+	for _, denom := range types.AllDenoms() {
+		coin := k.bank.GetBalance(ctx, addr, denom)
+		total = total.Add(coin.Amount)
 	}
 	return total
 }

@@ -93,6 +93,10 @@ export class ServerBridgeProvider implements IBridgeProvider {
     routes.push({ from: 'bitcoin', to: 'cosmos' });
     routes.push({ from: 'cosmos', to: 'bitcoin' });
 
+    // IBC routes (Open Chain ↔ Cosmos Hub)
+    routes.push({ from: 'openchain', to: 'cosmos' });
+    routes.push({ from: 'cosmos', to: 'openchain' });
+
     return routes;
   }
 

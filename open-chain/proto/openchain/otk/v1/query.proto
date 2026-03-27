@@ -1,0 +1,60 @@
+syntax = "proto3";
+package openchain.otk.v1;
+
+option go_package = "github.com/bpupadhyaya/openchain/x/otk/types";
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "openchain/otk/v1/types.proto";
+
+// Query defines the OTK module's gRPC query service.
+service Query {
+  // LivingLedger returns the Living Ledger for a Universal ID.
+  rpc LivingLedger(QueryLivingLedgerRequest) returns (QueryLivingLedgerResponse) {
+    option (google.api.http).get = "/openchain/otk/v1/living_ledger/{uid}";
+  }
+
+  // ChannelBalance returns the balance for a specific value channel.
+  rpc ChannelBalance(QueryChannelBalanceRequest) returns (QueryChannelBalanceResponse) {
+    option (google.api.http).get = "/openchain/otk/v1/channel_balance/{uid}/{channel}";
+  }
+
+  // ContributionScore returns the contribution score for a UID.
+  rpc ContributionScore(QueryContributionScoreRequest) returns (QueryContributionScoreResponse) {
+    option (google.api.http).get = "/openchain/otk/v1/contribution_score/{uid}";
+  }
+}
+
+// QueryLivingLedgerRequest queries the Living Ledger for a UID.
+message QueryLivingLedgerRequest {
+  string uid = 1;
+}
+
+// QueryLivingLedgerResponse returns the Living Ledger.
+message QueryLivingLedgerResponse {
+  LivingLedger ledger = 1;
+}
+
+// QueryChannelBalanceRequest queries a specific channel balance.
+message QueryChannelBalanceRequest {
+  string uid     = 1;
+  string channel = 2;
+}
+
+// QueryChannelBalanceResponse returns the channel balance.
+message QueryChannelBalanceResponse {
+  int64  balance = 1;
+  string channel = 2;
+}
+
+// QueryContributionScoreRequest queries the contribution score.
+message QueryContributionScoreRequest {
+  string uid = 1;
+}
+
+// QueryContributionScoreResponse returns the contribution score.
+message QueryContributionScoreResponse {
+  string uid   = 1;
+  int64  score = 2;
+  int64  rank  = 3;
+}

@@ -85,3 +85,18 @@ export function getNetworkConfig(): NetworkConfig {
 export function isTestnet(): boolean {
   return currentMode === 'testnet';
 }
+
+// ─── IBC Channel Mappings ───
+
+interface IBCChannels {
+  [sourceChain: string]: { [destChain: string]: string }; // channel ID
+}
+
+const IBC_CHANNELS: IBCChannels = {
+  openchain: { cosmos: 'channel-0' },
+  cosmos: { openchain: 'channel-0' },
+};
+
+export function getIBCChannel(from: string, to: string): string | undefined {
+  return IBC_CHANNELS[from]?.[to];
+}

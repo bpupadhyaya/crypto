@@ -1,0 +1,71 @@
+syntax = "proto3";
+package openchain.govuid.v1;
+
+option go_package = "github.com/bpupadhyaya/openchain/x/govuid/types";
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "openchain/govuid/v1/types.proto";
+
+// Query defines the govuid module's gRPC query service.
+service Query {
+  // Proposal returns a governance proposal by ID.
+  rpc Proposal(QueryProposalRequest) returns (QueryProposalResponse) {
+    option (google.api.http).get = "/openchain/govuid/v1/proposal/{proposal_id}";
+  }
+
+  // Proposals returns all proposals, optionally filtered by status.
+  rpc Proposals(QueryProposalsRequest) returns (QueryProposalsResponse) {
+    option (google.api.http).get = "/openchain/govuid/v1/proposals";
+  }
+
+  // Votes returns all votes for a proposal.
+  rpc Votes(QueryVotesRequest) returns (QueryVotesResponse) {
+    option (google.api.http).get = "/openchain/govuid/v1/votes/{proposal_id}";
+  }
+
+  // Tally returns the current tally for a proposal.
+  rpc Tally(QueryTallyRequest) returns (QueryTallyResponse) {
+    option (google.api.http).get = "/openchain/govuid/v1/tally/{proposal_id}";
+  }
+}
+
+// QueryProposalRequest queries a proposal by ID.
+message QueryProposalRequest {
+  uint64 proposal_id = 1;
+}
+
+// QueryProposalResponse returns the proposal.
+message QueryProposalResponse {
+  Proposal proposal = 1;
+}
+
+// QueryProposalsRequest queries proposals with optional status filter.
+message QueryProposalsRequest {
+  ProposalStatus status = 1;
+}
+
+// QueryProposalsResponse returns matching proposals.
+message QueryProposalsResponse {
+  repeated Proposal proposals = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryVotesRequest queries votes for a proposal.
+message QueryVotesRequest {
+  uint64 proposal_id = 1;
+}
+
+// QueryVotesResponse returns the votes.
+message QueryVotesResponse {
+  repeated Vote votes = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryTallyRequest queries the tally for a proposal.
+message QueryTallyRequest {
+  uint64 proposal_id = 1;
+}
+
+// QueryTallyResponse returns the tally result.
+message QueryTallyResponse {
+  TallyResult tally = 1 [(gogoproto.nullable) = false];
+}

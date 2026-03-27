@@ -10,6 +10,8 @@
 
 package types
 
+import "fmt"
+
 const (
 	ModuleName = "uid"
 	StoreKey   = ModuleName
@@ -57,6 +59,16 @@ type SelectiveDisclosure struct {
 	ExpiresAt int64  `json:"expires_at"` // Block height expiry
 }
 
+// Proto.Message interface methods for UniversalID (required for codec.Marshal/Unmarshal).
+func (u *UniversalID) ProtoMessage()             {}
+func (u *UniversalID) Reset()                    { *u = UniversalID{} }
+func (u *UniversalID) String() string            { return fmt.Sprintf("UID{%s}", u.ID) }
+
+// Proto.Message interface methods for SelectiveDisclosure.
+func (s *SelectiveDisclosure) ProtoMessage()  {}
+func (s *SelectiveDisclosure) Reset()         { *s = SelectiveDisclosure{} }
+func (s *SelectiveDisclosure) String() string { return fmt.Sprintf("Disclosure{%s/%s}", s.UID, s.ClaimType) }
+
 // Supported claim types for selective disclosure
 const (
 	ClaimIsParentOf  = "is_parent_of"
@@ -71,6 +83,11 @@ const (
 type GenesisState struct {
 	UIDs []UniversalID `json:"uids"`
 }
+
+// Proto.Message interface methods for GenesisState.
+func (g *GenesisState) ProtoMessage()  {}
+func (g *GenesisState) Reset()         { *g = GenesisState{} }
+func (g *GenesisState) String() string { return fmt.Sprintf("GenesisState{UIDs: %d}", len(g.UIDs)) }
 
 // DefaultGenesisState returns the default genesis state — empty.
 func DefaultGenesisState() *GenesisState {

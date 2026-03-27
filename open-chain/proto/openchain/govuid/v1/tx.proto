@@ -1,0 +1,50 @@
+syntax = "proto3";
+package openchain.govuid.v1;
+
+option go_package = "github.com/bpupadhyaya/openchain/x/govuid/types";
+
+import "cosmos/msg/v1/msg.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "amino/amino.proto";
+import "openchain/govuid/v1/types.proto";
+
+// Msg defines the govuid module's Msg service.
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  // SubmitProposal submits a new governance proposal (proposer must have active UID).
+  rpc SubmitProposal(MsgSubmitProposal) returns (MsgSubmitProposalResponse);
+
+  // Vote casts a vote on a proposal (voter must have active UID, 1 UID = 1 vote).
+  rpc Vote(MsgVote) returns (MsgVoteResponse);
+}
+
+// MsgSubmitProposal submits a new governance proposal.
+message MsgSubmitProposal {
+  option (cosmos.msg.v1.signer) = "proposer";
+  option (amino.name)           = "openchain/govuid/MsgSubmitProposal";
+
+  string proposer      = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string title         = 2;
+  string description   = 3;
+  int64  voting_period = 4;
+}
+
+// MsgSubmitProposalResponse defines the response for MsgSubmitProposal.
+message MsgSubmitProposalResponse {
+  uint64 proposal_id = 1;
+}
+
+// MsgVote casts a vote on an active proposal.
+message MsgVote {
+  option (cosmos.msg.v1.signer) = "voter";
+  option (amino.name)           = "openchain/govuid/MsgVote";
+
+  string     voter       = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64     proposal_id = 2;
+  VoteOption option      = 3;
+}
+
+// MsgVoteResponse defines the response for MsgVote.
+message MsgVoteResponse {}

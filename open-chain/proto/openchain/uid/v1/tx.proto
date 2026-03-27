@@ -1,0 +1,65 @@
+syntax = "proto3";
+package openchain.uid.v1;
+
+option go_package = "github.com/bpupadhyaya/openchain/x/uid/types";
+
+import "cosmos/msg/v1/msg.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "amino/amino.proto";
+
+// Msg defines the UID module's Msg service.
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  // RegisterUID registers a new Universal ID on Open Chain.
+  rpc RegisterUID(MsgRegisterUID) returns (MsgRegisterUIDResponse);
+
+  // SelectiveDisclosure adds a ZK proof claim to a Universal ID.
+  rpc SelectiveDisclosure(MsgSelectiveDisclosure) returns (MsgSelectiveDisclosureResponse);
+
+  // TransferGuardianship transitions a UID from guardian-controlled to self-sovereign.
+  rpc TransferGuardianship(MsgTransferGuardianship) returns (MsgTransferGuardianshipResponse);
+}
+
+// MsgRegisterUID registers a new Universal ID.
+message MsgRegisterUID {
+  option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name)           = "openchain/uid/MsgRegisterUID";
+
+  string creator    = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string proof_hash = 2;
+  string guardian   = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// MsgRegisterUIDResponse defines the response for MsgRegisterUID.
+message MsgRegisterUIDResponse {
+  string uid = 1;
+}
+
+// MsgSelectiveDisclosure adds a verifiable claim to a Universal ID.
+message MsgSelectiveDisclosure {
+  option (cosmos.msg.v1.signer) = "uid";
+  option (amino.name)           = "openchain/uid/MsgSelectiveDisclosure";
+
+  string uid              = 1;
+  string claim_type       = 2;
+  string claim_hash       = 3;
+  int64  expires_at_height = 4;
+}
+
+// MsgSelectiveDisclosureResponse defines the response for MsgSelectiveDisclosure.
+message MsgSelectiveDisclosureResponse {}
+
+// MsgTransferGuardianship transfers guardian control of a UID.
+message MsgTransferGuardianship {
+  option (cosmos.msg.v1.signer) = "old_guardian";
+  option (amino.name)           = "openchain/uid/MsgTransferGuardianship";
+
+  string uid          = 1;
+  string old_guardian = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string new_guardian = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// MsgTransferGuardianshipResponse defines the response for MsgTransferGuardianship.
+message MsgTransferGuardianshipResponse {}

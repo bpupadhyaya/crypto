@@ -1,0 +1,38 @@
+syntax = "proto3";
+package openchain.dex.v1;
+
+option go_package = "github.com/bpupadhyaya/openchain/x/dex/types";
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+
+// LiquidityPool represents an AMM pool.
+message LiquidityPool {
+  string id        = 1;
+  string token_a   = 2;
+  string token_b   = 3;
+  int64  reserve_a = 4;
+  int64  reserve_b = 5;
+  int64  lp_supply = 6;
+  int64  fee_rate  = 7;
+}
+
+// LimitOrder represents an on-chain limit order.
+message LimitOrder {
+  string id          = 1;
+  string maker       = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string sell_denom  = 3;
+  string buy_denom   = 4;
+  int64  sell_amount = 5;
+  int64  price       = 6;
+  int64  filled_pct  = 7;
+  string status      = 8;
+  int64  created_at  = 9;
+  int64  expires_at  = 10;
+}
+
+// GenesisState for the DEX module.
+message GenesisState {
+  repeated LiquidityPool pools  = 1 [(gogoproto.nullable) = false];
+  repeated LimitOrder    orders = 2 [(gogoproto.nullable) = false];
+}

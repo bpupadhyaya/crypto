@@ -92,6 +92,60 @@ export class CosmosSigner {
   }
 
   /**
+   * Send an IBC transfer (e.g. Open Chain ↔ Cosmos Hub).
+   *
+   * Uses MsgTransfer with a 10-minute timeout. The token arrives
+   * on the destination chain once a relayer picks up the packet.
+   */
+  async sendIbcTransfer(
+    toAddress: string,
+    amount: string,
+    sourceChannel: string,
+    sourcePort: string = 'transfer',
+  ): Promise<string> {
+    const { SigningStargateClient } = await import('@cosmjs/stargate');
+    const { DirectSecp256k1Wallet } = await import('@cosmjs/proto-signing');
+
+    const wallet = await DirectSecp256k1Wallet.fromKey(this.privateKey, this.prefix);
+    const [account] = await wallet.getAccounts();
+
+    const client = await SigningStargateClient.connectWithSigner(
+      this.rpcUrl,
+      wallet,
+    );
+
+    const microAmount = Math.round(parseFloat(amount) * 1_000_000).toString();
+
+    // Timeout 10 minutes from now, in nanoseconds
+    const timeoutTimestampNs = BigInt(Date.now() + 600_000) * BigInt(1_000_000);
+
+    const msg = {
+      typeUrl: '/ibc.applications.transfer.v1.MsgTransfer',
+      value: {
+        sourcePort,
+        sourceChannel,
+        token: { denom: this.denom, amount: microAmount },
+        sender: account.address,
+        receiver: toAddress,
+        timeoutHeight: { revisionNumber: BigInt(0), revisionHeight: BigInt(0) },
+        timeoutTimestamp: timeoutTimestampNs,
+      },
+    };
+
+    const fee = { amount: [{ denom: this.denom, amount: '2000' }], gas: '250000' };
+
+    const result = await client.signAndBroadcast(account.address, [msg], fee, 'IBC transfer via Open Wallet');
+
+    client.disconnect();
+
+    if (result.code !== 0) {
+      throw new Error(`IBC transfer failed: ${result.rawLog}`);
+    }
+
+    return result.transactionHash;
+  }
+
+  /**
    * Get the bech32 address for this key.
    */
   async getAddress(): Promise<string> {

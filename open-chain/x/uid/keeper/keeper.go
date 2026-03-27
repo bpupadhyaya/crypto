@@ -17,7 +17,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/bpupadhyaya/openchain/x/uid/types"
+	"openchain/x/uid/types"
 )
 
 // Keeper manages the Universal ID module state.

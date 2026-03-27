@@ -1,0 +1,57 @@
+syntax = "proto3";
+package openchain.govuid.v1;
+
+option go_package = "github.com/bpupadhyaya/openchain/x/govuid/types";
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+
+// ProposalStatus represents the status of a governance proposal.
+enum ProposalStatus {
+  PROPOSAL_STATUS_UNSPECIFIED = 0;
+  PROPOSAL_STATUS_VOTING      = 1;
+  PROPOSAL_STATUS_PASSED      = 2;
+  PROPOSAL_STATUS_REJECTED    = 3;
+  PROPOSAL_STATUS_EXECUTED    = 4;
+}
+
+// VoteOption represents a vote choice.
+enum VoteOption {
+  VOTE_OPTION_UNSPECIFIED = 0;
+  VOTE_OPTION_YES         = 1;
+  VOTE_OPTION_NO          = 2;
+  VOTE_OPTION_ABSTAIN     = 3;
+}
+
+// Proposal represents a governance proposal.
+message Proposal {
+  uint64         id             = 1;
+  string         title          = 2;
+  string         description    = 3;
+  string         proposer       = 4 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  ProposalStatus status         = 5;
+  int64          submit_height  = 6;
+  int64          voting_end_height = 7;
+  TallyResult    tally          = 8 [(gogoproto.nullable) = false];
+}
+
+// Vote represents a single vote on a proposal.
+message Vote {
+  uint64     proposal_id = 1;
+  string     voter       = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  VoteOption option      = 3;
+}
+
+// TallyResult holds the current tally for a proposal.
+message TallyResult {
+  uint64 yes     = 1;
+  uint64 no      = 2;
+  uint64 abstain = 3;
+}
+
+// GenesisState defines the govuid module's genesis state.
+message GenesisState {
+  repeated Proposal proposals = 1 [(gogoproto.nullable) = false];
+  repeated Vote     votes     = 2 [(gogoproto.nullable) = false];
+  uint64            next_proposal_id = 3;
+}

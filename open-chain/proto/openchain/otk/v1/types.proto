@@ -1,0 +1,84 @@
+syntax = "proto3";
+package openchain.otk.v1;
+
+option go_package = "github.com/bpupadhyaya/openchain/x/otk/types";
+
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
+// ContributionRing represents concentric levels of human value attribution.
+enum ContributionRing {
+  CONTRIBUTION_RING_UNSPECIFIED = 0;
+  CONTRIBUTION_RING_SELF        = 1;
+  CONTRIBUTION_RING_FAMILY      = 2;
+  CONTRIBUTION_RING_MENTORS     = 3;
+  CONTRIBUTION_RING_COMMUNITY   = 4;
+  CONTRIBUTION_RING_CITY        = 5;
+  CONTRIBUTION_RING_COUNTRY     = 6;
+  CONTRIBUTION_RING_HUMANITY    = 7;
+}
+
+// ValueTransfer represents a transfer of value between two Universal IDs.
+message ValueTransfer {
+  string from_uid    = 1;
+  string to_uid      = 2;
+  string channel     = 3;
+  int64  amount      = 4;
+  ContributionRing ring = 5;
+  bool   is_gratitude = 6;
+  bool   positive    = 7;
+  string memo        = 8;
+  int64  timestamp   = 9;
+}
+
+// Milestone represents a verifiable human development achievement.
+message Milestone {
+  string id          = 1;
+  string uid         = 2;
+  string channel     = 3;
+  string description = 4;
+  int64  mint_amount = 5;
+  repeated string verifiers = 6;
+  bool   verified   = 7;
+  int64  timestamp  = 8;
+}
+
+// ChannelLedger tracks value for a specific channel (e.g., nOTK, eOTK).
+message ChannelLedger {
+  string channel  = 1;
+  int64  received = 2;
+  int64  given    = 3;
+  int64  minted   = 4;
+  int64  burned   = 5;
+}
+
+// LivingLedger represents the complete value record for a Universal ID.
+message LivingLedger {
+  string uid = 1;
+  map<string, ChannelLedger> channels = 2;
+  int64 total_received     = 3;
+  int64 total_given        = 4;
+  int64 net_value          = 5;
+  int64 gratitude_received = 6;
+  int64 gratitude_given    = 7;
+  map<int32, int64> ring_attributions = 8;
+  int32 milestones_achieved = 9;
+}
+
+// LedgerEntry represents a single entry in the Living Ledger.
+message LedgerEntry {
+  int64  timestamp    = 1;
+  string channel      = 2;
+  string from_uid     = 3;
+  string to_uid       = 4;
+  int64  amount       = 5;
+  ContributionRing ring = 6;
+  string entry_type   = 7;
+  bool   is_gratitude = 8;
+  string milestone_id = 9;
+  string tx_hash      = 10;
+}
+
+// GenesisState defines the OTK module's genesis state.
+// No pre-mine. Genesis state is empty.
+message GenesisState {}

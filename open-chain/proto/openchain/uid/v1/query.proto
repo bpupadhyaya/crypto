@@ -1,0 +1,42 @@
+syntax = "proto3";
+package openchain.uid.v1;
+
+option go_package = "github.com/bpupadhyaya/openchain/x/uid/types";
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "openchain/uid/v1/types.proto";
+
+// Query defines the UID module's gRPC query service.
+service Query {
+  // UID returns the Universal ID for an address or UID string.
+  rpc UID(QueryUIDRequest) returns (QueryUIDResponse) {
+    option (google.api.http).get = "/openchain/uid/v1/uid/{uid}";
+  }
+
+  // SelectiveDisclosure returns a specific claim for a UID.
+  rpc SelectiveDisclosure(QuerySelectiveDisclosureRequest) returns (QuerySelectiveDisclosureResponse) {
+    option (google.api.http).get = "/openchain/uid/v1/disclosure/{uid}/{claim_type}";
+  }
+}
+
+// QueryUIDRequest queries a Universal ID.
+message QueryUIDRequest {
+  string uid = 1;
+}
+
+// QueryUIDResponse returns the Universal ID.
+message QueryUIDResponse {
+  UniversalID uid = 1;
+}
+
+// QuerySelectiveDisclosureRequest queries a specific claim for a UID.
+message QuerySelectiveDisclosureRequest {
+  string uid        = 1;
+  string claim_type = 2;
+}
+
+// QuerySelectiveDisclosureResponse returns the selective disclosure.
+message QuerySelectiveDisclosureResponse {
+  SelectiveDisclosure disclosure = 1;
+}

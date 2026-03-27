@@ -11,6 +11,8 @@
 package types
 
 import (
+	"fmt"
+
 	"cosmossdk.io/math"
 )
 
@@ -23,15 +25,45 @@ const (
 	BaseDenom = "uotk" // 1 OTK = 1,000,000 uotk (micro-OTK)
 )
 
-// Value Channel identifiers
+// Value Channel identifiers (human-readable names)
 const (
-	ChannelEconomic  = "xotk" // Economic value transfer
-	ChannelNurture   = "notk" // Parenting, caregiving
-	ChannelEducation = "eotk" // Teaching, mentoring
-	ChannelHealth    = "hotk" // Healthcare, wellness
-	ChannelCommunity = "cotk" // Community service
-	ChannelGovern    = "gotk" // Governance, civic participation
+	ChannelEconomic  = "economic"   // Economic value transfer
+	ChannelNurture   = "nurture"    // Parenting, caregiving
+	ChannelEducation = "education"  // Teaching, mentoring
+	ChannelHealth    = "health"     // Healthcare, wellness
+	ChannelCommunity = "community"  // Community service
+	ChannelGovern    = "governance" // Governance, civic participation
 )
+
+// Channel-specific denoms (micro-units)
+const (
+	DenomEconomic  = "uxotk" // Economic channel denom
+	DenomNurture   = "unotk" // Nurture channel denom
+	DenomEducation = "ueotk" // Education channel denom
+	DenomHealth    = "uhotk" // Health channel denom
+	DenomCommunity = "ucotk" // Community channel denom
+	DenomGovern    = "ugotk" // Governance channel denom
+)
+
+// ChannelToDenom maps human-readable channel names to on-chain denoms.
+var ChannelToDenom = map[string]string{
+	ChannelEconomic:  DenomEconomic,
+	ChannelNurture:   DenomNurture,
+	ChannelEducation: DenomEducation,
+	ChannelHealth:    DenomHealth,
+	ChannelCommunity: DenomCommunity,
+	ChannelGovern:    DenomGovern,
+}
+
+// DenomToChannel maps on-chain denoms back to channel names.
+var DenomToChannel = map[string]string{
+	DenomEconomic:  ChannelEconomic,
+	DenomNurture:   ChannelNurture,
+	DenomEducation: ChannelEducation,
+	DenomHealth:    ChannelHealth,
+	DenomCommunity: ChannelCommunity,
+	DenomGovern:    ChannelGovern,
+}
 
 // AllChannels returns all value channel identifiers.
 func AllChannels() []string {
@@ -43,6 +75,24 @@ func AllChannels() []string {
 		ChannelCommunity,
 		ChannelGovern,
 	}
+}
+
+// AllDenoms returns all channel-specific denoms.
+func AllDenoms() []string {
+	return []string{
+		DenomEconomic,
+		DenomNurture,
+		DenomEducation,
+		DenomHealth,
+		DenomCommunity,
+		DenomGovern,
+	}
+}
+
+// ChannelDenom returns the on-chain denom for a channel name.
+// Returns empty string if the channel is unknown.
+func ChannelDenom(channel string) string {
+	return ChannelToDenom[channel]
 }
 
 // ContributionRing represents the concentric levels of human value attribution.
@@ -99,6 +149,11 @@ type GenesisState struct {
 	// No pre-mine. Genesis state is empty.
 	// All OTK is minted through verified contributions.
 }
+
+// Proto.Message interface methods for GenesisState.
+func (g *GenesisState) ProtoMessage()  {}
+func (g *GenesisState) Reset()         { *g = GenesisState{} }
+func (g *GenesisState) String() string { return fmt.Sprintf("GenesisState{}") }
 
 // DefaultGenesisState returns the default genesis state — empty, as per the Human Constitution.
 func DefaultGenesisState() *GenesisState {

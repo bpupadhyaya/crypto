@@ -1,0 +1,70 @@
+syntax = "proto3";
+package openchain.otk.v1;
+
+option go_package = "github.com/bpupadhyaya/openchain/x/otk/types";
+
+import "cosmos/msg/v1/msg.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "amino/amino.proto";
+
+// Msg defines the OTK module's Msg service.
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  // ValueTransfer transfers value between Universal IDs on a specific channel.
+  rpc ValueTransfer(MsgValueTransfer) returns (MsgValueTransferResponse);
+
+  // MintMilestone mints OTK when a human development milestone is verified.
+  rpc MintMilestone(MsgMintMilestone) returns (MsgMintMilestoneResponse);
+
+  // Gratitude is a special value transfer expressing gratitude (child -> parent/teacher).
+  rpc Gratitude(MsgGratitude) returns (MsgGratitudeResponse);
+}
+
+// MsgValueTransfer transfers value between two addresses on a specific channel.
+message MsgValueTransfer {
+  option (cosmos.msg.v1.signer) = "from_uid";
+  option (amino.name)           = "openchain/otk/MsgValueTransfer";
+
+  string from_uid = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string to_uid   = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string channel  = 3;
+  int64  amount   = 4;
+  string reason   = 5;
+  repeated string ripple_rings = 6;
+}
+
+// MsgValueTransferResponse defines the response for MsgValueTransfer.
+message MsgValueTransferResponse {}
+
+// MsgMintMilestone mints OTK when a milestone is verified.
+message MsgMintMilestone {
+  option (cosmos.msg.v1.signer) = "verified_by";
+  option (amino.name)           = "openchain/otk/MsgMintMilestone";
+
+  string uid            = 1;
+  string milestone_type = 2;
+  string description    = 3;
+  string channel        = 4;
+  int64  amount         = 5;
+  string verified_by    = 6 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// MsgMintMilestoneResponse defines the response for MsgMintMilestone.
+message MsgMintMilestoneResponse {}
+
+// MsgGratitude is a special gratitude transaction.
+message MsgGratitude {
+  option (cosmos.msg.v1.signer) = "from_uid";
+  option (amino.name)           = "openchain/otk/MsgGratitude";
+
+  string from_uid = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string to_uid   = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  int64  amount   = 3;
+  string message  = 4;
+  string channel  = 5;
+}
+
+// MsgGratitudeResponse defines the response for MsgGratitude.
+message MsgGratitudeResponse {}
