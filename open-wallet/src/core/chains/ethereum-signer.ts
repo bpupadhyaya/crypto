@@ -75,6 +75,38 @@ export class EthereumSigner {
     });
   }
 
+  /**
+   * Approve a spender to use ERC-20 tokens.
+   */
+  async sendERC20Approval(tokenAddress: string, spender: string, amount: bigint): Promise<string> {
+    // approve(address,uint256) selector = 0x095ea7b3
+    const spenderBytes = spender.slice(2).padStart(64, '0');
+    const amountBytes = amount.toString(16).padStart(64, '0');
+    const data = `0x095ea7b3${spenderBytes}${amountBytes}` as `0x${string}`;
+
+    const hash = await this.client.sendTransaction({
+      account: this.account,
+      to: tokenAddress as `0x${string}`,
+      data,
+      chain: this.chain,
+    });
+    return hash;
+  }
+
+  /**
+   * Send a raw contract call (for THORChain router, etc.)
+   */
+  async sendContractCall(contractAddress: string, data: `0x${string}`, value?: string): Promise<string> {
+    const hash = await this.client.sendTransaction({
+      account: this.account,
+      to: contractAddress as `0x${string}`,
+      data,
+      value: value ? BigInt(value) : 0n,
+      chain: this.chain,
+    });
+    return hash;
+  }
+
   private encodeERC20Transfer(to: string, amount: bigint): `0x${string}` {
     // transfer(address,uint256) selector = 0xa9059cbb
     const toBytes = to.slice(2).padStart(64, '0');

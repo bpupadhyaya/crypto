@@ -62,6 +62,7 @@ export class BitcoinSigner {
     toAddress: string,
     amountSats: bigint,
     feeRateSatPerVbyte: number,
+    memo?: string,  // Optional OP_RETURN memo (used for THORChain swaps)
   ): Promise<Uint8Array> {
     // 1. Fetch UTXOs
     const utxos = await this.fetchUTXOs();
@@ -108,6 +109,14 @@ export class BitcoinSigner {
 
     // Output to recipient
     tx.addOutputAddress(toAddress, amountSats, network);
+
+    // OP_RETURN memo (for THORChain, atomic swaps, etc.)
+    if (memo) {
+      const memoBytes = new TextEncoder().encode(memo);
+      // OP_RETURN script: OP_RETURN <data>
+      const opReturnScript = new Uint8Array([0x6a, memoBytes.length, ...memoBytes]);
+      tx.addOutput({ script: opReturnScript, amount: 0n });
+    }
 
     // Change output (back to self)
     const change = inputTotal - amountSats - fee;

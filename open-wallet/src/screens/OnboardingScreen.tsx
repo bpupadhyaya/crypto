@@ -218,10 +218,17 @@ export function OnboardingScreen() {
       const btcSigner = BitcoinSigner.fromWallet(wallet);
       const solSigner = SolanaSigner.fromWallet(wallet);
 
+      // Derive Cosmos/OpenChain address
+      const { CosmosSigner } = await import('../core/chains/cosmos-signer');
+      const cosmosSigner = CosmosSigner.fromWallet(wallet, 0, 'openchain');
+      const cosmosAddr = await cosmosSigner.getAddress();
+
       setAddresses({
         ethereum: ethSigner.getAddress(),
         bitcoin: btcSigner.getAddress(),
         solana: solSigner.getAddress(),
+        openchain: cosmosAddr,
+        cosmos: cosmosAddr,
       });
       wallet.destroy();
     } catch (error) {
