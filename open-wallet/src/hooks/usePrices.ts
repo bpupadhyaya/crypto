@@ -35,7 +35,7 @@ export function usePrices() {
 
       try {
         if (mountedRef.current) setLoading(true);
-        const response = await fetch(`${COINGECKO_API}?ids=${ids}&vs_currencies=usd`, { signal: AbortSignal.timeout(5000) });
+        const response = await fetch(`${COINGECKO_API}?ids=${ids}&vs_currencies=usd`, { signal: AbortSignal.timeout(10000) });
         if (!response.ok) { if (mountedRef.current) setLoading(false); return; }
 
         const data = await response.json();

@@ -53,7 +53,7 @@ export function useAllBalances(addresses: Partial<Record<ChainId, string>>) {
           // Race with 5-second timeout to prevent UI blocking
           const result = await Promise.race([
             provider.getBalance(address),
-            new Promise<null>((resolve) => setTimeout(() => resolve(null), 5000)),
+            new Promise<null>((resolve) => setTimeout(() => resolve(null), 8000)),
           ]);
           return result;
         } catch {
