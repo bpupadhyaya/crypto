@@ -11,6 +11,7 @@ import { SUPPORTED_TOKENS, type TokenInfo } from '../core/tokens/registry';
 import { ManageTokensScreen } from './ManageTokensScreen';
 import { TokenDetailScreen } from './TokenDetailScreen';
 import { BuySellScreen } from './BuySellScreen';
+import { HistoryScreen } from './HistoryScreen';
 import { usePrices } from '../hooks/usePrices';
 import { useTheme } from '../hooks/useTheme';
 import type { Theme } from '../utils/theme';
@@ -26,7 +27,7 @@ const MOCK_ALLOCATIONS = [
 
 const keyExtractor = (item: TokenInfo) => item.symbol;
 
-const TokenRow = React.memo(({ token, price, onPress, t }: { token: TokenInfo; price?: number; onPress: () => void; t: Theme & { isDark: boolean } }) => {
+const TokenRow = React.memo(({ token, price, balance, onPress, t }: { token: TokenInfo; price?: number; balance?: number; onPress: () => void; t: Theme & { isDark: boolean } }) => {
   const s = useMemo(() => StyleSheet.create({
     tokenRow: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 14, backgroundColor: t.bg.card, borderBottomWidth: 1, borderBottomColor: t.border, marginHorizontal: 16 },
     tokenDot: { width: 10, height: 10, borderRadius: 5, marginRight: 12 },
@@ -46,7 +47,7 @@ const TokenRow = React.memo(({ token, price, onPress, t }: { token: TokenInfo; p
         <Text style={s.tokenName}>{token.name}</Text>
       </View>
       <View style={s.tokenValues}>
-        <Text style={s.tokenBalance}>0.00</Text>
+        <Text style={s.tokenBalance}>{balance ? balance.toFixed(balance < 0.01 ? 6 : balance < 1 ? 4 : 2) : '0.00'}</Text>
         <Text style={s.tokenUsd}>
           {price ? `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '—'}
         </Text>
@@ -99,12 +100,18 @@ const ActionBtn = React.memo(({ icon, label, color, t }: { icon: string; label: 
 export function HomeScreen() {
   const [showManage, setShowManage] = useState(false);
   const [showBuySell, setShowBuySell] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
   const [selectedToken, setSelectedToken] = useState<TokenInfo | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const enabledTokens = useWalletStore((s) => s.enabledTokens);
-  const totalUsdValue = useWalletStore((s) => s.totalUsdValue);
+  const addresses = useWalletStore((s) => s.addresses);
+  const setBalances = useWalletStore((s) => s.setBalances);
   const { prices, loading: pricesLoading, lastUpdated, refresh: refreshPrices } = usePrices();
   const t = useTheme();
+
+  // Fetch real on-chain balances
+  const { usePortfolio } = require('../hooks/useBalances');
+  const { balances: portfolioBalances, totalUsdValue } = usePortfolio(addresses);
 
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
@@ -131,9 +138,19 @@ export function HomeScreen() {
     return tokens;
   }, [enabledTokens, searchQuery]);
 
+  // Map portfolio balances to token symbol for display
+  const balanceMap = useMemo(() => {
+    const map: Record<string, number> = {};
+    for (const b of portfolioBalances) {
+      const decimals = b.token.decimals;
+      map[b.token.symbol] = Number(b.amount) / Math.pow(10, decimals);
+    }
+    return map;
+  }, [portfolioBalances]);
+
   const renderItem = useCallback(({ item }: { item: TokenInfo }) => (
-    <TokenRow token={item} price={prices[item.symbol]} onPress={() => setSelectedToken(item)} t={t} />
-  ), [prices, t]);
+    <TokenRow token={item} price={prices[item.symbol]} balance={balanceMap[item.symbol]} onPress={() => setSelectedToken(item)} t={t} />
+  ), [prices, balanceMap, t]);
 
   const openManage = useCallback(() => setShowManage(true), []);
   const closeManage = useCallback(() => setShowManage(false), []);
@@ -196,6 +213,7 @@ export function HomeScreen() {
   ), [totalUsdValue, openManage, lastUpdatedText, showTestnetBanner, s, t, searchQuery]);
 
   if (showBuySell) return <BuySellScreen onClose={() => setShowBuySell(false)} />;
+  if (showHistory) return <HistoryScreen />;
 
   if (selectedToken) {
     return (
