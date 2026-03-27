@@ -108,14 +108,23 @@ export function useTokenPrice(token: Token) {
   });
 }
 
+// ─── Demo prices (no network needed) ───
+
+const DEMO_PRICES = new Map<string, number>([
+  ['BTC', 87000], ['ETH', 2100], ['SOL', 140], ['ATOM', 7.50], ['OTK', 0.01],
+]);
+
 // ─── All Prices Hook ───
 
 export function useAllPrices() {
+  const demoMode = useWalletStore((s) => s.demoMode);
   const tokens = Object.values(NATIVE_TOKENS);
 
   return useQuery({
-    queryKey: ['prices', tokens.map((t) => t.symbol).join(',')],
+    queryKey: ['prices', demoMode ? 'demo' : tokens.map((t) => t.symbol).join(',')],
     queryFn: async (): Promise<Map<string, number>> => {
+      // Demo mode — return hardcoded prices instantly
+      if (demoMode) return DEMO_PRICES;
       try {
         const oracle = registry.getOracleProvider();
         return await oracle.getPrices(tokens);
