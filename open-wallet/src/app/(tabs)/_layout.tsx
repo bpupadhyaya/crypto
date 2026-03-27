@@ -13,8 +13,14 @@ const ICONS: Record<string, string> = { Home: '◉', Send: '↑', Swap: '⇄', R
 
 const LockButton = React.memo(() => {
   const setStatus = useWalletStore((s) => s.setStatus);
+  const handleLock = React.useCallback(() => {
+    // Set locked FIRST — triggers immediate screen switch in _layout.tsx
+    setStatus('locked');
+    // Stop background services after transition (non-blocking)
+    import('../../core/priceService').then((m) => m.stopPriceService()).catch(() => {});
+  }, [setStatus]);
   return (
-    <TouchableOpacity onPress={() => setStatus('locked')} style={{ paddingRight: 16, paddingLeft: 8 }} hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}>
+    <TouchableOpacity onPress={handleLock} style={{ paddingRight: 16, paddingLeft: 8 }} hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}>
       <Text style={{ fontSize: 20, color: '#606070' }}>🔒</Text>
     </TouchableOpacity>
   );

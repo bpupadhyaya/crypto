@@ -85,6 +85,14 @@ export default function RootLayout() {
     }
   }, []);
 
+  // Reset prefetch flags when locked (so they restart on next unlock)
+  useEffect(() => {
+    if (status === 'locked') {
+      priceServiceStarted = false;
+      balancePrefetched = false;
+    }
+  }, [status]);
+
   // Auth screens — rendered directly, no routing overhead
   if (status === 'pin_setup') {
     return <QueryClientProvider client={queryClient}><StatusBar style="light" /><PinSetupScreen /></QueryClientProvider>;
