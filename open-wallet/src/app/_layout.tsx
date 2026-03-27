@@ -36,16 +36,14 @@ export default function RootLayout() {
       import('../core/bootstrap').then((m) => m.bootstrapProviders());
       import('../core/notifications').then((m) => m.requestNotificationPermissions());
     }
-  }, []);
-
-  // Start background price service as soon as unlocked
-  useEffect(() => {
-    if (status === 'unlocked' && !priceServiceStarted) {
+    // Start price service on app launch (even before unlock)
+    // so prices are cached by the time user reaches Home screen
+    if (!priceServiceStarted) {
       priceServiceStarted = true;
       const enabledTokens = useWalletStore.getState().enabledTokens;
       import('../core/priceService').then((m) => m.startPriceService(enabledTokens));
     }
-  }, [status]);
+  }, []);
 
   // Auth screens — rendered directly, no routing overhead
   if (status === 'pin_setup') {

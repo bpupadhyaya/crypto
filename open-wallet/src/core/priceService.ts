@@ -1,11 +1,12 @@
 /**
  * Background Price Service — runs independently of UI.
  *
- * Fetches prices from CoinGecko in the background on a 30s interval.
- * Stores results in a module-level cache that any component can read.
- * Never blocks UI — fetch failures are silent.
+ * Two-batch strategy for fast initial display:
+ *   Batch 1: Top 5 tokens (BTC, ETH, SOL, USDT, USDC) — fires immediately
+ *   Batch 2: Remaining tokens — fires right after batch 1
  *
- * Start once on unlock. Prices populate progressively.
+ * Prices populate progressively. UI subscribes and re-renders as each batch arrives.
+ * Never blocks UI — fetch failures are silent.
  */
 
 import { SUPPORTED_TOKENS } from './tokens/registry';
@@ -13,29 +14,27 @@ import { SUPPORTED_TOKENS } from './tokens/registry';
 const COINGECKO_API = 'https://api.coingecko.com/api/v3/simple/price';
 const REFRESH_INTERVAL = 30_000; // 30 seconds
 
-// ─── Global price cache (survives all component mounts/unmounts) ───
+// Priority tokens — fetched first (what user sees at top of Home screen)
+const PRIORITY_SYMBOLS = ['BTC', 'ETH', 'SOL', 'USDT', 'USDC', 'OTK'];
+
+// ─── Global price cache ───
 let priceCache: Record<string, number> = {};
 let lastFetchTime = 0;
 let intervalId: ReturnType<typeof setInterval> | null = null;
 let listeners: Array<() => void> = [];
 let running = false;
 
-/** Get current cached prices. */
 export function getPrices(): Record<string, number> {
   return priceCache;
 }
 
-/** Get last fetch timestamp. */
 export function getLastFetchTime(): number {
   return lastFetchTime;
 }
 
-/** Subscribe to price updates. Returns unsubscribe function. */
 export function onPriceUpdate(fn: () => void): () => void {
   listeners.push(fn);
-  return () => {
-    listeners = listeners.filter((l) => l !== fn);
-  };
+  return () => { listeners = listeners.filter((l) => l !== fn); };
 }
 
 function notifyListeners() {
@@ -44,59 +43,76 @@ function notifyListeners() {
   }
 }
 
-/** Fetch prices once (non-blocking, silent on failure). */
-async function fetchPricesOnce(enabledTokens?: string[]) {
+/** Fetch a batch of token prices and merge into cache. */
+async function fetchBatch(tokenSymbols: string[]): Promise<boolean> {
+  const tokens = SUPPORTED_TOKENS.filter((t) => tokenSymbols.includes(t.symbol) && t.coingeckoId);
+  if (tokens.length === 0) return false;
+
+  const ids = tokens.map((t) => t.coingeckoId).join(',');
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 4000);
+
   try {
-    const tokens = enabledTokens
-      ? SUPPORTED_TOKENS.filter((t) => enabledTokens.includes(t.symbol))
-      : SUPPORTED_TOKENS;
-
-    if (tokens.length === 0) return;
-
-    const ids = tokens.map((t) => t.coingeckoId).filter(Boolean).join(',');
-    if (!ids) return;
-
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000);
-
     const response = await fetch(
       `${COINGECKO_API}?ids=${ids}&vs_currencies=usd`,
       { signal: controller.signal }
     );
     clearTimeout(timeoutId);
-
-    if (!response.ok) return;
+    if (!response.ok) return false;
 
     const data = await response.json();
-    const newPrices: Record<string, number> = { ...priceCache };
+    let updated = false;
 
     for (const token of tokens) {
       if (data[token.coingeckoId]?.usd) {
-        newPrices[token.symbol] = data[token.coingeckoId].usd;
+        priceCache[token.symbol] = data[token.coingeckoId].usd;
+        updated = true;
       }
     }
 
-    priceCache = newPrices;
-    lastFetchTime = Date.now();
-    notifyListeners();
+    if (updated) {
+      lastFetchTime = Date.now();
+      notifyListeners();
+    }
+    return true;
   } catch {
-    // Silent — never block UI for price failures
+    clearTimeout(timeoutId);
+    return false;
   }
 }
 
-/** Start the background price service. Idempotent — safe to call multiple times. */
+/** Two-batch fetch: priority tokens first, then the rest. */
+async function fetchAllPrices(enabledTokens?: string[]) {
+  const allSymbols = enabledTokens
+    ? enabledTokens
+    : SUPPORTED_TOKENS.map((t) => t.symbol);
+
+  // Batch 1: Priority tokens (user sees these first)
+  const batch1 = allSymbols.filter((s) => PRIORITY_SYMBOLS.includes(s));
+  const batch2 = allSymbols.filter((s) => !PRIORITY_SYMBOLS.includes(s));
+
+  // Fire batch 1 — UI updates as soon as top tokens arrive
+  if (batch1.length > 0) {
+    await fetchBatch(batch1);
+  }
+
+  // Fire batch 2 — remaining tokens
+  if (batch2.length > 0) {
+    await fetchBatch(batch2);
+  }
+}
+
 export function startPriceService(enabledTokens?: string[]) {
   if (running) return;
   running = true;
 
-  // Fetch immediately (non-blocking)
-  fetchPricesOnce(enabledTokens);
+  // Fetch immediately (non-blocking, two batches)
+  fetchAllPrices(enabledTokens);
 
-  // Then every 30 seconds
-  intervalId = setInterval(() => fetchPricesOnce(enabledTokens), REFRESH_INTERVAL);
+  // Refresh every 30 seconds
+  intervalId = setInterval(() => fetchAllPrices(enabledTokens), REFRESH_INTERVAL);
 }
 
-/** Stop the background price service. */
 export function stopPriceService() {
   if (intervalId) {
     clearInterval(intervalId);
@@ -105,12 +121,10 @@ export function stopPriceService() {
   running = false;
 }
 
-/** Force an immediate refresh (e.g., pull-to-refresh). */
 export function refreshPricesNow(enabledTokens?: string[]) {
-  fetchPricesOnce(enabledTokens);
+  fetchAllPrices(enabledTokens);
 }
 
-/** Check if service is running. */
 export function isPriceServiceRunning(): boolean {
   return running;
 }
