@@ -64,7 +64,7 @@ export function useAllBalances(addresses: Partial<Record<ChainId, string>>) {
           const provider = registry.getChainProvider(chainId);
           const result = await Promise.race([
             provider.getBalance(address),
-            new Promise<null>((resolve) => setTimeout(() => resolve(null), 8000)),
+            new Promise<null>((resolve) => setTimeout(() => resolve(null), 3000)),
           ]);
           return result;
         } catch {
