@@ -45,11 +45,20 @@ async function prefetchBalances() {
       if (!address) continue;
       try {
         const provider = registry.getChainProvider(chainId);
-        const balance = await Promise.race([
-          provider.getBalance(address),
-          new Promise((_, reject) => setTimeout(() => reject('timeout'), 3000)),
+        // Fetch balance and tx history in parallel per chain
+        const [balance] = await Promise.all([
+          Promise.race([
+            provider.getBalance(address),
+            new Promise((_, reject) => setTimeout(() => reject('timeout'), 3000)),
+          ]),
+          // Pre-fetch tx history (fire and forget — don't await blocking)
+          Promise.race([
+            provider.getTransactionHistory(address, 10).then((txs: any) => {
+              queryClient.setQueryData(['tx-history-prefetch', chainId, address], txs);
+            }),
+            new Promise((r) => setTimeout(r, 3000)),
+          ]).catch(() => {}),
         ]);
-        // Seed React Query cache so useAllBalances returns instantly
         queryClient.setQueryData(['balance', chainId, address], balance);
       } catch {}
     }

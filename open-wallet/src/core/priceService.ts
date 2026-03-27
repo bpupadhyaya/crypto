@@ -19,6 +19,7 @@ const PRIORITY_SYMBOLS = ['BTC', 'ETH', 'SOL', 'USDT', 'USDC', 'OTK'];
 
 // ─── Global price cache ───
 let priceCache: Record<string, number> = {};
+let changeCache: Record<string, number> = {}; // 24h change %
 let lastFetchTime = 0;
 let intervalId: ReturnType<typeof setInterval> | null = null;
 let listeners: Array<() => void> = [];
@@ -26,6 +27,10 @@ let running = false;
 
 export function getPrices(): Record<string, number> {
   return priceCache;
+}
+
+export function get24hChanges(): Record<string, number> {
+  return changeCache;
 }
 
 export function getLastFetchTime(): number {
@@ -54,7 +59,7 @@ async function fetchBatch(tokenSymbols: string[]): Promise<boolean> {
 
   try {
     const response = await fetch(
-      `${COINGECKO_API}?ids=${ids}&vs_currencies=usd`,
+      `${COINGECKO_API}?ids=${ids}&vs_currencies=usd&include_24hr_change=true`,
       { signal: controller.signal }
     );
     clearTimeout(timeoutId);
@@ -67,6 +72,9 @@ async function fetchBatch(tokenSymbols: string[]): Promise<boolean> {
       if (data[token.coingeckoId]?.usd) {
         priceCache[token.symbol] = data[token.coingeckoId].usd;
         updated = true;
+      }
+      if (data[token.coingeckoId]?.usd_24h_change != null) {
+        changeCache[token.symbol] = data[token.coingeckoId].usd_24h_change;
       }
     }
 

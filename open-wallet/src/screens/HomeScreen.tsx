@@ -35,7 +35,7 @@ const TOKEN_COLORS: Record<string, string> = {
 
 const keyExtractor = (item: TokenInfo) => item.symbol;
 
-const TokenRow = React.memo(({ token, price, balance, onPress, t }: { token: TokenInfo; price?: number; balance?: number; onPress: () => void; t: Theme & { isDark: boolean } }) => {
+const TokenRow = React.memo(({ token, price, balance, change, onPress, t }: { token: TokenInfo; price?: number; balance?: number; change?: number; onPress: () => void; t: Theme & { isDark: boolean } }) => {
   const s = useMemo(() => StyleSheet.create({
     tokenRow: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 14, backgroundColor: t.bg.card, borderBottomWidth: 1, borderBottomColor: t.border, marginHorizontal: 16 },
     tokenDot: { width: 10, height: 10, borderRadius: 5, marginRight: 12 },
@@ -44,8 +44,11 @@ const TokenRow = React.memo(({ token, price, balance, onPress, t }: { token: Tok
     tokenName: { color: t.text.muted, fontSize: 12, marginTop: 1 },
     tokenValues: { alignItems: 'flex-end' },
     tokenBalance: { color: t.text.secondary, fontSize: 14, fontWeight: '500' },
-    tokenUsd: { color: t.text.muted, fontSize: 12, marginTop: 1 },
+    tokenPriceRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 1 },
+    tokenUsd: { color: t.text.muted, fontSize: 12 },
   }), [t]);
+
+  const changeColor = change != null ? (change >= 0 ? t.accent.green : t.accent.red) : t.text.muted;
 
   return (
     <TouchableOpacity style={s.tokenRow} onPress={onPress} activeOpacity={0.7}>
@@ -56,9 +59,16 @@ const TokenRow = React.memo(({ token, price, balance, onPress, t }: { token: Tok
       </View>
       <View style={s.tokenValues}>
         <Text style={s.tokenBalance}>{balance ? balance.toFixed(balance < 0.01 ? 6 : balance < 1 ? 4 : 2) : '0.00'}</Text>
-        <Text style={s.tokenUsd}>
-          {price ? `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '—'}
-        </Text>
+        <View style={s.tokenPriceRow}>
+          <Text style={s.tokenUsd}>
+            {price ? `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '—'}
+          </Text>
+          {change != null && (
+            <Text style={{ color: changeColor, fontSize: 11, fontWeight: '600' }}>
+              {change >= 0 ? '+' : ''}{change.toFixed(1)}%
+            </Text>
+          )}
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -113,7 +123,7 @@ export function HomeScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const enabledTokens = useWalletStore((s) => s.enabledTokens);
   const addresses = useWalletStore((s) => s.addresses);
-  const { prices, loading: pricesLoading, lastUpdated, refresh: refreshPrices } = usePrices();
+  const { prices, changes, loading: pricesLoading, lastUpdated, refresh: refreshPrices } = usePrices();
   const t = useTheme();
 
   // Fetch real on-chain balances
@@ -183,8 +193,8 @@ export function HomeScreen() {
   }, [portfolioBalances, totalUsdValue]);
 
   const renderItem = useCallback(({ item }: { item: TokenInfo }) => (
-    <TokenRow token={item} price={prices[item.symbol]} balance={balanceMap[item.symbol]} onPress={() => setSelectedToken(item)} t={t} />
-  ), [prices, balanceMap, t]);
+    <TokenRow token={item} price={prices[item.symbol]} balance={balanceMap[item.symbol]} change={changes[item.symbol]} onPress={() => setSelectedToken(item)} t={t} />
+  ), [prices, changes, balanceMap, t]);
 
   const openManage = useCallback(() => setShowManage(true), []);
   const closeManage = useCallback(() => setShowManage(false), []);

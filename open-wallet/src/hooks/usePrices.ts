@@ -11,6 +11,7 @@ import { Alert } from 'react-native';
 import { useWalletStore } from '../store/walletStore';
 import {
   getPrices,
+  get24hChanges,
   getLastFetchTime,
   onPriceUpdate,
   startPriceService,
@@ -20,24 +21,24 @@ import {
 export function usePrices() {
   const enabledTokens = useWalletStore((s) => s.enabledTokens);
   const [prices, setPrices] = useState<Record<string, number>>(getPrices);
+  const [changes, setChanges] = useState<Record<string, number>>(get24hChanges);
   const [lastUpdated, setLastUpdated] = useState<number>(getLastFetchTime);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Ensure the background service is running
     startPriceService(enabledTokens);
 
-    // Subscribe to price updates from the background service
     const unsub = onPriceUpdate(() => {
       setPrices({ ...getPrices() });
+      setChanges({ ...get24hChanges() });
       setLastUpdated(getLastFetchTime());
       setLoading(false);
     });
 
-    // Seed with current cache (may already have data)
     const current = getPrices();
     if (Object.keys(current).length > 0) {
       setPrices(current);
+      setChanges(get24hChanges());
       setLastUpdated(getLastFetchTime());
     }
 
@@ -66,5 +67,5 @@ export function usePrices() {
     }
   }, [prices]);
 
-  return { prices, loading, lastUpdated, refresh };
+  return { prices, changes, loading, lastUpdated, refresh };
 }
