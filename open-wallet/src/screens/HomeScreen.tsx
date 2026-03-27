@@ -192,6 +192,20 @@ export function HomeScreen() {
     return result;
   }, [portfolioBalances, totalUsdValue]);
 
+  // Weighted 24h portfolio change
+  const portfolioChange = useMemo(() => {
+    if (totalUsdValue <= 0 || !changes || Object.keys(changes).length === 0) return null;
+    let weightedSum = 0;
+    for (const b of portfolioBalances) {
+      const usd = b.usdValue ?? 0;
+      const change = changes[b.token.symbol];
+      if (usd > 0 && change != null) {
+        weightedSum += (usd / totalUsdValue) * change;
+      }
+    }
+    return weightedSum;
+  }, [portfolioBalances, changes, totalUsdValue]);
+
   const renderItem = useCallback(({ item }: { item: TokenInfo }) => (
     <TokenRow token={item} price={prices[item.symbol]} balance={balanceMap[item.symbol]} change={changes[item.symbol]} onPress={() => setSelectedToken(item)} t={t} />
   ), [prices, changes, balanceMap, t]);
@@ -231,6 +245,11 @@ export function HomeScreen() {
           centerValue={`$${totalUsdValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
         />
         <Legend t={t} data={allocations} />
+        {portfolioChange != null && (
+          <Text style={{ color: portfolioChange >= 0 ? t.accent.green : t.accent.red, fontSize: 14, fontWeight: '700', marginTop: 8 }}>
+            {portfolioChange >= 0 ? '+' : ''}{portfolioChange.toFixed(2)}% (24h)
+          </Text>
+        )}
       </View>
       <View style={s.actions}>
         <ActionBtn icon="↑" label="Send" color={t.accent.orange} t={t} />
@@ -260,7 +279,7 @@ export function HomeScreen() {
       />
       {lastUpdatedText ? <Text style={s.lastUpdated}>{lastUpdatedText}</Text> : null}
     </>
-  ), [totalUsdValue, openManage, lastUpdatedText, showTestnetBanner, demoMode, allocations, s, t, searchQuery]);
+  ), [totalUsdValue, portfolioChange, openManage, lastUpdatedText, showTestnetBanner, demoMode, allocations, s, t, searchQuery]);
 
   if (showBuySell) return <BuySellScreen onClose={() => setShowBuySell(false)} />;
   if (showHistory) return <HistoryScreen />;
