@@ -5,7 +5,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   View, Text, TouchableOpacity, ScrollView,
-  StyleSheet, SafeAreaView, Switch, Alert,
+  StyleSheet, SafeAreaView, Switch, Alert, Linking,
 } from 'react-native';
 import { useWalletStore } from '../store/walletStore';
 import { authManager } from '../core/auth/auth';
@@ -373,10 +373,46 @@ export function SettingsScreen() {
             <Text style={st.value}>0.1.0-alpha</Text>
           </View>
           <View style={st.divider} />
-          <View style={st.row}>
+          <TouchableOpacity style={st.row} onPress={() => Linking.openURL('https://github.com/bpupadhyaya/crypto')}>
             <Text style={st.label}>License</Text>
-            <Text style={st.value}>MIT (Open Source)</Text>
-          </View>
+            <Text style={{ color: t.accent.green, fontSize: 14, fontWeight: '600' }}>MIT (Open Source)</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => Linking.openURL('https://github.com/bpupadhyaya/crypto')}>
+            <Text style={st.label}>Source Code</Text>
+            <Text style={{ color: t.accent.blue, fontSize: 14 }}>GitHub</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => Linking.openURL('https://github.com/bpupadhyaya/crypto/blob/main/docs/HUMAN_CONSTITUTION.md')}>
+            <Text style={st.label}>Human Constitution</Text>
+            <Text style={{ color: t.accent.blue, fontSize: 14 }}>Read</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Support the Mission */}
+        <Text style={st.section}>Support the Mission</Text>
+        <View style={[st.card, { padding: 20 }]}>
+          <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: '700', marginBottom: 8 }}>
+            Help build financial infrastructure for all of humanity
+          </Text>
+          <Text style={{ color: t.text.muted, fontSize: 13, lineHeight: 20, marginBottom: 16 }}>
+            Open Wallet, Open Chain, and Open Token are 100% open source with no VC funding, no pre-mine, and no founder allocation. Every line of code is a gift to humanity. Your donation keeps development going — toward a world where every parent's sacrifice is valued, every teacher's impact is visible, and every human has equal access to the global economy.
+          </Text>
+          <TouchableOpacity
+            style={{ backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 10 }}
+            onPress={() => Linking.openURL('https://github.com/sponsors/bpupadhyaya')}
+          >
+            <Text style={{ color: '#fff', fontSize: 15, fontWeight: '700' }}>Sponsor on GitHub</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ backgroundColor: t.accent.blue, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 10 }}
+            onPress={() => Linking.openURL('https://buy.stripe.com/cNi7sLeUmcNo4mwcQ56AM00')}
+          >
+            <Text style={{ color: '#fff', fontSize: 15, fontWeight: '700' }}>Donate via Stripe</Text>
+          </TouchableOpacity>
+          <Text style={{ color: t.text.muted, fontSize: 11, textAlign: 'center', lineHeight: 16 }}>
+            No features are locked behind donations. Your support is entirely voluntary and goes directly toward building tools that serve humanity.
+          </Text>
         </View>
 
         {/* Sign Out */}
