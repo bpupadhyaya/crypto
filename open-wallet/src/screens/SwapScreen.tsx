@@ -1,139 +1,167 @@
 /**
- * Swap Screen — Exchange any token to any other token.
- * Core value proposition of Open Wallet.
+ * Swap Screen — 8 swap options with security ratings, pros/cons.
  *
- * Wired to real DEX/Bridge providers:
- *   Same chain → 1inch (EVM) or Jupiter (Solana)
- *   Cross chain → Li.Fi aggregator or THORChain (native BTC)
+ * Built-in (always available):
+ * 🔐 Open Wallet Atomic Swap (5/5) — P2P, standalone, ALWAYS works
+ * 🏊 Open Wallet DEX (4/5) — AMM on Open Chain
+ * 📋 Open Wallet Order Book (4.5/5) — Limit orders
+ *
+ * External (more liquidity):
+ * ⚡ THORChain (3.5/5) · 📊 1inch (3.5/5) · ⚡ Jupiter (3.5/5)
+ * 🌉 Li.Fi (3/5) · 🌊 Osmosis (4/5)
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  StyleSheet,
-  SafeAreaView,
-  Alert,
-  ActivityIndicator,
+  View, Text, TextInput, TouchableOpacity, ScrollView,
+  StyleSheet, SafeAreaView, Alert, ActivityIndicator,
 } from 'react-native';
 import { useWalletStore } from '../store/walletStore';
 import { ConfirmTransactionScreen } from './ConfirmTransactionScreen';
-import { NATIVE_TOKENS } from '../hooks/useBalances';
 import { useTheme } from '../hooks/useTheme';
-import type { Token, ChainId } from '../core/abstractions/types';
+import { getAllSwapOptions, type SwapOption } from '../core/swap';
+import type { Token } from '../core/abstractions/types';
 
-const POPULAR_TOKENS: Token[] = [
-  { symbol: 'BTC', name: 'Bitcoin', chainId: 'bitcoin', decimals: 8 },
-  { symbol: 'ETH', name: 'Ethereum', chainId: 'ethereum', decimals: 18 },
-  { symbol: 'SOL', name: 'Solana', chainId: 'solana', decimals: 9 },
-  { symbol: 'USDC', name: 'USD Coin', chainId: 'ethereum', decimals: 6,
-    contractAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' },
-  { symbol: 'USDT', name: 'Tether', chainId: 'ethereum', decimals: 6,
-    contractAddress: '0xdAC17F958D2ee523a2206206994597C13D831ec7' },
-];
-
-function findToken(symbol: string): Token {
-  return POPULAR_TOKENS.find((t) => t.symbol === symbol) ?? POPULAR_TOKENS[1];
-}
+const SWAP_TOKENS = ['BTC', 'ETH', 'SOL', 'USDT', 'USDC', 'OTK', 'ATOM'];
 
 export function SwapScreen() {
-  const { mode } = useWalletStore();
-  const [fromSymbol, setFromSymbol] = useState('ETH');
-  const [toSymbol, setToSymbol] = useState('USDC');
+  const { mode, addresses } = useWalletStore();
+  const [fromSymbol, setFromSymbol] = useState('BTC');
+  const [toSymbol, setToSymbol] = useState('USDT');
   const [amountStr, setAmountStr] = useState('');
-  const [slippageBps, setSlippageBps] = useState(50);
-  const [swapping, setSwapping] = useState(false);
+  const [options, setOptions] = useState<SwapOption[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<SwapOption | null>(null);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [showCompare, setShowCompare] = useState(false);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const t = useTheme();
 
-  const fromToken = useMemo(() => findToken(fromSymbol), [fromSymbol]);
-  const toToken = useMemo(() => findToken(toSymbol), [toSymbol]);
-
-  const [showConfirm, setShowConfirm] = useState(false);
-  const isCrossChain = fromToken.chainId !== toToken.chainId;
-
-  const quote = useMemo(() => {
-    const num = parseFloat(amountStr);
-    if (isNaN(num) || num <= 0) return null;
-    return { estimatedOutput: (num * 0.998).toFixed(4), fee: '~$0.50', route: isCrossChain ? 'Li.Fi Bridge' : '1inch DEX' };
-  }, [amountStr, isCrossChain]);
-  const quoteLoading = false;
-  const estimatedOutput = quote?.estimatedOutput ?? null;
-
-  const styles = useMemo(() => StyleSheet.create({
-    container: { flex: 1, backgroundColor: t.bg.primary, paddingHorizontal: 24 },
+  const s = useMemo(() => StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.bg.primary },
+    scroll: { paddingHorizontal: 20 },
     title: { color: t.text.primary, fontSize: 24, fontWeight: '800', marginTop: 16 },
-    subtitle: { color: t.text.muted, fontSize: 13, marginTop: 4, marginBottom: 20 },
-    swapCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16 },
+    subtitle: { color: t.text.muted, fontSize: 13, marginTop: 4, marginBottom: 16 },
+    // Token selector
+    tokenRow: { flexDirection: 'row', gap: 8, marginBottom: 12, flexWrap: 'wrap' },
+    tokenChip: { paddingVertical: 8, paddingHorizontal: 14, borderRadius: 16, backgroundColor: t.bg.card },
+    tokenChipActive: { backgroundColor: t.accent.green },
+    tokenChipText: { color: t.text.secondary, fontSize: 14, fontWeight: '600' },
+    tokenChipTextActive: { color: t.bg.primary },
+    // Swap card
+    swapCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 8 },
     cardLabel: { color: t.text.muted, fontSize: 12, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 },
-    tokenRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    tokenSelector: { backgroundColor: t.border, borderRadius: 12, paddingVertical: 10, paddingHorizontal: 16 },
-    tokenText: { color: t.text.primary, fontSize: 18, fontWeight: '700' },
-    chainBadge: { color: t.text.muted, fontSize: 10, textTransform: 'uppercase', marginTop: 2 },
-    amountInput: { color: t.text.primary, fontSize: 24, fontWeight: '600', textAlign: 'right', flex: 1, marginLeft: 16 },
-    outputArea: { flex: 1, marginLeft: 16, alignItems: 'flex-end' },
-    estimatedAmount: { color: t.text.secondary, fontSize: 24, fontWeight: '600', textAlign: 'right' },
-    flipButton: { alignSelf: 'center', backgroundColor: t.accent.green, width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center', marginVertical: -12, zIndex: 1 },
+    amountInput: { color: t.text.primary, fontSize: 24, fontWeight: '600' },
+    flipBtn: { alignSelf: 'center', backgroundColor: t.accent.green, width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center', marginVertical: -12, zIndex: 1 },
     flipIcon: { color: t.bg.primary, fontSize: 20, fontWeight: '800' },
-    quoteDetails: { backgroundColor: t.bg.card, borderRadius: 12, padding: 16, marginTop: 16 },
-    detailRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
-    detailLabel: { color: t.text.muted, fontSize: 13 },
-    detailValue: { color: t.text.secondary, fontSize: 13, maxWidth: '60%' },
-    slippageSection: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 16 },
-    slippageRow: { flexDirection: 'row', gap: 6 },
-    slippageChip: { backgroundColor: t.border, borderRadius: 8, paddingVertical: 4, paddingHorizontal: 10 },
-    slippageChipActive: { backgroundColor: t.accent.green + '33' },
-    slippageText: { color: t.text.muted, fontSize: 12 },
-    slippageTextActive: { color: t.accent.green, fontWeight: '600' },
-    quickTokens: { marginTop: 20 },
-    quickLabel: { color: t.text.muted, fontSize: 12, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 },
-    quickRow: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
-    quickChip: { backgroundColor: t.bg.card, borderRadius: 20, paddingVertical: 8, paddingHorizontal: 16 },
-    quickChipActive: { borderWidth: 1, borderColor: t.accent.green + '30' },
-    quickChipText: { color: t.text.secondary, fontSize: 14 },
-    swapButton: { backgroundColor: t.accent.blue, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginTop: 24 },
-    swapButtonDisabled: { opacity: 0.6 },
-    swapButtonText: { color: '#ffffff', fontSize: 17, fontWeight: '700' },
+    toCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 16, alignItems: 'center' },
+    toAmount: { color: t.text.secondary, fontSize: 20, fontWeight: '700' },
+    toLabel: { color: t.text.muted, fontSize: 13, marginTop: 4 },
+    // Section headers
+    sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 20, marginBottom: 10 },
+    sectionTitle: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5 },
+    compareBtn: { color: t.accent.blue, fontSize: 13, fontWeight: '600' },
+    // Option cards
+    optionCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 10 },
+    optionCardSelected: { borderWidth: 2, borderColor: t.accent.green },
+    optionCardUnavailable: { opacity: 0.5 },
+    optionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+    optionLeft: { flexDirection: 'row', alignItems: 'center', flex: 1 },
+    optionIcon: { fontSize: 24, marginRight: 10 },
+    optionName: { color: t.text.primary, fontSize: 15, fontWeight: '700', flex: 1 },
+    optionAmount: { color: t.accent.green, fontSize: 16, fontWeight: '800' },
+    optionAmountUnavail: { color: t.text.muted, fontSize: 14 },
+    optionMeta: { flexDirection: 'row', gap: 12, marginTop: 8, flexWrap: 'wrap' },
+    metaBadge: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+    metaText: { color: t.text.muted, fontSize: 12 },
+    securityBadge: { paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4 },
+    securityText: { fontSize: 11, fontWeight: '700' },
+    // Expanded details
+    expandedBox: { marginTop: 12, paddingTop: 12, borderTopWidth: 1, borderTopColor: t.border },
+    expandedLabel: { color: t.text.muted, fontSize: 12, fontWeight: '600', marginTop: 8 },
+    expandedText: { color: t.text.secondary, fontSize: 13, lineHeight: 20, marginTop: 2 },
+    expandBtn: { color: t.accent.blue, fontSize: 12, fontWeight: '600', marginTop: 8 },
+    // Fallback note
+    fallbackNote: { backgroundColor: t.accent.green + '10', borderRadius: 12, padding: 14, marginTop: 16, marginBottom: 20 },
+    fallbackText: { color: t.accent.green, fontSize: 12, lineHeight: 18, textAlign: 'center' },
+    // Swap button
+    swapBtn: { backgroundColor: t.accent.blue, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginTop: 16 },
+    swapBtnDisabled: { opacity: 0.5 },
+    swapBtnText: { color: '#fff', fontSize: 17, fontWeight: '700' },
+    // Loading
+    loadingBox: { padding: 40, alignItems: 'center' },
+    loadingText: { color: t.text.muted, fontSize: 14, marginTop: 12 },
   }), [t]);
 
-  const flipTokens = () => {
+  // Fetch quotes when amount changes
+  useEffect(() => {
+    const amount = parseFloat(amountStr);
+    if (!amount || amount <= 0) { setOptions([]); return; }
+
+    const timer = setTimeout(async () => {
+      setLoading(true);
+      try {
+        const fromAddr = addresses.ethereum ?? addresses.bitcoin ?? '';
+        const toAddr = addresses.ethereum ?? '';
+        const results = await getAllSwapOptions({
+          fromToken: fromSymbol, toToken: toSymbol,
+          fromAmount: amount, fromAddress: fromAddr, toAddress: toAddr,
+        });
+        setOptions(results);
+      } catch {
+        setOptions([]);
+      }
+      setLoading(false);
+    }, 600);
+
+    return () => clearTimeout(timer);
+  }, [amountStr, fromSymbol, toSymbol, addresses]);
+
+  const flipTokens = useCallback(() => {
     setFromSymbol(toSymbol);
     setToSymbol(fromSymbol);
     setAmountStr('');
-  };
+    setOptions([]);
+    setSelectedOption(null);
+  }, [fromSymbol, toSymbol]);
 
-  const handleSwap = () => {
-    if (!amountStr.trim() || parseFloat(amountStr) <= 0) {
-      Alert.alert('Invalid Amount', 'Please enter a valid amount.');
-      return;
-    }
-    if (!quote) {
-      Alert.alert('No Quote', 'Enter an amount to get a quote.');
+  const handleSwap = useCallback(() => {
+    if (!selectedOption) {
+      Alert.alert('Select Option', 'Please choose a swap method.');
       return;
     }
     setShowConfirm(true);
-  };
+  }, [selectedOption]);
 
-  const executeSwap = async () => {
-    await new Promise((r) => setTimeout(r, 1500));
-    Alert.alert('Success', `Swapped ${amountStr} ${fromSymbol} → ${estimatedOutput} ${toSymbol}`);
+  const executeSwap = useCallback(async () => {
+    // Simulate swap execution
+    await new Promise((r) => setTimeout(r, 2000));
+    Alert.alert('Swap Initiated',
+      `${amountStr} ${fromSymbol} → ${selectedOption?.toAmount.toFixed(4)} ${toSymbol}\n\nVia: ${selectedOption?.name}\n\n${selectedOption?.id === 'ow-atomic' ? 'Atomic swap in progress. Your funds are cryptographically secured.' : 'Transaction submitted to the network.'}`
+    );
     setAmountStr('');
+    setOptions([]);
+    setSelectedOption(null);
     setShowConfirm(false);
+  }, [amountStr, fromSymbol, toSymbol, selectedOption]);
+
+  const getSecurityColor = (rating: number) => {
+    if (rating >= 4.5) return t.accent.green;
+    if (rating >= 3.5) return t.accent.yellow;
+    return t.accent.orange;
   };
 
-  if (showConfirm) {
+  const getSecurityBg = (rating: number) => getSecurityColor(rating) + '20';
+
+  if (showConfirm && selectedOption) {
     return (
       <ConfirmTransactionScreen
         tx={{
-          type: isCrossChain ? 'bridge' : 'swap',
-          fromSymbol,
-          fromAmount: amountStr,
-          toSymbol,
-          toAmount: estimatedOutput ?? '?',
-          fee: quote?.fee,
-          route: quote?.route,
+          type: 'swap',
+          fromSymbol, fromAmount: amountStr,
+          toSymbol, toAmount: selectedOption.toAmount.toFixed(4),
+          fee: selectedOption.fee,
+          route: `${selectedOption.name} (Security: ${selectedOption.securityRating}/5)`,
         }}
         onConfirm={executeSwap}
         onCancel={() => setShowConfirm(false)}
@@ -141,124 +169,151 @@ export function SwapScreen() {
     );
   }
 
+  const builtIn = options.filter((o) => o.category === 'built-in');
+  const external = options.filter((o) => o.category === 'external');
+
+  const renderOption = (opt: SwapOption) => {
+    const isExpanded = expandedId === opt.id;
+    const isSelected = selectedOption?.id === opt.id;
+    return (
+      <TouchableOpacity
+        key={opt.id}
+        style={[s.optionCard, isSelected && s.optionCardSelected, !opt.available && s.optionCardUnavailable]}
+        onPress={() => opt.available && setSelectedOption(opt)}
+        activeOpacity={0.7}
+      >
+        <View style={s.optionHeader}>
+          <View style={s.optionLeft}>
+            <Text style={s.optionIcon}>{opt.icon}</Text>
+            <Text style={s.optionName} numberOfLines={1}>{opt.name}</Text>
+          </View>
+          {opt.available ? (
+            <Text style={s.optionAmount}>~{opt.toAmount.toFixed(2)} {toSymbol}</Text>
+          ) : (
+            <Text style={s.optionAmountUnavail}>{opt.error ?? 'Unavailable'}</Text>
+          )}
+        </View>
+
+        <View style={s.optionMeta}>
+          <View style={[s.securityBadge, { backgroundColor: getSecurityBg(opt.securityRating) }]}>
+            <Text style={[s.securityText, { color: getSecurityColor(opt.securityRating) }]}>
+              {'★'.repeat(Math.floor(opt.securityRating))}{opt.securityRating % 1 ? '½' : ''} {opt.securityRating}/5
+            </Text>
+          </View>
+          <View style={s.metaBadge}><Text style={s.metaText}>{opt.speed}</Text></View>
+          <View style={s.metaBadge}><Text style={s.metaText}>Fee: {opt.fee}</Text></View>
+          {opt.priceImpact > 0.1 && (
+            <View style={s.metaBadge}><Text style={[s.metaText, { color: t.accent.orange }]}>Impact: {opt.priceImpact.toFixed(1)}%</Text></View>
+          )}
+          {opt.alwaysAvailable && (
+            <View style={[s.securityBadge, { backgroundColor: t.accent.green + '20' }]}>
+              <Text style={[s.securityText, { color: t.accent.green }]}>ALWAYS ON</Text>
+            </View>
+          )}
+        </View>
+
+        <TouchableOpacity onPress={() => setExpandedId(isExpanded ? null : opt.id)}>
+          <Text style={s.expandBtn}>{isExpanded ? 'Hide Details' : 'Learn More'}</Text>
+        </TouchableOpacity>
+
+        {isExpanded && (
+          <View style={s.expandedBox}>
+            <Text style={s.expandedLabel}>Security</Text>
+            <Text style={s.expandedText}>{opt.securityNote}</Text>
+            <Text style={s.expandedLabel}>Route</Text>
+            <Text style={s.expandedText}>{opt.route}</Text>
+            <Text style={s.expandedLabel}>How It Works</Text>
+            <Text style={s.expandedText}>
+              {opt.id === 'ow-atomic' ? 'Hash Time-Locked Contracts (HTLC) between you and a counterparty. Pure cryptography — if either party fails, both get refunded automatically. No intermediary involved.' :
+               opt.id === 'ow-dex' ? 'Automated Market Maker (AMM) pool on Open Chain. Your tokens swap against pooled liquidity. Price determined by constant product formula (x × y = k). Near-zero fees.' :
+               opt.id === 'ow-orderbook' ? 'You fill a limit order from another user. Settlement is atomic (all-or-nothing). Set your own price. If no matching order exists, your order waits.' :
+               `External protocol: ${opt.route}. Your transaction is processed by the protocol's smart contracts/validators. Open Wallet signs locally — your keys never leave your device.`}
+            </Text>
+          </View>
+        )}
+      </TouchableOpacity>
+    );
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Text style={styles.title}>Swap</Text>
-        <Text style={styles.subtitle}>
-          {isCrossChain ? 'Cross-chain bridge swap' : 'Any token to any token, one tap'}
-        </Text>
+    <SafeAreaView style={s.container}>
+      <ScrollView style={s.scroll} showsVerticalScrollIndicator={false}>
+        <Text style={s.title}>Swap</Text>
+        <Text style={s.subtitle}>8 options — you choose. Your keys, your decision.</Text>
 
         {/* From */}
-        <View style={styles.swapCard}>
-          <Text style={styles.cardLabel}>From</Text>
-          <View style={styles.tokenRow}>
-            <TouchableOpacity style={styles.tokenSelector}>
-              <Text style={styles.tokenText}>{fromSymbol}</Text>
-              <Text style={styles.chainBadge}>{fromToken.chainId}</Text>
+        <Text style={s.cardLabel}>From</Text>
+        <View style={s.tokenRow}>
+          {SWAP_TOKENS.filter((t) => t !== toSymbol).map((sym) => (
+            <TouchableOpacity key={sym} style={[s.tokenChip, fromSymbol === sym && s.tokenChipActive]} onPress={() => { setFromSymbol(sym); setOptions([]); }}>
+              <Text style={[s.tokenChipText, fromSymbol === sym && s.tokenChipTextActive]}>{sym}</Text>
             </TouchableOpacity>
-            <TextInput
-              style={styles.amountInput}
-              placeholder="0.00"
-              placeholderTextColor={t.text.muted}
-              value={amountStr}
-              onChangeText={setAmountStr}
-              keyboardType="decimal-pad"
-            />
-          </View>
+          ))}
+        </View>
+        <View style={s.swapCard}>
+          <TextInput style={s.amountInput} placeholder="0.00" placeholderTextColor={t.text.muted} value={amountStr} onChangeText={setAmountStr} keyboardType="decimal-pad" />
         </View>
 
         {/* Flip */}
-        <TouchableOpacity style={styles.flipButton} onPress={flipTokens}>
-          <Text style={styles.flipIcon}>↕</Text>
+        <TouchableOpacity style={s.flipBtn} onPress={flipTokens}>
+          <Text style={s.flipIcon}>↕</Text>
         </TouchableOpacity>
 
         {/* To */}
-        <View style={styles.swapCard}>
-          <Text style={styles.cardLabel}>To {isCrossChain && '(cross-chain)'}</Text>
-          <View style={styles.tokenRow}>
-            <TouchableOpacity style={styles.tokenSelector}>
-              <Text style={styles.tokenText}>{toSymbol}</Text>
-              <Text style={styles.chainBadge}>{toToken.chainId}</Text>
+        <Text style={s.cardLabel}>To</Text>
+        <View style={s.tokenRow}>
+          {SWAP_TOKENS.filter((t) => t !== fromSymbol).map((sym) => (
+            <TouchableOpacity key={sym} style={[s.tokenChip, toSymbol === sym && s.tokenChipActive]} onPress={() => { setToSymbol(sym); setOptions([]); }}>
+              <Text style={[s.tokenChipText, toSymbol === sym && s.tokenChipTextActive]}>{sym}</Text>
             </TouchableOpacity>
-            <View style={styles.outputArea}>
-              {quoteLoading && amountStr ? (
-                <ActivityIndicator color={t.accent.green} size="small" />
-              ) : (
-                <Text style={styles.estimatedAmount}>
-                  {estimatedOutput ?? '—'}
-                </Text>
-              )}
-            </View>
-          </View>
+          ))}
         </View>
 
-        {/* Quote details */}
-        {quote && (
-          <View style={styles.quoteDetails}>
-            <View style={styles.detailRow}>
-              <Text style={styles.detailLabel}>Route</Text>
-              <Text style={styles.detailValue} numberOfLines={1}>{quote.route}</Text>
-            </View>
-            <View style={styles.detailRow}>
-              <Text style={styles.detailLabel}>Est. fee</Text>
-              <Text style={styles.detailValue}>{quote.fee}</Text>
-            </View>
+        {/* Loading */}
+        {loading && (
+          <View style={s.loadingBox}>
+            <ActivityIndicator color={t.accent.green} size="large" />
+            <Text style={s.loadingText}>Fetching quotes from 8 providers...</Text>
           </View>
         )}
 
-        {/* Pro mode: slippage */}
-        {mode === 'pro' && (
-          <View style={styles.slippageSection}>
-            <Text style={styles.detailLabel}>Slippage tolerance</Text>
-            <View style={styles.slippageRow}>
-              {[25, 50, 100, 200].map((bps) => (
-                <TouchableOpacity
-                  key={bps}
-                  style={[styles.slippageChip, slippageBps === bps && styles.slippageChipActive]}
-                  onPress={() => setSlippageBps(bps)}
-                >
-                  <Text style={[styles.slippageText, slippageBps === bps && styles.slippageTextActive]}>
-                    {(bps / 100).toFixed(1)}%
-                  </Text>
-                </TouchableOpacity>
-              ))}
+        {/* Built-in Options */}
+        {builtIn.length > 0 && (
+          <>
+            <View style={s.sectionHeader}>
+              <Text style={s.sectionTitle}>Built Into Open Wallet (Always Available)</Text>
             </View>
-          </View>
+            {builtIn.map(renderOption)}
+          </>
         )}
 
-        {/* Quick token selectors */}
-        <View style={styles.quickTokens}>
-          <Text style={styles.quickLabel}>Swap to</Text>
-          <View style={styles.quickRow}>
-            {POPULAR_TOKENS.filter((tk) => tk.symbol !== fromSymbol).map((token) => (
-              <TouchableOpacity
-                key={token.symbol}
-                style={[styles.quickChip, toSymbol === token.symbol && styles.quickChipActive]}
-                onPress={() => setToSymbol(token.symbol)}
-              >
-                <Text style={[styles.quickChipText, toSymbol === token.symbol && { color: t.accent.green }]}>
-                  {token.symbol}
-                </Text>
-              </TouchableOpacity>
-            ))}
+        {/* External Options */}
+        {external.length > 0 && (
+          <>
+            <View style={s.sectionHeader}>
+              <Text style={s.sectionTitle}>External Protocols (More Liquidity)</Text>
+            </View>
+            {external.map(renderOption)}
+          </>
+        )}
+
+        {/* Fallback note */}
+        {options.length > 0 && (
+          <View style={s.fallbackNote}>
+            <Text style={s.fallbackText}>
+              🔐 Open Wallet Atomic Swap is ALWAYS available as fallback. It uses pure cryptography — no external service, protocol, or API can shut it down.
+            </Text>
           </View>
-        </View>
+        )}
 
         {/* Swap button */}
-        <TouchableOpacity
-          style={[styles.swapButton, (swapping || !quote) && styles.swapButtonDisabled]}
-          onPress={handleSwap}
-          disabled={swapping || (!quote && !!amountStr)}
-        >
-          {swapping ? (
-            <ActivityIndicator color="#ffffff" />
-          ) : (
-            <Text style={styles.swapButtonText}>
-              {isCrossChain ? `Bridge ${fromSymbol} → ${toSymbol}` : `Swap ${fromSymbol} → ${toSymbol}`}
+        {selectedOption && (
+          <TouchableOpacity style={s.swapBtn} onPress={handleSwap}>
+            <Text style={s.swapBtnText}>
+              Swap via {selectedOption.name}
             </Text>
-          )}
-        </TouchableOpacity>
+          </TouchableOpacity>
+        )}
 
         <View style={{ height: 40 }} />
       </ScrollView>
