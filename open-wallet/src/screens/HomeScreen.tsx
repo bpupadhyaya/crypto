@@ -116,6 +116,8 @@ export function HomeScreen() {
     container: { flex: 1, backgroundColor: t.bg.primary },
     testnetBanner: { backgroundColor: t.accent.yellow + '20', paddingVertical: 6, alignItems: 'center', marginHorizontal: 16, borderRadius: 8, marginTop: 8 },
     testnetText: { color: t.accent.yellow, fontSize: 12, fontWeight: '700', letterSpacing: 1 },
+    demoBanner: { backgroundColor: t.accent.purple + '20', paddingVertical: 6, alignItems: 'center', marginHorizontal: 16, borderRadius: 8, marginTop: 8 },
+    demoText: { color: t.accent.purple, fontSize: 12, fontWeight: '700', letterSpacing: 1 },
     list: { paddingBottom: 100 },
     chartCard: { backgroundColor: t.bg.card, borderRadius: 24, padding: 24, alignItems: 'center', marginHorizontal: 16, marginTop: 16 },
     actions: { flexDirection: 'row', justifyContent: 'space-evenly', paddingHorizontal: 16, marginTop: 20 },
@@ -163,6 +165,7 @@ export function HomeScreen() {
   }, [lastUpdated]);
 
   const networkMode = useWalletStore((s) => s.networkMode);
+  const demoMode = useWalletStore((s) => s.demoMode);
   const showTestnetBanner = networkMode === 'testnet';
 
   const header = useMemo(() => (
@@ -170,6 +173,11 @@ export function HomeScreen() {
       {showTestnetBanner && (
         <View style={s.testnetBanner}>
           <Text style={s.testnetText}>TESTNET MODE — No real funds</Text>
+        </View>
+      )}
+      {demoMode && (
+        <View style={s.demoBanner}>
+          <Text style={s.demoText}>DEMO MODE — Simulated balances</Text>
         </View>
       )}
       <View style={s.chartCard}>
@@ -209,7 +217,7 @@ export function HomeScreen() {
       />
       {lastUpdatedText ? <Text style={s.lastUpdated}>{lastUpdatedText}</Text> : null}
     </>
-  ), [totalUsdValue, openManage, lastUpdatedText, showTestnetBanner, s, t, searchQuery]);
+  ), [totalUsdValue, openManage, lastUpdatedText, showTestnetBanner, demoMode, s, t, searchQuery]);
 
   if (showBuySell) return <BuySellScreen onClose={() => setShowBuySell(false)} />;
   if (showHistory) return <HistoryScreen />;

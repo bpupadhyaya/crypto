@@ -165,19 +165,25 @@ export function SendScreen() {
     }
 
     // Check balance before proceeding
+    const demoMode = useWalletStore.getState().demoMode;
     try {
-      const provider = registry.getChainProvider(selectedChain);
-      if (senderAddress) {
+      const decimals = selectedChain === 'bitcoin' ? 8 : selectedChain === 'ethereum' ? 18 : selectedChain === 'openchain' ? 6 : selectedChain === 'cosmos' ? 6 : 9;
+      let humanBalance = 0;
+      if (demoMode) {
+        // Use demo balances — no RPC call
+        const demoAmounts: Record<string, number> = { bitcoin: 0.5, ethereum: 5, solana: 1000, cosmos: 100, openchain: 10000 };
+        humanBalance = demoAmounts[selectedChain] ?? 0;
+      } else if (senderAddress) {
+        const provider = registry.getChainProvider(selectedChain);
         const balance = await provider.getBalance(senderAddress);
-        const decimals = selectedChain === 'bitcoin' ? 8 : selectedChain === 'ethereum' ? 18 : selectedChain === 'openchain' ? 6 : selectedChain === 'cosmos' ? 6 : 9;
-        const humanBalance = Number(balance.amount) / 10 ** decimals;
-        if (humanBalance < parseFloat(amount)) {
-          Alert.alert(
-            'Insufficient Balance',
-            `You have ${humanBalance.toFixed(6)} ${chainSymbol} but are trying to send ${amount} ${chainSymbol}.${isTestnet() ? '\n\nGet free testnet tokens from a faucet.' : ''}`
-          );
-          return;
-        }
+        humanBalance = Number(balance.amount) / 10 ** decimals;
+      }
+      if (humanBalance < parseFloat(amount)) {
+        Alert.alert(
+          'Insufficient Balance',
+          `You have ${humanBalance.toFixed(6)} ${chainSymbol} but are trying to send ${amount} ${chainSymbol}.${isTestnet() ? '\n\nGet free testnet tokens from a faucet.' : ''}`
+        );
+        return;
       }
     } catch {
       // Network error — let user proceed, will fail at broadcast
@@ -225,6 +231,19 @@ export function SendScreen() {
         setRecipient('');
         setShowConfirm(false);
         setIsPaperMode(false);
+        return;
+      }
+
+      // Demo mode — simulate success without touching the chain
+      if (useWalletStore.getState().demoMode) {
+        await new Promise((r) => setTimeout(r, 1500));
+        Alert.alert(
+          'Demo Send Complete',
+          `${amount} ${chainSymbol} sent (simulated).\n\nThis is a demo transaction — no real funds were moved.`,
+        );
+        setAmount('');
+        setRecipient('');
+        setShowConfirm(false);
         return;
       }
 

@@ -27,7 +27,7 @@ import i18n from '../i18n';
 type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude';
 
 export function SettingsScreen() {
-  const { mode, setMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode } = useWalletStore();
+  const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode } = useWalletStore();
   const [view, setView] = useState<SettingsView>('main');
   const [pinToChange, setPinToChange] = useState('');
   const [biometricAvailable, setBiometricAvailable] = useState(false);
@@ -311,6 +311,25 @@ export function SettingsScreen() {
             <Text style={st.label}>Chains</Text>
             <Text style={st.value}>
               {networkMode === 'testnet' ? 'BTC Testnet · Sepolia · Devnet' : 'BTC · Ethereum · Solana'}
+            </Text>
+          </View>
+        </View>
+
+        {/* Demo Mode */}
+        <Text style={st.section}>Demo</Text>
+        <View style={st.card}>
+          <View style={st.row}>
+            <Text style={st.label}>Demo Mode</Text>
+            <Switch
+              value={demoMode}
+              onValueChange={setDemoMode}
+              trackColor={{ false: '#333', true: t.accent.purple + '40' }}
+              thumbColor={demoMode ? t.accent.purple : '#666'}
+            />
+          </View>
+          <View style={{ paddingHorizontal: 16, paddingBottom: 12 }}>
+            <Text style={{ color: t.text.muted, fontSize: 12 }}>
+              Show simulated balances (1000 SOL, 0.5 BTC, 5 ETH, 100 ATOM, 10000 OTK). No real funds are used.
             </Text>
           </View>
         </View>

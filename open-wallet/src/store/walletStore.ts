@@ -15,6 +15,8 @@ export type WalletStatus = 'locked' | 'unlocked' | 'onboarding' | 'pin_setup';
 interface WalletState {
   mode: AppMode;
   setMode: (mode: AppMode) => void;
+  demoMode: boolean;
+  setDemoMode: (enabled: boolean) => void;
   networkMode: NetworkMode;
   setNetworkMode: (mode: NetworkMode) => void;
   themeMode: ThemeMode;
@@ -65,6 +67,8 @@ const DEFAULT_TOKENS = ['OTK', 'BTC', 'ETH', 'USDT', 'XRP', 'USDC', 'SOL', 'ADA'
 export const useWalletStore = create<WalletState>((set) => ({
   mode: 'simple',
   setMode: (mode) => { set({ mode }); schedulePersist(); },
+  demoMode: false,
+  setDemoMode: (enabled) => { set({ demoMode: enabled }); schedulePersist(); },
   networkMode: 'testnet' as NetworkMode,
   setNetworkMode: (mode) => { setNetworkMode(mode); set({ networkMode: mode }); schedulePersist(); },
   themeMode: 'dark' as ThemeMode,
@@ -128,7 +132,7 @@ async function doPersist() {
     }
     const s = useWalletStore.getState();
     await asyncStorageModule.setItem('ow-store', JSON.stringify({
-      mode: s.mode, networkMode: s.networkMode, themeMode: s.themeMode, locale: s.locale, currency: s.currency, biometricEnabled: s.biometricEnabled,
+      mode: s.mode, demoMode: s.demoMode, networkMode: s.networkMode, themeMode: s.themeMode, locale: s.locale, currency: s.currency, biometricEnabled: s.biometricEnabled,
       addresses: s.addresses, hasVault: s.hasVault, enabledTokens: s.enabledTokens,
       contacts: s.contacts, accounts: s.accounts, activeAccountIndex: s.activeAccountIndex, priceAlerts: s.priceAlerts,
     }));
@@ -159,6 +163,7 @@ function ensureOTK(tokens: string[]): string[] {
       setNetworkMode(restoredNetworkMode);
       useWalletStore.setState({
         mode: d.mode ?? 'simple',
+        demoMode: d.demoMode ?? false,
         networkMode: restoredNetworkMode,
         themeMode: d.themeMode ?? 'dark',
         locale: d.locale ?? 'en',

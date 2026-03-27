@@ -9,6 +9,16 @@ import { registry } from '../core/abstractions/registry';
 import { useWalletStore } from '../store/walletStore';
 import type { ChainId, Token, Balance } from '../core/abstractions/types';
 
+// ─── Demo balances (simulated, never touches chain) ───
+
+const DEMO_BALANCES: Balance[] = [
+  { token: { symbol: 'BTC', name: 'Bitcoin', chainId: 'bitcoin', decimals: 8 }, amount: BigInt(50000000), usdValue: undefined },        // 0.5 BTC
+  { token: { symbol: 'ETH', name: 'Ethereum', chainId: 'ethereum', decimals: 18 }, amount: BigInt('5000000000000000000'), usdValue: undefined }, // 5 ETH
+  { token: { symbol: 'SOL', name: 'Solana', chainId: 'solana', decimals: 9 }, amount: BigInt(1000000000000), usdValue: undefined },      // 1000 SOL
+  { token: { symbol: 'ATOM', name: 'Cosmos', chainId: 'cosmos', decimals: 6 }, amount: BigInt(100000000), usdValue: undefined },          // 100 ATOM
+  { token: { symbol: 'OTK', name: 'Open Token', chainId: 'openchain', decimals: 6 }, amount: BigInt(10000000000), usdValue: undefined }, // 10000 OTK
+];
+
 // ─── Well-known native tokens ───
 
 const NATIVE_TOKENS: Record<ChainId, Token> = {
@@ -42,15 +52,16 @@ export function useBalance(chainId: ChainId, address: string | undefined) {
 // ─── All Balances Hook ───
 
 export function useAllBalances(addresses: Partial<Record<ChainId, string>>) {
+  const demoMode = useWalletStore((s) => s.demoMode);
   const chains = Object.entries(addresses).filter(([_, addr]) => !!addr) as [ChainId, string][];
 
+  // Always call useQueries (hooks must not be conditional), but disable when demo
   const queries = useQueries({
-    queries: chains.map(([chainId, address]) => ({
+    queries: demoMode ? [] : chains.map(([chainId, address]) => ({
       queryKey: ['balance', chainId, address],
       queryFn: async (): Promise<Balance | null> => {
         try {
           const provider = registry.getChainProvider(chainId);
-          // Race with 5-second timeout to prevent UI blocking
           const result = await Promise.race([
             provider.getBalance(address),
             new Promise<null>((resolve) => setTimeout(() => resolve(null), 8000)),
@@ -61,9 +72,13 @@ export function useAllBalances(addresses: Partial<Record<ChainId, string>>) {
         }
       },
       staleTime: 30_000,
-      refetchInterval: 60_000, // reduce refetch frequency
+      refetchInterval: 60_000,
     })),
   });
+
+  if (demoMode) {
+    return { balances: DEMO_BALANCES, isLoading: false, isError: false };
+  }
 
   const balances = queries
     .map((q) => q.data)
