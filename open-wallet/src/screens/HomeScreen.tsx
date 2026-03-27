@@ -17,14 +17,21 @@ import { usePortfolio } from '../hooks/useBalances';
 import { useTheme } from '../hooks/useTheme';
 import type { Theme } from '../utils/theme';
 
-// Static — never recreated
-const MOCK_ALLOCATIONS = [
+// Fallback allocations when no portfolio data
+const FALLBACK_ALLOCATIONS = [
   { label: 'BTC', value: 35, color: '#f7931a' },
   { label: 'ETH', value: 25, color: '#627eea' },
   { label: 'USDC', value: 15, color: '#2775ca' },
   { label: 'SOL', value: 10, color: '#9945ff' },
   { label: 'Others', value: 15, color: '#606070' },
 ];
+
+const TOKEN_COLORS: Record<string, string> = {
+  BTC: '#f7931a', ETH: '#627eea', SOL: '#9945ff', USDC: '#2775ca',
+  USDT: '#26a17b', ATOM: '#2e3148', OTK: '#00c853', LINK: '#2a5ada',
+  ADA: '#0033ad', DOT: '#e6007a', AVAX: '#e84142', BNB: '#f0b90b',
+  DOGE: '#c2a633', XRP: '#00aae4',
+};
 
 const keyExtractor = (item: TokenInfo) => item.symbol;
 
@@ -57,8 +64,8 @@ const TokenRow = React.memo(({ token, price, balance, onPress, t }: { token: Tok
   );
 });
 
-// Memoized legend (static data, never changes)
-const Legend = React.memo(({ t }: { t: Theme }) => {
+// Memoized legend — dynamic allocations
+const Legend = React.memo(({ t, data }: { t: Theme; data: Array<{ label: string; value: number; color: string }> }) => {
   const s = useMemo(() => StyleSheet.create({
     legend: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 12, marginTop: 16 },
     legendItem: { flexDirection: 'row', alignItems: 'center', gap: 4 },
@@ -69,7 +76,7 @@ const Legend = React.memo(({ t }: { t: Theme }) => {
 
   return (
     <View style={s.legend}>
-      {MOCK_ALLOCATIONS.map((slice) => (
+      {data.map((slice) => (
         <View key={slice.label} style={s.legendItem}>
           <View style={[s.legendDot, { backgroundColor: slice.color }]} />
           <Text style={s.legendLabel}>{slice.label}</Text>
@@ -149,6 +156,32 @@ export function HomeScreen() {
     return map;
   }, [portfolioBalances]);
 
+  // Compute real pie chart allocations from portfolio
+  const allocations = useMemo(() => {
+    if (totalUsdValue <= 0) return FALLBACK_ALLOCATIONS;
+    const items: Array<{ label: string; value: number; color: string; usd: number }> = [];
+    for (const b of portfolioBalances) {
+      const usd = b.usdValue ?? 0;
+      if (usd > 0) {
+        items.push({ label: b.token.symbol, value: Math.round((usd / totalUsdValue) * 100), color: TOKEN_COLORS[b.token.symbol] ?? '#606070', usd });
+      }
+    }
+    if (items.length === 0) return FALLBACK_ALLOCATIONS;
+    // Sort by value descending, cap at 5, rest goes to "Others"
+    items.sort((a, b) => b.usd - a.usd);
+    const top = items.slice(0, 4);
+    const rest = items.slice(4);
+    const topTotal = top.reduce((s, i) => s + i.value, 0);
+    const result = top.map(({ label, value, color }) => ({ label, value, color }));
+    const othersValue = 100 - topTotal;
+    if (rest.length > 0 && othersValue > 0) {
+      result.push({ label: 'Others', value: othersValue, color: '#606070' });
+    } else if (topTotal < 100 && result.length > 0) {
+      result[0].value += (100 - topTotal); // rounding fix
+    }
+    return result;
+  }, [portfolioBalances, totalUsdValue]);
+
   const renderItem = useCallback(({ item }: { item: TokenInfo }) => (
     <TokenRow token={item} price={prices[item.symbol]} balance={balanceMap[item.symbol]} onPress={() => setSelectedToken(item)} t={t} />
   ), [prices, balanceMap, t]);
@@ -182,12 +215,12 @@ export function HomeScreen() {
       )}
       <View style={s.chartCard}>
         <PieChart
-          slices={MOCK_ALLOCATIONS}
+          slices={allocations}
           size={180}
           centerLabel="Total"
-          centerValue={`$${totalUsdValue.toFixed(2)}`}
+          centerValue={`$${totalUsdValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
         />
-        <Legend t={t} />
+        <Legend t={t} data={allocations} />
       </View>
       <View style={s.actions}>
         <ActionBtn icon="↑" label="Send" color={t.accent.orange} t={t} />
@@ -217,7 +250,7 @@ export function HomeScreen() {
       />
       {lastUpdatedText ? <Text style={s.lastUpdated}>{lastUpdatedText}</Text> : null}
     </>
-  ), [totalUsdValue, openManage, lastUpdatedText, showTestnetBanner, demoMode, s, t, searchQuery]);
+  ), [totalUsdValue, openManage, lastUpdatedText, showTestnetBanner, demoMode, allocations, s, t, searchQuery]);
 
   if (showBuySell) return <BuySellScreen onClose={() => setShowBuySell(false)} />;
   if (showHistory) return <HistoryScreen />;
