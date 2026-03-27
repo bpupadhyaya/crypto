@@ -406,9 +406,9 @@ export function SettingsScreen() {
           </TouchableOpacity>
           <TouchableOpacity
             style={{ backgroundColor: t.accent.blue, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 10 }}
-            onPress={() => Linking.openURL('https://buy.stripe.com/cNi7sLeUmcNo4mwcQ56AM00')}
+            onPress={() => Linking.openURL('https://bpupadhyaya.github.io/support-openwallet.html')}
           >
-            <Text style={{ color: '#fff', fontSize: 15, fontWeight: '700' }}>Donate via Stripe</Text>
+            <Text style={{ color: '#fff', fontSize: 15, fontWeight: '700' }}>Donation Options</Text>
           </TouchableOpacity>
           <Text style={{ color: t.text.muted, fontSize: 11, textAlign: 'center', lineHeight: 16 }}>
             No features are locked behind donations. Your support is entirely voluntary and goes directly toward building tools that serve humanity.
