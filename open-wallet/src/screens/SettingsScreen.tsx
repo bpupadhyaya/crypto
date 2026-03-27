@@ -24,10 +24,11 @@ import { GratitudeScreen } from './GratitudeScreen';
 import { GovernanceScreen } from './GovernanceScreen';
 import { OracleScreen } from './OracleScreen';
 import { ContributionScoreScreen } from './ContributionScoreScreen';
+import { PrivacyPolicyScreen } from './PrivacyPolicyScreen';
 import { useTheme } from '../hooks/useTheme';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy';
 
 export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode } = useWalletStore();
@@ -181,6 +182,7 @@ export function SettingsScreen() {
   if (view === 'governance') return <GovernanceScreen onClose={() => setView('main')} />;
   if (view === 'oracle') return <OracleScreen onClose={() => setView('main')} />;
   if (view === 'scores') return <ContributionScoreScreen onClose={() => setView('main')} />;
+  if (view === 'privacy') return <PrivacyPolicyScreen onClose={() => setView('main')} />;
 
   // ─── Main Settings ───
 
@@ -448,8 +450,18 @@ export function SettingsScreen() {
             <Text style={{ color: t.accent.blue, fontSize: 14 }}>GitHub</Text>
           </TouchableOpacity>
           <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('privacy')}>
+            <Text style={st.label}>Privacy Policy</Text>
+            <Text style={{ color: t.accent.blue, fontSize: 14 }}>Read</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => Linking.openURL('https://bpupadhyaya.github.io/privacy-openwallet.html')}>
+            <Text style={st.label}>Privacy Policy (Web)</Text>
+            <Text style={{ color: t.accent.blue, fontSize: 14 }}>External</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
           <TouchableOpacity style={st.row} onPress={() => Linking.openURL('https://github.com/bpupadhyaya/crypto/blob/main/docs/HUMAN_CONSTITUTION.md')}>
-            <Text style={st.label}>Human Constitution</Text>
+            <Text style={st.label}>The Human Constitution</Text>
             <Text style={{ color: t.accent.blue, fontSize: 14 }}>Read</Text>
           </TouchableOpacity>
         </View>
