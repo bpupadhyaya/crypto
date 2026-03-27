@@ -395,7 +395,7 @@ export function SettingsScreen() {
         <View style={st.card}>
           <View style={st.row}>
             <Text style={st.label}>Version</Text>
-            <Text style={st.value}>0.1.0-alpha</Text>
+            <Text style={st.value}>0.2.0-alpha</Text>
           </View>
           <View style={st.divider} />
           <TouchableOpacity style={st.row} onPress={() => Linking.openURL('https://github.com/bpupadhyaya/crypto')}>

@@ -2,7 +2,7 @@
   "expo": {
     "name": "Open Wallet",
     "slug": "open-wallet",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
@@ -46,6 +46,13 @@
         "expo-local-authentication",
         {
           "faceIDPermission": "Open Wallet uses Face ID to unlock your wallet securely."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#22c55e"
         }
       ]
     ]
