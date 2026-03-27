@@ -20,6 +20,7 @@ import { useWalletStore } from '../store/walletStore';
 import { ConfirmTransactionScreen } from './ConfirmTransactionScreen';
 import { useTheme } from '../hooks/useTheme';
 import { getAllSwapOptions, type SwapOption } from '../core/swap';
+import { executeSwapTransaction } from '../core/swap/executor';
 import { checkRealTransactionAllowed, recordPaperTrade, getSwapFlow, getTrafficLightEmoji } from '../core/paperTrading';
 import { isTestnet } from '../core/network';
 import type { Token } from '../core/abstractions/types';
@@ -156,10 +157,9 @@ export function SwapScreen() {
     setShowConfirm(true);
   }, [selectedOption]);
 
-  const executeSwap = useCallback(async () => {
-    await new Promise((r) => setTimeout(r, 2000));
-
+  const executeSwap = useCallback(async (vaultPassword?: string) => {
     if (isPaperSwap) {
+      await new Promise((r) => setTimeout(r, 1500));
       const flow = getSwapFlow(selectedOption?.id ?? '');
       const status = await recordPaperTrade(flow);
       Alert.alert(
@@ -167,16 +167,44 @@ export function SwapScreen() {
         `${amountStr} ${fromSymbol} → ${selectedOption?.toAmount.toFixed(4)} ${toSymbol} (simulated)\n\nVia: ${selectedOption?.name}\nPaper trades: ${status.count}/3 recommended\n\n${status.light === 'green' ? 'Cleared for real swaps!' : 'Complete more paper trades for full access.'}`
       );
     } else {
-      Alert.alert('Swap Initiated',
-        `${amountStr} ${fromSymbol} → ${selectedOption?.toAmount.toFixed(4)} ${toSymbol}\n\nVia: ${selectedOption?.name}\n\n${selectedOption?.id === 'ow-atomic' ? 'Atomic swap in progress. Your funds are cryptographically secured.' : 'Transaction submitted to the network.'}`
-      );
+      // Real swap execution
+      const password = vaultPassword ?? useWalletStore.getState().tempVaultPassword;
+      if (!password) {
+        Alert.alert('Error', 'Wallet not unlocked. Please sign in again.');
+        throw new Error('Wallet not unlocked');
+      }
+
+      try {
+        const { Vault } = await import('../core/vault/vault');
+        const vault = new Vault();
+        const contents = await vault.unlock(password);
+
+        const result = await executeSwapTransaction({
+          option: selectedOption!,
+          fromAmount: parseFloat(amountStr),
+          fromSymbol, toSymbol,
+          mnemonic: contents.mnemonic,
+          accountIndex: useWalletStore.getState().activeAccountIndex,
+          fromAddress: addresses.bitcoin ?? addresses.ethereum ?? '',
+          toAddress: addresses.ethereum ?? '',
+        });
+
+        Alert.alert(
+          result.success ? 'Swap Initiated' : 'Swap Failed',
+          result.message,
+        );
+
+        if (!result.success) throw new Error(result.message);
+      } catch (err) {
+        throw err;
+      }
     }
     setAmountStr('');
     setOptions([]);
     setSelectedOption(null);
     setShowConfirm(false);
     setIsPaperSwap(false);
-  }, [amountStr, fromSymbol, toSymbol, selectedOption, isPaperSwap]);
+  }, [amountStr, fromSymbol, toSymbol, selectedOption, isPaperSwap, addresses]);
 
   const getSecurityColor = (rating: number) => {
     if (rating >= 4.5) return t.accent.green;
