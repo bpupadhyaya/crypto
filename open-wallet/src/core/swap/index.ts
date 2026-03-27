@@ -17,6 +17,7 @@
 import { getDEXQuote, type DEXQuote } from './dex';
 import { getOrderBookQuote } from './orderbook';
 import { getAllExternalQuotes, type ExternalQuote } from './external';
+import { calculateLiveSwapEstimate } from './prices';
 
 export interface SwapOption {
   id: string;
@@ -61,7 +62,7 @@ export async function getAllSwapOptions(params: {
   ]);
 
   // 1. Open Wallet Atomic Swap (always available)
-  const atomicEstimate = estimateAtomicOutput(fromToken, toToken, fromAmount);
+  const atomicEstimate = await calculateLiveSwapEstimate(fromToken, toToken, fromAmount, 0.3);
   options.push({
     id: 'ow-atomic',
     name: 'Open Wallet Atomic Swap',
@@ -150,18 +151,7 @@ export async function getAllSwapOptions(params: {
   return options;
 }
 
-/**
- * Estimate atomic swap output (market price minus ~0.3% for network fees).
- */
-function estimateAtomicOutput(fromToken: string, toToken: string, amount: number): number {
-  const prices: Record<string, number> = {
-    BTC: 62000, ETH: 2000, SOL: 87, USDT: 1, USDC: 1, OTK: 0.10,
-    ATOM: 8, DOT: 6, AVAX: 25, LINK: 12, ADA: 0.45,
-  };
-  const fromUsd = (prices[fromToken] ?? 1) * amount;
-  const toPrice = prices[toToken] ?? 1;
-  return (fromUsd * 0.997) / toPrice; // 0.3% for network fees
-}
+// Live prices used via calculateLiveSwapEstimate from ./prices
 
 export { type DEXQuote } from './dex';
 export { type ExternalQuote } from './external';

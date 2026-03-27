@@ -45,8 +45,8 @@ export interface OrderLevel {
  * Get the order book for a trading pair.
  */
 export async function getOrderBook(sellToken: string, buyToken: string): Promise<OrderBookSummary> {
-  // In production, queries Open Chain's order book module
-  // Mock data for UI demonstration
+  // Refresh live prices
+  await refreshPrices();
   const basePrice = getBasePrice(sellToken, buyToken);
 
   const bids: OrderLevel[] = [];
@@ -137,12 +137,18 @@ export async function getOrderBookQuote(
 
 // ─── Helpers ───
 
+// Live price cache for order book (updated when getOrderBook is called)
+let obPriceCache: Record<string, number> = {};
+
+async function refreshPrices(): Promise<void> {
+  try {
+    const { getAllLivePrices } = await import('./prices');
+    obPriceCache = await getAllLivePrices();
+  } catch {}
+}
+
 function getBasePrice(tokenA: string, tokenB: string): number {
-  const usdPrices: Record<string, number> = {
-    BTC: 62000, ETH: 2000, SOL: 87, OTK: 0.10, USDT: 1, USDC: 1,
-    ATOM: 8, DOT: 6, AVAX: 25, LINK: 12, ADA: 0.45,
-  };
-  const priceA = usdPrices[tokenA] ?? 1;
-  const priceB = usdPrices[tokenB] ?? 1;
+  const priceA = obPriceCache[tokenA] ?? 1;
+  const priceB = obPriceCache[tokenB] ?? 1;
   return priceA / priceB;
 }

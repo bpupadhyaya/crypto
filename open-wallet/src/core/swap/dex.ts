@@ -107,16 +107,24 @@ function getRestUrl(): string {
  * Get all liquidity pools from Open Chain.
  */
 export async function getPools(): Promise<LiquidityPool[]> {
-  // In production, queries Open Chain's DEX module
-  // For now, return mock pools to demonstrate the UI
+  // Use live prices for pool reserves so quotes match market
+  let btcPrice = 68000, ethPrice = 2060, solPrice = 87;
+  try {
+    const { getAllLivePrices } = await import('./prices');
+    const prices = await getAllLivePrices();
+    btcPrice = prices.BTC || btcPrice;
+    ethPrice = prices.ETH || ethPrice;
+    solPrice = prices.SOL || solPrice;
+  } catch {}
+
   return [
-    { id: 'pool-btc-usdt', tokenA: 'BTC', tokenB: 'USDT', reserveA: 10, reserveB: 620000, totalLPTokens: 2489, feeRate: 0.003, volume24h: 150000, tvlUsd: 1240000 },
-    { id: 'pool-eth-usdt', tokenA: 'ETH', tokenB: 'USDT', reserveA: 500, reserveB: 1000000, totalLPTokens: 22360, feeRate: 0.003, volume24h: 500000, tvlUsd: 2000000 },
-    { id: 'pool-btc-eth', tokenA: 'BTC', tokenB: 'ETH', reserveA: 10, reserveB: 300, totalLPTokens: 54, feeRate: 0.003, volume24h: 80000, tvlUsd: 1240000 },
-    { id: 'pool-sol-usdc', tokenA: 'SOL', tokenB: 'USDC', reserveA: 10000, reserveB: 870000, totalLPTokens: 2950, feeRate: 0.003, volume24h: 200000, tvlUsd: 1740000 },
+    { id: 'pool-btc-usdt', tokenA: 'BTC', tokenB: 'USDT', reserveA: 10, reserveB: Math.round(10 * btcPrice), totalLPTokens: 2489, feeRate: 0.003, volume24h: 150000, tvlUsd: Math.round(20 * btcPrice) },
+    { id: 'pool-eth-usdt', tokenA: 'ETH', tokenB: 'USDT', reserveA: 500, reserveB: Math.round(500 * ethPrice), totalLPTokens: 22360, feeRate: 0.003, volume24h: 500000, tvlUsd: Math.round(1000 * ethPrice) },
+    { id: 'pool-btc-eth', tokenA: 'BTC', tokenB: 'ETH', reserveA: 10, reserveB: Math.round(10 * btcPrice / ethPrice), totalLPTokens: 54, feeRate: 0.003, volume24h: 80000, tvlUsd: Math.round(20 * btcPrice) },
+    { id: 'pool-sol-usdc', tokenA: 'SOL', tokenB: 'USDC', reserveA: 10000, reserveB: Math.round(10000 * solPrice), totalLPTokens: 2950, feeRate: 0.003, volume24h: 200000, tvlUsd: Math.round(20000 * solPrice) },
     { id: 'pool-otk-usdt', tokenA: 'OTK', tokenB: 'USDT', reserveA: 1000000, reserveB: 100000, totalLPTokens: 10000, feeRate: 0.001, volume24h: 10000, tvlUsd: 200000 },
-    { id: 'pool-eth-usdc', tokenA: 'ETH', tokenB: 'USDC', reserveA: 500, reserveB: 1000000, totalLPTokens: 22360, feeRate: 0.003, volume24h: 400000, tvlUsd: 2000000 },
-    { id: 'pool-btc-usdc', tokenA: 'BTC', tokenB: 'USDC', reserveA: 10, reserveB: 620000, totalLPTokens: 2489, feeRate: 0.003, volume24h: 120000, tvlUsd: 1240000 },
+    { id: 'pool-eth-usdc', tokenA: 'ETH', tokenB: 'USDC', reserveA: 500, reserveB: Math.round(500 * ethPrice), totalLPTokens: 22360, feeRate: 0.003, volume24h: 400000, tvlUsd: Math.round(1000 * ethPrice) },
+    { id: 'pool-btc-usdc', tokenA: 'BTC', tokenB: 'USDC', reserveA: 10, reserveB: Math.round(10 * btcPrice), totalLPTokens: 2489, feeRate: 0.003, volume24h: 120000, tvlUsd: Math.round(20 * btcPrice) },
   ];
 }
 
