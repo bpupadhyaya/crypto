@@ -25,10 +25,11 @@ import { GovernanceScreen } from './GovernanceScreen';
 import { OracleScreen } from './OracleScreen';
 import { ContributionScoreScreen } from './ContributionScoreScreen';
 import { PrivacyPolicyScreen } from './PrivacyPolicyScreen';
+import { WhatsNewScreen } from './WhatsNewScreen';
 import { useTheme } from '../hooks/useTheme';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew';
 
 export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode } = useWalletStore();
@@ -183,6 +184,7 @@ export function SettingsScreen() {
   if (view === 'oracle') return <OracleScreen onClose={() => setView('main')} />;
   if (view === 'scores') return <ContributionScoreScreen onClose={() => setView('main')} />;
   if (view === 'privacy') return <PrivacyPolicyScreen onClose={() => setView('main')} />;
+  if (view === 'whatsnew') return <WhatsNewScreen onClose={() => setView('main')} />;
 
   // ─── Main Settings ───
 
@@ -437,8 +439,13 @@ export function SettingsScreen() {
         <View style={st.card}>
           <View style={st.row}>
             <Text style={st.label}>Version</Text>
-            <Text style={st.value}>0.2.0-alpha</Text>
+            <Text style={st.value}>0.3.0-alpha</Text>
           </View>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('whatsnew')}>
+            <Text style={st.label}>What's New</Text>
+            <Text style={{ color: t.accent.green, fontSize: 14 }}>v0.3.0</Text>
+          </TouchableOpacity>
           <View style={st.divider} />
           <TouchableOpacity style={st.row} onPress={() => Linking.openURL('https://github.com/bpupadhyaya/crypto')}>
             <Text style={st.label}>License</Text>
