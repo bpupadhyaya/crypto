@@ -51,6 +51,7 @@ import (
 	dexkeeper "openchain/x/dex/keeper"
 	govuidkeeper "openchain/x/govuid/keeper"
 	otkkeeper "openchain/x/otk/keeper"
+	messagingkeeper "openchain/x/messaging/keeper"
 	tokenfactorykeeper "openchain/x/tokenfactory/keeper"
 	uidkeeper "openchain/x/uid/keeper"
 )
@@ -105,6 +106,7 @@ type App struct {
 	DEXKeeper          *dexkeeper.Keeper
 	AchievementKeeper  *achievementkeeper.Keeper
 	TokenFactoryKeeper *tokenfactorykeeper.Keeper
+	MessagingKeeper    *messagingkeeper.Keeper
 
 	// ibc keepers
 	IBCKeeper           *ibckeeper.Keeper
