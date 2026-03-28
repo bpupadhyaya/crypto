@@ -81,9 +81,12 @@ export default function RootLayout() {
     }
     if (status === 'unlocked' && !priceServiceStarted) {
       priceServiceStarted = true;
-      const enabledTokens = useWalletStore.getState().enabledTokens;
-      import('../core/priceService').then((m) => m.startPriceService(enabledTokens));
-      if (!balancePrefetched) prefetchBalances();
+      // Delay heavy background work so UI stays responsive for user interaction
+      setTimeout(() => {
+        const enabledTokens = useWalletStore.getState().enabledTokens;
+        import('../core/priceService').then((m) => m.startPriceService(enabledTokens));
+        if (!balancePrefetched) prefetchBalances();
+      }, 2000);
     }
   }, [status]);
 
