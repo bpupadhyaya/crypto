@@ -6,3 +6,4 @@ export { SendScreen } from './SendScreen';
 export { ReceiveScreen } from './ReceiveScreen';
 export { SwapScreen } from './SwapScreen';
 export { SettingsScreen } from './SettingsScreen';
+export { ExchangeScreen } from './ExchangeScreen';

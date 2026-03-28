@@ -33,10 +33,11 @@ import { PaymentRailsScreen } from './PaymentRailsScreen';
 import { NotificationHistoryScreen } from './NotificationHistoryScreen';
 import { PortfolioAnalyticsScreen } from './PortfolioAnalyticsScreen';
 import { MarketScreen } from './MarketScreen';
+import { ExchangeScreen } from './ExchangeScreen';
 import { useTheme } from '../hooks/useTheme';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange';
 
 export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode } = useWalletStore();
@@ -199,6 +200,7 @@ export function SettingsScreen() {
   if (view === 'notifications') return <NotificationHistoryScreen onClose={() => setView('main')} />;
   if (view === 'analytics') return <PortfolioAnalyticsScreen onClose={() => setView('main')} />;
   if (view === 'market') return <MarketScreen onClose={() => setView('main')} />;
+  if (view === 'exchange') return <ExchangeScreen onClose={() => setView('main')} />;
 
   // ─── Main Settings ───
 
@@ -319,6 +321,11 @@ export function SettingsScreen() {
           <TouchableOpacity style={st.row} onPress={() => setView('notifications')}>
             <Text style={st.label}>Notification History</Text>
             <Text style={st.value}>Received TXs</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('exchange')}>
+            <Text style={st.label}>Universal Exchange</Text>
+            <Text style={{ color: t.accent.green, fontSize: 14, fontWeight: '600' }}>Any-to-Any</Text>
           </TouchableOpacity>
         </View>
 
