@@ -212,6 +212,11 @@ func (k Keeper) setPosition(ctx sdk.Context, pos *types.Position) {
 	store.Set([]byte("position/"+pos.Address), bz)
 }
 
+// InitMarket persists a lending market during genesis initialization.
+func (k Keeper) InitMarket(ctx sdk.Context, m *types.Market) {
+	k.setMarket(ctx, m)
+}
+
 func (k Keeper) setMarket(ctx sdk.Context, m *types.Market) {
 	store := ctx.KVStore(k.storeKey)
 	bz, _ := json.Marshal(m)

@@ -38,10 +38,22 @@ func NewAppModule(cdc codec.Codec, keeper *keeper.Keeper) AppModule {
 }
 
 func (am AppModule) RegisterServices(_ module.Configurator) {}
-func (am AppModule) InitGenesis(_ sdk.Context, _ codec.JSONCodec, _ json.RawMessage) {}
+
+func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, data json.RawMessage) {
+	// Initialize default lending markets from genesis state
+	for _, market := range types.DefaultGenesisState().Markets {
+		am.keeper.InitMarket(ctx, &market)
+	}
+}
+
 func (am AppModule) ExportGenesis(_ sdk.Context, cdc codec.JSONCodec) json.RawMessage { return cdc.MustMarshalJSON(types.DefaultGenesisState()) }
 func (am AppModule) ConsensusVersion() uint64 { return 1 }
 func (am AppModule) BeginBlock(_ sdk.Context) {}
-func (am AppModule) EndBlock(_ sdk.Context)   {}
-func (am AppModule) IsOnePerModuleType()      {}
-func (am AppModule) IsAppModule()             {}
+
+// EndBlock checks for underwater lending positions and liquidates them.
+func (am AppModule) EndBlock(ctx sdk.Context) {
+	am.keeper.CheckLiquidations(ctx)
+}
+
+func (am AppModule) IsOnePerModuleType() {}
+func (am AppModule) IsAppModule()        {}

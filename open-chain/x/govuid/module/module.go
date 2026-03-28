@@ -69,9 +69,11 @@ func (am AppModule) ConsensusVersion() uint64 { return 1 }
 
 func (am AppModule) BeginBlock(ctx sdk.Context) {}
 
-// EndBlock tallies proposals whose voting period has ended.
+// EndBlock tallies proposals whose voting period has ended and
+// processes constitutional amendments through the deliberation pipeline.
 func (am AppModule) EndBlock(ctx sdk.Context) {
 	am.keeper.EndBlocker(ctx)
+	am.keeper.ProcessAmendments(ctx)
 }
 
 func (am AppModule) IsOnePerModuleType() {}

@@ -40,7 +40,10 @@ func NewAppModule(cdc codec.Codec, keeper *keeper.Keeper) AppModule {
 }
 
 func (am AppModule) RegisterServices(_ module.Configurator) {}
-func (am AppModule) InitGenesis(_ sdk.Context, _ codec.JSONCodec, _ json.RawMessage) {}
+func (am AppModule) InitGenesis(ctx sdk.Context, _ codec.JSONCodec, _ json.RawMessage) {
+	// Escrow module initialized — no pre-configured escrows at genesis
+	ctx.Logger().Info("Escrow module initialized")
+}
 func (am AppModule) ExportGenesis(_ sdk.Context, _ codec.JSONCodec) json.RawMessage { return []byte("{}") }
 func (am AppModule) ConsensusVersion() uint64 { return 1 }
 func (am AppModule) BeginBlock(_ sdk.Context) {}

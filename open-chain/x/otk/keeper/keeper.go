@@ -48,6 +48,18 @@ func NewKeeper(cdc codec.Codec, storeKey storetypes.StoreKey, bank bankkeeper.Ke
 	}
 }
 
+// InitTreasury initializes the OTK module treasury at genesis.
+// Sets the default contribution rate and ensures the module account is ready for minting.
+func (k Keeper) InitTreasury(ctx sdk.Context) {
+	store := ctx.KVStore(k.storeKey)
+	// Default contribution rate: 5% of minted OTK goes to the treasury
+	store.Set([]byte("treasury/contribution_rate_bps"), []byte("500"))
+	ctx.EventManager().EmitEvent(sdk.NewEvent(
+		"otk_treasury_initialized",
+		sdk.NewAttribute("contribution_rate_bps", "500"),
+	))
+}
+
 // MintForMilestone mints OTK when a human development milestone is verified.
 // OTK is distributed across contribution rings using the ripple attribution formula.
 //

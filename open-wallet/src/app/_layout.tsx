@@ -22,6 +22,7 @@ const queryClient = new QueryClient({
 import { OnboardingScreen } from '../screens/OnboardingScreen';
 import { UnlockScreen } from '../screens/UnlockScreen';
 import { PinSetupScreen } from '../screens/PinSetupScreen';
+import { ErrorBoundary } from '../components/ErrorBoundary';
 import {
   startSession, endSession, recordActivity, onAutoLock, setAutoLockTimeout,
 } from '../core/security/sessionManager';
@@ -151,15 +152,17 @@ export default function RootLayout() {
 
   // After first unlock: tabs stay mounted forever, lock screen uses native Modal
   return (
-    <QueryClientProvider client={queryClient}>
-      <StatusBar style="light" />
-      <Slot />
-      <Modal visible={needsUnlock} animationType="none" presentationStyle="fullScreen" statusBarTranslucent>
-        <UnlockScreen />
-      </Modal>
-      <Modal visible={needsPinSetup} animationType="none" presentationStyle="fullScreen" statusBarTranslucent>
-        <PinSetupScreen />
-      </Modal>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <StatusBar style="light" />
+        <Slot />
+        <Modal visible={needsUnlock} animationType="none" presentationStyle="fullScreen" statusBarTranslucent>
+          <UnlockScreen />
+        </Modal>
+        <Modal visible={needsPinSetup} animationType="none" presentationStyle="fullScreen" statusBarTranslucent>
+          <PinSetupScreen />
+        </Modal>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }

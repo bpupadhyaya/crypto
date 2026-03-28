@@ -6,3 +6,4 @@ export { TokenSelector } from './TokenSelector';
 export type { TokenSelectorProps } from './TokenSelector';
 export { FeatureTooltip, resetAllTooltips } from './FeatureTooltip';
 export type { FeatureTooltipProps } from './FeatureTooltip';
+export { ErrorBoundary } from './ErrorBoundary';

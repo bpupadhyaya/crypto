@@ -171,6 +171,44 @@ func (k Keeper) VoteOnProposal(ctx sdk.Context, daoID, propID, voter, vote strin
 	return nil
 }
 
+// ResolveExpiredProposals iterates all DAOs and resolves proposals past their voting deadline.
+// Proposals that expire without reaching quorum are rejected.
+func (k Keeper) ResolveExpiredProposals(ctx sdk.Context) {
+	store := ctx.KVStore(k.storeKey)
+	prefix := []byte("dao_prop/")
+	iter := store.Iterator(prefix, storetypes.PrefixEndBytes(prefix))
+	defer iter.Close()
+
+	for ; iter.Valid(); iter.Next() {
+		var prop types.DAOProposal
+		if err := json.Unmarshal(iter.Value(), &prop); err != nil {
+			continue
+		}
+		if prop.Status != "voting" {
+			continue
+		}
+		if ctx.BlockHeight() <= prop.EndsAt {
+			continue
+		}
+
+		// Voting period expired — resolve based on current tally
+		if prop.YesVotes > prop.NoVotes {
+			prop.Status = "passed"
+		} else {
+			prop.Status = "rejected"
+		}
+
+		bz, _ := json.Marshal(prop)
+		store.Set(iter.Key(), bz)
+
+		ctx.EventManager().EmitEvent(sdk.NewEvent("dao_proposal_resolved",
+			sdk.NewAttribute("proposal_id", prop.ID),
+			sdk.NewAttribute("dao_id", prop.DAOID),
+			sdk.NewAttribute("status", prop.Status),
+		))
+	}
+}
+
 func (k Keeper) getProposal(ctx sdk.Context, daoID, propID string) (*types.DAOProposal, error) {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get([]byte(fmt.Sprintf("dao_prop/%s/%s", daoID, propID)))

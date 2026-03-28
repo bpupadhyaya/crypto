@@ -40,6 +40,25 @@ import (
 	uidtypes "openchain/x/uid/types"
 )
 
+// Module dependency graph (determines initialization order):
+//
+//   OTK          → BankKeeper, AchievementKeeper
+//   UID          → (none)
+//   GovUID       → UIDKeeper
+//   DEX          → BankKeeper
+//   Achievement  → (none)
+//   TokenFactory → BankKeeper
+//   Messaging    → (none)
+//   Lending      → BankKeeper
+//   Farming      → BankKeeper
+//   Escrow       → BankKeeper
+//   DAO          → BankKeeper
+//   Correction   → (none)
+//
+// Modules with no dependencies (UID, Achievement, Messaging, Correction) can be
+// initialized in any order. Modules depending on BankKeeper must come after the
+// bank module is set up. GovUID must come after UID. OTK cross-module dep on
+// AchievementKeeper is resolved post-init via SetAchievementMinter.
 func (app *App) registerOpenChainModules() error {
 	// Register store keys for all custom modules
 	otkStoreKey := storetypes.NewKVStoreKey(otktypes.StoreKey)

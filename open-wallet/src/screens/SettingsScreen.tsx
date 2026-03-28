@@ -72,9 +72,11 @@ import { VotingPowerScreen } from './VotingPowerScreen';
 import { MilestoneDefinitionsScreen } from './MilestoneDefinitionsScreen';
 import { useTheme } from '../hooks/useTheme';
 import { isLowBandwidth, setLowBandwidthOverride, getLowBandwidthOverride } from '../core/network/lowBandwidth';
+import { isTestnet } from '../core/network';
+import { DevToolsScreen } from './DevToolsScreen';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools';
 
 export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode, autoLockTimeout, setAutoLockTimeout } = useWalletStore();
@@ -274,6 +276,7 @@ export function SettingsScreen() {
   if (view === 'delegation') return <DelegationScreen onClose={() => setView('main')} />;
   if (view === 'voting-power') return <VotingPowerScreen onClose={() => setView('main')} />;
   if (view === 'milestones') return <MilestoneDefinitionsScreen onClose={() => setView('main')} />;
+  if (view === 'dev-tools') return <DevToolsScreen onClose={() => setView('main')} />;
 
   // ─── Low Bandwidth State ───
   const lowBandwidthOverride = getLowBandwidthOverride();
@@ -842,6 +845,19 @@ export function SettingsScreen() {
             <Text style={{ color: t.accent.blue, fontSize: 14 }}>Support</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Dev Tools — only visible in testnet or demo mode */}
+        {(isTestnet() || demoMode) && (
+          <>
+            <Text style={st.section}>Developer</Text>
+            <View style={st.card}>
+              <TouchableOpacity style={st.row} onPress={() => setView('dev-tools')}>
+                <Text style={st.label}>Dev Tools</Text>
+                <Text style={{ color: t.accent.purple, fontSize: 14 }}>Debug</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
 
         {/* Support the Mission */}
         <Text style={st.section}>Support the Mission</Text>

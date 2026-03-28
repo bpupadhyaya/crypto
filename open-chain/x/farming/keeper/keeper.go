@@ -166,6 +166,11 @@ func (k Keeper) setStakedPosition(ctx sdk.Context, pos *types.StakedPosition) {
 	store.Set([]byte(fmt.Sprintf("stake/%s/%s", pos.Farmer, pos.FarmID)), bz)
 }
 
+// InitFarm persists a farm during genesis initialization.
+func (k Keeper) InitFarm(ctx sdk.Context, f *types.Farm) {
+	k.setFarm(ctx, f)
+}
+
 func (k Keeper) setFarm(ctx sdk.Context, f *types.Farm) {
 	store := ctx.KVStore(k.storeKey)
 	bz, _ := json.Marshal(f)

@@ -59,7 +59,9 @@ func NewAppModule(cdc codec.Codec, keeper *keeper.Keeper) AppModule {
 func (am AppModule) RegisterServices(_ module.Configurator) {}
 
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, data json.RawMessage) {
-	// No pre-existing corrections — all are submitted through the correction process
+	// Correction module initialized — no pre-existing corrections at genesis.
+	// All corrections are submitted through the community verification process (Article V).
+	ctx.Logger().Info("Correction module initialized")
 }
 
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {

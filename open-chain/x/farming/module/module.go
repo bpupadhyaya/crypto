@@ -38,10 +38,23 @@ func NewAppModule(cdc codec.Codec, keeper *keeper.Keeper) AppModule {
 }
 
 func (am AppModule) RegisterServices(_ module.Configurator) {}
-func (am AppModule) InitGenesis(_ sdk.Context, _ codec.JSONCodec, _ json.RawMessage) {}
+
+func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, data json.RawMessage) {
+	// Initialize default yield farms from genesis state
+	for _, farm := range types.DefaultGenesisState().Farms {
+		am.keeper.InitFarm(ctx, &farm)
+	}
+}
+
 func (am AppModule) ExportGenesis(_ sdk.Context, cdc codec.JSONCodec) json.RawMessage { return cdc.MustMarshalJSON(types.DefaultGenesisState()) }
 func (am AppModule) ConsensusVersion() uint64 { return 1 }
 func (am AppModule) BeginBlock(_ sdk.Context) {}
-func (am AppModule) EndBlock(_ sdk.Context)   {}
-func (am AppModule) IsOnePerModuleType()      {}
-func (am AppModule) IsAppModule()             {}
+
+// EndBlock — no per-block work needed for the farming module.
+// Yield farming rewards are calculated lazily on ClaimRewards based on
+// the staker's share of the pool and elapsed blocks since their last claim.
+// This avoids O(stakers) iteration every block.
+func (am AppModule) EndBlock(_ sdk.Context) {}
+
+func (am AppModule) IsOnePerModuleType() {}
+func (am AppModule) IsAppModule()        {}

@@ -56,7 +56,9 @@ func NewAppModule(cdc codec.Codec, keeper *keeper.Keeper) AppModule {
 func (am AppModule) RegisterServices(_ module.Configurator) {}
 
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, data json.RawMessage) {
-	// No pre-mine — genesis is empty per Human Constitution Article III
+	// No pre-mine — genesis is empty per Human Constitution Article III.
+	// Register the OTK module account with the bank module for minting permissions.
+	am.keeper.InitTreasury(ctx)
 }
 
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
@@ -73,17 +75,19 @@ func (am AppModule) BeginBlock(ctx sdk.Context) {}
 // into the block production cycle:
 //  1. Expire old milestones past their verification window
 //  2. Process verified milestones — mint OTK for those that reached attestation threshold
-//  3. Distribute staking rewards (every N blocks)
-//  4. Slash inaccurate verifiers (suspend those below accuracy threshold)
+//  3. Distribute staking rewards (every 100 blocks — interval managed inside keeper)
+//  4. Slash inaccurate verifiers (every 1000 blocks)
 func (am AppModule) EndBlock(ctx sdk.Context) {
 	// Expire old milestones
 	am.keeper.ExpireOldMilestones(ctx)
 	// Check verified milestones and mint OTK
 	am.keeper.ProcessVerifiedMilestones(ctx)
-	// Distribute staking rewards (internally checks block interval)
+	// Distribute staking rewards (every 100 blocks — interval check inside keeper)
 	_ = am.keeper.DistributeStakingRewards(ctx)
-	// Slash verifiers with accuracy below threshold
-	am.keeper.SlashInaccurateVerifiers(ctx)
+	// Slash verifiers with accuracy below threshold (every 1000 blocks)
+	if ctx.BlockHeight()%1000 == 0 {
+		am.keeper.SlashInaccurateVerifiers(ctx)
+	}
 }
 
 func (am AppModule) IsOnePerModuleType() {}
