@@ -27,6 +27,11 @@ import hi from './translations/hi';
 import es from './translations/es';
 import zh from './translations/zh';
 import vi from './translations/vi';
+import ar from './translations/ar';
+import pt from './translations/pt';
+import fr from './translations/fr';
+import ja from './translations/ja';
+import ko from './translations/ko';
 
 const deviceLanguage = getLocales()[0]?.languageCode ?? 'en';
 
@@ -39,6 +44,11 @@ i18next
       es: { translation: es },
       zh: { translation: zh },
       vi: { translation: vi },
+      ar: { translation: ar },
+      pt: { translation: pt },
+      fr: { translation: fr },
+      ja: { translation: ja },
+      ko: { translation: ko },
     },
     lng: deviceLanguage,
     fallbackLng: 'en',

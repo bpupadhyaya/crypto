@@ -27,3 +27,5 @@ export { LendBorrowScreen } from './LendBorrowScreen';
 export { TaxCalculatorScreen } from './TaxCalculatorScreen';
 export { WalletAnalyticsScreen } from './WalletAnalyticsScreen';
 export { WatchlistScreen } from './WatchlistScreen';
+export { TutorialScreen, isTutorialCompleted, resetTutorial } from './TutorialScreen';
+export { HelpScreen } from './HelpScreen';

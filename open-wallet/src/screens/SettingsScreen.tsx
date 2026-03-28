@@ -55,10 +55,13 @@ import { LendBorrowScreen } from './LendBorrowScreen';
 import { TaxCalculatorScreen } from './TaxCalculatorScreen';
 import { WalletAnalyticsScreen } from './WalletAnalyticsScreen';
 import { WatchlistScreen } from './WatchlistScreen';
+import { AccessibilityScreen } from './AccessibilityScreen';
+import { TutorialScreen } from './TutorialScreen';
+import { HelpScreen } from './HelpScreen';
 import { useTheme } from '../hooks/useTheme';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility';
 
 export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode } = useWalletStore();
@@ -243,6 +246,9 @@ export function SettingsScreen() {
   if (view === 'tax-calculator') return <TaxCalculatorScreen onClose={() => setView('main')} />;
   if (view === 'wallet-analytics') return <WalletAnalyticsScreen onClose={() => setView('main')} />;
   if (view === 'watchlist') return <WatchlistScreen onClose={() => setView('main')} />;
+  if (view === 'tutorial') return <TutorialScreen onClose={() => setView('main')} />;
+  if (view === 'help') return <HelpScreen onClose={() => setView('main')} />;
+  if (view === 'accessibility') return <AccessibilityScreen onClose={() => setView('main')} />;
 
   // ─── Main Settings ───
 
@@ -294,6 +300,11 @@ export function SettingsScreen() {
                   { code: 'es', label: 'ES' },
                   { code: 'zh', label: '中' },
                   { code: 'vi', label: 'VI' },
+                  { code: 'ar', label: 'عر' },
+                  { code: 'pt', label: 'PT' },
+                  { code: 'fr', label: 'FR' },
+                  { code: 'ja', label: '日' },
+                  { code: 'ko', label: '한' },
                 ].map((lang) => (
                   <TouchableOpacity
                     key={lang.code}
@@ -413,6 +424,11 @@ export function SettingsScreen() {
           <TouchableOpacity style={st.row} onPress={() => setView('automation')}>
             <Text style={st.label}>Automation Rules</Text>
             <Text style={{ color: t.accent.blue, fontSize: 14, fontWeight: '600' }}>Auto-Trade</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('accessibility')}>
+            <Text style={st.label}>Accessibility</Text>
+            <Text style={st.value}>Font, Contrast, Motion</Text>
           </TouchableOpacity>
         </View>
 
@@ -681,6 +697,16 @@ export function SettingsScreen() {
           <TouchableOpacity style={st.row} onPress={() => Linking.openURL('https://github.com/bpupadhyaya/crypto/blob/main/docs/HUMAN_CONSTITUTION.md')}>
             <Text style={st.label}>The Human Constitution</Text>
             <Text style={{ color: t.accent.blue, fontSize: 14 }}>Read</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('tutorial')}>
+            <Text style={st.label}>Tutorial</Text>
+            <Text style={{ color: t.accent.green, fontSize: 14 }}>Walkthrough</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('help')}>
+            <Text style={st.label}>Help & FAQ</Text>
+            <Text style={{ color: t.accent.blue, fontSize: 14 }}>Support</Text>
           </TouchableOpacity>
         </View>
 

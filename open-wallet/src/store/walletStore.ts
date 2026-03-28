@@ -66,6 +66,18 @@ interface WalletState {
   addImportedWallet: (wallet: { id: string; name: string; type: 'imported' | 'watch-only'; chain: string; address: string; importMethod: 'seed' | 'private-key' | 'address'; addedAt: number }) => void;
   removeImportedWallet: (id: string) => void;
 
+  // ─── Accessibility ───
+  fontSize: 'small' | 'medium' | 'large' | 'xlarge';
+  setFontSize: (size: 'small' | 'medium' | 'large' | 'xlarge') => void;
+  highContrast: boolean;
+  setHighContrast: (enabled: boolean) => void;
+  reduceMotion: boolean;
+  setReduceMotion: (enabled: boolean) => void;
+  screenReaderHints: boolean;
+  setScreenReaderHints: (enabled: boolean) => void;
+  hapticFeedback: boolean;
+  setHapticFeedback: (enabled: boolean) => void;
+
   // ─── P2P / Backend Mode ───
   backendType: BackendType;
   setBackendType: (type: BackendType) => void;
@@ -131,6 +143,16 @@ export const useWalletStore = create<WalletState>((set) => ({
   importedWallets: [],
   addImportedWallet: (wallet) => { set((s) => ({ importedWallets: [...s.importedWallets, wallet] })); schedulePersist(); },
   removeImportedWallet: (id) => { set((s) => ({ importedWallets: s.importedWallets.filter((w) => w.id !== id) })); schedulePersist(); },
+  fontSize: 'medium' as const,
+  setFontSize: (size) => { set({ fontSize: size }); schedulePersist(); },
+  highContrast: false,
+  setHighContrast: (enabled) => { set({ highContrast: enabled }); schedulePersist(); },
+  reduceMotion: false,
+  setReduceMotion: (enabled) => { set({ reduceMotion: enabled }); schedulePersist(); },
+  screenReaderHints: false,
+  setScreenReaderHints: (enabled) => { set({ screenReaderHints: enabled }); schedulePersist(); },
+  hapticFeedback: true,
+  setHapticFeedback: (enabled) => { set({ hapticFeedback: enabled }); schedulePersist(); },
   backendType: 'server' as BackendType,
   setBackendType: (type) => { set({ backendType: type }); schedulePersist(); },
   p2pEnabled: false,
@@ -162,6 +184,7 @@ async function doPersist() {
       addresses: s.addresses, hasVault: s.hasVault, enabledTokens: s.enabledTokens,
       contacts: s.contacts, accounts: s.accounts, activeAccountIndex: s.activeAccountIndex, priceAlerts: s.priceAlerts,
       importedWallets: s.importedWallets,
+      fontSize: s.fontSize, highContrast: s.highContrast, reduceMotion: s.reduceMotion, screenReaderHints: s.screenReaderHints, hapticFeedback: s.hapticFeedback,
       backendType: s.backendType, p2pEnabled: s.p2pEnabled, p2pBootstrapPeers: s.p2pBootstrapPeers, p2pEnableMDNS: s.p2pEnableMDNS,
     }));
   } catch {}
@@ -205,6 +228,11 @@ function ensureOTK(tokens: string[]): string[] {
         activeAccountIndex: d.activeAccountIndex ?? 0,
         priceAlerts: d.priceAlerts ?? [],
         importedWallets: d.importedWallets ?? [],
+        fontSize: d.fontSize ?? 'medium',
+        highContrast: d.highContrast ?? false,
+        reduceMotion: d.reduceMotion ?? false,
+        screenReaderHints: d.screenReaderHints ?? false,
+        hapticFeedback: d.hapticFeedback ?? true,
         backendType: d.backendType ?? 'server',
         p2pEnabled: d.p2pEnabled ?? false,
         p2pBootstrapPeers: d.p2pBootstrapPeers ?? [],
