@@ -16,7 +16,7 @@ function LockButton() {
     <TouchableOpacity
       onPress={() => Alert.alert('Lock Wallet', 'Lock your wallet?', [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Lock', style: 'destructive', onPress: () => useWalletStore.getState().setStatus('locked') },
+        { text: 'Lock', style: 'destructive', onPress: () => setTimeout(() => useWalletStore.getState().setStatus('locked'), 0) },
       ])}
       style={{ paddingRight: 16, paddingLeft: 8 }}
       hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}

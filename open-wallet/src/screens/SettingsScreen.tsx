@@ -504,7 +504,7 @@ export function SettingsScreen() {
           style={st.signOutBtn}
           onPress={() => Alert.alert('Sign Out', 'Lock your wallet?', [
             { text: 'Cancel', style: 'cancel' },
-            { text: 'Sign Out', style: 'destructive', onPress: () => setStatus('locked') },
+            { text: 'Sign Out', style: 'destructive', onPress: () => setTimeout(() => setStatus('locked'), 0) },
           ])}
         >
           <Text style={st.signOutText}>Sign Out</Text>
