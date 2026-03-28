@@ -9,7 +9,7 @@ import { Buffer } from 'buffer';
 import 'react-native-get-random-values';
 
 import React, { useEffect, useRef } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, Modal, StyleSheet } from 'react-native';
 import { Slot } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -102,20 +102,17 @@ export default function RootLayout() {
     if (needsUnlock) return <QueryClientProvider client={queryClient}><StatusBar style="light" /><UnlockScreen /></QueryClientProvider>;
   }
 
-  // After first unlock: tabs stay mounted forever, auth overlays on top
+  // After first unlock: tabs stay mounted forever, lock screen uses native Modal
   return (
     <QueryClientProvider client={queryClient}>
       <StatusBar style="light" />
-      <View style={s.root}>
-        <Slot />
-        {needsPinSetup && <View style={s.overlay}><PinSetupScreen /></View>}
-        {needsUnlock && <View style={s.overlay}><UnlockScreen /></View>}
-      </View>
+      <Slot />
+      <Modal visible={needsUnlock} animationType="none" presentationStyle="fullScreen" statusBarTranslucent>
+        <UnlockScreen />
+      </Modal>
+      <Modal visible={needsPinSetup} animationType="none" presentationStyle="fullScreen" statusBarTranslucent>
+        <PinSetupScreen />
+      </Modal>
     </QueryClientProvider>
   );
 }
-
-const s = StyleSheet.create({
-  root: { flex: 1 },
-  overlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 10 },
-});
