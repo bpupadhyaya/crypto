@@ -42,10 +42,15 @@ import { NFTGalleryScreen } from './NFTGalleryScreen';
 import { SecurityAuditScreen } from './SecurityAuditScreen';
 import { CloudBackupScreen } from './CloudBackupScreen';
 import { RewardsScreen } from './RewardsScreen';
+import { MessagesScreen } from './MessagesScreen';
+import { SocialFeedScreen } from './SocialFeedScreen';
+import { ProfileScreen } from './ProfileScreen';
+import { RecurringPaymentsScreen } from './RecurringPaymentsScreen';
+import { AutomationScreen } from './AutomationScreen';
 import { useTheme } from '../hooks/useTheme';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation';
 
 export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode } = useWalletStore();
@@ -217,6 +222,11 @@ export function SettingsScreen() {
   if (view === 'nft-gallery') return <NFTGalleryScreen onClose={() => setView('main')} />;
   if (view === 'security-audit') return <SecurityAuditScreen onClose={() => setView('main')} />;
   if (view === 'cloud-backup') return <CloudBackupScreen onClose={() => setView('main')} />;
+  if (view === 'messages') return <MessagesScreen onClose={() => setView('main')} />;
+  if (view === 'social-feed') return <SocialFeedScreen onClose={() => setView('main')} />;
+  if (view === 'profile') return <ProfileScreen onClose={() => setView('main')} />;
+  if (view === 'recurring-payments') return <RecurringPaymentsScreen onClose={() => setView('main')} />;
+  if (view === 'automation') return <AutomationScreen onClose={() => setView('main')} />;
 
   // ─── Main Settings ───
 
@@ -362,6 +372,16 @@ export function SettingsScreen() {
           <TouchableOpacity style={st.row} onPress={() => setView('nft-gallery')}>
             <Text style={st.label}>NFT Gallery</Text>
             <Text style={{ color: t.accent.orange, fontSize: 14 }}>View</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('recurring-payments')}>
+            <Text style={st.label}>Recurring Payments</Text>
+            <Text style={{ color: t.accent.green, fontSize: 14, fontWeight: '600' }}>Schedule</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('automation')}>
+            <Text style={st.label}>Automation Rules</Text>
+            <Text style={{ color: t.accent.blue, fontSize: 14, fontWeight: '600' }}>Auto-Trade</Text>
           </TouchableOpacity>
         </View>
 
@@ -543,6 +563,25 @@ export function SettingsScreen() {
           <TouchableOpacity style={st.row} onPress={() => setView('achievements')}>
             <Text style={st.label}>Achievements</Text>
             <Text style={{ color: t.accent.orange, fontSize: 14 }}>Soulbound NFTs</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Social */}
+        <Text style={st.section}>Social</Text>
+        <View style={st.card}>
+          <TouchableOpacity style={st.row} onPress={() => setView('messages')}>
+            <Text style={st.label}>Messages</Text>
+            <Text style={{ color: t.accent.green, fontSize: 14 }}>Encrypted P2P</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('social-feed')}>
+            <Text style={st.label}>Community Feed</Text>
+            <Text style={{ color: t.accent.blue, fontSize: 14 }}>Activity</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('profile')}>
+            <Text style={st.label}>My Profile</Text>
+            <Text style={{ color: t.accent.purple, fontSize: 14 }}>View</Text>
           </TouchableOpacity>
         </View>
 

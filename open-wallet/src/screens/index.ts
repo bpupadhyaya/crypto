@@ -14,3 +14,8 @@ export { TokenLaunchScreen } from './TokenLaunchScreen';
 export { NFTGalleryScreen } from './NFTGalleryScreen';
 export { SecurityAuditScreen } from './SecurityAuditScreen';
 export { CloudBackupScreen } from './CloudBackupScreen';
+export { MessagesScreen } from './MessagesScreen';
+export { SocialFeedScreen } from './SocialFeedScreen';
+export { ProfileScreen } from './ProfileScreen';
+export { RecurringPaymentsScreen } from './RecurringPaymentsScreen';
+export { AutomationScreen } from './AutomationScreen';
