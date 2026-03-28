@@ -26,10 +26,11 @@ import { OracleScreen } from './OracleScreen';
 import { ContributionScoreScreen } from './ContributionScoreScreen';
 import { PrivacyPolicyScreen } from './PrivacyPolicyScreen';
 import { WhatsNewScreen } from './WhatsNewScreen';
+import { DeFiScreen } from './DeFiScreen';
 import { useTheme } from '../hooks/useTheme';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi';
 
 export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode } = useWalletStore();
@@ -185,6 +186,7 @@ export function SettingsScreen() {
   if (view === 'scores') return <ContributionScoreScreen onClose={() => setView('main')} />;
   if (view === 'privacy') return <PrivacyPolicyScreen onClose={() => setView('main')} />;
   if (view === 'whatsnew') return <WhatsNewScreen onClose={() => setView('main')} />;
+  if (view === 'defi') return <DeFiScreen onClose={() => setView('main')} />;
 
   // ─── Main Settings ───
 
@@ -403,6 +405,11 @@ export function SettingsScreen() {
         {/* Open Chain */}
         <Text style={st.section}>Open Chain</Text>
         <View style={st.card}>
+          <TouchableOpacity style={st.row} onPress={() => setView('defi')}>
+            <Text style={st.label}>DeFi Dashboard</Text>
+            <Text style={st.valueGreen}>View</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
           <TouchableOpacity style={st.row} onPress={() => setView('uid')}>
             <Text style={st.label}>Universal ID</Text>
             <Text style={st.valueGreen}>Register</Text>
