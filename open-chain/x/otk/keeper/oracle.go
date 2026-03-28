@@ -445,6 +445,95 @@ func (k Keeper) ProcessVerifiedMilestones(ctx sdk.Context) {
 	}
 }
 
+// UpdateVerifierAccuracy recalculates accuracy after milestone resolution.
+// If a verifier approved a milestone that was ultimately rejected (or vice versa),
+// their accuracy drops. Accuracy is tracked as a percentage (0-100).
+func (k Keeper) UpdateVerifierAccuracy(ctx sdk.Context, milestoneID string) {
+	pm, err := k.GetPendingMilestone(ctx, milestoneID)
+	if err != nil {
+		return
+	}
+
+	// Only update accuracy for resolved milestones
+	if pm.Status != "verified" && pm.Status != "rejected" && pm.Status != "executed" {
+		return
+	}
+
+	wasApproved := pm.Status == "verified" || pm.Status == "executed"
+
+	for _, att := range pm.Attestations {
+		verifier, err := k.GetVerifier(ctx, att.VerifierUID)
+		if err != nil {
+			continue
+		}
+
+		// Determine if this verifier voted correctly
+		votedCorrectly := (att.Approved && wasApproved) || (!att.Approved && !wasApproved)
+
+		if votedCorrectly {
+			// Nudge accuracy up (max 100)
+			if verifier.Accuracy < 100 {
+				verifier.Accuracy++
+			}
+		} else {
+			// Penalize: drop accuracy by 5 points per incorrect vote
+			verifier.Accuracy -= 5
+			if verifier.Accuracy < 0 {
+				verifier.Accuracy = 0
+			}
+		}
+
+		_ = k.setVerifier(ctx, verifier)
+
+		ctx.EventManager().EmitEvent(sdk.NewEvent(
+			"verifier_accuracy_updated",
+			sdk.NewAttribute("verifier_uid", verifier.UID),
+			sdk.NewAttribute("milestone_id", milestoneID),
+			sdk.NewAttribute("voted_correctly", fmt.Sprintf("%t", votedCorrectly)),
+			sdk.NewAttribute("new_accuracy", fmt.Sprintf("%d", verifier.Accuracy)),
+		))
+	}
+}
+
+// SlashInaccurateVerifiers suspends verifiers below MinAccuracy.
+// Called from EndBlock. Iterates all verifiers and suspends those whose
+// accuracy score has fallen below the configured threshold.
+func (k Keeper) SlashInaccurateVerifiers(ctx sdk.Context) {
+	params := DefaultOracleParams()
+	store := ctx.KVStore(k.storeKey)
+	prefix := []byte("verifier/")
+	iterator := store.Iterator(prefix, storetypes.PrefixEndBytes(prefix))
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var v Verifier
+		if err := json.Unmarshal(iterator.Value(), &v); err != nil {
+			continue
+		}
+		if v.Status != VerifierActive {
+			continue
+		}
+
+		// Only slash verifiers who have made enough attestations to be meaningful
+		if v.Attestations < int64(params.MinVerifiers) {
+			continue
+		}
+
+		if v.Accuracy < params.MinAccuracy {
+			v.Status = VerifierSuspended
+			_ = k.setVerifier(ctx, &v)
+
+			ctx.EventManager().EmitEvent(sdk.NewEvent(
+				"verifier_slashed",
+				sdk.NewAttribute("verifier_uid", v.UID),
+				sdk.NewAttribute("accuracy", fmt.Sprintf("%d", v.Accuracy)),
+				sdk.NewAttribute("min_accuracy", fmt.Sprintf("%d", params.MinAccuracy)),
+				sdk.NewAttribute("action", "suspended"),
+			))
+		}
+	}
+}
+
 // ExpireOldMilestones marks expired pending milestones. Called from EndBlocker.
 func (k Keeper) ExpireOldMilestones(ctx sdk.Context) {
 	milestones, err := k.GetPendingMilestones(ctx)

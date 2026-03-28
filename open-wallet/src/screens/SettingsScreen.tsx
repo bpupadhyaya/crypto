@@ -41,10 +41,11 @@ import { TokenLaunchScreen } from './TokenLaunchScreen';
 import { NFTGalleryScreen } from './NFTGalleryScreen';
 import { SecurityAuditScreen } from './SecurityAuditScreen';
 import { CloudBackupScreen } from './CloudBackupScreen';
+import { RewardsScreen } from './RewardsScreen';
 import { useTheme } from '../hooks/useTheme';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup';
 
 export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode } = useWalletStore();
@@ -192,6 +193,7 @@ export function SettingsScreen() {
   if (view === 'hardware') return <HardwareWalletScreen onClose={() => setView('main')} />;
   if (view === 'walletconnect') return <WalletConnectScreen onClose={() => setView('main')} />;
   if (view === 'staking') return <StakingScreen onClose={() => setView('main')} />;
+  if (view === 'rewards') return <RewardsScreen onClose={() => setView('main')} />;
   if (view === 'uid') return <UniversalIDScreen onClose={() => setView('main')} />;
   if (view === 'ledger') return <LivingLedgerScreen onClose={() => setView('main')} onSendGratitude={() => setView('gratitude')} />;
   if (view === 'gratitude') return <GratitudeScreen onClose={() => setView('main')} />;
@@ -320,6 +322,11 @@ export function SettingsScreen() {
           <TouchableOpacity style={st.row} onPress={() => setView('staking')}>
             <Text style={st.label}>Staking</Text>
             <Text style={st.valueGreen}>5% APY</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('rewards')}>
+            <Text style={st.label}>Staking Rewards</Text>
+            <Text style={st.valueGreen}>Claim</Text>
           </TouchableOpacity>
           <View style={st.divider} />
           <TouchableOpacity style={st.row} onPress={() => setView('contacts')}>

@@ -26,6 +26,7 @@ import type { ChainId } from '../core/abstractions/types';
 import { getChainFeeEstimate, onFeeUpdate, refreshFeesNow } from '../core/gas/feeService';
 import { parseFeeAmount, type FeeEstimate } from '../core/gas/estimator';
 import { getPrices } from '../core/priceService';
+import { resolveName, isNameServiceInput, type ResolvedAddress } from '../core/names/resolver';
 
 // ─── Module-level caches to avoid repeated expensive operations ───
 import { prewarmedModules } from '../core/prewarmer';
@@ -47,6 +48,8 @@ export function SendScreen() {
   const [showScanner, setShowScanner] = useState(false);
   const [feeSpeed, setFeeSpeed] = useState<'slow' | 'medium' | 'fast'>('medium');
   const [chainFeeEstimate, setChainFeeEstimate] = useState<FeeEstimate | undefined>(undefined);
+  const [resolvedAddr, setResolvedAddr] = useState<ResolvedAddress | null>(null);
+  const [isResolving, setIsResolving] = useState(false);
   const t = useTheme();
 
   // Subscribe to background fee service updates
@@ -57,6 +60,30 @@ export function SendScreen() {
     const unsub = onFeeUpdate(update);
     return unsub;
   }, [selectedChain]);
+
+  // ─── Name service resolution with 500ms debounce ───
+  useEffect(() => {
+    if (!isNameServiceInput(recipient)) {
+      setResolvedAddr(null);
+      setIsResolving(false);
+      return;
+    }
+    setIsResolving(true);
+    const timer = setTimeout(async () => {
+      try {
+        const result = await resolveName(recipient);
+        setResolvedAddr(result);
+      } catch {
+        setResolvedAddr(null);
+      } finally {
+        setIsResolving(false);
+      }
+    }, 500);
+    return () => { clearTimeout(timer); setIsResolving(false); };
+  }, [recipient]);
+
+  // The effective recipient address — use resolved address if available
+  const effectiveRecipient = resolvedAddr?.address ?? recipient;
 
   const styles = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary, paddingHorizontal: 24 },
@@ -114,8 +141,14 @@ export function SendScreen() {
   }, [selectedChain]);
 
   // Validate address (basic check — no heavy imports)
+  // If a name-service name resolved successfully, treat it as valid.
   const isAddressValid = useMemo(() => {
     if (!recipient.trim()) return null;
+    // If still resolving a name, don't mark invalid yet
+    if (isNameServiceInput(recipient)) {
+      if (isResolving) return null;
+      return resolvedAddr ? true : false;
+    }
     const addr = recipient.trim();
     if (selectedChain === 'ethereum') return /^0x[0-9a-fA-F]{40}$/.test(addr);
     if (selectedChain === 'bitcoin') return /^(bc1|tb1|[13mn2])[a-zA-HJ-NP-Z0-9]{25,62}$/.test(addr);
@@ -123,7 +156,7 @@ export function SendScreen() {
     if (selectedChain === 'openchain') return /^openchain[a-z0-9]{39}$/.test(addr);
     if (selectedChain === 'cosmos') return /^cosmos[a-z0-9]{39}$/.test(addr);
     return addr.length > 10;
-  }, [recipient, selectedChain]);
+  }, [recipient, selectedChain, resolvedAddr, isResolving]);
 
   const chainSymbol = useMemo(() => {
     const symbols: Record<string, string> = { bitcoin: 'BTC', ethereum: 'ETH', solana: 'SOL', cosmos: 'ATOM', openchain: 'OTK' };
@@ -132,12 +165,12 @@ export function SendScreen() {
 
   // Estimate fee when amount and recipient are set
   const estimateFee = useCallback(async () => {
-    if (!recipient.trim() || !amount.trim() || parseFloat(amount) <= 0 || isAddressValid !== true) return;
+    if (!effectiveRecipient.trim() || !amount.trim() || parseFloat(amount) <= 0 || isAddressValid !== true) return;
     try {
       const provider = registry.getChainProvider(selectedChain);
       const decimals = selectedChain === 'bitcoin' ? 8 : selectedChain === 'ethereum' ? 18 : 9;
       const rawAmount = BigInt(Math.round(parseFloat(amount) * 10 ** decimals));
-      const fee = await provider.estimateFee(senderAddress, recipient.trim(), rawAmount);
+      const fee = await provider.estimateFee(senderAddress, effectiveRecipient.trim(), rawAmount);
       const feeHuman = Number(fee) / 10 ** decimals;
       setEstimatedFee(feeHuman < 0.000001 ? '<0.000001' : feeHuman.toFixed(6));
     } catch {
@@ -164,7 +197,7 @@ export function SendScreen() {
       Alert.alert('Invalid Address', `This is not a valid ${selectedChain} address.`);
       return;
     }
-    if (recipient.trim().toLowerCase() === senderAddress.toLowerCase()) {
+    if (effectiveRecipient.trim().toLowerCase() === senderAddress.toLowerCase()) {
       Alert.alert('Same Address', 'You cannot send to your own address.');
       return;
     }
@@ -279,11 +312,11 @@ export function SendScreen() {
       if (selectedChain === 'ethereum') {
         const EthSigner = prewarmedModules.EthereumSigner ?? (await import('../core/chains/ethereum-signer')).EthereumSigner;
         const signer = EthSigner.fromWallet(wallet, store.activeAccountIndex);
-        txHash = await signer.sendTransaction(recipient.trim(), amount.trim());
+        txHash = await signer.sendTransaction(effectiveRecipient.trim(), amount.trim());
       } else if (selectedChain === 'solana') {
         const SolSigner = prewarmedModules.SolanaSigner ?? (await import('../core/chains/solana-signer')).SolanaSigner;
         const signer = SolSigner.fromWallet(wallet, store.activeAccountIndex);
-        txHash = await signer.sendSOL(recipient.trim(), parseFloat(amount));
+        txHash = await signer.sendSOL(effectiveRecipient.trim(), parseFloat(amount));
       } else if (selectedChain === 'bitcoin') {
         const BtcSigner = prewarmedModules.BitcoinSigner ?? (await import('../core/chains/bitcoin-signer')).BitcoinSigner;
         const signer = BtcSigner.fromWallet(wallet, store.activeAccountIndex);
@@ -291,7 +324,7 @@ export function SendScreen() {
         const amountSats = BigInt(Math.round(parseFloat(amount) * 10 ** decimals));
         // Use medium fee rate (10 sat/vbyte for testnet, real estimate for mainnet)
         const feeRate = isTestnet() ? 10 : 20;
-        const rawTx = await signer.createTransaction(recipient.trim(), amountSats, feeRate);
+        const rawTx = await signer.createTransaction(effectiveRecipient.trim(), amountSats, feeRate);
         // Broadcast via provider
         const provider = registry.getChainProvider('bitcoin');
         txHash = await provider.broadcastTransaction({
@@ -303,7 +336,7 @@ export function SendScreen() {
         // Cosmos SDK chains (Open Chain, Cosmos Hub) — use @cosmjs/stargate
         const { CosmosSigner } = await import('../core/chains/cosmos-signer');
         const signer = CosmosSigner.fromWallet(wallet, store.activeAccountIndex, selectedChain as 'openchain' | 'cosmos');
-        txHash = await signer.sendTokens(recipient.trim(), amount.trim());
+        txHash = await signer.sendTokens(effectiveRecipient.trim(), amount.trim());
       } else {
         throw new Error(`Unsupported chain: ${selectedChain}`);
       }
@@ -353,7 +386,7 @@ export function SendScreen() {
           type: 'send',
           fromSymbol: chainSymbol,
           fromAmount: amount,
-          recipient: recipient,
+          recipient: effectiveRecipient,
           fee: chainFeeEstimate
             ? parseFeeAmount(chainFeeEstimate[feeSpeed].fee).toFixed(6)
             : estimatedFee ?? undefined,
@@ -413,7 +446,7 @@ export function SendScreen() {
               isAddressValid === false && styles.inputError,
               isAddressValid === true && styles.inputValid,
             ]}
-            placeholder={`${chainSymbol} address`}
+            placeholder={`${chainSymbol} address or name (.eth, .sol, .crypto)`}
             placeholderTextColor={t.text.muted}
             value={recipient}
             onChangeText={setRecipient}
@@ -423,6 +456,28 @@ export function SendScreen() {
           {isAddressValid === true && <Text style={styles.validIcon}>✓</Text>}
           {isAddressValid === false && <Text style={styles.invalidIcon}>✗</Text>}
         </View>
+        {/* Name resolution indicator */}
+        {isResolving && (
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8, gap: 6 }}>
+            <ActivityIndicator size="small" color={t.text.muted} />
+            <Text style={{ color: t.text.muted, fontSize: 12 }}>Resolving name...</Text>
+          </View>
+        )}
+        {resolvedAddr && !isResolving && (
+          <View style={{ backgroundColor: t.bg.card, borderRadius: 8, padding: 10, marginBottom: 12 }}>
+            <Text style={{ color: t.accent.green, fontSize: 12, fontWeight: '600', marginBottom: 2 }}>
+              Resolved via {resolvedAddr.nameService}
+            </Text>
+            <Text style={{ color: t.text.secondary, fontSize: 12, fontFamily: 'monospace' }} numberOfLines={1} ellipsizeMode="middle">
+              {resolvedAddr.address}
+            </Text>
+          </View>
+        )}
+        {isNameServiceInput(recipient) && !isResolving && !resolvedAddr && recipient.trim().length > 0 && (
+          <Text style={{ color: t.accent.red, fontSize: 12, marginBottom: 8 }}>
+            Could not resolve this name. Check spelling and try again.
+          </Text>
+        )}
 
         {/* Amount */}
         <Text style={styles.fieldLabel}>Amount</Text>
