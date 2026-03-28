@@ -46,6 +46,10 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v10/modules/core/keeper"
 
 	"openchain/docs"
+
+	otkkeeper "openchain/x/otk/keeper"
+	uidkeeper "openchain/x/uid/keeper"
+	govuidkeeper "openchain/x/govuid/keeper"
 )
 
 const (
@@ -90,6 +94,11 @@ type App struct {
 	ConsensusParamsKeeper consensuskeeper.Keeper
 	CircuitBreakerKeeper  circuitkeeper.Keeper
 	ParamsKeeper          paramskeeper.Keeper
+
+	// open chain keepers
+	OTKKeeper    *otkkeeper.Keeper
+	UIDKeeper    *uidkeeper.Keeper
+	GovUIDKeeper *govuidkeeper.Keeper
 
 	// ibc keepers
 	IBCKeeper           *ibckeeper.Keeper

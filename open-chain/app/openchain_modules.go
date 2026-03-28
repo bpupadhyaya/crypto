@@ -1,21 +1,12 @@
 package app
 
-// registerOpenChainModules registers the custom Open Chain modules:
-//   - x/otk: Multi-channel Open Token (OTK) — human value representation
+// registerOpenChainModules registers custom Open Chain modules and initializes keepers.
+//
+// Modules:
+//   - x/otk: Multi-channel Open Token — human value representation
 //   - x/uid: Universal ID — privacy-preserving human identity
-//
-// These modules are registered as non-depinject modules (like IBC),
-// since they don't have protobuf module config definitions yet.
-// They will be migrated to full depinject support as the chain matures.
-//
-// For now, the OTK module uses the bank module for token operations
-// (minting, burning, transfers) and adds custom logic for:
-//   - Multi-channel value tracking (nOTK, eOTK, hOTK, cOTK, xOTK, gOTK)
-//   - Ripple attribution across contribution rings
-//   - Milestone-based minting
-//   - Gratitude transactions
-//
-// The UID module manages Universal ID registration and selective disclosure.
+//   - x/dex: Decentralized exchange — AMM + order book
+//   - x/govuid: One-human-one-vote governance
 
 import (
 	"fmt"
@@ -23,33 +14,28 @@ import (
 	storetypes "cosmossdk.io/store/types"
 
 	dextypes "openchain/x/dex/types"
+	govuidkeeper "openchain/x/govuid/keeper"
+	otkkeeper "openchain/x/otk/keeper"
 	otktypes "openchain/x/otk/types"
+	uidkeeper "openchain/x/uid/keeper"
 	uidtypes "openchain/x/uid/types"
 )
 
-// registerOpenChainModules sets up store keys for OTK and UID modules.
-// The actual keeper initialization and module registration will be done
-// when protobuf message types are defined (Phase 2).
-//
-// For Phase 1, we register the store keys so the chain is aware of
-// these modules and their data can be persisted.
 func (app *App) registerOpenChainModules() error {
 	// Register store keys for custom modules
-	if err := app.RegisterStores(
-		storetypes.NewKVStoreKey(otktypes.StoreKey),
-		storetypes.NewKVStoreKey(uidtypes.StoreKey),
-		storetypes.NewKVStoreKey(dextypes.StoreKey),
-	); err != nil {
+	otkStoreKey := storetypes.NewKVStoreKey(otktypes.StoreKey)
+	uidStoreKey := storetypes.NewKVStoreKey(uidtypes.StoreKey)
+	dexStoreKey := storetypes.NewKVStoreKey(dextypes.StoreKey)
+	govuidStoreKey := storetypes.NewKVStoreKey("govuid")
+
+	if err := app.RegisterStores(otkStoreKey, uidStoreKey, dexStoreKey, govuidStoreKey); err != nil {
 		return fmt.Errorf("failed to register Open Chain module stores: %w", err)
 	}
 
-	// Phase 2 TODO: Initialize keepers and register message handlers
-	// app.OTKKeeper = otkkeeper.NewKeeper(...)
-	// app.UIDKeeper = uidkeeper.NewKeeper(...)
-
-	// Phase 2 TODO: Register modules with the module manager
-	// app.ModuleManager.RegisterLegacyModule(otkmodule.NewAppModule(...))
-	// app.ModuleManager.RegisterLegacyModule(uidmodule.NewAppModule(...))
+	// Initialize keepers
+	app.OTKKeeper = otkkeeper.NewKeeper(app.appCodec, otkStoreKey, app.BankKeeper)
+	app.UIDKeeper = uidkeeper.NewKeeper(app.appCodec, uidStoreKey)
+	app.GovUIDKeeper = govuidkeeper.NewKeeper(app.appCodec, govuidStoreKey, app.UIDKeeper)
 
 	return nil
 }
