@@ -23,16 +23,20 @@ import (
 	achievementkeeper "openchain/x/achievement/keeper"
 	achievementtypes "openchain/x/achievement/types"
 	govuidkeeper "openchain/x/govuid/keeper"
+	messagingkeeper "openchain/x/messaging/keeper"
 	otkkeeper "openchain/x/otk/keeper"
+	tokenfactorykeeper "openchain/x/tokenfactory/keeper"
 	uidkeeper "openchain/x/uid/keeper"
 )
 
 // Keepers holds references to all custom module keepers needed by REST handlers.
 type Keepers struct {
-	OTK         *otkkeeper.Keeper
-	UID         *uidkeeper.Keeper
-	GovUID      *govuidkeeper.Keeper
-	Achievement *achievementkeeper.Keeper
+	OTK          *otkkeeper.Keeper
+	UID          *uidkeeper.Keeper
+	GovUID       *govuidkeeper.Keeper
+	Achievement  *achievementkeeper.Keeper
+	TokenFactory *tokenfactorykeeper.Keeper
+	Messaging    *messagingkeeper.Keeper
 }
 
 // ContextProvider returns the latest committed sdk.Context for read queries.
@@ -63,6 +67,91 @@ func RegisterRoutes(mux *http.ServeMux, keepers Keepers, ctxProvider ContextProv
 	mux.HandleFunc("/openchain/achievement/v1/achievements/", handleAchievements(keepers.Achievement, ctxProvider))
 	mux.HandleFunc("/openchain/achievement/v1/achievement/", handleAchievement(keepers.Achievement, ctxProvider))
 	mux.HandleFunc("/openchain/achievement/v1/stats/", handleAchievementStats(keepers.Achievement, ctxProvider))
+
+	// ─── Token Factory Module ───
+	if keepers.TokenFactory != nil {
+		mux.HandleFunc("/openchain/tokenfactory/v1/token/", handleToken(keepers.TokenFactory, ctxProvider))
+		mux.HandleFunc("/openchain/tokenfactory/v1/tokens/", handleTokensByCreator(keepers.TokenFactory, ctxProvider))
+		mux.HandleFunc("/openchain/tokenfactory/v1/tokens", handleAllTokens(keepers.TokenFactory, ctxProvider))
+	}
+
+	// ─── Messaging Module ───
+	if keepers.Messaging != nil {
+		mux.HandleFunc("/openchain/messaging/v1/messages/", handleMessages(keepers.Messaging, ctxProvider))
+		mux.HandleFunc("/openchain/messaging/v1/conversations/", handleConversations(keepers.Messaging, ctxProvider))
+	}
+
+	// ─── Chain Params ───
+	mux.HandleFunc("/openchain/govuid/v1/params", handleChainParams(keepers.GovUID, ctxProvider))
+}
+
+// ─── Token Factory Handlers ───
+
+func handleToken(k *tokenfactorykeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		denom := strings.TrimPrefix(r.URL.Path, "/openchain/tokenfactory/v1/token/")
+		if denom == "" { http.Error(w, "denom required", 400); return }
+		ctx := ctxProvider()
+		token, err := k.GetToken(ctx, denom)
+		if err != nil { http.Error(w, err.Error(), 404); return }
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(token)
+	}
+}
+
+func handleTokensByCreator(k *tokenfactorykeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		creator := strings.TrimPrefix(r.URL.Path, "/openchain/tokenfactory/v1/tokens/")
+		if creator == "" { http.Error(w, "creator required", 400); return }
+		ctx := ctxProvider()
+		tokens, _ := k.GetTokensByCreator(ctx, creator)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{"tokens": tokens})
+	}
+}
+
+func handleAllTokens(k *tokenfactorykeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := ctxProvider()
+		tokens, _ := k.GetAllTokens(ctx)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{"tokens": tokens})
+	}
+}
+
+// ─── Messaging Handlers ───
+
+func handleMessages(k *messagingkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		uid := strings.TrimPrefix(r.URL.Path, "/openchain/messaging/v1/messages/")
+		if uid == "" { http.Error(w, "uid required", 400); return }
+		ctx := ctxProvider()
+		msgs, _ := k.GetMessages(ctx, uid, 50)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{"messages": msgs})
+	}
+}
+
+func handleConversations(k *messagingkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		uid := strings.TrimPrefix(r.URL.Path, "/openchain/messaging/v1/conversations/")
+		if uid == "" { http.Error(w, "uid required", 400); return }
+		ctx := ctxProvider()
+		convos, _ := k.GetConversations(ctx, uid)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{"conversations": convos})
+	}
+}
+
+// ─── Chain Params Handler ───
+
+func handleChainParams(k *govuidkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := ctxProvider()
+		params := k.GetChainParams(ctx)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(params)
+	}
 }
 
 // ════════════════════════════════════════════════════════════════
