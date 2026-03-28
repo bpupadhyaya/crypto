@@ -26,6 +26,7 @@ import { PinSetupScreen } from '../screens/PinSetupScreen';
 let providersInitialized = false;
 let priceServiceStarted = false;
 let balancePrefetched = false;
+let notificationServiceStarted = false;
 
 async function prefetchBalances() {
   if (balancePrefetched) return;
@@ -78,6 +79,8 @@ export default function RootLayout() {
     if (status === 'locked') {
       priceServiceStarted = false;
       balancePrefetched = false;
+      notificationServiceStarted = false;
+      import('../core/notificationService').then((m) => m.stopNotificationService()).catch(() => {});
     }
     if (status === 'unlocked' && !priceServiceStarted) {
       priceServiceStarted = true;
@@ -86,6 +89,13 @@ export default function RootLayout() {
         const enabledTokens = useWalletStore.getState().enabledTokens;
         import('../core/priceService').then((m) => m.startPriceService(enabledTokens));
         if (!balancePrefetched) prefetchBalances();
+
+        // Start notification service (skip demo mode)
+        if (!notificationServiceStarted && !useWalletStore.getState().demoMode) {
+          notificationServiceStarted = true;
+          const addresses = useWalletStore.getState().addresses as Record<string, string>;
+          import('../core/notificationService').then((m) => m.startNotificationService(addresses));
+        }
       }, 2000);
     }
   }, [status]);

@@ -30,10 +30,13 @@ import { DeFiScreen } from './DeFiScreen';
 import { P2PScreen } from './P2PScreen';
 import { AchievementsScreen } from './AchievementsScreen';
 import { PaymentRailsScreen } from './PaymentRailsScreen';
+import { NotificationHistoryScreen } from './NotificationHistoryScreen';
+import { PortfolioAnalyticsScreen } from './PortfolioAnalyticsScreen';
+import { MarketScreen } from './MarketScreen';
 import { useTheme } from '../hooks/useTheme';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market';
 
 export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode } = useWalletStore();
@@ -193,6 +196,9 @@ export function SettingsScreen() {
   if (view === 'p2p') return <P2PScreen onClose={() => setView('main')} />;
   if (view === 'achievements') return <AchievementsScreen onClose={() => setView('main')} />;
   if (view === 'rails') return <PaymentRailsScreen onClose={() => setView('main')} />;
+  if (view === 'notifications') return <NotificationHistoryScreen onClose={() => setView('main')} />;
+  if (view === 'analytics') return <PortfolioAnalyticsScreen onClose={() => setView('main')} />;
+  if (view === 'market') return <MarketScreen onClose={() => setView('main')} />;
 
   // ─── Main Settings ───
 
@@ -275,6 +281,16 @@ export function SettingsScreen() {
             <Text style={st.value}>›</Text>
           </TouchableOpacity>
           <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('analytics')}>
+            <Text style={st.label}>Portfolio Analytics</Text>
+            <Text style={st.value}>›</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('market')}>
+            <Text style={st.label}>Market</Text>
+            <Text style={st.value}>Top tokens</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
           <TouchableOpacity style={st.row} onPress={() => setView('hardware')}>
             <Text style={st.label}>Hardware Wallet</Text>
             <Text style={st.value}>Ledger · Trezor</Text>
@@ -298,6 +314,11 @@ export function SettingsScreen() {
           <TouchableOpacity style={st.row} onPress={() => setView('rails')}>
             <Text style={st.label}>Buy with Local Currency</Text>
             <Text style={{ color: t.accent.green, fontSize: 14 }}>UPI, PIX, M-Pesa...</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('notifications')}>
+            <Text style={st.label}>Notification History</Text>
+            <Text style={st.value}>Received TXs</Text>
           </TouchableOpacity>
         </View>
 

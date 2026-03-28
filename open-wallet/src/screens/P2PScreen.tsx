@@ -15,10 +15,12 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   View, Text, TouchableOpacity, ScrollView,
-  StyleSheet, SafeAreaView, Switch, Alert, TextInput,
+  StyleSheet, SafeAreaView, Switch, Alert, TextInput, Modal,
 } from 'react-native';
+import QRCode from 'react-native-qrcode-svg';
 import { useWalletStore } from '../store/walletStore';
 import { p2pManager, type PeerInfo } from '../core/providers/mobile/p2p';
+import { QRScanner } from '../components/QRScanner';
 import { useTheme } from '../hooks/useTheme';
 import type { BackendType } from '../core/abstractions/types';
 
@@ -39,6 +41,8 @@ export function P2PScreen({ onClose }: P2PScreenProps) {
   const [peers, setPeers] = useState<PeerInfo[]>([]);
   const [blockHeight, setBlockHeight] = useState(0);
   const [newPeerAddress, setNewPeerAddress] = useState('');
+  const [showQR, setShowQR] = useState(false);
+  const [showScanner, setShowScanner] = useState(false);
   const t = useTheme();
 
   const st = useMemo(() => StyleSheet.create({
@@ -76,6 +80,16 @@ export function P2PScreen({ onClose }: P2PScreenProps) {
     backText: { color: t.accent.blue, fontSize: 16 },
     statusDot: { width: 8, height: 8, borderRadius: 4, marginRight: 8 },
     statusRow: { flexDirection: 'row', alignItems: 'center' },
+    qrRow: { flexDirection: 'row', gap: 8, marginTop: 12 },
+    qrBtn: { flex: 1, backgroundColor: t.accent.blue, borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
+    qrBtnScan: { flex: 1, backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
+    qrBtnText: { color: '#fff', fontSize: 14, fontWeight: '700' },
+    qrOverlay: { flex: 1, backgroundColor: t.bg.primary, justifyContent: 'center', alignItems: 'center', padding: 24 },
+    qrTitle: { color: t.text.primary, fontSize: 18, fontWeight: '700', marginBottom: 20 },
+    qrWrapper: { padding: 20, backgroundColor: '#ffffff', borderRadius: 20, marginBottom: 20 },
+    qrInfo: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginBottom: 20, lineHeight: 18 },
+    qrCloseBtn: { backgroundColor: t.accent.red + '20', borderRadius: 12, paddingVertical: 14, paddingHorizontal: 40, alignItems: 'center' },
+    qrCloseText: { color: t.accent.red, fontSize: 15, fontWeight: '700' },
   }), [t]);
 
   // ─── Peer & Block Updates ───
@@ -137,6 +151,48 @@ export function P2PScreen({ onClose }: P2PScreenProps) {
       Alert.alert('Failed', err instanceof Error ? err.message : 'Could not add peer');
     }
   }, [newPeerAddress, p2pBootstrapPeers, setP2PBootstrapPeers]);
+
+  // ─── QR Peer Sharing ───
+
+  const peerQRData = useMemo(() => JSON.stringify({
+    nodeId: peerId || 'not-started',
+    address: '0.0.0.0:26657', // In production, detect local IP
+    chainId: 'openchain-testnet-1',
+  }), [peerId]);
+
+  const handleScanPeer = useCallback(async (data: string) => {
+    setShowScanner(false);
+    try {
+      const parsed = JSON.parse(data);
+      if (!parsed.address || !parsed.chainId) {
+        Alert.alert('Invalid QR', 'This QR code does not contain valid peer information.');
+        return;
+      }
+
+      const address = parsed.nodeId
+        ? `${parsed.nodeId}@${parsed.address}`
+        : parsed.address;
+
+      // Add to bootstrap peers
+      if (!p2pBootstrapPeers.includes(address)) {
+        setP2PBootstrapPeers([...p2pBootstrapPeers, address]);
+      }
+
+      // If node is running, attempt connection immediately
+      if (nodeRunning) {
+        try {
+          await p2pManager.addPeer(address);
+          Alert.alert('Peer Added', `Connected to ${parsed.nodeId ? parsed.nodeId.slice(0, 12) + '...' : parsed.address}`);
+        } catch (err) {
+          Alert.alert('Peer Saved', `Added ${parsed.address} to bootstrap peers. Connection will be attempted when the node starts.`);
+        }
+      } else {
+        Alert.alert('Peer Saved', `Added ${parsed.address} to bootstrap peers. Start the node to connect.`);
+      }
+    } catch {
+      Alert.alert('Invalid QR', 'Could not parse peer information from this QR code.');
+    }
+  }, [nodeRunning, p2pBootstrapPeers, setP2PBootstrapPeers]);
 
   // ─── Backend Type Switch ───
 
@@ -205,6 +261,16 @@ export function P2PScreen({ onClose }: P2PScreenProps) {
             <Text style={st.btnText}>Start Node</Text>
           </TouchableOpacity>
         )}
+
+        {/* QR Peer Sharing */}
+        <View style={st.qrRow}>
+          <TouchableOpacity style={st.qrBtn} onPress={() => setShowQR(true)}>
+            <Text style={st.qrBtnText}>Show My Peer QR</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={st.qrBtnScan} onPress={() => setShowScanner(true)}>
+            <Text style={st.qrBtnText}>Scan Peer QR</Text>
+          </TouchableOpacity>
+        </View>
 
         {/* Network Mode */}
         <Text style={st.section}>Network Mode</Text>
@@ -329,6 +395,30 @@ export function P2PScreen({ onClose }: P2PScreenProps) {
 
         <View style={{ height: 40 }} />
       </ScrollView>
+      {/* QR Code Modal */}
+      <Modal visible={showQR} animationType="slide" presentationStyle="fullScreen">
+        <View style={st.qrOverlay}>
+          <Text style={st.qrTitle}>My Peer Info</Text>
+          <View style={st.qrWrapper}>
+            <QRCode value={peerQRData} size={220} backgroundColor="#ffffff" color="#0a0a0f" />
+          </View>
+          <Text style={st.qrInfo}>
+            Another phone running Open Wallet can scan this{'\n'}
+            QR code to connect to your P2P node.
+          </Text>
+          <TouchableOpacity style={st.qrCloseBtn} onPress={() => setShowQR(false)}>
+            <Text style={st.qrCloseText}>Close</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+
+      {/* QR Scanner Modal */}
+      <Modal visible={showScanner} animationType="slide" presentationStyle="fullScreen">
+        <QRScanner
+          onScan={handleScanPeer}
+          onClose={() => setShowScanner(false)}
+        />
+      </Modal>
     </SafeAreaView>
   );
 }
