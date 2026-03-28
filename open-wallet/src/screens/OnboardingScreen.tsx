@@ -1,9 +1,16 @@
 /**
  * Onboarding Screen — First-time wallet setup.
  * Create new wallet or restore from seed phrase.
+ *
+ * Hardened seed phrase verification:
+ *   1. Show seed phrase
+ *   2. Require re-ordering ALL shuffled words
+ *   3. Checkbox: "I understand losing means losing funds"
+ *   4. Warning about paper vs screenshot
+ *   5. Second verification: enter specific word positions
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import {
   View,
   Text,
@@ -13,11 +20,19 @@ import {
   SafeAreaView,
   Alert,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import { useWalletStore } from '../store/walletStore';
 import { useTheme } from '../hooks/useTheme';
 
-type OnboardingStep = 'welcome' | 'create' | 'backup' | 'verify_recovery' | 'restore' | 'password';
+type OnboardingStep =
+  | 'welcome'
+  | 'create'
+  | 'backup'
+  | 'verify_shuffle'
+  | 'verify_spot_check'
+  | 'restore'
+  | 'password';
 
 export function OnboardingScreen() {
   const [step, setStep] = useState<OnboardingStep>('welcome');
@@ -26,7 +41,17 @@ export function OnboardingScreen() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [verifyInput, setVerifyInput] = useState('');
+
+  // Shuffle verification state
+  const [shuffledWords, setShuffledWords] = useState<string[]>([]);
+  const [selectedWords, setSelectedWords] = useState<string[]>([]);
+  const [acknowledgedLoss, setAcknowledgedLoss] = useState(false);
+  const [acknowledgedPaper, setAcknowledgedPaper] = useState(false);
+
+  // Spot-check verification state
+  const [spotCheckIndices, setSpotCheckIndices] = useState<number[]>([]);
+  const [spotCheckAnswers, setSpotCheckAnswers] = useState<Record<number, string>>({});
+
   const { setStatus, setHasVault, setAddresses, setTempVaultPassword } = useWalletStore();
   const t = useTheme();
 
@@ -39,6 +64,10 @@ export function OnboardingScreen() {
       flex: 1,
       justifyContent: 'center',
       paddingHorizontal: 24,
+    },
+    scrollContent: {
+      paddingHorizontal: 24,
+      paddingVertical: 32,
     },
     logo: {
       color: t.accent.green,
@@ -70,6 +99,14 @@ export function OnboardingScreen() {
       paddingVertical: 18,
       alignItems: 'center',
       marginTop: 16,
+    },
+    primaryButtonDisabled: {
+      backgroundColor: t.accent.green,
+      borderRadius: 16,
+      paddingVertical: 18,
+      alignItems: 'center',
+      marginTop: 16,
+      opacity: 0.4,
     },
     primaryButtonText: {
       color: t.bg.primary,
@@ -151,7 +188,144 @@ export function OnboardingScreen() {
       fontSize: 16,
       marginBottom: 12,
     },
+    // Shuffle verification styles
+    shuffleArea: {
+      minHeight: 80,
+      backgroundColor: t.bg.card,
+      borderRadius: 16,
+      padding: 12,
+      marginBottom: 16,
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: 6,
+    },
+    selectedWordChip: {
+      backgroundColor: t.accent.green + '20',
+      borderRadius: 8,
+      paddingVertical: 6,
+      paddingHorizontal: 12,
+      borderWidth: 1,
+      borderColor: t.accent.green,
+    },
+    selectedWordText: {
+      color: t.accent.green,
+      fontSize: 13,
+      fontWeight: '600',
+    },
+    wordPool: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: 6,
+      marginBottom: 16,
+    },
+    poolWordChip: {
+      backgroundColor: t.border,
+      borderRadius: 8,
+      paddingVertical: 8,
+      paddingHorizontal: 14,
+    },
+    poolWordChipUsed: {
+      opacity: 0.25,
+    },
+    poolWordText: {
+      color: t.text.primary,
+      fontSize: 13,
+      fontWeight: '500',
+    },
+    checkboxRow: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      marginBottom: 12,
+      paddingHorizontal: 4,
+    },
+    checkbox: {
+      width: 24,
+      height: 24,
+      borderRadius: 6,
+      borderWidth: 2,
+      borderColor: t.border,
+      marginRight: 12,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 2,
+    },
+    checkboxChecked: {
+      backgroundColor: t.accent.green,
+      borderColor: t.accent.green,
+    },
+    checkboxMark: {
+      color: '#fff',
+      fontSize: 14,
+      fontWeight: '800',
+    },
+    checkboxLabel: {
+      color: t.text.secondary,
+      fontSize: 14,
+      flex: 1,
+      lineHeight: 20,
+    },
+    warningBox: {
+      backgroundColor: t.accent.yellow + '15',
+      borderRadius: 12,
+      padding: 16,
+      marginBottom: 16,
+      borderWidth: 1,
+      borderColor: t.accent.yellow + '40',
+    },
+    warningText: {
+      color: t.accent.yellow,
+      fontSize: 13,
+      lineHeight: 20,
+      fontWeight: '500',
+    },
+    spotCheckCard: {
+      backgroundColor: t.bg.card,
+      borderRadius: 12,
+      padding: 16,
+      marginBottom: 12,
+    },
+    spotCheckLabel: {
+      color: t.text.secondary,
+      fontSize: 13,
+      fontWeight: '700',
+      marginBottom: 8,
+    },
+    spotCheckInput: {
+      backgroundColor: t.bg.primary,
+      borderRadius: 10,
+      padding: 12,
+      color: t.text.primary,
+      fontSize: 16,
+    },
+    progressText: {
+      color: t.text.muted,
+      fontSize: 12,
+      textAlign: 'center',
+      marginBottom: 8,
+    },
   }), [t]);
+
+  // ─── Helpers ───
+
+  const shuffleArray = useCallback(<T,>(arr: T[]): T[] => {
+    const shuffled = [...arr];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }, []);
+
+  const pickRandomIndices = useCallback((total: number, count: number): number[] => {
+    const indices: number[] = [];
+    while (indices.length < count) {
+      const r = Math.floor(Math.random() * total);
+      if (!indices.includes(r)) indices.push(r);
+    }
+    return indices.sort((a, b) => a - b);
+  }, []);
+
+  // ─── Handlers ───
 
   const handleCreateWallet = async () => {
     setLoading(true);
@@ -166,6 +340,96 @@ export function OnboardingScreen() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const startShuffleVerification = () => {
+    const words = mnemonic.split(' ');
+    setShuffledWords(shuffleArray(words));
+    setSelectedWords([]);
+    setAcknowledgedLoss(false);
+    setAcknowledgedPaper(false);
+    setStep('verify_shuffle');
+  };
+
+  const handleWordSelect = (word: string) => {
+    // Find the first unused occurrence of this word
+    const usedCounts: Record<string, number> = {};
+    for (const w of selectedWords) {
+      usedCounts[w] = (usedCounts[w] || 0) + 1;
+    }
+
+    const availableCount = shuffledWords.filter((w) => w === word).length;
+    const usedCount = usedCounts[word] || 0;
+
+    if (usedCount < availableCount) {
+      setSelectedWords([...selectedWords, word]);
+    }
+  };
+
+  const handleWordDeselect = (index: number) => {
+    setSelectedWords(selectedWords.filter((_, i) => i !== index));
+  };
+
+  const handleShuffleVerify = () => {
+    const originalWords = mnemonic.split(' ');
+    if (selectedWords.length !== originalWords.length) {
+      Alert.alert('Incomplete', `Please select all ${originalWords.length} words in the correct order.`);
+      return;
+    }
+
+    if (!acknowledgedLoss) {
+      Alert.alert('Required', 'Please acknowledge that losing your seed phrase means losing your funds.');
+      return;
+    }
+
+    if (!acknowledgedPaper) {
+      Alert.alert('Required', 'Please confirm you have written this down on paper.');
+      return;
+    }
+
+    const correct = selectedWords.every((w, i) => w === originalWords[i]);
+    if (!correct) {
+      Alert.alert(
+        'Incorrect Order',
+        'The words are not in the correct order. Please try again.\n\nGo back and carefully check your written copy.',
+        [{ text: 'Try Again', onPress: () => { setSelectedWords([]); setShuffledWords(shuffleArray(originalWords)); } }],
+      );
+      return;
+    }
+
+    // Start spot-check verification
+    const indices = pickRandomIndices(originalWords.length, 3);
+    setSpotCheckIndices(indices);
+    setSpotCheckAnswers({});
+    setStep('verify_spot_check');
+  };
+
+  const handleSpotCheckVerify = () => {
+    const originalWords = mnemonic.split(' ');
+    let allCorrect = true;
+
+    for (const idx of spotCheckIndices) {
+      const answer = (spotCheckAnswers[idx] || '').trim().toLowerCase();
+      if (answer !== originalWords[idx].toLowerCase()) {
+        allCorrect = false;
+        break;
+      }
+    }
+
+    if (!allCorrect) {
+      Alert.alert(
+        'Incorrect',
+        'One or more answers are wrong. Please check your written recovery phrase and try again.',
+        [{ text: 'Try Again', onPress: () => setSpotCheckAnswers({}) }],
+      );
+      return;
+    }
+
+    Alert.alert(
+      'Recovery Verified',
+      'Your recovery phrase is correct and verified. Your wallet can be recovered from this phrase.\n\nNow set a password to encrypt your wallet on this device.',
+      [{ text: 'Continue', onPress: () => setStep('password') }],
+    );
   };
 
   const handleSetPassword = async () => {
@@ -287,7 +551,7 @@ export function OnboardingScreen() {
           </View>
 
           <Text style={styles.footer}>
-            100% Open Source • Post-Quantum Encrypted
+            100% Open Source - Post-Quantum Encrypted
           </Text>
         </View>
       </SafeAreaView>
@@ -299,11 +563,17 @@ export function OnboardingScreen() {
     const words = mnemonic.split(' ');
     return (
       <SafeAreaView style={styles.container}>
-        <View style={styles.content}>
+        <ScrollView contentContainerStyle={styles.scrollContent}>
           <Text style={styles.stepTitle}>Save Your Recovery Phrase</Text>
           <Text style={styles.stepDesc}>
             Write these {words.length} words down in order. This is the ONLY way to recover your wallet. Never share it.
           </Text>
+
+          <View style={styles.warningBox}>
+            <Text style={styles.warningText}>
+              IMPORTANT: Write this down on PAPER. Do NOT take a screenshot — screenshots can be leaked through cloud backups, malware, or device theft.
+            </Text>
+          </View>
 
           <View style={styles.wordGrid}>
             {words.map((word, i) => (
@@ -328,12 +598,12 @@ export function OnboardingScreen() {
             onPress={() => {
               Alert.alert(
                 'Verify Your Recovery Phrase',
-                'To confirm you saved your seed phrase correctly, we will now ask you to re-enter it.\n\nThis is mandatory — it guarantees you can recover your wallet if anything happens to your device.',
-                [{ text: 'Continue', onPress: () => setStep('verify_recovery') }]
+                'To confirm you saved your seed phrase correctly, you will need to put ALL words back in the correct order from a shuffled list.\n\nThis is mandatory — it guarantees you can recover your wallet.',
+                [{ text: 'Continue', onPress: startShuffleVerification }],
               );
             }}
           >
-            <Text style={styles.primaryButtonText}>I've Saved It — Verify Now</Text>
+            <Text style={styles.primaryButtonText}>I've Written It Down — Verify Now</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -342,54 +612,171 @@ export function OnboardingScreen() {
           >
             <Text style={styles.secondaryButtonText}>Cancel</Text>
           </TouchableOpacity>
-        </View>
+        </ScrollView>
       </SafeAreaView>
     );
   }
 
-  // ─── Verify Recovery (Mandatory) ───
-  if (step === 'verify_recovery') {
-    const handleVerify = () => {
-      const inputWords = verifyInput.trim().toLowerCase().split(/\s+/);
-      const originalWords = mnemonic.trim().toLowerCase().split(/\s+/);
-      if (inputWords.length !== originalWords.length || inputWords.join(' ') !== originalWords.join(' ')) {
-        Alert.alert(
-          'Incorrect',
-          'The recovery phrase you entered does not match. Please check your saved phrase and try again.\n\nThis verification is mandatory to protect your funds.',
-        );
-        return;
-      }
-      Alert.alert(
-        '✅ Recovery Verified',
-        'Your recovery phrase is correct. Your wallet can be recovered from this phrase.\n\nNow set a password to encrypt your wallet on this device.',
-        [{ text: 'Continue', onPress: () => setStep('password') }]
-      );
-    };
+  // ─── Verify Shuffle (put ALL words in correct order) ───
+  if (step === 'verify_shuffle') {
+    const originalWords = mnemonic.split(' ');
+    const totalWords = originalWords.length;
+
+    // Track which pool words are used
+    const usedCounts: Record<string, number> = {};
+    for (const w of selectedWords) {
+      usedCounts[w] = (usedCounts[w] || 0) + 1;
+    }
+
+    const isComplete = selectedWords.length === totalWords;
+    const canSubmit = isComplete && acknowledgedLoss && acknowledgedPaper;
 
     return (
       <SafeAreaView style={styles.container}>
-        <View style={styles.content}>
-          <Text style={styles.title}>Verify Recovery Phrase</Text>
-          <Text style={[styles.subtitle, { marginBottom: 16 }]}>
-            Re-enter your {mnemonic.split(' ').length}-word recovery phrase to confirm you saved it correctly. This is mandatory.
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <Text style={styles.stepTitle}>Verify Recovery Phrase</Text>
+          <Text style={styles.stepDesc}>
+            Tap the words below in the correct order (1 through {totalWords}) to rebuild your recovery phrase.
           </Text>
-          <TextInput
-            style={[styles.input, { minHeight: 120, textAlignVertical: 'top' }]}
-            placeholder="Enter your recovery phrase..."
-            placeholderTextColor={t.text.muted}
-            value={verifyInput}
-            onChangeText={setVerifyInput}
-            multiline
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
-          <TouchableOpacity style={styles.primaryButton} onPress={handleVerify}>
-            <Text style={styles.primaryButtonText}>Verify & Continue</Text>
+
+          <Text style={styles.progressText}>
+            {selectedWords.length} of {totalWords} words selected
+          </Text>
+
+          {/* Selected words area */}
+          <View style={styles.shuffleArea}>
+            {selectedWords.length === 0 ? (
+              <Text style={{ color: t.text.muted, fontSize: 14 }}>Tap words below to add them in order...</Text>
+            ) : (
+              selectedWords.map((word, i) => (
+                <TouchableOpacity
+                  key={`selected-${i}`}
+                  style={styles.selectedWordChip}
+                  onPress={() => handleWordDeselect(i)}
+                >
+                  <Text style={styles.selectedWordText}>{i + 1}. {word}</Text>
+                </TouchableOpacity>
+              ))
+            )}
+          </View>
+
+          {/* Word pool (shuffled) */}
+          <View style={styles.wordPool}>
+            {shuffledWords.map((word, i) => {
+              const totalOfThisWord = shuffledWords.filter((w) => w === word).length;
+              const usedOfThisWord = usedCounts[word] || 0;
+              // Count how many of this specific word (by index) before this one are the same
+              const sameWordsBefore = shuffledWords.slice(0, i).filter((w) => w === word).length;
+              const isUsed = sameWordsBefore < usedOfThisWord;
+
+              return (
+                <TouchableOpacity
+                  key={`pool-${i}`}
+                  style={[styles.poolWordChip, isUsed && styles.poolWordChipUsed]}
+                  onPress={() => !isUsed && handleWordSelect(word)}
+                  disabled={isUsed}
+                >
+                  <Text style={styles.poolWordText}>{word}</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+
+          {/* Acknowledgment checkboxes */}
+          <TouchableOpacity
+            style={styles.checkboxRow}
+            onPress={() => setAcknowledgedLoss(!acknowledgedLoss)}
+          >
+            <View style={[styles.checkbox, acknowledgedLoss && styles.checkboxChecked]}>
+              {acknowledgedLoss && <Text style={styles.checkboxMark}>v</Text>}
+            </View>
+            <Text style={styles.checkboxLabel}>
+              I understand that losing my seed phrase means losing my funds forever. There is no recovery without it.
+            </Text>
           </TouchableOpacity>
-          <Text style={{ color: t.accent.yellow, fontSize: 12, textAlign: 'center', marginTop: 16, lineHeight: 18 }}>
-            ⚠️ If you cannot re-enter your recovery phrase, go back and save it again. Without it, your wallet cannot be recovered if your device is lost.
+
+          <TouchableOpacity
+            style={styles.checkboxRow}
+            onPress={() => setAcknowledgedPaper(!acknowledgedPaper)}
+          >
+            <View style={[styles.checkbox, acknowledgedPaper && styles.checkboxChecked]}>
+              {acknowledgedPaper && <Text style={styles.checkboxMark}>v</Text>}
+            </View>
+            <Text style={styles.checkboxLabel}>
+              I have written this down on paper (NOT a screenshot). I will store it in a safe, secure location.
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={canSubmit ? styles.primaryButton : styles.primaryButtonDisabled}
+            onPress={handleShuffleVerify}
+            disabled={!canSubmit}
+          >
+            <Text style={styles.primaryButtonText}>Verify Order</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.secondaryButton}
+            onPress={() => {
+              Alert.alert('Go Back?', 'You will need to start verification again.', [
+                { text: 'Cancel' },
+                { text: 'Go Back', onPress: () => setStep('backup') },
+              ]);
+            }}
+          >
+            <Text style={styles.secondaryButtonText}>Back to Seed Phrase</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+
+  // ─── Verify Spot Check (enter specific word positions) ───
+  if (step === 'verify_spot_check') {
+    const allAnswered = spotCheckIndices.every(
+      (idx) => (spotCheckAnswers[idx] || '').trim().length > 0,
+    );
+
+    return (
+      <SafeAreaView style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <Text style={styles.stepTitle}>Final Verification</Text>
+          <Text style={styles.stepDesc}>
+            Almost done. Enter the specific words at these positions from your written recovery phrase.
           </Text>
-        </View>
+
+          {spotCheckIndices.map((idx) => (
+            <View key={idx} style={styles.spotCheckCard}>
+              <Text style={styles.spotCheckLabel}>Word #{idx + 1}</Text>
+              <TextInput
+                style={styles.spotCheckInput}
+                placeholder={`Enter word #${idx + 1}`}
+                placeholderTextColor={t.text.muted}
+                value={spotCheckAnswers[idx] || ''}
+                onChangeText={(text) =>
+                  setSpotCheckAnswers({ ...spotCheckAnswers, [idx]: text })
+                }
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+            </View>
+          ))}
+
+          <TouchableOpacity
+            style={allAnswered ? styles.primaryButton : styles.primaryButtonDisabled}
+            onPress={handleSpotCheckVerify}
+            disabled={!allAnswered}
+          >
+            <Text style={styles.primaryButtonText}>Complete Verification</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.secondaryButton}
+            onPress={() => setStep('verify_shuffle')}
+          >
+            <Text style={styles.secondaryButtonText}>Back</Text>
+          </TouchableOpacity>
+        </ScrollView>
       </SafeAreaView>
     );
   }

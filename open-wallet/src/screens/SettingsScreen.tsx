@@ -1,5 +1,6 @@
 /**
- * Settings Screen — Security, PIN, biometric, mode, sign out.
+ * Settings Screen — Categorized settings with Sign Out at top right.
+ * Collapsible sections for groups with more than 5 items.
  */
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -83,9 +84,11 @@ import { TxNotesScreen } from './TxNotesScreen';
 import { GasTrackerScreen } from './GasTrackerScreen';
 import { BatchTxScreen } from './BatchTxScreen';
 import { AddressLabelScreen } from './AddressLabelScreen';
+import { HardwareKeyScreen } from './HardwareKeyScreen';
+import { TreasuryScreen } from './TreasuryScreen';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury';
 
 export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode, autoLockTimeout, setAutoLockTimeout } = useWalletStore();
@@ -93,11 +96,16 @@ export function SettingsScreen() {
   const [pinToChange, setPinToChange] = useState('');
   const [biometricAvailable, setBiometricAvailable] = useState(false);
   const [pinConfigured, setPinConfigured] = useState(false);
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
   const t = useTheme();
 
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     scroll: { paddingHorizontal: 16, paddingTop: 8 },
+    headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 4, paddingTop: 12, paddingBottom: 8 },
+    headerTitle: { color: t.text.primary, fontSize: 24, fontWeight: '800' },
+    signOutBtn: { paddingVertical: 6, paddingHorizontal: 12 },
+    signOutText: { color: t.accent.red, fontSize: 14, fontWeight: '600' },
     section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 8, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 4 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 },
@@ -113,18 +121,13 @@ export function SettingsScreen() {
     networkMainnet: { backgroundColor: t.accent.red },
     modeBtnText: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
     modeBtnTextActive: { color: t.bg.primary },
-    progressBar: { height: 4, backgroundColor: t.border, borderRadius: 2, marginHorizontal: 16, marginBottom: 8 },
-    progressFill: { height: 4, backgroundColor: t.accent.green, borderRadius: 2 },
-    migrationRow: { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 6 },
-    migrationName: { color: t.text.secondary, fontSize: 13 },
-    migrationYear: { color: t.text.muted, fontSize: 12 },
     currencyRow: { flexDirection: 'row', gap: 4 },
     currencyChip: { paddingVertical: 4, paddingHorizontal: 10, borderRadius: 8, backgroundColor: t.border },
     currencyActive: { backgroundColor: t.accent.green },
     currencyText: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
     currencyTextActive: { color: t.bg.primary },
-    signOutBtn: { backgroundColor: t.accent.red + '20', borderRadius: 16, paddingVertical: 16, alignItems: 'center', marginTop: 24 },
-    signOutText: { color: t.accent.red, fontSize: 16, fontWeight: '700' },
+    showMoreBtn: { paddingVertical: 10, paddingHorizontal: 16 },
+    showMoreText: { color: t.accent.blue, fontSize: 14, fontWeight: '600' },
     backBtn: { paddingVertical: 20, alignItems: 'center' },
     backText: { color: t.accent.blue, fontSize: 16 },
   }), [t]);
@@ -133,6 +136,10 @@ export function SettingsScreen() {
     authManager.isBiometricAvailable().then(({ available }) => setBiometricAvailable(available));
     authManager.isPinConfigured().then(setPinConfigured);
   }, []);
+
+  const toggleSection = (key: string) => {
+    setExpandedSections((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
 
   // ─── PIN Change Flow ───
 
@@ -231,6 +238,7 @@ export function SettingsScreen() {
   if (view === 'alerts') return <PriceAlertsScreen onClose={() => setView('main')} />;
   if (view === 'contacts') return <AddressBookScreen onClose={() => setView('main')} />;
   if (view === 'hardware') return <HardwareWalletScreen onClose={() => setView('main')} />;
+  if (view === 'hardware-key') return <HardwareKeyScreen onClose={() => setView('main')} />;
   if (view === 'walletconnect') return <WalletConnectScreen onClose={() => setView('main')} />;
   if (view === 'staking') return <StakingScreen onClose={() => setView('main')} />;
   if (view === 'rewards') return <RewardsScreen onClose={() => setView('main')} />;
@@ -295,6 +303,7 @@ export function SettingsScreen() {
   if (view === 'batch-tx') return <BatchTxScreen onClose={() => setView('main')} />;
   if (view === 'address-labels') return <AddressLabelScreen onClose={() => setView('main')} />;
   if (view === 'dev-tools') return <DevToolsScreen onClose={() => setView('main')} />;
+  if (view === 'treasury') return <TreasuryScreen onClose={() => setView('main')} />;
 
   // ─── Low Bandwidth State ───
   const lowBandwidthOverride = getLowBandwidthOverride();
@@ -303,235 +312,160 @@ export function SettingsScreen() {
     setLowBandwidthOverride(enabled ? true : null);
   };
 
-  // ─── Main Settings ───
+  // ─── Collapsible Section Helper ───
+  const renderCollapsibleItems = (
+    sectionKey: string,
+    items: Array<{ label: string; onPress: () => void; rightText?: string; rightColor?: string; rightComponent?: React.ReactNode }>,
+    visibleCount: number = 4,
+  ) => {
+    const expanded = expandedSections[sectionKey] || false;
+    const visibleItems = expanded ? items : items.slice(0, visibleCount);
+    const hasMore = items.length > visibleCount;
 
-  const migrationServices = Object.entries(MOBILE_PROVIDERS_STATUS).map(([name, status]) => ({
-    name, readiness: status.readiness, estimatedYear: status.estimatedYear,
-  }));
-  const totalReadiness = Math.round(
-    migrationServices.reduce((sum, s) => sum + s.readiness, 0) / migrationServices.length
-  );
+    return (
+      <>
+        {visibleItems.map((item, i) => (
+          <React.Fragment key={item.label}>
+            {i > 0 && <View style={st.divider} />}
+            {item.rightComponent ? (
+              <View style={st.row}>
+                <Text style={st.label}>{item.label}</Text>
+                {item.rightComponent}
+              </View>
+            ) : (
+              <TouchableOpacity style={st.row} onPress={item.onPress}>
+                <Text style={st.label}>{item.label}</Text>
+                <Text style={{ color: item.rightColor || t.text.secondary, fontSize: 14, fontWeight: item.rightColor ? '600' : '400' }}>
+                  {item.rightText || '>'}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </React.Fragment>
+        ))}
+        {hasMore && !expanded && (
+          <>
+            <View style={st.divider} />
+            <TouchableOpacity style={st.showMoreBtn} onPress={() => toggleSection(sectionKey)}>
+              <Text style={st.showMoreText}>Show {items.length - visibleCount} more...</Text>
+            </TouchableOpacity>
+          </>
+        )}
+        {hasMore && expanded && (
+          <>
+            <View style={st.divider} />
+            <TouchableOpacity style={st.showMoreBtn} onPress={() => toggleSection(sectionKey)}>
+              <Text style={st.showMoreText}>Show less</Text>
+            </TouchableOpacity>
+          </>
+        )}
+      </>
+    );
+  };
+
+  // ─── Main Settings ───
 
   return (
     <SafeAreaView style={st.container}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={st.scroll}>
 
-        {/* Interface */}
-        <Text style={st.section}>Interface</Text>
-        <View style={st.card}>
-          <View style={st.row}>
-            <Text style={st.label}>Mode</Text>
-            <View style={st.modeToggle}>
-              {(['simple', 'pro'] as const).map((m) => (
-                <TouchableOpacity key={m} style={[st.modeBtn, mode === m && st.modeBtnActive]} onPress={() => setMode(m)}>
-                  <Text style={[st.modeBtnText, mode === m && st.modeBtnTextActive]}>{m === 'simple' ? 'Simple' : 'Pro'}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-          <View style={st.divider} />
-          <View style={st.row}>
-            <Text style={st.label}>Theme</Text>
-            <View style={st.modeToggle}>
-              {(['dark', 'light', 'system'] as const).map((m) => (
-                <TouchableOpacity key={m} style={[st.modeBtn, themeMode === m && st.modeBtnActive]} onPress={() => setThemeMode(m)}>
-                  <Text style={[st.modeBtnText, themeMode === m && st.modeBtnTextActive]}>
-                    {m === 'dark' ? '🌙' : m === 'light' ? '☀️' : '⚙️'}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-          <View style={st.divider} />
-          <View style={st.row}>
-            <Text style={st.label}>Language</Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ maxWidth: 200 }}>
-              <View style={st.modeToggle}>
-                {[
-                  { code: 'en', label: 'EN' },
-                  { code: 'hi', label: 'हिं' },
-                  { code: 'es', label: 'ES' },
-                  { code: 'zh', label: '中' },
-                  { code: 'vi', label: 'VI' },
-                  { code: 'ar', label: 'عر' },
-                  { code: 'pt', label: 'PT' },
-                  { code: 'fr', label: 'FR' },
-                  { code: 'ja', label: '日' },
-                  { code: 'ko', label: '한' },
-                ].map((lang) => (
-                  <TouchableOpacity
-                    key={lang.code}
-                    style={[st.modeBtn, i18n.language === lang.code && st.modeBtnActive]}
-                    onPress={() => i18n.changeLanguage(lang.code)}
-                  >
-                    <Text style={[st.modeBtnText, i18n.language === lang.code && st.modeBtnTextActive]}>
-                      {lang.label}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </ScrollView>
-          </View>
-          <View style={st.divider} />
-          <View style={st.row}>
-            <Text style={st.label}>Currency</Text>
-            <View style={st.currencyRow}>
-              {SUPPORTED_CURRENCIES.slice(0, 5).map((c) => (
-                <TouchableOpacity key={c.code} style={[st.currencyChip, currency === c.code && st.currencyActive]} onPress={() => setCurrency(c.code)}>
-                  <Text style={[st.currencyText, currency === c.code && st.currencyTextActive]}>{c.symbol}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('alerts')}>
-            <Text style={st.label}>Price Alerts</Text>
-            <Text style={st.value}>›</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('analytics')}>
-            <Text style={st.label}>Portfolio Analytics</Text>
-            <Text style={st.value}>›</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('portfolio-chart')}>
-            <Text style={st.label}>Portfolio Chart</Text>
-            <Text style={{ color: t.accent.green, fontSize: 14, fontWeight: '600' }}>History</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('advanced-alerts')}>
-            <Text style={st.label}>Advanced Alerts</Text>
-            <Text style={{ color: t.accent.orange, fontSize: 14, fontWeight: '600' }}>Multi-Condition</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('token-compare')}>
-            <Text style={st.label}>Token Compare</Text>
-            <Text style={{ color: t.accent.purple, fontSize: 14, fontWeight: '600' }}>Side by Side</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('wallet-analytics')}>
-            <Text style={st.label}>Wallet Analytics</Text>
-            <Text style={{ color: t.accent.blue, fontSize: 14 }}>Activity</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('tax-calculator')}>
-            <Text style={st.label}>Tax Calculator</Text>
-            <Text style={{ color: t.accent.orange, fontSize: 14, fontWeight: '600' }}>Multi-Country</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('watchlist')}>
-            <Text style={st.label}>Watchlist</Text>
-            <Text style={{ color: t.accent.purple, fontSize: 14, fontWeight: '600' }}>Track Tokens</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('market')}>
-            <Text style={st.label}>Market</Text>
-            <Text style={st.value}>Top tokens</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('hardware')}>
-            <Text style={st.label}>Hardware Wallet</Text>
-            <Text style={st.value}>Ledger · Trezor</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('walletconnect')}>
-            <Text style={st.label}>WalletConnect</Text>
-            <Text style={st.value}>Connect to dApps</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('staking')}>
-            <Text style={st.label}>Staking</Text>
-            <Text style={st.valueGreen}>5% APY</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('rewards')}>
-            <Text style={st.label}>Staking Rewards</Text>
-            <Text style={st.valueGreen}>Claim</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('contacts')}>
-            <Text style={st.label}>Address Book</Text>
-            <Text style={st.value}>›</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('rails')}>
-            <Text style={st.label}>Buy with Local Currency</Text>
-            <Text style={{ color: t.accent.green, fontSize: 14 }}>UPI, PIX, M-Pesa...</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('notifications')}>
-            <Text style={st.label}>Notification History</Text>
-            <Text style={st.value}>Received TXs</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('exchange')}>
-            <Text style={st.label}>Universal Exchange</Text>
-            <Text style={{ color: t.accent.green, fontSize: 14, fontWeight: '600' }}>Any-to-Any</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('dapp-browser')}>
-            <Text style={st.label}>DApp Browser</Text>
-            <Text style={{ color: t.accent.blue, fontSize: 14 }}>Browse</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('token-launch')}>
-            <Text style={st.label}>Token Launch Pad</Text>
-            <Text style={{ color: t.accent.purple, fontSize: 14, fontWeight: '600' }}>Create</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('nft-gallery')}>
-            <Text style={st.label}>NFT Gallery</Text>
-            <Text style={{ color: t.accent.orange, fontSize: 14 }}>View</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('recurring-payments')}>
-            <Text style={st.label}>Recurring Payments</Text>
-            <Text style={{ color: t.accent.green, fontSize: 14, fontWeight: '600' }}>Schedule</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('automation')}>
-            <Text style={st.label}>Automation Rules</Text>
-            <Text style={{ color: t.accent.blue, fontSize: 14, fontWeight: '600' }}>Auto-Trade</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('accessibility')}>
-            <Text style={st.label}>Accessibility</Text>
-            <Text style={st.value}>Font, Contrast, Motion</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('address-verify')}>
-            <Text style={st.label}>Address Verification</Text>
-            <Text style={{ color: t.accent.green, fontSize: 14, fontWeight: '600' }}>Verify</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('tx-simulator')}>
-            <Text style={st.label}>Transaction Simulator</Text>
-            <Text style={{ color: t.accent.blue, fontSize: 14, fontWeight: '600' }}>Preview</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('tx-notes')}>
-            <Text style={st.label}>Transaction Notes</Text>
-            <Text style={{ color: t.accent.purple, fontSize: 14, fontWeight: '600' }}>Tags & Notes</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('gas-tracker')}>
-            <Text style={st.label}>Gas Tracker</Text>
-            <Text style={{ color: t.accent.orange, fontSize: 14, fontWeight: '600' }}>All Chains</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('batch-tx')}>
-            <Text style={st.label}>Batch Transactions</Text>
-            <Text style={{ color: t.accent.green, fontSize: 14, fontWeight: '600' }}>Multi-Send</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('address-labels')}>
-            <Text style={st.label}>Address Labels</Text>
-            <Text style={{ color: t.accent.blue, fontSize: 14, fontWeight: '600' }}>Manage</Text>
+        {/* Header with Sign Out */}
+        <View style={st.headerRow}>
+          <Text style={st.headerTitle}>Settings</Text>
+          <TouchableOpacity
+            style={st.signOutBtn}
+            onPress={() => setTimeout(() => setStatus('locked'), 0)}
+          >
+            <Text style={st.signOutText}>Sign Out</Text>
           </TouchableOpacity>
         </View>
 
-        {/* Network */}
-        <Text style={st.section}>Network</Text>
+        {/* ─── 1. Account & Security ─── */}
+        <Text style={st.section}>Account & Security</Text>
+        <View style={st.card}>
+          {renderCollapsibleItems('security', [
+            {
+              label: pinConfigured ? 'Change PIN' : 'Set Up PIN',
+              onPress: () => setView(pinConfigured ? 'change-pin' : 'new-pin'),
+              rightText: pinConfigured ? '••••••' : 'Not set',
+            },
+            ...(biometricAvailable ? [{
+              label: 'Biometric Unlock',
+              onPress: () => {},
+              rightComponent: (
+                <Switch
+                  value={biometricEnabled}
+                  onValueChange={toggleBiometric}
+                  trackColor={{ false: '#333', true: t.accent.green + '40' }}
+                  thumbColor={biometricEnabled ? t.accent.green : '#666'}
+                />
+              ),
+            }] : []),
+            {
+              label: 'Auto-Lock Timeout',
+              onPress: () => {},
+              rightComponent: (
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ maxWidth: 200 }}>
+                  <View style={st.modeToggle}>
+                    {([
+                      { label: '1m', ms: 60000 },
+                      { label: '5m', ms: 300000 },
+                      { label: '15m', ms: 900000 },
+                      { label: '30m', ms: 1800000 },
+                      { label: '1h', ms: 3600000 },
+                      { label: 'Never', ms: 0 },
+                    ] as const).map((opt) => (
+                      <TouchableOpacity
+                        key={opt.ms}
+                        style={[st.modeBtn, autoLockTimeout === opt.ms && st.modeBtnActive]}
+                        onPress={() => setAutoLockTimeout(opt.ms)}
+                      >
+                        <Text style={[st.modeBtnText, autoLockTimeout === opt.ms && st.modeBtnTextActive]}>
+                          {opt.label}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </ScrollView>
+              ),
+            },
+            {
+              label: 'Security Audit',
+              onPress: () => setView('security-audit'),
+              rightText: 'Health Check',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'Multi-Sig Wallets',
+              onPress: () => setView('multisig'),
+              rightText: 'M-of-N',
+              rightColor: t.accent.purple,
+            },
+            {
+              label: 'Spending Limits',
+              onPress: () => setView('spending-limits'),
+              rightText: 'Per Token',
+              rightColor: t.accent.orange,
+            },
+            {
+              label: 'Import External Wallet',
+              onPress: () => setView('import-wallet'),
+              rightText: 'Add',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'Cloud Backup',
+              onPress: () => setView('cloud-backup'),
+              rightText: 'Encrypted Export',
+            },
+            {
+              label: 'Backup / Recovery Phrase',
+              onPress: () => setView('backup'),
+            },
+          ])}
+        </View>
+
+        {/* ─── 2. Network & P2P ─── */}
+        <Text style={st.section}>Network & P2P</Text>
         <View style={st.card}>
           <View style={st.row}>
             <Text style={st.label}>Network</Text>
@@ -559,21 +493,9 @@ export function SettingsScreen() {
             </View>
           </View>
           <View style={st.divider} />
-          <View style={st.row}>
-            <Text style={st.label}>Chains</Text>
-            <Text style={st.value}>
-              {networkMode === 'testnet' ? 'BTC Testnet · Sepolia · Devnet' : 'BTC · Ethereum · Solana'}
-            </Text>
-          </View>
-          <View style={st.divider} />
           <TouchableOpacity style={st.row} onPress={() => setView('p2p')}>
             <Text style={st.label}>P2P Network</Text>
             <Text style={st.valueGreen}>Configure</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('chain-info')}>
-            <Text style={st.label}>Chain Information</Text>
-            <Text style={{ color: t.accent.purple, fontSize: 14, fontWeight: '600' }}>5 Chains</Text>
           </TouchableOpacity>
           <View style={st.divider} />
           <View style={st.row}>
@@ -585,344 +507,471 @@ export function SettingsScreen() {
               thumbColor={lowBandwidthEnabled ? t.accent.green : '#666'}
             />
           </View>
-          <View style={{ paddingHorizontal: 16, paddingBottom: 12 }}>
-            <Text style={{ color: t.text.muted, fontSize: 12 }}>
-              Reduces data usage for 2G/3G connections. Disables charts, reduces refresh rates, caches aggressively.
-            </Text>
-          </View>
           <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('offline-queue')}>
-            <Text style={st.label}>Offline Queue</Text>
-            <Text style={{ color: t.accent.orange, fontSize: 14, fontWeight: '600' }}>Queued TXs</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('pending-tx')}>
-            <Text style={st.label}>Pending Transactions</Text>
-            <Text style={{ color: t.accent.yellow, fontSize: 14, fontWeight: '600' }}>In Progress</Text>
+          <TouchableOpacity style={st.row} onPress={() => setView('chain-info')}>
+            <Text style={st.label}>Chain Information</Text>
+            <Text style={{ color: t.accent.purple, fontSize: 14, fontWeight: '600' }}>5 Chains</Text>
           </TouchableOpacity>
         </View>
 
-        {/* Demo Mode */}
-        <Text style={st.section}>Demo</Text>
+        {/* ─── 3. Wallet ─── */}
+        <Text style={st.section}>Wallet</Text>
         <View style={st.card}>
-          <View style={st.row}>
-            <Text style={st.label}>Demo Mode</Text>
-            <Switch
-              value={demoMode}
-              onValueChange={setDemoMode}
-              trackColor={{ false: '#333', true: t.accent.purple + '40' }}
-              thumbColor={demoMode ? t.accent.purple : '#666'}
-            />
-          </View>
-          <View style={{ paddingHorizontal: 16, paddingBottom: 12 }}>
-            <Text style={{ color: t.text.muted, fontSize: 12 }}>
-              Show simulated balances (1000 SOL, 0.5 BTC, 5 ETH, 100 ATOM, 10000 OTK). No real funds are used.
-            </Text>
-          </View>
-        </View>
-
-        {/* Security */}
-        <Text style={st.section}>Security</Text>
-        <View style={st.card}>
-          <TouchableOpacity style={st.row} onPress={() => setView(pinConfigured ? 'change-pin' : 'new-pin')}>
-            <Text style={st.label}>{pinConfigured ? 'Change PIN' : 'Set Up PIN'}</Text>
-            <Text style={st.value}>{pinConfigured ? '••••••  ›' : 'Not set  ›'}</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          {biometricAvailable && (
-            <>
-              <View style={st.row}>
-                <Text style={st.label}>Biometric Unlock</Text>
+          {renderCollapsibleItems('wallet', [
+            {
+              label: 'Mode',
+              onPress: () => {},
+              rightComponent: (
+                <View style={st.modeToggle}>
+                  {(['simple', 'pro'] as const).map((m) => (
+                    <TouchableOpacity key={m} style={[st.modeBtn, mode === m && st.modeBtnActive]} onPress={() => setMode(m)}>
+                      <Text style={[st.modeBtnText, mode === m && st.modeBtnTextActive]}>{m === 'simple' ? 'Simple' : 'Pro'}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              ),
+            },
+            {
+              label: 'Demo Mode',
+              onPress: () => {},
+              rightComponent: (
                 <Switch
-                  value={biometricEnabled}
-                  onValueChange={toggleBiometric}
-                  trackColor={{ false: '#333', true: t.accent.green + '40' }}
-                  thumbColor={biometricEnabled ? t.accent.green : '#666'}
+                  value={demoMode}
+                  onValueChange={setDemoMode}
+                  trackColor={{ false: '#333', true: t.accent.purple + '40' }}
+                  thumbColor={demoMode ? t.accent.purple : '#666'}
                 />
-              </View>
-              <View style={st.divider} />
-            </>
-          )}
-          <View style={st.row}>
-            <Text style={st.label}>Auto-Lock</Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ maxWidth: 220 }}>
-              <View style={st.modeToggle}>
-                {([
-                  { label: 'Never', ms: 0 },
-                  { label: '1m', ms: 60000 },
-                  { label: '5m', ms: 300000 },
-                  { label: '15m', ms: 900000 },
-                  { label: '30m', ms: 1800000 },
-                  { label: '1h', ms: 3600000 },
-                ] as const).map((opt) => (
-                  <TouchableOpacity
-                    key={opt.ms}
-                    style={[st.modeBtn, autoLockTimeout === opt.ms && st.modeBtnActive]}
-                    onPress={() => setAutoLockTimeout(opt.ms)}
-                  >
-                    <Text style={[st.modeBtnText, autoLockTimeout === opt.ms && st.modeBtnTextActive]}>
-                      {opt.label}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </ScrollView>
-          </View>
-          <View style={st.divider} />
-          <View style={st.row}>
-            <Text style={st.label}>Encryption</Text>
-            <Text style={st.valueGreen}>AES-256-GCM + PBKDF2</Text>
-          </View>
-          <View style={st.divider} />
-          <View style={st.row}>
-            <Text style={st.label}>PQC Status</Text>
-            <Text style={st.valueYellow}>Vault Ready • Chain Pending</Text>
-          </View>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('backup')}>
-            <Text style={st.label}>Backup / Recovery Phrase</Text>
-            <Text style={st.value}>›</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('import-wallet')}>
-            <Text style={st.label}>Import External Wallet</Text>
-            <Text style={st.valueGreen}>Add</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('export')}>
-            <Text style={st.label}>Export Transactions</Text>
-            <Text style={st.value}>CSV / JSON</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('security-audit')}>
-            <Text style={st.label}>Security Audit</Text>
-            <Text style={st.valueGreen}>Health Check</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('cloud-backup')}>
-            <Text style={st.label}>Cloud Backup</Text>
-            <Text style={st.value}>Encrypted Export</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('multisig')}>
-            <Text style={st.label}>Multi-Sig Wallets</Text>
-            <Text style={{ color: t.accent.purple, fontSize: 14, fontWeight: '600' }}>M-of-N</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('spending-limits')}>
-            <Text style={st.label}>Spending Limits</Text>
-            <Text style={{ color: t.accent.orange, fontSize: 14, fontWeight: '600' }}>Per Token</Text>
-          </TouchableOpacity>
+              ),
+            },
+            {
+              label: 'Theme',
+              onPress: () => {},
+              rightComponent: (
+                <View style={st.modeToggle}>
+                  {(['dark', 'light', 'system'] as const).map((m) => (
+                    <TouchableOpacity key={m} style={[st.modeBtn, themeMode === m && st.modeBtnActive]} onPress={() => setThemeMode(m)}>
+                      <Text style={[st.modeBtnText, themeMode === m && st.modeBtnTextActive]}>
+                        {m === 'dark' ? 'Dark' : m === 'light' ? 'Light' : 'Auto'}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              ),
+            },
+            {
+              label: 'Language',
+              onPress: () => {},
+              rightComponent: (
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ maxWidth: 200 }}>
+                  <View style={st.modeToggle}>
+                    {[
+                      { code: 'en', label: 'EN' },
+                      { code: 'hi', label: 'HI' },
+                      { code: 'es', label: 'ES' },
+                      { code: 'zh', label: 'ZH' },
+                      { code: 'vi', label: 'VI' },
+                      { code: 'ar', label: 'AR' },
+                      { code: 'pt', label: 'PT' },
+                      { code: 'fr', label: 'FR' },
+                      { code: 'ja', label: 'JA' },
+                      { code: 'ko', label: 'KO' },
+                    ].map((lang) => (
+                      <TouchableOpacity
+                        key={lang.code}
+                        style={[st.modeBtn, i18n.language === lang.code && st.modeBtnActive]}
+                        onPress={() => i18n.changeLanguage(lang.code)}
+                      >
+                        <Text style={[st.modeBtnText, i18n.language === lang.code && st.modeBtnTextActive]}>
+                          {lang.label}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </ScrollView>
+              ),
+            },
+            {
+              label: 'Currency',
+              onPress: () => {},
+              rightComponent: (
+                <View style={st.currencyRow}>
+                  {SUPPORTED_CURRENCIES.slice(0, 5).map((c) => (
+                    <TouchableOpacity key={c.code} style={[st.currencyChip, currency === c.code && st.currencyActive]} onPress={() => setCurrency(c.code)}>
+                      <Text style={[st.currencyText, currency === c.code && st.currencyTextActive]}>{c.symbol}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              ),
+            },
+            {
+              label: 'Accessibility',
+              onPress: () => setView('accessibility'),
+              rightText: 'Font, Contrast, Motion',
+            },
+            {
+              label: 'Notification History',
+              onPress: () => setView('notifications'),
+              rightText: 'Received TXs',
+            },
+            {
+              label: 'Recurring Payments',
+              onPress: () => setView('recurring-payments'),
+              rightText: 'Schedule',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'Automation Rules',
+              onPress: () => setView('automation'),
+              rightText: 'Auto-Trade',
+              rightColor: t.accent.blue,
+            },
+          ])}
         </View>
 
-        {/* Network Migration */}
-        <Text style={st.section}>Network Migration</Text>
+        {/* ─── 4. Exchange & DeFi ─── */}
+        <Text style={st.section}>Exchange & DeFi</Text>
         <View style={st.card}>
-          <View style={st.row}>
-            <Text style={st.label}>Progress</Text>
-            <Text style={st.valueGreen}>{totalReadiness}% → Mobile P2P</Text>
-          </View>
-          <View style={st.progressBar}>
-            <View style={[st.progressFill, { width: `${Math.max(totalReadiness, 2)}%` }]} />
-          </View>
-          {migrationServices.map((svc) => (
-            <View key={svc.name} style={st.migrationRow}>
-              <Text style={st.migrationName}>{svc.name.charAt(0).toUpperCase() + svc.name.slice(1)}</Text>
-              <Text style={st.migrationYear}>~{svc.estimatedYear}</Text>
-            </View>
-          ))}
+          {renderCollapsibleItems('defi', [
+            {
+              label: 'Universal Exchange',
+              onPress: () => setView('exchange'),
+              rightText: 'Any-to-Any',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'Buy with Local Currency',
+              onPress: () => setView('rails'),
+              rightText: 'UPI, PIX, M-Pesa...',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'Staking',
+              onPress: () => setView('staking'),
+              rightText: '5% APY',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'Staking Rewards',
+              onPress: () => setView('rewards'),
+              rightText: 'Claim',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'Liquidity Pools',
+              onPress: () => setView('liquidity'),
+              rightText: 'AMM',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'Yield Farming',
+              onPress: () => setView('yield-farm'),
+              rightText: 'Earn OTK',
+              rightColor: t.accent.purple,
+            },
+            {
+              label: 'Lend & Borrow',
+              onPress: () => setView('lend-borrow'),
+              rightText: 'Supply / Borrow',
+              rightColor: t.accent.blue,
+            },
+          ])}
         </View>
 
-        {/* Open Chain */}
+        {/* ─── 5. Open Chain ─── */}
         <Text style={st.section}>Open Chain</Text>
         <View style={st.card}>
-          <TouchableOpacity style={st.row} onPress={() => setView('defi')}>
-            <Text style={st.label}>DeFi Dashboard</Text>
-            <Text style={st.valueGreen}>View</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('uid')}>
-            <Text style={st.label}>Universal ID</Text>
-            <Text style={st.valueGreen}>Register</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('ledger')}>
-            <Text style={st.label}>Living Ledger</Text>
-            <Text style={st.value}>View</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('gratitude')}>
-            <Text style={st.label}>Send Gratitude</Text>
-            <Text style={{ color: t.accent.purple, fontSize: 14 }}>Send</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('governance')}>
-            <Text style={st.label}>Governance</Text>
-            <Text style={{ color: t.accent.blue, fontSize: 14 }}>Vote</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('dao')}>
-            <Text style={st.label}>DAOs</Text>
-            <Text style={{ color: t.accent.purple, fontSize: 14 }}>Manage</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('delegation')}>
-            <Text style={st.label}>Delegation</Text>
-            <Text style={st.valueGreen}>Redelegate</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('voting-power')}>
-            <Text style={st.label}>Voting Power</Text>
-            <Text style={{ color: t.accent.blue, fontSize: 14 }}>1 Vote</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('oracle')}>
-            <Text style={st.label}>Milestone Oracle</Text>
-            <Text style={{ color: t.accent.orange, fontSize: 14 }}>Verify</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('scores')}>
-            <Text style={st.label}>Contribution Scores</Text>
-            <Text style={st.valueGreen}>Leaderboard</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('identity')}>
-            <Text style={st.label}>Identity & Reputation</Text>
-            <Text style={st.valueGreen}>View</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('achievements')}>
-            <Text style={st.label}>Achievements</Text>
-            <Text style={{ color: t.accent.orange, fontSize: 14 }}>Soulbound NFTs</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('escrow')}>
-            <Text style={st.label}>Escrow</Text>
-            <Text style={{ color: t.accent.green, fontSize: 14, fontWeight: '600' }}>P2P Trades</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('disputes')}>
-            <Text style={st.label}>Dispute Resolution</Text>
-            <Text style={{ color: t.accent.orange, fontSize: 14, fontWeight: '600' }}>Arbiter</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('correction')}>
-            <Text style={st.label}>Corrections (-OTK)</Text>
-            <Text style={{ color: t.accent.red, fontSize: 14, fontWeight: '600' }}>Article V</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('community-health')}>
-            <Text style={st.label}>Community Health</Text>
-            <Text style={{ color: t.accent.green, fontSize: 14, fontWeight: '600' }}>Dashboard</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('milestones')}>
-            <Text style={st.label}>Regional Milestones</Text>
-            <Text style={{ color: t.accent.green, fontSize: 14, fontWeight: '600' }}>Browse & Submit</Text>
-          </TouchableOpacity>
+          {renderCollapsibleItems('openchain', [
+            {
+              label: 'DeFi Dashboard',
+              onPress: () => setView('defi'),
+              rightText: 'View',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'Universal ID',
+              onPress: () => setView('uid'),
+              rightText: 'Register',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'Identity & Reputation',
+              onPress: () => setView('identity'),
+              rightText: 'View',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'Living Ledger',
+              onPress: () => setView('ledger'),
+            },
+            {
+              label: 'Send Gratitude',
+              onPress: () => setView('gratitude'),
+              rightText: 'Send',
+              rightColor: t.accent.purple,
+            },
+            {
+              label: 'Governance',
+              onPress: () => setView('governance'),
+              rightText: 'Vote',
+              rightColor: t.accent.blue,
+            },
+            {
+              label: 'DAOs',
+              onPress: () => setView('dao'),
+              rightText: 'Manage',
+              rightColor: t.accent.purple,
+            },
+            {
+              label: 'Voting Power',
+              onPress: () => setView('voting-power'),
+              rightText: '1 Vote',
+              rightColor: t.accent.blue,
+            },
+            {
+              label: 'Milestone Oracle',
+              onPress: () => setView('oracle'),
+              rightText: 'Verify',
+              rightColor: t.accent.orange,
+            },
+            {
+              label: 'Regional Milestones',
+              onPress: () => setView('milestones'),
+              rightText: 'Browse & Submit',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'Contribution Scores',
+              onPress: () => setView('scores'),
+              rightText: 'Leaderboard',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'Achievements',
+              onPress: () => setView('achievements'),
+              rightText: 'Soulbound NFTs',
+              rightColor: t.accent.orange,
+            },
+            {
+              label: 'Community Health',
+              onPress: () => setView('community-health'),
+              rightText: 'Dashboard',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'Correction Reports',
+              onPress: () => setView('correction'),
+              rightText: 'Article V',
+              rightColor: t.accent.red,
+            },
+            {
+              label: 'Escrow & Disputes',
+              onPress: () => setView('escrow'),
+              rightText: 'P2P Trades',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'Treasury',
+              onPress: () => setView('treasury'),
+              rightText: 'View',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'Encrypted Messages',
+              onPress: () => setView('messages'),
+              rightText: 'P2P',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'Community Feed',
+              onPress: () => setView('social-feed'),
+              rightText: 'Activity',
+              rightColor: t.accent.blue,
+            },
+            {
+              label: 'My Profile',
+              onPress: () => setView('profile'),
+              rightText: 'View',
+              rightColor: t.accent.purple,
+            },
+          ])}
         </View>
 
-        {/* DeFi */}
-        <Text style={st.section}>DeFi</Text>
+        {/* ─── 6. Tools ─── */}
+        <Text style={st.section}>Tools</Text>
         <View style={st.card}>
-          <TouchableOpacity style={st.row} onPress={() => setView('liquidity')}>
-            <Text style={st.label}>Liquidity Pools</Text>
-            <Text style={st.valueGreen}>AMM</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('yield-farm')}>
-            <Text style={st.label}>Yield Farming</Text>
-            <Text style={{ color: t.accent.purple, fontSize: 14, fontWeight: '600' }}>Earn OTK</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('lend-borrow')}>
-            <Text style={st.label}>Lend & Borrow</Text>
-            <Text style={{ color: t.accent.blue, fontSize: 14, fontWeight: '600' }}>Supply / Borrow</Text>
-          </TouchableOpacity>
+          {renderCollapsibleItems('tools', [
+            {
+              label: 'Price Alerts',
+              onPress: () => setView('alerts'),
+            },
+            {
+              label: 'Advanced Alerts',
+              onPress: () => setView('advanced-alerts'),
+              rightText: 'Multi-Condition',
+              rightColor: t.accent.orange,
+            },
+            {
+              label: 'Portfolio Analytics',
+              onPress: () => setView('analytics'),
+            },
+            {
+              label: 'Portfolio Chart',
+              onPress: () => setView('portfolio-chart'),
+              rightText: 'History',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'Market',
+              onPress: () => setView('market'),
+              rightText: 'Top tokens',
+            },
+            {
+              label: 'Token Compare',
+              onPress: () => setView('token-compare'),
+              rightText: 'Side by Side',
+              rightColor: t.accent.purple,
+            },
+            {
+              label: 'Watchlist',
+              onPress: () => setView('watchlist'),
+              rightText: 'Track Tokens',
+              rightColor: t.accent.purple,
+            },
+            {
+              label: 'Tax Calculator',
+              onPress: () => setView('tax-calculator'),
+              rightText: 'Multi-Country',
+              rightColor: t.accent.orange,
+            },
+            {
+              label: 'Wallet Analytics',
+              onPress: () => setView('wallet-analytics'),
+              rightText: 'Activity',
+              rightColor: t.accent.blue,
+            },
+            {
+              label: 'Transaction Notes',
+              onPress: () => setView('tx-notes'),
+              rightText: 'Tags & Notes',
+              rightColor: t.accent.purple,
+            },
+            {
+              label: 'Gas Tracker',
+              onPress: () => setView('gas-tracker'),
+              rightText: 'All Chains',
+              rightColor: t.accent.orange,
+            },
+            {
+              label: 'Batch Transactions',
+              onPress: () => setView('batch-tx'),
+              rightText: 'Multi-Send',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'Address Labels',
+              onPress: () => setView('address-labels'),
+              rightText: 'Manage',
+              rightColor: t.accent.blue,
+            },
+            {
+              label: 'Address Verification',
+              onPress: () => setView('address-verify'),
+              rightText: 'Verify',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'Transaction Simulator',
+              onPress: () => setView('tx-simulator'),
+              rightText: 'Preview',
+              rightColor: t.accent.blue,
+            },
+            {
+              label: 'Transaction Export',
+              onPress: () => setView('export'),
+              rightText: 'CSV / JSON',
+            },
+            {
+              label: 'DApp Browser',
+              onPress: () => setView('dapp-browser'),
+              rightText: 'Browse',
+              rightColor: t.accent.blue,
+            },
+            {
+              label: 'Token Launch Pad',
+              onPress: () => setView('token-launch'),
+              rightText: 'Create',
+              rightColor: t.accent.purple,
+            },
+            {
+              label: 'NFT Gallery',
+              onPress: () => setView('nft-gallery'),
+              rightText: 'View',
+              rightColor: t.accent.orange,
+            },
+          ])}
         </View>
 
-        {/* Social */}
-        <Text style={st.section}>Social</Text>
-        <View style={st.card}>
-          <TouchableOpacity style={st.row} onPress={() => setView('messages')}>
-            <Text style={st.label}>Messages</Text>
-            <Text style={{ color: t.accent.green, fontSize: 14 }}>Encrypted P2P</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('social-feed')}>
-            <Text style={st.label}>Community Feed</Text>
-            <Text style={{ color: t.accent.blue, fontSize: 14 }}>Activity</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('profile')}>
-            <Text style={st.label}>My Profile</Text>
-            <Text style={{ color: t.accent.purple, fontSize: 14 }}>View</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* About */}
+        {/* ─── 7. About ─── */}
         <Text style={st.section}>About</Text>
         <View style={st.card}>
-          <View style={st.row}>
-            <Text style={st.label}>Version</Text>
-            <Text style={st.value}>0.3.0-alpha</Text>
-          </View>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('whatsnew')}>
-            <Text style={st.label}>What's New</Text>
-            <Text style={{ color: t.accent.green, fontSize: 14 }}>v0.3.0</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => Linking.openURL('https://github.com/bpupadhyaya/crypto')}>
-            <Text style={st.label}>License</Text>
-            <Text style={{ color: t.accent.green, fontSize: 14, fontWeight: '600' }}>MIT (Open Source)</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => Linking.openURL('https://github.com/bpupadhyaya/crypto')}>
-            <Text style={st.label}>Source Code</Text>
-            <Text style={{ color: t.accent.blue, fontSize: 14 }}>GitHub</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('privacy')}>
-            <Text style={st.label}>Privacy Policy</Text>
-            <Text style={{ color: t.accent.blue, fontSize: 14 }}>Read</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => Linking.openURL('https://bpupadhyaya.github.io/privacy-openwallet.html')}>
-            <Text style={st.label}>Privacy Policy (Web)</Text>
-            <Text style={{ color: t.accent.blue, fontSize: 14 }}>External</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => Linking.openURL('https://github.com/bpupadhyaya/crypto/blob/main/docs/HUMAN_CONSTITUTION.md')}>
-            <Text style={st.label}>The Human Constitution</Text>
-            <Text style={{ color: t.accent.blue, fontSize: 14 }}>Read</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('tutorial')}>
-            <Text style={st.label}>Tutorial</Text>
-            <Text style={{ color: t.accent.green, fontSize: 14 }}>Walkthrough</Text>
-          </TouchableOpacity>
-          <View style={st.divider} />
-          <TouchableOpacity style={st.row} onPress={() => setView('help')}>
-            <Text style={st.label}>Help & FAQ</Text>
-            <Text style={{ color: t.accent.blue, fontSize: 14 }}>Support</Text>
-          </TouchableOpacity>
+          {renderCollapsibleItems('about', [
+            {
+              label: 'Version',
+              onPress: () => {},
+              rightText: '0.3.0-alpha',
+            },
+            {
+              label: "What's New",
+              onPress: () => setView('whatsnew'),
+              rightText: 'v0.3.0',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'License',
+              onPress: () => Linking.openURL('https://github.com/bpupadhyaya/crypto'),
+              rightText: 'MIT (Open Source)',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'Source Code',
+              onPress: () => Linking.openURL('https://github.com/bpupadhyaya/crypto'),
+              rightText: 'GitHub',
+              rightColor: t.accent.blue,
+            },
+            {
+              label: 'Privacy Policy',
+              onPress: () => setView('privacy'),
+              rightText: 'Read',
+              rightColor: t.accent.blue,
+            },
+            {
+              label: 'Privacy Policy (Web)',
+              onPress: () => Linking.openURL('https://bpupadhyaya.github.io/privacy-openwallet.html'),
+              rightText: 'External',
+              rightColor: t.accent.blue,
+            },
+            {
+              label: 'The Human Constitution',
+              onPress: () => Linking.openURL('https://github.com/bpupadhyaya/crypto/blob/main/docs/HUMAN_CONSTITUTION.md'),
+              rightText: 'Read',
+              rightColor: t.accent.blue,
+            },
+            {
+              label: 'Tutorial',
+              onPress: () => setView('tutorial'),
+              rightText: 'Walkthrough',
+              rightColor: t.accent.green,
+            },
+            {
+              label: 'Help & FAQ',
+              onPress: () => setView('help'),
+              rightText: 'Support',
+              rightColor: t.accent.blue,
+            },
+          ])}
         </View>
 
-        {/* Dev Tools — only visible in testnet or demo mode */}
-        {(isTestnet() || demoMode) && (
-          <>
-            <Text style={st.section}>Developer</Text>
-            <View style={st.card}>
-              <TouchableOpacity style={st.row} onPress={() => setView('dev-tools')}>
-                <Text style={st.label}>Dev Tools</Text>
-                <Text style={{ color: t.accent.purple, fontSize: 14 }}>Debug</Text>
-              </TouchableOpacity>
-            </View>
-          </>
-        )}
-
-        {/* Support the Mission */}
+        {/* ─── 8. Support the Mission ─── */}
         <Text style={st.section}>Support the Mission</Text>
         <View style={[st.card, { padding: 20 }]}>
           <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: '700', marginBottom: 8 }}>
@@ -948,16 +997,18 @@ export function SettingsScreen() {
           </Text>
         </View>
 
-        {/* Sign Out */}
-        <TouchableOpacity
-          style={st.signOutBtn}
-          onPress={() => Alert.alert('Sign Out', 'Lock your wallet?', [
-            { text: 'Cancel', style: 'cancel' },
-            { text: 'Sign Out', style: 'destructive', onPress: () => setTimeout(() => setStatus('locked'), 0) },
-          ])}
-        >
-          <Text style={st.signOutText}>Sign Out</Text>
-        </TouchableOpacity>
+        {/* ─── 9. Developer (testnet/demo only) ─── */}
+        {(isTestnet() || demoMode) && (
+          <>
+            <Text style={st.section}>Developer</Text>
+            <View style={st.card}>
+              <TouchableOpacity style={st.row} onPress={() => setView('dev-tools')}>
+                <Text style={st.label}>Dev Tools</Text>
+                <Text style={{ color: t.accent.purple, fontSize: 14 }}>Debug</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
 
         <View style={{ height: 40 }} />
       </ScrollView>
