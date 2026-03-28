@@ -1,17 +1,14 @@
 /**
  * Root Layout — Ultra-fast state-based screen switching.
- *
- * Key optimization: Once tabs are mounted, they NEVER unmount.
- * Lock screen overlays on top (absolute positioning), so locking
- * is instant regardless of how much data tabs have loaded.
+ * No expo-router overhead for auth screens.
+ * Tabs only load after unlock (deferred).
  */
 
 import { Buffer } from 'buffer';
 (globalThis as any).Buffer = Buffer;
 import 'react-native-get-random-values';
 
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
 import { Slot } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -65,8 +62,6 @@ async function prefetchBalances() {
 
 export default function RootLayout() {
   const { status, hasVault } = useWalletStore();
-  // Track if tabs have ever been shown (once true, tabs stay mounted forever)
-  const [tabsEverShown, setTabsEverShown] = useState(false);
 
   useEffect(() => {
     if (!providersInitialized) {
@@ -83,67 +78,41 @@ export default function RootLayout() {
     }
   }, []);
 
-  // Reset prefetch flags when locked
+  // Restart services on re-unlock, reset flags on lock
   useEffect(() => {
     if (status === 'locked') {
       priceServiceStarted = false;
       balancePrefetched = false;
+      import('../core/priceService').then((m) => m.stopPriceService()).catch(() => {});
     }
-  }, [status]);
-
-  // Once unlocked, tabs stay mounted forever
-  useEffect(() => {
     if (status === 'unlocked') {
-      setTabsEverShown(true);
-      // Restart price service on re-unlock
       if (!priceServiceStarted) {
         priceServiceStarted = true;
         const enabledTokens = useWalletStore.getState().enabledTokens;
         import('../core/priceService').then((m) => m.startPriceService(enabledTokens));
       }
+      if (!balancePrefetched) {
+        prefetchBalances();
+      }
     }
   }, [status]);
 
-  const isUnlocked = status === 'unlocked';
-  const showOnboarding = status !== 'unlocked' && !hasVault;
-  const showPinSetup = status === 'pin_setup';
-  const showLock = status === 'locked' || (status !== 'unlocked' && hasVault && !showPinSetup);
+  // Auth screens — rendered directly, no routing overhead
+  if (status === 'pin_setup') {
+    return <QueryClientProvider client={queryClient}><StatusBar style="light" /><PinSetupScreen /></QueryClientProvider>;
+  }
+  if (status !== 'unlocked' && hasVault) {
+    return <QueryClientProvider client={queryClient}><StatusBar style="light" /><UnlockScreen /></QueryClientProvider>;
+  }
+  if (status !== 'unlocked') {
+    return <QueryClientProvider client={queryClient}><StatusBar style="light" /><OnboardingScreen /></QueryClientProvider>;
+  }
 
+  // Unlocked — use expo-router only for tabs
   return (
     <QueryClientProvider client={queryClient}>
       <StatusBar style="light" />
-      <View style={styles.root}>
-        {/* Tabs — mounted once, never unmounted. Hidden behind overlay when locked. */}
-        {tabsEverShown && (
-          <View style={[styles.layer, !isUnlocked && styles.hidden]} pointerEvents={isUnlocked ? 'auto' : 'none'}>
-            <Slot />
-          </View>
-        )}
-
-        {/* Auth overlay — sits on top of tabs */}
-        {showPinSetup && (
-          <View style={styles.overlay}>
-            <PinSetupScreen />
-          </View>
-        )}
-        {showLock && (
-          <View style={styles.overlay}>
-            <UnlockScreen />
-          </View>
-        )}
-        {showOnboarding && (
-          <View style={styles.overlay}>
-            <OnboardingScreen />
-          </View>
-        )}
-      </View>
+      <Slot />
     </QueryClientProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#0a0a0f' },
-  layer: { ...StyleSheet.absoluteFillObject },
-  hidden: { opacity: 0 },
-  overlay: { ...StyleSheet.absoluteFillObject, zIndex: 10 },
-});

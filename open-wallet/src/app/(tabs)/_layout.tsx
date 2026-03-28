@@ -2,32 +2,25 @@
  * Tab Layout — Static, memoized. Zero re-renders.
  */
 
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import { Tabs } from 'expo-router';
-import { View, Text, StyleSheet, TouchableOpacity, InteractionManager } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { OfflineBanner } from '../../components/OfflineBanner';
 import { ToastContainer } from '../../components/Toast';
 import { useWalletStore } from '../../store/walletStore';
 
 const ICONS: Record<string, string> = { Home: '◉', Send: '↑', Swap: '⇄', Receive: '↓', Settings: '⚙' };
 
-// Lock screen shown instantly as local state — no waiting for Zustand propagation
-let showLockOverlay: ((show: boolean) => void) | null = null;
-
 const LockButton = React.memo(() => {
   const setStatus = useWalletStore((s) => s.setStatus);
-  const handleLock = useCallback(() => {
-    // 1. Show black overlay INSTANTLY (local state, no Zustand)
-    showLockOverlay?.(true);
-    // 2. Set Zustand state after overlay is visible (deferred)
-    requestAnimationFrame(() => {
-      setStatus('locked');
-      import('../../core/priceService').then((m) => m.stopPriceService()).catch(() => {});
-    });
+  const [pressed, setPressed] = React.useState(false);
+  const handleLock = React.useCallback(() => {
+    setPressed(true);
+    setStatus('locked');
   }, [setStatus]);
   return (
     <TouchableOpacity onPress={handleLock} style={{ paddingRight: 16, paddingLeft: 8 }} hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}>
-      <Text style={{ fontSize: 20, color: '#606070' }}>🔒</Text>
+      <Text style={{ fontSize: 20, color: pressed ? '#22c55e' : '#606070' }}>🔒</Text>
     </TouchableOpacity>
   );
 });
@@ -50,20 +43,8 @@ const SCREEN_OPTIONS = {
 };
 
 export default React.memo(function TabLayout() {
-  const [lockOverlay, setLockOverlay] = useState(false);
-  const status = useWalletStore((s) => s.status);
-  showLockOverlay = setLockOverlay;
-
-  // Clear overlay when unlocked
-  React.useEffect(() => {
-    if (status === 'unlocked' && lockOverlay) {
-      setLockOverlay(false);
-    }
-  }, [status, lockOverlay]);
-
   return (
     <View style={{ flex: 1, backgroundColor: '#0a0a0f' }}>
-    {lockOverlay && <View style={st.lockOverlay} />}
     <OfflineBanner />
     <ToastContainer />
     <Tabs screenOptions={SCREEN_OPTIONS}>
@@ -85,5 +66,4 @@ export default React.memo(function TabLayout() {
 const st = StyleSheet.create({
   icon: { fontSize: 22, color: '#606070' },
   iconActive: { color: '#22c55e' },
-  lockOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: '#0a0a0f', zIndex: 100 },
 });
