@@ -51,7 +51,15 @@ const SCREEN_OPTIONS = {
 
 export default React.memo(function TabLayout() {
   const [lockOverlay, setLockOverlay] = useState(false);
+  const status = useWalletStore((s) => s.status);
   showLockOverlay = setLockOverlay;
+
+  // Clear overlay when unlocked
+  React.useEffect(() => {
+    if (status === 'unlocked' && lockOverlay) {
+      setLockOverlay(false);
+    }
+  }, [status, lockOverlay]);
 
   return (
     <View style={{ flex: 1, backgroundColor: '#0a0a0f' }}>
