@@ -47,10 +47,12 @@ import { SocialFeedScreen } from './SocialFeedScreen';
 import { ProfileScreen } from './ProfileScreen';
 import { RecurringPaymentsScreen } from './RecurringPaymentsScreen';
 import { AutomationScreen } from './AutomationScreen';
+import { MultiSigScreen } from './MultiSigScreen';
+import { SpendingLimitsScreen } from './SpendingLimitsScreen';
 import { useTheme } from '../hooks/useTheme';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits';
 
 export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode } = useWalletStore();
@@ -227,6 +229,8 @@ export function SettingsScreen() {
   if (view === 'profile') return <ProfileScreen onClose={() => setView('main')} />;
   if (view === 'recurring-payments') return <RecurringPaymentsScreen onClose={() => setView('main')} />;
   if (view === 'automation') return <AutomationScreen onClose={() => setView('main')} />;
+  if (view === 'multisig') return <MultiSigScreen onClose={() => setView('main')} />;
+  if (view === 'spending-limits') return <SpendingLimitsScreen onClose={() => setView('main')} />;
 
   // ─── Main Settings ───
 
@@ -501,6 +505,16 @@ export function SettingsScreen() {
           <TouchableOpacity style={st.row} onPress={() => setView('cloud-backup')}>
             <Text style={st.label}>Cloud Backup</Text>
             <Text style={st.value}>Encrypted Export</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('multisig')}>
+            <Text style={st.label}>Multi-Sig Wallets</Text>
+            <Text style={{ color: t.accent.purple, fontSize: 14, fontWeight: '600' }}>M-of-N</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('spending-limits')}>
+            <Text style={st.label}>Spending Limits</Text>
+            <Text style={{ color: t.accent.orange, fontSize: 14, fontWeight: '600' }}>Per Token</Text>
           </TouchableOpacity>
         </View>
 

@@ -19,3 +19,5 @@ export { SocialFeedScreen } from './SocialFeedScreen';
 export { ProfileScreen } from './ProfileScreen';
 export { RecurringPaymentsScreen } from './RecurringPaymentsScreen';
 export { AutomationScreen } from './AutomationScreen';
+export { MultiSigScreen } from './MultiSigScreen';
+export { SpendingLimitsScreen } from './SpendingLimitsScreen';
