@@ -1,14 +1,15 @@
 /**
- * Root Layout — Ultra-fast state-based screen switching.
- * No expo-router overhead for auth screens.
- * Tabs only load after unlock (deferred).
+ * Root Layout — Tabs never unmount after first unlock.
+ * Lock screen renders on top as a simple overlay.
+ * Lock/unlock is instant — no tab teardown.
  */
 
 import { Buffer } from 'buffer';
 (globalThis as any).Buffer = Buffer;
 import 'react-native-get-random-values';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { View, StyleSheet } from 'react-native';
 import { Slot } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -18,7 +19,6 @@ const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 30_000 } },
 });
 
-// Direct imports — lightweight screens
 import { OnboardingScreen } from '../screens/OnboardingScreen';
 import { UnlockScreen } from '../screens/UnlockScreen';
 import { PinSetupScreen } from '../screens/PinSetupScreen';
@@ -32,25 +32,17 @@ async function prefetchBalances() {
   balancePrefetched = true;
   try {
     const addresses = useWalletStore.getState().addresses;
-    const demoMode = useWalletStore.getState().demoMode;
-    if (demoMode) return;
-
+    if (useWalletStore.getState().demoMode) return;
     await new Promise((r) => setTimeout(r, 1000));
     const { registry } = await import('../core/abstractions/registry');
-
     for (const [chainId, address] of Object.entries(addresses)) {
       if (!address) continue;
       try {
         const provider = registry.getChainProvider(chainId);
         const [balance] = await Promise.all([
+          Promise.race([provider.getBalance(address), new Promise((_, rej) => setTimeout(() => rej('t'), 3000))]),
           Promise.race([
-            provider.getBalance(address),
-            new Promise((_, reject) => setTimeout(() => reject('timeout'), 3000)),
-          ]),
-          Promise.race([
-            provider.getTransactionHistory(address, 10).then((txs: any) => {
-              queryClient.setQueryData(['tx-history-prefetch', chainId, address], txs);
-            }),
+            provider.getTransactionHistory(address, 10).then((txs: any) => queryClient.setQueryData(['tx-history-prefetch', chainId, address], txs)),
             new Promise((r) => setTimeout(r, 3000)),
           ]).catch(() => {}),
         ]);
@@ -61,7 +53,11 @@ async function prefetchBalances() {
 }
 
 export default function RootLayout() {
-  const { status, hasVault } = useWalletStore();
+  const status = useWalletStore((s) => s.status);
+  const hasVault = useWalletStore((s) => s.hasVault);
+  const hasBeenUnlocked = useRef(false);
+
+  if (status === 'unlocked') hasBeenUnlocked.current = true;
 
   useEffect(() => {
     if (!providersInitialized) {
@@ -78,41 +74,45 @@ export default function RootLayout() {
     }
   }, []);
 
-  // Restart services on re-unlock, reset flags on lock
   useEffect(() => {
     if (status === 'locked') {
       priceServiceStarted = false;
       balancePrefetched = false;
-      import('../core/priceService').then((m) => m.stopPriceService()).catch(() => {});
     }
-    if (status === 'unlocked') {
-      if (!priceServiceStarted) {
-        priceServiceStarted = true;
-        const enabledTokens = useWalletStore.getState().enabledTokens;
-        import('../core/priceService').then((m) => m.startPriceService(enabledTokens));
-      }
-      if (!balancePrefetched) {
-        prefetchBalances();
-      }
+    if (status === 'unlocked' && !priceServiceStarted) {
+      priceServiceStarted = true;
+      const enabledTokens = useWalletStore.getState().enabledTokens;
+      import('../core/priceService').then((m) => m.startPriceService(enabledTokens));
+      if (!balancePrefetched) prefetchBalances();
     }
   }, [status]);
 
-  // Auth screens — rendered directly, no routing overhead
-  if (status === 'pin_setup') {
-    return <QueryClientProvider client={queryClient}><StatusBar style="light" /><PinSetupScreen /></QueryClientProvider>;
-  }
-  if (status !== 'unlocked' && hasVault) {
-    return <QueryClientProvider client={queryClient}><StatusBar style="light" /><UnlockScreen /></QueryClientProvider>;
-  }
-  if (status !== 'unlocked') {
-    return <QueryClientProvider client={queryClient}><StatusBar style="light" /><OnboardingScreen /></QueryClientProvider>;
+  const isUnlocked = status === 'unlocked';
+  const needsOnboarding = !hasVault && status !== 'unlocked' && status !== 'pin_setup';
+  const needsPinSetup = status === 'pin_setup';
+  const needsUnlock = !isUnlocked && hasVault && !needsPinSetup;
+
+  // Before first unlock: don't render tabs at all
+  if (!hasBeenUnlocked.current) {
+    if (needsPinSetup) return <QueryClientProvider client={queryClient}><StatusBar style="light" /><PinSetupScreen /></QueryClientProvider>;
+    if (needsOnboarding) return <QueryClientProvider client={queryClient}><StatusBar style="light" /><OnboardingScreen /></QueryClientProvider>;
+    if (needsUnlock) return <QueryClientProvider client={queryClient}><StatusBar style="light" /><UnlockScreen /></QueryClientProvider>;
   }
 
-  // Unlocked — use expo-router only for tabs
+  // After first unlock: tabs stay mounted forever, auth overlays on top
   return (
     <QueryClientProvider client={queryClient}>
       <StatusBar style="light" />
-      <Slot />
+      <View style={s.root}>
+        <Slot />
+        {needsPinSetup && <View style={s.overlay}><PinSetupScreen /></View>}
+        {needsUnlock && <View style={s.overlay}><UnlockScreen /></View>}
+      </View>
     </QueryClientProvider>
   );
 }
+
+const s = StyleSheet.create({
+  root: { flex: 1 },
+  overlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 10 },
+});
