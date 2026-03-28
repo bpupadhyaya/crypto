@@ -16,6 +16,8 @@ import (
 
 	achievementkeeper "openchain/x/achievement/keeper"
 	achievementtypes "openchain/x/achievement/types"
+	lendingkeeper "openchain/x/lending/keeper"
+	lendingtypes "openchain/x/lending/types"
 	messagingkeeper "openchain/x/messaging/keeper"
 	messagingtypes "openchain/x/messaging/types"
 	dexkeeper "openchain/x/dex/keeper"
@@ -38,8 +40,9 @@ func (app *App) registerOpenChainModules() error {
 	achievementStoreKey := storetypes.NewKVStoreKey(achievementtypes.StoreKey)
 	tokenFactoryStoreKey := storetypes.NewKVStoreKey(tokenfactorytypes.StoreKey)
 	messagingStoreKey := storetypes.NewKVStoreKey(messagingtypes.StoreKey)
+	lendingStoreKey := storetypes.NewKVStoreKey(lendingtypes.StoreKey)
 
-	if err := app.RegisterStores(otkStoreKey, uidStoreKey, dexStoreKey, govuidStoreKey, achievementStoreKey, tokenFactoryStoreKey, messagingStoreKey); err != nil {
+	if err := app.RegisterStores(otkStoreKey, uidStoreKey, dexStoreKey, govuidStoreKey, achievementStoreKey, tokenFactoryStoreKey, messagingStoreKey, lendingStoreKey); err != nil {
 		return fmt.Errorf("failed to register Open Chain module stores: %w", err)
 	}
 
@@ -51,6 +54,7 @@ func (app *App) registerOpenChainModules() error {
 	app.AchievementKeeper = achievementkeeper.NewKeeper(app.appCodec, achievementStoreKey)
 	app.TokenFactoryKeeper = tokenfactorykeeper.NewKeeper(app.appCodec, tokenFactoryStoreKey, app.BankKeeper)
 	app.MessagingKeeper = messagingkeeper.NewKeeper(app.appCodec, messagingStoreKey)
+	app.LendingKeeper = lendingkeeper.NewKeeper(app.appCodec, lendingStoreKey, app.BankKeeper)
 
 	// Wire cross-module dependencies (set after all keepers initialized)
 	app.OTKKeeper.SetAchievementMinter(app.AchievementKeeper)
