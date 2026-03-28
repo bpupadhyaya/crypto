@@ -1,0 +1,10 @@
+{
+  "name": "validator-7",
+  "address": "8a24a066145b6daca9db7e54e907b1cdd26e310b977abc121e826ae173095743",
+  "pub_key": "8a24a066145b6daca9db7e54e907b1cdd26e310b977abc121e826ae173095743",
+  "priv_key": "517fae29da0a418d61c98e62e1c202e1a80dba50824ce469e16b6e7e7f6328468a24a066145b6daca9db7e54e907b1cdd26e310b977abc121e826ae173095743",
+  "node_id": "8a24a066145b6daca9db7e54e907b1cdd26e310b",
+  "p2p_port": 26726,
+  "rpc_port": 26727,
+  "mnemonic": "beef penalty alley robot forget supply erase unlock flag venue kitten render off nation knife protect flat merge theory equal poet domain dry stumble"
+}

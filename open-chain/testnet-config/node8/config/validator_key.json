@@ -1,0 +1,10 @@
+{
+  "name": "validator-8",
+  "address": "0a9d0c32ec3dda62ae4b068e4c6f6516ae8831df34fd33e22b5a46551486c6bb",
+  "pub_key": "0a9d0c32ec3dda62ae4b068e4c6f6516ae8831df34fd33e22b5a46551486c6bb",
+  "priv_key": "e14dc331efdd1d8168cf08eb52b39de70ab68d89fa67bb7c60b2c096cf0ed7ac0a9d0c32ec3dda62ae4b068e4c6f6516ae8831df34fd33e22b5a46551486c6bb",
+  "node_id": "0a9d0c32ec3dda62ae4b068e4c6f6516ae8831df",
+  "p2p_port": 26736,
+  "rpc_port": 26737,
+  "mnemonic": "connect catch guilt coast cage shield year blame insect tumble frame choose monitor actual language chimney enable install anxiety never magic safe engine board"
+}

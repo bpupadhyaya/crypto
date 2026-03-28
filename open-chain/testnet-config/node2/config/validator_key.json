@@ -1,0 +1,10 @@
+{
+  "name": "validator-2",
+  "address": "89020888e7b21cfaad5c6a16b47741d464e816e23bef20785265f6968cf9e815",
+  "pub_key": "89020888e7b21cfaad5c6a16b47741d464e816e23bef20785265f6968cf9e815",
+  "priv_key": "2616bb7d2cc5c07b999c83fb72aa60dabdca0afe6d11ad2ef0c241ec16dae94189020888e7b21cfaad5c6a16b47741d464e816e23bef20785265f6968cf9e815",
+  "node_id": "89020888e7b21cfaad5c6a16b47741d464e816e2",
+  "p2p_port": 26676,
+  "rpc_port": 26677,
+  "mnemonic": "observe orphan toy wasp decrease wet frost hair silly text enhance myself shell business pool tool orchard trick spring cute enhance pull cruel security"
+}

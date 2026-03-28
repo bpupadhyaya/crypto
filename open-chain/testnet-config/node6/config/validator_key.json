@@ -1,0 +1,10 @@
+{
+  "name": "validator-6",
+  "address": "70f072f26ac055d4227616b349ba42279210f531a895a9b76e6cc1480f23fe4b",
+  "pub_key": "70f072f26ac055d4227616b349ba42279210f531a895a9b76e6cc1480f23fe4b",
+  "priv_key": "60ab1a055aaebcfd17858866071f6b453a3021c17c12c81c6e87be72779fc4f570f072f26ac055d4227616b349ba42279210f531a895a9b76e6cc1480f23fe4b",
+  "node_id": "70f072f26ac055d4227616b349ba42279210f531",
+  "p2p_port": 26716,
+  "rpc_port": 26717,
+  "mnemonic": "unusual require bacon dutch convince soda fortune warfare dentist repair avocado obey toast seed describe visit must cream creek bronze unusual high cream shift"
+}

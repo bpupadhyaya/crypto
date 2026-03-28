@@ -28,10 +28,12 @@ import { PrivacyPolicyScreen } from './PrivacyPolicyScreen';
 import { WhatsNewScreen } from './WhatsNewScreen';
 import { DeFiScreen } from './DeFiScreen';
 import { P2PScreen } from './P2PScreen';
+import { AchievementsScreen } from './AchievementsScreen';
+import { PaymentRailsScreen } from './PaymentRailsScreen';
 import { useTheme } from '../hooks/useTheme';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails';
 
 export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode } = useWalletStore();
@@ -189,6 +191,8 @@ export function SettingsScreen() {
   if (view === 'whatsnew') return <WhatsNewScreen onClose={() => setView('main')} />;
   if (view === 'defi') return <DeFiScreen onClose={() => setView('main')} />;
   if (view === 'p2p') return <P2PScreen onClose={() => setView('main')} />;
+  if (view === 'achievements') return <AchievementsScreen onClose={() => setView('main')} />;
+  if (view === 'rails') return <PaymentRailsScreen onClose={() => setView('main')} />;
 
   // ─── Main Settings ───
 
@@ -289,6 +293,11 @@ export function SettingsScreen() {
           <TouchableOpacity style={st.row} onPress={() => setView('contacts')}>
             <Text style={st.label}>Address Book</Text>
             <Text style={st.value}>›</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('rails')}>
+            <Text style={st.label}>Buy with Local Currency</Text>
+            <Text style={{ color: t.accent.green, fontSize: 14 }}>UPI, PIX, M-Pesa...</Text>
           </TouchableOpacity>
         </View>
 
@@ -445,6 +454,11 @@ export function SettingsScreen() {
           <TouchableOpacity style={st.row} onPress={() => setView('scores')}>
             <Text style={st.label}>Contribution Scores</Text>
             <Text style={st.valueGreen}>Leaderboard</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('achievements')}>
+            <Text style={st.label}>Achievements</Text>
+            <Text style={{ color: t.accent.orange, fontSize: 14 }}>Soulbound NFTs</Text>
           </TouchableOpacity>
         </View>
 

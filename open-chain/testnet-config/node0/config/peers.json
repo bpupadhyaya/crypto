@@ -1,0 +1,9 @@
+{
+  "chain_id": "openchain-testnet-1",
+  "moniker": "validator-0",
+  "node_id": "28bbd4c56309ede3e9954e0f220cd3d9a1e9daeb",
+  "p2p_listen_addr": "tcp://192.168.1.10:26656",
+  "persistent_peers": "28bbd4c56309ede3e9954e0f220cd3d9a1e9daeb@\u003cphone-0-ip\u003e:26656,54c3700a3a800c3b0caa2cc38346fde0606f7bf6@\u003cphone-1-ip\u003e:26666,89020888e7b21cfaad5c6a16b47741d464e816e2@\u003cphone-2-ip\u003e:26676,99027cdc4d2e6ad41be71b80d553fd3426b5e27d@\u003cphone-3-ip\u003e:26686,b4e6d75ce1577183bdc26bdb4f8247c495b9b686@\u003cphone-4-ip\u003e:26696,d697c85a82aeff35c9b25a12feb7f15bf2dbecfd@\u003cphone-5-ip\u003e:26706,70f072f26ac055d4227616b349ba42279210f531@\u003cphone-6-ip\u003e:26716,8a24a066145b6daca9db7e54e907b1cdd26e310b@\u003cphone-7-ip\u003e:26726,0a9d0c32ec3dda62ae4b068e4c6f6516ae8831df@\u003cphone-8-ip\u003e:26736,47c29b02979d5d0fff6e530e2a6fa0ef2e1fa31c@\u003cphone-9-ip\u003e:26746",
+  "phone_ip": "192.168.1.10",
+  "rpc_listen_addr": "tcp://192.168.1.10:26657"
+}

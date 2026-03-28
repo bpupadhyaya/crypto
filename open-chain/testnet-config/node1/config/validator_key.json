@@ -1,0 +1,10 @@
+{
+  "name": "validator-1",
+  "address": "54c3700a3a800c3b0caa2cc38346fde0606f7bf605cc2af4fd2e70fb72ee9ee8",
+  "pub_key": "54c3700a3a800c3b0caa2cc38346fde0606f7bf605cc2af4fd2e70fb72ee9ee8",
+  "priv_key": "c840321f596bba068669f2479bb052a5edde090f3a441bb435af9d52cf5e583d54c3700a3a800c3b0caa2cc38346fde0606f7bf605cc2af4fd2e70fb72ee9ee8",
+  "node_id": "54c3700a3a800c3b0caa2cc38346fde0606f7bf6",
+  "p2p_port": 26666,
+  "rpc_port": 26667,
+  "mnemonic": "youth loan profit dog kit next garlic promote rare crew decide obtain clever pony learn pause disease clay token library steel lens avoid photo"
+}

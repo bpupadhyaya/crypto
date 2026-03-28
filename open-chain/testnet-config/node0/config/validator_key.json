@@ -1,0 +1,10 @@
+{
+  "name": "validator-0",
+  "address": "28bbd4c56309ede3e9954e0f220cd3d9a1e9daebf1deb07537050549790a5e11",
+  "pub_key": "28bbd4c56309ede3e9954e0f220cd3d9a1e9daebf1deb07537050549790a5e11",
+  "priv_key": "d76d6685735fe66f23704f92813e2d0dfd284dd7b95cecb315aa89e125f9c9f128bbd4c56309ede3e9954e0f220cd3d9a1e9daebf1deb07537050549790a5e11",
+  "node_id": "28bbd4c56309ede3e9954e0f220cd3d9a1e9daeb",
+  "p2p_port": 26656,
+  "rpc_port": 26657,
+  "mnemonic": "oak rabbit size trap wash cannon elite submit shaft abuse iron paddle bid lunch very spend jaguar view grab process ripple fresh gain nice"
+}
