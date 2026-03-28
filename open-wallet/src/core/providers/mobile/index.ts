@@ -1,5 +1,7 @@
 export { P2PManager, p2pManager } from './p2p';
 export type { P2PConfig, PeerInfo } from './p2p';
+export { NodeRunner, nodeRunner } from '../../p2p/nodeRunner';
+export type { NodeConfig, NodeStatus, BlockInfo } from '../../p2p/nodeRunner';
 export { MobileOpenChainProvider } from './mobileChainProvider';
 export { MobileSolanaProvider } from './mobileSolanaProvider';
 export type { MobileSolanaConfig } from './mobileSolanaProvider';

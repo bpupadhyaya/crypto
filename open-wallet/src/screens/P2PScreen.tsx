@@ -21,6 +21,7 @@ import QRCode from 'react-native-qrcode-svg';
 import { useWalletStore } from '../store/walletStore';
 import { p2pManager, type PeerInfo } from '../core/providers/mobile/p2p';
 import { QRScanner } from '../components/QRScanner';
+import { P2PSetupGuideScreen } from './P2PSetupGuideScreen';
 import { useTheme } from '../hooks/useTheme';
 import type { BackendType } from '../core/abstractions/types';
 
@@ -43,6 +44,7 @@ export function P2PScreen({ onClose }: P2PScreenProps) {
   const [newPeerAddress, setNewPeerAddress] = useState('');
   const [showQR, setShowQR] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
+  const [showSetupGuide, setShowSetupGuide] = useState(false);
   const t = useTheme();
 
   const st = useMemo(() => StyleSheet.create({
@@ -90,6 +92,8 @@ export function P2PScreen({ onClose }: P2PScreenProps) {
     qrInfo: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginBottom: 20, lineHeight: 18 },
     qrCloseBtn: { backgroundColor: t.accent.red + '20', borderRadius: 12, paddingVertical: 14, paddingHorizontal: 40, alignItems: 'center' },
     qrCloseText: { color: t.accent.red, fontSize: 15, fontWeight: '700' },
+    setupGuideBtn: { backgroundColor: t.accent.blue + '15', borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginTop: 12 },
+    setupGuideBtnText: { color: t.accent.blue, fontSize: 15, fontWeight: '700' },
   }), [t]);
 
   // ─── Peer & Block Updates ───
@@ -272,6 +276,11 @@ export function P2PScreen({ onClose }: P2PScreenProps) {
           </TouchableOpacity>
         </View>
 
+        {/* Setup Guide */}
+        <TouchableOpacity style={st.setupGuideBtn} onPress={() => setShowSetupGuide(true)}>
+          <Text style={st.setupGuideBtnText}>Setup Guide (10-Phone Testnet)</Text>
+        </TouchableOpacity>
+
         {/* Network Mode */}
         <Text style={st.section}>Network Mode</Text>
         <View style={st.card}>
@@ -418,6 +427,11 @@ export function P2PScreen({ onClose }: P2PScreenProps) {
           onScan={handleScanPeer}
           onClose={() => setShowScanner(false)}
         />
+      </Modal>
+
+      {/* Setup Guide Modal */}
+      <Modal visible={showSetupGuide} animationType="slide" presentationStyle="fullScreen">
+        <P2PSetupGuideScreen onClose={() => setShowSetupGuide(false)} />
       </Modal>
     </SafeAreaView>
   );

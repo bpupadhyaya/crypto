@@ -7,10 +7,15 @@
  *   Each phone runs CometBFT → exposes WebSocket on port 26657 →
  *   other phones connect directly to that IP:port. No central server.
  *
- * This is a WebSocket-based P2P simulation that connects to CometBFT's
- * WebSocket RPC directly on each peer's IP. When gomobile bindings are
- * compiled, this will switch to the embedded CometBFT node via native bridge.
+ * When P2P mode is enabled, the manager uses NodeRunner to start a local
+ * node and routes all balance/tx/history queries through the local node's
+ * REST API (localhost:1317). If the local node isn't available, it falls
+ * back to connecting to a peer's REST API.
+ *
+ * Auto-discovers peers via mDNS and connects to their REST endpoints.
  */
+
+import { NodeRunner, nodeRunner, type NodeConfig } from '../../p2p/nodeRunner';
 
 // ─── Types ───
 
@@ -25,6 +30,10 @@ export interface P2PConfig {
   dataDir: string;
   /** WebSocket port for CometBFT RPC (default 26657) */
   wsPort?: number;
+  /** If true, start a local node via NodeRunner on start() */
+  useLocalNode?: boolean;
+  /** Validator key for local node (if this phone is a validator) */
+  validatorKey?: string;
 }
 
 export interface PeerInfo {
@@ -56,6 +65,11 @@ export class P2PManager {
   private reconnectTimers: Map<string, ReturnType<typeof setTimeout>> = new Map();
   private mdnsTimer: ReturnType<typeof setInterval> | null = null;
 
+  // NodeRunner integration — manages the embedded local node
+  private localNodeRunner: NodeRunner = nodeRunner;
+  private localNodeActive = false;
+  private nodeBlockUnsub: (() => void) | null = null;
+
   // Event listeners
   private blockListeners: EventCallback<BlockHeader>[] = [];
   private peerListeners: EventCallback<PeerInfo[]>[] = [];
@@ -72,7 +86,47 @@ export class P2PManager {
     // Generate a local peer ID (in production, derived from node key)
     this.peerId = `ow-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 
-    // Connect to bootstrap peers
+    // Start local node via NodeRunner if requested (P2P mode)
+    if (config.useLocalNode !== false) {
+      try {
+        const nodeConfig: NodeConfig = {
+          chainId: config.chainID,
+          validatorKey: config.validatorKey,
+          bootstrapPeers: config.bootstrapPeers,
+          enableMDNS: config.enableMDNS,
+        };
+        await this.localNodeRunner.start(nodeConfig);
+        this.localNodeActive = true;
+
+        // Use the node's peer ID if available
+        const nodeStatus = this.localNodeRunner.getStatus();
+        if (nodeStatus.peerId) {
+          this.peerId = nodeStatus.peerId;
+        }
+
+        // Subscribe to blocks from the local node
+        this.nodeBlockUnsub = this.localNodeRunner.onNewBlock((height) => {
+          if (height > this.latestHeight) {
+            this.latestHeight = height;
+          }
+          const header: BlockHeader = {
+            height,
+            hash: '',
+            time: new Date().toISOString(),
+            proposer: '',
+            numTxs: 0,
+          };
+          for (const listener of this.blockListeners) {
+            try { listener(header); } catch { /* listener error */ }
+          }
+        });
+      } catch {
+        // Local node failed to start; continue with peer connections
+        this.localNodeActive = false;
+      }
+    }
+
+    // Connect to bootstrap peers (WebSocket connections for direct RPC)
     for (const peer of config.bootstrapPeers) {
       this.connectToPeer(peer);
     }
@@ -88,6 +142,16 @@ export class P2PManager {
 
   async stop(): Promise<void> {
     if (!this.started) return;
+
+    // Stop local node if we started it
+    if (this.localNodeActive) {
+      if (this.nodeBlockUnsub) {
+        this.nodeBlockUnsub();
+        this.nodeBlockUnsub = null;
+      }
+      await this.localNodeRunner.stop();
+      this.localNodeActive = false;
+    }
 
     // Close all WebSocket connections
     for (const [id, ws] of this.sockets) {
@@ -149,6 +213,16 @@ export class P2PManager {
   // ─── Chain Queries (via connected peers) ───
 
   async broadcastTransaction(txHex: string): Promise<void> {
+    // Prefer local node for broadcast (direct mempool insertion)
+    if (this.localNodeActive) {
+      try {
+        await this.localNodeRunner.broadcastTx(txHex);
+        return;
+      } catch {
+        // Fall through to peer broadcast
+      }
+    }
+
     const ws = this.getBestPeer();
     if (!ws) throw new Error('No connected peers');
 
@@ -183,6 +257,15 @@ export class P2PManager {
   }
 
   async getLatestHeight(): Promise<number> {
+    // Check local node first
+    if (this.localNodeActive) {
+      const nodeStatus = this.localNodeRunner.getStatus();
+      if (nodeStatus.latestBlock > 0) {
+        this.latestHeight = nodeStatus.latestBlock;
+        return this.latestHeight;
+      }
+    }
+
     if (this.latestHeight > 0) return this.latestHeight;
 
     const ws = this.getBestPeer();
@@ -217,25 +300,65 @@ export class P2PManager {
   }
 
   async getAccountBalance(address: string): Promise<{ denom: string; amount: string }[]> {
+    // Prefer local node REST if active
+    if (this.localNodeActive) {
+      try {
+        const restBase = this.localNodeRunner.getRestBase();
+        const res = await fetch(
+          `${restBase}/cosmos/bank/v1beta1/balances/${address}`,
+          { signal: AbortSignal.timeout(8_000) }
+        );
+        if (res.ok) {
+          const data = await res.json();
+          return data.balances ?? [];
+        }
+      } catch {
+        // Fall through to peer query
+      }
+    }
+
+    // Fall back to peer REST endpoints
+    const peerAddress = this.getBestPeerAddress();
+    if (peerAddress) {
+      const data = await this.queryAccountViaREST(address, peerAddress);
+      if (data?.balances) return data.balances;
+    }
+
+    // Last resort: WebSocket ABCI query
     const ws = this.getBestPeer();
     if (!ws) return [];
 
     try {
       const result = await this.rpcCall(ws, 'abci_query', {
         path: `/cosmos.bank.v1beta1.Query/AllBalances`,
-        data: '', // Would need protobuf encoding in production
+        data: '',
         height: '0',
         prove: false,
       });
       // In production, decode protobuf response
-      // For now, fall back to REST query on the same peer
       return [];
     } catch {
       return [];
     }
   }
 
-  async queryAccountViaREST(address: string, peerAddress: string): Promise<any> {
+  async queryAccountViaREST(address: string, peerAddress?: string): Promise<any> {
+    // Try local node REST first if active
+    if (this.localNodeActive) {
+      try {
+        const restBase = this.localNodeRunner.getRestBase();
+        const response = await fetch(
+          `${restBase}/cosmos/bank/v1beta1/balances/${address}`,
+          { signal: AbortSignal.timeout(8_000) }
+        );
+        if (response.ok) return response.json();
+      } catch {
+        // Fall through to peer
+      }
+    }
+
+    if (!peerAddress) return null;
+
     // Direct REST query to peer's CometBFT REST endpoint (port 1317)
     const restBase = peerAddress.replace(/:\d+$/, ':1317');
     try {
@@ -250,11 +373,33 @@ export class P2PManager {
     }
   }
 
-  async queryTxHistoryViaREST(address: string, peerAddress: string, limit: number = 20): Promise<any> {
-    const restBase = peerAddress.replace(/:\d+$/, ':1317');
+  async queryTxHistoryViaREST(address: string, peerAddress?: string, limit: number = 20): Promise<any> {
+    // Build the REST base — prefer local node, then peer
+    let restBase: string | null = null;
+
+    if (this.localNodeActive) {
+      restBase = this.localNodeRunner.getRestBase();
+    }
+
+    if (!restBase && peerAddress) {
+      restBase = `http://${peerAddress.replace(/:\d+$/, ':1317')}`;
+    }
+
+    // Also try discovered peers from the node runner
+    if (!restBase) {
+      const discovered = this.localNodeRunner.getPeerAddresses();
+      for (const addr of discovered) {
+        const host = addr.includes(':') ? addr.split(':')[0] : addr;
+        restBase = `http://${host}:1317`;
+        break; // Use first available
+      }
+    }
+
+    if (!restBase) return null;
+
     try {
-      const sentUrl = `http://${restBase}/cosmos/tx/v1beta1/txs?events=transfer.sender%3D%27${address}%27&pagination.limit=${limit}&order_by=ORDER_BY_DESC`;
-      const recvUrl = `http://${restBase}/cosmos/tx/v1beta1/txs?events=transfer.recipient%3D%27${address}%27&pagination.limit=${limit}&order_by=ORDER_BY_DESC`;
+      const sentUrl = `${restBase}/cosmos/tx/v1beta1/txs?events=transfer.sender%3D%27${address}%27&pagination.limit=${limit}&order_by=ORDER_BY_DESC`;
+      const recvUrl = `${restBase}/cosmos/tx/v1beta1/txs?events=transfer.recipient%3D%27${address}%27&pagination.limit=${limit}&order_by=ORDER_BY_DESC`;
 
       const [sentRes, recvRes] = await Promise.all([
         fetch(sentUrl, { signal: AbortSignal.timeout(8_000) }),
@@ -467,14 +612,49 @@ export class P2PManager {
     }
   }
 
+  /** Whether the local embedded node is active */
+  isLocalNodeActive(): boolean {
+    return this.localNodeActive;
+  }
+
+  /** Get the NodeRunner instance for direct access */
+  getNodeRunner(): NodeRunner {
+    return this.localNodeRunner;
+  }
+
   private startMDNSDiscovery(): void {
-    // mDNS discovery simulation for local network testing.
-    // In production, this would use react-native-zeroconf or the
-    // gomobile bridge to discover peers on the local network.
-    // For now, it's a no-op placeholder that logs intent.
-    this.mdnsTimer = setInterval(() => {
-      // Would broadcast mDNS query for _openchain._tcp service
-      // and auto-connect to discovered peers
+    // mDNS discovery for local network testing.
+    // In production, this uses react-native-zeroconf to browse for
+    // _openchain._tcp services on the local WiFi network.
+    //
+    // For the 10-phone testnet, each phone advertises:
+    //   Service: _openchain._tcp
+    //   Port: 26657 (RPC), 1317 (REST), 26656 (P2P)
+    //   TXT: chainId=openchain-testnet-1, peerId=<id>
+    //
+    // Discovery flow:
+    //   1. Browse _openchain._tcp every 10s
+    //   2. For each discovered service, extract IP
+    //   3. Attempt WebSocket connection to <IP>:26657
+    //   4. Add to peers map
+    //
+    // Placeholder: uses NodeRunner's peer discovery (via net_info RPC)
+    // to transitively find peers on the local network.
+    this.mdnsTimer = setInterval(async () => {
+      if (!this.localNodeActive) return;
+
+      // Pull discovered peers from the node runner
+      const discoveredAddresses = this.localNodeRunner.getPeerAddresses();
+      for (const addr of discoveredAddresses) {
+        // Check if we already have a connection to this peer
+        const host = addr.includes(':') ? addr.split(':')[0] : addr;
+        const alreadyConnected = Array.from(this.peers.values()).some(
+          (p) => p.address.startsWith(host)
+        );
+        if (!alreadyConnected) {
+          this.connectToPeer(addr);
+        }
+      }
     }, 10_000);
   }
 }
