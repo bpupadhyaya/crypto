@@ -70,13 +70,22 @@ import { DAOScreen } from './DAOScreen';
 import { DelegationScreen } from './DelegationScreen';
 import { VotingPowerScreen } from './VotingPowerScreen';
 import { MilestoneDefinitionsScreen } from './MilestoneDefinitionsScreen';
+import { PortfolioChartScreen } from './PortfolioChartScreen';
+import { AdvancedAlertsScreen } from './AdvancedAlertsScreen';
+import { TokenCompareScreen } from './TokenCompareScreen';
 import { useTheme } from '../hooks/useTheme';
 import { isLowBandwidth, setLowBandwidthOverride, getLowBandwidthOverride } from '../core/network/lowBandwidth';
 import { isTestnet } from '../core/network';
 import { DevToolsScreen } from './DevToolsScreen';
+import { OfflineQueueScreen } from './OfflineQueueScreen';
+import { PendingTxScreen } from './PendingTxScreen';
+import { TxNotesScreen } from './TxNotesScreen';
+import { GasTrackerScreen } from './GasTrackerScreen';
+import { BatchTxScreen } from './BatchTxScreen';
+import { AddressLabelScreen } from './AddressLabelScreen';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels';
 
 export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode, autoLockTimeout, setAutoLockTimeout } = useWalletStore();
@@ -276,6 +285,15 @@ export function SettingsScreen() {
   if (view === 'delegation') return <DelegationScreen onClose={() => setView('main')} />;
   if (view === 'voting-power') return <VotingPowerScreen onClose={() => setView('main')} />;
   if (view === 'milestones') return <MilestoneDefinitionsScreen onClose={() => setView('main')} />;
+  if (view === 'offline-queue') return <OfflineQueueScreen onClose={() => setView('main')} />;
+  if (view === 'pending-tx') return <PendingTxScreen onClose={() => setView('main')} />;
+  if (view === 'portfolio-chart') return <PortfolioChartScreen onClose={() => setView('main')} />;
+  if (view === 'advanced-alerts') return <AdvancedAlertsScreen onClose={() => setView('main')} />;
+  if (view === 'token-compare') return <TokenCompareScreen onClose={() => setView('main')} />;
+  if (view === 'tx-notes') return <TxNotesScreen onClose={() => setView('main')} />;
+  if (view === 'gas-tracker') return <GasTrackerScreen onClose={() => setView('main')} />;
+  if (view === 'batch-tx') return <BatchTxScreen onClose={() => setView('main')} />;
+  if (view === 'address-labels') return <AddressLabelScreen onClose={() => setView('main')} />;
   if (view === 'dev-tools') return <DevToolsScreen onClose={() => setView('main')} />;
 
   // ─── Low Bandwidth State ───
@@ -374,6 +392,21 @@ export function SettingsScreen() {
           <TouchableOpacity style={st.row} onPress={() => setView('analytics')}>
             <Text style={st.label}>Portfolio Analytics</Text>
             <Text style={st.value}>›</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('portfolio-chart')}>
+            <Text style={st.label}>Portfolio Chart</Text>
+            <Text style={{ color: t.accent.green, fontSize: 14, fontWeight: '600' }}>History</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('advanced-alerts')}>
+            <Text style={st.label}>Advanced Alerts</Text>
+            <Text style={{ color: t.accent.orange, fontSize: 14, fontWeight: '600' }}>Multi-Condition</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('token-compare')}>
+            <Text style={st.label}>Token Compare</Text>
+            <Text style={{ color: t.accent.purple, fontSize: 14, fontWeight: '600' }}>Side by Side</Text>
           </TouchableOpacity>
           <View style={st.divider} />
           <TouchableOpacity style={st.row} onPress={() => setView('wallet-analytics')}>
@@ -475,6 +508,26 @@ export function SettingsScreen() {
             <Text style={st.label}>Transaction Simulator</Text>
             <Text style={{ color: t.accent.blue, fontSize: 14, fontWeight: '600' }}>Preview</Text>
           </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('tx-notes')}>
+            <Text style={st.label}>Transaction Notes</Text>
+            <Text style={{ color: t.accent.purple, fontSize: 14, fontWeight: '600' }}>Tags & Notes</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('gas-tracker')}>
+            <Text style={st.label}>Gas Tracker</Text>
+            <Text style={{ color: t.accent.orange, fontSize: 14, fontWeight: '600' }}>All Chains</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('batch-tx')}>
+            <Text style={st.label}>Batch Transactions</Text>
+            <Text style={{ color: t.accent.green, fontSize: 14, fontWeight: '600' }}>Multi-Send</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('address-labels')}>
+            <Text style={st.label}>Address Labels</Text>
+            <Text style={{ color: t.accent.blue, fontSize: 14, fontWeight: '600' }}>Manage</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Network */}
@@ -537,6 +590,16 @@ export function SettingsScreen() {
               Reduces data usage for 2G/3G connections. Disables charts, reduces refresh rates, caches aggressively.
             </Text>
           </View>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('offline-queue')}>
+            <Text style={st.label}>Offline Queue</Text>
+            <Text style={{ color: t.accent.orange, fontSize: 14, fontWeight: '600' }}>Queued TXs</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('pending-tx')}>
+            <Text style={st.label}>Pending Transactions</Text>
+            <Text style={{ color: t.accent.yellow, fontSize: 14, fontWeight: '600' }}>In Progress</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Demo Mode */}
