@@ -8,6 +8,7 @@ package app
 //   - x/dex: Decentralized exchange — AMM + order book
 //   - x/govuid: One-human-one-vote governance
 //   - x/achievement: Soulbound milestone NFTs
+//   - x/correction: Article V correction mechanism (-OTK for verified harm)
 
 import (
 	"fmt"
@@ -16,6 +17,8 @@ import (
 
 	achievementkeeper "openchain/x/achievement/keeper"
 	achievementtypes "openchain/x/achievement/types"
+	correctionkeeper "openchain/x/correction/keeper"
+	correctiontypes "openchain/x/correction/types"
 	daokeeper "openchain/x/dao/keeper"
 	daotypes "openchain/x/dao/types"
 	dexkeeper "openchain/x/dex/keeper"
@@ -50,8 +53,9 @@ func (app *App) registerOpenChainModules() error {
 	escrowStoreKey := storetypes.NewKVStoreKey(escrowtypes.StoreKey)
 	farmingStoreKey := storetypes.NewKVStoreKey(farmingtypes.StoreKey)
 	daoStoreKey := storetypes.NewKVStoreKey(daotypes.StoreKey)
+	correctionStoreKey := storetypes.NewKVStoreKey(correctiontypes.StoreKey)
 
-	if err := app.RegisterStores(otkStoreKey, uidStoreKey, dexStoreKey, govuidStoreKey, achievementStoreKey, tokenFactoryStoreKey, messagingStoreKey, lendingStoreKey, farmingStoreKey, escrowStoreKey, daoStoreKey); err != nil {
+	if err := app.RegisterStores(otkStoreKey, uidStoreKey, dexStoreKey, govuidStoreKey, achievementStoreKey, tokenFactoryStoreKey, messagingStoreKey, lendingStoreKey, farmingStoreKey, escrowStoreKey, daoStoreKey, correctionStoreKey); err != nil {
 		return fmt.Errorf("failed to register Open Chain module stores: %w", err)
 	}
 
@@ -67,6 +71,7 @@ func (app *App) registerOpenChainModules() error {
 	app.EscrowKeeper = escrowkeeper.NewKeeper(app.appCodec, escrowStoreKey, app.BankKeeper)
 	app.FarmingKeeper = farmingkeeper.NewKeeper(app.appCodec, farmingStoreKey, app.BankKeeper)
 	app.DAOKeeper = daokeeper.NewKeeper(app.appCodec, daoStoreKey, app.BankKeeper)
+	app.CorrectionKeeper = correctionkeeper.NewKeeper(app.appCodec, correctionStoreKey)
 
 	// Wire cross-module dependencies (set after all keepers initialized)
 	app.OTKKeeper.SetAchievementMinter(app.AchievementKeeper)

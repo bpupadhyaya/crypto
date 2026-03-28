@@ -64,13 +64,17 @@ import { TxSimulatorScreen } from './TxSimulatorScreen';
 import { ChainInfoScreen } from './ChainInfoScreen';
 import { EscrowScreen } from './EscrowScreen';
 import { DisputeScreen } from './DisputeScreen';
+import { CorrectionScreen } from './CorrectionScreen';
+import { CommunityHealthScreen } from './CommunityHealthScreen';
 import { DAOScreen } from './DAOScreen';
 import { DelegationScreen } from './DelegationScreen';
 import { VotingPowerScreen } from './VotingPowerScreen';
+import { MilestoneDefinitionsScreen } from './MilestoneDefinitionsScreen';
 import { useTheme } from '../hooks/useTheme';
+import { isLowBandwidth, setLowBandwidthOverride, getLowBandwidthOverride } from '../core/network/lowBandwidth';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health';
 
 export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode, autoLockTimeout, setAutoLockTimeout } = useWalletStore();
@@ -264,9 +268,19 @@ export function SettingsScreen() {
   if (view === 'chain-info') return <ChainInfoScreen onClose={() => setView('main')} />;
   if (view === 'escrow') return <EscrowScreen onClose={() => setView('main')} />;
   if (view === 'disputes') return <DisputeScreen onClose={() => setView('main')} />;
+  if (view === 'correction') return <CorrectionScreen onClose={() => setView('main')} />;
+  if (view === 'community-health') return <CommunityHealthScreen onClose={() => setView('main')} />;
   if (view === 'dao') return <DAOScreen onClose={() => setView('main')} />;
   if (view === 'delegation') return <DelegationScreen onClose={() => setView('main')} />;
   if (view === 'voting-power') return <VotingPowerScreen onClose={() => setView('main')} />;
+  if (view === 'milestones') return <MilestoneDefinitionsScreen onClose={() => setView('main')} />;
+
+  // ─── Low Bandwidth State ───
+  const lowBandwidthOverride = getLowBandwidthOverride();
+  const lowBandwidthEnabled = lowBandwidthOverride !== null ? lowBandwidthOverride : isLowBandwidth();
+  const toggleLowBandwidth = (enabled: boolean) => {
+    setLowBandwidthOverride(enabled ? true : null);
+  };
 
   // ─── Main Settings ───
 
@@ -505,6 +519,21 @@ export function SettingsScreen() {
             <Text style={st.label}>Chain Information</Text>
             <Text style={{ color: t.accent.purple, fontSize: 14, fontWeight: '600' }}>5 Chains</Text>
           </TouchableOpacity>
+          <View style={st.divider} />
+          <View style={st.row}>
+            <Text style={st.label}>Low Bandwidth Mode</Text>
+            <Switch
+              value={lowBandwidthEnabled}
+              onValueChange={toggleLowBandwidth}
+              trackColor={{ false: '#333', true: t.accent.green + '40' }}
+              thumbColor={lowBandwidthEnabled ? t.accent.green : '#666'}
+            />
+          </View>
+          <View style={{ paddingHorizontal: 16, paddingBottom: 12 }}>
+            <Text style={{ color: t.text.muted, fontSize: 12 }}>
+              Reduces data usage for 2G/3G connections. Disables charts, reduces refresh rates, caches aggressively.
+            </Text>
+          </View>
         </View>
 
         {/* Demo Mode */}
@@ -709,6 +738,21 @@ export function SettingsScreen() {
           <TouchableOpacity style={st.row} onPress={() => setView('disputes')}>
             <Text style={st.label}>Dispute Resolution</Text>
             <Text style={{ color: t.accent.orange, fontSize: 14, fontWeight: '600' }}>Arbiter</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('correction')}>
+            <Text style={st.label}>Corrections (-OTK)</Text>
+            <Text style={{ color: t.accent.red, fontSize: 14, fontWeight: '600' }}>Article V</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('community-health')}>
+            <Text style={st.label}>Community Health</Text>
+            <Text style={{ color: t.accent.green, fontSize: 14, fontWeight: '600' }}>Dashboard</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('milestones')}>
+            <Text style={st.label}>Regional Milestones</Text>
+            <Text style={{ color: t.accent.green, fontSize: 14, fontWeight: '600' }}>Browse & Submit</Text>
           </TouchableOpacity>
         </View>
 

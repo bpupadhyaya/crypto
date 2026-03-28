@@ -38,3 +38,5 @@ export { ChainInfoScreen } from './ChainInfoScreen';
 export { IdentityScreen } from './IdentityScreen';
 export { EscrowScreen } from './EscrowScreen';
 export { DisputeScreen } from './DisputeScreen';
+export { CorrectionScreen } from './CorrectionScreen';
+export { CommunityHealthScreen } from './CommunityHealthScreen';
