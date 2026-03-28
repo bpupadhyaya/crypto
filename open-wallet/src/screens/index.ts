@@ -24,3 +24,6 @@ export { SpendingLimitsScreen } from './SpendingLimitsScreen';
 export { LiquidityScreen } from './LiquidityScreen';
 export { YieldFarmScreen } from './YieldFarmScreen';
 export { LendBorrowScreen } from './LendBorrowScreen';
+export { TaxCalculatorScreen } from './TaxCalculatorScreen';
+export { WalletAnalyticsScreen } from './WalletAnalyticsScreen';
+export { WatchlistScreen } from './WatchlistScreen';
