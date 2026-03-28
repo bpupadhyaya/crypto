@@ -36,3 +36,5 @@ export { AddressVerifyScreen } from './AddressVerifyScreen';
 export { TxSimulatorScreen } from './TxSimulatorScreen';
 export { ChainInfoScreen } from './ChainInfoScreen';
 export { IdentityScreen } from './IdentityScreen';
+export { EscrowScreen } from './EscrowScreen';
+export { DisputeScreen } from './DisputeScreen';

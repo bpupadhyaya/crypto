@@ -49,6 +49,7 @@ import (
 
 	achievementkeeper "openchain/x/achievement/keeper"
 	dexkeeper "openchain/x/dex/keeper"
+	escrowkeeper "openchain/x/escrow/keeper"
 	farmingkeeper "openchain/x/farming/keeper"
 	govuidkeeper "openchain/x/govuid/keeper"
 	otkkeeper "openchain/x/otk/keeper"
@@ -110,6 +111,7 @@ type App struct {
 	TokenFactoryKeeper *tokenfactorykeeper.Keeper
 	MessagingKeeper    *messagingkeeper.Keeper
 	LendingKeeper      *lendingkeeper.Keeper
+	EscrowKeeper       *escrowkeeper.Keeper
 	FarmingKeeper      *farmingkeeper.Keeper
 
 	// ibc keepers

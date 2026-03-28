@@ -16,15 +16,17 @@ import (
 
 	achievementkeeper "openchain/x/achievement/keeper"
 	achievementtypes "openchain/x/achievement/types"
+	dexkeeper "openchain/x/dex/keeper"
+	dextypes "openchain/x/dex/types"
+	escrowkeeper "openchain/x/escrow/keeper"
+	escrowtypes "openchain/x/escrow/types"
+	farmingkeeper "openchain/x/farming/keeper"
+	farmingtypes "openchain/x/farming/types"
+	govuidkeeper "openchain/x/govuid/keeper"
 	lendingkeeper "openchain/x/lending/keeper"
 	lendingtypes "openchain/x/lending/types"
 	messagingkeeper "openchain/x/messaging/keeper"
 	messagingtypes "openchain/x/messaging/types"
-	dexkeeper "openchain/x/dex/keeper"
-	dextypes "openchain/x/dex/types"
-	farmingkeeper "openchain/x/farming/keeper"
-	farmingtypes "openchain/x/farming/types"
-	govuidkeeper "openchain/x/govuid/keeper"
 	otkkeeper "openchain/x/otk/keeper"
 	otktypes "openchain/x/otk/types"
 	tokenfactorykeeper "openchain/x/tokenfactory/keeper"
@@ -43,9 +45,10 @@ func (app *App) registerOpenChainModules() error {
 	tokenFactoryStoreKey := storetypes.NewKVStoreKey(tokenfactorytypes.StoreKey)
 	messagingStoreKey := storetypes.NewKVStoreKey(messagingtypes.StoreKey)
 	lendingStoreKey := storetypes.NewKVStoreKey(lendingtypes.StoreKey)
+	escrowStoreKey := storetypes.NewKVStoreKey(escrowtypes.StoreKey)
 	farmingStoreKey := storetypes.NewKVStoreKey(farmingtypes.StoreKey)
 
-	if err := app.RegisterStores(otkStoreKey, uidStoreKey, dexStoreKey, govuidStoreKey, achievementStoreKey, tokenFactoryStoreKey, messagingStoreKey, lendingStoreKey, farmingStoreKey); err != nil {
+	if err := app.RegisterStores(otkStoreKey, uidStoreKey, dexStoreKey, govuidStoreKey, achievementStoreKey, tokenFactoryStoreKey, messagingStoreKey, lendingStoreKey, farmingStoreKey, escrowStoreKey); err != nil {
 		return fmt.Errorf("failed to register Open Chain module stores: %w", err)
 	}
 
@@ -58,6 +61,7 @@ func (app *App) registerOpenChainModules() error {
 	app.TokenFactoryKeeper = tokenfactorykeeper.NewKeeper(app.appCodec, tokenFactoryStoreKey, app.BankKeeper)
 	app.MessagingKeeper = messagingkeeper.NewKeeper(app.appCodec, messagingStoreKey)
 	app.LendingKeeper = lendingkeeper.NewKeeper(app.appCodec, lendingStoreKey, app.BankKeeper)
+	app.EscrowKeeper = escrowkeeper.NewKeeper(app.appCodec, escrowStoreKey, app.BankKeeper)
 	app.FarmingKeeper = farmingkeeper.NewKeeper(app.appCodec, farmingStoreKey, app.BankKeeper)
 
 	// Wire cross-module dependencies (set after all keepers initialized)

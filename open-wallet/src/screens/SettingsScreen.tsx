@@ -62,10 +62,12 @@ import { IdentityScreen } from './IdentityScreen';
 import { AddressVerifyScreen } from './AddressVerifyScreen';
 import { TxSimulatorScreen } from './TxSimulatorScreen';
 import { ChainInfoScreen } from './ChainInfoScreen';
+import { EscrowScreen } from './EscrowScreen';
+import { DisputeScreen } from './DisputeScreen';
 import { useTheme } from '../hooks/useTheme';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes';
 
 export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode, autoLockTimeout, setAutoLockTimeout } = useWalletStore();
@@ -257,6 +259,8 @@ export function SettingsScreen() {
   if (view === 'address-verify') return <AddressVerifyScreen onClose={() => setView('main')} />;
   if (view === 'tx-simulator') return <TxSimulatorScreen onClose={() => setView('main')} />;
   if (view === 'chain-info') return <ChainInfoScreen onClose={() => setView('main')} />;
+  if (view === 'escrow') return <EscrowScreen onClose={() => setView('main')} />;
+  if (view === 'disputes') return <DisputeScreen onClose={() => setView('main')} />;
 
   // ─── Main Settings ───
 
@@ -674,6 +678,16 @@ export function SettingsScreen() {
           <TouchableOpacity style={st.row} onPress={() => setView('achievements')}>
             <Text style={st.label}>Achievements</Text>
             <Text style={{ color: t.accent.orange, fontSize: 14 }}>Soulbound NFTs</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('escrow')}>
+            <Text style={st.label}>Escrow</Text>
+            <Text style={{ color: t.accent.green, fontSize: 14, fontWeight: '600' }}>P2P Trades</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('disputes')}>
+            <Text style={st.label}>Dispute Resolution</Text>
+            <Text style={{ color: t.accent.orange, fontSize: 14, fontWeight: '600' }}>Arbiter</Text>
           </TouchableOpacity>
         </View>
 
