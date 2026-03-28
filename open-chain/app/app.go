@@ -47,9 +47,11 @@ import (
 
 	"openchain/docs"
 
+	achievementkeeper "openchain/x/achievement/keeper"
+	dexkeeper "openchain/x/dex/keeper"
+	govuidkeeper "openchain/x/govuid/keeper"
 	otkkeeper "openchain/x/otk/keeper"
 	uidkeeper "openchain/x/uid/keeper"
-	govuidkeeper "openchain/x/govuid/keeper"
 )
 
 const (
@@ -96,9 +98,11 @@ type App struct {
 	ParamsKeeper          paramskeeper.Keeper
 
 	// open chain keepers
-	OTKKeeper    *otkkeeper.Keeper
-	UIDKeeper    *uidkeeper.Keeper
-	GovUIDKeeper *govuidkeeper.Keeper
+	OTKKeeper         *otkkeeper.Keeper
+	UIDKeeper         *uidkeeper.Keeper
+	GovUIDKeeper      *govuidkeeper.Keeper
+	DEXKeeper         *dexkeeper.Keeper
+	AchievementKeeper *achievementkeeper.Keeper
 
 	// ibc keepers
 	IBCKeeper           *ibckeeper.Keeper
