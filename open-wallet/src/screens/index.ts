@@ -21,3 +21,6 @@ export { RecurringPaymentsScreen } from './RecurringPaymentsScreen';
 export { AutomationScreen } from './AutomationScreen';
 export { MultiSigScreen } from './MultiSigScreen';
 export { SpendingLimitsScreen } from './SpendingLimitsScreen';
+export { LiquidityScreen } from './LiquidityScreen';
+export { YieldFarmScreen } from './YieldFarmScreen';
+export { LendBorrowScreen } from './LendBorrowScreen';
