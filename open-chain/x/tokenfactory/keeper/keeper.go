@@ -122,6 +122,71 @@ func (k Keeper) GetAllTokens(ctx sdk.Context) ([]types.TokenMetadata, error) {
 	return tokens, nil
 }
 
+// MintAdditional mints more supply of an existing factory token.
+// Only the original creator can mint more.
+func (k Keeper) MintAdditional(ctx sdk.Context, creator, denom string, amount int64) error {
+	token, err := k.GetToken(ctx, denom)
+	if err != nil {
+		return err
+	}
+	if token.Creator != creator {
+		return fmt.Errorf("only the creator can mint additional supply")
+	}
+
+	creatorAddr, err := sdk.AccAddressFromBech32(creator)
+	if err != nil {
+		return err
+	}
+
+	coins := sdk.NewCoins(sdk.NewInt64Coin(denom, amount))
+	if err := k.bank.MintCoins(ctx, types.ModuleName, coins); err != nil {
+		return err
+	}
+	if err := k.bank.SendCoinsFromModuleToAccount(ctx, types.ModuleName, creatorAddr, coins); err != nil {
+		return err
+	}
+
+	ctx.EventManager().EmitEvent(sdk.NewEvent(
+		"token_minted",
+		sdk.NewAttribute("denom", denom),
+		sdk.NewAttribute("amount", fmt.Sprintf("%d", amount)),
+		sdk.NewAttribute("creator", creator),
+	))
+	return nil
+}
+
+// BurnTokens burns supply of a factory token from the creator's account.
+func (k Keeper) BurnTokens(ctx sdk.Context, creator, denom string, amount int64) error {
+	token, err := k.GetToken(ctx, denom)
+	if err != nil {
+		return err
+	}
+	if token.Creator != creator {
+		return fmt.Errorf("only the creator can burn tokens")
+	}
+
+	creatorAddr, err := sdk.AccAddressFromBech32(creator)
+	if err != nil {
+		return err
+	}
+
+	coins := sdk.NewCoins(sdk.NewInt64Coin(denom, amount))
+	if err := k.bank.SendCoinsFromAccountToModule(ctx, creatorAddr, types.ModuleName, coins); err != nil {
+		return fmt.Errorf("insufficient balance to burn: %w", err)
+	}
+	if err := k.bank.BurnCoins(ctx, types.ModuleName, coins); err != nil {
+		return err
+	}
+
+	ctx.EventManager().EmitEvent(sdk.NewEvent(
+		"token_burned",
+		sdk.NewAttribute("denom", denom),
+		sdk.NewAttribute("amount", fmt.Sprintf("%d", amount)),
+		sdk.NewAttribute("creator", creator),
+	))
+	return nil
+}
+
 func (k Keeper) setToken(ctx sdk.Context, meta *types.TokenMetadata) error {
 	store := ctx.KVStore(k.storeKey)
 	key := []byte(fmt.Sprintf("token/%s", meta.Denom))

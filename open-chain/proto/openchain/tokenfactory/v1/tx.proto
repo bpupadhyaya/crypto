@@ -1,0 +1,55 @@
+syntax = "proto3";
+package openchain.tokenfactory.v1;
+
+option go_package = "openchain/x/tokenfactory/types";
+
+import "cosmos/msg/v1/msg.proto";
+import "amino/amino.proto";
+
+// MsgCreateToken creates a new custom token on Open Chain.
+message MsgCreateToken {
+  option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "tokenfactory/MsgCreateToken";
+
+  string creator        = 1;
+  string name           = 2;
+  string symbol         = 3;
+  int32  decimals       = 4;
+  int64  initial_supply = 5;
+  string description    = 6;
+}
+
+message MsgCreateTokenResponse {
+  string denom = 1;
+}
+
+// MsgMintToken mints additional supply of an existing factory token.
+message MsgMintToken {
+  option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "tokenfactory/MsgMintToken";
+
+  string creator = 1;
+  string denom   = 2;
+  int64  amount  = 3;
+}
+
+message MsgMintTokenResponse {}
+
+// MsgBurnToken burns supply of a factory token.
+message MsgBurnToken {
+  option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "tokenfactory/MsgBurnToken";
+
+  string creator = 1;
+  string denom   = 2;
+  int64  amount  = 3;
+}
+
+message MsgBurnTokenResponse {}
+
+// Msg service for token factory.
+service Msg {
+  rpc CreateToken(MsgCreateToken) returns (MsgCreateTokenResponse);
+  rpc MintToken(MsgMintToken) returns (MsgMintTokenResponse);
+  rpc BurnToken(MsgBurnToken) returns (MsgBurnTokenResponse);
+}

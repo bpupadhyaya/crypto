@@ -1,0 +1,47 @@
+syntax = "proto3";
+package openchain.tokenfactory.v1;
+
+option go_package = "openchain/x/tokenfactory/types";
+
+import "google/api/annotations.proto";
+
+message QueryTokenRequest {
+  string denom = 1;
+}
+
+message QueryTokenResponse {
+  string denom         = 1;
+  string name          = 2;
+  string symbol        = 3;
+  int32  decimals      = 4;
+  int64  initial_supply = 5;
+  string description   = 6;
+  string creator       = 7;
+  int64  created_at    = 8;
+}
+
+message QueryTokensByCreatorRequest {
+  string creator = 1;
+}
+
+message QueryTokensByCreatorResponse {
+  repeated QueryTokenResponse tokens = 1;
+}
+
+message QueryAllTokensRequest {}
+
+message QueryAllTokensResponse {
+  repeated QueryTokenResponse tokens = 1;
+}
+
+service Query {
+  rpc Token(QueryTokenRequest) returns (QueryTokenResponse) {
+    option (google.api.http).get = "/openchain/tokenfactory/v1/token/{denom}";
+  }
+  rpc TokensByCreator(QueryTokensByCreatorRequest) returns (QueryTokensByCreatorResponse) {
+    option (google.api.http).get = "/openchain/tokenfactory/v1/tokens/{creator}";
+  }
+  rpc AllTokens(QueryAllTokensRequest) returns (QueryAllTokensResponse) {
+    option (google.api.http).get = "/openchain/tokenfactory/v1/tokens";
+  }
+}
