@@ -1,0 +1,334 @@
+/**
+ * P2P Settings Screen — Node status, peers, network mode.
+ *
+ * Shows:
+ *   - P2P node running/stopped status
+ *   - Connected peers with latency
+ *   - Start/Stop node
+ *   - Peer ID
+ *   - Latest synced block height
+ *   - Bootstrap peer configuration
+ *   - mDNS toggle for local testing
+ *   - Network mode: Server / P2P / Hybrid
+ */
+
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import {
+  View, Text, TouchableOpacity, ScrollView,
+  StyleSheet, SafeAreaView, Switch, Alert, TextInput,
+} from 'react-native';
+import { useWalletStore } from '../store/walletStore';
+import { p2pManager, type PeerInfo } from '../core/providers/mobile/p2p';
+import { useTheme } from '../hooks/useTheme';
+import type { BackendType } from '../core/abstractions/types';
+
+interface P2PScreenProps {
+  onClose: () => void;
+}
+
+export function P2PScreen({ onClose }: P2PScreenProps) {
+  const {
+    backendType, setBackendType,
+    p2pEnabled, setP2PEnabled,
+    p2pBootstrapPeers, setP2PBootstrapPeers,
+    p2pEnableMDNS, setP2PEnableMDNS,
+  } = useWalletStore();
+
+  const [nodeRunning, setNodeRunning] = useState(p2pManager.isRunning());
+  const [peerId, setPeerId] = useState(p2pManager.getPeerId());
+  const [peers, setPeers] = useState<PeerInfo[]>([]);
+  const [blockHeight, setBlockHeight] = useState(0);
+  const [newPeerAddress, setNewPeerAddress] = useState('');
+  const t = useTheme();
+
+  const st = useMemo(() => StyleSheet.create({
+    container: { flex: 1, backgroundColor: t.bg.primary },
+    scroll: { paddingHorizontal: 16, paddingTop: 8 },
+    header: { color: t.text.primary, fontSize: 20, fontWeight: '700', textAlign: 'center', marginVertical: 16 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 8, marginLeft: 4 },
+    card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 4 },
+    row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 },
+    label: { color: t.text.primary, fontSize: 15 },
+    value: { color: t.text.secondary, fontSize: 14 },
+    valueGreen: { color: t.accent.green, fontSize: 13, fontWeight: '600' },
+    valueRed: { color: t.accent.red, fontSize: 13, fontWeight: '600' },
+    valueMono: { color: t.text.secondary, fontSize: 11, fontFamily: 'monospace' },
+    divider: { height: 1, backgroundColor: t.border, marginHorizontal: 16 },
+    modeToggle: { flexDirection: 'row', gap: 4 },
+    modeBtn: { paddingVertical: 6, paddingHorizontal: 16, borderRadius: 8, backgroundColor: t.border },
+    modeBtnActive: { backgroundColor: t.accent.green },
+    modeBtnText: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
+    modeBtnTextActive: { color: t.bg.primary },
+    startBtn: { backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginTop: 16 },
+    stopBtn: { backgroundColor: t.accent.red + '20', borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginTop: 16 },
+    btnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+    stopBtnText: { color: t.accent.red, fontSize: 15, fontWeight: '700' },
+    peerCard: { backgroundColor: t.bg.card, borderRadius: 12, padding: 12, marginBottom: 8 },
+    peerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+    peerId: { color: t.text.primary, fontSize: 13, fontFamily: 'monospace', flex: 1 },
+    peerLatency: { color: t.accent.green, fontSize: 12, fontWeight: '600', marginLeft: 8 },
+    peerAge: { color: t.text.muted, fontSize: 11, marginTop: 4 },
+    input: { backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 14, fontFamily: 'monospace', marginTop: 8 },
+    addPeerBtn: { backgroundColor: t.accent.blue, borderRadius: 10, paddingVertical: 10, alignItems: 'center', marginTop: 8 },
+    addPeerText: { color: '#fff', fontSize: 14, fontWeight: '600' },
+    emptyText: { color: t.text.muted, fontSize: 13, textAlign: 'center', padding: 20 },
+    backBtn: { paddingVertical: 20, alignItems: 'center' },
+    backText: { color: t.accent.blue, fontSize: 16 },
+    statusDot: { width: 8, height: 8, borderRadius: 4, marginRight: 8 },
+    statusRow: { flexDirection: 'row', alignItems: 'center' },
+  }), [t]);
+
+  // ─── Peer & Block Updates ───
+
+  useEffect(() => {
+    const unsubPeers = p2pManager.onPeerUpdate((updatedPeers) => {
+      setPeers(updatedPeers);
+    });
+    const unsubBlocks = p2pManager.onNewBlock((block) => {
+      setBlockHeight(block.height);
+    });
+
+    // Initial state
+    p2pManager.getPeers().then(setPeers);
+    p2pManager.getLatestHeight().then(setBlockHeight);
+
+    return () => { unsubPeers(); unsubBlocks(); };
+  }, []);
+
+  // ─── Start/Stop Node ───
+
+  const handleStartNode = useCallback(async () => {
+    try {
+      const id = await p2pManager.start({
+        bootstrapPeers: p2pBootstrapPeers,
+        enableMDNS: p2pEnableMDNS,
+        chainID: 'openchain-testnet-1',
+        dataDir: '',
+      });
+      setPeerId(id);
+      setNodeRunning(true);
+      setP2PEnabled(true);
+    } catch (err) {
+      Alert.alert('Start Failed', err instanceof Error ? err.message : 'Could not start P2P node');
+    }
+  }, [p2pBootstrapPeers, p2pEnableMDNS, setP2PEnabled]);
+
+  const handleStopNode = useCallback(async () => {
+    await p2pManager.stop();
+    setNodeRunning(false);
+    setPeers([]);
+    setBlockHeight(0);
+    setP2PEnabled(false);
+  }, [setP2PEnabled]);
+
+  // ─── Add Peer ───
+
+  const handleAddPeer = useCallback(async () => {
+    const address = newPeerAddress.trim();
+    if (!address) return;
+
+    try {
+      await p2pManager.addPeer(address);
+      if (!p2pBootstrapPeers.includes(address)) {
+        setP2PBootstrapPeers([...p2pBootstrapPeers, address]);
+      }
+      setNewPeerAddress('');
+    } catch (err) {
+      Alert.alert('Failed', err instanceof Error ? err.message : 'Could not add peer');
+    }
+  }, [newPeerAddress, p2pBootstrapPeers, setP2PBootstrapPeers]);
+
+  // ─── Backend Type Switch ───
+
+  const handleBackendSwitch = useCallback((type: BackendType) => {
+    if (type === 'mobile' && !nodeRunning) {
+      Alert.alert('Start P2P First', 'Start the P2P node before switching to mobile mode.');
+      return;
+    }
+    setBackendType(type);
+  }, [nodeRunning, setBackendType]);
+
+  // ─── Peer Time Ago ───
+
+  const timeAgo = (timestamp: number): string => {
+    const seconds = Math.floor((Date.now() - timestamp) / 1000);
+    if (seconds < 60) return `${seconds}s ago`;
+    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+    return `${Math.floor(seconds / 3600)}h ago`;
+  };
+
+  return (
+    <SafeAreaView style={st.container}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={st.scroll}>
+        <Text style={st.header}>P2P Network</Text>
+
+        {/* Node Status */}
+        <Text style={st.section}>Node Status</Text>
+        <View style={st.card}>
+          <View style={st.row}>
+            <Text style={st.label}>Status</Text>
+            <View style={st.statusRow}>
+              <View style={[st.statusDot, { backgroundColor: nodeRunning ? t.accent.green : t.accent.red }]} />
+              <Text style={nodeRunning ? st.valueGreen : st.valueRed}>
+                {nodeRunning ? 'Running' : 'Stopped'}
+              </Text>
+            </View>
+          </View>
+          <View style={st.divider} />
+          <View style={st.row}>
+            <Text style={st.label}>Peer ID</Text>
+            <Text style={st.valueMono} numberOfLines={1}>
+              {peerId || 'Not started'}
+            </Text>
+          </View>
+          <View style={st.divider} />
+          <View style={st.row}>
+            <Text style={st.label}>Block Height</Text>
+            <Text style={st.valueGreen}>
+              {blockHeight > 0 ? blockHeight.toLocaleString() : '--'}
+            </Text>
+          </View>
+          <View style={st.divider} />
+          <View style={st.row}>
+            <Text style={st.label}>Connected Peers</Text>
+            <Text style={st.value}>{peers.length}</Text>
+          </View>
+        </View>
+
+        {/* Start/Stop Button */}
+        {nodeRunning ? (
+          <TouchableOpacity style={st.stopBtn} onPress={handleStopNode}>
+            <Text style={st.stopBtnText}>Stop Node</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={st.startBtn} onPress={handleStartNode}>
+            <Text style={st.btnText}>Start Node</Text>
+          </TouchableOpacity>
+        )}
+
+        {/* Network Mode */}
+        <Text style={st.section}>Network Mode</Text>
+        <View style={st.card}>
+          <View style={st.row}>
+            <Text style={st.label}>Backend</Text>
+            <View style={st.modeToggle}>
+              {(['server', 'mobile', 'hybrid'] as const).map((m) => (
+                <TouchableOpacity
+                  key={m}
+                  style={[st.modeBtn, backendType === m && st.modeBtnActive]}
+                  onPress={() => handleBackendSwitch(m)}
+                >
+                  <Text style={[st.modeBtnText, backendType === m && st.modeBtnTextActive]}>
+                    {m === 'server' ? 'Server' : m === 'mobile' ? 'P2P' : 'Hybrid'}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+          <View style={{ paddingHorizontal: 16, paddingBottom: 12 }}>
+            <Text style={{ color: t.text.muted, fontSize: 12 }}>
+              {backendType === 'server' && 'All queries go through centralized RPC servers.'}
+              {backendType === 'mobile' && 'All queries go directly to peer nodes. No central server.'}
+              {backendType === 'hybrid' && 'Uses P2P for Open Chain, servers for other chains.'}
+            </Text>
+          </View>
+        </View>
+
+        {/* Connected Peers */}
+        <Text style={st.section}>Connected Peers</Text>
+        {peers.length === 0 ? (
+          <Text style={st.emptyText}>
+            {nodeRunning ? 'Searching for peers...' : 'Start the node to connect to peers'}
+          </Text>
+        ) : (
+          peers.map((peer) => (
+            <View key={peer.id} style={st.peerCard}>
+              <View style={st.peerRow}>
+                <Text style={st.peerId} numberOfLines={1}>{peer.id}</Text>
+                <Text style={st.peerLatency}>{peer.latency}ms</Text>
+              </View>
+              <Text style={st.peerAge}>{peer.address} · {timeAgo(peer.lastSeen)}</Text>
+            </View>
+          ))
+        )}
+
+        {/* Add Peer */}
+        {nodeRunning && (
+          <>
+            <Text style={st.section}>Add Peer</Text>
+            <TextInput
+              style={st.input}
+              placeholder="192.168.1.5:26657"
+              placeholderTextColor={t.text.muted}
+              value={newPeerAddress}
+              onChangeText={setNewPeerAddress}
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
+            <TouchableOpacity style={st.addPeerBtn} onPress={handleAddPeer}>
+              <Text style={st.addPeerText}>Add Peer</Text>
+            </TouchableOpacity>
+          </>
+        )}
+
+        {/* Discovery Settings */}
+        <Text style={st.section}>Discovery</Text>
+        <View style={st.card}>
+          <View style={st.row}>
+            <Text style={st.label}>mDNS (Local Network)</Text>
+            <Switch
+              value={p2pEnableMDNS}
+              onValueChange={setP2PEnableMDNS}
+              trackColor={{ false: '#333', true: t.accent.green + '40' }}
+              thumbColor={p2pEnableMDNS ? t.accent.green : '#666'}
+            />
+          </View>
+          <View style={{ paddingHorizontal: 16, paddingBottom: 12 }}>
+            <Text style={{ color: t.text.muted, fontSize: 12 }}>
+              Auto-discover Open Wallet peers on your local Wi-Fi network. Useful for testing with multiple phones.
+            </Text>
+          </View>
+        </View>
+
+        {/* Bootstrap Peers */}
+        <Text style={st.section}>Bootstrap Peers ({p2pBootstrapPeers.length})</Text>
+        <View style={st.card}>
+          {p2pBootstrapPeers.length === 0 ? (
+            <View style={{ padding: 16 }}>
+              <Text style={{ color: t.text.muted, fontSize: 13 }}>
+                No bootstrap peers configured. Add peers above or use mDNS for local discovery.
+              </Text>
+            </View>
+          ) : (
+            p2pBootstrapPeers.map((addr, i) => (
+              <React.Fragment key={addr}>
+                {i > 0 && <View style={st.divider} />}
+                <TouchableOpacity
+                  style={st.row}
+                  onLongPress={() => {
+                    Alert.alert('Remove Peer', `Remove ${addr} from bootstrap list?`, [
+                      { text: 'Cancel', style: 'cancel' },
+                      {
+                        text: 'Remove', style: 'destructive',
+                        onPress: () => setP2PBootstrapPeers(p2pBootstrapPeers.filter((p) => p !== addr)),
+                      },
+                    ]);
+                  }}
+                >
+                  <Text style={st.valueMono}>{addr}</Text>
+                </TouchableOpacity>
+              </React.Fragment>
+            ))
+          )}
+        </View>
+
+        {/* Back */}
+        <TouchableOpacity style={st.backBtn} onPress={onClose}>
+          <Text style={st.backText}>Back to Settings</Text>
+        </TouchableOpacity>
+
+        <View style={{ height: 40 }} />
+      </ScrollView>
+    </SafeAreaView>
+  );
+}

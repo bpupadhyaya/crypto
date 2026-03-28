@@ -5,7 +5,7 @@
  */
 
 import { create } from 'zustand';
-import type { ChainId, Balance } from '../core/abstractions/types';
+import type { ChainId, Balance, BackendType } from '../core/abstractions/types';
 import { type NetworkMode, setNetworkMode } from '../core/network';
 import type { ThemeMode } from '../utils/theme';
 
@@ -60,6 +60,16 @@ interface WalletState {
   addPriceAlert: (alert: { id: string; symbol: string; targetPrice: number; direction: 'above' | 'below'; enabled: boolean; triggered: boolean }) => void;
   removePriceAlert: (id: string) => void;
   togglePriceAlert: (id: string) => void;
+
+  // ─── P2P / Backend Mode ───
+  backendType: BackendType;
+  setBackendType: (type: BackendType) => void;
+  p2pEnabled: boolean;
+  setP2PEnabled: (enabled: boolean) => void;
+  p2pBootstrapPeers: string[];
+  setP2PBootstrapPeers: (peers: string[]) => void;
+  p2pEnableMDNS: boolean;
+  setP2PEnableMDNS: (enabled: boolean) => void;
 }
 
 const DEFAULT_TOKENS = ['OTK', 'BTC', 'ETH', 'USDT', 'XRP', 'USDC', 'SOL', 'ADA', 'LINK', 'AVAX', 'SUI', 'POL', 'DOT', 'DOGE', 'BNB', 'TON'];
@@ -113,6 +123,14 @@ export const useWalletStore = create<WalletState>((set) => ({
   addPriceAlert: (alert) => { set((s) => ({ priceAlerts: [...s.priceAlerts, alert] })); schedulePersist(); },
   removePriceAlert: (id) => { set((s) => ({ priceAlerts: s.priceAlerts.filter((a) => a.id !== id) })); schedulePersist(); },
   togglePriceAlert: (id) => { set((s) => ({ priceAlerts: s.priceAlerts.map((a) => a.id === id ? { ...a, enabled: !a.enabled } : a) })); schedulePersist(); },
+  backendType: 'server' as BackendType,
+  setBackendType: (type) => { set({ backendType: type }); schedulePersist(); },
+  p2pEnabled: false,
+  setP2PEnabled: (enabled) => { set({ p2pEnabled: enabled }); schedulePersist(); },
+  p2pBootstrapPeers: [],
+  setP2PBootstrapPeers: (peers) => { set({ p2pBootstrapPeers: peers }); schedulePersist(); },
+  p2pEnableMDNS: false,
+  setP2PEnableMDNS: (enabled) => { set({ p2pEnableMDNS: enabled }); schedulePersist(); },
 }));
 
 // ─── Non-blocking persistence ───
@@ -135,6 +153,7 @@ async function doPersist() {
       mode: s.mode, demoMode: s.demoMode, networkMode: s.networkMode, themeMode: s.themeMode, locale: s.locale, currency: s.currency, biometricEnabled: s.biometricEnabled,
       addresses: s.addresses, hasVault: s.hasVault, enabledTokens: s.enabledTokens,
       contacts: s.contacts, accounts: s.accounts, activeAccountIndex: s.activeAccountIndex, priceAlerts: s.priceAlerts,
+      backendType: s.backendType, p2pEnabled: s.p2pEnabled, p2pBootstrapPeers: s.p2pBootstrapPeers, p2pEnableMDNS: s.p2pEnableMDNS,
     }));
   } catch {}
 }
@@ -176,6 +195,10 @@ function ensureOTK(tokens: string[]): string[] {
         accounts: d.accounts ?? [{ name: 'Main Account', index: 0 }],
         activeAccountIndex: d.activeAccountIndex ?? 0,
         priceAlerts: d.priceAlerts ?? [],
+        backendType: d.backendType ?? 'server',
+        p2pEnabled: d.p2pEnabled ?? false,
+        p2pBootstrapPeers: d.p2pBootstrapPeers ?? [],
+        p2pEnableMDNS: d.p2pEnableMDNS ?? false,
         ...(shouldSetStatus ? { status: d.hasVault ? 'locked' : 'onboarding' } : {}),
       });
     }

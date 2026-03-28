@@ -11,8 +11,11 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"openchain/x/otk/types"
 )
 
 // ─── Verifier Types ───
@@ -341,6 +344,90 @@ func (k Keeper) GetPendingMilestones(ctx sdk.Context) ([]PendingMilestone, error
 		}
 	}
 	return milestones, nil
+}
+
+// GetVerifiedMilestones returns all milestones with status "verified" that
+// have not yet been executed (minted). Called from EndBlock to process minting.
+func (k Keeper) GetVerifiedMilestones(ctx sdk.Context) ([]PendingMilestone, error) {
+	store := ctx.KVStore(k.storeKey)
+	prefix := []byte("pending_milestone/")
+	iterator := store.Iterator(prefix, storetypes.PrefixEndBytes(prefix))
+	defer iterator.Close()
+
+	var milestones []PendingMilestone
+	for ; iterator.Valid(); iterator.Next() {
+		var pm PendingMilestone
+		if err := json.Unmarshal(iterator.Value(), &pm); err != nil {
+			continue
+		}
+		if pm.Status == "verified" {
+			milestones = append(milestones, pm)
+		}
+	}
+	return milestones, nil
+}
+
+// ProcessVerifiedMilestones finds milestones that reached attestation threshold
+// and triggers OTK minting. Called from EndBlock.
+//
+// P2P minting flow:
+//  1. User submits milestone -> creates MsgSubmitMilestone tx
+//  2. Tx gossips to all peers via mempool
+//  3. Verifiers see pending milestone, submit MsgAttestMilestone
+//  4. Attestation txs gossip to all peers
+//  5. When threshold met, status becomes "verified"
+//  6. EndBlock calls this function -- next block proposer includes the mint
+//  7. All validators verify the mint and include in consensus
+//  8. OTK is minted -- all nodes update state
+func (k Keeper) ProcessVerifiedMilestones(ctx sdk.Context) {
+	milestones, err := k.GetVerifiedMilestones(ctx)
+	if err != nil {
+		return
+	}
+
+	for _, pm := range milestones {
+		// Build Milestone struct for minting
+		milestone := types.Milestone{
+			ID:         pm.MilestoneID,
+			UID:        pm.UID,
+			Channel:    pm.Channel,
+			MintAmount: math.NewInt(pm.MintAmount),
+			Verified:   true,
+		}
+
+		// Mint with ripple attribution to default rings.
+		// For now, mint directly to the UID's address (Ring Self).
+		addr, err := sdk.AccAddressFromBech32(pm.UID)
+		if err != nil {
+			// UID may not be a valid bech32 address yet -- skip
+			continue
+		}
+		rings := map[types.ContributionRing][]sdk.AccAddress{
+			types.RingSelf: {addr},
+		}
+
+		if err := k.MintForMilestone(ctx, milestone, rings); err != nil {
+			// Log but don't halt the chain on mint failure
+			ctx.EventManager().EmitEvent(sdk.NewEvent(
+				"milestone_mint_failed",
+				sdk.NewAttribute("milestone_id", pm.MilestoneID),
+				sdk.NewAttribute("error", err.Error()),
+			))
+			continue
+		}
+
+		// Mark as executed so it's not processed again
+		pm.Status = "executed"
+		_ = k.setPendingMilestone(ctx, &pm)
+
+		ctx.EventManager().EmitEvent(sdk.NewEvent(
+			"milestone_executed",
+			sdk.NewAttribute("milestone_id", pm.MilestoneID),
+			sdk.NewAttribute("uid", pm.UID),
+			sdk.NewAttribute("channel", pm.Channel),
+			sdk.NewAttribute("mint_amount", fmt.Sprintf("%d", pm.MintAmount)),
+		))
+	}
 }
 
 // ExpireOldMilestones marks expired pending milestones. Called from EndBlocker.

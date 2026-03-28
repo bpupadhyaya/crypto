@@ -27,10 +27,11 @@ import { ContributionScoreScreen } from './ContributionScoreScreen';
 import { PrivacyPolicyScreen } from './PrivacyPolicyScreen';
 import { WhatsNewScreen } from './WhatsNewScreen';
 import { DeFiScreen } from './DeFiScreen';
+import { P2PScreen } from './P2PScreen';
 import { useTheme } from '../hooks/useTheme';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p';
 
 export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode } = useWalletStore();
@@ -187,6 +188,7 @@ export function SettingsScreen() {
   if (view === 'privacy') return <PrivacyPolicyScreen onClose={() => setView('main')} />;
   if (view === 'whatsnew') return <WhatsNewScreen onClose={() => setView('main')} />;
   if (view === 'defi') return <DeFiScreen onClose={() => setView('main')} />;
+  if (view === 'p2p') return <P2PScreen onClose={() => setView('main')} />;
 
   // ─── Main Settings ───
 
@@ -325,6 +327,11 @@ export function SettingsScreen() {
               {networkMode === 'testnet' ? 'BTC Testnet · Sepolia · Devnet' : 'BTC · Ethereum · Solana'}
             </Text>
           </View>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('p2p')}>
+            <Text style={st.label}>P2P Network</Text>
+            <Text style={st.valueGreen}>Configure</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Demo Mode */}

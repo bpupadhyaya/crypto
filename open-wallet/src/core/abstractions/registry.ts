@@ -11,6 +11,7 @@
 
 import {
   ChainId,
+  BackendType,
   ProviderMeta,
 } from './types';
 
@@ -26,6 +27,8 @@ import {
   IProviderRegistry,
 } from './interfaces';
 
+type ProviderFactory = () => void;
+
 export class ProviderRegistry implements IProviderRegistry {
   private chainProviders = new Map<ChainId, IChainProvider>();
   private dexProviders = new Map<string, IDexProvider>(); // key: chainId or 'default'
@@ -35,6 +38,48 @@ export class ProviderRegistry implements IProviderRegistry {
   private storageProvider: IStorageProvider | null = null;
   private networkProvider: INetworkProvider | null = null;
   private fiatProvider: IFiatProvider | null = null;
+
+  // ─── Backend Type Switching ───
+
+  private currentBackendType: BackendType = 'server';
+
+  /** Registered factory functions for each backend type */
+  private backendFactories = new Map<BackendType, ProviderFactory>();
+
+  /**
+   * Register a factory function that sets up all providers for a backend type.
+   * Call this at startup for each supported mode (server, mobile, hybrid).
+   *
+   * Example:
+   *   registry.registerBackendFactory('mobile', () => {
+   *     registry.registerChainProvider('openchain', new MobileOpenChainProvider(p2p));
+   *     registry.registerChainProvider('bitcoin', new MobileBitcoinProvider(config));
+   *   });
+   */
+  registerBackendFactory(type: BackendType, factory: ProviderFactory): void {
+    this.backendFactories.set(type, factory);
+  }
+
+  /**
+   * Switch all providers to a different backend type.
+   * Calls the registered factory for that type, replacing all providers.
+   *
+   * Usage:
+   *   registry.setBackendType('mobile');  // switches all providers to P2P
+   *   registry.setBackendType('server');  // switches back to server
+   */
+  setBackendType(type: BackendType): void {
+    const factory = this.backendFactories.get(type);
+    if (!factory) {
+      throw new Error(`No backend factory registered for '${type}'. Register one with registerBackendFactory().`);
+    }
+    this.currentBackendType = type;
+    factory();
+  }
+
+  getCurrentBackendType(): BackendType {
+    return this.currentBackendType;
+  }
 
   // ─── Registration (used at startup and during migration) ───
 

@@ -67,7 +67,17 @@ func (am AppModule) ConsensusVersion() uint64 { return 1 }
 
 func (am AppModule) BeginBlock(ctx sdk.Context) {}
 
-func (am AppModule) EndBlock(ctx sdk.Context) {}
+// EndBlock checks for verified milestones and triggers minting.
+// This is the ABCI lifecycle hook that wires P2P minting consensus
+// into the block production cycle:
+//  1. Expire old milestones past their verification window
+//  2. Process verified milestones — mint OTK for those that reached attestation threshold
+func (am AppModule) EndBlock(ctx sdk.Context) {
+	// Expire old milestones
+	am.keeper.ExpireOldMilestones(ctx)
+	// Check verified milestones and mint OTK
+	am.keeper.ProcessVerifiedMilestones(ctx)
+}
 
 func (am AppModule) IsOnePerModuleType() {}
 
