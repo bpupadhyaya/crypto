@@ -64,7 +64,7 @@ import i18n from '../i18n';
 type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility';
 
 export function SettingsScreen() {
-  const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode } = useWalletStore();
+  const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode, autoLockTimeout, setAutoLockTimeout } = useWalletStore();
   const [view, setView] = useState<SettingsView>('main');
   const [pinToChange, setPinToChange] = useState('');
   const [biometricAvailable, setBiometricAvailable] = useState(false);
@@ -515,6 +515,32 @@ export function SettingsScreen() {
               <View style={st.divider} />
             </>
           )}
+          <View style={st.row}>
+            <Text style={st.label}>Auto-Lock</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ maxWidth: 220 }}>
+              <View style={st.modeToggle}>
+                {([
+                  { label: 'Never', ms: 0 },
+                  { label: '1m', ms: 60000 },
+                  { label: '5m', ms: 300000 },
+                  { label: '15m', ms: 900000 },
+                  { label: '30m', ms: 1800000 },
+                  { label: '1h', ms: 3600000 },
+                ] as const).map((opt) => (
+                  <TouchableOpacity
+                    key={opt.ms}
+                    style={[st.modeBtn, autoLockTimeout === opt.ms && st.modeBtnActive]}
+                    onPress={() => setAutoLockTimeout(opt.ms)}
+                  >
+                    <Text style={[st.modeBtnText, autoLockTimeout === opt.ms && st.modeBtnTextActive]}>
+                      {opt.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
+          </View>
+          <View style={st.divider} />
           <View style={st.row}>
             <Text style={st.label}>Encryption</Text>
             <Text style={st.valueGreen}>AES-256-GCM + PBKDF2</Text>

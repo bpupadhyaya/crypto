@@ -87,6 +87,10 @@ interface WalletState {
   setP2PBootstrapPeers: (peers: string[]) => void;
   p2pEnableMDNS: boolean;
   setP2PEnableMDNS: (enabled: boolean) => void;
+
+  // ─── Auto-Lock ───
+  autoLockTimeout: number; // ms, 0 = never
+  setAutoLockTimeout: (ms: number) => void;
 }
 
 const DEFAULT_TOKENS = ['OTK', 'BTC', 'ETH', 'USDT', 'XRP', 'USDC', 'SOL', 'ADA', 'LINK', 'AVAX', 'SUI', 'POL', 'DOT', 'DOGE', 'BNB', 'TON'];
@@ -161,6 +165,8 @@ export const useWalletStore = create<WalletState>((set) => ({
   setP2PBootstrapPeers: (peers) => { set({ p2pBootstrapPeers: peers }); schedulePersist(); },
   p2pEnableMDNS: false,
   setP2PEnableMDNS: (enabled) => { set({ p2pEnableMDNS: enabled }); schedulePersist(); },
+  autoLockTimeout: 5 * 60 * 1000, // default 5 minutes
+  setAutoLockTimeout: (ms) => { set({ autoLockTimeout: ms }); schedulePersist(); },
 }));
 
 // ─── Non-blocking persistence ───
@@ -186,6 +192,7 @@ async function doPersist() {
       importedWallets: s.importedWallets,
       fontSize: s.fontSize, highContrast: s.highContrast, reduceMotion: s.reduceMotion, screenReaderHints: s.screenReaderHints, hapticFeedback: s.hapticFeedback,
       backendType: s.backendType, p2pEnabled: s.p2pEnabled, p2pBootstrapPeers: s.p2pBootstrapPeers, p2pEnableMDNS: s.p2pEnableMDNS,
+      autoLockTimeout: s.autoLockTimeout,
     }));
   } catch {}
 }
@@ -237,6 +244,7 @@ function ensureOTK(tokens: string[]): string[] {
         p2pEnabled: d.p2pEnabled ?? false,
         p2pBootstrapPeers: d.p2pBootstrapPeers ?? [],
         p2pEnableMDNS: d.p2pEnableMDNS ?? false,
+        autoLockTimeout: d.autoLockTimeout ?? (5 * 60 * 1000),
         ...(shouldSetStatus ? { status: d.hasVault ? 'locked' : 'onboarding' } : {}),
       });
     }

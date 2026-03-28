@@ -29,3 +29,6 @@ export { WalletAnalyticsScreen } from './WalletAnalyticsScreen';
 export { WatchlistScreen } from './WatchlistScreen';
 export { TutorialScreen, isTutorialCompleted, resetTutorial } from './TutorialScreen';
 export { HelpScreen } from './HelpScreen';
+export { AccessibilityScreen } from './AccessibilityScreen';
+export { TransactionSuccessScreen } from './TransactionSuccessScreen';
+export type { TransactionType } from './TransactionSuccessScreen';

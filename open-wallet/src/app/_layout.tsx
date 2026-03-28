@@ -8,7 +8,7 @@ import { Buffer } from 'buffer';
 (globalThis as any).Buffer = Buffer;
 import 'react-native-get-random-values';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { View, Modal, StyleSheet } from 'react-native';
 import { Slot } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -22,6 +22,9 @@ const queryClient = new QueryClient({
 import { OnboardingScreen } from '../screens/OnboardingScreen';
 import { UnlockScreen } from '../screens/UnlockScreen';
 import { PinSetupScreen } from '../screens/PinSetupScreen';
+import {
+  startSession, endSession, recordActivity, onAutoLock, setAutoLockTimeout,
+} from '../core/security/sessionManager';
 
 let providersInitialized = false;
 let priceServiceStarted = false;
@@ -57,9 +60,32 @@ async function prefetchBalances() {
 export default function RootLayout() {
   const status = useWalletStore((s) => s.status);
   const hasVault = useWalletStore((s) => s.hasVault);
+  const autoLockTimeout = useWalletStore((s) => s.autoLockTimeout);
   const hasBeenUnlocked = useRef(false);
 
   if (status === 'unlocked') hasBeenUnlocked.current = true;
+
+  // ─── Session Manager: auto-lock on inactivity ───
+  useEffect(() => {
+    const unsub = onAutoLock(() => {
+      useWalletStore.getState().setStatus('locked');
+    });
+    return unsub;
+  }, []);
+
+  // Start/end session when wallet locks/unlocks
+  useEffect(() => {
+    if (status === 'unlocked') {
+      startSession(autoLockTimeout);
+    } else if (status === 'locked') {
+      endSession();
+    }
+  }, [status]);
+
+  // Sync timeout changes into the running session
+  useEffect(() => {
+    setAutoLockTimeout(autoLockTimeout);
+  }, [autoLockTimeout]);
 
   useEffect(() => {
     if (!providersInitialized) {
