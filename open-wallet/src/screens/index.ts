@@ -32,3 +32,6 @@ export { HelpScreen } from './HelpScreen';
 export { AccessibilityScreen } from './AccessibilityScreen';
 export { TransactionSuccessScreen } from './TransactionSuccessScreen';
 export type { TransactionType } from './TransactionSuccessScreen';
+export { AddressVerifyScreen } from './AddressVerifyScreen';
+export { TxSimulatorScreen } from './TxSimulatorScreen';
+export { ChainInfoScreen } from './ChainInfoScreen';

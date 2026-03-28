@@ -58,10 +58,13 @@ import { WatchlistScreen } from './WatchlistScreen';
 import { AccessibilityScreen } from './AccessibilityScreen';
 import { TutorialScreen } from './TutorialScreen';
 import { HelpScreen } from './HelpScreen';
+import { AddressVerifyScreen } from './AddressVerifyScreen';
+import { TxSimulatorScreen } from './TxSimulatorScreen';
+import { ChainInfoScreen } from './ChainInfoScreen';
 import { useTheme } from '../hooks/useTheme';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info';
 
 export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode, autoLockTimeout, setAutoLockTimeout } = useWalletStore();
@@ -249,6 +252,9 @@ export function SettingsScreen() {
   if (view === 'tutorial') return <TutorialScreen onClose={() => setView('main')} />;
   if (view === 'help') return <HelpScreen onClose={() => setView('main')} />;
   if (view === 'accessibility') return <AccessibilityScreen onClose={() => setView('main')} />;
+  if (view === 'address-verify') return <AddressVerifyScreen onClose={() => setView('main')} />;
+  if (view === 'tx-simulator') return <TxSimulatorScreen onClose={() => setView('main')} />;
+  if (view === 'chain-info') return <ChainInfoScreen onClose={() => setView('main')} />;
 
   // ─── Main Settings ───
 
@@ -430,6 +436,16 @@ export function SettingsScreen() {
             <Text style={st.label}>Accessibility</Text>
             <Text style={st.value}>Font, Contrast, Motion</Text>
           </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('address-verify')}>
+            <Text style={st.label}>Address Verification</Text>
+            <Text style={{ color: t.accent.green, fontSize: 14, fontWeight: '600' }}>Verify</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('tx-simulator')}>
+            <Text style={st.label}>Transaction Simulator</Text>
+            <Text style={{ color: t.accent.blue, fontSize: 14, fontWeight: '600' }}>Preview</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Network */}
@@ -471,6 +487,11 @@ export function SettingsScreen() {
           <TouchableOpacity style={st.row} onPress={() => setView('p2p')}>
             <Text style={st.label}>P2P Network</Text>
             <Text style={st.valueGreen}>Configure</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('chain-info')}>
+            <Text style={st.label}>Chain Information</Text>
+            <Text style={{ color: t.accent.purple, fontSize: 14, fontWeight: '600' }}>5 Chains</Text>
           </TouchableOpacity>
         </View>
 
