@@ -2,22 +2,28 @@
  * Tab Layout — Static, memoized. Zero re-renders.
  */
 
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { Tabs } from 'expo-router';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, InteractionManager } from 'react-native';
 import { OfflineBanner } from '../../components/OfflineBanner';
 import { ToastContainer } from '../../components/Toast';
 import { useWalletStore } from '../../store/walletStore';
 
 const ICONS: Record<string, string> = { Home: '◉', Send: '↑', Swap: '⇄', Receive: '↓', Settings: '⚙' };
 
+// Lock screen shown instantly as local state — no waiting for Zustand propagation
+let showLockOverlay: ((show: boolean) => void) | null = null;
+
 const LockButton = React.memo(() => {
   const setStatus = useWalletStore((s) => s.setStatus);
-  const handleLock = React.useCallback(() => {
-    // Set locked FIRST — triggers immediate screen switch in _layout.tsx
-    setStatus('locked');
-    // Stop background services after transition (non-blocking)
-    import('../../core/priceService').then((m) => m.stopPriceService()).catch(() => {});
+  const handleLock = useCallback(() => {
+    // 1. Show black overlay INSTANTLY (local state, no Zustand)
+    showLockOverlay?.(true);
+    // 2. Set Zustand state after overlay is visible (deferred)
+    requestAnimationFrame(() => {
+      setStatus('locked');
+      import('../../core/priceService').then((m) => m.stopPriceService()).catch(() => {});
+    });
   }, [setStatus]);
   return (
     <TouchableOpacity onPress={handleLock} style={{ paddingRight: 16, paddingLeft: 8 }} hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}>
@@ -44,8 +50,12 @@ const SCREEN_OPTIONS = {
 };
 
 export default React.memo(function TabLayout() {
+  const [lockOverlay, setLockOverlay] = useState(false);
+  showLockOverlay = setLockOverlay;
+
   return (
     <View style={{ flex: 1, backgroundColor: '#0a0a0f' }}>
+    {lockOverlay && <View style={st.lockOverlay} />}
     <OfflineBanner />
     <ToastContainer />
     <Tabs screenOptions={SCREEN_OPTIONS}>
@@ -67,4 +77,5 @@ export default React.memo(function TabLayout() {
 const st = StyleSheet.create({
   icon: { fontSize: 22, color: '#606070' },
   iconActive: { color: '#22c55e' },
+  lockOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: '#0a0a0f', zIndex: 100 },
 });
