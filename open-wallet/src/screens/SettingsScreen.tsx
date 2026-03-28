@@ -36,10 +36,15 @@ import { MarketScreen } from './MarketScreen';
 import { ExchangeScreen } from './ExchangeScreen';
 import { ImportWalletScreen } from './ImportWalletScreen';
 import { ExportScreen } from './ExportScreen';
+import { DAppBrowserScreen } from './DAppBrowserScreen';
+import { TokenLaunchScreen } from './TokenLaunchScreen';
+import { NFTGalleryScreen } from './NFTGalleryScreen';
+import { SecurityAuditScreen } from './SecurityAuditScreen';
+import { CloudBackupScreen } from './CloudBackupScreen';
 import { useTheme } from '../hooks/useTheme';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup';
 
 export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode } = useWalletStore();
@@ -205,6 +210,11 @@ export function SettingsScreen() {
   if (view === 'exchange') return <ExchangeScreen onClose={() => setView('main')} />;
   if (view === 'import-wallet') return <ImportWalletScreen onClose={() => setView('main')} />;
   if (view === 'export') return <ExportScreen onClose={() => setView('main')} />;
+  if (view === 'dapp-browser') return <DAppBrowserScreen onClose={() => setView('main')} />;
+  if (view === 'token-launch') return <TokenLaunchScreen onClose={() => setView('main')} />;
+  if (view === 'nft-gallery') return <NFTGalleryScreen onClose={() => setView('main')} />;
+  if (view === 'security-audit') return <SecurityAuditScreen onClose={() => setView('main')} />;
+  if (view === 'cloud-backup') return <CloudBackupScreen onClose={() => setView('main')} />;
 
   // ─── Main Settings ───
 
@@ -331,6 +341,21 @@ export function SettingsScreen() {
             <Text style={st.label}>Universal Exchange</Text>
             <Text style={{ color: t.accent.green, fontSize: 14, fontWeight: '600' }}>Any-to-Any</Text>
           </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('dapp-browser')}>
+            <Text style={st.label}>DApp Browser</Text>
+            <Text style={{ color: t.accent.blue, fontSize: 14 }}>Browse</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('token-launch')}>
+            <Text style={st.label}>Token Launch Pad</Text>
+            <Text style={{ color: t.accent.purple, fontSize: 14, fontWeight: '600' }}>Create</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('nft-gallery')}>
+            <Text style={st.label}>NFT Gallery</Text>
+            <Text style={{ color: t.accent.orange, fontSize: 14 }}>View</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Network */}
@@ -439,6 +464,16 @@ export function SettingsScreen() {
           <TouchableOpacity style={st.row} onPress={() => setView('export')}>
             <Text style={st.label}>Export Transactions</Text>
             <Text style={st.value}>CSV / JSON</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('security-audit')}>
+            <Text style={st.label}>Security Audit</Text>
+            <Text style={st.valueGreen}>Health Check</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('cloud-backup')}>
+            <Text style={st.label}>Cloud Backup</Text>
+            <Text style={st.value}>Encrypted Export</Text>
           </TouchableOpacity>
         </View>
 

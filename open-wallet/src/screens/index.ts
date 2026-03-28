@@ -9,3 +9,8 @@ export { SettingsScreen } from './SettingsScreen';
 export { ExchangeScreen } from './ExchangeScreen';
 export { ImportWalletScreen } from './ImportWalletScreen';
 export { ExportScreen } from './ExportScreen';
+export { DAppBrowserScreen } from './DAppBrowserScreen';
+export { TokenLaunchScreen } from './TokenLaunchScreen';
+export { NFTGalleryScreen } from './NFTGalleryScreen';
+export { SecurityAuditScreen } from './SecurityAuditScreen';
+export { CloudBackupScreen } from './CloudBackupScreen';
