@@ -23,6 +23,9 @@ import (
 	achievementkeeper "openchain/x/achievement/keeper"
 	achievementtypes "openchain/x/achievement/types"
 	govuidkeeper "openchain/x/govuid/keeper"
+	dexkeeper "openchain/x/dex/keeper"
+	farmingkeeper "openchain/x/farming/keeper"
+	lendingkeeper "openchain/x/lending/keeper"
 	messagingkeeper "openchain/x/messaging/keeper"
 	otkkeeper "openchain/x/otk/keeper"
 	tokenfactorykeeper "openchain/x/tokenfactory/keeper"
@@ -37,6 +40,9 @@ type Keepers struct {
 	Achievement  *achievementkeeper.Keeper
 	TokenFactory *tokenfactorykeeper.Keeper
 	Messaging    *messagingkeeper.Keeper
+	DEX          *dexkeeper.Keeper
+	Lending      *lendingkeeper.Keeper
+	Farming      *farmingkeeper.Keeper
 }
 
 // ContextProvider returns the latest committed sdk.Context for read queries.
@@ -79,6 +85,24 @@ func RegisterRoutes(mux *http.ServeMux, keepers Keepers, ctxProvider ContextProv
 	if keepers.Messaging != nil {
 		mux.HandleFunc("/openchain/messaging/v1/messages/", handleMessages(keepers.Messaging, ctxProvider))
 		mux.HandleFunc("/openchain/messaging/v1/conversations/", handleConversations(keepers.Messaging, ctxProvider))
+	}
+
+	// ─── DEX Module ───
+	if keepers.DEX != nil {
+		mux.HandleFunc("/openchain/dex/v1/pools", handleDEXPools(keepers.DEX, ctxProvider))
+		mux.HandleFunc("/openchain/dex/v1/orders/", handleDEXOrders(keepers.DEX, ctxProvider))
+	}
+
+	// ─── Lending Module ───
+	if keepers.Lending != nil {
+		mux.HandleFunc("/openchain/lending/v1/markets", handleLendingMarkets(keepers.Lending, ctxProvider))
+		mux.HandleFunc("/openchain/lending/v1/position/", handleLendingPosition(keepers.Lending, ctxProvider))
+		mux.HandleFunc("/openchain/lending/v1/insurance", handleInsuranceFund(keepers.Lending, ctxProvider))
+	}
+
+	// ─── Farming Module ───
+	if keepers.Farming != nil {
+		mux.HandleFunc("/openchain/farming/v1/farms", handleFarms(keepers.Farming, ctxProvider))
 	}
 
 	// ─── Chain Params ───
@@ -151,6 +175,65 @@ func handleChainParams(k *govuidkeeper.Keeper, ctxProvider ContextProvider) http
 		params := k.GetChainParams(ctx)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(params)
+	}
+}
+
+// ─── DEX Handlers ───
+
+func handleDEXPools(k *dexkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{"pools": []interface{}{}})
+	}
+}
+
+func handleDEXOrders(k *dexkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		maker := strings.TrimPrefix(r.URL.Path, "/openchain/dex/v1/orders/")
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{"maker": maker, "orders": []interface{}{}})
+	}
+}
+
+// ─── Lending Handlers ───
+
+func handleLendingMarkets(k *lendingkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := ctxProvider()
+		markets := k.GetAllMarkets(ctx)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{"markets": markets})
+	}
+}
+
+func handleLendingPosition(k *lendingkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		address := strings.TrimPrefix(r.URL.Path, "/openchain/lending/v1/position/")
+		if address == "" { http.Error(w, "address required", 400); return }
+		ctx := ctxProvider()
+		pos := k.GetPosition(ctx, address)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(pos)
+	}
+}
+
+func handleInsuranceFund(k *lendingkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := ctxProvider()
+		fund := k.GetInsuranceFund(ctx)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(fund)
+	}
+}
+
+// ─── Farming Handlers ───
+
+func handleFarms(k *farmingkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := ctxProvider()
+		farms := k.GetAllFarms(ctx)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{"farms": farms})
 	}
 }
 

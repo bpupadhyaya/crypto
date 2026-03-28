@@ -58,13 +58,14 @@ import { WatchlistScreen } from './WatchlistScreen';
 import { AccessibilityScreen } from './AccessibilityScreen';
 import { TutorialScreen } from './TutorialScreen';
 import { HelpScreen } from './HelpScreen';
+import { IdentityScreen } from './IdentityScreen';
 import { AddressVerifyScreen } from './AddressVerifyScreen';
 import { TxSimulatorScreen } from './TxSimulatorScreen';
 import { ChainInfoScreen } from './ChainInfoScreen';
 import { useTheme } from '../hooks/useTheme';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity';
 
 export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode, autoLockTimeout, setAutoLockTimeout } = useWalletStore();
@@ -219,6 +220,7 @@ export function SettingsScreen() {
   if (view === 'governance') return <GovernanceScreen onClose={() => setView('main')} />;
   if (view === 'oracle') return <OracleScreen onClose={() => setView('main')} />;
   if (view === 'scores') return <ContributionScoreScreen onClose={() => setView('main')} />;
+  if (view === 'identity') return <IdentityScreen onClose={() => setView('main')} />;
   if (view === 'privacy') return <PrivacyPolicyScreen onClose={() => setView('main')} />;
   if (view === 'whatsnew') return <WhatsNewScreen onClose={() => setView('main')} />;
   if (view === 'defi') return <DeFiScreen onClose={() => setView('main')} />;
@@ -662,6 +664,11 @@ export function SettingsScreen() {
           <TouchableOpacity style={st.row} onPress={() => setView('scores')}>
             <Text style={st.label}>Contribution Scores</Text>
             <Text style={st.valueGreen}>Leaderboard</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('identity')}>
+            <Text style={st.label}>Identity & Reputation</Text>
+            <Text style={st.valueGreen}>View</Text>
           </TouchableOpacity>
           <View style={st.divider} />
           <TouchableOpacity style={st.row} onPress={() => setView('achievements')}>

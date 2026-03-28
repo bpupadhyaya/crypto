@@ -35,3 +35,4 @@ export type { TransactionType } from './TransactionSuccessScreen';
 export { AddressVerifyScreen } from './AddressVerifyScreen';
 export { TxSimulatorScreen } from './TxSimulatorScreen';
 export { ChainInfoScreen } from './ChainInfoScreen';
+export { IdentityScreen } from './IdentityScreen';
