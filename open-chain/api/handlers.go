@@ -23,6 +23,8 @@ import (
 	achievementkeeper "openchain/x/achievement/keeper"
 	achievementtypes "openchain/x/achievement/types"
 	govuidkeeper "openchain/x/govuid/keeper"
+	correctionkeeper "openchain/x/correction/keeper"
+	daokeeper "openchain/x/dao/keeper"
 	dexkeeper "openchain/x/dex/keeper"
 	farmingkeeper "openchain/x/farming/keeper"
 	lendingkeeper "openchain/x/lending/keeper"
@@ -43,6 +45,8 @@ type Keepers struct {
 	DEX          *dexkeeper.Keeper
 	Lending      *lendingkeeper.Keeper
 	Farming      *farmingkeeper.Keeper
+	Correction   *correctionkeeper.Keeper
+	DAO          *daokeeper.Keeper
 }
 
 // ContextProvider returns the latest committed sdk.Context for read queries.
@@ -104,6 +108,27 @@ func RegisterRoutes(mux *http.ServeMux, keepers Keepers, ctxProvider ContextProv
 	if keepers.Farming != nil {
 		mux.HandleFunc("/openchain/farming/v1/farms", handleFarms(keepers.Farming, ctxProvider))
 	}
+
+	// ─── Correction Module ───
+	if keepers.Correction != nil {
+		mux.HandleFunc("/openchain/correction/v1/reports/target/", handleCorrectionReportsByTarget(keepers.Correction, ctxProvider))
+		mux.HandleFunc("/openchain/correction/v1/reports/pending", handlePendingCorrectionReports(keepers.Correction, ctxProvider))
+	}
+
+	// ─── DAO Module ───
+	if keepers.DAO != nil {
+		mux.HandleFunc("/openchain/dao/v1/daos/", handleDAOsByMember(keepers.DAO, ctxProvider))
+		mux.HandleFunc("/openchain/dao/v1/dao/", handleDAO(keepers.DAO, ctxProvider))
+	}
+
+	// ─── Regional Aggregates ───
+	mux.HandleFunc("/openchain/otk/v1/regions", handleRegionalAggregates(keepers.OTK, ctxProvider))
+	mux.HandleFunc("/openchain/otk/v1/region/", handleRegionalAggregate(keepers.OTK, ctxProvider))
+	mux.HandleFunc("/openchain/otk/v1/alerts", handleAlertRegions(keepers.OTK, ctxProvider))
+	mux.HandleFunc("/openchain/otk/v1/treasury", handleTreasury(keepers.OTK, ctxProvider))
+
+	// ─── Amendments ───
+	mux.HandleFunc("/openchain/govuid/v1/amendments", handleAmendments(keepers.GovUID, ctxProvider))
 
 	// ─── Chain Params ───
 	mux.HandleFunc("/openchain/govuid/v1/params", handleChainParams(keepers.GovUID, ctxProvider))
@@ -234,6 +259,108 @@ func handleFarms(k *farmingkeeper.Keeper, ctxProvider ContextProvider) http.Hand
 		farms := k.GetAllFarms(ctx)
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(map[string]interface{}{"farms": farms})
+	}
+}
+
+// ─── Correction Handlers ───
+
+func handleCorrectionReportsByTarget(k *correctionkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		target := strings.TrimPrefix(r.URL.Path, "/openchain/correction/v1/reports/target/")
+		if target == "" { http.Error(w, "target required", 400); return }
+		ctx := ctxProvider()
+		reports, _ := k.GetReportsByTarget(ctx, target)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{"reports": reports})
+	}
+}
+
+func handlePendingCorrectionReports(k *correctionkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := ctxProvider()
+		reports, _ := k.GetPendingReports(ctx)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{"reports": reports})
+	}
+}
+
+// ─── DAO Handlers ───
+
+func handleDAOsByMember(k *daokeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		member := strings.TrimPrefix(r.URL.Path, "/openchain/dao/v1/daos/")
+		if member == "" { http.Error(w, "member required", 400); return }
+		ctx := ctxProvider()
+		daos, _ := k.GetDAOsByMember(ctx, member)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{"daos": daos})
+	}
+}
+
+func handleDAO(k *daokeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		daoID := strings.TrimPrefix(r.URL.Path, "/openchain/dao/v1/dao/")
+		if daoID == "" { http.Error(w, "dao_id required", 400); return }
+		ctx := ctxProvider()
+		dao, err := k.GetDAO(ctx, daoID)
+		if err != nil { http.Error(w, err.Error(), 404); return }
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(dao)
+	}
+}
+
+// ─── Regional Aggregate Handlers ───
+
+func handleRegionalAggregates(k *otkkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := ctxProvider()
+		regions := k.GetAllRegionalAggregates(ctx)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{"regions": regions})
+	}
+}
+
+func handleRegionalAggregate(k *otkkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		region := strings.TrimPrefix(r.URL.Path, "/openchain/otk/v1/region/")
+		if region == "" { http.Error(w, "region required", 400); return }
+		ctx := ctxProvider()
+		ra := k.GetRegionalAggregate(ctx, region)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(ra)
+	}
+}
+
+func handleAlertRegions(k *otkkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		threshold := int64(40) // default threshold
+		if t := r.URL.Query().Get("threshold"); t != "" {
+			if v, err := strconv.ParseInt(t, 10, 64); err == nil { threshold = v }
+		}
+		ctx := ctxProvider()
+		alerts := k.GetAlertRegions(ctx, threshold)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{"alerts": alerts, "threshold": threshold})
+	}
+}
+
+func handleTreasury(k *otkkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := ctxProvider()
+		treasury := k.GetTreasury(ctx)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(treasury)
+	}
+}
+
+// ─── Amendment Handlers ───
+
+func handleAmendments(k *govuidkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := ctxProvider()
+		amendments := k.GetAllAmendments(ctx)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{"amendments": amendments})
 	}
 }
 
