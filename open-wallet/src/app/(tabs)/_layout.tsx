@@ -13,14 +13,16 @@ const ICONS: Record<string, string> = { Home: '◉', Send: '↑', Swap: '⇄', R
 
 const LockButton = React.memo(() => {
   const setStatus = useWalletStore((s) => s.setStatus);
-  const [pressed, setPressed] = React.useState(false);
   const handleLock = React.useCallback(() => {
-    setPressed(true);
-    setStatus('locked');
+    // Alert dialog masks the transition — same pattern as Sign Out
+    Alert.alert('Lock Wallet', 'Lock your wallet?', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Lock', onPress: () => setStatus('locked') },
+    ]);
   }, [setStatus]);
   return (
     <TouchableOpacity onPress={handleLock} style={{ paddingRight: 16, paddingLeft: 8 }} hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}>
-      <Text style={{ fontSize: 20, color: pressed ? '#22c55e' : '#606070' }}>🔒</Text>
+      <Text style={{ fontSize: 20, color: '#606070' }}>🔒</Text>
     </TouchableOpacity>
   );
 });
