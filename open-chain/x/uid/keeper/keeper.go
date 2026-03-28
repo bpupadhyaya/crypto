@@ -126,6 +126,23 @@ func (k Keeper) AddSelectiveDisclosure(ctx sdk.Context, disclosure types.Selecti
 	return nil
 }
 
+// GetSelectiveDisclosure retrieves a selective disclosure claim by UID and claim type.
+func (k Keeper) GetSelectiveDisclosure(ctx sdk.Context, uid, claimType string) (*types.SelectiveDisclosure, error) {
+	store := ctx.KVStore(k.storeKey)
+	key := disclosureKey(uid, claimType)
+
+	bz := store.Get(key)
+	if bz == nil {
+		return nil, fmt.Errorf("no disclosure found for UID %s claim %s", uid, claimType)
+	}
+
+	var disclosure types.SelectiveDisclosure
+	if err := k.cdc.Unmarshal(bz, &disclosure); err != nil {
+		return nil, err
+	}
+	return &disclosure, nil
+}
+
 // TransferGuardianship transfers guardian role (e.g., when child reaches age of agency).
 func (k Keeper) TransferGuardianship(ctx sdk.Context, address sdk.AccAddress) error {
 	uid, err := k.GetUID(ctx, address)

@@ -163,6 +163,44 @@ func (k Keeper) GetAchievementsByChannel(ctx sdk.Context, uid string, channel st
 	return achievements, nil
 }
 
+// AchievementStats holds aggregate statistics for a UID's achievements.
+type AchievementStats struct {
+	UID            string         `json:"uid"`
+	TotalCount     int64          `json:"total_count"`
+	ByChannel      map[string]int `json:"by_channel"`
+	ByLevel        map[int]int    `json:"by_level"`
+	HighestLevel   int            `json:"highest_level"`
+	LatestMintedAt int64          `json:"latest_minted_at"`
+}
+
+// GetAchievementStats returns aggregate achievement statistics for a UID.
+func (k Keeper) GetAchievementStats(ctx sdk.Context, uid string) (*AchievementStats, error) {
+	achievements, err := k.GetAchievements(ctx, uid)
+	if err != nil {
+		return nil, err
+	}
+
+	stats := &AchievementStats{
+		UID:        uid,
+		TotalCount: k.GetAchievementCount(ctx, uid),
+		ByChannel:  make(map[string]int),
+		ByLevel:    make(map[int]int),
+	}
+
+	for _, ach := range achievements {
+		stats.ByChannel[ach.Channel]++
+		stats.ByLevel[ach.Level]++
+		if ach.Level > stats.HighestLevel {
+			stats.HighestLevel = ach.Level
+		}
+		if ach.MintedAt > stats.LatestMintedAt {
+			stats.LatestMintedAt = ach.MintedAt
+		}
+	}
+
+	return stats, nil
+}
+
 // --- Key construction helpers ---
 
 func achievementKey(id string) []byte {

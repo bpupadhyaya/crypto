@@ -1,0 +1,501 @@
+// Package api implements REST query handlers for Open Chain custom modules.
+//
+// These handlers are designed to be registered on the Cosmos SDK REST server
+// (port 1317) or any standard net/http ServeMux. They read from keeper state
+// via an sdk.Context and return JSON responses.
+//
+// The wallet screens (Open Wallet) query these endpoints to display:
+// - Living Ledger data, contribution scores, top contributors
+// - Universal ID info, selective disclosures
+// - Governance proposals, votes, tallies
+// - Soulbound achievements and stats
+
+package api
+
+import (
+	"encoding/json"
+	"net/http"
+	"strconv"
+	"strings"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	achievementkeeper "openchain/x/achievement/keeper"
+	achievementtypes "openchain/x/achievement/types"
+	govuidkeeper "openchain/x/govuid/keeper"
+	otkkeeper "openchain/x/otk/keeper"
+	uidkeeper "openchain/x/uid/keeper"
+)
+
+// Keepers holds references to all custom module keepers needed by REST handlers.
+type Keepers struct {
+	OTK         *otkkeeper.Keeper
+	UID         *uidkeeper.Keeper
+	GovUID      *govuidkeeper.Keeper
+	Achievement *achievementkeeper.Keeper
+}
+
+// ContextProvider returns the latest committed sdk.Context for read queries.
+// In a live chain, this is typically app.NewContext(true, tmproto.Header{}).
+type ContextProvider func() sdk.Context
+
+// RegisterRoutes registers all custom module REST query handlers on the given ServeMux.
+// The ctxProvider supplies a read-only sdk.Context for each request.
+func RegisterRoutes(mux *http.ServeMux, keepers Keepers, ctxProvider ContextProvider) {
+	// ─── OTK Module ───
+	mux.HandleFunc("/openchain/otk/v1/living_ledger/", handleLivingLedger(keepers.OTK, ctxProvider))
+	mux.HandleFunc("/openchain/otk/v1/contribution_score/", handleContributionScore(keepers.OTK, ctxProvider))
+	mux.HandleFunc("/openchain/otk/v1/top_contributors", handleTopContributors(keepers.OTK, ctxProvider))
+	mux.HandleFunc("/openchain/otk/v1/pending_milestones", handlePendingMilestones(keepers.OTK, ctxProvider))
+	mux.HandleFunc("/openchain/otk/v1/verifier/", handleVerifier(keepers.OTK, ctxProvider))
+	mux.HandleFunc("/openchain/otk/v1/channel_balance/", handleChannelBalance(keepers.OTK, ctxProvider))
+
+	// ─── UID Module ───
+	mux.HandleFunc("/openchain/uid/v1/uid/", handleUID(keepers.UID, ctxProvider))
+	mux.HandleFunc("/openchain/uid/v1/disclosure/", handleDisclosure(keepers.UID, ctxProvider))
+
+	// ─── GovUID Module ───
+	mux.HandleFunc("/openchain/govuid/v1/proposals", handleProposals(keepers.GovUID, ctxProvider))
+	mux.HandleFunc("/openchain/govuid/v1/proposal/", handleProposal(keepers.GovUID, ctxProvider))
+	mux.HandleFunc("/openchain/govuid/v1/votes/", handleVotes(keepers.GovUID, ctxProvider))
+
+	// ─── Achievement Module ───
+	mux.HandleFunc("/openchain/achievement/v1/achievements/", handleAchievements(keepers.Achievement, ctxProvider))
+	mux.HandleFunc("/openchain/achievement/v1/achievement/", handleAchievement(keepers.Achievement, ctxProvider))
+	mux.HandleFunc("/openchain/achievement/v1/stats/", handleAchievementStats(keepers.Achievement, ctxProvider))
+}
+
+// ════════════════════════════════════════════════════════════════
+// OTK Handlers
+// ════════════════════════════════════════════════════════════════
+
+// GET /openchain/otk/v1/living_ledger/{address}
+func handleLivingLedger(k *otkkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+			return
+		}
+
+		address := extractPathParam(r.URL.Path, "/openchain/otk/v1/living_ledger/")
+		if address == "" {
+			writeError(w, http.StatusBadRequest, "address is required")
+			return
+		}
+
+		ctx := ctxProvider()
+		ledger, err := k.GetLivingLedger(ctx, address)
+		if err != nil {
+			writeError(w, http.StatusInternalServerError, err.Error())
+			return
+		}
+
+		writeJSON(w, http.StatusOK, ledger)
+	}
+}
+
+// GET /openchain/otk/v1/contribution_score/{address}
+func handleContributionScore(k *otkkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+			return
+		}
+
+		address := extractPathParam(r.URL.Path, "/openchain/otk/v1/contribution_score/")
+		if address == "" {
+			writeError(w, http.StatusBadRequest, "address is required")
+			return
+		}
+
+		ctx := ctxProvider()
+		score, err := k.GetContributionScore(ctx, address)
+		if err != nil {
+			writeError(w, http.StatusNotFound, err.Error())
+			return
+		}
+
+		rank, total, rankErr := k.GetRank(ctx, address)
+		if rankErr != nil {
+			// Score exists but no rank yet — return score with rank=0
+			rank = 0
+			total = 0
+		}
+
+		writeJSON(w, http.StatusOK, map[string]interface{}{
+			"score": score,
+			"rank":  rank,
+			"total": total,
+		})
+	}
+}
+
+// GET /openchain/otk/v1/top_contributors?limit=10
+func handleTopContributors(k *otkkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+			return
+		}
+
+		limit := 10
+		if l := r.URL.Query().Get("limit"); l != "" {
+			if parsed, err := strconv.Atoi(l); err == nil && parsed > 0 && parsed <= 100 {
+				limit = parsed
+			}
+		}
+
+		ctx := ctxProvider()
+		contributors := k.GetTopContributors(ctx, limit)
+
+		writeJSON(w, http.StatusOK, map[string]interface{}{
+			"contributors": contributors,
+		})
+	}
+}
+
+// GET /openchain/otk/v1/pending_milestones
+func handlePendingMilestones(k *otkkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+			return
+		}
+
+		ctx := ctxProvider()
+		milestones, err := k.GetPendingMilestones(ctx)
+		if err != nil {
+			writeError(w, http.StatusInternalServerError, err.Error())
+			return
+		}
+
+		if milestones == nil {
+			milestones = []otkkeeper.PendingMilestone{}
+		}
+
+		writeJSON(w, http.StatusOK, map[string]interface{}{
+			"milestones": milestones,
+		})
+	}
+}
+
+// GET /openchain/otk/v1/verifier/{uid}
+func handleVerifier(k *otkkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+			return
+		}
+
+		uid := extractPathParam(r.URL.Path, "/openchain/otk/v1/verifier/")
+		if uid == "" {
+			writeError(w, http.StatusBadRequest, "uid is required")
+			return
+		}
+
+		ctx := ctxProvider()
+		verifier, err := k.GetVerifier(ctx, uid)
+		if err != nil {
+			writeError(w, http.StatusNotFound, err.Error())
+			return
+		}
+
+		writeJSON(w, http.StatusOK, verifier)
+	}
+}
+
+// GET /openchain/otk/v1/channel_balance/{address}/{channel}
+func handleChannelBalance(k *otkkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+			return
+		}
+
+		// Extract two path segments: address and channel
+		rest := extractPathParam(r.URL.Path, "/openchain/otk/v1/channel_balance/")
+		parts := strings.SplitN(rest, "/", 2)
+		if len(parts) != 2 || parts[0] == "" || parts[1] == "" {
+			writeError(w, http.StatusBadRequest, "address and channel are required: /channel_balance/{address}/{channel}")
+			return
+		}
+		address := parts[0]
+		channel := parts[1]
+
+		addr, err := sdk.AccAddressFromBech32(address)
+		if err != nil {
+			writeError(w, http.StatusBadRequest, "invalid address: "+err.Error())
+			return
+		}
+
+		ctx := ctxProvider()
+		balance := k.GetChannelBalance(ctx, addr, channel)
+
+		writeJSON(w, http.StatusOK, map[string]interface{}{
+			"address": address,
+			"channel": channel,
+			"balance": balance.Int64(),
+		})
+	}
+}
+
+// ════════════════════════════════════════════════════════════════
+// UID Handlers
+// ════════════════════════════════════════════════════════════════
+
+// GET /openchain/uid/v1/uid/{address}
+func handleUID(k *uidkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+			return
+		}
+
+		address := extractPathParam(r.URL.Path, "/openchain/uid/v1/uid/")
+		if address == "" {
+			writeError(w, http.StatusBadRequest, "address is required")
+			return
+		}
+
+		addr, err := sdk.AccAddressFromBech32(address)
+		if err != nil {
+			writeError(w, http.StatusBadRequest, "invalid address: "+err.Error())
+			return
+		}
+
+		ctx := ctxProvider()
+		uid, err := k.GetUID(ctx, addr)
+		if err != nil {
+			writeError(w, http.StatusNotFound, err.Error())
+			return
+		}
+
+		writeJSON(w, http.StatusOK, uid)
+	}
+}
+
+// GET /openchain/uid/v1/disclosure/{uid}/{claim_type}
+func handleDisclosure(k *uidkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+			return
+		}
+
+		rest := extractPathParam(r.URL.Path, "/openchain/uid/v1/disclosure/")
+		parts := strings.SplitN(rest, "/", 2)
+		if len(parts) != 2 || parts[0] == "" || parts[1] == "" {
+			writeError(w, http.StatusBadRequest, "uid and claim_type are required: /disclosure/{uid}/{claim_type}")
+			return
+		}
+		uid := parts[0]
+		claimType := parts[1]
+
+		ctx := ctxProvider()
+		disclosure, err := k.GetSelectiveDisclosure(ctx, uid, claimType)
+		if err != nil {
+			writeError(w, http.StatusNotFound, err.Error())
+			return
+		}
+
+		writeJSON(w, http.StatusOK, disclosure)
+	}
+}
+
+// ════════════════════════════════════════════════════════════════
+// GovUID Handlers
+// ════════════════════════════════════════════════════════════════
+
+// GET /openchain/govuid/v1/proposals
+func handleProposals(k *govuidkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+			return
+		}
+
+		ctx := ctxProvider()
+		// Pass empty status to get all proposals
+		proposals := k.GetProposals(ctx, "")
+
+		writeJSON(w, http.StatusOK, map[string]interface{}{
+			"proposals": proposals,
+		})
+	}
+}
+
+// GET /openchain/govuid/v1/proposal/{id}
+func handleProposal(k *govuidkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+			return
+		}
+
+		idStr := extractPathParam(r.URL.Path, "/openchain/govuid/v1/proposal/")
+		if idStr == "" {
+			writeError(w, http.StatusBadRequest, "proposal id is required")
+			return
+		}
+
+		id, err := strconv.ParseUint(idStr, 10, 64)
+		if err != nil {
+			writeError(w, http.StatusBadRequest, "invalid proposal id: "+err.Error())
+			return
+		}
+
+		ctx := ctxProvider()
+		proposal, err := k.GetProposal(ctx, id)
+		if err != nil {
+			writeError(w, http.StatusNotFound, err.Error())
+			return
+		}
+
+		writeJSON(w, http.StatusOK, proposal)
+	}
+}
+
+// GET /openchain/govuid/v1/votes/{proposal_id}
+func handleVotes(k *govuidkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+			return
+		}
+
+		idStr := extractPathParam(r.URL.Path, "/openchain/govuid/v1/votes/")
+		if idStr == "" {
+			writeError(w, http.StatusBadRequest, "proposal_id is required")
+			return
+		}
+
+		id, err := strconv.ParseUint(idStr, 10, 64)
+		if err != nil {
+			writeError(w, http.StatusBadRequest, "invalid proposal_id: "+err.Error())
+			return
+		}
+
+		ctx := ctxProvider()
+		votes := k.GetVotes(ctx, id)
+
+		writeJSON(w, http.StatusOK, map[string]interface{}{
+			"votes": votes,
+		})
+	}
+}
+
+// ════════════════════════════════════════════════════════════════
+// Achievement Handlers
+// ════════════════════════════════════════════════════════════════
+
+// GET /openchain/achievement/v1/achievements/{uid}
+func handleAchievements(k *achievementkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+			return
+		}
+
+		uid := extractPathParam(r.URL.Path, "/openchain/achievement/v1/achievements/")
+		if uid == "" {
+			writeError(w, http.StatusBadRequest, "uid is required")
+			return
+		}
+
+		ctx := ctxProvider()
+		achievements, err := k.GetAchievements(ctx, uid)
+		if err != nil {
+			writeError(w, http.StatusInternalServerError, err.Error())
+			return
+		}
+
+		if achievements == nil {
+			achievements = []achievementtypes.Achievement{}
+		}
+
+		writeJSON(w, http.StatusOK, map[string]interface{}{
+			"achievements": achievements,
+		})
+	}
+}
+
+// GET /openchain/achievement/v1/achievement/{id}
+func handleAchievement(k *achievementkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+			return
+		}
+
+		id := extractPathParam(r.URL.Path, "/openchain/achievement/v1/achievement/")
+		if id == "" {
+			writeError(w, http.StatusBadRequest, "achievement id is required")
+			return
+		}
+
+		ctx := ctxProvider()
+		achievement, err := k.GetAchievement(ctx, id)
+		if err != nil {
+			writeError(w, http.StatusNotFound, err.Error())
+			return
+		}
+
+		writeJSON(w, http.StatusOK, achievement)
+	}
+}
+
+// GET /openchain/achievement/v1/stats/{uid}
+func handleAchievementStats(k *achievementkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+			return
+		}
+
+		uid := extractPathParam(r.URL.Path, "/openchain/achievement/v1/stats/")
+		if uid == "" {
+			writeError(w, http.StatusBadRequest, "uid is required")
+			return
+		}
+
+		ctx := ctxProvider()
+		stats, err := k.GetAchievementStats(ctx, uid)
+		if err != nil {
+			writeError(w, http.StatusInternalServerError, err.Error())
+			return
+		}
+
+		writeJSON(w, http.StatusOK, stats)
+	}
+}
+
+// ════════════════════════════════════════════════════════════════
+// Helpers
+// ════════════════════════════════════════════════════════════════
+
+// extractPathParam returns the path segment(s) after the given prefix.
+// For example, extractPathParam("/a/b/c/foo", "/a/b/c/") returns "foo".
+func extractPathParam(path, prefix string) string {
+	if !strings.HasPrefix(path, prefix) {
+		return ""
+	}
+	param := strings.TrimPrefix(path, prefix)
+	param = strings.TrimSuffix(param, "/")
+	return param
+}
+
+// writeJSON writes a JSON response with the given status code.
+func writeJSON(w http.ResponseWriter, status int, data interface{}) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	_ = json.NewEncoder(w).Encode(data)
+}
+
+// writeError writes a JSON error response.
+func writeError(w http.ResponseWriter, status int, message string) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	_ = json.NewEncoder(w).Encode(map[string]string{
+		"error": message,
+	})
+}
