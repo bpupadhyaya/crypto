@@ -416,6 +416,20 @@ func (k Keeper) ProcessVerifiedMilestones(ctx sdk.Context) {
 			continue
 		}
 
+		// Mint soulbound achievement NFT alongside OTK
+		if k.achievements != nil {
+			achievement := map[string]interface{}{
+				"id":           fmt.Sprintf("ach-%s", pm.MilestoneID),
+				"uid":          pm.UID,
+				"milestone_id": pm.MilestoneID,
+				"channel":      pm.Channel,
+				"description":  pm.Description,
+				"mint_amount":  pm.MintAmount,
+				"minted_at":    ctx.BlockHeight(),
+			}
+			_ = k.achievements.MintAchievementFromData(ctx, achievement)
+		}
+
 		// Mark as executed so it's not processed again
 		pm.Status = "executed"
 		_ = k.setPendingMilestone(ctx, &pm)
@@ -426,6 +440,7 @@ func (k Keeper) ProcessVerifiedMilestones(ctx sdk.Context) {
 			sdk.NewAttribute("uid", pm.UID),
 			sdk.NewAttribute("channel", pm.Channel),
 			sdk.NewAttribute("mint_amount", fmt.Sprintf("%d", pm.MintAmount)),
+			sdk.NewAttribute("achievement_minted", "true"),
 		))
 	}
 }

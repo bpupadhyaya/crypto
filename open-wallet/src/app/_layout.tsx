@@ -25,6 +25,7 @@ import { PinSetupScreen } from '../screens/PinSetupScreen';
 
 let providersInitialized = false;
 let priceServiceStarted = false;
+let feeServiceStarted = false;
 let balancePrefetched = false;
 let notificationServiceStarted = false;
 
@@ -73,14 +74,20 @@ export default function RootLayout() {
       const enabledTokens = useWalletStore.getState().enabledTokens;
       import('../core/priceService').then((m) => m.startPriceService(enabledTokens));
     }
+    if (!feeServiceStarted) {
+      feeServiceStarted = true;
+      import('../core/gas/feeService').then((m) => m.startFeeService());
+    }
   }, []);
 
   useEffect(() => {
     if (status === 'locked') {
       priceServiceStarted = false;
+      feeServiceStarted = false;
       balancePrefetched = false;
       notificationServiceStarted = false;
       import('../core/notificationService').then((m) => m.stopNotificationService()).catch(() => {});
+      import('../core/gas/feeService').then((m) => m.stopFeeService()).catch(() => {});
     }
     if (status === 'unlocked' && !priceServiceStarted) {
       priceServiceStarted = true;
@@ -88,6 +95,10 @@ export default function RootLayout() {
       setTimeout(() => {
         const enabledTokens = useWalletStore.getState().enabledTokens;
         import('../core/priceService').then((m) => m.startPriceService(enabledTokens));
+        if (!feeServiceStarted) {
+          feeServiceStarted = true;
+          import('../core/gas/feeService').then((m) => m.startFeeService());
+        }
         if (!balancePrefetched) prefetchBalances();
 
         // Start notification service (skip demo mode)

@@ -61,6 +61,11 @@ interface WalletState {
   removePriceAlert: (id: string) => void;
   togglePriceAlert: (id: string) => void;
 
+  // ─── Imported Wallets ───
+  importedWallets: Array<{ id: string; name: string; type: 'imported' | 'watch-only'; chain: string; address: string; importMethod: 'seed' | 'private-key' | 'address'; addedAt: number }>;
+  addImportedWallet: (wallet: { id: string; name: string; type: 'imported' | 'watch-only'; chain: string; address: string; importMethod: 'seed' | 'private-key' | 'address'; addedAt: number }) => void;
+  removeImportedWallet: (id: string) => void;
+
   // ─── P2P / Backend Mode ───
   backendType: BackendType;
   setBackendType: (type: BackendType) => void;
@@ -123,6 +128,9 @@ export const useWalletStore = create<WalletState>((set) => ({
   addPriceAlert: (alert) => { set((s) => ({ priceAlerts: [...s.priceAlerts, alert] })); schedulePersist(); },
   removePriceAlert: (id) => { set((s) => ({ priceAlerts: s.priceAlerts.filter((a) => a.id !== id) })); schedulePersist(); },
   togglePriceAlert: (id) => { set((s) => ({ priceAlerts: s.priceAlerts.map((a) => a.id === id ? { ...a, enabled: !a.enabled } : a) })); schedulePersist(); },
+  importedWallets: [],
+  addImportedWallet: (wallet) => { set((s) => ({ importedWallets: [...s.importedWallets, wallet] })); schedulePersist(); },
+  removeImportedWallet: (id) => { set((s) => ({ importedWallets: s.importedWallets.filter((w) => w.id !== id) })); schedulePersist(); },
   backendType: 'server' as BackendType,
   setBackendType: (type) => { set({ backendType: type }); schedulePersist(); },
   p2pEnabled: false,
@@ -153,6 +161,7 @@ async function doPersist() {
       mode: s.mode, demoMode: s.demoMode, networkMode: s.networkMode, themeMode: s.themeMode, locale: s.locale, currency: s.currency, biometricEnabled: s.biometricEnabled,
       addresses: s.addresses, hasVault: s.hasVault, enabledTokens: s.enabledTokens,
       contacts: s.contacts, accounts: s.accounts, activeAccountIndex: s.activeAccountIndex, priceAlerts: s.priceAlerts,
+      importedWallets: s.importedWallets,
       backendType: s.backendType, p2pEnabled: s.p2pEnabled, p2pBootstrapPeers: s.p2pBootstrapPeers, p2pEnableMDNS: s.p2pEnableMDNS,
     }));
   } catch {}
@@ -195,6 +204,7 @@ function ensureOTK(tokens: string[]): string[] {
         accounts: d.accounts ?? [{ name: 'Main Account', index: 0 }],
         activeAccountIndex: d.activeAccountIndex ?? 0,
         priceAlerts: d.priceAlerts ?? [],
+        importedWallets: d.importedWallets ?? [],
         backendType: d.backendType ?? 'server',
         p2pEnabled: d.p2pEnabled ?? false,
         p2pBootstrapPeers: d.p2pBootstrapPeers ?? [],

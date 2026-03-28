@@ -3,7 +3,7 @@
  * Wired to real transaction signers (BTC/ETH/SOL).
  */
 
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   View,
   Text,
@@ -23,6 +23,9 @@ import { isTestnet } from '../core/network';
 import { useTheme } from '../hooks/useTheme';
 import { checkRealTransactionAllowed, recordPaperTrade, getSendFlow, getTrafficLightColor, getTrafficLightEmoji, type TrafficLight } from '../core/paperTrading';
 import type { ChainId } from '../core/abstractions/types';
+import { getChainFeeEstimate, onFeeUpdate, refreshFeesNow } from '../core/gas/feeService';
+import { parseFeeAmount, type FeeEstimate } from '../core/gas/estimator';
+import { getPrices } from '../core/priceService';
 
 // ─── Module-level caches to avoid repeated expensive operations ───
 import { prewarmedModules } from '../core/prewarmer';
@@ -42,7 +45,18 @@ export function SendScreen() {
   const [isPaperMode, setIsPaperMode] = useState(false);
   const [paperLight, setPaperLight] = useState<TrafficLight>('red');
   const [showScanner, setShowScanner] = useState(false);
+  const [feeSpeed, setFeeSpeed] = useState<'slow' | 'medium' | 'fast'>('medium');
+  const [chainFeeEstimate, setChainFeeEstimate] = useState<FeeEstimate | undefined>(undefined);
   const t = useTheme();
+
+  // Subscribe to background fee service updates
+  useEffect(() => {
+    const update = () => setChainFeeEstimate(getChainFeeEstimate(selectedChain));
+    update(); // Read current cached value
+    refreshFeesNow(); // Trigger fresh fetch when send screen opens
+    const unsub = onFeeUpdate(update);
+    return unsub;
+  }, [selectedChain]);
 
   const styles = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary, paddingHorizontal: 24 },
@@ -72,6 +86,15 @@ export function SendScreen() {
     sendButtonDisabled: { opacity: 0.6 },
     sendButtonText: { color: t.bg.primary, fontSize: 17, fontWeight: '700' },
     hint: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginTop: 16, lineHeight: 18 },
+    feeSpeedRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
+    feeSpeedBtn: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, paddingVertical: 10, paddingHorizontal: 8, alignItems: 'center', borderWidth: 1.5, borderColor: 'transparent' },
+    feeSpeedBtnActive: { borderColor: t.accent.orange },
+    feeSpeedLabel: { color: t.text.secondary, fontSize: 12, fontWeight: '700', marginBottom: 2 },
+    feeSpeedLabelActive: { color: t.accent.orange },
+    feeSpeedFee: { color: t.text.muted, fontSize: 10 },
+    feeSpeedTime: { color: t.text.muted, fontSize: 10, marginTop: 1 },
+    feeUsd: { color: t.text.muted, fontSize: 11, marginTop: 4, textAlign: 'right' },
+    nearZeroFee: { color: t.accent.green, fontSize: 13, fontWeight: '600', textAlign: 'center', paddingVertical: 8 },
   }), [t]);
 
   const senderAddress = addresses[selectedChain] ?? '';
@@ -331,7 +354,9 @@ export function SendScreen() {
           fromSymbol: chainSymbol,
           fromAmount: amount,
           recipient: recipient,
-          fee: estimatedFee ?? undefined,
+          fee: chainFeeEstimate
+            ? parseFeeAmount(chainFeeEstimate[feeSpeed].fee).toFixed(6)
+            : estimatedFee ?? undefined,
         }}
         onConfirm={executeSend}
         onCancel={() => setShowConfirm(false)}
@@ -415,8 +440,48 @@ export function SendScreen() {
           </View>
         </View>
 
-        {/* Fee estimate */}
-        {estimatedFee && (
+        {/* Fee speed selector */}
+        {chainFeeEstimate && (selectedChain === 'cosmos' || selectedChain === 'openchain') ? (
+          <View style={styles.feeCard}>
+            <Text style={styles.nearZeroFee}>Near-zero fee ({chainFeeEstimate.medium.fee})</Text>
+          </View>
+        ) : chainFeeEstimate ? (
+          <View style={styles.feeCard}>
+            <Text style={[styles.fieldLabel, { marginBottom: 8 }]}>Fee Speed</Text>
+            <View style={styles.feeSpeedRow}>
+              {(['slow', 'medium', 'fast'] as const).map((speed) => {
+                const level = chainFeeEstimate[speed];
+                const active = feeSpeed === speed;
+                return (
+                  <TouchableOpacity
+                    key={speed}
+                    style={[styles.feeSpeedBtn, active && styles.feeSpeedBtnActive]}
+                    onPress={() => setFeeSpeed(speed)}
+                  >
+                    <Text style={[styles.feeSpeedLabel, active && styles.feeSpeedLabelActive]}>
+                      {speed === 'slow' ? 'Slow' : speed === 'medium' ? 'Medium' : 'Fast'}
+                    </Text>
+                    <Text style={styles.feeSpeedFee}>{level.fee}</Text>
+                    <Text style={styles.feeSpeedTime}>{level.timeEstimate}</Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+            {chainFeeEstimate.baseFeeUsd > 0 && (
+              <Text style={styles.feeUsd}>
+                ~${chainFeeEstimate.baseFeeUsd.toFixed(2)} USD (medium)
+              </Text>
+            )}
+            {mode === 'pro' && amount && (
+              <View style={[styles.feeRow, { marginTop: 8 }]}>
+                <Text style={styles.feeLabel}>Total</Text>
+                <Text style={styles.feeValueBold}>
+                  {(parseFloat(amount || '0') + parseFeeAmount(chainFeeEstimate[feeSpeed].fee)).toFixed(6)} {chainSymbol}
+                </Text>
+              </View>
+            )}
+          </View>
+        ) : estimatedFee ? (
           <View style={styles.feeCard}>
             <View style={styles.feeRow}>
               <Text style={styles.feeLabel}>Network fee</Text>
@@ -431,7 +496,7 @@ export function SendScreen() {
               </View>
             )}
           </View>
-        )}
+        ) : null}
 
         {/* Paper Trade button */}
         <TouchableOpacity

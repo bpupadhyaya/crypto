@@ -34,10 +34,12 @@ import { NotificationHistoryScreen } from './NotificationHistoryScreen';
 import { PortfolioAnalyticsScreen } from './PortfolioAnalyticsScreen';
 import { MarketScreen } from './MarketScreen';
 import { ExchangeScreen } from './ExchangeScreen';
+import { ImportWalletScreen } from './ImportWalletScreen';
+import { ExportScreen } from './ExportScreen';
 import { useTheme } from '../hooks/useTheme';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'walletconnect' | 'staking' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export';
 
 export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode } = useWalletStore();
@@ -201,6 +203,8 @@ export function SettingsScreen() {
   if (view === 'analytics') return <PortfolioAnalyticsScreen onClose={() => setView('main')} />;
   if (view === 'market') return <MarketScreen onClose={() => setView('main')} />;
   if (view === 'exchange') return <ExchangeScreen onClose={() => setView('main')} />;
+  if (view === 'import-wallet') return <ImportWalletScreen onClose={() => setView('main')} />;
+  if (view === 'export') return <ExportScreen onClose={() => setView('main')} />;
 
   // ─── Main Settings ───
 
@@ -425,6 +429,16 @@ export function SettingsScreen() {
           <TouchableOpacity style={st.row} onPress={() => setView('backup')}>
             <Text style={st.label}>Backup / Recovery Phrase</Text>
             <Text style={st.value}>›</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('import-wallet')}>
+            <Text style={st.label}>Import External Wallet</Text>
+            <Text style={st.valueGreen}>Add</Text>
+          </TouchableOpacity>
+          <View style={st.divider} />
+          <TouchableOpacity style={st.row} onPress={() => setView('export')}>
+            <Text style={st.label}>Export Transactions</Text>
+            <Text style={st.value}>CSV / JSON</Text>
           </TouchableOpacity>
         </View>
 

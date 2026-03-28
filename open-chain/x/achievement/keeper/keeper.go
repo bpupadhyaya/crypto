@@ -45,6 +45,28 @@ func NewKeeper(cdc codec.Codec, storeKey storetypes.StoreKey) *Keeper {
 	}
 }
 
+// MintAchievementFromData creates an achievement from a generic map (used by OTK keeper cross-module call).
+// Implements the AchievementMinter interface expected by x/otk.
+func (k Keeper) MintAchievementFromData(ctx sdk.Context, data interface{}) error {
+	m, ok := data.(map[string]interface{})
+	if !ok {
+		return fmt.Errorf("invalid achievement data type")
+	}
+	achievement := types.Achievement{
+		ID:          fmt.Sprintf("%v", m["id"]),
+		UID:         fmt.Sprintf("%v", m["uid"]),
+		MilestoneID: fmt.Sprintf("%v", m["milestone_id"]),
+		Channel:     fmt.Sprintf("%v", m["channel"]),
+		Description: fmt.Sprintf("%v", m["description"]),
+		Level:       types.GetAchievementLevel(fmt.Sprintf("%v", m["channel"]), int64(m["mint_amount"].(int64))),
+		Title:       fmt.Sprintf("Milestone: %v", m["description"]),
+	}
+	if mintedAt, ok := m["minted_at"].(int64); ok {
+		achievement.MintedAt = mintedAt
+	}
+	return k.MintAchievement(ctx, achievement)
+}
+
 // MintAchievement stores a new soulbound achievement and emits an event.
 // This is called when a milestone is verified and OTK is minted.
 func (k Keeper) MintAchievement(ctx sdk.Context, achievement types.Achievement) error {

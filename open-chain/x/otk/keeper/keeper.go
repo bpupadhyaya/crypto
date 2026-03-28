@@ -21,11 +21,22 @@ import (
 	"openchain/x/otk/types"
 )
 
+// AchievementMinter is the interface for minting achievements (avoids circular import).
+type AchievementMinter interface {
+	MintAchievementFromData(ctx sdk.Context, data interface{}) error
+}
+
 // Keeper manages the OTK module state.
 type Keeper struct {
-	cdc      codec.Codec
-	storeKey storetypes.StoreKey
-	bank     bankkeeper.Keeper
+	cdc          codec.Codec
+	storeKey     storetypes.StoreKey
+	bank         bankkeeper.Keeper
+	achievements AchievementMinter // optional — set after init to avoid circular deps
+}
+
+// SetAchievementMinter sets the achievement keeper after initialization.
+func (k *Keeper) SetAchievementMinter(m AchievementMinter) {
+	k.achievements = m
 }
 
 // NewKeeper creates a new OTK keeper.

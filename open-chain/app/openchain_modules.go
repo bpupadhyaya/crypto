@@ -44,5 +44,8 @@ func (app *App) registerOpenChainModules() error {
 	app.DEXKeeper = dexkeeper.NewKeeper(app.appCodec, dexStoreKey, app.BankKeeper)
 	app.AchievementKeeper = achievementkeeper.NewKeeper(app.appCodec, achievementStoreKey)
 
+	// Wire cross-module dependencies (set after all keepers initialized)
+	app.OTKKeeper.SetAchievementMinter(app.AchievementKeeper)
+
 	return nil
 }
