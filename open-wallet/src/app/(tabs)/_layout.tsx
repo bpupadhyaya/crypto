@@ -11,21 +11,20 @@ import { useWalletStore } from '../../store/walletStore';
 
 const ICONS: Record<string, string> = { Home: '◉', Send: '↑', Swap: '⇄', Receive: '↓', Settings: '⚙' };
 
-const LockButton = React.memo(() => {
-  const setStatus = useWalletStore((s) => s.setStatus);
-  const handleLock = React.useCallback(() => {
-    // Alert dialog masks the transition — same pattern as Sign Out
-    Alert.alert('Lock Wallet', 'Lock your wallet?', [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Lock', onPress: () => setStatus('locked') },
-    ]);
-  }, [setStatus]);
+function LockButton() {
   return (
-    <TouchableOpacity onPress={handleLock} style={{ paddingRight: 16, paddingLeft: 8 }} hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}>
+    <TouchableOpacity
+      onPress={() => Alert.alert('Lock Wallet', 'Lock your wallet?', [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Lock', style: 'destructive', onPress: () => useWalletStore.getState().setStatus('locked') },
+      ])}
+      style={{ paddingRight: 16, paddingLeft: 8 }}
+      hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+    >
       <Text style={{ fontSize: 20, color: '#606070' }}>🔒</Text>
     </TouchableOpacity>
   );
-});
+}
 
 const TabIcon = React.memo(({ label, focused }: { label: string; focused: boolean }) => (
   <Text style={[st.icon, focused && st.iconActive]}>{ICONS[label] ?? '•'}</Text>
