@@ -54,3 +54,8 @@ export { ParentingJourneyScreen } from './ParentingJourneyScreen';
 export { TeacherImpactScreen } from './TeacherImpactScreen';
 export { PaymentRequestScreen } from './PaymentRequestScreen';
 export { ValidatorDashboardScreen } from './ValidatorDashboardScreen';
+export { EducationHubScreen } from './EducationHubScreen';
+export { SkillCertScreen } from './SkillCertScreen';
+export { MentorshipScreen } from './MentorshipScreen';
+export { VolunteerScreen } from './VolunteerScreen';
+export { CommunityBoardScreen } from './CommunityBoardScreen';

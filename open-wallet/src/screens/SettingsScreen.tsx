@@ -91,9 +91,14 @@ import { HardwareKeyScreen } from './HardwareKeyScreen';
 import { TreasuryScreen } from './TreasuryScreen';
 import { PaymentRequestScreen } from './PaymentRequestScreen';
 import { ValidatorDashboardScreen } from './ValidatorDashboardScreen';
+import { VolunteerScreen } from './VolunteerScreen';
+import { CommunityBoardScreen } from './CommunityBoardScreen';
+import { EducationHubScreen } from './EducationHubScreen';
+import { SkillCertScreen } from './SkillCertScreen';
+import { MentorshipScreen } from './MentorshipScreen';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury' | 'family-tree' | 'parenting-journey' | 'teacher-impact' | 'payment-request' | 'validator-dashboard';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury' | 'family-tree' | 'parenting-journey' | 'teacher-impact' | 'payment-request' | 'validator-dashboard' | 'volunteer' | 'community-board' | 'education-hub' | 'skill-cert' | 'mentorship';
 
 type SettingsCategory = 'account' | 'network' | 'wallet' | 'exchange' | 'chain' | 'tools' | 'about' | 'support' | 'developer';
 
@@ -335,6 +340,11 @@ export function SettingsScreen() {
   if (view === 'teacher-impact') return <TeacherImpactScreen onClose={() => setView('main')} />;
   if (view === 'payment-request') return <PaymentRequestScreen onClose={() => setView('main')} />;
   if (view === 'validator-dashboard') return <ValidatorDashboardScreen onClose={() => setView('main')} />;
+  if (view === 'volunteer') return <VolunteerScreen onClose={() => setView('main')} />;
+  if (view === 'community-board') return <CommunityBoardScreen onClose={() => setView('main')} />;
+  if (view === 'education-hub') return <EducationHubScreen onClose={() => setView('main')} />;
+  if (view === 'skill-cert') return <SkillCertScreen onClose={() => setView('main')} />;
+  if (view === 'mentorship') return <MentorshipScreen onClose={() => setView('main')} />;
 
   // ─── Low Bandwidth State ───
   const lowBandwidthOverride = getLowBandwidthOverride();
@@ -806,6 +816,36 @@ export function SettingsScreen() {
       rightColor: t.accent.blue,
     },
     {
+      label: 'Education Hub',
+      onPress: () => setView('education-hub'),
+      rightText: 'Article I',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Skill Certifications',
+      onPress: () => setView('skill-cert'),
+      rightText: 'Soulbound',
+      rightColor: t.accent.purple,
+    },
+    {
+      label: 'Mentorship',
+      onPress: () => setView('mentorship'),
+      rightText: 'Connect',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Volunteer Service',
+      onPress: () => setView('volunteer'),
+      rightText: 'cOTK',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Community Board',
+      onPress: () => setView('community-board'),
+      rightText: 'Opportunities',
+      rightColor: t.accent.purple,
+    },
+    {
       label: 'Encrypted Messages',
       onPress: () => setView('messages'),
       rightText: 'P2P',
@@ -1127,7 +1167,7 @@ export function SettingsScreen() {
     { key: 'network', icon: '\uD83C\uDF10', label: 'Network\n& P2P', badge: '4 items' },
     { key: 'wallet', icon: '\uD83D\uDC5B', label: 'Wallet', badge: '10 items' },
     { key: 'exchange', icon: '\uD83D\uDCB1', label: 'Exchange\n& DeFi', badge: '7 items' },
-    { key: 'chain', icon: '\u26D3\uFE0F', label: 'Open Chain', badge: '23 items' },
+    { key: 'chain', icon: '\u26D3\uFE0F', label: 'Open Chain', badge: '28 items' },
     { key: 'tools', icon: '\uD83D\uDD27', label: 'Tools', badge: '22 items' },
     { key: 'about', icon: '\u2139\uFE0F', label: 'About', badge: '9 items' },
     { key: 'support', icon: '\uD83D\uDC9A', label: 'Support\nthe Mission', badge: '' },
