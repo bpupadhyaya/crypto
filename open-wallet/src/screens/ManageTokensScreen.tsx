@@ -120,9 +120,27 @@ export function ManageTokensScreen({ onClose }: { onClose: () => void }) {
   }, [searchQuery]);
 
   const handleAddFromSearch = useCallback(async (result: any) => {
-    const token: TokenInfo = { symbol: result.symbol.toUpperCase(), name: result.name, chainId: 'ethereum', decimals: 18, coingeckoId: result.id, isNative: false, color: `hsl(${Math.abs(result.symbol.charCodeAt(0) * 47) % 360}, 70%, 55%)` };
-    try { await addCustomToken(token); toggleToken(token.symbol, true); setCustomTokensList(getCustomTokens()); Alert.alert('Added', `${token.symbol} added. Prices sync from CoinGecko.`); setView('list'); }
-    catch (err: any) { Alert.alert('Error', err.message); }
+    // Detect the native chain from CoinGecko data, or use the token's own name as chain
+    let detectedChain = result.id || result.name.toLowerCase().replace(/\s+/g, '-');
+    // Map known CoinGecko platforms to our chain IDs
+    const knownChains: Record<string, string> = {
+      bitcoin: 'bitcoin', ethereum: 'ethereum', solana: 'solana',
+      'binancecoin': 'bsc', 'avalanche-2': 'avalanche', 'matic-network': 'polygon',
+      'cosmos': 'cosmos', cardano: 'cardano', polkadot: 'polkadot',
+    };
+    const chainId = knownChains[result.id] || detectedChain;
+    const isSupported = ['bitcoin', 'ethereum', 'solana', 'bsc', 'avalanche', 'polygon', 'cosmos', 'openchain'].includes(chainId);
+    const token: TokenInfo = { symbol: result.symbol.toUpperCase(), name: result.name, chainId, decimals: 18, coingeckoId: result.id, isNative: true, color: `hsl(${Math.abs(result.symbol.charCodeAt(0) * 47) % 360}, 70%, 55%)` };
+    try {
+      await addCustomToken(token);
+      toggleToken(token.symbol, true);
+      setCustomTokensList(getCustomTokens());
+      const supportMsg = isSupported
+        ? 'Full support: send, receive, swap, price tracking.'
+        : 'Price tracking enabled. Send/receive requires chain integration.';
+      Alert.alert('Added', `${token.symbol} (${token.name}) added.\n\n${supportMsg}`);
+      setView('list');
+    } catch (err: any) { Alert.alert('Error', err.message); }
   }, [toggleToken]);
 
   const handleRemove = useCallback(async (symbol: string, chainId: string) => {
