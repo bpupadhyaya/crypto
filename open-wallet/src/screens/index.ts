@@ -62,3 +62,6 @@ export { CommunityBoardScreen } from './CommunityBoardScreen';
 export { WellnessScreen } from './WellnessScreen';
 export { CivicScreen } from './CivicScreen';
 export { ValueChannelScreen } from './ValueChannelScreen';
+export { GlobalImpactScreen } from './GlobalImpactScreen';
+export { MyImpactScreen } from './MyImpactScreen';
+export { PeaceIndexScreen } from './PeaceIndexScreen';
