@@ -108,9 +108,12 @@ import { AmbassadorScreen } from './AmbassadorScreen';
 import { EldercareScreen } from './EldercareScreen';
 import { IntergenerationScreen } from './IntergenerationScreen';
 import { GratitudeWallScreen } from './GratitudeWallScreen';
+import { NeedsAssessmentScreen } from './NeedsAssessmentScreen';
+import { ResourceMatchScreen } from './ResourceMatchScreen';
+import { BasicNeedsScreen } from './BasicNeedsScreen';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury' | 'family-tree' | 'parenting-journey' | 'teacher-impact' | 'payment-request' | 'validator-dashboard' | 'volunteer' | 'community-board' | 'education-hub' | 'skill-cert' | 'mentorship' | 'wellness' | 'civic' | 'value-channels' | 'global-impact' | 'my-impact' | 'peace-index' | 'constitution-reader' | 'pledge' | 'ambassador' | 'eldercare' | 'intergeneration' | 'gratitude-wall';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury' | 'family-tree' | 'parenting-journey' | 'teacher-impact' | 'payment-request' | 'validator-dashboard' | 'volunteer' | 'community-board' | 'education-hub' | 'skill-cert' | 'mentorship' | 'wellness' | 'civic' | 'value-channels' | 'global-impact' | 'my-impact' | 'peace-index' | 'constitution-reader' | 'pledge' | 'ambassador' | 'eldercare' | 'intergeneration' | 'gratitude-wall' | 'needs-assessment' | 'resource-match' | 'basic-needs';
 
 type SettingsCategory = 'account' | 'network' | 'wallet' | 'exchange' | 'chain' | 'tools' | 'about' | 'support' | 'developer';
 
@@ -369,6 +372,9 @@ export function SettingsScreen() {
   if (view === 'eldercare') return <EldercareScreen onClose={() => setView('main')} />;
   if (view === 'intergeneration') return <IntergenerationScreen onClose={() => setView('main')} />;
   if (view === 'gratitude-wall') return <GratitudeWallScreen onClose={() => setView('main')} onSendGratitude={() => setView('gratitude')} />;
+  if (view === 'needs-assessment') return <NeedsAssessmentScreen onClose={() => setView('main')} />;
+  if (view === 'resource-match') return <ResourceMatchScreen onClose={() => setView('main')} />;
+  if (view === 'basic-needs') return <BasicNeedsScreen onClose={() => setView('main')} />;
 
   // ─── Low Bandwidth State ───
   const lowBandwidthOverride = getLowBandwidthOverride();
@@ -947,6 +953,24 @@ export function SettingsScreen() {
       rightText: 'Live Feed',
       rightColor: t.accent.green,
     },
+    {
+      label: 'Needs Assessment',
+      onPress: () => setView('needs-assessment'),
+      rightText: 'Article I \u00A7 3',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Resource Matching',
+      onPress: () => setView('resource-match'),
+      rightText: 'Give & Get Help',
+      rightColor: t.accent.purple,
+    },
+    {
+      label: 'Basic Needs Dashboard',
+      onPress: () => setView('basic-needs'),
+      rightText: 'Needs = Peace',
+      rightColor: t.accent.blue,
+    },
   ];
 
   const toolsItems = [
@@ -1257,7 +1281,7 @@ export function SettingsScreen() {
     { key: 'network', icon: '\uD83C\uDF10', label: 'Network\n& P2P', badge: '4 items' },
     { key: 'wallet', icon: '\uD83D\uDC5B', label: 'Wallet', badge: '10 items' },
     { key: 'exchange', icon: '\uD83D\uDCB1', label: 'Exchange\n& DeFi', badge: '7 items' },
-    { key: 'chain', icon: '\u26D3\uFE0F', label: 'Open Chain', badge: '37 items' },
+    { key: 'chain', icon: '\u26D3\uFE0F', label: 'Open Chain', badge: '40 items' },
     { key: 'tools', icon: '\uD83D\uDD27', label: 'Tools', badge: '22 items' },
     { key: 'about', icon: '\u2139\uFE0F', label: 'About', badge: '11 items' },
     { key: 'support', icon: '\uD83D\uDC9A', label: 'Support\nthe Mission', badge: '' },
