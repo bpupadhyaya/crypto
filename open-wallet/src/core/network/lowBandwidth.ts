@@ -81,9 +81,8 @@ let _detectedSpeed: ConnectionSpeed = 'wifi';
  */
 export async function detectConnectionSpeed(): Promise<ConnectionSpeed> {
   try {
-    // Try React Native NetInfo
-    // @ts-ignore — optional dependency
-    const NetInfo = await import(/* webpackIgnore: true */ '@react-native-community/netinfo').catch(() => null);
+    // Detect connection speed using Navigator API (works in React Native)
+    const NetInfo: any = null; // @react-native-community/netinfo not installed — use fallback below
     if (NetInfo) {
       const state = await NetInfo.default.fetch();
       if (state.type === 'wifi' || state.type === 'ethernet') {
