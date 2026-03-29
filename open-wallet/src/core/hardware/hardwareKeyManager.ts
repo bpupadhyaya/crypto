@@ -86,13 +86,15 @@ const DERIVATION_PATHS: Record<string, string> = {
 };
 
 // ─── Native Module Loader ───
+// Metro bundler requires static strings in require() calls.
+// Since hardware wallet libraries are optional (not installed by default),
+// we return null and show install instructions when the user tries to use them.
 
-function tryLoadModule(moduleName: string): any | null {
-  try {
-    return require(moduleName);
-  } catch {
-    return null;
-  }
+function tryLoadModule(_moduleName: string): any | null {
+  // Hardware wallet native modules are not pre-installed.
+  // When user tries to connect a device, they'll get clear instructions.
+  // To enable: npm install <module> and rebuild.
+  return null;
 }
 
 // ─── Demo Mode Addresses ───
