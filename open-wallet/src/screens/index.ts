@@ -199,3 +199,6 @@ export { PublicSpeakingScreen } from './PublicSpeakingScreen';
 export { NetworkingScreen } from './NetworkingScreen';
 export { ParentingStagesScreen } from './ParentingStagesScreen';
 export { SoilScreen } from './SoilScreen';
+export { PersonaOnboardingScreen } from './PersonaOnboardingScreen';
+export { MyDayScreen } from './MyDayScreen';
+export { GlobalSearchScreen } from './GlobalSearchScreen';

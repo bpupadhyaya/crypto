@@ -91,6 +91,18 @@ interface WalletState {
   // ─── Auto-Lock ───
   autoLockTimeout: number; // ms, 0 = never
   setAutoLockTimeout: (ms: number) => void;
+
+  // ─── Persona Onboarding (Art IX) ───
+  persona: string | null;
+  setPersona: (persona: string | null) => void;
+  personaInterests: string[];
+  setPersonaInterests: (interests: string[]) => void;
+  personaRegion: string | null;
+  setPersonaRegion: (region: string | null) => void;
+  personaLanguage: string | null;
+  setPersonaLanguage: (language: string | null) => void;
+  personaShortcuts: string[];
+  setPersonaShortcuts: (shortcuts: string[]) => void;
 }
 
 const DEFAULT_TOKENS = ['OTK', 'BTC', 'ETH', 'USDT', 'XRP', 'USDC', 'SOL', 'ADA', 'LINK', 'AVAX', 'SUI', 'POL', 'DOT', 'DOGE', 'BNB', 'TON'];
@@ -167,6 +179,16 @@ export const useWalletStore = create<WalletState>((set) => ({
   setP2PEnableMDNS: (enabled) => { set({ p2pEnableMDNS: enabled }); schedulePersist(); },
   autoLockTimeout: 5 * 60 * 1000, // default 5 minutes
   setAutoLockTimeout: (ms) => { set({ autoLockTimeout: ms }); schedulePersist(); },
+  persona: null,
+  setPersona: (persona) => { set({ persona }); schedulePersist(); },
+  personaInterests: [],
+  setPersonaInterests: (interests) => { set({ personaInterests: interests }); schedulePersist(); },
+  personaRegion: null,
+  setPersonaRegion: (region) => { set({ personaRegion: region }); schedulePersist(); },
+  personaLanguage: null,
+  setPersonaLanguage: (language) => { set({ personaLanguage: language }); schedulePersist(); },
+  personaShortcuts: [],
+  setPersonaShortcuts: (shortcuts) => { set({ personaShortcuts: shortcuts }); schedulePersist(); },
 }));
 
 // ─── Non-blocking persistence ───
@@ -193,6 +215,7 @@ async function doPersist() {
       fontSize: s.fontSize, highContrast: s.highContrast, reduceMotion: s.reduceMotion, screenReaderHints: s.screenReaderHints, hapticFeedback: s.hapticFeedback,
       backendType: s.backendType, p2pEnabled: s.p2pEnabled, p2pBootstrapPeers: s.p2pBootstrapPeers, p2pEnableMDNS: s.p2pEnableMDNS,
       autoLockTimeout: s.autoLockTimeout,
+      persona: s.persona, personaInterests: s.personaInterests, personaRegion: s.personaRegion, personaLanguage: s.personaLanguage, personaShortcuts: s.personaShortcuts,
     }));
   } catch {}
 }
