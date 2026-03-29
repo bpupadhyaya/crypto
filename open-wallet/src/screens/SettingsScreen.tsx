@@ -195,9 +195,19 @@ import { FeedbackScreen } from './FeedbackScreen';
 import { GratitudeJournalScreen } from './GratitudeJournalScreen';
 import { EmergencyContactsScreen } from './EmergencyContactsScreen';
 import { VisionBoardScreen } from './VisionBoardScreen';
+import { PetitionScreen } from './PetitionScreen';
+import { BarrierFreeScreen } from './BarrierFreeScreen';
+import { CleanupDriveScreen } from './CleanupDriveScreen';
+import { NutritionScreen } from './NutritionScreen';
+import { SleepScreen } from './SleepScreen';
+import { JournalScreen } from './JournalScreen';
+import { TreePlantingScreen } from './TreePlantingScreen';
+import { BookClubScreen } from './BookClubScreen';
+import { ApprenticeshipScreen } from './ApprenticeshipScreen';
+import { NeighborHelpScreen } from './NeighborHelpScreen';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury' | 'family-tree' | 'parenting-journey' | 'teacher-impact' | 'payment-request' | 'validator-dashboard' | 'volunteer' | 'community-board' | 'education-hub' | 'skill-cert' | 'mentorship' | 'wellness' | 'civic' | 'value-channels' | 'global-impact' | 'my-impact' | 'peace-index' | 'constitution-reader' | 'pledge' | 'ambassador' | 'eldercare' | 'intergeneration' | 'gratitude-wall' | 'needs-assessment' | 'resource-match' | 'basic-needs' | 'guardian' | 'cross-chain-id' | 'appeal' | 'pqc-key' | 'zk-proof' | 'data-sovereignty' | 'mediation' | 'curriculum' | 'health-emergency' | 'community-projects' | 'micro-grants' | 'inter-regional' | 'time-bank' | 'mentor-match' | 'environmental' | 'disaster-response' | 'cooperative' | 'youth-council' | 'cultural-heritage' | 'skill-verification' | 'family-finance' | 'reputation' | 'community-radio' | 'food-security' | 'water-sanitation' | 'housing' | 'mental-wellness' | 'digital-literacy' | 'legal-aid' | 'renewable-energy' | 'language-exchange' | 'elder-wisdom' | 'art-studio' | 'safety-net' | 'transport' | 'childcare' | 'disability-support' | 'emergency-prep' | 'immigration-support' | 'sports' | 'library' | 'waste-management' | 'conflict-prevention' | 'pet-welfare' | 'job-board' | 'marketplace' | 'maternal-health' | 'senior-activities' | 'grief-support' | 'recovery' | 'workshop' | 'civic-education' | 'farm-to-table' | 'volunteer-abroad' | 'research' | 'insurance-pool' | 'storytelling' | 'travel' | 'innovation' | 'barter' | 'music' | 'election' | 'budget' | 'news' | 'infrastructure' | 'weather' | 'homeschool' | 'meditation' | 'calendar' | 'ancestry' | 'arbitration' | 'supply-chain' | 'volunteer-match' | 'community-map' | 'prayer' | 'permaculture' | 'financial-literacy' | 'teen' | 'tutor' | 'coworking' | 'feedback' | 'gratitude-journal' | 'emergency-contacts' | 'vision-board';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury' | 'family-tree' | 'parenting-journey' | 'teacher-impact' | 'payment-request' | 'validator-dashboard' | 'volunteer' | 'community-board' | 'education-hub' | 'skill-cert' | 'mentorship' | 'wellness' | 'civic' | 'value-channels' | 'global-impact' | 'my-impact' | 'peace-index' | 'constitution-reader' | 'pledge' | 'ambassador' | 'eldercare' | 'intergeneration' | 'gratitude-wall' | 'needs-assessment' | 'resource-match' | 'basic-needs' | 'guardian' | 'cross-chain-id' | 'appeal' | 'pqc-key' | 'zk-proof' | 'data-sovereignty' | 'mediation' | 'curriculum' | 'health-emergency' | 'community-projects' | 'micro-grants' | 'inter-regional' | 'time-bank' | 'mentor-match' | 'environmental' | 'disaster-response' | 'cooperative' | 'youth-council' | 'cultural-heritage' | 'skill-verification' | 'family-finance' | 'reputation' | 'community-radio' | 'food-security' | 'water-sanitation' | 'housing' | 'mental-wellness' | 'digital-literacy' | 'legal-aid' | 'renewable-energy' | 'language-exchange' | 'elder-wisdom' | 'art-studio' | 'safety-net' | 'transport' | 'childcare' | 'disability-support' | 'emergency-prep' | 'immigration-support' | 'sports' | 'library' | 'waste-management' | 'conflict-prevention' | 'pet-welfare' | 'job-board' | 'marketplace' | 'maternal-health' | 'senior-activities' | 'grief-support' | 'recovery' | 'workshop' | 'civic-education' | 'farm-to-table' | 'volunteer-abroad' | 'research' | 'insurance-pool' | 'storytelling' | 'travel' | 'innovation' | 'barter' | 'music' | 'election' | 'budget' | 'news' | 'infrastructure' | 'weather' | 'homeschool' | 'meditation' | 'calendar' | 'ancestry' | 'arbitration' | 'supply-chain' | 'volunteer-match' | 'community-map' | 'prayer' | 'permaculture' | 'financial-literacy' | 'teen' | 'tutor' | 'coworking' | 'feedback' | 'gratitude-journal' | 'emergency-contacts' | 'vision-board' | 'petition' | 'barrier-free' | 'cleanup-drive' | 'nutrition' | 'sleep' | 'journal' | 'tree-planting' | 'book-club' | 'apprenticeship' | 'neighbor-help';
 
 type SettingsCategory = 'account' | 'network' | 'wallet' | 'exchange' | 'chain' | 'tools' | 'about' | 'support' | 'developer';
 
@@ -543,6 +553,16 @@ export function SettingsScreen() {
   if (view === 'gratitude-journal') return <GratitudeJournalScreen onClose={() => setView('main')} />;
   if (view === 'emergency-contacts') return <EmergencyContactsScreen onClose={() => setView('main')} />;
   if (view === 'vision-board') return <VisionBoardScreen onClose={() => setView('main')} />;
+  if (view === 'petition') return <PetitionScreen onClose={() => setView('main')} />;
+  if (view === 'barrier-free') return <BarrierFreeScreen onClose={() => setView('main')} />;
+  if (view === 'cleanup-drive') return <CleanupDriveScreen onClose={() => setView('main')} />;
+  if (view === 'nutrition') return <NutritionScreen onClose={() => setView('main')} />;
+  if (view === 'sleep') return <SleepScreen onClose={() => setView('main')} />;
+  if (view === 'journal') return <JournalScreen onClose={() => setView('main')} />;
+  if (view === 'tree-planting') return <TreePlantingScreen onClose={() => setView('main')} />;
+  if (view === 'book-club') return <BookClubScreen onClose={() => setView('main')} />;
+  if (view === 'apprenticeship') return <ApprenticeshipScreen onClose={() => setView('main')} />;
+  if (view === 'neighbor-help') return <NeighborHelpScreen onClose={() => setView('main')} />;
 
   // ─── Low Bandwidth State ───
   const lowBandwidthOverride = getLowBandwidthOverride();
@@ -1642,6 +1662,66 @@ export function SettingsScreen() {
       onPress: () => setView('vision-board'),
       rightText: 'Goals & Dreams',
       rightColor: t.accent.blue,
+    },
+    {
+      label: 'Petitions',
+      onPress: () => setView('petition'),
+      rightText: 'Collective Action',
+      rightColor: t.accent.red,
+    },
+    {
+      label: 'Barrier-Free',
+      onPress: () => setView('barrier-free'),
+      rightText: 'Accessibility Audit',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Cleanup Drives',
+      onPress: () => setView('cleanup-drive'),
+      rightText: 'cOTK Environmental',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Nutrition',
+      onPress: () => setView('nutrition'),
+      rightText: 'hOTK Diet',
+      rightColor: t.accent.orange,
+    },
+    {
+      label: 'Sleep Tracker',
+      onPress: () => setView('sleep'),
+      rightText: 'hOTK Rest',
+      rightColor: t.accent.purple,
+    },
+    {
+      label: 'Personal Journal',
+      onPress: () => setView('journal'),
+      rightText: 'Daily Reflection',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Tree Planting',
+      onPress: () => setView('tree-planting'),
+      rightText: 'cOTK Reforestation',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Book Clubs',
+      onPress: () => setView('book-club'),
+      rightText: 'eOTK Reading',
+      rightColor: t.accent.yellow,
+    },
+    {
+      label: 'Apprenticeships',
+      onPress: () => setView('apprenticeship'),
+      rightText: 'Trade Skills',
+      rightColor: t.accent.orange,
+    },
+    {
+      label: 'Neighbor Help',
+      onPress: () => setView('neighbor-help'),
+      rightText: 'Quick Mutual Aid',
+      rightColor: t.accent.green,
     },
   ];
 
