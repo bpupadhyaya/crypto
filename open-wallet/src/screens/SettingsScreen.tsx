@@ -89,9 +89,11 @@ import { BatchTxScreen } from './BatchTxScreen';
 import { AddressLabelScreen } from './AddressLabelScreen';
 import { HardwareKeyScreen } from './HardwareKeyScreen';
 import { TreasuryScreen } from './TreasuryScreen';
+import { PaymentRequestScreen } from './PaymentRequestScreen';
+import { ValidatorDashboardScreen } from './ValidatorDashboardScreen';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury' | 'family-tree' | 'parenting-journey' | 'teacher-impact';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury' | 'family-tree' | 'parenting-journey' | 'teacher-impact' | 'payment-request' | 'validator-dashboard';
 
 type SettingsCategory = 'account' | 'network' | 'wallet' | 'exchange' | 'chain' | 'tools' | 'about' | 'support' | 'developer';
 
@@ -331,6 +333,8 @@ export function SettingsScreen() {
   if (view === 'family-tree') return <FamilyTreeScreen onClose={() => setView('main')} onSendGratitude={() => setView('gratitude')} />;
   if (view === 'parenting-journey') return <ParentingJourneyScreen onClose={() => setView('main')} />;
   if (view === 'teacher-impact') return <TeacherImpactScreen onClose={() => setView('main')} />;
+  if (view === 'payment-request') return <PaymentRequestScreen onClose={() => setView('main')} />;
+  if (view === 'validator-dashboard') return <ValidatorDashboardScreen onClose={() => setView('main')} />;
 
   // ─── Low Bandwidth State ───
   const lowBandwidthOverride = getLowBandwidthOverride();
@@ -635,6 +639,12 @@ export function SettingsScreen() {
       rightText: 'Auto-Trade',
       rightColor: t.accent.blue,
     },
+    {
+      label: 'Payment Requests',
+      onPress: () => setView('payment-request'),
+      rightText: 'Generate Link',
+      rightColor: t.accent.green,
+    },
   ];
 
   const exchangeItems = [
@@ -812,6 +822,12 @@ export function SettingsScreen() {
       onPress: () => setView('profile'),
       rightText: 'View',
       rightColor: t.accent.purple,
+    },
+    {
+      label: 'Validator Dashboard',
+      onPress: () => setView('validator-dashboard'),
+      rightText: 'Node Stats',
+      rightColor: t.accent.green,
     },
   ];
 
@@ -1109,11 +1125,11 @@ export function SettingsScreen() {
   const tiles: Array<{ key: SettingsCategory; icon: string; label: string; badge: string }> = [
     { key: 'account', icon: '\uD83D\uDD12', label: 'Account\n& Security', badge: '9 items' },
     { key: 'network', icon: '\uD83C\uDF10', label: 'Network\n& P2P', badge: '4 items' },
-    { key: 'wallet', icon: '\uD83D\uDC5B', label: 'Wallet', badge: '9 items' },
-    { key: 'exchange', icon: '\uD83D\uDCB1', label: 'Exchange\n& DeFi', badge: '6 items' },
-    { key: 'chain', icon: '\u26D3\uFE0F', label: 'Open Chain', badge: '19 items' },
-    { key: 'tools', icon: '\uD83D\uDD27', label: 'Tools', badge: '16 items' },
-    { key: 'about', icon: '\u2139\uFE0F', label: 'About', badge: '8 items' },
+    { key: 'wallet', icon: '\uD83D\uDC5B', label: 'Wallet', badge: '10 items' },
+    { key: 'exchange', icon: '\uD83D\uDCB1', label: 'Exchange\n& DeFi', badge: '7 items' },
+    { key: 'chain', icon: '\u26D3\uFE0F', label: 'Open Chain', badge: '23 items' },
+    { key: 'tools', icon: '\uD83D\uDD27', label: 'Tools', badge: '22 items' },
+    { key: 'about', icon: '\u2139\uFE0F', label: 'About', badge: '9 items' },
     { key: 'support', icon: '\uD83D\uDC9A', label: 'Support\nthe Mission', badge: '' },
   ];
 

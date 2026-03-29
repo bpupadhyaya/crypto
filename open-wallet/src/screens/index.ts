@@ -52,3 +52,5 @@ export { TokenCompareScreen } from './TokenCompareScreen';
 export { FamilyTreeScreen } from './FamilyTreeScreen';
 export { ParentingJourneyScreen } from './ParentingJourneyScreen';
 export { TeacherImpactScreen } from './TeacherImpactScreen';
+export { PaymentRequestScreen } from './PaymentRequestScreen';
+export { ValidatorDashboardScreen } from './ValidatorDashboardScreen';

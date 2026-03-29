@@ -52,7 +52,7 @@ export class ServerEthereumProvider implements IChainProvider {
   readonly meta: ProviderMeta = {
     name: 'ServerEthereumProvider',
     backendType: 'server',
-    version: '0.2.0',
+    version: '0.3.0',
     capabilities: ['balance', 'send', 'history', 'erc20'],
   };
 

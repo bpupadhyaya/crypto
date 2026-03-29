@@ -31,7 +31,7 @@ function registerLazyProviders() {
     const proxy = new Proxy({} as any, {
       get(_target, prop) {
         if (prop === 'meta') {
-          return { name: `Lazy${chainId}Provider`, backendType: 'server', version: '0.2.0', capabilities: [] };
+          return { name: `Lazy${chainId}Provider`, backendType: 'server', version: '0.3.0', capabilities: [] };
         }
         if (prop === 'chainId') return chainId;
         return async (...args: any[]) => {

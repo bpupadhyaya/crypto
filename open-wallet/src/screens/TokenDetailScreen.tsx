@@ -73,9 +73,13 @@ export const TokenDetailScreen = React.memo(({ token, price, onClose, onSend }: 
   const fetchChart = useCallback(async (days: number) => {
     setLoading(true);
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10_000);
       const res = await fetch(
-        `${COINGECKO_API}/coins/${token.coingeckoId}/market_chart?vs_currency=usd&days=${days}`
+        `${COINGECKO_API}/coins/${token.coingeckoId}/market_chart?vs_currency=usd&days=${days}`,
+        { signal: controller.signal },
       );
+      clearTimeout(timeoutId);
       if (!res.ok) { setLoading(false); return; }
       const data = await res.json();
       const prices = (data.prices ?? []).map(([_, p]: [number, number]) => p);
@@ -84,7 +88,9 @@ export const TokenDetailScreen = React.memo(({ token, price, onClose, onSend }: 
         const change = ((prices[prices.length - 1] - prices[0]) / prices[0]) * 100;
         setPriceChange(change);
       }
-    } catch {}
+    } catch {
+      // timeout or network error — keep existing chart data
+    }
     setLoading(false);
   }, [token.coingeckoId]);
 
@@ -163,7 +169,7 @@ export const TokenDetailScreen = React.memo(({ token, price, onClose, onSend }: 
         <View style={s.balanceCard}>
           <Text style={s.balanceLabel}>Your Balance</Text>
           <Text style={s.balanceAmount}>0.00 {token.symbol}</Text>
-          <Text style={s.balanceUsd}>$0.00</Text>
+          <Text style={s.balanceUsd}>{price ? `$${(0 * price).toFixed(2)}` : '\u2014'}</Text>
         </View>
 
         {/* Quick Actions */}
@@ -192,7 +198,7 @@ export const TokenDetailScreen = React.memo(({ token, price, onClose, onSend }: 
 
         {/* Info */}
         <View style={s.infoCard}>
-          <InfoRow label="Network" value={token.chainId} />
+          <InfoRow label="Network" value={token.chainId === 'ethereum' ? 'Ethereum' : token.chainId === 'bitcoin' ? 'Bitcoin' : token.chainId === 'solana' ? 'Solana' : token.chainId === 'cosmos' ? 'Cosmos' : token.chainId === 'openchain' ? 'Open Chain' : token.chainId} />
           <InfoRow label="Decimals" value={token.decimals.toString()} />
           <InfoRow label="Type" value={token.isNative ? 'Native' : 'Token'} />
           {token.contractAddress && (
