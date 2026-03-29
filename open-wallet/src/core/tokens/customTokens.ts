@@ -62,20 +62,79 @@ export function getAllTokens(builtInTokens: TokenInfo[]): TokenInfo[] {
 
 /**
  * Auto-detect token info from a contract address.
- * Queries the blockchain to get name, symbol, decimals.
+ * Tries multiple methods:
+ * 1. CoinGecko contract lookup (most reliable)
+ * 2. On-chain RPC call (direct blockchain query)
+ * 3. Jupiter token list (for Solana)
  */
 export async function detectTokenFromAddress(
   contractAddress: string,
   chainId: string,
 ): Promise<Partial<TokenInfo> | null> {
+  // Auto-prepend 0x for EVM chains if missing
+  let address = contractAddress.trim();
+  if (['ethereum', 'polygon', 'avalanche', 'bsc'].includes(chainId)) {
+    if (!address.startsWith('0x') && !address.startsWith('0X')) {
+      address = '0x' + address;
+    }
+  }
+
   try {
-    if (chainId === 'ethereum' || chainId === 'polygon' || chainId === 'avalanche' || chainId === 'bsc') {
-      return await detectERC20Token(contractAddress, chainId);
+    // Method 1: Try CoinGecko contract lookup (works for most tokens)
+    const cgResult = await detectViaCoinGecko(address, chainId);
+    if (cgResult) return cgResult;
+
+    // Method 2: Try on-chain RPC
+    if (['ethereum', 'polygon', 'avalanche', 'bsc'].includes(chainId)) {
+      const rpcResult = await detectERC20Token(address, chainId);
+      if (rpcResult) return rpcResult;
     }
+
+    // Method 3: Solana token list
     if (chainId === 'solana') {
-      return await detectSPLToken(contractAddress);
+      return await detectSPLToken(address);
     }
+
     return null;
+  } catch {
+    return null;
+  }
+}
+
+/** Detect token via CoinGecko contract API — most reliable method. */
+async function detectViaCoinGecko(
+  address: string,
+  chainId: string,
+): Promise<Partial<TokenInfo> | null> {
+  const platformMap: Record<string, string> = {
+    ethereum: 'ethereum',
+    polygon: 'polygon-pos',
+    bsc: 'binance-smart-chain',
+    avalanche: 'avalanche',
+    solana: 'solana',
+  };
+  const platform = platformMap[chainId];
+  if (!platform) return null;
+
+  try {
+    const res = await fetch(
+      `https://api.coingecko.com/api/v3/coins/${platform}/contract/${address}`,
+      { signal: AbortSignal.timeout(5000) },
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (!data.symbol) return null;
+
+    return {
+      symbol: data.symbol.toUpperCase(),
+      name: data.name,
+      chainId,
+      decimals: data.detail_platforms?.[platform]?.decimal_place ?? 18,
+      contractAddress: address,
+      coingeckoId: data.id,
+      isNative: false,
+      color: generateColorFromSymbol(data.symbol),
+    } as Partial<TokenInfo>;
   } catch {
     return null;
   }
