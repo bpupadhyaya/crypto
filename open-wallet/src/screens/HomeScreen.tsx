@@ -467,9 +467,9 @@ export function HomeScreen() {
         )}
       </View>
       <View style={s.actions}>
-        <ActionBtn icon="\u2191" label="Send" color={t.accent.orange} t={t} />
-        <ActionBtn icon="\u2193" label="Receive" color={t.accent.green} t={t} />
-        <ActionBtn icon="\u21C4" label="Swap" color={t.accent.blue} t={t} />
+        <ActionBtn icon="↑" label="Send" color={t.accent.orange} t={t} />
+        <ActionBtn icon="↓" label="Receive" color={t.accent.green} t={t} />
+        <ActionBtn icon="⇄" label="Swap" color={t.accent.blue} t={t} />
         <TouchableOpacity style={{ alignItems: 'center', flex: 1 }} onPress={() => setShowBuySell(true)}>
           <View style={{ width: 56, height: 56, borderRadius: 28, justifyContent: 'center', alignItems: 'center', marginBottom: 6, backgroundColor: t.accent.purple + '20' }}>
             <Text style={{ fontSize: 24, fontWeight: '700', color: t.accent.purple }}>$</Text>
