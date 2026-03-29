@@ -301,6 +301,33 @@ func RegisterRoutes(mux *http.ServeMux, keepers Keepers, ctxProvider ContextProv
 		json.NewEncoder(w).Encode(projects)
 	})
 
+	// ─── Community Events ───
+	mux.HandleFunc("/openchain/otk/v1/events", func(w http.ResponseWriter, r *http.Request) {
+		ctx := ctxProvider()
+		category := r.URL.Query().Get("category")
+		events := keepers.OTK.GetUpcomingEvents(ctx, category, 50)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(events)
+	})
+
+	// ─── Wellness Streaks ───
+	mux.HandleFunc("/openchain/otk/v1/wellness_streak/", func(w http.ResponseWriter, r *http.Request) {
+		uid := strings.TrimPrefix(r.URL.Path, "/openchain/otk/v1/wellness_streak/")
+		ctx := ctxProvider()
+		streak := keepers.OTK.GetWellnessStreak(ctx, uid)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(streak)
+	})
+
+	// ─── Climate Carbon ───
+	mux.HandleFunc("/openchain/otk/v1/carbon/", func(w http.ResponseWriter, r *http.Request) {
+		region := strings.TrimPrefix(r.URL.Path, "/openchain/otk/v1/carbon/")
+		ctx := ctxProvider()
+		carbon := keepers.OTK.GetCommunityCarbon(ctx, region)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(carbon)
+	})
+
 	// ─── DAO Treasury ───
 	if keepers.DAO != nil {
 		mux.HandleFunc("/openchain/dao/v1/treasury/", func(w http.ResponseWriter, r *http.Request) {
