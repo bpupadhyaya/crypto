@@ -130,6 +130,43 @@ func RegisterRoutes(mux *http.ServeMux, keepers Keepers, ctxProvider ContextProv
 	// ─── Amendments ───
 	mux.HandleFunc("/openchain/govuid/v1/amendments", handleAmendments(keepers.GovUID, ctxProvider))
 
+	// ─── Value Channel Profiles ───
+	mux.HandleFunc("/openchain/otk/v1/volunteer/", func(w http.ResponseWriter, r *http.Request) {
+		uid := strings.TrimPrefix(r.URL.Path, "/openchain/otk/v1/volunteer/")
+		ctx := ctxProvider()
+		profile := keepers.OTK.GetVolunteerProfile(ctx, uid)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(profile)
+	})
+	mux.HandleFunc("/openchain/otk/v1/wellness/", func(w http.ResponseWriter, r *http.Request) {
+		uid := strings.TrimPrefix(r.URL.Path, "/openchain/otk/v1/wellness/")
+		ctx := ctxProvider()
+		profile := keepers.OTK.GetWellnessProfile(ctx, uid)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(profile)
+	})
+	mux.HandleFunc("/openchain/otk/v1/civic/", func(w http.ResponseWriter, r *http.Request) {
+		uid := strings.TrimPrefix(r.URL.Path, "/openchain/otk/v1/civic/")
+		ctx := ctxProvider()
+		profile := keepers.OTK.GetCivicProfile(ctx, uid)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(profile)
+	})
+	mux.HandleFunc("/openchain/otk/v1/economic/", func(w http.ResponseWriter, r *http.Request) {
+		uid := strings.TrimPrefix(r.URL.Path, "/openchain/otk/v1/economic/")
+		ctx := ctxProvider()
+		profile := keepers.OTK.GetEconomicProfile(ctx, uid)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(profile)
+	})
+	mux.HandleFunc("/openchain/otk/v1/teacher_impact/", func(w http.ResponseWriter, r *http.Request) {
+		uid := strings.TrimPrefix(r.URL.Path, "/openchain/otk/v1/teacher_impact/")
+		ctx := ctxProvider()
+		impact := keepers.OTK.GetTeacherImpact(ctx, uid)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(impact)
+	})
+
 	// ─── Price Oracle ───
 	mux.HandleFunc("/openchain/otk/v1/prices", handlePrices(keepers.OTK, ctxProvider))
 	mux.HandleFunc("/openchain/otk/v1/price/", handlePrice(keepers.OTK, ctxProvider))
