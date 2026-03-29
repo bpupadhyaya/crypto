@@ -46,6 +46,10 @@ type Proposal struct {
 	SubmitHeight    int64          `json:"submit_height"`
 	VotingEndHeight int64          `json:"voting_end_height"` // SubmitHeight + VotingPeriod
 	Tally           TallyResult    `json:"tally"`
+	// Execution fields — what happens when the proposal passes
+	ActionType string `json:"action_type,omitempty"` // param_change, treasury_spend, correction_reverse, text, upgrade, emergency
+	ActionData string `json:"action_data,omitempty"` // JSON-encoded action parameters
+	Executed   bool   `json:"executed,omitempty"`     // true after execution
 }
 
 // Vote represents a single vote on a proposal.

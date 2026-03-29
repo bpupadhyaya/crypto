@@ -247,14 +247,22 @@ func (k Keeper) TallyProposal(ctx sdk.Context, proposalID uint64) (*types.TallyR
 	return &proposal.Tally, nil
 }
 
-// EndBlocker checks for proposals whose voting period has ended and tallies them.
+// EndBlocker checks for proposals whose voting period has ended, tallies them,
+// executes passed proposals, and processes constitutional amendments.
 func (k Keeper) EndBlocker(ctx sdk.Context) {
+	// Tally expired voting proposals
 	proposals := k.GetProposals(ctx, types.ProposalStatusVoting)
 	for _, p := range proposals {
 		if ctx.BlockHeight() > p.VotingEndHeight {
 			_, _ = k.TallyProposal(ctx, p.ID)
 		}
 	}
+
+	// Execute passed proposals that haven't been executed yet
+	k.ExecutePassedProposals(ctx)
+
+	// Process constitutional amendments (deliberation → voting → passed/rejected)
+	k.ProcessAmendments(ctx)
 }
 
 // ─── Storage helpers ───

@@ -1,0 +1,74 @@
+syntax = "proto3";
+package openchain.employment.v1;
+
+option go_package = "openchain/x/otk/keeper";
+
+// JobListing — Community employment opportunity.
+message JobListing {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  string posted_by = 4;
+  string job_type = 5;       // full_time, part_time, gig, volunteer, apprentice
+  string category = 6;       // technology, agriculture, education, health, construction, services, creative
+  repeated string skills = 7;
+  string pay_type = 8;       // otk, fiat, time_exchange, volunteer
+  int64 pay_amount = 9;
+  string region = 10;
+  bool remote = 11;
+  string status = 12;        // open, filled, closed, expired
+  int64 applicants = 13;
+  int64 posted_at = 14;
+  int64 filled_at = 15;
+  string filled_by = 16;
+}
+
+// MarketListing — Local marketplace item/service.
+message MarketListing {
+  string id = 1;
+  string seller_uid = 2;
+  string title = 3;
+  string description = 4;
+  string category = 5;       // food, crafts, services, equipment, clothing, electronics, furniture, other
+  string price_type = 6;     // otk, time, barter, free
+  int64 price_otk = 7;
+  string price_desc = 8;
+  string condition = 9;      // new, like_new, good, fair, for_parts
+  string region = 10;
+  string status = 11;        // available, reserved, sold, expired
+  int64 views = 12;
+  int64 posted_at = 13;
+}
+
+// MsgPostJob
+message MsgPostJob {
+  string poster = 1;
+  string title = 2;
+  string description = 3;
+  string job_type = 4;
+  string category = 5;
+  repeated string skills = 6;
+  string pay_type = 7;
+  int64 pay_amount = 8;
+  string region = 9;
+  bool remote = 10;
+}
+
+// MsgApplyJob
+message MsgApplyJob {
+  string applicant = 1;
+  string listing_id = 2;
+  string message = 3;
+}
+
+// MsgPostMarketListing
+message MsgPostMarketListing {
+  string seller = 1;
+  string title = 2;
+  string description = 3;
+  string category = 4;
+  string price_type = 5;
+  int64 price_otk = 6;
+  string condition = 7;
+  string region = 8;
+}

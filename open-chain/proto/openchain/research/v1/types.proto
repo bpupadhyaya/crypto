@@ -1,0 +1,57 @@
+syntax = "proto3";
+package openchain.research.v1;
+
+option go_package = "openchain/x/otk/keeper";
+
+// ResearchProject — Community open-access research.
+message ResearchProject {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  string category = 4;      // health, agriculture, education, environment, technology, social, economics, culture
+  string lead_uid = 5;
+  int64 contributors = 6;
+  int64 data_points = 7;
+  string status = 8;         // recruiting, active, analysis, published, archived
+  string region = 9;
+  int64 eotk_pool = 10;
+  string output_hash = 11;   // IPFS/on-chain hash of published results
+  int64 started_at = 12;
+  int64 published_at = 13;
+}
+
+// ResearchContribution — Individual contribution to a project.
+message ResearchContribution {
+  string project_id = 1;
+  string contributor_id = 2;
+  string contrib_type = 3;  // data, analysis, review, expertise, funding
+  string description = 4;
+  string data_hash = 5;
+  int64 eotk_earned = 6;
+  int64 block_height = 7;
+}
+
+// MsgCreateProject
+message MsgCreateProject {
+  string lead = 1;
+  string title = 2;
+  string description = 3;
+  string category = 4;
+  string region = 5;
+}
+
+// MsgContribute
+message MsgContribute {
+  string contributor = 1;
+  string project_id = 2;
+  string contrib_type = 3;
+  string description = 4;
+  string data_hash = 5;
+}
+
+// MsgPublishResults
+message MsgPublishResults {
+  string lead = 1;
+  string project_id = 2;
+  string output_hash = 3;
+}

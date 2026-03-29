@@ -54,6 +54,10 @@ type DAOProposal struct {
 	Status      string `json:"status"` // voting, passed, rejected, executed
 	CreatedAt   int64  `json:"created_at"`
 	EndsAt      int64  `json:"ends_at"`
+	// Executable action (for treasury_spend, membership, parameter proposals)
+	ActionType string `json:"action_type,omitempty"` // treasury_spend, add_member, remove_member, parameter
+	ActionData string `json:"action_data,omitempty"` // JSON-encoded action parameters
+	Executed   bool   `json:"executed,omitempty"`     // true after execution
 }
 
 type GenesisState struct {

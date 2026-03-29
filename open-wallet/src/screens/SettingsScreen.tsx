@@ -111,9 +111,83 @@ import { GratitudeWallScreen } from './GratitudeWallScreen';
 import { NeedsAssessmentScreen } from './NeedsAssessmentScreen';
 import { ResourceMatchScreen } from './ResourceMatchScreen';
 import { BasicNeedsScreen } from './BasicNeedsScreen';
+import { GuardianScreen } from './GuardianScreen';
+import { CrossChainIdentityScreen } from './CrossChainIdentityScreen';
+import { AppealScreen } from './AppealScreen';
+import { PQCKeyScreen } from './PQCKeyScreen';
+import { ZKProofScreen } from './ZKProofScreen';
+import { DataSovereigntyScreen } from './DataSovereigntyScreen';
+import { MediationScreen } from './MediationScreen';
+import { CurriculumScreen } from './CurriculumScreen';
+import { HealthEmergencyScreen } from './HealthEmergencyScreen';
+import { CommunityProjectScreen } from './CommunityProjectScreen';
+import { MicroGrantScreen } from './MicroGrantScreen';
+import { InterRegionalScreen } from './InterRegionalScreen';
+import { TimeBankScreen } from './TimeBankScreen';
+import { MentorMatchScreen } from './MentorMatchScreen';
+import { EnvironmentalImpactScreen } from './EnvironmentalImpactScreen';
+import { DisasterResponseScreen } from './DisasterResponseScreen';
+import { CooperativeScreen } from './CooperativeScreen';
+import { YouthCouncilScreen } from './YouthCouncilScreen';
+import { CulturalHeritageScreen } from './CulturalHeritageScreen';
+import { SkillVerificationScreen } from './SkillVerificationScreen';
+import { FamilyFinanceScreen } from './FamilyFinanceScreen';
+import { ReputationDashboardScreen } from './ReputationDashboardScreen';
+import { CommunityRadioScreen } from './CommunityRadioScreen';
+import { FoodSecurityScreen } from './FoodSecurityScreen';
+import { WaterSanitationScreen } from './WaterSanitationScreen';
+import { HousingScreen } from './HousingScreen';
+import { MentalWellnessScreen } from './MentalWellnessScreen';
+import { DigitalLiteracyScreen } from './DigitalLiteracyScreen';
+import { LegalAidScreen } from './LegalAidScreen';
+import { RenewableEnergyScreen } from './RenewableEnergyScreen';
+import { LanguageExchangeScreen } from './LanguageExchangeScreen';
+import { ElderWisdomScreen } from './ElderWisdomScreen';
+import { ArtStudioScreen } from './ArtStudioScreen';
+import { SafetyNetScreen } from './SafetyNetScreen';
+import { TransportScreen } from './TransportScreen';
+import { ChildcareScreen } from './ChildcareScreen';
+import { DisabilitySupportScreen } from './DisabilitySupportScreen';
+import { EmergencyPrepScreen } from './EmergencyPrepScreen';
+import { ImmigrationSupportScreen } from './ImmigrationSupportScreen';
+import { SportsScreen } from './SportsScreen';
+import { LibraryScreen } from './LibraryScreen';
+import { WasteManagementScreen } from './WasteManagementScreen';
+import { ConflictPreventionScreen } from './ConflictPreventionScreen';
+import { PetWelfareScreen } from './PetWelfareScreen';
+import { JobBoardScreen } from './JobBoardScreen';
+import { MarketplaceScreen } from './MarketplaceScreen';
+import { MaternalHealthScreen } from './MaternalHealthScreen';
+import { SeniorActivitiesScreen } from './SeniorActivitiesScreen';
+import { GriefSupportScreen } from './GriefSupportScreen';
+import { RecoveryScreen } from './RecoveryScreen';
+import { WorkshopScreen } from './WorkshopScreen';
+import { CivicEducationScreen } from './CivicEducationScreen';
+import { FarmToTableScreen } from './FarmToTableScreen';
+import { VolunteerAbroadScreen } from './VolunteerAbroadScreen';
+import { ResearchScreen } from './ResearchScreen';
+import { InsurancePoolScreen } from './InsurancePoolScreen';
+import { StorytellingScreen } from './StorytellingScreen';
+import { TravelScreen } from './TravelScreen';
+import { InnovationScreen } from './InnovationScreen';
+import { BarterScreen } from './BarterScreen';
+import { MusicScreen } from './MusicScreen';
+import { ElectionScreen } from './ElectionScreen';
+import { BudgetScreen } from './BudgetScreen';
+import { NewsScreen } from './NewsScreen';
+import { InfrastructureScreen } from './InfrastructureScreen';
+import { WeatherScreen } from './WeatherScreen';
+import { HomeSchoolScreen } from './HomeSchoolScreen';
+import { MeditationScreen } from './MeditationScreen';
+import { CalendarScreen } from './CalendarScreen';
+import { AncestryScreen } from './AncestryScreen';
+import { ArbitrationScreen } from './ArbitrationScreen';
+import { SupplyChainScreen } from './SupplyChainScreen';
+import { VolunteerMatchScreen } from './VolunteerMatchScreen';
+import { CommunityMapScreen } from './CommunityMapScreen';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury' | 'family-tree' | 'parenting-journey' | 'teacher-impact' | 'payment-request' | 'validator-dashboard' | 'volunteer' | 'community-board' | 'education-hub' | 'skill-cert' | 'mentorship' | 'wellness' | 'civic' | 'value-channels' | 'global-impact' | 'my-impact' | 'peace-index' | 'constitution-reader' | 'pledge' | 'ambassador' | 'eldercare' | 'intergeneration' | 'gratitude-wall' | 'needs-assessment' | 'resource-match' | 'basic-needs';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury' | 'family-tree' | 'parenting-journey' | 'teacher-impact' | 'payment-request' | 'validator-dashboard' | 'volunteer' | 'community-board' | 'education-hub' | 'skill-cert' | 'mentorship' | 'wellness' | 'civic' | 'value-channels' | 'global-impact' | 'my-impact' | 'peace-index' | 'constitution-reader' | 'pledge' | 'ambassador' | 'eldercare' | 'intergeneration' | 'gratitude-wall' | 'needs-assessment' | 'resource-match' | 'basic-needs' | 'guardian' | 'cross-chain-id' | 'appeal' | 'pqc-key' | 'zk-proof' | 'data-sovereignty' | 'mediation' | 'curriculum' | 'health-emergency' | 'community-projects' | 'micro-grants' | 'inter-regional' | 'time-bank' | 'mentor-match' | 'environmental' | 'disaster-response' | 'cooperative' | 'youth-council' | 'cultural-heritage' | 'skill-verification' | 'family-finance' | 'reputation' | 'community-radio' | 'food-security' | 'water-sanitation' | 'housing' | 'mental-wellness' | 'digital-literacy' | 'legal-aid' | 'renewable-energy' | 'language-exchange' | 'elder-wisdom' | 'art-studio' | 'safety-net' | 'transport' | 'childcare' | 'disability-support' | 'emergency-prep' | 'immigration-support' | 'sports' | 'library' | 'waste-management' | 'conflict-prevention' | 'pet-welfare' | 'job-board' | 'marketplace' | 'maternal-health' | 'senior-activities' | 'grief-support' | 'recovery' | 'workshop' | 'civic-education' | 'farm-to-table' | 'volunteer-abroad' | 'research' | 'insurance-pool' | 'storytelling' | 'travel' | 'innovation' | 'barter' | 'music' | 'election' | 'budget' | 'news' | 'infrastructure' | 'weather' | 'homeschool' | 'meditation' | 'calendar' | 'ancestry' | 'arbitration' | 'supply-chain' | 'volunteer-match' | 'community-map';
 
 type SettingsCategory = 'account' | 'network' | 'wallet' | 'exchange' | 'chain' | 'tools' | 'about' | 'support' | 'developer';
 
@@ -375,6 +449,80 @@ export function SettingsScreen() {
   if (view === 'needs-assessment') return <NeedsAssessmentScreen onClose={() => setView('main')} />;
   if (view === 'resource-match') return <ResourceMatchScreen onClose={() => setView('main')} />;
   if (view === 'basic-needs') return <BasicNeedsScreen onClose={() => setView('main')} />;
+  if (view === 'guardian') return <GuardianScreen onClose={() => setView('main')} />;
+  if (view === 'cross-chain-id') return <CrossChainIdentityScreen onClose={() => setView('main')} />;
+  if (view === 'appeal') return <AppealScreen onClose={() => setView('main')} />;
+  if (view === 'pqc-key') return <PQCKeyScreen onClose={() => setView('main')} />;
+  if (view === 'zk-proof') return <ZKProofScreen onClose={() => setView('main')} />;
+  if (view === 'data-sovereignty') return <DataSovereigntyScreen onClose={() => setView('main')} />;
+  if (view === 'mediation') return <MediationScreen onClose={() => setView('main')} />;
+  if (view === 'curriculum') return <CurriculumScreen onClose={() => setView('main')} />;
+  if (view === 'health-emergency') return <HealthEmergencyScreen onClose={() => setView('main')} />;
+  if (view === 'community-projects') return <CommunityProjectScreen onClose={() => setView('main')} />;
+  if (view === 'micro-grants') return <MicroGrantScreen onClose={() => setView('main')} />;
+  if (view === 'inter-regional') return <InterRegionalScreen onClose={() => setView('main')} />;
+  if (view === 'time-bank') return <TimeBankScreen onClose={() => setView('main')} />;
+  if (view === 'mentor-match') return <MentorMatchScreen onClose={() => setView('main')} />;
+  if (view === 'environmental') return <EnvironmentalImpactScreen onClose={() => setView('main')} />;
+  if (view === 'disaster-response') return <DisasterResponseScreen onClose={() => setView('main')} />;
+  if (view === 'cooperative') return <CooperativeScreen onClose={() => setView('main')} />;
+  if (view === 'youth-council') return <YouthCouncilScreen onClose={() => setView('main')} />;
+  if (view === 'cultural-heritage') return <CulturalHeritageScreen onClose={() => setView('main')} />;
+  if (view === 'skill-verification') return <SkillVerificationScreen onClose={() => setView('main')} />;
+  if (view === 'family-finance') return <FamilyFinanceScreen onClose={() => setView('main')} />;
+  if (view === 'reputation') return <ReputationDashboardScreen onClose={() => setView('main')} />;
+  if (view === 'community-radio') return <CommunityRadioScreen onClose={() => setView('main')} />;
+  if (view === 'food-security') return <FoodSecurityScreen onClose={() => setView('main')} />;
+  if (view === 'water-sanitation') return <WaterSanitationScreen onClose={() => setView('main')} />;
+  if (view === 'housing') return <HousingScreen onClose={() => setView('main')} />;
+  if (view === 'mental-wellness') return <MentalWellnessScreen onClose={() => setView('main')} />;
+  if (view === 'digital-literacy') return <DigitalLiteracyScreen onClose={() => setView('main')} />;
+  if (view === 'legal-aid') return <LegalAidScreen onClose={() => setView('main')} />;
+  if (view === 'renewable-energy') return <RenewableEnergyScreen onClose={() => setView('main')} />;
+  if (view === 'language-exchange') return <LanguageExchangeScreen onClose={() => setView('main')} />;
+  if (view === 'elder-wisdom') return <ElderWisdomScreen onClose={() => setView('main')} />;
+  if (view === 'art-studio') return <ArtStudioScreen onClose={() => setView('main')} />;
+  if (view === 'safety-net') return <SafetyNetScreen onClose={() => setView('main')} />;
+  if (view === 'transport') return <TransportScreen onClose={() => setView('main')} />;
+  if (view === 'childcare') return <ChildcareScreen onClose={() => setView('main')} />;
+  if (view === 'disability-support') return <DisabilitySupportScreen onClose={() => setView('main')} />;
+  if (view === 'emergency-prep') return <EmergencyPrepScreen onClose={() => setView('main')} />;
+  if (view === 'immigration-support') return <ImmigrationSupportScreen onClose={() => setView('main')} />;
+  if (view === 'sports') return <SportsScreen onClose={() => setView('main')} />;
+  if (view === 'library') return <LibraryScreen onClose={() => setView('main')} />;
+  if (view === 'waste-management') return <WasteManagementScreen onClose={() => setView('main')} />;
+  if (view === 'conflict-prevention') return <ConflictPreventionScreen onClose={() => setView('main')} />;
+  if (view === 'pet-welfare') return <PetWelfareScreen onClose={() => setView('main')} />;
+  if (view === 'job-board') return <JobBoardScreen onClose={() => setView('main')} />;
+  if (view === 'marketplace') return <MarketplaceScreen onClose={() => setView('main')} />;
+  if (view === 'maternal-health') return <MaternalHealthScreen onClose={() => setView('main')} />;
+  if (view === 'senior-activities') return <SeniorActivitiesScreen onClose={() => setView('main')} />;
+  if (view === 'grief-support') return <GriefSupportScreen onClose={() => setView('main')} />;
+  if (view === 'recovery') return <RecoveryScreen onClose={() => setView('main')} />;
+  if (view === 'workshop') return <WorkshopScreen onClose={() => setView('main')} />;
+  if (view === 'civic-education') return <CivicEducationScreen onClose={() => setView('main')} />;
+  if (view === 'farm-to-table') return <FarmToTableScreen onClose={() => setView('main')} />;
+  if (view === 'volunteer-abroad') return <VolunteerAbroadScreen onClose={() => setView('main')} />;
+  if (view === 'research') return <ResearchScreen onClose={() => setView('main')} />;
+  if (view === 'insurance-pool') return <InsurancePoolScreen onClose={() => setView('main')} />;
+  if (view === 'storytelling') return <StorytellingScreen onClose={() => setView('main')} />;
+  if (view === 'travel') return <TravelScreen onClose={() => setView('main')} />;
+  if (view === 'innovation') return <InnovationScreen onClose={() => setView('main')} />;
+  if (view === 'barter') return <BarterScreen onClose={() => setView('main')} />;
+  if (view === 'music') return <MusicScreen onClose={() => setView('main')} />;
+  if (view === 'election') return <ElectionScreen onClose={() => setView('main')} />;
+  if (view === 'budget') return <BudgetScreen onClose={() => setView('main')} />;
+  if (view === 'news') return <NewsScreen onClose={() => setView('main')} />;
+  if (view === 'infrastructure') return <InfrastructureScreen onClose={() => setView('main')} />;
+  if (view === 'weather') return <WeatherScreen onClose={() => setView('main')} />;
+  if (view === 'homeschool') return <HomeSchoolScreen onClose={() => setView('main')} />;
+  if (view === 'meditation') return <MeditationScreen onClose={() => setView('main')} />;
+  if (view === 'calendar') return <CalendarScreen onClose={() => setView('main')} />;
+  if (view === 'ancestry') return <AncestryScreen onClose={() => setView('main')} />;
+  if (view === 'arbitration') return <ArbitrationScreen onClose={() => setView('main')} />;
+  if (view === 'supply-chain') return <SupplyChainScreen onClose={() => setView('main')} />;
+  if (view === 'volunteer-match') return <VolunteerMatchScreen onClose={() => setView('main')} />;
+  if (view === 'community-map') return <CommunityMapScreen onClose={() => setView('main')} />;
 
   // ─── Low Bandwidth State ───
   const lowBandwidthOverride = getLowBandwidthOverride();
@@ -969,6 +1117,450 @@ export function SettingsScreen() {
       label: 'Basic Needs Dashboard',
       onPress: () => setView('basic-needs'),
       rightText: 'Needs = Peace',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Guardian Accounts',
+      onPress: () => setView('guardian'),
+      rightText: 'Art. II',
+      rightColor: t.accent.purple,
+    },
+    {
+      label: 'Cross-Chain Identity',
+      onPress: () => setView('cross-chain-id'),
+      rightText: 'Multi-Chain UID',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Appeal & Contest',
+      onPress: () => setView('appeal'),
+      rightText: 'Art. V',
+      rightColor: t.accent.yellow,
+    },
+    {
+      label: 'Mediation',
+      onPress: () => setView('mediation'),
+      rightText: 'Conflict Resolution',
+      rightColor: t.accent.orange,
+    },
+    {
+      label: 'Curriculum & Pathways',
+      onPress: () => setView('curriculum'),
+      rightText: 'eOTK Learning',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Health Emergency',
+      onPress: () => setView('health-emergency'),
+      rightText: 'SOS Network',
+      rightColor: t.accent.red,
+    },
+    {
+      label: 'Community Projects',
+      onPress: () => setView('community-projects'),
+      rightText: 'cOTK Projects',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Micro-Grants',
+      onPress: () => setView('micro-grants'),
+      rightText: 'Treasury Funded',
+      rightColor: t.accent.yellow,
+    },
+    {
+      label: 'Inter-Regional Cooperation',
+      onPress: () => setView('inter-regional'),
+      rightText: 'Cross-Region',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Time Bank',
+      onPress: () => setView('time-bank'),
+      rightText: '1 Hour = 1 Hour',
+      rightColor: t.accent.purple,
+    },
+    {
+      label: 'Mentor Match',
+      onPress: () => setView('mentor-match'),
+      rightText: 'Smart Matching',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'PQC Key Management',
+      onPress: () => setView('pqc-key'),
+      rightText: 'Quantum-Safe',
+      rightColor: t.accent.orange,
+    },
+    {
+      label: 'ZK Proofs',
+      onPress: () => setView('zk-proof'),
+      rightText: 'Art. VIII Privacy',
+      rightColor: t.accent.purple,
+    },
+    {
+      label: 'Data Sovereignty',
+      onPress: () => setView('data-sovereignty'),
+      rightText: 'Your Data, Your Rules',
+      rightColor: t.accent.red,
+    },
+    {
+      label: 'Environmental Impact',
+      onPress: () => setView('environmental'),
+      rightText: 'Eco Score',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Disaster Response',
+      onPress: () => setView('disaster-response'),
+      rightText: 'Relief Coordination',
+      rightColor: t.accent.red,
+    },
+    {
+      label: 'Cooperatives',
+      onPress: () => setView('cooperative'),
+      rightText: 'Shared Ownership',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Youth Council',
+      onPress: () => setView('youth-council'),
+      rightText: 'Youth Governance',
+      rightColor: t.accent.purple,
+    },
+    {
+      label: 'Cultural Heritage',
+      onPress: () => setView('cultural-heritage'),
+      rightText: 'Preserve Traditions',
+      rightColor: t.accent.orange,
+    },
+    {
+      label: 'Skill Verification',
+      onPress: () => setView('skill-verification'),
+      rightText: 'On-Chain Credentials',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Family Finance',
+      onPress: () => setView('family-finance'),
+      rightText: 'Shared Budgets',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Reputation Dashboard',
+      onPress: () => setView('reputation'),
+      rightText: 'Score Breakdown',
+      rightColor: t.accent.yellow,
+    },
+    {
+      label: 'Community Radio',
+      onPress: () => setView('community-radio'),
+      rightText: 'Announcements',
+      rightColor: t.accent.purple,
+    },
+    {
+      label: 'Food Security',
+      onPress: () => setView('food-security'),
+      rightText: 'Gardens & Sharing',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Water & Sanitation',
+      onPress: () => setView('water-sanitation'),
+      rightText: 'Clean Water Access',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Housing Security',
+      onPress: () => setView('housing'),
+      rightText: 'Shelter & Co-Housing',
+      rightColor: t.accent.orange,
+    },
+    {
+      label: 'Mental Wellness',
+      onPress: () => setView('mental-wellness'),
+      rightText: 'Peer Support',
+      rightColor: t.accent.purple,
+    },
+    {
+      label: 'Digital Literacy',
+      onPress: () => setView('digital-literacy'),
+      rightText: 'Tech For All',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Legal Aid',
+      onPress: () => setView('legal-aid'),
+      rightText: 'Know Your Rights',
+      rightColor: t.accent.yellow,
+    },
+    {
+      label: 'Renewable Energy',
+      onPress: () => setView('renewable-energy'),
+      rightText: 'Community Power',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Language Exchange',
+      onPress: () => setView('language-exchange'),
+      rightText: 'Cross-Cultural',
+      rightColor: t.accent.purple,
+    },
+    {
+      label: 'Elder Wisdom',
+      onPress: () => setView('elder-wisdom'),
+      rightText: 'nOTK Knowledge',
+      rightColor: t.accent.orange,
+    },
+    {
+      label: 'Art Studio',
+      onPress: () => setView('art-studio'),
+      rightText: 'Creative Expression',
+      rightColor: t.accent.red,
+    },
+    {
+      label: 'Safety Net',
+      onPress: () => setView('safety-net'),
+      rightText: 'Neighborhood Watch',
+      rightColor: t.accent.yellow,
+    },
+    {
+      label: 'Community Transport',
+      onPress: () => setView('transport'),
+      rightText: 'Ride Sharing',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Childcare Co-ops',
+      onPress: () => setView('childcare'),
+      rightText: 'nOTK Babysitting',
+      rightColor: t.accent.purple,
+    },
+    {
+      label: 'Disability Support',
+      onPress: () => setView('disability-support'),
+      rightText: 'Inclusion',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Emergency Preparedness',
+      onPress: () => setView('emergency-prep'),
+      rightText: 'Be Ready',
+      rightColor: t.accent.orange,
+    },
+    {
+      label: 'Newcomer Integration',
+      onPress: () => setView('immigration-support'),
+      rightText: 'Welcome Program',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Sports & Fitness',
+      onPress: () => setView('sports'),
+      rightText: 'hOTK Active',
+      rightColor: t.accent.red,
+    },
+    {
+      label: 'Community Library',
+      onPress: () => setView('library'),
+      rightText: 'eOTK Knowledge',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Waste Management',
+      onPress: () => setView('waste-management'),
+      rightText: 'Recycle & Upcycle',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Conflict Prevention',
+      onPress: () => setView('conflict-prevention'),
+      rightText: 'Early Warning',
+      rightColor: t.accent.yellow,
+    },
+    {
+      label: 'Pet Welfare',
+      onPress: () => setView('pet-welfare'),
+      rightText: 'Animal Care',
+      rightColor: t.accent.orange,
+    },
+    {
+      label: 'Job Board',
+      onPress: () => setView('job-board'),
+      rightText: 'xOTK Employment',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Marketplace',
+      onPress: () => setView('marketplace'),
+      rightText: 'Local Exchange',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Maternal Health',
+      onPress: () => setView('maternal-health'),
+      rightText: 'Pregnancy & Care',
+      rightColor: t.accent.purple,
+    },
+    {
+      label: 'Senior Activities',
+      onPress: () => setView('senior-activities'),
+      rightText: 'Active Aging',
+      rightColor: t.accent.orange,
+    },
+    {
+      label: 'Grief Support',
+      onPress: () => setView('grief-support'),
+      rightText: 'Peer Support',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Recovery Support',
+      onPress: () => setView('recovery'),
+      rightText: 'Wellness Journey',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Community Workshop',
+      onPress: () => setView('workshop'),
+      rightText: 'Shared Tools',
+      rightColor: t.accent.yellow,
+    },
+    {
+      label: 'Civic Education',
+      onPress: () => setView('civic-education'),
+      rightText: 'gOTK Learning',
+      rightColor: t.accent.purple,
+    },
+    {
+      label: 'Farm to Table',
+      onPress: () => setView('farm-to-table'),
+      rightText: 'Local Produce',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Volunteer Abroad',
+      onPress: () => setView('volunteer-abroad'),
+      rightText: 'International Service',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Community Research',
+      onPress: () => setView('research'),
+      rightText: 'eOTK Science',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Insurance Pools',
+      onPress: () => setView('insurance-pool'),
+      rightText: 'Mutual Aid',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Storytelling',
+      onPress: () => setView('storytelling'),
+      rightText: 'Community Stories',
+      rightColor: t.accent.purple,
+    },
+    {
+      label: 'Community Travel',
+      onPress: () => setView('travel'),
+      rightText: 'Ethical Tourism',
+      rightColor: t.accent.orange,
+    },
+    {
+      label: 'Innovation Hub',
+      onPress: () => setView('innovation'),
+      rightText: 'Open Source Ideas',
+      rightColor: t.accent.yellow,
+    },
+    {
+      label: 'Barter Exchange',
+      onPress: () => setView('barter'),
+      rightText: 'Direct Trade',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Music & Performance',
+      onPress: () => setView('music'),
+      rightText: 'Creative Arts',
+      rightColor: t.accent.red,
+    },
+    {
+      label: 'Elections',
+      onPress: () => setView('election'),
+      rightText: 'Community Voting',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Community Budget',
+      onPress: () => setView('budget'),
+      rightText: 'Transparent Finance',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Community News',
+      onPress: () => setView('news'),
+      rightText: 'Verified Reporting',
+      rightColor: t.accent.yellow,
+    },
+    {
+      label: 'Infrastructure',
+      onPress: () => setView('infrastructure'),
+      rightText: 'Public Works',
+      rightColor: t.accent.orange,
+    },
+    {
+      label: 'Weather & Climate',
+      onPress: () => setView('weather'),
+      rightText: 'Local Conditions',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Home School',
+      onPress: () => setView('homeschool'),
+      rightText: 'eOTK Education',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Meditation & Wellness',
+      onPress: () => setView('meditation'),
+      rightText: 'hOTK Mindfulness',
+      rightColor: t.accent.purple,
+    },
+    {
+      label: 'Community Calendar',
+      onPress: () => setView('calendar'),
+      rightText: 'All Events',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Ancestry & Genealogy',
+      onPress: () => setView('ancestry'),
+      rightText: 'nOTK Family History',
+      rightColor: t.accent.orange,
+    },
+    {
+      label: 'Arbitration',
+      onPress: () => setView('arbitration'),
+      rightText: 'Binding Resolution',
+      rightColor: t.accent.red,
+    },
+    {
+      label: 'Supply Chain',
+      onPress: () => setView('supply-chain'),
+      rightText: 'Farm to Fork',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Volunteer Match',
+      onPress: () => setView('volunteer-match'),
+      rightText: 'cOTK Smart Match',
+      rightColor: t.accent.purple,
+    },
+    {
+      label: 'Community Map',
+      onPress: () => setView('community-map'),
+      rightText: 'Resource Directory',
       rightColor: t.accent.blue,
     },
   ];

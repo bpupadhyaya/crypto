@@ -1,0 +1,69 @@
+syntax = "proto3";
+package openchain.insurance.v1;
+
+option go_package = "openchain/x/otk/keeper";
+
+// InsurancePool — Community mutual aid insurance.
+message InsurancePool {
+  string id = 1;
+  string name = 2;
+  string pool_type = 3;     // health, crop, disaster, job_loss, equipment, general
+  string region = 4;
+  int64 members = 5;
+  int64 total_pool_otk = 6;
+  int64 monthly_premium = 7;
+  int64 max_claim = 8;
+  int64 active_claims = 9;
+  int64 paid_claims = 10;
+  int64 total_paid_out = 11;
+  string status = 12;       // active, paused, depleted
+  int64 created_at = 13;
+}
+
+// InsuranceClaim — Claim against a mutual aid pool.
+message InsuranceClaim {
+  string id = 1;
+  string pool_id = 2;
+  string claimant_uid = 3;
+  int64 amount = 4;
+  string reason = 5;
+  string evidence = 6;      // hash of supporting documents
+  string status = 7;        // submitted, voting, approved, rejected, paid
+  int64 yes_votes = 8;
+  int64 no_votes = 9;
+  int64 voting_ends = 10;
+  int64 submitted_at = 11;
+  int64 paid_at = 12;
+}
+
+// MsgCreatePool
+message MsgCreatePool {
+  string creator = 1;
+  string name = 2;
+  string pool_type = 3;
+  string region = 4;
+  int64 monthly_premium = 5;
+  int64 max_claim = 6;
+}
+
+// MsgJoinPool
+message MsgJoinPool {
+  string member = 1;
+  string pool_id = 2;
+}
+
+// MsgFileClaim
+message MsgFileClaim {
+  string claimant = 1;
+  string pool_id = 2;
+  int64 amount = 3;
+  string reason = 4;
+  string evidence = 5;
+}
+
+// MsgVoteClaim
+message MsgVoteClaim {
+  string voter = 1;
+  string claim_id = 2;
+  bool approve = 3;
+}

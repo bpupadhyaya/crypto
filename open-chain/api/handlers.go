@@ -173,6 +173,144 @@ func RegisterRoutes(mux *http.ServeMux, keepers Keepers, ctxProvider ContextProv
 
 	// ─── Chain Params ───
 	mux.HandleFunc("/openchain/govuid/v1/params", handleChainParams(keepers.GovUID, ctxProvider))
+
+	// ─── Environmental Impact ───
+	mux.HandleFunc("/openchain/otk/v1/environmental/", func(w http.ResponseWriter, r *http.Request) {
+		uid := strings.TrimPrefix(r.URL.Path, "/openchain/otk/v1/environmental/")
+		ctx := ctxProvider()
+		profile := keepers.OTK.GetEnvironmentalProfile(ctx, uid)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(profile)
+	})
+	mux.HandleFunc("/openchain/otk/v1/eco_region/", func(w http.ResponseWriter, r *http.Request) {
+		region := strings.TrimPrefix(r.URL.Path, "/openchain/otk/v1/eco_region/")
+		ctx := ctxProvider()
+		health := keepers.OTK.GetRegionalEnvironmentalHealth(ctx, region)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(health)
+	})
+
+	// ─── Water & Sanitation ───
+	mux.HandleFunc("/openchain/otk/v1/water_score/", func(w http.ResponseWriter, r *http.Request) {
+		region := strings.TrimPrefix(r.URL.Path, "/openchain/otk/v1/water_score/")
+		ctx := ctxProvider()
+		score := keepers.OTK.GetRegionalWaterScore(ctx, region)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(score)
+	})
+
+	// ─── Housing Security ───
+	mux.HandleFunc("/openchain/otk/v1/housing_score/", func(w http.ResponseWriter, r *http.Request) {
+		region := strings.TrimPrefix(r.URL.Path, "/openchain/otk/v1/housing_score/")
+		ctx := ctxProvider()
+		score := keepers.OTK.GetRegionalHousingScore(ctx, region)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(score)
+	})
+
+	// ─── Lending Liquidation History ───
+	if keepers.Lending != nil {
+		mux.HandleFunc("/openchain/lending/v1/liquidations", func(w http.ResponseWriter, r *http.Request) {
+			ctx := ctxProvider()
+			events := keepers.Lending.GetLiquidationHistory(ctx, 50)
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(events)
+		})
+	}
+
+	// ─── Caregiver Profile ───
+	mux.HandleFunc("/openchain/otk/v1/caregiver/", func(w http.ResponseWriter, r *http.Request) {
+		uid := strings.TrimPrefix(r.URL.Path, "/openchain/otk/v1/caregiver/")
+		ctx := ctxProvider()
+		profile := keepers.OTK.GetCaregiverProfile(ctx, uid)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(profile)
+	})
+
+	// ─── Parent Profile ───
+	mux.HandleFunc("/openchain/otk/v1/parent/", func(w http.ResponseWriter, r *http.Request) {
+		uid := strings.TrimPrefix(r.URL.Path, "/openchain/otk/v1/parent/")
+		ctx := ctxProvider()
+		profile := keepers.OTK.GetParentProfile(ctx, uid)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(profile)
+	})
+
+	// ─── Peace Index ───
+	mux.HandleFunc("/openchain/otk/v1/peace_index/", func(w http.ResponseWriter, r *http.Request) {
+		region := strings.TrimPrefix(r.URL.Path, "/openchain/otk/v1/peace_index/")
+		ctx := ctxProvider()
+		idx := keepers.OTK.GetGlobalPeaceIndex(ctx)
+		if region != "" && region != "global" {
+			regIdx := keepers.OTK.GetRegionalEnvironmentalHealth(ctx, region)
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(regIdx)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(idx)
+	})
+
+	// ─── Employment / Job Board ───
+	mux.HandleFunc("/openchain/otk/v1/jobs", func(w http.ResponseWriter, r *http.Request) {
+		ctx := ctxProvider()
+		region := r.URL.Query().Get("region")
+		jobs := keepers.OTK.GetOpenJobs(ctx, region, 50)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(jobs)
+	})
+	mux.HandleFunc("/openchain/otk/v1/employment_stats/", func(w http.ResponseWriter, r *http.Request) {
+		region := strings.TrimPrefix(r.URL.Path, "/openchain/otk/v1/employment_stats/")
+		ctx := ctxProvider()
+		stats := keepers.OTK.GetEmploymentStats(ctx, region)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(stats)
+	})
+
+	// ─── Marketplace ───
+	mux.HandleFunc("/openchain/otk/v1/market", func(w http.ResponseWriter, r *http.Request) {
+		ctx := ctxProvider()
+		category := r.URL.Query().Get("category")
+		listings := keepers.OTK.GetMarketListings(ctx, category, 50)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(listings)
+	})
+	mux.HandleFunc("/openchain/otk/v1/market_stats/", func(w http.ResponseWriter, r *http.Request) {
+		region := strings.TrimPrefix(r.URL.Path, "/openchain/otk/v1/market_stats/")
+		ctx := ctxProvider()
+		stats := keepers.OTK.GetMarketStats(ctx, region)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(stats)
+	})
+
+	// ─── Insurance Pools ───
+	mux.HandleFunc("/openchain/otk/v1/insurance_pools", func(w http.ResponseWriter, r *http.Request) {
+		ctx := ctxProvider()
+		poolType := r.URL.Query().Get("type")
+		pools := keepers.OTK.GetInsurancePools(ctx, poolType)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(pools)
+	})
+
+	// ─── Research Projects ───
+	mux.HandleFunc("/openchain/otk/v1/research", func(w http.ResponseWriter, r *http.Request) {
+		ctx := ctxProvider()
+		category := r.URL.Query().Get("category")
+		projects := keepers.OTK.GetResearchProjects(ctx, category, 50)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(projects)
+	})
+
+	// ─── DAO Treasury ───
+	if keepers.DAO != nil {
+		mux.HandleFunc("/openchain/dao/v1/treasury/", func(w http.ResponseWriter, r *http.Request) {
+			daoID := strings.TrimPrefix(r.URL.Path, "/openchain/dao/v1/treasury/")
+			ctx := ctxProvider()
+			treasury := keepers.DAO.GetDAOTreasury(ctx, daoID)
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(treasury)
+		})
+	}
 }
 
 // ─── Token Factory Handlers ───

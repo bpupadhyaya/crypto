@@ -116,6 +116,14 @@ func (k Keeper) MintForMilestone(ctx sdk.Context, milestone types.Milestone, rin
 		}
 	}
 
+	// Auto-contribute to treasury (Article III: treasury gets a share of all minting)
+	treasury := k.GetTreasury(ctx)
+	treasuryShare := totalMinted.Int64() * treasury.ContributionRate / 10000
+	if treasuryShare > 0 {
+		k.ContributeToTreasury(ctx, channelDenom, treasuryShare)
+		k.ContributeToTreasury(ctx, types.BaseDenom, treasuryShare)
+	}
+
 	// Update the Living Ledger with channel breakdown
 	if err := k.RecordMilestoneMint(ctx, milestone.UID, milestone.Channel, totalMinted.Int64()); err != nil {
 		return fmt.Errorf("failed to update living ledger: %w", err)

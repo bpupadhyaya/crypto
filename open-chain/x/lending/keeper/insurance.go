@@ -12,6 +12,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"openchain/x/lending/types"
@@ -99,7 +100,7 @@ func (k Keeper) CoverBadDebt(ctx sdk.Context, denom string, shortfall int64) err
 func (k Keeper) CheckLiquidations(ctx sdk.Context) {
 	store := ctx.KVStore(k.storeKey)
 	prefix := []byte("position/")
-	iterator := store.Iterator(prefix, nil)
+	iterator := store.Iterator(prefix, storetypes.PrefixEndBytes(prefix))
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
