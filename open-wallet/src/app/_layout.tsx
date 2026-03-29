@@ -8,12 +8,13 @@ import { Buffer } from 'buffer';
 (globalThis as any).Buffer = Buffer;
 import 'react-native-get-random-values';
 
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { View, Modal, StyleSheet } from 'react-native';
 import { Slot } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useWalletStore } from '../store/walletStore';
+import { SplashScreen } from '../components/SplashScreen';
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 30_000 } },
@@ -63,6 +64,7 @@ export default function RootLayout() {
   const hasVault = useWalletStore((s) => s.hasVault);
   const autoLockTimeout = useWalletStore((s) => s.autoLockTimeout);
   const hasBeenUnlocked = useRef(false);
+  const [showSplash, setShowSplash] = useState(true);
 
   if (status === 'unlocked') hasBeenUnlocked.current = true;
 
@@ -156,6 +158,7 @@ export default function RootLayout() {
       <QueryClientProvider client={queryClient}>
         <StatusBar style="light" />
         <Slot />
+        {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
         <Modal visible={needsUnlock} animationType="none" presentationStyle="fullScreen" statusBarTranslucent>
           <UnlockScreen />
         </Modal>

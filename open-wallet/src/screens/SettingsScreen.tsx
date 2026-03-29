@@ -71,6 +71,9 @@ import { DAOScreen } from './DAOScreen';
 import { DelegationScreen } from './DelegationScreen';
 import { VotingPowerScreen } from './VotingPowerScreen';
 import { MilestoneDefinitionsScreen } from './MilestoneDefinitionsScreen';
+import { FamilyTreeScreen } from './FamilyTreeScreen';
+import { ParentingJourneyScreen } from './ParentingJourneyScreen';
+import { TeacherImpactScreen } from './TeacherImpactScreen';
 import { PortfolioChartScreen } from './PortfolioChartScreen';
 import { AdvancedAlertsScreen } from './AdvancedAlertsScreen';
 import { TokenCompareScreen } from './TokenCompareScreen';
@@ -88,7 +91,7 @@ import { HardwareKeyScreen } from './HardwareKeyScreen';
 import { TreasuryScreen } from './TreasuryScreen';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury' | 'family-tree' | 'parenting-journey' | 'teacher-impact';
 
 type SettingsCategory = 'account' | 'network' | 'wallet' | 'exchange' | 'chain' | 'tools' | 'about' | 'support' | 'developer';
 
@@ -325,6 +328,9 @@ export function SettingsScreen() {
   if (view === 'address-labels') return <AddressLabelScreen onClose={() => setView('main')} />;
   if (view === 'dev-tools') return <DevToolsScreen onClose={() => setView('main')} />;
   if (view === 'treasury') return <TreasuryScreen onClose={() => setView('main')} />;
+  if (view === 'family-tree') return <FamilyTreeScreen onClose={() => setView('main')} onSendGratitude={() => setView('gratitude')} />;
+  if (view === 'parenting-journey') return <ParentingJourneyScreen onClose={() => setView('main')} />;
+  if (view === 'teacher-impact') return <TeacherImpactScreen onClose={() => setView('main')} />;
 
   // ─── Low Bandwidth State ───
   const lowBandwidthOverride = getLowBandwidthOverride();
@@ -772,6 +778,24 @@ export function SettingsScreen() {
       rightColor: t.accent.green,
     },
     {
+      label: 'Family Tree',
+      onPress: () => setView('family-tree'),
+      rightText: 'Connections',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Parenting Journey',
+      onPress: () => setView('parenting-journey'),
+      rightText: 'Milestones',
+      rightColor: t.accent.purple,
+    },
+    {
+      label: 'Teacher Impact',
+      onPress: () => setView('teacher-impact'),
+      rightText: 'eOTK',
+      rightColor: t.accent.blue,
+    },
+    {
       label: 'Encrypted Messages',
       onPress: () => setView('messages'),
       rightText: 'P2P',
@@ -1087,7 +1111,7 @@ export function SettingsScreen() {
     { key: 'network', icon: '\uD83C\uDF10', label: 'Network\n& P2P', badge: '4 items' },
     { key: 'wallet', icon: '\uD83D\uDC5B', label: 'Wallet', badge: '9 items' },
     { key: 'exchange', icon: '\uD83D\uDCB1', label: 'Exchange\n& DeFi', badge: '6 items' },
-    { key: 'chain', icon: '\u26D3\uFE0F', label: 'Open Chain', badge: '16 items' },
+    { key: 'chain', icon: '\u26D3\uFE0F', label: 'Open Chain', badge: '19 items' },
     { key: 'tools', icon: '\uD83D\uDD27', label: 'Tools', badge: '16 items' },
     { key: 'about', icon: '\u2139\uFE0F', label: 'About', badge: '8 items' },
     { key: 'support', icon: '\uD83D\uDC9A', label: 'Support\nthe Mission', badge: '' },

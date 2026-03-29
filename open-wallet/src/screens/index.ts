@@ -49,3 +49,6 @@ export type { PendingTxType, PendingTxStatus, PendingTransaction } from './Pendi
 export { PortfolioChartScreen } from './PortfolioChartScreen';
 export { AdvancedAlertsScreen } from './AdvancedAlertsScreen';
 export { TokenCompareScreen } from './TokenCompareScreen';
+export { FamilyTreeScreen } from './FamilyTreeScreen';
+export { ParentingJourneyScreen } from './ParentingJourneyScreen';
+export { TeacherImpactScreen } from './TeacherImpactScreen';
