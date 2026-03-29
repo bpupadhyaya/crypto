@@ -130,6 +130,10 @@ func RegisterRoutes(mux *http.ServeMux, keepers Keepers, ctxProvider ContextProv
 	// ─── Amendments ───
 	mux.HandleFunc("/openchain/govuid/v1/amendments", handleAmendments(keepers.GovUID, ctxProvider))
 
+	// ─── Price Oracle ───
+	mux.HandleFunc("/openchain/otk/v1/prices", handlePrices(keepers.OTK, ctxProvider))
+	mux.HandleFunc("/openchain/otk/v1/price/", handlePrice(keepers.OTK, ctxProvider))
+
 	// ─── Chain Params ───
 	mux.HandleFunc("/openchain/govuid/v1/params", handleChainParams(keepers.GovUID, ctxProvider))
 }
@@ -193,6 +197,28 @@ func handleConversations(k *messagingkeeper.Keeper, ctxProvider ContextProvider)
 }
 
 // ─── Chain Params Handler ───
+
+// ─── Price Oracle Handlers ───
+
+func handlePrices(k *otkkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := ctxProvider()
+		prices := k.GetAllPrices(ctx)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]interface{}{"prices": prices})
+	}
+}
+
+func handlePrice(k *otkkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		denom := strings.TrimPrefix(r.URL.Path, "/openchain/otk/v1/price/")
+		if denom == "" { http.Error(w, "denom required", 400); return }
+		ctx := ctxProvider()
+		price := k.GetAggregatedPrice(ctx, denom)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(price)
+	}
+}
 
 func handleChainParams(k *govuidkeeper.Keeper, ctxProvider ContextProvider) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
