@@ -22,6 +22,7 @@ import {
 } from 'react-native';
 import { useWalletStore } from '../store/walletStore';
 import { useTheme } from '../hooks/useTheme';
+import { ConstitutionSummary } from '../components/ConstitutionSummary';
 
 // ─── Types ───
 
@@ -291,6 +292,10 @@ export function ValueChannelScreen({ onClose, onNavigate }: Props) {
             This is The Human Constitution.{'\n'}
             All value channels, one humanity.
           </Text>
+        </View>
+
+        <View style={{ marginTop: 16, marginBottom: 20 }}>
+          <ConstitutionSummary />
         </View>
       </ScrollView>
     </SafeAreaView>

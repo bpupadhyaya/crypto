@@ -21,6 +21,7 @@ import { usePortfolio } from '../hooks/useBalances';
 import { useTheme } from '../hooks/useTheme';
 import { useAnimatedNumber } from '../utils/animations';
 import { formatCryptoAmount } from '../core/currency/formatter';
+import { ConstitutionSummary } from '../components/ConstitutionSummary';
 import type { Theme } from '../utils/theme';
 
 // Fallback allocations when no portfolio data
@@ -525,6 +526,7 @@ export function HomeScreen() {
           keyExtractor={keyExtractor}
           renderItem={renderItem}
           ListHeaderComponent={header}
+          ListFooterComponent={<View style={{ paddingHorizontal: 4, paddingTop: 16, paddingBottom: 8 }}><ConstitutionSummary /></View>}
           showsVerticalScrollIndicator={false}
           initialNumToRender={10}
           maxToRenderPerBatch={10}

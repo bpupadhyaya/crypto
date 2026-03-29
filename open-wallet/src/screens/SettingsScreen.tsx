@@ -102,9 +102,15 @@ import { ValueChannelScreen } from './ValueChannelScreen';
 import { GlobalImpactScreen } from './GlobalImpactScreen';
 import { MyImpactScreen } from './MyImpactScreen';
 import { PeaceIndexScreen } from './PeaceIndexScreen';
+import { ConstitutionReaderScreen } from './ConstitutionReaderScreen';
+import { PledgeScreen } from './PledgeScreen';
+import { AmbassadorScreen } from './AmbassadorScreen';
+import { EldercareScreen } from './EldercareScreen';
+import { IntergenerationScreen } from './IntergenerationScreen';
+import { GratitudeWallScreen } from './GratitudeWallScreen';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury' | 'family-tree' | 'parenting-journey' | 'teacher-impact' | 'payment-request' | 'validator-dashboard' | 'volunteer' | 'community-board' | 'education-hub' | 'skill-cert' | 'mentorship' | 'wellness' | 'civic' | 'value-channels' | 'global-impact' | 'my-impact' | 'peace-index';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury' | 'family-tree' | 'parenting-journey' | 'teacher-impact' | 'payment-request' | 'validator-dashboard' | 'volunteer' | 'community-board' | 'education-hub' | 'skill-cert' | 'mentorship' | 'wellness' | 'civic' | 'value-channels' | 'global-impact' | 'my-impact' | 'peace-index' | 'constitution-reader' | 'pledge' | 'ambassador' | 'eldercare' | 'intergeneration' | 'gratitude-wall';
 
 type SettingsCategory = 'account' | 'network' | 'wallet' | 'exchange' | 'chain' | 'tools' | 'about' | 'support' | 'developer';
 
@@ -357,6 +363,12 @@ export function SettingsScreen() {
   if (view === 'my-impact') return <MyImpactScreen onClose={() => setView('main')} />;
   if (view === 'peace-index') return <PeaceIndexScreen onClose={() => setView('main')} />;
   if (view === 'value-channels') return <ValueChannelScreen onClose={() => setView('main')} onNavigate={(screen) => setView(screen as any)} />;
+  if (view === 'constitution-reader') return <ConstitutionReaderScreen onClose={() => setView('main')} />;
+  if (view === 'pledge') return <PledgeScreen onClose={() => setView('main')} />;
+  if (view === 'ambassador') return <AmbassadorScreen onClose={() => setView('main')} />;
+  if (view === 'eldercare') return <EldercareScreen onClose={() => setView('main')} />;
+  if (view === 'intergeneration') return <IntergenerationScreen onClose={() => setView('main')} />;
+  if (view === 'gratitude-wall') return <GratitudeWallScreen onClose={() => setView('main')} onSendGratitude={() => setView('gratitude')} />;
 
   // ─── Low Bandwidth State ───
   const lowBandwidthOverride = getLowBandwidthOverride();
@@ -917,6 +929,24 @@ export function SettingsScreen() {
       rightText: 'Article X',
       rightColor: t.accent.blue,
     },
+    {
+      label: 'Eldercare',
+      onPress: () => setView('eldercare'),
+      rightText: 'nOTK',
+      rightColor: t.accent.purple,
+    },
+    {
+      label: 'Generations',
+      onPress: () => setView('intergeneration'),
+      rightText: 'Legacy',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Gratitude Wall',
+      onPress: () => setView('gratitude-wall'),
+      rightText: 'Live Feed',
+      rightColor: t.accent.green,
+    },
   ];
 
   const toolsItems = [
@@ -1086,9 +1116,21 @@ export function SettingsScreen() {
     },
     {
       label: 'The Human Constitution',
-      onPress: () => Linking.openURL('https://github.com/bpupadhyaya/crypto/blob/main/docs/HUMAN_CONSTITUTION.md'),
+      onPress: () => setView('constitution-reader'),
       rightText: 'Read',
       rightColor: t.accent.blue,
+    },
+    {
+      label: 'Constitution Pledge',
+      onPress: () => setView('pledge'),
+      rightText: 'Sign',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Ambassador Program',
+      onPress: () => setView('ambassador'),
+      rightText: 'Join',
+      rightColor: t.accent.purple,
     },
     {
       label: 'Tutorial',
@@ -1215,9 +1257,9 @@ export function SettingsScreen() {
     { key: 'network', icon: '\uD83C\uDF10', label: 'Network\n& P2P', badge: '4 items' },
     { key: 'wallet', icon: '\uD83D\uDC5B', label: 'Wallet', badge: '10 items' },
     { key: 'exchange', icon: '\uD83D\uDCB1', label: 'Exchange\n& DeFi', badge: '7 items' },
-    { key: 'chain', icon: '\u26D3\uFE0F', label: 'Open Chain', badge: '34 items' },
+    { key: 'chain', icon: '\u26D3\uFE0F', label: 'Open Chain', badge: '37 items' },
     { key: 'tools', icon: '\uD83D\uDD27', label: 'Tools', badge: '22 items' },
-    { key: 'about', icon: '\u2139\uFE0F', label: 'About', badge: '9 items' },
+    { key: 'about', icon: '\u2139\uFE0F', label: 'About', badge: '11 items' },
     { key: 'support', icon: '\uD83D\uDC9A', label: 'Support\nthe Mission', badge: '' },
   ];
 

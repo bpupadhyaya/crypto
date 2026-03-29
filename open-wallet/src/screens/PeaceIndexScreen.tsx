@@ -15,6 +15,7 @@ import {
   StyleSheet, SafeAreaView,
 } from 'react-native';
 import { useTheme } from '../hooks/useTheme';
+import { ConstitutionSummary } from '../components/ConstitutionSummary';
 
 interface Props {
   onClose: () => void;
@@ -384,6 +385,10 @@ export function PeaceIndexScreen({ onClose }: Props) {
 
         {/* Demo tag */}
         <Text style={s.demoTag}>DEMO MODE — Sample peace index data</Text>
+
+        <View style={{ marginTop: 16 }}>
+          <ConstitutionSummary />
+        </View>
 
         <View style={{ height: 60 }} />
       </ScrollView>
