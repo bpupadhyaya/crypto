@@ -205,9 +205,19 @@ import { TreePlantingScreen } from './TreePlantingScreen';
 import { BookClubScreen } from './BookClubScreen';
 import { ApprenticeshipScreen } from './ApprenticeshipScreen';
 import { NeighborHelpScreen } from './NeighborHelpScreen';
+import { DanceScreen } from './DanceScreen';
+import { GardeningScreen } from './GardeningScreen';
+import { PhotoScreen } from './PhotoScreen';
+import { PoetryScreen } from './PoetryScreen';
+import { RepairCafeScreen } from './RepairCafeScreen';
+import { SkillSwapScreen } from './SkillSwapScreen';
+import { CeremonyScreen } from './CeremonyScreen';
+import { WildlifeScreen } from './WildlifeScreen';
+import { GamesScreen } from './GamesScreen';
+import { CookingScreen } from './CookingScreen';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury' | 'family-tree' | 'parenting-journey' | 'teacher-impact' | 'payment-request' | 'validator-dashboard' | 'volunteer' | 'community-board' | 'education-hub' | 'skill-cert' | 'mentorship' | 'wellness' | 'civic' | 'value-channels' | 'global-impact' | 'my-impact' | 'peace-index' | 'constitution-reader' | 'pledge' | 'ambassador' | 'eldercare' | 'intergeneration' | 'gratitude-wall' | 'needs-assessment' | 'resource-match' | 'basic-needs' | 'guardian' | 'cross-chain-id' | 'appeal' | 'pqc-key' | 'zk-proof' | 'data-sovereignty' | 'mediation' | 'curriculum' | 'health-emergency' | 'community-projects' | 'micro-grants' | 'inter-regional' | 'time-bank' | 'mentor-match' | 'environmental' | 'disaster-response' | 'cooperative' | 'youth-council' | 'cultural-heritage' | 'skill-verification' | 'family-finance' | 'reputation' | 'community-radio' | 'food-security' | 'water-sanitation' | 'housing' | 'mental-wellness' | 'digital-literacy' | 'legal-aid' | 'renewable-energy' | 'language-exchange' | 'elder-wisdom' | 'art-studio' | 'safety-net' | 'transport' | 'childcare' | 'disability-support' | 'emergency-prep' | 'immigration-support' | 'sports' | 'library' | 'waste-management' | 'conflict-prevention' | 'pet-welfare' | 'job-board' | 'marketplace' | 'maternal-health' | 'senior-activities' | 'grief-support' | 'recovery' | 'workshop' | 'civic-education' | 'farm-to-table' | 'volunteer-abroad' | 'research' | 'insurance-pool' | 'storytelling' | 'travel' | 'innovation' | 'barter' | 'music' | 'election' | 'budget' | 'news' | 'infrastructure' | 'weather' | 'homeschool' | 'meditation' | 'calendar' | 'ancestry' | 'arbitration' | 'supply-chain' | 'volunteer-match' | 'community-map' | 'prayer' | 'permaculture' | 'financial-literacy' | 'teen' | 'tutor' | 'coworking' | 'feedback' | 'gratitude-journal' | 'emergency-contacts' | 'vision-board' | 'petition' | 'barrier-free' | 'cleanup-drive' | 'nutrition' | 'sleep' | 'journal' | 'tree-planting' | 'book-club' | 'apprenticeship' | 'neighbor-help';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury' | 'family-tree' | 'parenting-journey' | 'teacher-impact' | 'payment-request' | 'validator-dashboard' | 'volunteer' | 'community-board' | 'education-hub' | 'skill-cert' | 'mentorship' | 'wellness' | 'civic' | 'value-channels' | 'global-impact' | 'my-impact' | 'peace-index' | 'constitution-reader' | 'pledge' | 'ambassador' | 'eldercare' | 'intergeneration' | 'gratitude-wall' | 'needs-assessment' | 'resource-match' | 'basic-needs' | 'guardian' | 'cross-chain-id' | 'appeal' | 'pqc-key' | 'zk-proof' | 'data-sovereignty' | 'mediation' | 'curriculum' | 'health-emergency' | 'community-projects' | 'micro-grants' | 'inter-regional' | 'time-bank' | 'mentor-match' | 'environmental' | 'disaster-response' | 'cooperative' | 'youth-council' | 'cultural-heritage' | 'skill-verification' | 'family-finance' | 'reputation' | 'community-radio' | 'food-security' | 'water-sanitation' | 'housing' | 'mental-wellness' | 'digital-literacy' | 'legal-aid' | 'renewable-energy' | 'language-exchange' | 'elder-wisdom' | 'art-studio' | 'safety-net' | 'transport' | 'childcare' | 'disability-support' | 'emergency-prep' | 'immigration-support' | 'sports' | 'library' | 'waste-management' | 'conflict-prevention' | 'pet-welfare' | 'job-board' | 'marketplace' | 'maternal-health' | 'senior-activities' | 'grief-support' | 'recovery' | 'workshop' | 'civic-education' | 'farm-to-table' | 'volunteer-abroad' | 'research' | 'insurance-pool' | 'storytelling' | 'travel' | 'innovation' | 'barter' | 'music' | 'election' | 'budget' | 'news' | 'infrastructure' | 'weather' | 'homeschool' | 'meditation' | 'calendar' | 'ancestry' | 'arbitration' | 'supply-chain' | 'volunteer-match' | 'community-map' | 'prayer' | 'permaculture' | 'financial-literacy' | 'teen' | 'tutor' | 'coworking' | 'feedback' | 'gratitude-journal' | 'emergency-contacts' | 'vision-board' | 'petition' | 'barrier-free' | 'cleanup-drive' | 'nutrition' | 'sleep' | 'journal' | 'tree-planting' | 'book-club' | 'apprenticeship' | 'neighbor-help' | 'dance' | 'gardening' | 'photo' | 'poetry' | 'repair-cafe' | 'skill-swap' | 'ceremony' | 'wildlife' | 'games' | 'cooking';
 
 type SettingsCategory = 'account' | 'network' | 'wallet' | 'exchange' | 'chain' | 'tools' | 'about' | 'support' | 'developer';
 
@@ -563,6 +573,16 @@ export function SettingsScreen() {
   if (view === 'book-club') return <BookClubScreen onClose={() => setView('main')} />;
   if (view === 'apprenticeship') return <ApprenticeshipScreen onClose={() => setView('main')} />;
   if (view === 'neighbor-help') return <NeighborHelpScreen onClose={() => setView('main')} />;
+  if (view === 'dance') return <DanceScreen onClose={() => setView('main')} />;
+  if (view === 'gardening') return <GardeningScreen onClose={() => setView('main')} />;
+  if (view === 'photo') return <PhotoScreen onClose={() => setView('main')} />;
+  if (view === 'poetry') return <PoetryScreen onClose={() => setView('main')} />;
+  if (view === 'repair-cafe') return <RepairCafeScreen onClose={() => setView('main')} />;
+  if (view === 'skill-swap') return <SkillSwapScreen onClose={() => setView('main')} />;
+  if (view === 'ceremony') return <CeremonyScreen onClose={() => setView('main')} />;
+  if (view === 'wildlife') return <WildlifeScreen onClose={() => setView('main')} />;
+  if (view === 'games') return <GamesScreen onClose={() => setView('main')} />;
+  if (view === 'cooking') return <CookingScreen onClose={() => setView('main')} />;
 
   // ─── Low Bandwidth State ───
   const lowBandwidthOverride = getLowBandwidthOverride();
@@ -1722,6 +1742,66 @@ export function SettingsScreen() {
       onPress: () => setView('neighbor-help'),
       rightText: 'Quick Mutual Aid',
       rightColor: t.accent.green,
+    },
+    {
+      label: 'Dance & Movement',
+      onPress: () => setView('dance'),
+      rightText: 'Cultural Dance',
+      rightColor: t.accent.purple,
+    },
+    {
+      label: 'Gardening',
+      onPress: () => setView('gardening'),
+      rightText: 'Plant Tracker',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Photography',
+      onPress: () => setView('photo'),
+      rightText: 'Visual Stories',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Poetry',
+      onPress: () => setView('poetry'),
+      rightText: 'Literary Arts',
+      rightColor: t.accent.purple,
+    },
+    {
+      label: 'Repair Cafe',
+      onPress: () => setView('repair-cafe'),
+      rightText: 'xOTK Fix-It',
+      rightColor: t.accent.orange,
+    },
+    {
+      label: 'Skill Swap',
+      onPress: () => setView('skill-swap'),
+      rightText: 'Teach & Learn',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Ceremonies',
+      onPress: () => setView('ceremony'),
+      rightText: 'Rites of Passage',
+      rightColor: t.accent.purple,
+    },
+    {
+      label: 'Wildlife',
+      onPress: () => setView('wildlife'),
+      rightText: 'Biodiversity',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Games & Play',
+      onPress: () => setView('games'),
+      rightText: 'Community Fun',
+      rightColor: t.accent.yellow,
+    },
+    {
+      label: 'Cooking',
+      onPress: () => setView('cooking'),
+      rightText: 'Recipes & Culture',
+      rightColor: t.accent.orange,
     },
   ];
 
