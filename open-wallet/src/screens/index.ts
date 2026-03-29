@@ -59,3 +59,6 @@ export { SkillCertScreen } from './SkillCertScreen';
 export { MentorshipScreen } from './MentorshipScreen';
 export { VolunteerScreen } from './VolunteerScreen';
 export { CommunityBoardScreen } from './CommunityBoardScreen';
+export { WellnessScreen } from './WellnessScreen';
+export { CivicScreen } from './CivicScreen';
+export { ValueChannelScreen } from './ValueChannelScreen';
