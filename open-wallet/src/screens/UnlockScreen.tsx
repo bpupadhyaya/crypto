@@ -6,8 +6,11 @@
  *   2. Biometric (Face ID / fingerprint — auto-try)
  *   3. Password (vault password)
  *   4. Recover via Seed Phrase (12/24 words)
- *   5. Hardware Key (external device)
- *   6. Phone Built-in Key (Solana Saga/Seeker style secure element)
+ *   5. Hardware Key (external device: Ledger, Trezor, Keystone)
+ *   6. Phone Seed Vault (Solana Saga/Seeker — TRUE cold storage)
+ *
+ * Note: Phone security enhancements (Knox, SE, Titan) are not unlock methods.
+ * They protect the app's keys but the user still unlocks via PIN/biometric/password.
  */
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -26,7 +29,13 @@ import { PinPad } from '../components/PinPad';
 import { authManager } from '../core/auth/auth';
 import { useWalletStore } from '../store/walletStore';
 import { useTheme } from '../hooks/useTheme';
-import { detectBuiltinKey, getDemoBuiltinKey, type BuiltinKeyInfo } from '../core/hardware/hardwareKeyManager';
+import {
+  detectBuiltinKey,
+  getDemoBuiltinKey,
+  importFromSeedVault,
+  getDemoSeedVaultAddresses,
+  type BuiltinKeyInfo,
+} from '../core/hardware/hardwareKeyManager';
 
 type UnlockMode = 'loading' | 'biometric' | 'pin' | 'password' | 'seed-recovery' | 'hardware-key' | 'builtin-key';
 
@@ -69,6 +78,16 @@ export function UnlockScreen() {
     hwIcon: { fontSize: 48, marginBottom: 12 },
     hwTitle: { color: t.text.primary, fontSize: 18, fontWeight: '700', marginBottom: 4 },
     hwDesc: { color: t.text.muted, fontSize: 13, textAlign: 'center', lineHeight: 20 },
+    // Cold storage card (green border)
+    coldStorageCard: {
+      backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 16,
+      alignItems: 'center', borderWidth: 2, borderColor: t.accent.green,
+    },
+    coldStorageDot: {
+      width: 10, height: 10, borderRadius: 5, backgroundColor: t.accent.green, marginBottom: 8,
+    },
+    coldStorageProvider: { color: t.accent.green, fontSize: 14, fontWeight: '600', marginBottom: 8 },
+    coldStorageDesc: { color: t.text.muted, fontSize: 13, textAlign: 'center', lineHeight: 20 },
   }), [t]);
 
   useEffect(() => {
@@ -86,16 +105,19 @@ export function UnlockScreen() {
       if (!configured) setMode('password');
     });
 
-    // Detect built-in hardware key
+    // Detect built-in hardware key (cold storage only matters for unlock)
     detectBuiltinKeyAsync();
   }, []);
 
   const detectBuiltinKeyAsync = async () => {
     try {
       const info = demoMode ? getDemoBuiltinKey() : await detectBuiltinKey();
-      if (info.available) {
+      // Only show the "Use Phone's Built-in Key" option if it's TRUE cold storage
+      // (Solana Saga/Seeker). Security enhancements (Knox/SE/Titan) don't unlock.
+      if (info.available && info.isColdStorage) {
         setBuiltinKey(info);
       }
+      // If not cold storage, hide the option completely
     } catch {
       // No built-in key available
     }
@@ -237,18 +259,26 @@ export function UnlockScreen() {
     if (!builtinKey) return;
     setLoading(true);
     try {
-      // In a real implementation, this would access the phone's secure element
-      // to retrieve or derive keys without exposing the seed phrase
-      const providerNames: Record<string, string> = {
-        'solana-saga': 'Solana Saga Seed Vault',
-        'solana-seeker': 'Solana Seeker Seed Vault',
-        'samsung-knox': 'Samsung Knox',
-        'google-titan': 'Google Titan M',
-        'apple-se': 'Apple Secure Enclave',
-      };
+      // Request addresses from Seed Vault API
+      // The seed never leaves the hardware — we only get public addresses
+      let addresses: Record<string, string>;
+
+      if (demoMode) {
+        addresses = getDemoSeedVaultAddresses();
+      } else {
+        const result = await importFromSeedVault(builtinKey.provider);
+        addresses = result.addresses;
+      }
+
+      // Set the imported addresses in the store
+      setAddresses(addresses);
+
+      // Unlock the wallet
+      setStatus('unlocked');
+    } catch (err) {
       Alert.alert(
-        'Built-in Key',
-        `Authenticating with ${providerNames[builtinKey.provider] || builtinKey.provider}...\n\nThis would use your phone's secure hardware to unlock the wallet without exposing your seed phrase.`,
+        'Seed Vault Error',
+        err instanceof Error ? err.message : 'Failed to access phone seed vault.',
       );
     } finally {
       setLoading(false);
@@ -280,7 +310,7 @@ export function UnlockScreen() {
             <Text style={styles.altMethodText}>Use Hardware Key</Text>
           </TouchableOpacity>
         )}
-        {builtinKey && builtinKey.available && currentMode !== 'builtin-key' && (
+        {builtinKey && currentMode !== 'builtin-key' && (
           <TouchableOpacity style={[styles.altMethodBtn, styles.builtinIndicator]} onPress={() => setMode('builtin-key')}>
             <Text style={[styles.altMethodText, styles.builtinText]}>Use Phone's Built-in Key</Text>
           </TouchableOpacity>
@@ -412,7 +442,7 @@ export function UnlockScreen() {
     );
   }
 
-  // ─── Hardware Key ───
+  // ─── Hardware Key (external) ───
   if (mode === 'hardware-key') {
     return (
       <SafeAreaView style={styles.container}>
@@ -447,29 +477,27 @@ export function UnlockScreen() {
     );
   }
 
-  // ─── Phone Built-in Key ───
+  // ─── Phone Built-in Key (Solana Saga/Seeker cold storage) ───
   if (mode === 'builtin-key' && builtinKey) {
     const providerNames: Record<string, string> = {
       'solana-saga': 'Solana Saga Seed Vault',
       'solana-seeker': 'Solana Seeker Seed Vault',
-      'samsung-knox': 'Samsung Knox Secure Element',
-      'google-titan': 'Google Titan M Chip',
-      'apple-se': 'Apple Secure Enclave',
     };
 
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.content}>
-          <View style={[styles.hwCard, { borderWidth: 2, borderColor: t.accent.green }]}>
-            <Text style={styles.hwIcon}>SE</Text>
-            <Text style={styles.hwTitle}>Phone's Built-in Key</Text>
-            <Text style={[styles.hwDesc, { color: t.accent.green, fontWeight: '600', marginBottom: 8 }]}>
+          <View style={styles.coldStorageCard}>
+            <View style={styles.coldStorageDot} />
+            <Text style={styles.hwTitle}>Phone Seed Vault</Text>
+            <Text style={styles.coldStorageProvider}>
               {providerNames[builtinKey.provider] || builtinKey.provider}
             </Text>
-            <Text style={styles.hwDesc}>
-              {builtinKey.hasExistingSeedPhrase
-                ? 'Your phone has an existing seed phrase in its secure element. Authenticate to unlock.'
-                : 'Use your phone\'s secure hardware to authenticate and unlock your wallet.'}
+            <Text style={styles.coldStorageDesc}>
+              Your phone has a hardware security module that generates and stores your seed
+              phrase. The seed never leaves the hardware — even Open Wallet cannot see it.
+              {'\n\n'}
+              Authenticate to import your wallet addresses from the seed vault.
             </Text>
           </View>
 
@@ -481,7 +509,7 @@ export function UnlockScreen() {
             {loading ? (
               <ActivityIndicator color={t.bg.primary} />
             ) : (
-              <Text style={styles.unlockButtonText}>Authenticate with Secure Element</Text>
+              <Text style={styles.unlockButtonText}>Use Phone's Built-in Key</Text>
             )}
           </TouchableOpacity>
         </View>

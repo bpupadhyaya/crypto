@@ -5,17 +5,24 @@
  * 1. No external code execution — all signing logic ships with the app
  * 2. No WebView, no CDN, no runtime downloads — everything is bundled
  * 3. Transaction is verified THREE times:
- *    a) App shows tx details → user confirms in app
+ *    a) App shows tx details → user confirms in app (pre-sign)
  *    b) Hardware device shows tx details → user confirms on device screen
- *    c) After signing, app re-verifies the signed tx matches what was requested
+ *    c) After signing, app re-verifies the signed tx matches what was requested (post-sign)
  * 4. If any verification fails → transaction is rejected, user is warned
  * 5. All code is open source — anyone can audit
  *
  * This pipeline is used for ALL transaction signing, whether:
  * - Software wallet (app-managed keys)
- * - External hardware (Ledger, Trezor, Keystone)
- * - Phone built-in key (Solana Saga/Seeker, Samsung Knox)
+ * - External hardware (Ledger via BLE, Trezor via USB, Keystone via QR)
+ * - Phone cold storage (Solana Saga/Seeker Seed Vault)
+ * - Phone-enhanced security (keys protected by Knox/SE/Titan, signed by app)
  */
+
+import {
+  createHardwareWalletSigner,
+  getProvider,
+  type HardwareWalletProvider,
+} from './hardwareKeyManager';
 
 export interface TransactionRequest {
   id: string;
@@ -34,11 +41,20 @@ export interface TransactionRequest {
   createdAt: number;
 }
 
+export type SignerType =
+  | 'software'
+  | 'ledger'
+  | 'trezor'
+  | 'keystone'
+  | 'solana-saga'
+  | 'solana-seeker'
+  | 'phone-security'; // Knox/SE/Titan — still software-signed but hardware-protected keys
+
 export interface SignedTransaction {
   request: TransactionRequest;
   signature: Uint8Array;
   signedTxBytes: Uint8Array;
-  signerType: 'software' | 'ledger' | 'trezor' | 'keystone' | 'phone-builtin';
+  signerType: SignerType;
   signedAt: number;
   verified: boolean;
 }
@@ -162,16 +178,31 @@ export function verifyBroadcastResponse(txHash: string, chain: string): boolean 
  * Full signing pipeline — pre-verify → sign → post-verify → broadcast → verify.
  *
  * Returns null if ANY verification step fails.
+ *
+ * @param request The transaction request to sign
+ * @param signer A function that takes unsigned tx bytes and returns signature + signed bytes
+ * @param signerType Which signer is being used (for audit trail)
  */
 export async function secureSign(
   request: TransactionRequest,
   signer: (unsignedTx: Uint8Array) => Promise<{ signature: Uint8Array; signedTx: Uint8Array }>,
-  signerType: SignedTransaction['signerType'],
+  signerType: SignerType,
 ): Promise<SignedTransaction | null> {
   // Step 1: Pre-sign verification
   const preCheck = preSignVerify(request);
   if (!preCheck.valid) {
     console.error('Pre-sign verification failed:', preCheck.errors);
+    logSigningAttempt({
+      timestamp: Date.now(),
+      requestId: request.id,
+      chain: request.chain,
+      amount: request.amount,
+      token: request.token,
+      signerType,
+      preVerified: false,
+      postVerified: false,
+      broadcasted: false,
+    });
     return null;
   }
 
@@ -181,6 +212,17 @@ export async function secureSign(
     signResult = await signer(request.unsignedTxBytes);
   } catch (err) {
     console.error('Signing failed:', err);
+    logSigningAttempt({
+      timestamp: Date.now(),
+      requestId: request.id,
+      chain: request.chain,
+      amount: request.amount,
+      token: request.token,
+      signerType,
+      preVerified: true,
+      postVerified: false,
+      broadcasted: false,
+    });
     return null;
   }
 
@@ -197,12 +239,91 @@ export async function secureSign(
   const postCheck = postSignVerify(signed);
   if (!postCheck.valid) {
     console.error('Post-sign verification failed:', postCheck.errors);
+    logSigningAttempt({
+      timestamp: Date.now(),
+      requestId: request.id,
+      chain: request.chain,
+      amount: request.amount,
+      token: request.token,
+      signerType,
+      preVerified: true,
+      postVerified: false,
+      broadcasted: false,
+    });
     return null;
   }
 
   signed.verified = true;
+
+  logSigningAttempt({
+    timestamp: Date.now(),
+    requestId: request.id,
+    chain: request.chain,
+    amount: request.amount,
+    token: request.token,
+    signerType,
+    preVerified: true,
+    postVerified: true,
+    broadcasted: false, // Caller updates this after broadcast
+  });
+
   return signed;
 }
+
+/**
+ * Sign a transaction using a connected hardware wallet.
+ *
+ * This is the main entry point for hardware wallet signing.
+ * The flow is:
+ *   1. Pre-sign verification (app checks tx is legitimate)
+ *   2. Send to hardware device for signing (user confirms on device screen)
+ *   3. Post-sign verification (app re-verifies signed tx matches request)
+ *
+ * The triple-verification catches compromised firmware, BLE MITM, and bugs.
+ */
+export async function secureSignWithHardware(
+  request: TransactionRequest,
+  providerId: string,
+  demoMode: boolean = false,
+): Promise<SignedTransaction | null> {
+  // Determine signer type from provider ID
+  const signerTypeMap: Record<string, SignerType> = {
+    'ledger': 'ledger',
+    'trezor': 'trezor',
+    'keystone': 'keystone',
+    'solana-saga': 'solana-saga',
+    'solana-seeker': 'solana-seeker',
+    'samsung-knox': 'phone-security',
+    'apple-se': 'phone-security',
+    'google-titan': 'phone-security',
+  };
+
+  const signerType = signerTypeMap[providerId] || 'software';
+
+  // Create the hardware wallet signer function
+  const signer = createHardwareWalletSigner(providerId, request.chain, demoMode);
+
+  // Run through the full secure signing pipeline
+  return secureSign(request, signer, signerType);
+}
+
+/**
+ * Sign with the app's software wallet (optionally protected by phone security).
+ *
+ * For phones with Knox/SE/Titan, the keys are stored in hardware-protected
+ * keystore, but the actual signing computation happens in the app.
+ * This is security ENHANCEMENT, not cold storage.
+ */
+export async function secureSignWithSoftware(
+  request: TransactionRequest,
+  softwareSigner: (unsignedTx: Uint8Array) => Promise<{ signature: Uint8Array; signedTx: Uint8Array }>,
+  hasPhoneSecurity: boolean = false,
+): Promise<SignedTransaction | null> {
+  const signerType: SignerType = hasPhoneSecurity ? 'phone-security' : 'software';
+  return secureSign(request, softwareSigner, signerType);
+}
+
+// ─── Security Audit Log ───
 
 /**
  * Security audit log — record all signing attempts for forensics.
@@ -231,4 +352,15 @@ export function logSigningAttempt(entry: SigningAuditEntry) {
 
 export function getSigningAuditLog(): SigningAuditEntry[] {
   return [...auditLog];
+}
+
+/**
+ * Update the broadcast status of an audit entry after tx is sent.
+ */
+export function markBroadcasted(requestId: string, txHash: string) {
+  const entry = auditLog.find((e) => e.requestId === requestId);
+  if (entry) {
+    entry.broadcasted = true;
+    entry.txHash = txHash;
+  }
 }
