@@ -154,4 +154,64 @@ export class CosmosSigner {
     const [account] = await wallet.getAccounts();
     return account.address;
   }
+
+  /**
+   * Sign and broadcast arbitrary Cosmos SDK messages.
+   * Used by DEX swaps, order book, atomic swaps, and any custom module transactions.
+   *
+   * @param messages - Array of { typeUrl, value } messages (e.g., MsgSwap, MsgPlaceLimitOrder)
+   * @param fee - Transaction fee { amount: [{ denom, amount }], gas: string }
+   * @returns Transaction hash
+   */
+  async signAndBroadcast(
+    messages: Array<{ typeUrl: string; value: any }>,
+    fee: { amount: Array<{ denom: string; amount: string }>; gas: string },
+  ): Promise<string> {
+    const { SigningStargateClient } = await import('@cosmjs/stargate');
+    const { DirectSecp256k1Wallet } = await import('@cosmjs/proto-signing');
+    const { Registry } = await import('@cosmjs/proto-signing');
+
+    const wallet = await DirectSecp256k1Wallet.fromKey(this.privateKey, this.prefix);
+    const [account] = await wallet.getAccounts();
+
+    // Create a registry that accepts any message type (custom modules)
+    const registry = new Registry();
+    for (const msg of messages) {
+      // Register each message type as a generic pass-through
+      // The chain's module will decode it using its own proto definitions
+      if (!registry.lookupType(msg.typeUrl)) {
+        registry.register(msg.typeUrl, {
+          encode: (value: any, writer: any) => {
+            // Encode as JSON bytes for custom modules
+            const jsonBytes = new TextEncoder().encode(JSON.stringify(value));
+            writer.uint32(10).bytes(jsonBytes);
+            return writer;
+          },
+          decode: (input: any) => input,
+          fromPartial: (value: any) => value,
+        } as any);
+      }
+    }
+
+    const client = await SigningStargateClient.connectWithSigner(
+      this.rpcUrl,
+      wallet,
+      { registry },
+    );
+
+    const result = await client.signAndBroadcast(
+      account.address,
+      messages,
+      fee,
+      'Open Wallet transaction',
+    );
+
+    client.disconnect();
+
+    if (result.code !== 0) {
+      throw new Error(`Transaction failed (code ${result.code}): ${result.rawLog}`);
+    }
+
+    return result.transactionHash;
+  }
 }
