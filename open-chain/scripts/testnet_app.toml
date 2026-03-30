@@ -1,0 +1,36 @@
+# Open Chain Testnet App Configuration
+# Apply to each validator node's config/app.toml
+
+[api]
+# Enable REST API for wallet queries
+enable = true
+swagger = true
+address = "tcp://0.0.0.0:1317"
+enabled-unsafe-cors = true
+
+[grpc]
+# Enable gRPC for programmatic access
+enable = true
+address = "0.0.0.0:9090"
+
+[grpc-web]
+enable = true
+address = "0.0.0.0:9091"
+
+[state-sync]
+# Enable state sync for fast bootstrap of new validators
+snapshot-interval = 1000
+snapshot-keep-recent = 2
+
+[pruning]
+# Keep recent state for testnet
+pruning = "nothing"
+
+[telemetry]
+enabled = true
+prometheus-retention-time = 60
+global-labels = [["chain_id", "openchain-testnet-1"]]
+
+[minimum-gas-prices]
+# Near-zero gas prices (Article VII: near-zero fixed fees)
+minimum-gas-prices = "0.001uotk"
