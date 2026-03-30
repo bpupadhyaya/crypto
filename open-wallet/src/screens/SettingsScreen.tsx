@@ -281,9 +281,14 @@ import { CommunityAwardsScreen } from './CommunityAwardsScreen';
 import { MicrofinanceScreen } from './MicrofinanceScreen';
 import { PredictionScreen } from './PredictionScreen';
 import { CommunityConstitutionScreen } from './CommunityConstitutionScreen';
+import { CrowdfundScreen } from './CrowdfundScreen';
+import { ResourceSharingScreen } from './ResourceSharingScreen';
+import { HealthRecordScreen } from './HealthRecordScreen';
+import { CommunityGoalsScreen } from './CommunityGoalsScreen';
+import { EducationFundScreen } from './EducationFundScreen';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury' | 'family-tree' | 'parenting-journey' | 'teacher-impact' | 'payment-request' | 'validator-dashboard' | 'volunteer' | 'community-board' | 'education-hub' | 'skill-cert' | 'mentorship' | 'wellness' | 'civic' | 'value-channels' | 'global-impact' | 'my-impact' | 'peace-index' | 'constitution-reader' | 'pledge' | 'ambassador' | 'eldercare' | 'intergeneration' | 'gratitude-wall' | 'needs-assessment' | 'resource-match' | 'basic-needs' | 'guardian' | 'cross-chain-id' | 'appeal' | 'pqc-key' | 'zk-proof' | 'data-sovereignty' | 'mediation' | 'curriculum' | 'health-emergency' | 'community-projects' | 'micro-grants' | 'inter-regional' | 'time-bank' | 'mentor-match' | 'environmental' | 'disaster-response' | 'cooperative' | 'youth-council' | 'cultural-heritage' | 'skill-verification' | 'family-finance' | 'reputation' | 'community-radio' | 'food-security' | 'water-sanitation' | 'housing' | 'mental-wellness' | 'digital-literacy' | 'legal-aid' | 'renewable-energy' | 'language-exchange' | 'elder-wisdom' | 'art-studio' | 'safety-net' | 'transport' | 'childcare' | 'disability-support' | 'emergency-prep' | 'immigration-support' | 'sports' | 'library' | 'waste-management' | 'conflict-prevention' | 'pet-welfare' | 'job-board' | 'marketplace' | 'maternal-health' | 'senior-activities' | 'grief-support' | 'recovery' | 'workshop' | 'civic-education' | 'farm-to-table' | 'volunteer-abroad' | 'research' | 'insurance-pool' | 'storytelling' | 'travel' | 'innovation' | 'barter' | 'music' | 'election' | 'budget' | 'news' | 'infrastructure' | 'weather' | 'homeschool' | 'meditation' | 'calendar' | 'ancestry' | 'arbitration' | 'supply-chain' | 'volunteer-match' | 'community-map' | 'prayer' | 'permaculture' | 'financial-literacy' | 'teen' | 'tutor' | 'coworking' | 'feedback' | 'gratitude-journal' | 'emergency-contacts' | 'vision-board' | 'petition' | 'barrier-free' | 'cleanup-drive' | 'nutrition' | 'sleep' | 'journal' | 'tree-planting' | 'book-club' | 'apprenticeship' | 'neighbor-help' | 'dance' | 'gardening' | 'photo' | 'poetry' | 'repair-cafe' | 'skill-swap' | 'ceremony' | 'wildlife' | 'games' | 'cooking' | 'end-of-life' | 'astronomy' | 'beekeeping' | 'textile' | 'veteran' | 'digital-archive' | 'yoga' | 'podcast' | 'child-safety' | 'climate-action' | 'habitat' | 'first-aid' | 'neighborhood' | 'digital-wellbeing' | 'allergy' | 'incident-report' | 'pen-pal' | 'seasonal' | 'memorial' | 'personal-timeline' | 'relationship' | 'philanthropy' | 'film' | 'debate' | 'stem' | 'aquaponics' | 'public-speaking' | 'networking' | 'parenting-stages' | 'soil' | 'persona-onboarding' | 'my-day' | 'global-search' | 'impact-report' | 'community-stats' | 'tokenomics' | 'constitution-quiz' | 'system-status' | 'leaderboard' | 'notification-center' | 'shortcuts' | 'data-export' | 'theme-studio' | 'referral' | 'wellness-hub' | 'dca' | 'yield-optimizer' | 'cross-chain-bridge' | 'swap-history' | 'portfolio-rebalance' | 'price-chart' | 'airdrop' | 'staking-calc' | 'liquidity-guide' | 'trading' | 'contracts' | 'governance-history' | 'multi-wallet' | 'gas-optimize' | 'seed-quiz' | 'app-info' | 'time-capsule' | 'community-awards' | 'microfinance' | 'prediction' | 'community-constitution';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury' | 'family-tree' | 'parenting-journey' | 'teacher-impact' | 'payment-request' | 'validator-dashboard' | 'volunteer' | 'community-board' | 'education-hub' | 'skill-cert' | 'mentorship' | 'wellness' | 'civic' | 'value-channels' | 'global-impact' | 'my-impact' | 'peace-index' | 'constitution-reader' | 'pledge' | 'ambassador' | 'eldercare' | 'intergeneration' | 'gratitude-wall' | 'needs-assessment' | 'resource-match' | 'basic-needs' | 'guardian' | 'cross-chain-id' | 'appeal' | 'pqc-key' | 'zk-proof' | 'data-sovereignty' | 'mediation' | 'curriculum' | 'health-emergency' | 'community-projects' | 'micro-grants' | 'inter-regional' | 'time-bank' | 'mentor-match' | 'environmental' | 'disaster-response' | 'cooperative' | 'youth-council' | 'cultural-heritage' | 'skill-verification' | 'family-finance' | 'reputation' | 'community-radio' | 'food-security' | 'water-sanitation' | 'housing' | 'mental-wellness' | 'digital-literacy' | 'legal-aid' | 'renewable-energy' | 'language-exchange' | 'elder-wisdom' | 'art-studio' | 'safety-net' | 'transport' | 'childcare' | 'disability-support' | 'emergency-prep' | 'immigration-support' | 'sports' | 'library' | 'waste-management' | 'conflict-prevention' | 'pet-welfare' | 'job-board' | 'marketplace' | 'maternal-health' | 'senior-activities' | 'grief-support' | 'recovery' | 'workshop' | 'civic-education' | 'farm-to-table' | 'volunteer-abroad' | 'research' | 'insurance-pool' | 'storytelling' | 'travel' | 'innovation' | 'barter' | 'music' | 'election' | 'budget' | 'news' | 'infrastructure' | 'weather' | 'homeschool' | 'meditation' | 'calendar' | 'ancestry' | 'arbitration' | 'supply-chain' | 'volunteer-match' | 'community-map' | 'prayer' | 'permaculture' | 'financial-literacy' | 'teen' | 'tutor' | 'coworking' | 'feedback' | 'gratitude-journal' | 'emergency-contacts' | 'vision-board' | 'petition' | 'barrier-free' | 'cleanup-drive' | 'nutrition' | 'sleep' | 'journal' | 'tree-planting' | 'book-club' | 'apprenticeship' | 'neighbor-help' | 'dance' | 'gardening' | 'photo' | 'poetry' | 'repair-cafe' | 'skill-swap' | 'ceremony' | 'wildlife' | 'games' | 'cooking' | 'end-of-life' | 'astronomy' | 'beekeeping' | 'textile' | 'veteran' | 'digital-archive' | 'yoga' | 'podcast' | 'child-safety' | 'climate-action' | 'habitat' | 'first-aid' | 'neighborhood' | 'digital-wellbeing' | 'allergy' | 'incident-report' | 'pen-pal' | 'seasonal' | 'memorial' | 'personal-timeline' | 'relationship' | 'philanthropy' | 'film' | 'debate' | 'stem' | 'aquaponics' | 'public-speaking' | 'networking' | 'parenting-stages' | 'soil' | 'persona-onboarding' | 'my-day' | 'global-search' | 'impact-report' | 'community-stats' | 'tokenomics' | 'constitution-quiz' | 'system-status' | 'leaderboard' | 'notification-center' | 'shortcuts' | 'data-export' | 'theme-studio' | 'referral' | 'wellness-hub' | 'dca' | 'yield-optimizer' | 'cross-chain-bridge' | 'swap-history' | 'portfolio-rebalance' | 'price-chart' | 'airdrop' | 'staking-calc' | 'liquidity-guide' | 'trading' | 'contracts' | 'governance-history' | 'multi-wallet' | 'gas-optimize' | 'seed-quiz' | 'app-info' | 'time-capsule' | 'community-awards' | 'microfinance' | 'prediction' | 'community-constitution' | 'crowdfund' | 'resource-sharing' | 'health-record' | 'community-goals' | 'education-fund';
 
 type SettingsCategory = 'account' | 'network' | 'wallet' | 'exchange' | 'chain' | 'tools' | 'about' | 'support' | 'developer';
 
@@ -715,6 +720,11 @@ export function SettingsScreen() {
   if (view === 'microfinance') return <MicrofinanceScreen onClose={() => setView('main')} />;
   if (view === 'prediction') return <PredictionScreen onClose={() => setView('main')} />;
   if (view === 'community-constitution') return <CommunityConstitutionScreen onClose={() => setView('main')} />;
+  if (view === 'crowdfund') return <CrowdfundScreen onClose={() => setView('main')} />;
+  if (view === 'resource-sharing') return <ResourceSharingScreen onClose={() => setView('main')} />;
+  if (view === 'health-record') return <HealthRecordScreen onClose={() => setView('main')} />;
+  if (view === 'community-goals') return <CommunityGoalsScreen onClose={() => setView('main')} />;
+  if (view === 'education-fund') return <EducationFundScreen onClose={() => setView('main')} />;
 
   // ─── Low Bandwidth State ───
   const lowBandwidthOverride = getLowBandwidthOverride();
@@ -1287,6 +1297,36 @@ export function SettingsScreen() {
       label: 'Community Charter',
       onPress: () => setView('community-constitution'),
       rightText: 'Local Rules',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Crowdfunding',
+      onPress: () => setView('crowdfund'),
+      rightText: 'Back Projects',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Resource Sharing',
+      onPress: () => setView('resource-sharing'),
+      rightText: 'Borrow & Share',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Health Records',
+      onPress: () => setView('health-record'),
+      rightText: 'Encrypted PHR',
+      rightColor: t.accent.red,
+    },
+    {
+      label: 'Community Goals',
+      onPress: () => setView('community-goals'),
+      rightText: 'Collective Action',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Education Fund',
+      onPress: () => setView('education-fund'),
+      rightText: 'eOTK Scholarships',
       rightColor: t.accent.blue,
     },
     {

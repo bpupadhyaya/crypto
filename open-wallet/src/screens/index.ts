@@ -235,3 +235,8 @@ export { CommunityAwardsScreen } from './CommunityAwardsScreen';
 export { MicrofinanceScreen } from './MicrofinanceScreen';
 export { PredictionScreen } from './PredictionScreen';
 export { CommunityConstitutionScreen } from './CommunityConstitutionScreen';
+export { CrowdfundScreen } from './CrowdfundScreen';
+export { ResourceSharingScreen } from './ResourceSharingScreen';
+export { HealthRecordScreen } from './HealthRecordScreen';
+export { CommunityGoalsScreen } from './CommunityGoalsScreen';
+export { EducationFundScreen } from './EducationFundScreen';
