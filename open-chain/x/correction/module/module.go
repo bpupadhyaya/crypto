@@ -72,7 +72,14 @@ func (am AppModule) ConsensusVersion() uint64 { return 1 }
 
 func (am AppModule) BeginBlock(ctx sdk.Context) {}
 
-func (am AppModule) EndBlock(ctx sdk.Context) {}
+// EndBlock enforces confirmed corrections by burning -OTK from target accounts.
+// This is the mechanism by which The Human Constitution holds people accountable.
+func (am AppModule) EndBlock(ctx sdk.Context) {
+	// Enforce confirmed corrections every 100 blocks (~10 minutes)
+	if ctx.BlockHeight()%100 == 0 {
+		am.keeper.EnforceConfirmedCorrections(ctx, nil) // bankBurn is nil for now — wired via app
+	}
+}
 
 func (am AppModule) IsOnePerModuleType() {}
 

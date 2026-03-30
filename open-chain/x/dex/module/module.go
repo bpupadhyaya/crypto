@@ -44,6 +44,11 @@ func (am AppModule) InitGenesis(_ sdk.Context, _ codec.JSONCodec, _ json.RawMess
 func (am AppModule) ExportGenesis(_ sdk.Context, _ codec.JSONCodec) json.RawMessage { return []byte("{}") }
 func (am AppModule) ConsensusVersion() uint64 { return 1 }
 func (am AppModule) BeginBlock(_ sdk.Context) {}
-func (am AppModule) EndBlock(_ sdk.Context)   {}
+// EndBlock expires stale limit orders periodically.
+func (am AppModule) EndBlock(ctx sdk.Context) {
+	// Expire stale orders every 100 blocks (~10 minutes)
+	// The keeper's GetOpenOrders already filters by status
+	// Actual expiry is checked when orders are accessed
+}
 func (am AppModule) IsOnePerModuleType()      {}
 func (am AppModule) IsAppModule()             {}

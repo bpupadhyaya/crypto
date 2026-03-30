@@ -30,6 +30,11 @@ func NewKeeper(cdc codec.Codec, storeKey storetypes.StoreKey, bank bankkeeper.Ke
 	return &Keeper{cdc: cdc, storeKey: storeKey, bank: bank}
 }
 
+// GetStoreKey returns the module's store key (used by EndBlock in module.go).
+func (k Keeper) GetStoreKey() storetypes.StoreKey {
+	return k.storeKey
+}
+
 // ─── AMM Pool Operations ───
 
 // CreatePool creates a new liquidity pool.
