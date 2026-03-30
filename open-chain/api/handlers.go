@@ -351,6 +351,63 @@ func RegisterRoutes(mux *http.ServeMux, keepers Keepers, ctxProvider ContextProv
 			json.NewEncoder(w).Encode(treasury)
 		})
 	}
+
+	// ─── Notifications ───
+	mux.HandleFunc("/openchain/otk/v1/notifications/", func(w http.ResponseWriter, r *http.Request) {
+		uid := strings.TrimPrefix(r.URL.Path, "/openchain/otk/v1/notifications/")
+		ctx := ctxProvider()
+		notifs := keepers.OTK.GetNotifications(ctx, uid, 50, false)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(notifs)
+	})
+
+	// ─── Correction Enforcements ───
+	if keepers.Correction != nil {
+		mux.HandleFunc("/openchain/correction/v1/enforcements", func(w http.ResponseWriter, r *http.Request) {
+			ctx := ctxProvider()
+			enforcements := keepers.Correction.GetAllEnforcements(ctx)
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(enforcements)
+		})
+	}
+
+	// ─── Reputation ───
+	mux.HandleFunc("/openchain/uid/v1/reputation/", func(w http.ResponseWriter, r *http.Request) {
+		uid := strings.TrimPrefix(r.URL.Path, "/openchain/uid/v1/reputation/")
+		ctx := ctxProvider()
+		reputation := keepers.UID.GetReputation(ctx, uid)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(reputation)
+	})
+
+	// ─── Family Relationships ───
+	mux.HandleFunc("/openchain/uid/v1/family/", func(w http.ResponseWriter, r *http.Request) {
+		uid := strings.TrimPrefix(r.URL.Path, "/openchain/uid/v1/family/")
+		ctx := ctxProvider()
+		tree := keepers.UID.GetFamilyTree(ctx, uid)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(tree)
+	})
+
+	// ─── Linked Addresses (Cross-Chain Identity) ───
+	mux.HandleFunc("/openchain/uid/v1/linked/", func(w http.ResponseWriter, r *http.Request) {
+		uid := strings.TrimPrefix(r.URL.Path, "/openchain/uid/v1/linked/")
+		ctx := ctxProvider()
+		addresses, _ := keepers.UID.GetLinkedAddresses(ctx, uid)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(addresses)
+	})
+
+	// ─── Encryption Keys ───
+	if keepers.Messaging != nil {
+		mux.HandleFunc("/openchain/messaging/v1/enc_key/", func(w http.ResponseWriter, r *http.Request) {
+			uid := strings.TrimPrefix(r.URL.Path, "/openchain/messaging/v1/enc_key/")
+			ctx := ctxProvider()
+			key, _ := keepers.Messaging.GetEncryptionKey(ctx, uid)
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(key)
+		})
+	}
 }
 
 // ─── Token Factory Handlers ───
