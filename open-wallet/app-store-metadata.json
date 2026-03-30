@@ -1,0 +1,46 @@
+{
+  "ios": {
+    "bundleId": "com.equalinformation.openwallet",
+    "appName": "Open Wallet",
+    "subtitle": "Human Value Blockchain",
+    "version": "0.5.0",
+    "buildNumber": "1",
+    "category": "Finance",
+    "secondaryCategory": "Social Networking",
+    "ageRating": "4+",
+    "price": "Free",
+    "description": "Open Wallet is a non-custodial crypto wallet, mobile-first blockchain, and human value token — built to implement The Human Constitution.\n\n300 screens covering every dimension of human life: health, education, economy, governance, culture, nature, safety, spirituality, arts, and community.\n\nKey Features:\n• Multi-chain wallet: Bitcoin, Ethereum, Solana, Cosmos, Open Chain\n• 8 swap options: THORChain, 1inch, Jupiter, Osmosis, DEX, Order Book, Atomic Swap, Li.Fi\n• 6 OTK value channels: Nurture, Education, Health, Community, Economic, Governance\n• One-human-one-vote governance\n• Living Ledger — lifelong record of contributions\n• Peace Index — measure progress toward world peace\n• 10 languages, Simple Mode, offline-first\n• Post-quantum cryptography (ML-DSA + Ed25519)\n• 100% open source (MIT license)\n\nThe Human Constitution: \"World peace through better-raised, better-educated, better-supported human beings.\"\n\nSource: github.com/bpupadhyaya/crypto",
+    "keywords": "crypto,wallet,bitcoin,ethereum,solana,blockchain,defi,nft,governance,peace,community,education,health",
+    "supportUrl": "https://equalinformation.com/support-openwallet.html",
+    "privacyPolicyUrl": "https://equalinformation.com/privacy-openwallet.html",
+    "marketingUrl": "https://equalinformation.com/openwallet-features.html",
+    "screenshots": {
+      "iphone_6_5": ["home.png", "swap.png", "governance.png", "living-ledger.png", "peace-index.png"],
+      "iphone_5_5": ["home.png", "swap.png", "governance.png"],
+      "ipad_12_9": ["home.png", "swap.png"]
+    },
+    "localization": {
+      "en": { "name": "Open Wallet", "subtitle": "Human Value Blockchain" },
+      "hi": { "name": "Open Wallet", "subtitle": "मानव मूल्य ब्लॉकचेन" },
+      "es": { "name": "Open Wallet", "subtitle": "Blockchain de Valor Humano" },
+      "zh-Hans": { "name": "Open Wallet", "subtitle": "人类价值区块链" },
+      "ar": { "name": "Open Wallet", "subtitle": "بلوك تشين القيمة الإنسانية" },
+      "pt-BR": { "name": "Open Wallet", "subtitle": "Blockchain de Valor Humano" },
+      "fr": { "name": "Open Wallet", "subtitle": "Blockchain de Valeur Humaine" },
+      "ja": { "name": "Open Wallet", "subtitle": "人間価値ブロックチェーン" },
+      "ko": { "name": "Open Wallet", "subtitle": "인간 가치 블록체인" },
+      "vi": { "name": "Open Wallet", "subtitle": "Blockchain Giá Trị Con Người" }
+    }
+  },
+  "android": {
+    "packageName": "com.equalinformation.openwallet",
+    "appName": "Open Wallet - Human Value Blockchain",
+    "shortDescription": "Non-custodial crypto wallet implementing The Human Constitution. 300 screens. 8 swap options. 10 languages.",
+    "fullDescription": "Open Wallet is a non-custodial crypto wallet, mobile-first blockchain, and human value token — built to implement The Human Constitution.\n\n🌍 300 screens covering every dimension of human life\n💱 8 swap options across 5 blockchains\n🗳️ One-human-one-vote governance\n📖 Living Ledger — lifelong contribution record\n☮️ Peace Index — measuring world peace\n🔐 Post-quantum cryptography\n🌐 10 languages, offline-first\n📱 100% open source (MIT)\n\nValue Channels:\n• nOTK (Nurture) — parenting, caregiving\n• eOTK (Education) — teaching, mentoring\n• hOTK (Health) — healthcare, wellness\n• cOTK (Community) — volunteering, service\n• xOTK (Economic) — trade, employment\n• gOTK (Governance) — civic participation\n\n\"World peace through better-raised, better-educated, better-supported human beings.\"\n\nSource: github.com/bpupadhyaya/crypto\nWebsite: equalinformation.com",
+    "category": "Finance",
+    "contentRating": "Everyone",
+    "price": "Free",
+    "privacyPolicyUrl": "https://equalinformation.com/privacy-openwallet.html",
+    "screenshots": ["home.png", "swap.png", "governance.png", "living-ledger.png", "peace-index.png"]
+  }
+}
