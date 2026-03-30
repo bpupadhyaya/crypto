@@ -23,6 +23,15 @@ service Msg {
 
   // CancelOrder cancels an open limit order.
   rpc CancelOrder(MsgCancelOrder) returns (MsgCancelOrderResponse);
+
+  // FillOrder fills an existing limit order.
+  rpc FillOrder(MsgFillOrder) returns (MsgFillOrderResponse);
+
+  // CreateAtomicSwapOrder posts a P2P atomic swap order for counterparty matching.
+  rpc CreateAtomicSwapOrder(MsgCreateAtomicSwapOrder) returns (MsgCreateAtomicSwapOrderResponse);
+
+  // MatchAtomicSwap accepts an atomic swap order as counterparty.
+  rpc MatchAtomicSwap(MsgMatchAtomicSwap) returns (MsgMatchAtomicSwapResponse);
 }
 
 // MsgCreatePool creates a new liquidity pool.
@@ -90,3 +99,49 @@ message MsgCancelOrder {
 
 // MsgCancelOrderResponse defines the response for MsgCancelOrder.
 message MsgCancelOrderResponse {}
+
+// MsgFillOrder fills an existing limit order (taker buys from maker).
+message MsgFillOrder {
+  option (cosmos.msg.v1.signer) = "taker";
+  option (amino.name)           = "openchain/dex/MsgFillOrder";
+
+  string taker    = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string order_id = 2;
+}
+
+message MsgFillOrderResponse {}
+
+// MsgCreateAtomicSwapOrder — P2P cross-chain atomic swap order.
+// Posted to Open Chain for counterparty discovery.
+message MsgCreateAtomicSwapOrder {
+  option (cosmos.msg.v1.signer) = "initiator";
+  option (amino.name)           = "openchain/dex/MsgCreateAtomicSwapOrder";
+
+  string initiator               = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string initiator_source_address = 2;  // BTC/ETH/SOL address on source chain
+  string source_chain            = 3;   // bitcoin, ethereum, solana
+  string dest_chain              = 4;   // bitcoin, ethereum, solana, cosmos
+  string sell_amount             = 5;
+  string sell_denom              = 6;
+  string buy_amount              = 7;
+  string buy_denom               = 8;
+  string secret_hash             = 9;   // SHA-256 hash of HTLC secret
+  string initiator_timelock      = 10;  // blocks
+  string participant_timelock    = 11;  // blocks (shorter than initiator)
+}
+
+message MsgCreateAtomicSwapOrderResponse {
+  string order_id = 1;
+}
+
+// MsgMatchAtomicSwap — Accept an atomic swap order as counterparty.
+message MsgMatchAtomicSwap {
+  option (cosmos.msg.v1.signer) = "participant";
+  option (amino.name)           = "openchain/dex/MsgMatchAtomicSwap";
+
+  string participant         = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string order_id            = 2;
+  string participant_address = 3;  // Address on destination chain
+}
+
+message MsgMatchAtomicSwapResponse {}

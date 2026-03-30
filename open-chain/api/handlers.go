@@ -301,6 +301,19 @@ func RegisterRoutes(mux *http.ServeMux, keepers Keepers, ctxProvider ContextProv
 		json.NewEncoder(w).Encode(projects)
 	})
 
+	// ─── Atomic Swaps ───
+	if keepers.DEX != nil {
+		mux.HandleFunc("/openchain/dex/v1/atomic_swaps", func(w http.ResponseWriter, r *http.Request) {
+			ctx := ctxProvider()
+			sell := r.URL.Query().Get("sell")
+			buy := r.URL.Query().Get("buy")
+			ms := dexkeeper.NewMsgServer(keepers.DEX)
+			orders := ms.GetPendingAtomicSwaps(ctx, sell, buy)
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(orders)
+		})
+	}
+
 	// ─── Community Events ───
 	mux.HandleFunc("/openchain/otk/v1/events", func(w http.ResponseWriter, r *http.Request) {
 		ctx := ctxProvider()
