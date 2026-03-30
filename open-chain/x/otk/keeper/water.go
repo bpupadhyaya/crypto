@@ -37,7 +37,7 @@ type WaterSource struct {
 type WaterQualityTest struct {
 	SourceID    string  `json:"source_id"`
 	TesterUID   string  `json:"tester_uid"`
-	pH          float64 `json:"ph"`
+	PH          float64 `json:"ph"`
 	Turbidity   float64 `json:"turbidity_ntu"`
 	Bacteria    string  `json:"bacteria"`    // safe, warning, unsafe
 	Chemicals   string  `json:"chemicals"`   // safe, warning, unsafe
