@@ -230,3 +230,8 @@ export { MultiWalletScreen } from './MultiWalletScreen';
 export { GasOptimizeScreen } from './GasOptimizeScreen';
 export { SeedPhraseQuizScreen } from './SeedPhraseQuizScreen';
 export { AppInfoScreen } from './AppInfoScreen';
+export { TimeCapsuleScreen } from './TimeCapsuleScreen';
+export { CommunityAwardsScreen } from './CommunityAwardsScreen';
+export { MicrofinanceScreen } from './MicrofinanceScreen';
+export { PredictionScreen } from './PredictionScreen';
+export { CommunityConstitutionScreen } from './CommunityConstitutionScreen';
