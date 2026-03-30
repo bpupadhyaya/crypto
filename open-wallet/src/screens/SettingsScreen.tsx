@@ -260,9 +260,19 @@ import { DataExportScreen } from './DataExportScreen';
 import { ThemeStudioScreen } from './ThemeStudioScreen';
 import { ReferralScreen } from './ReferralScreen';
 import { WellnessHubScreen } from './WellnessHubScreen';
+import { DCAScreen } from './DCAScreen';
+import { YieldOptimizerScreen } from './YieldOptimizerScreen';
+import { CrossChainBridgeScreen } from './CrossChainBridgeScreen';
+import { TokenSwapHistoryScreen } from './TokenSwapHistoryScreen';
+import { PortfolioRebalanceScreen } from './PortfolioRebalanceScreen';
+import { PriceChartScreen } from './PriceChartScreen';
+import { AirdropScreen } from './AirdropScreen';
+import { StakingCalcScreen } from './StakingCalcScreen';
+import { LiquidityGuideScreen } from './LiquidityGuideScreen';
+import { TradingScreen } from './TradingScreen';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury' | 'family-tree' | 'parenting-journey' | 'teacher-impact' | 'payment-request' | 'validator-dashboard' | 'volunteer' | 'community-board' | 'education-hub' | 'skill-cert' | 'mentorship' | 'wellness' | 'civic' | 'value-channels' | 'global-impact' | 'my-impact' | 'peace-index' | 'constitution-reader' | 'pledge' | 'ambassador' | 'eldercare' | 'intergeneration' | 'gratitude-wall' | 'needs-assessment' | 'resource-match' | 'basic-needs' | 'guardian' | 'cross-chain-id' | 'appeal' | 'pqc-key' | 'zk-proof' | 'data-sovereignty' | 'mediation' | 'curriculum' | 'health-emergency' | 'community-projects' | 'micro-grants' | 'inter-regional' | 'time-bank' | 'mentor-match' | 'environmental' | 'disaster-response' | 'cooperative' | 'youth-council' | 'cultural-heritage' | 'skill-verification' | 'family-finance' | 'reputation' | 'community-radio' | 'food-security' | 'water-sanitation' | 'housing' | 'mental-wellness' | 'digital-literacy' | 'legal-aid' | 'renewable-energy' | 'language-exchange' | 'elder-wisdom' | 'art-studio' | 'safety-net' | 'transport' | 'childcare' | 'disability-support' | 'emergency-prep' | 'immigration-support' | 'sports' | 'library' | 'waste-management' | 'conflict-prevention' | 'pet-welfare' | 'job-board' | 'marketplace' | 'maternal-health' | 'senior-activities' | 'grief-support' | 'recovery' | 'workshop' | 'civic-education' | 'farm-to-table' | 'volunteer-abroad' | 'research' | 'insurance-pool' | 'storytelling' | 'travel' | 'innovation' | 'barter' | 'music' | 'election' | 'budget' | 'news' | 'infrastructure' | 'weather' | 'homeschool' | 'meditation' | 'calendar' | 'ancestry' | 'arbitration' | 'supply-chain' | 'volunteer-match' | 'community-map' | 'prayer' | 'permaculture' | 'financial-literacy' | 'teen' | 'tutor' | 'coworking' | 'feedback' | 'gratitude-journal' | 'emergency-contacts' | 'vision-board' | 'petition' | 'barrier-free' | 'cleanup-drive' | 'nutrition' | 'sleep' | 'journal' | 'tree-planting' | 'book-club' | 'apprenticeship' | 'neighbor-help' | 'dance' | 'gardening' | 'photo' | 'poetry' | 'repair-cafe' | 'skill-swap' | 'ceremony' | 'wildlife' | 'games' | 'cooking' | 'end-of-life' | 'astronomy' | 'beekeeping' | 'textile' | 'veteran' | 'digital-archive' | 'yoga' | 'podcast' | 'child-safety' | 'climate-action' | 'habitat' | 'first-aid' | 'neighborhood' | 'digital-wellbeing' | 'allergy' | 'incident-report' | 'pen-pal' | 'seasonal' | 'memorial' | 'personal-timeline' | 'relationship' | 'philanthropy' | 'film' | 'debate' | 'stem' | 'aquaponics' | 'public-speaking' | 'networking' | 'parenting-stages' | 'soil' | 'persona-onboarding' | 'my-day' | 'global-search' | 'impact-report' | 'community-stats' | 'tokenomics' | 'constitution-quiz' | 'system-status' | 'leaderboard' | 'notification-center' | 'shortcuts' | 'data-export' | 'theme-studio' | 'referral' | 'wellness-hub';
+type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury' | 'family-tree' | 'parenting-journey' | 'teacher-impact' | 'payment-request' | 'validator-dashboard' | 'volunteer' | 'community-board' | 'education-hub' | 'skill-cert' | 'mentorship' | 'wellness' | 'civic' | 'value-channels' | 'global-impact' | 'my-impact' | 'peace-index' | 'constitution-reader' | 'pledge' | 'ambassador' | 'eldercare' | 'intergeneration' | 'gratitude-wall' | 'needs-assessment' | 'resource-match' | 'basic-needs' | 'guardian' | 'cross-chain-id' | 'appeal' | 'pqc-key' | 'zk-proof' | 'data-sovereignty' | 'mediation' | 'curriculum' | 'health-emergency' | 'community-projects' | 'micro-grants' | 'inter-regional' | 'time-bank' | 'mentor-match' | 'environmental' | 'disaster-response' | 'cooperative' | 'youth-council' | 'cultural-heritage' | 'skill-verification' | 'family-finance' | 'reputation' | 'community-radio' | 'food-security' | 'water-sanitation' | 'housing' | 'mental-wellness' | 'digital-literacy' | 'legal-aid' | 'renewable-energy' | 'language-exchange' | 'elder-wisdom' | 'art-studio' | 'safety-net' | 'transport' | 'childcare' | 'disability-support' | 'emergency-prep' | 'immigration-support' | 'sports' | 'library' | 'waste-management' | 'conflict-prevention' | 'pet-welfare' | 'job-board' | 'marketplace' | 'maternal-health' | 'senior-activities' | 'grief-support' | 'recovery' | 'workshop' | 'civic-education' | 'farm-to-table' | 'volunteer-abroad' | 'research' | 'insurance-pool' | 'storytelling' | 'travel' | 'innovation' | 'barter' | 'music' | 'election' | 'budget' | 'news' | 'infrastructure' | 'weather' | 'homeschool' | 'meditation' | 'calendar' | 'ancestry' | 'arbitration' | 'supply-chain' | 'volunteer-match' | 'community-map' | 'prayer' | 'permaculture' | 'financial-literacy' | 'teen' | 'tutor' | 'coworking' | 'feedback' | 'gratitude-journal' | 'emergency-contacts' | 'vision-board' | 'petition' | 'barrier-free' | 'cleanup-drive' | 'nutrition' | 'sleep' | 'journal' | 'tree-planting' | 'book-club' | 'apprenticeship' | 'neighbor-help' | 'dance' | 'gardening' | 'photo' | 'poetry' | 'repair-cafe' | 'skill-swap' | 'ceremony' | 'wildlife' | 'games' | 'cooking' | 'end-of-life' | 'astronomy' | 'beekeeping' | 'textile' | 'veteran' | 'digital-archive' | 'yoga' | 'podcast' | 'child-safety' | 'climate-action' | 'habitat' | 'first-aid' | 'neighborhood' | 'digital-wellbeing' | 'allergy' | 'incident-report' | 'pen-pal' | 'seasonal' | 'memorial' | 'personal-timeline' | 'relationship' | 'philanthropy' | 'film' | 'debate' | 'stem' | 'aquaponics' | 'public-speaking' | 'networking' | 'parenting-stages' | 'soil' | 'persona-onboarding' | 'my-day' | 'global-search' | 'impact-report' | 'community-stats' | 'tokenomics' | 'constitution-quiz' | 'system-status' | 'leaderboard' | 'notification-center' | 'shortcuts' | 'data-export' | 'theme-studio' | 'referral' | 'wellness-hub' | 'dca' | 'yield-optimizer' | 'cross-chain-bridge' | 'swap-history' | 'portfolio-rebalance' | 'price-chart' | 'airdrop' | 'staking-calc' | 'liquidity-guide' | 'trading';
 
 type SettingsCategory = 'account' | 'network' | 'wallet' | 'exchange' | 'chain' | 'tools' | 'about' | 'support' | 'developer';
 
@@ -673,6 +683,16 @@ export function SettingsScreen() {
   if (view === 'theme-studio') return <ThemeStudioScreen onClose={() => setView('main')} />;
   if (view === 'referral') return <ReferralScreen onClose={() => setView('main')} />;
   if (view === 'wellness-hub') return <WellnessHubScreen onClose={() => setView('main')} />;
+  if (view === 'dca') return <DCAScreen onClose={() => setView('main')} />;
+  if (view === 'yield-optimizer') return <YieldOptimizerScreen onClose={() => setView('main')} />;
+  if (view === 'cross-chain-bridge') return <CrossChainBridgeScreen onClose={() => setView('main')} />;
+  if (view === 'swap-history') return <TokenSwapHistoryScreen onClose={() => setView('main')} />;
+  if (view === 'portfolio-rebalance') return <PortfolioRebalanceScreen onClose={() => setView('main')} />;
+  if (view === 'price-chart') return <PriceChartScreen onClose={() => setView('main')} />;
+  if (view === 'airdrop') return <AirdropScreen onClose={() => setView('main')} />;
+  if (view === 'staking-calc') return <StakingCalcScreen onClose={() => setView('main')} />;
+  if (view === 'liquidity-guide') return <LiquidityGuideScreen onClose={() => setView('main')} />;
+  if (view === 'trading') return <TradingScreen onClose={() => setView('main')} />;
 
   // ─── Low Bandwidth State ───
   const lowBandwidthOverride = getLowBandwidthOverride();
@@ -1120,6 +1140,66 @@ export function SettingsScreen() {
       onPress: () => setView('wellness-hub'),
       rightText: 'All Health',
       rightColor: t.accent.green,
+    },
+    {
+      label: 'DCA (Auto-Buy)',
+      onPress: () => setView('dca'),
+      rightText: 'Recurring',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Yield Optimizer',
+      onPress: () => setView('yield-optimizer'),
+      rightText: 'Auto-Compound',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Cross-Chain Bridge',
+      onPress: () => setView('cross-chain-bridge'),
+      rightText: 'Bridge Tokens',
+      rightColor: t.accent.purple,
+    },
+    {
+      label: 'Swap History',
+      onPress: () => setView('swap-history'),
+      rightText: 'All 8 Providers',
+      rightColor: t.accent.orange,
+    },
+    {
+      label: 'Portfolio Rebalance',
+      onPress: () => setView('portfolio-rebalance'),
+      rightText: 'Target Allocation',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Price Charts',
+      onPress: () => setView('price-chart'),
+      rightText: 'Detailed Charts',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Airdrops',
+      onPress: () => setView('airdrop'),
+      rightText: 'Claim Tokens',
+      rightColor: t.accent.yellow,
+    },
+    {
+      label: 'Staking Calculator',
+      onPress: () => setView('staking-calc'),
+      rightText: 'Rewards Projector',
+      rightColor: t.accent.green,
+    },
+    {
+      label: 'Liquidity Guide',
+      onPress: () => setView('liquidity-guide'),
+      rightText: 'Learn LP',
+      rightColor: t.accent.blue,
+    },
+    {
+      label: 'Advanced Trading',
+      onPress: () => setView('trading'),
+      rightText: 'Order Book UI',
+      rightColor: t.accent.orange,
     },
     {
       label: 'DeFi Dashboard',
