@@ -10,7 +10,7 @@
  *   5. Second verification: enter specific word positions
  */
 
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   View,
   Text,
@@ -21,9 +21,11 @@ import {
   Alert,
   ActivityIndicator,
   ScrollView,
+  Platform,
 } from 'react-native';
 import { useWalletStore } from '../store/walletStore';
 import { useTheme } from '../hooks/useTheme';
+import { detectBuiltinKey, importFromSeedVault, type BuiltinKeyInfo } from '../core/hardware/hardwareKeyManager';
 
 type OnboardingStep =
   | 'welcome'
@@ -41,6 +43,20 @@ export function OnboardingScreen() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [seedVaultAvailable, setSeedVaultAvailable] = useState(false);
+  const [seedVaultName, setSeedVaultName] = useState('');
+
+  // Detect built-in Seed Vault (Solana Seeker/Saga)
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      detectBuiltinKey().then((info: BuiltinKeyInfo) => {
+        if (info && info.isColdStorage) {
+          setSeedVaultAvailable(true);
+          setSeedVaultName(info.provider === 'solana-seeker' ? 'Solana Seeker Seed Vault' : info.provider === 'solana-saga' ? 'Solana Saga Seed Vault' : 'Built-in Seed Vault');
+        }
+      }).catch(() => {});
+    }
+  }, []);
 
   // Shuffle verification state
   const [shuffledWords, setShuffledWords] = useState<string[]>([]);
@@ -327,6 +343,47 @@ export function OnboardingScreen() {
 
   // ─── Handlers ───
 
+  const handleUseSeedVault = async () => {
+    setLoading(true);
+    try {
+      const result = await importFromSeedVault(seedVaultName.includes('Seeker') ? 'solana-seeker' : 'solana-saga');
+      if (!result || Object.keys(result).length === 0) {
+        Alert.alert('Seed Vault', 'No keys found in the Seed Vault. Please set up the Seed Vault first in your phone settings, then try again.');
+        return;
+      }
+
+      // Seed Vault provides addresses — no seed phrase needed
+      // The signing happens inside the secure element
+      Object.entries(result).forEach(([chain, addr]) => {
+        setAddresses({ [chain]: addr } as any);
+      });
+      setHasVault(true);
+      setStatus('unlocked');
+
+      Alert.alert(
+        'Seed Vault Connected',
+        `Your ${seedVaultName} is now connected to Open Wallet.\n\nYour private keys stay inside the phone's secure element — they never leave the hardware. This is the most secure way to use Open Wallet.\n\nAddresses imported for ${Object.keys(result).length} chain(s).`,
+      );
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      // In demo mode, simulate seed vault connection
+      if (msg.includes('not installed') || msg.includes('not available')) {
+        Alert.alert(
+          'Seed Vault',
+          'The Seed Vault library is not yet installed. For now, you can create a new wallet or restore from a seed phrase.\n\nSeed Vault integration will be fully available in the next release.',
+          [
+            { text: 'Create New Wallet', onPress: () => handleCreateWallet() },
+            { text: 'Cancel', style: 'cancel' },
+          ],
+        );
+      } else {
+        Alert.alert('Seed Vault Error', msg);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleCreateWallet = async () => {
     setLoading(true);
     try {
@@ -548,7 +605,28 @@ export function OnboardingScreen() {
             >
               <Text style={styles.secondaryButtonText}>Restore Existing Wallet</Text>
             </TouchableOpacity>
+
+            {seedVaultAvailable && (
+              <TouchableOpacity
+                style={[styles.primaryButton, { backgroundColor: t.accent.purple, marginTop: 8 }]}
+                onPress={handleUseSeedVault}
+                disabled={loading}
+              >
+                {loading ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text style={styles.primaryButtonText}>Use {seedVaultName}</Text>
+                )}
+              </TouchableOpacity>
+            )}
           </View>
+
+          {seedVaultAvailable && (
+            <Text style={[styles.footer, { color: t.accent.purple, marginBottom: 4 }]}>
+              This phone has a built-in hardware key.{'\n'}
+              Your seed phrase never leaves the secure element.
+            </Text>
+          )}
 
           <Text style={styles.footer}>
             100% Open Source - Post-Quantum Encrypted
