@@ -25,7 +25,8 @@ import {
 } from 'react-native';
 import { useWalletStore } from '../store/walletStore';
 import { useTheme } from '../hooks/useTheme';
-import { detectBuiltinKey, importFromSeedVault, type BuiltinKeyInfo } from '../core/hardware/hardwareKeyManager';
+import { detectSeedVault } from '../core/hardware/seedVaultBridge';
+import { getProvider } from '../core/hardware/hardwareKeyManager';
 
 type OnboardingStep =
   | 'welcome'
@@ -49,10 +50,10 @@ export function OnboardingScreen() {
   // Detect built-in Seed Vault (Solana Seeker/Saga)
   useEffect(() => {
     if (Platform.OS === 'android') {
-      detectBuiltinKey().then((info: BuiltinKeyInfo) => {
-        if (info && info.isColdStorage) {
+      detectSeedVault().then((info) => {
+        if (info.available) {
           setSeedVaultAvailable(true);
-          setSeedVaultName(info.provider === 'solana-seeker' ? 'Solana Seeker Seed Vault' : info.provider === 'solana-saga' ? 'Solana Saga Seed Vault' : 'Built-in Seed Vault');
+          setSeedVaultName(info.model === 'seeker' ? 'Solana Seeker Seed Vault' : info.model === 'saga' ? 'Solana Saga Seed Vault' : 'Built-in Seed Vault');
         }
       }).catch(() => {});
     }
@@ -346,39 +347,26 @@ export function OnboardingScreen() {
   const handleUseSeedVault = async () => {
     setLoading(true);
     try {
-      const result = await importFromSeedVault(seedVaultName.includes('Seeker') ? 'solana-seeker' : 'solana-saga');
-      if (!result || Object.keys(result).length === 0) {
-        Alert.alert('Seed Vault', 'No keys found in the Seed Vault. Please set up the Seed Vault first in your phone settings, then try again.');
+      const { connectSeedVault } = await import('../core/hardware/seedVaultBridge');
+      const result = await connectSeedVault();
+
+      if (!result.success) {
+        Alert.alert('Seed Vault', result.message);
         return;
       }
 
       // Seed Vault provides addresses — no seed phrase needed
       // The signing happens inside the secure element
-      Object.entries(result).forEach(([chain, addr]) => {
+      Object.entries(result.addresses).forEach(([chain, addr]) => {
         setAddresses({ [chain]: addr } as any);
       });
       setHasVault(true);
       setStatus('unlocked');
 
-      Alert.alert(
-        'Seed Vault Connected',
-        `Your ${seedVaultName} is now connected to Open Wallet.\n\nYour private keys stay inside the phone's secure element — they never leave the hardware. This is the most secure way to use Open Wallet.\n\nAddresses imported for ${Object.keys(result).length} chain(s).`,
-      );
+      Alert.alert('Seed Vault Connected', result.message);
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Unknown error';
-      // In demo mode, simulate seed vault connection
-      if (msg.includes('not installed') || msg.includes('not available')) {
-        Alert.alert(
-          'Seed Vault',
-          'The Seed Vault library is not yet installed. For now, you can create a new wallet or restore from a seed phrase.\n\nSeed Vault integration will be fully available in the next release.',
-          [
-            { text: 'Create New Wallet', onPress: () => handleCreateWallet() },
-            { text: 'Cancel', style: 'cancel' },
-          ],
-        );
-      } else {
-        Alert.alert('Seed Vault Error', msg);
-      }
+      Alert.alert('Seed Vault Error', msg);
     } finally {
       setLoading(false);
     }
@@ -622,10 +610,10 @@ export function OnboardingScreen() {
   if (step === 'welcome') {
     return (
       <SafeAreaView style={styles.container}>
-        <ScrollView contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 40, paddingBottom: 40 }}>
-          <Text style={[styles.logo, { fontSize: 36, marginBottom: 4 }]}>OW</Text>
-          <Text style={[styles.title, { fontSize: 26 }]}>Open Wallet</Text>
-          <Text style={[styles.subtitle, { fontSize: 14, marginTop: 8 }]}>
+        <ScrollView contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 16, paddingBottom: 40 }}>
+          <Text style={[styles.logo, { fontSize: 32, marginBottom: 2 }]}>OW</Text>
+          <Text style={[styles.title, { fontSize: 22 }]}>Open Wallet</Text>
+          <Text style={[styles.subtitle, { fontSize: 13, marginTop: 6 }]}>
             Your money. Your control.{'\n'}
             Every token. Every chain. One app.
           </Text>
