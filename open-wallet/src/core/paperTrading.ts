@@ -70,11 +70,11 @@ export async function getPaperTradeStatus(flow: TradeFlow): Promise<PaperTradeSt
   if (count === 0) {
     light = 'red';
     canProceedReal = false;
-    message = `You must complete at least 1 paper (practice) transaction before using real funds. This protects you from accidental loss.\n\nTap "Paper Trade" to practice with fake money first.`;
+    message = `We kindly ask you to complete at least 1 practice transaction before using real funds.\n\nPractice trading serves two important purposes:\n\n1. It helps you become familiar with how the transaction works, so you feel confident when using real funds.\n\n2. It verifies that everything in the transaction path is functioning correctly — from your wallet to the destination.\n\nWe do our very best to ensure your tokens are never lost. This practice step is one of the ways we protect you.\n\nTap "Paper Trade" to try it safely with simulated funds.`;
   } else if (count < 3) {
     light = 'orange';
     canProceedReal = true;
-    message = `You've completed ${count}/3 recommended paper trades. You may proceed with real funds, but we recommend completing ${3 - count} more practice transaction${3 - count > 1 ? 's' : ''} first.\n\nPractice builds confidence and catches issues early.`;
+    message = `You've completed ${count} of 3 recommended practice trades — thank you for taking this step.\n\nYou may proceed with real funds now, but we gently recommend completing ${3 - count} more practice transaction${3 - count > 1 ? 's' : ''} first.\n\nEach practice trade helps confirm that this specific transaction path is working properly and gives you greater confidence. We care deeply about keeping your funds safe, and this is one of the ways we do that.`;
   } else {
     light = 'green';
     canProceedReal = true;

@@ -143,11 +143,11 @@ export function SwapScreen() {
       const check = await checkRealTransactionAllowed(flow);
       if (!check.allowed) {
         Alert.alert(
-          `${getTrafficLightEmoji(check.light)} Paper Trade Required`,
+          `${getTrafficLightEmoji(check.light)} Practice Trade Recommended`,
           check.message,
           [
-            { text: 'Do Paper Trade', onPress: () => { setIsPaperSwap(true); setShowConfirm(true); } },
-            { text: 'Cancel', style: 'cancel' },
+            { text: 'Practice Now', onPress: () => { setIsPaperSwap(true); setShowConfirm(true); } },
+            { text: 'Not Now', style: 'cancel' },
           ]
         );
         return;
@@ -163,8 +163,8 @@ export function SwapScreen() {
       const flow = getSwapFlow(selectedOption?.id ?? '');
       const status = await recordPaperTrade(flow);
       Alert.alert(
-        `${getTrafficLightEmoji(status.light)} Paper Swap Complete`,
-        `${amountStr} ${fromSymbol} → ${selectedOption?.toAmount.toFixed(4)} ${toSymbol} (simulated)\n\nVia: ${selectedOption?.name}\nPaper trades: ${status.count}/3 recommended\n\n${status.light === 'green' ? 'Cleared for real swaps!' : 'Complete more paper trades for full access.'}`
+        `${getTrafficLightEmoji(status.light)} Practice Swap Complete`,
+        `${amountStr} ${fromSymbol} → ${selectedOption?.toAmount.toFixed(4)} ${toSymbol} (simulated)\n\nVia: ${selectedOption?.name}\nPractice trades completed: ${status.count}/3 recommended\n\n${status.light === 'green' ? 'Wonderful! You\'re now cleared for real transactions. The path is verified and you\'re ready to go.' : `We recommend ${3 - status.count} more practice trade${3 - status.count > 1 ? 's' : ''} to fully verify this transaction path. Each one helps ensure your real funds will arrive safely.`}`
       );
     } else {
       // Real swap execution
