@@ -25,7 +25,6 @@ import {
 } from 'react-native';
 import { useWalletStore } from '../store/walletStore';
 import { useTheme } from '../hooks/useTheme';
-import { detectSeedVault } from '../core/hardware/seedVaultBridge';
 import { getProvider } from '../core/hardware/hardwareKeyManager';
 
 type OnboardingStep =
@@ -44,37 +43,9 @@ export function OnboardingScreen() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [seedVaultAvailable, setSeedVaultAvailable] = useState(false);
-  const [seedVaultName, setSeedVaultName] = useState('');
-
-  // Detect built-in Seed Vault (Solana Seeker/Saga)
-  useEffect(() => {
-    if (Platform.OS === 'android') {
-      // Primary detection via bridge
-      detectSeedVault().then((info) => {
-        if (info.available) {
-          setSeedVaultAvailable(true);
-          setSeedVaultName(info.model === 'seeker' ? 'Solana Seeker Seed Vault' : info.model === 'saga' ? 'Solana Saga Seed Vault' : 'Built-in Seed Vault');
-        } else {
-          // Fallback: check Platform.constants directly
-          try {
-            const constants = (Platform as any).constants || {};
-            const model = (constants.Model || constants.model || '').toLowerCase();
-            const brand = (constants.Brand || constants.brand || '').toLowerCase();
-            const mfr = (constants.Manufacturer || constants.manufacturer || '').toLowerCase();
-            console.log(`[Onboarding] Fallback detection: model="${model}" brand="${brand}" mfr="${mfr}"`);
-            if (model.includes('seeker') || brand.includes('solana') || mfr.includes('solana')) {
-              setSeedVaultAvailable(true);
-              setSeedVaultName('Solana Seeker Seed Vault');
-            } else if (model.includes('saga') || brand.includes('osom') || mfr.includes('osom')) {
-              setSeedVaultAvailable(true);
-              setSeedVaultName('Solana Saga Seed Vault');
-            }
-          } catch { /* ignore */ }
-        }
-      }).catch(() => {});
-    }
-  }, []);
+  // On Android, always show Seed Vault option — detection happens when user taps it
+  const seedVaultAvailable = Platform.OS === 'android';
+  const seedVaultName = 'Solana Seed Vault';
 
   // Shuffle verification state
   const [shuffledWords, setShuffledWords] = useState<string[]>([]);
@@ -364,26 +335,60 @@ export function OnboardingScreen() {
   const handleUseSeedVault = async () => {
     setLoading(true);
     try {
+      // First try the real Seed Vault bridge
       const { connectSeedVault } = await import('../core/hardware/seedVaultBridge');
       const result = await connectSeedVault();
 
-      if (!result.success) {
-        Alert.alert('Seed Vault', result.message);
+      if (result.success) {
+        // Seed Vault connected — import addresses
+        Object.entries(result.addresses).forEach(([chain, addr]) => {
+          setAddresses({ [chain]: addr } as any);
+        });
+        setHasVault(true);
+        setStatus('unlocked');
+        Alert.alert('Seed Vault Connected', result.message);
         return;
       }
 
-      // Seed Vault provides addresses — no seed phrase needed
-      // The signing happens inside the secure element
-      Object.entries(result.addresses).forEach(([chain, addr]) => {
-        setAddresses({ [chain]: addr } as any);
-      });
-      setHasVault(true);
-      setStatus('unlocked');
+      // If detection failed, the device might still be a Seeker/Saga
+      // but Platform.constants didn't work. Try requesting Seed Vault anyway
+      // via Android Intent — the OS will show the Seed Vault UI if available
+      const { authorizeSeedVault, getSeedVaultPublicKey } = await import('../core/hardware/seedVaultBridge');
+      const authorized = await authorizeSeedVault();
 
-      Alert.alert('Seed Vault Connected', result.message);
+      if (authorized) {
+        const pubkey = await getSeedVaultPublicKey(0);
+        if (pubkey) {
+          setAddresses({ solana: pubkey } as any);
+          setHasVault(true);
+          setStatus('unlocked');
+          Alert.alert(
+            'Seed Vault Connected',
+            `Connected to Seed Vault.\n\nSolana address: ${pubkey.slice(0, 8)}...${pubkey.slice(-6)}\n\nAll signing happens in the secure element.`,
+          );
+          return;
+        }
+      }
+
+      // If we get here, Seed Vault is genuinely not available
+      Alert.alert(
+        'Seed Vault',
+        'Could not connect to the Seed Vault.\n\nIf this is a Solana Seeker or Saga phone, please make sure:\n\n1. The Seed Vault has been set up in your phone Settings\n2. You have created or imported a seed phrase in the Seed Vault\n3. Try restarting the app\n\nAlternatively, you can create a new wallet or restore from a seed phrase.',
+        [
+          { text: 'Create New Wallet', onPress: handleCreateWallet },
+          { text: 'Cancel', style: 'cancel' },
+        ],
+      );
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Unknown error';
-      Alert.alert('Seed Vault Error', msg);
+      Alert.alert(
+        'Seed Vault',
+        `Connection attempt failed: ${msg}\n\nYou can create a new wallet or restore from a seed phrase instead.`,
+        [
+          { text: 'Create New Wallet', onPress: handleCreateWallet },
+          { text: 'Cancel', style: 'cancel' },
+        ],
+      );
     } finally {
       setLoading(false);
     }
@@ -627,10 +632,10 @@ export function OnboardingScreen() {
   if (step === 'welcome') {
     return (
       <SafeAreaView style={styles.container}>
-        <ScrollView contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 16, paddingBottom: 40 }}>
-          <Text style={[styles.logo, { fontSize: 32, marginBottom: 2 }]}>OW</Text>
-          <Text style={[styles.title, { fontSize: 22 }]}>Open Wallet</Text>
-          <Text style={[styles.subtitle, { fontSize: 13, marginTop: 6 }]}>
+        <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 8, paddingBottom: 30 }}>
+          <Text style={[styles.logo, { fontSize: 28, marginBottom: 0 }]}>OW</Text>
+          <Text style={[styles.title, { fontSize: 20 }]}>Open Wallet</Text>
+          <Text style={[styles.subtitle, { fontSize: 12, marginTop: 4, lineHeight: 18 }]}>
             Your money. Your control.{'\n'}
             Every token. Every chain. One app.
           </Text>
@@ -659,28 +664,28 @@ export function OnboardingScreen() {
 
           {/* ─── Hardware Wallets (always visible) ─── */}
           <Text style={{
-            color: t.text.secondary, fontSize: 12, fontWeight: '700',
-            textTransform: 'uppercase', letterSpacing: 1.5,
-            marginTop: 28, marginBottom: 12, textAlign: 'center',
+            color: t.text.secondary, fontSize: 11, fontWeight: '700',
+            textTransform: 'uppercase', letterSpacing: 1.2,
+            marginTop: 16, marginBottom: 8, textAlign: 'center',
           }}>
             Connect Hardware Wallet
           </Text>
 
-          {/* Built-in Seed Vault (Seeker/Saga) — shown first if available */}
+          {/* Built-in Seed Vault (Seeker/Saga) */}
           {seedVaultAvailable && (
             <TouchableOpacity
-              style={[styles.primaryButton, { backgroundColor: t.accent.purple, marginBottom: 8 }]}
+              style={[styles.primaryButton, { backgroundColor: t.accent.purple, marginBottom: 6, paddingVertical: 12 }]}
               onPress={() => handleHardwareWallet('seed-vault')}
               disabled={loading}
             >
-              <Text style={styles.primaryButtonText}>{seedVaultName}</Text>
-              <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11, marginTop: 2 }}>Built-in secure element — most secure</Text>
+              <Text style={[styles.primaryButtonText, { fontSize: 14 }]}>Solana Seeker / Saga Seed Vault</Text>
+              <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 10, marginTop: 1 }}>Built-in secure element — keys never leave hardware</Text>
             </TouchableOpacity>
           )}
 
           {/* Ledger */}
           <TouchableOpacity
-            style={[styles.secondaryButton, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }]}
+            style={[styles.secondaryButton, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }]}
             onPress={() => handleHardwareWallet('ledger')}
             disabled={loading}
           >
@@ -692,7 +697,7 @@ export function OnboardingScreen() {
 
           {/* Trezor */}
           <TouchableOpacity
-            style={[styles.secondaryButton, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }]}
+            style={[styles.secondaryButton, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }]}
             onPress={() => handleHardwareWallet('trezor')}
             disabled={loading}
           >
@@ -704,7 +709,7 @@ export function OnboardingScreen() {
 
           {/* Keystone */}
           <TouchableOpacity
-            style={[styles.secondaryButton, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }]}
+            style={[styles.secondaryButton, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }]}
             onPress={() => handleHardwareWallet('keystone')}
             disabled={loading}
           >
@@ -714,27 +719,25 @@ export function OnboardingScreen() {
             </View>
           </TouchableOpacity>
 
-          {/* Solana Saga (if not already showing as Seeker) */}
+          {/* Solana Saga / Seeker shown for iOS too (won't detect but explains) */}
           {!seedVaultAvailable && (
             <TouchableOpacity
-              style={[styles.secondaryButton, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }]}
+              style={[styles.secondaryButton, { flexDirection: 'row', alignItems: 'center', marginBottom: 6 }]}
               onPress={() => handleHardwareWallet('seed-vault')}
               disabled={loading}
             >
               <View>
-                <Text style={styles.secondaryButtonText}>Solana Saga / Seeker</Text>
-                <Text style={{ color: t.text.muted, fontSize: 11 }}>Built-in Seed Vault — connect on Solana phones</Text>
+                <Text style={[styles.secondaryButtonText, { fontSize: 14 }]}>Solana Seeker / Saga</Text>
+                <Text style={{ color: t.text.muted, fontSize: 10 }}>Built-in Seed Vault — for Solana phones only</Text>
               </View>
             </TouchableOpacity>
           )}
 
-          <Text style={[styles.footer, { marginTop: 20 }]}>
-            Hardware wallets keep your keys offline.{'\n'}
-            Your seed phrase never touches the internet.
+          <Text style={[styles.footer, { marginTop: 12, fontSize: 11 }]}>
+            Hardware wallets keep your keys offline.
           </Text>
-
-          <Text style={styles.footer}>
-            100% Open Source - Post-Quantum Encrypted
+          <Text style={[styles.footer, { fontSize: 10, marginTop: 4 }]}>
+            100% Open Source · Post-Quantum Encrypted
           </Text>
         </ScrollView>
       </SafeAreaView>
@@ -769,7 +772,7 @@ export function OnboardingScreen() {
 
           {__DEV__ && (
             <TouchableOpacity
-              style={[styles.secondaryButton, { marginBottom: 8 }]}
+              style={[styles.secondaryButton, { marginBottom: 6 }]}
               onPress={async () => { const Clipboard = await import('expo-clipboard'); Clipboard.setStringAsync(mnemonic); Alert.alert('Copied', 'Seed phrase copied (dev only)'); }}
             >
               <Text style={[styles.secondaryButtonText, { color: t.accent.yellow }]}>Copy (Dev Only)</Text>
