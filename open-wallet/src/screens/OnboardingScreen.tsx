@@ -574,11 +574,55 @@ export function OnboardingScreen() {
     setStep('password');
   };
 
+  // ─── Hardware wallet connection handler ───
+  const handleHardwareWallet = (type: string) => {
+    if (type === 'seed-vault') {
+      handleUseSeedVault();
+    } else {
+      Alert.alert(
+        `Connect ${type === 'ledger' ? 'Ledger' : type === 'trezor' ? 'Trezor' : type === 'keystone' ? 'Keystone' : 'Hardware Wallet'}`,
+        type === 'ledger'
+          ? 'Make sure your Ledger is unlocked and Bluetooth is enabled.\n\n1. Open the Ledger Live app on your Ledger\n2. Enable Bluetooth in Ledger settings\n3. Tap "Connect" below to pair'
+          : type === 'trezor'
+          ? 'Connect your Trezor via USB-C or Bluetooth.\n\n1. Unlock your Trezor device\n2. Connect via cable or enable Bluetooth\n3. Tap "Connect" below to pair'
+          : type === 'keystone'
+          ? 'Scan the QR code on your Keystone device.\n\n1. Navigate to the sync screen on Keystone\n2. The camera will open to scan the QR code'
+          : 'Follow the instructions for your hardware wallet.',
+        [
+          {
+            text: 'Connect',
+            onPress: async () => {
+              setLoading(true);
+              try {
+                const { getProvider } = await import('../core/hardware/hardwareKeyManager');
+                const provider = getProvider(type);
+                if (!provider) {
+                  Alert.alert('Not Available', `${type} support requires the corresponding library. This will be fully available in the next release.\n\nFor now, you can create a new wallet or restore from a seed phrase.`);
+                  return;
+                }
+                await provider.connect();
+                if (provider.connected) {
+                  const address = await provider.getAddress('ethereum', 0);
+                  Alert.alert('Connected!', `${provider.name} connected.\nAddress: ${address.slice(0, 10)}...${address.slice(-6)}`);
+                }
+              } catch (err) {
+                Alert.alert('Connection Failed', err instanceof Error ? err.message : 'Could not connect to hardware wallet. Please try again.');
+              } finally {
+                setLoading(false);
+              }
+            },
+          },
+          { text: 'Cancel', style: 'cancel' },
+        ],
+      );
+    }
+  };
+
   // ─── Welcome ───
   if (step === 'welcome') {
     return (
       <SafeAreaView style={styles.container}>
-        <View style={styles.content}>
+        <ScrollView contentContainerStyle={[styles.content, { paddingBottom: 40 }]}>
           <Text style={styles.logo}>OW</Text>
           <Text style={styles.title}>Open Wallet</Text>
           <Text style={styles.subtitle}>
@@ -586,6 +630,7 @@ export function OnboardingScreen() {
             Every token. Every chain. One app.
           </Text>
 
+          {/* ─── Software Wallet ─── */}
           <View style={styles.buttonGroup}>
             <TouchableOpacity
               style={styles.primaryButton}
@@ -605,33 +650,88 @@ export function OnboardingScreen() {
             >
               <Text style={styles.secondaryButtonText}>Restore Existing Wallet</Text>
             </TouchableOpacity>
-
-            {seedVaultAvailable && (
-              <TouchableOpacity
-                style={[styles.primaryButton, { backgroundColor: t.accent.purple, marginTop: 8 }]}
-                onPress={handleUseSeedVault}
-                disabled={loading}
-              >
-                {loading ? (
-                  <ActivityIndicator color="#fff" />
-                ) : (
-                  <Text style={styles.primaryButtonText}>Use {seedVaultName}</Text>
-                )}
-              </TouchableOpacity>
-            )}
           </View>
 
+          {/* ─── Hardware Wallets (always visible) ─── */}
+          <Text style={{
+            color: t.text.secondary, fontSize: 12, fontWeight: '700',
+            textTransform: 'uppercase', letterSpacing: 1.5,
+            marginTop: 28, marginBottom: 12, textAlign: 'center',
+          }}>
+            Connect Hardware Wallet
+          </Text>
+
+          {/* Built-in Seed Vault (Seeker/Saga) — shown first if available */}
           {seedVaultAvailable && (
-            <Text style={[styles.footer, { color: t.accent.purple, marginBottom: 4 }]}>
-              This phone has a built-in hardware key.{'\n'}
-              Your seed phrase never leaves the secure element.
-            </Text>
+            <TouchableOpacity
+              style={[styles.primaryButton, { backgroundColor: t.accent.purple, marginBottom: 8 }]}
+              onPress={() => handleHardwareWallet('seed-vault')}
+              disabled={loading}
+            >
+              <Text style={styles.primaryButtonText}>{seedVaultName}</Text>
+              <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11, marginTop: 2 }}>Built-in secure element — most secure</Text>
+            </TouchableOpacity>
           )}
+
+          {/* Ledger */}
+          <TouchableOpacity
+            style={[styles.secondaryButton, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }]}
+            onPress={() => handleHardwareWallet('ledger')}
+            disabled={loading}
+          >
+            <View>
+              <Text style={styles.secondaryButtonText}>Ledger</Text>
+              <Text style={{ color: t.text.muted, fontSize: 11 }}>Nano S Plus / Nano X / Stax — via Bluetooth</Text>
+            </View>
+          </TouchableOpacity>
+
+          {/* Trezor */}
+          <TouchableOpacity
+            style={[styles.secondaryButton, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }]}
+            onPress={() => handleHardwareWallet('trezor')}
+            disabled={loading}
+          >
+            <View>
+              <Text style={styles.secondaryButtonText}>Trezor</Text>
+              <Text style={{ color: t.text.muted, fontSize: 11 }}>Model T / Model One / Safe 3 — via USB-C</Text>
+            </View>
+          </TouchableOpacity>
+
+          {/* Keystone */}
+          <TouchableOpacity
+            style={[styles.secondaryButton, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }]}
+            onPress={() => handleHardwareWallet('keystone')}
+            disabled={loading}
+          >
+            <View>
+              <Text style={styles.secondaryButtonText}>Keystone</Text>
+              <Text style={{ color: t.text.muted, fontSize: 11 }}>Air-gapped — via QR code scan</Text>
+            </View>
+          </TouchableOpacity>
+
+          {/* Solana Saga (if not already showing as Seeker) */}
+          {!seedVaultAvailable && (
+            <TouchableOpacity
+              style={[styles.secondaryButton, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }]}
+              onPress={() => handleHardwareWallet('seed-vault')}
+              disabled={loading}
+            >
+              <View>
+                <Text style={styles.secondaryButtonText}>Solana Saga / Seeker</Text>
+                <Text style={{ color: t.text.muted, fontSize: 11 }}>Built-in Seed Vault — connect on Solana phones</Text>
+              </View>
+            </TouchableOpacity>
+          )}
+
+          <Text style={[styles.footer, { marginTop: 20 }]}>
+            Hardware wallets keep your keys offline.{'\n'}
+            Your seed phrase never touches the internet.
+          </Text>
 
           <Text style={styles.footer}>
             100% Open Source - Post-Quantum Encrypted
           </Text>
-        </View>
+        </ScrollView>
       </SafeAreaView>
     );
   }
