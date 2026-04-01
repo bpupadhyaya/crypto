@@ -46,34 +46,66 @@ export async function detectSeedVault(): Promise<SeedVaultInfo> {
   }
 
   try {
-    // Method 1: Check PlatformConstants (React Native exposes device info)
-    const PlatformConstants = (Platform as any).constants;
-    const model = (PlatformConstants?.Model || PlatformConstants?.model || '').toLowerCase();
-    const brand = (PlatformConstants?.Brand || PlatformConstants?.brand || '').toLowerCase();
-    const manufacturer = (PlatformConstants?.Manufacturer || PlatformConstants?.manufacturer || '').toLowerCase();
+    // React Native on Android provides Platform.constants with device info
+    // Fields: Model (string), Brand (string), Manufacturer (string)
+    // On Seeker: Model="Seeker", Brand="solanamobile", Manufacturer="Solana Mobile Inc."
+    // On Saga: Model="Saga", Brand="OSOM", Manufacturer="OSOM Products Inc."
 
-    // Method 2: Check via system properties through DeviceInfo-like module
-    let deviceModel = model;
-    let deviceBrand = brand;
-    let deviceManufacturer = manufacturer;
+    // Access constants - try multiple paths since RN versions differ
+    let deviceModel = '';
+    let deviceBrand = '';
+    let deviceManufacturer = '';
 
-    // Try NativeModules for additional device info
+    // Path 1: Platform.constants (modern RN)
     try {
-      const DeviceInfo = NativeModules.PlatformConstants || NativeModules.DeviceInfo || NativeModules.RNDeviceInfo;
-      if (DeviceInfo) {
-        deviceModel = (DeviceInfo.Model || DeviceInfo.model || deviceModel).toLowerCase();
-        deviceBrand = (DeviceInfo.Brand || DeviceInfo.brand || deviceBrand).toLowerCase();
-        deviceManufacturer = (DeviceInfo.Manufacturer || DeviceInfo.manufacturer || deviceManufacturer).toLowerCase();
-      }
+      const constants = (Platform as any).constants || {};
+      deviceModel = (constants.Model || constants.model || '').toLowerCase();
+      deviceBrand = (constants.Brand || constants.brand || '').toLowerCase();
+      deviceManufacturer = (constants.Manufacturer || constants.manufacturer || '').toLowerCase();
     } catch { /* ignore */ }
 
-    // Detect Seeker: model="Seeker", brand="solanamobile", manufacturer="Solana Mobile Inc."
+    // Path 2: NativeModules.PlatformConstants (older RN)
+    if (!deviceModel && !deviceBrand) {
+      try {
+        const pc = NativeModules.PlatformConstants;
+        if (pc) {
+          const pcConstants = pc.getConstants ? pc.getConstants() : pc;
+          deviceModel = (pcConstants?.Model || pcConstants?.model || '').toLowerCase();
+          deviceBrand = (pcConstants?.Brand || pcConstants?.brand || '').toLowerCase();
+          deviceManufacturer = (pcConstants?.Manufacturer || pcConstants?.manufacturer || '').toLowerCase();
+        }
+      } catch { /* ignore */ }
+    }
+
+    // Path 3: Direct NativeModules access
+    if (!deviceModel && !deviceBrand) {
+      try {
+        const modules = NativeModules as any;
+        // Some RN versions put it under different names
+        for (const key of ['PlatformConstants', 'DeviceInfo', 'RNDeviceInfo', 'AndroidConstants']) {
+          if (modules[key]) {
+            const info = modules[key].getConstants ? modules[key].getConstants() : modules[key];
+            if (info?.Model || info?.model || info?.Brand || info?.brand) {
+              deviceModel = (info.Model || info.model || '').toLowerCase();
+              deviceBrand = (info.Brand || info.brand || '').toLowerCase();
+              deviceManufacturer = (info.Manufacturer || info.manufacturer || '').toLowerCase();
+              break;
+            }
+          }
+        }
+      } catch { /* ignore */ }
+    }
+
+    // Log for debugging (visible in Metro console)
+    console.log(`[SeedVault] Device detection: model="${deviceModel}" brand="${deviceBrand}" manufacturer="${deviceManufacturer}"`);
+
+    // Detect Seeker: model="seeker", brand="solanamobile", manufacturer="solana mobile inc."
     const isSeeker = deviceModel.includes('seeker') ||
                      deviceBrand.includes('solanamobile') ||
-                     deviceBrand.includes('solana') ||
+                     deviceBrand.includes('solana mobile') ||
                      deviceManufacturer.includes('solana');
 
-    // Detect Saga: model="Saga", brand="OSOM", manufacturer="OSOM Products Inc."
+    // Detect Saga: model="saga", brand="osom", manufacturer="osom"
     const isSaga = deviceModel.includes('saga') ||
                    deviceBrand.includes('osom') ||
                    deviceManufacturer.includes('osom');

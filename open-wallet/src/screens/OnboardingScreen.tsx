@@ -50,10 +50,27 @@ export function OnboardingScreen() {
   // Detect built-in Seed Vault (Solana Seeker/Saga)
   useEffect(() => {
     if (Platform.OS === 'android') {
+      // Primary detection via bridge
       detectSeedVault().then((info) => {
         if (info.available) {
           setSeedVaultAvailable(true);
           setSeedVaultName(info.model === 'seeker' ? 'Solana Seeker Seed Vault' : info.model === 'saga' ? 'Solana Saga Seed Vault' : 'Built-in Seed Vault');
+        } else {
+          // Fallback: check Platform.constants directly
+          try {
+            const constants = (Platform as any).constants || {};
+            const model = (constants.Model || constants.model || '').toLowerCase();
+            const brand = (constants.Brand || constants.brand || '').toLowerCase();
+            const mfr = (constants.Manufacturer || constants.manufacturer || '').toLowerCase();
+            console.log(`[Onboarding] Fallback detection: model="${model}" brand="${brand}" mfr="${mfr}"`);
+            if (model.includes('seeker') || brand.includes('solana') || mfr.includes('solana')) {
+              setSeedVaultAvailable(true);
+              setSeedVaultName('Solana Seeker Seed Vault');
+            } else if (model.includes('saga') || brand.includes('osom') || mfr.includes('osom')) {
+              setSeedVaultAvailable(true);
+              setSeedVaultName('Solana Saga Seed Vault');
+            }
+          } catch { /* ignore */ }
         }
       }).catch(() => {});
     }
