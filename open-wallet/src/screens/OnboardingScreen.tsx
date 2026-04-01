@@ -106,7 +106,7 @@ export function OnboardingScreen() {
       lineHeight: 24,
     },
     buttonGroup: {
-      marginTop: 48,
+      marginTop: 24,
       gap: 12,
     },
     primaryButton: {
@@ -622,10 +622,10 @@ export function OnboardingScreen() {
   if (step === 'welcome') {
     return (
       <SafeAreaView style={styles.container}>
-        <ScrollView contentContainerStyle={[styles.content, { paddingBottom: 40 }]}>
-          <Text style={styles.logo}>OW</Text>
-          <Text style={styles.title}>Open Wallet</Text>
-          <Text style={styles.subtitle}>
+        <ScrollView contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 40, paddingBottom: 40 }}>
+          <Text style={[styles.logo, { fontSize: 36, marginBottom: 4 }]}>OW</Text>
+          <Text style={[styles.title, { fontSize: 26 }]}>Open Wallet</Text>
+          <Text style={[styles.subtitle, { fontSize: 14, marginTop: 8 }]}>
             Your money. Your control.{'\n'}
             Every token. Every chain. One app.
           </Text>
