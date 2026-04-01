@@ -17,7 +17,7 @@
  * On non-Solana phones, all methods gracefully return false/null.
  */
 
-import { Platform, NativeModules, Alert } from 'react-native';
+import { Platform, NativeModules } from 'react-native';
 
 // ─── Types ───
 
@@ -46,35 +46,76 @@ export async function detectSeedVault(): Promise<SeedVaultInfo> {
   }
 
   try {
-    // Check device model first
-    const { PlatformConstants } = NativeModules;
-    const model = PlatformConstants?.Model?.toLowerCase() || '';
-    const brand = PlatformConstants?.Brand?.toLowerCase() || '';
+    // Method 1: Check PlatformConstants (React Native exposes device info)
+    const PlatformConstants = (Platform as any).constants;
+    const model = (PlatformConstants?.Model || PlatformConstants?.model || '').toLowerCase();
+    const brand = (PlatformConstants?.Brand || PlatformConstants?.brand || '').toLowerCase();
+    const manufacturer = (PlatformConstants?.Manufacturer || PlatformConstants?.manufacturer || '').toLowerCase();
 
-    const isSeeker = model.includes('seeker') || brand.includes('solanamobile');
-    const isSaga = model.includes('saga') || brand.includes('osom');
+    // Method 2: Check via system properties through DeviceInfo-like module
+    let deviceModel = model;
+    let deviceBrand = brand;
+    let deviceManufacturer = manufacturer;
+
+    // Try NativeModules for additional device info
+    try {
+      const DeviceInfo = NativeModules.PlatformConstants || NativeModules.DeviceInfo || NativeModules.RNDeviceInfo;
+      if (DeviceInfo) {
+        deviceModel = (DeviceInfo.Model || DeviceInfo.model || deviceModel).toLowerCase();
+        deviceBrand = (DeviceInfo.Brand || DeviceInfo.brand || deviceBrand).toLowerCase();
+        deviceManufacturer = (DeviceInfo.Manufacturer || DeviceInfo.manufacturer || deviceManufacturer).toLowerCase();
+      }
+    } catch { /* ignore */ }
+
+    // Detect Seeker: model="Seeker", brand="solanamobile", manufacturer="Solana Mobile Inc."
+    const isSeeker = deviceModel.includes('seeker') ||
+                     deviceBrand.includes('solanamobile') ||
+                     deviceBrand.includes('solana') ||
+                     deviceManufacturer.includes('solana');
+
+    // Detect Saga: model="Saga", brand="OSOM", manufacturer="OSOM Products Inc."
+    const isSaga = deviceModel.includes('saga') ||
+                   deviceBrand.includes('osom') ||
+                   deviceManufacturer.includes('osom');
 
     if (!isSeeker && !isSaga) {
+      // Method 3: Check if Seed Vault app/service exists on the device
+      // Some Solana phones might not match model strings but still have Seed Vault
+      try {
+        const SeedVaultModule = NativeModules.SeedVaultModule;
+        if (SeedVaultModule) {
+          return {
+            available: true,
+            model: 'unknown',
+            apiVersion: 1,
+            hasAuthorizedSeed: false,
+          };
+        }
+      } catch { /* no seed vault module */ }
+
       return { available: false, model: 'unknown', apiVersion: 0, hasAuthorizedSeed: false };
     }
 
-    // Try to access Seed Vault native module
-    const SeedVaultModule = NativeModules.SeedVaultModule;
-    if (SeedVaultModule) {
-      const info = await SeedVaultModule.getInfo();
-      return {
-        available: true,
-        model: isSeeker ? 'seeker' : 'saga',
-        apiVersion: info?.apiVersion || 1,
-        hasAuthorizedSeed: info?.hasAuthorizedSeed || false,
-      };
-    }
+    // Device is Seeker or Saga — Seed Vault is available
+    const detectedModel = isSeeker ? 'seeker' : 'saga';
 
-    // Fallback: device is Seeker/Saga but native module not registered yet
-    // We can still detect via system properties
+    // Try to access Seed Vault native module for more info
+    try {
+      const SeedVaultModule = NativeModules.SeedVaultModule;
+      if (SeedVaultModule?.getInfo) {
+        const info = await SeedVaultModule.getInfo();
+        return {
+          available: true,
+          model: detectedModel as 'seeker' | 'saga',
+          apiVersion: info?.apiVersion || (isSeeker ? 2 : 1),
+          hasAuthorizedSeed: info?.hasAuthorizedSeed || false,
+        };
+      }
+    } catch { /* native module not available yet, but device is still Seeker/Saga */ }
+
     return {
       available: true,
-      model: isSeeker ? 'seeker' : 'saga',
+      model: detectedModel as 'seeker' | 'saga',
       apiVersion: isSeeker ? 2 : 1,
       hasAuthorizedSeed: false,
     };
