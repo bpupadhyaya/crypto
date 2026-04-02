@@ -1,5 +1,5 @@
 /**
- * Dev-only test credentials — only used when __DEV__ is true.
+ * Dev/test credentials — for fast-track testing on all builds.
  * These are standard BIP39 test vectors; never used in production.
  *
  * Flow: welcome →(Tap 1)→ pin_setup →(Tap 2)→ unlocked (dashboard)

@@ -563,10 +563,9 @@ export function OnboardingScreen() {
     setStep('password');
   };
 
-  // ─── Dev Quickstart (DEV builds only) ───
+  // ─── Dev Quickstart ───
 
   const handleDevQuickstart = async () => {
-    if (!__DEV__) return;
     const { DEV_MNEMONIC, DEV_PASSWORD } = await import('../config/devCredentials');
     setLoading(true);
     try {
@@ -763,7 +762,7 @@ export function OnboardingScreen() {
             </TouchableOpacity>
           )}
 
-          {__DEV__ && (
+          {(
             <TouchableOpacity
               style={[styles.secondaryButton, { marginTop: 16, borderColor: '#f59e0b', borderStyle: 'dashed' }]}
               onPress={handleDevQuickstart}
@@ -811,7 +810,7 @@ export function OnboardingScreen() {
             ))}
           </View>
 
-          {__DEV__ && (
+          {(
             <TouchableOpacity
               style={[styles.secondaryButton, { marginBottom: 6 }]}
               onPress={async () => { const Clipboard = await import('expo-clipboard'); Clipboard.setStringAsync(mnemonic); Alert.alert('Copied', 'Seed phrase copied (dev only)'); }}

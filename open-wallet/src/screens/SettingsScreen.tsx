@@ -3,7 +3,7 @@
  * Tapping a category tile shows the full list of items for that category.
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import {
   View, Text, TouchableOpacity, ScrollView,
   StyleSheet, SafeAreaView, Switch, Alert, Linking,
@@ -2898,36 +2898,60 @@ export function SettingsScreen() {
     const config = categoryMap[cat];
     if (!config) return null;
 
-    // Open Chain: render as grouped cards (max 10 items each) for better UX
+    // Open Chain: render as semantically grouped cards (max 10 items each) for better UX
     if (cat === 'chain') {
-      const ITEMS_PER_CARD = 10;
-      const GROUP_TITLES = [
-        'Dashboard & Discover',
-        'Finance & Portfolio',
-        'Trading & DeFi',
-        'Community Life',
-        'Environment & Basics',
-        'Rights & Transparency',
-        'Future & Economy',
-        'Mutual Aid & Giving',
-        'Blockchain & Network',
-        'Culture & Rewards',
-        'Identity & Trust',
-        'Governance & Civic',
-        'Impact & Wellbeing',
-        'Education & Learning',
-        'Inclusion & Care',
-        'Local Economy & Innovation',
-        'Arts, Faith & Misc',
-        'More',
+      const GROUPS: Array<{ title: string; labels: string[] }> = [
+        { title: 'Dashboard & Discovery', labels: ['My Day', 'Search Everything', 'My Profile', 'Community Radar', 'Community Stats', 'Data Dashboard', 'Community Directory', 'World Map', 'Live Community Map', 'Community Map'] },
+        { title: 'App & Settings', labels: ['Setup Persona', 'Notifications', 'Shortcuts', 'Theme Studio', 'Data Export', 'System Status', 'About Open Wallet', 'Changelog', 'FAQ', 'Night Mode'] },
+        { title: 'Finance & Savings', labels: ['Portfolio Rebalance', 'DCA (Auto-Buy)', 'Staking Calculator', 'Retirement Planning', 'Freelance Tools', 'Community Bank', 'Family Finance', 'Financial Literacy', 'Living Ledger', 'Community Vault'] },
+        { title: 'Trading & DeFi', labels: ['Advanced Trading', 'Cross-Chain Bridge', 'Swap History', 'Price Charts', 'DeFi Dashboard', 'Liquidity Guide', 'Airdrops', 'Gas Optimizer', 'Cross-Chain Portfolio', 'Yield Optimizer'] },
+        { title: 'OTK & Wallet', labels: ['OTK Tokenomics', 'OTK Flow', 'Token Burns', 'Token History', 'Reward Shop', 'Seed Phrase Quiz', 'Backup Verify', 'Wallet Health', 'Multi-Wallet', 'QR Hub'] },
+        { title: 'Blockchain & Network', labels: ['Chain Explorer', 'Validator List', 'Validator Dashboard', 'Oracle Network', 'Milestone Oracle', 'Network Stats', 'Smart Contracts', 'PQC Key Management', 'ZK Proofs', 'Supply Chain'] },
+        { title: 'Governance & Voting', labels: ['Governance', 'Governance History', 'DAOs', 'Voting Power', 'Elections', 'Delegate Power', 'Civic Participation', 'Community Charter', 'Petitions', 'Arbitration'] },
+        { title: 'Rights & Transparency', labels: ['Human Rights', 'Transparency Portal', 'Anti-Corruption', 'Open Data', 'Correction Reports', 'Constitution Dashboard', 'Constitution Quiz', 'Legal Aid', 'Data Sovereignty', 'Appeal & Contest'] },
+        { title: 'Identity & Trust', labels: ['Universal ID', 'Identity & Reputation', 'Digital Identity', 'Reputation Dashboard', 'Skill Certifications', 'Skill Verification', 'Trust Network', 'Cross-Chain Identity', 'Guardian Accounts', 'Social Recovery'] },
+        { title: 'Community Life', labels: ['Community Goals', 'Community Awards', 'Community Projects', 'Community Board', 'Community Pledges', 'Community Health', 'Community Health Index', 'Community Budget', 'Community Partners', 'Community News'] },
+        { title: 'Education & Learning', labels: ['Education Hub', 'Education Fund', 'Mentorship', 'Teacher Impact', 'Curriculum & Pathways', 'Skill Tree', 'Knowledge Base', 'Language School', 'Mentor Directory', 'Mentor Match'] },
+        { title: 'Health & Wellness', labels: ['Wellness Hub', 'Wellness', 'Wellness Check', 'Mental Wellness', 'Meditation & Wellness', 'Health Records', 'Habit Tracker', 'Mood Map', 'Sports & Fitness', 'Recovery Support'] },
+        { title: 'Environment & Climate', labels: ['Carbon Tracker', 'Environmental Impact', 'Renewable Energy', 'Composting', 'Rainwater Harvest', 'Tree Planting', 'Cleanup Drives', 'Climate Action', 'Habitat Restoration', 'Energy Audit'] },
+        { title: 'Mutual Aid & Giving', labels: ['Crowdfunding', 'Resource Sharing', 'Microfinance', 'Volunteer Service', 'Volunteer Log', 'Time Bank', 'Donor Wall', 'Neighbor Help', 'Philanthropy', 'Micro-Grants'] },
+        { title: 'Inclusion & Care', labels: ['Eldercare', 'Childcare Co-ops', 'Disability Support', 'Newcomer Integration', 'Safe Spaces', 'Barrier-Free', 'Maternal Health', 'Senior Activities', 'Veteran Support', 'Teen Space'] },
+        { title: 'Local Economy & Work', labels: ['Job Board', 'Marketplace', 'Local Currency', 'Cooperatives', 'Innovation Hub', 'Community Workshop', 'Repair Cafe', 'Co-Working', 'Farm to Table', 'Bike Share'] },
+        { title: 'Social & Communication', labels: ['Encrypted Messages', 'Community Feed', 'Community Radio', 'Community Radio Live', 'Storytelling', 'Community Podcast', 'Gratitude Wall', 'Send Gratitude', 'Language Exchange', 'Translation Service'] },
+        { title: 'Impact & Peace', labels: ['Global Impact', 'My Impact', 'Impact Report', 'Impact Calculator', 'Peace Index', 'Peace Ambassador', 'Regional Dashboard', 'Regional Milestones', 'Inter-Regional Cooperation', 'Vision 2030/2035'] },
+        { title: 'Family & Generations', labels: ['Family Tree', 'Parenting Journey', 'Generations', 'Ancestry & Genealogy', 'Parenting Stages', 'Relationship Wellness', 'Memorials', 'Life Timeline', 'Child Development', 'Elder Wisdom'] },
+        { title: 'Safety & Emergency', labels: ['Emergency Kit', 'Emergency Fund', 'Emergency Preparedness', 'Emergency Contacts', 'Safety Net', 'Disaster Response', 'Child Safety', 'First Aid', 'Incident Reports', 'Health Emergency'] },
+        { title: 'Arts & Culture', labels: ['Art Studio', 'Music & Performance', 'Dance & Movement', 'Photography', 'Poetry', 'Community Cinema', 'Cultural Heritage', 'Book Clubs', 'Ceremonies', 'Textile Arts'] },
+        { title: 'Rewards & Achievements', labels: ['Leaderboard', 'Achievements', 'Achievement Gallery', 'Contribution Scores', 'Contribution History', 'Milestone Tracker', 'Success Stories', 'Verifier Dashboard', 'Gratitude Analytics', 'Full Year Calendar'] },
+        { title: 'Community Resources', labels: ['Community Calendar', 'Community Library', 'Community Transport', 'Infrastructure', 'My Neighborhood', 'Community Feedback', 'Volunteer Match', 'Volunteer Abroad', 'Community Research', 'Community Travel'] },
+        { title: 'Personal Growth', labels: ['Vision Board', 'Personal Journal', 'Gratitude Journal', 'Graduation', 'Support Groups', 'Legacy Plan', 'Time Capsules', 'Predictions', 'Multi-Device Sync', 'Referral Program'] },
+        { title: 'Food & Farming', labels: ['Food Security', 'Water & Sanitation', 'Housing Security', 'Nutrition', 'Gardening', 'Cooking', 'Permaculture', 'Beekeeping', 'Soil Health', 'Aquaponics'] },
+        { title: 'Civic & Advocacy', labels: ['Youth Council', 'Civic Education', 'Debates', 'Conflict Prevention', 'Peer Review', 'Accessibility Map', 'Accessibility Settings', 'Connections', 'Feedback Form', 'Open Source'] },
+        { title: 'Finance & Legal', labels: ['Insurance Pools', 'Escrow & Disputes', 'Treasury', 'Barter Exchange', 'Value Channels', 'Needs Assessment', 'Resource Matching', 'Basic Needs Dashboard', 'Mediation', 'Waste Management'] },
+        { title: 'Skills & Development', labels: ['Skill Swap', 'Apprenticeships', 'Professional Networking', 'Digital Literacy', 'Peer Tutoring', 'Home School', 'STEM Education', 'Public Speaking', 'Fee Estimator', 'Roadmap'] },
+        { title: 'Lifestyle & Hobbies', labels: ['Wildlife', 'Games & Play', 'Yoga', 'Digital Wellbeing', 'Allergy Management', 'Pen Pals', 'Seasonal Living', 'Sleep Tracker', 'Astronomy', 'Digital Archive'] },
+        { title: 'More', labels: ['Pet Welfare', 'Grief Support', 'Weather & Climate', 'Interfaith & Prayer', 'End-of-Life Planning', 'Progress Report', 'Community Kitchen'] },
       ];
-      const cards: Array<{ title: string; items: typeof config.items }> = [];
-      for (let i = 0; i < config.items.length; i += ITEMS_PER_CARD) {
-        cards.push({
-          title: GROUP_TITLES[Math.floor(i / ITEMS_PER_CARD)] ?? 'More',
-          items: config.items.slice(i, i + ITEMS_PER_CARD),
-        });
+
+      const itemsByLabel = new Map(config.items.map((item) => [item.label, item]));
+      const groupedLabels = new Set(GROUPS.flatMap((g) => g.labels));
+
+      const cards = GROUPS.map((g) => ({
+        title: g.title,
+        items: g.labels.map((l) => itemsByLabel.get(l)).filter((item): item is NonNullable<typeof item> => item != null),
+      })).filter((c) => c.items.length > 0);
+
+      // Any items not in any defined group fall into the last "More" card
+      const ungrouped = config.items.filter((item) => !groupedLabels.has(item.label));
+      if (ungrouped.length > 0) {
+        const moreCard = cards.find((c) => c.title === 'More');
+        if (moreCard) {
+          moreCard.items.push(...ungrouped);
+        } else {
+          cards.push({ title: 'More', items: ungrouped });
+        }
       }
+
       return (
         <SafeAreaView style={st.container}>
           <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={st.scroll}>

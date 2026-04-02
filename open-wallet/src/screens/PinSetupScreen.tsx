@@ -115,7 +115,6 @@ export function PinSetupScreen() {
   };
 
   const handleDevAutoPin = async () => {
-    if (!__DEV__) return;
     const { DEV_PIN } = await import('../config/devCredentials');
     const pw = tempVaultPassword;
     setTempVaultPassword(null);
@@ -155,7 +154,7 @@ export function PinSetupScreen() {
         onComplete={step === 'create' ? handlePinCreate : handlePinConfirm}
         error={error}
       />
-      {__DEV__ && (
+      {(
         <TouchableOpacity
           onPress={handleDevAutoPin}
           style={{ alignItems: 'center', paddingVertical: 12, paddingBottom: 24 }}

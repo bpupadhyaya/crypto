@@ -154,7 +154,6 @@ export function UnlockScreen() {
   };
 
   const handleDevAutoUnlock = async () => {
-    if (!__DEV__) return;
     const { DEV_PIN } = await import('../config/devCredentials');
     await handlePinUnlock(DEV_PIN);
   };
@@ -348,7 +347,7 @@ export function UnlockScreen() {
           error={pinError}
         />
         {renderAltMethods('pin')}
-        {__DEV__ && (
+        {(
           <TouchableOpacity
             onPress={handleDevAutoUnlock}
             style={{ alignItems: 'center', paddingVertical: 10, paddingBottom: 20 }}
