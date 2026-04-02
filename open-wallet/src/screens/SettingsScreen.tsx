@@ -2898,6 +2898,69 @@ export function SettingsScreen() {
     const config = categoryMap[cat];
     if (!config) return null;
 
+    // Open Chain: render as grouped cards (max 10 items each) for better UX
+    if (cat === 'chain') {
+      const ITEMS_PER_CARD = 10;
+      const GROUP_TITLES = [
+        'Dashboard & Discover',
+        'Finance & Portfolio',
+        'Trading & DeFi',
+        'Community Life',
+        'Environment & Basics',
+        'Rights & Transparency',
+        'Future & Economy',
+        'Mutual Aid & Giving',
+        'Blockchain & Network',
+        'Culture & Rewards',
+        'Identity & Trust',
+        'Governance & Civic',
+        'Impact & Wellbeing',
+        'Education & Learning',
+        'Inclusion & Care',
+        'Local Economy & Innovation',
+        'Arts, Faith & Misc',
+        'More',
+      ];
+      const cards: Array<{ title: string; items: typeof config.items }> = [];
+      for (let i = 0; i < config.items.length; i += ITEMS_PER_CARD) {
+        cards.push({
+          title: GROUP_TITLES[Math.floor(i / ITEMS_PER_CARD)] ?? 'More',
+          items: config.items.slice(i, i + ITEMS_PER_CARD),
+        });
+      }
+      return (
+        <SafeAreaView style={st.container}>
+          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={st.scroll}>
+            <View style={st.categoryHeader}>
+              <TouchableOpacity style={st.categoryBackBtn} onPress={() => setCategory(null)}>
+                <Text style={st.categoryBackText}>{'\u2190'}</Text>
+              </TouchableOpacity>
+              <Text style={st.categoryTitle}>{config.title}</Text>
+            </View>
+            {cards.map((card) => (
+              <View key={card.title} style={{ marginTop: 12 }}>
+                <Text style={{
+                  color: t.text.secondary,
+                  fontSize: 11,
+                  fontWeight: '700',
+                  textTransform: 'uppercase',
+                  letterSpacing: 1.2,
+                  marginLeft: 4,
+                  marginBottom: 6,
+                }}>
+                  {card.title}
+                </Text>
+                <View style={st.card}>
+                  {renderCollapsibleItems(`openchain-${card.title}`, card.items, card.items.length)}
+                </View>
+              </View>
+            ))}
+            <View style={{ height: 40 }} />
+          </ScrollView>
+        </SafeAreaView>
+      );
+    }
+
     return (
       <SafeAreaView style={st.container}>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={st.scroll}>

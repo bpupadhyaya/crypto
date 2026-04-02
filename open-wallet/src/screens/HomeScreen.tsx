@@ -272,6 +272,76 @@ const AnimatedTotal = React.memo(({ value, t }: { value: number; t: Theme }) => 
   return null; // The PieChart handles the center display; we pass the animated formatted value
 });
 
+// ─── Memoized chart + actions header (does NOT depend on search query) ───
+// Extracted so PieChart never re-renders while user is typing in search box.
+const ChartHeader = React.memo(function ChartHeader({
+  formattedTotal,
+  portfolioChange,
+  allocations,
+  showTestnetBanner,
+  demoMode,
+  openManage,
+  onBuySell,
+  s,
+  t,
+}: {
+  formattedTotal: string;
+  portfolioChange: number | null;
+  allocations: Array<{ label: string; value: number; color: string }>;
+  showTestnetBanner: boolean;
+  demoMode: boolean;
+  openManage: () => void;
+  onBuySell: () => void;
+  s: ReturnType<typeof StyleSheet.create>;
+  t: Theme & { isDark: boolean };
+}) {
+  return (
+    <>
+      {showTestnetBanner && (
+        <View style={s.testnetBanner}>
+          <Text style={s.testnetText}>TESTNET MODE — No real funds</Text>
+        </View>
+      )}
+      {demoMode && (
+        <View style={s.demoBanner}>
+          <Text style={s.demoText}>DEMO MODE — Simulated balances</Text>
+        </View>
+      )}
+      <View style={s.chartCard}>
+        <PieChart
+          slices={allocations}
+          size={180}
+          centerLabel="Total"
+          centerValue={formattedTotal}
+        />
+        <Legend t={t} data={allocations} />
+        {portfolioChange != null && (
+          <Text style={{ color: portfolioChange >= 0 ? t.accent.green : t.accent.red, fontSize: 14, fontWeight: '700', marginTop: 8 }}>
+            {portfolioChange >= 0 ? '+' : ''}{portfolioChange.toFixed(2)}% (24h)
+          </Text>
+        )}
+      </View>
+      <View style={s.actions}>
+        <ActionBtn icon="↑" label="Send" color={t.accent.orange} t={t} />
+        <ActionBtn icon="↓" label="Receive" color={t.accent.green} t={t} />
+        <ActionBtn icon="⇄" label="Swap" color={t.accent.blue} t={t} />
+        <TouchableOpacity style={{ alignItems: 'center', flex: 1 }} onPress={onBuySell}>
+          <View style={{ width: 56, height: 56, borderRadius: 28, justifyContent: 'center', alignItems: 'center', marginBottom: 6, backgroundColor: t.accent.purple + '20' }}>
+            <Text style={{ fontSize: 24, fontWeight: '700', color: t.accent.purple }}>$</Text>
+          </View>
+          <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: '600' }}>Buy</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={s.sectionHeader}>
+        <Text style={s.sectionTitle}>Tokens</Text>
+        <TouchableOpacity onPress={openManage}>
+          <Text style={s.manageLink}>Manage</Text>
+        </TouchableOpacity>
+      </View>
+    </>
+  );
+});
+
 export function HomeScreen() {
   const [showManage, setShowManage] = useState(false);
   const [showBuySell, setShowBuySell] = useState(false);
@@ -428,6 +498,7 @@ export function HomeScreen() {
 
   const openManage = useCallback(() => setShowManage(true), []);
   const closeManage = useCallback(() => setShowManage(false), []);
+  const openBuySell = useCallback(() => setShowBuySell(true), []);
 
   const lastUpdatedText = useMemo(() => {
     if (!lastUpdated) return '';
@@ -441,49 +512,25 @@ export function HomeScreen() {
   const demoMode = useWalletStore((s) => s.demoMode);
   const showTestnetBanner = networkMode === 'testnet';
 
+  // Stable chart header — does NOT depend on searchQuery so PieChart never
+  // re-renders while user types. Only recalculates when chart data changes.
+  const chartHeader = useMemo(() => (
+    <ChartHeader
+      formattedTotal={formattedTotal}
+      portfolioChange={portfolioChange}
+      allocations={allocations}
+      showTestnetBanner={showTestnetBanner}
+      demoMode={demoMode}
+      openManage={openManage}
+      onBuySell={openBuySell}
+      s={s}
+      t={t}
+    />
+  ), [formattedTotal, portfolioChange, allocations, showTestnetBanner, demoMode, openManage, openBuySell, s, t]);
+
   const header = useMemo(() => (
-    <>
-      {showTestnetBanner && (
-        <View style={s.testnetBanner}>
-          <Text style={s.testnetText}>TESTNET MODE — No real funds</Text>
-        </View>
-      )}
-      {demoMode && (
-        <View style={s.demoBanner}>
-          <Text style={s.demoText}>DEMO MODE — Simulated balances</Text>
-        </View>
-      )}
-      <View style={s.chartCard}>
-        <PieChart
-          slices={allocations}
-          size={180}
-          centerLabel="Total"
-          centerValue={formattedTotal}
-        />
-        <Legend t={t} data={allocations} />
-        {portfolioChange != null && (
-          <Text style={{ color: portfolioChange >= 0 ? t.accent.green : t.accent.red, fontSize: 14, fontWeight: '700', marginTop: 8 }}>
-            {portfolioChange >= 0 ? '+' : ''}{portfolioChange.toFixed(2)}% (24h)
-          </Text>
-        )}
-      </View>
-      <View style={s.actions}>
-        <ActionBtn icon="↑" label="Send" color={t.accent.orange} t={t} />
-        <ActionBtn icon="↓" label="Receive" color={t.accent.green} t={t} />
-        <ActionBtn icon="⇄" label="Swap" color={t.accent.blue} t={t} />
-        <TouchableOpacity style={{ alignItems: 'center', flex: 1 }} onPress={() => setShowBuySell(true)}>
-          <View style={{ width: 56, height: 56, borderRadius: 28, justifyContent: 'center', alignItems: 'center', marginBottom: 6, backgroundColor: t.accent.purple + '20' }}>
-            <Text style={{ fontSize: 24, fontWeight: '700', color: t.accent.purple }}>$</Text>
-          </View>
-          <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: '600' }}>Buy</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={s.sectionHeader}>
-        <Text style={s.sectionTitle}>Tokens</Text>
-        <TouchableOpacity onPress={openManage}>
-          <Text style={s.manageLink}>Manage</Text>
-        </TouchableOpacity>
-      </View>
+    <View>
+      {chartHeader}
       <TextInput
         style={s.searchInput}
         placeholder="Search tokens..."
@@ -501,8 +548,8 @@ export function HomeScreen() {
       ) : lastUpdatedText ? (
         <Text style={s.lastUpdated}>{lastUpdatedText}</Text>
       ) : null}
-    </>
-  ), [totalUsdValue, formattedTotal, portfolioChange, openManage, lastUpdatedText, showTestnetBanner, demoMode, allocations, s, t, searchQuery, refreshStatusText]);
+    </View>
+  ), [chartHeader, s, t, searchQuery, refreshStatusText, lastUpdatedText]);
 
   if (showBuySell) return <BuySellScreen onClose={() => setShowBuySell(false)} />;
   if (showHistory) return <HistoryScreen />;
