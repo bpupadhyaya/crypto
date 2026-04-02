@@ -336,12 +336,10 @@ export function OnboardingScreen() {
   const handleUseSeedVault = async () => {
     setLoading(true);
     try {
-      // First try the real Seed Vault bridge
       const { connectSeedVault } = await import('../core/hardware/seedVaultBridge');
       const result = await connectSeedVault();
 
       if (result.success) {
-        // Seed Vault connected — import addresses
         Object.entries(result.addresses).forEach(([chain, addr]) => {
           setAddresses({ [chain]: addr } as any);
         });
@@ -351,30 +349,10 @@ export function OnboardingScreen() {
         return;
       }
 
-      // If detection failed, the device might still be a Seeker/Saga
-      // but Platform.constants didn't work. Try requesting Seed Vault anyway
-      // via Android Intent — the OS will show the Seed Vault UI if available
-      const { authorizeSeedVault, getSeedVaultPublicKey } = await import('../core/hardware/seedVaultBridge');
-      const authorized = await authorizeSeedVault();
-
-      if (authorized) {
-        const pubkey = await getSeedVaultPublicKey(0);
-        if (pubkey) {
-          setAddresses({ solana: pubkey } as any);
-          setHasVault(true);
-          setStatus('unlocked');
-          Alert.alert(
-            'Seed Vault Connected',
-            `Connected to Seed Vault.\n\nSolana address: ${pubkey.slice(0, 8)}...${pubkey.slice(-6)}\n\nAll signing happens in the secure element.`,
-          );
-          return;
-        }
-      }
-
-      // If we get here, Seed Vault is genuinely not available
+      // connectSeedVault now surfaces the real error message
       Alert.alert(
         'Seed Vault',
-        'Could not connect to the Seed Vault.\n\nIf this is a Solana Seeker or Saga phone, please make sure:\n\n1. The Seed Vault has been set up in your phone Settings\n2. You have created or imported a seed phrase in the Seed Vault\n3. Try restarting the app\n\nAlternatively, you can create a new wallet or restore from a seed phrase.',
+        `${result.message}\n\nAlternatively, you can create a new wallet or restore from a seed phrase.`,
         [
           { text: 'Create New Wallet', onPress: handleCreateWallet },
           { text: 'Cancel', style: 'cancel' },
@@ -384,7 +362,7 @@ export function OnboardingScreen() {
       const msg = error instanceof Error ? error.message : 'Unknown error';
       Alert.alert(
         'Seed Vault',
-        `Connection attempt failed: ${msg}\n\nYou can create a new wallet or restore from a seed phrase instead.`,
+        `Connection failed: ${msg}\n\nYou can create a new wallet or restore from a seed phrase instead.`,
         [
           { text: 'Create New Wallet', onPress: handleCreateWallet },
           { text: 'Cancel', style: 'cancel' },

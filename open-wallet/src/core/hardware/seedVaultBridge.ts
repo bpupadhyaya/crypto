@@ -122,46 +122,66 @@ export async function detectSeedVault(): Promise<SeedVaultInfo> {
 // ─── MWA Authorization + Key Retrieval ───
 
 /**
+ * Decode an MWA account to a base58 Solana public key.
+ * MWA v2 WalletAccount has publicKey: Uint8Array directly.
+ * MWA v1 legacy Account has address: base64-encoded 32 raw bytes.
+ * Uses atob() — always available in React Native, no Buffer polyfill needed.
+ */
+function mwaAccountToBase58(account: any): string {
+  // WalletAccount (MWA v2) — publicKey Uint8Array available directly
+  if (account.publicKey instanceof Uint8Array) {
+    return new PublicKey(account.publicKey).toBase58();
+  }
+
+  const b64: string = account.address;
+
+  // If it looks like a base58 address already (32–44 chars, no base64-only chars)
+  if (b64.length >= 32 && b64.length <= 44 && !/[^1-9A-HJ-NP-Za-km-z]/.test(b64)) {
+    return b64;
+  }
+
+  // Decode base64 or base64url → Uint8Array using atob (no Buffer required)
+  // Normalize base64url to standard base64 first (MWA may use URL-safe encoding)
+  const normalized = b64.replace(/-/g, '+').replace(/_/g, '/');
+  const padded = normalized.padEnd(normalized.length + (4 - (normalized.length % 4)) % 4, '=');
+  const binary = atob(padded);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return new PublicKey(bytes).toBase58();
+}
+
+/**
  * Connect to the Seed Vault via Mobile Wallet Adapter.
  * Opens the Seed Vault authorization UI, then returns the Solana public key.
  * The private key NEVER leaves the hardware secure element.
- *
- * @returns base58 Solana public key, or null if failed/denied
+ * Throws with a descriptive message on failure — callers should catch and show to user.
  */
-export async function authorizeSeedVaultMWA(): Promise<{ publicKey: string; authToken: string } | null> {
-  if (Platform.OS !== 'android') return null;
+export async function authorizeSeedVaultMWA(): Promise<{ publicKey: string; authToken: string }> {
+  if (Platform.OS !== 'android') {
+    throw new Error('Seed Vault is only available on Android (Solana Seeker / Saga).');
+  }
 
-  try {
-    const result = await transact(async (wallet) => {
-      const authResult = await wallet.authorize({
-        cluster: 'mainnet-beta',
-        identity: {
-          name: 'Open Wallet',
-          uri: 'https://openwallet.app',
-          icon: 'favicon.ico',
-        },
-      });
-
-      if (!authResult.accounts || authResult.accounts.length === 0) {
-        return null;
-      }
-
-      // MWA returns base64-encoded public key bytes
-      const addressBase64 = authResult.accounts[0].address;
-      const addressBytes = Buffer.from(addressBase64, 'base64');
-      const pubkey = new PublicKey(addressBytes).toBase58();
-
-      return {
-        publicKey: pubkey,
-        authToken: authResult.auth_token,
-      };
+  return transact(async (wallet) => {
+    const authResult = await wallet.authorize({
+      cluster: 'mainnet-beta',
+      identity: {
+        name: 'Open Wallet',
+        uri: 'https://openwallet.app',
+        icon: 'favicon.ico',
+      },
     });
 
-    return result ?? null;
-  } catch (err) {
-    console.log('[SeedVault] MWA authorize failed:', err);
-    return null;
-  }
+    if (!authResult.accounts || authResult.accounts.length === 0) {
+      throw new Error('Seed Vault returned no accounts. Make sure the Seed Vault has been initialized in phone Settings.');
+    }
+
+    const pubkey = mwaAccountToBase58(authResult.accounts[0]);
+    console.log('[SeedVault] MWA authorized, pubkey:', pubkey);
+
+    return { publicKey: pubkey, authToken: authResult.auth_token };
+  });
 }
 
 /**
@@ -208,29 +228,34 @@ export async function signWithSeedVaultMWA(
 // ─── Legacy helpers (kept for backward compat) ───
 
 export async function authorizeSeedVault(): Promise<boolean> {
-  const result = await authorizeSeedVaultMWA();
-  return result !== null;
+  try {
+    const result = await authorizeSeedVaultMWA();
+    return !!result.publicKey;
+  } catch {
+    return false;
+  }
 }
 
 export async function getSeedVaultPublicKey(_accountIndex: number = 0): Promise<string | null> {
-  const result = await authorizeSeedVaultMWA();
-  return result?.publicKey ?? null;
+  try {
+    const result = await authorizeSeedVaultMWA();
+    return result.publicKey;
+  } catch {
+    return null;
+  }
 }
 
 export async function signWithSeedVault(transactionBytes: string): Promise<string | null> {
   if (Platform.OS !== 'android') return null;
   try {
-    const result = await transact(async (wallet) => {
-      const authResult = await wallet.authorize({
+    return await transact(async (wallet) => {
+      await wallet.authorize({
         cluster: 'mainnet-beta',
         identity: { name: 'Open Wallet', uri: 'https://openwallet.app', icon: 'favicon.ico' },
       });
-      const signed = await wallet.signTransactions({
-        payloads: [transactionBytes],
-      });
+      const signed = await wallet.signTransactions({ payloads: [transactionBytes] });
       return signed.signed_payloads[0] ?? null;
     });
-    return result ?? null;
   } catch {
     return null;
   }
@@ -239,19 +264,19 @@ export async function signWithSeedVault(transactionBytes: string): Promise<strin
 export async function signMessageWithSeedVault(message: string): Promise<string | null> {
   if (Platform.OS !== 'android') return null;
   try {
-    const msgBytes = Buffer.from(message, 'utf8');
-    const result = await transact(async (wallet) => {
+    // Encode message to base64 using btoa (no Buffer required)
+    const msgBase64 = btoa(unescape(encodeURIComponent(message)));
+    return await transact(async (wallet) => {
       const authResult = await wallet.authorize({
         cluster: 'mainnet-beta',
         identity: { name: 'Open Wallet', uri: 'https://openwallet.app', icon: 'favicon.ico' },
       });
       const signed = await wallet.signMessages({
         addresses: [authResult.accounts[0].address],
-        payloads: [msgBytes.toString('base64')],
+        payloads: [msgBase64],
       });
       return signed.signed_payloads[0] ?? null;
     });
-    return result ?? null;
   } catch {
     return null;
   }
@@ -281,30 +306,25 @@ export async function connectSeedVault(): Promise<{
   model: string;
   message: string;
 }> {
-  // Step 1: Detect device (Seeker/Saga check — but still attempt MWA even if unknown)
   const info = await detectSeedVault();
 
-  // Step 2: Authorize via MWA (this opens the Seed Vault UI on the device)
-  const mwaResult = await authorizeSeedVaultMWA();
-
-  if (!mwaResult) {
-    const deviceMsg = info.available
-      ? `This appears to be a ${info.model === 'seeker' ? 'Solana Seeker' : 'Solana Saga'}, but the Seed Vault authorization was denied or failed.`
-      : 'Could not connect to the Seed Vault.';
+  try {
+    const mwaResult = await authorizeSeedVaultMWA();
+    return {
+      success: true,
+      addresses: { solana: mwaResult.publicKey },
+      model: info.model,
+      message: `Connected to ${info.model === 'seeker' ? 'Solana Seeker' : 'Solana Saga'} Seed Vault.\n\nYour Solana address: ${mwaResult.publicKey.slice(0, 8)}...${mwaResult.publicKey.slice(-6)}\n\nAll transactions will be signed inside the phone's secure element. Your private key never leaves the hardware.`,
+    };
+  } catch (err) {
+    const errMsg = err instanceof Error ? err.message : String(err);
     return {
       success: false,
       addresses: {},
       model: info.model,
-      message: `${deviceMsg}\n\nPlease make sure:\n1. The Seed Vault has been set up in phone Settings\n2. You have created or imported a seed phrase in the Seed Vault\n3. Approve the authorization prompt when it appears`,
+      message: errMsg,
     };
   }
-
-  return {
-    success: true,
-    addresses: { solana: mwaResult.publicKey },
-    model: info.model,
-    message: `Connected to ${info.model === 'seeker' ? 'Solana Seeker' : 'Solana Saga'} Seed Vault.\n\nYour Solana address: ${mwaResult.publicKey.slice(0, 8)}...${mwaResult.publicKey.slice(-6)}\n\nAll transactions will be signed inside the phone's secure element. Your private key never leaves the hardware.`,
-  };
 }
 
 // ─── Export ───
