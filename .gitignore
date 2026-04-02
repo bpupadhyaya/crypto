@@ -23,3 +23,7 @@
 hs_err_pid*
 replay_pid*
 scripts/reconnect_seekers.sh
+
+# IDE & local tool config
+.idea/
+.claude/
