@@ -22,6 +22,7 @@
  */
 
 import { Platform } from 'react-native';
+import { detectSeedVault } from './seedVaultBridge';
 
 // ─── Types ───
 
@@ -438,15 +439,16 @@ function createSolanaSagaProvider(): HardwareWalletProvider {
     async detect(): Promise<boolean> {
       if (Platform.OS !== 'android') return false;
       const SeedVault = tryLoadModule(SEED_VAULT_MODULE);
-      if (!SeedVault) {
-        console.warn(`Solana Seed Vault library not installed. Run: npm install ${SEED_VAULT_MODULE}`);
-        return false;
+      if (SeedVault) {
+        try {
+          return await SeedVault.SeedVaultLib.isAvailable(false); // false = check Saga specifically
+        } catch {
+          return false;
+        }
       }
-      try {
-        return await SeedVault.SeedVaultLib.isAvailable(false); // false = check Saga specifically
-      } catch {
-        return false;
-      }
+      // Fallback: detect by device model when native library is not installed
+      const info = await detectSeedVault();
+      return info.available && info.model === 'saga';
     },
 
     async connect(): Promise<void> {
@@ -535,20 +537,21 @@ function createSolanaSeekerProvider(): HardwareWalletProvider {
     async detect(): Promise<boolean> {
       if (Platform.OS !== 'android') return false;
       const SeedVault = tryLoadModule(SEED_VAULT_MODULE);
-      if (!SeedVault) {
-        console.warn(`Solana Seed Vault library not installed. Run: npm install ${SEED_VAULT_MODULE}`);
-        return false;
+      if (SeedVault) {
+        try {
+          // Seeker has an updated Seed Vault API
+          const available = await SeedVault.SeedVaultLib.isAvailable(true); // true = include Seeker
+          if (!available) return false;
+          // Distinguish Seeker from Saga by checking device model or API version
+          const info = await SeedVault.SeedVaultLib.getDeviceInfo?.();
+          return info?.model === 'seeker' || info?.apiVersion >= 2;
+        } catch {
+          return false;
+        }
       }
-      try {
-        // Seeker has an updated Seed Vault API
-        const available = await SeedVault.SeedVaultLib.isAvailable(true); // true = include Seeker
-        if (!available) return false;
-        // Distinguish Seeker from Saga by checking device model or API version
-        const info = await SeedVault.SeedVaultLib.getDeviceInfo?.();
-        return info?.model === 'seeker' || info?.apiVersion >= 2;
-      } catch {
-        return false;
-      }
+      // Fallback: detect by device model when native library is not installed
+      const info = await detectSeedVault();
+      return info.available && info.model === 'seeker';
     },
 
     async connect(): Promise<void> {
