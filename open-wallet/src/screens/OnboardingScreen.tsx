@@ -22,6 +22,7 @@ import {
   ActivityIndicator,
   ScrollView,
   Platform,
+  StatusBar,
 } from 'react-native';
 import { useWalletStore } from '../store/walletStore';
 import { useTheme } from '../hooks/useTheme';
@@ -632,7 +633,7 @@ export function OnboardingScreen() {
   if (step === 'welcome') {
     return (
       <SafeAreaView style={styles.container}>
-        <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 8, paddingBottom: 30 }}>
+        <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight ?? 0) + 8 : 8, paddingBottom: 30 }}>
           <Text style={[styles.logo, { fontSize: 28, marginBottom: 0 }]}>OW</Text>
           <Text style={[styles.title, { fontSize: 20 }]}>Open Wallet</Text>
           <Text style={[styles.subtitle, { fontSize: 12, marginTop: 4, lineHeight: 18 }]}>
