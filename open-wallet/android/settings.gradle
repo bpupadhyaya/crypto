@@ -36,6 +36,4 @@ rootProject.name = 'Open Wallet'
 expoAutolinking.useExpoVersionCatalog()
 
 include ':app'
-include ':solana-mobile-seed-vault-lib'
-project(':solana-mobile-seed-vault-lib').projectDir = new File(rootProject.projectDir, '../node_modules/@solana-mobile/seed-vault-lib/android')
 includeBuild(expoAutolinking.reactNativeGradlePlugin)

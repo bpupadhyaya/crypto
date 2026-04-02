@@ -563,6 +563,57 @@ export function OnboardingScreen() {
     setStep('password');
   };
 
+  // ─── Dev Quickstart (DEV builds only) ───
+
+  const handleDevQuickstart = async () => {
+    if (!__DEV__) return;
+    const { DEV_MNEMONIC, DEV_PASSWORD } = await import('../config/devCredentials');
+    setLoading(true);
+    try {
+      const { Vault } = await import('../core/vault/vault');
+      const vaultInstance = new Vault();
+      await vaultInstance.create(DEV_PASSWORD, {
+        mnemonic: DEV_MNEMONIC,
+        accounts: [{
+          id: 'default',
+          name: 'Main Account',
+          derivationPaths: {
+            bitcoin: "m/44'/0'/0'/0/0",
+            ethereum: "m/44'/60'/0'/0/0",
+            solana: "m/44'/501'/0'/0'",
+            cosmos: "m/44'/118'/0'/0/0",
+          },
+        }],
+        settings: {},
+      });
+
+      const { HDWallet } = await import('../core/wallet/hdwallet');
+      const { EthereumSigner } = await import('../core/chains/ethereum-signer');
+      const { BitcoinSigner } = await import('../core/chains/bitcoin-signer');
+      const { SolanaSigner } = await import('../core/chains/solana-signer');
+      const { CosmosSigner } = await import('../core/chains/cosmos-signer');
+
+      const wallet = HDWallet.fromMnemonic(DEV_MNEMONIC);
+      const cosmosAddr = await CosmosSigner.fromWallet(wallet, 0, 'openchain').getAddress();
+      setAddresses({
+        ethereum: EthereumSigner.fromWallet(wallet).getAddress(),
+        bitcoin: BitcoinSigner.fromWallet(wallet).getAddress(),
+        solana: SolanaSigner.fromWallet(wallet).getAddress(),
+        openchain: cosmosAddr,
+        cosmos: cosmosAddr,
+      });
+      wallet.destroy();
+
+      setHasVault(true);
+      setTempVaultPassword(DEV_PASSWORD);
+      setStatus('pin_setup' as any);
+    } catch (err) {
+      Alert.alert('Dev Quickstart Error', err instanceof Error ? err.message : String(err));
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // ─── Hardware wallet connection handler ───
   const handleHardwareWallet = (type: string) => {
     if (type === 'seed-vault') {
@@ -709,6 +760,17 @@ export function OnboardingScreen() {
                 <Text style={[styles.secondaryButtonText, { fontSize: 14 }]}>Solana Seeker / Saga</Text>
                 <Text style={{ color: t.text.muted, fontSize: 10 }}>Built-in Seed Vault — for Solana phones only</Text>
               </View>
+            </TouchableOpacity>
+          )}
+
+          {__DEV__ && (
+            <TouchableOpacity
+              style={[styles.secondaryButton, { marginTop: 16, borderColor: '#f59e0b', borderStyle: 'dashed' }]}
+              onPress={handleDevQuickstart}
+              disabled={loading}
+            >
+              <Text style={[styles.secondaryButtonText, { color: '#f59e0b', fontSize: 13 }]}>⚡ Dev Quickstart</Text>
+              <Text style={{ color: '#f59e0b88', fontSize: 10, marginTop: 2 }}>test seed · devpassword123 · PIN 123456</Text>
             </TouchableOpacity>
           )}
 

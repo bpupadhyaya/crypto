@@ -153,6 +153,12 @@ export function UnlockScreen() {
     }
   };
 
+  const handleDevAutoUnlock = async () => {
+    if (!__DEV__) return;
+    const { DEV_PIN } = await import('../config/devCredentials');
+    await handlePinUnlock(DEV_PIN);
+  };
+
   const handlePinUnlock = async (pin: string) => {
     try {
       const valid = await authManager.verifyPin(pin);
@@ -342,6 +348,14 @@ export function UnlockScreen() {
           error={pinError}
         />
         {renderAltMethods('pin')}
+        {__DEV__ && (
+          <TouchableOpacity
+            onPress={handleDevAutoUnlock}
+            style={{ alignItems: 'center', paddingVertical: 10, paddingBottom: 20 }}
+          >
+            <Text style={{ color: '#f59e0b', fontSize: 13, fontWeight: '600' }}>⚡ Dev: Unlock with PIN 123456</Text>
+          </TouchableOpacity>
+        )}
       </SafeAreaView>
     );
   }

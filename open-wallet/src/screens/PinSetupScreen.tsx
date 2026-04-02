@@ -114,6 +114,15 @@ export function PinSetupScreen() {
     setStatus('unlocked');
   };
 
+  const handleDevAutoPin = async () => {
+    if (!__DEV__) return;
+    const { DEV_PIN } = await import('../config/devCredentials');
+    const pw = tempVaultPassword;
+    setTempVaultPassword(null);
+    authManager.setupPin(DEV_PIN, pw ?? undefined).catch(() => {});
+    setStatus('unlocked');
+  };
+
   if (step === 'biometric') {
     return (
       <SafeAreaView style={styles.container}>
@@ -146,6 +155,14 @@ export function PinSetupScreen() {
         onComplete={step === 'create' ? handlePinCreate : handlePinConfirm}
         error={error}
       />
+      {__DEV__ && (
+        <TouchableOpacity
+          onPress={handleDevAutoPin}
+          style={{ alignItems: 'center', paddingVertical: 12, paddingBottom: 24 }}
+        >
+          <Text style={{ color: '#f59e0b', fontSize: 13, fontWeight: '600' }}>⚡ Dev: Set PIN 123456 & Continue</Text>
+        </TouchableOpacity>
+      )}
     </SafeAreaView>
   );
 }
