@@ -2,22 +2,25 @@
  * Solana Seed Vault Bridge — Direct integration with Seeker/Saga Seed Vault.
  *
  * The Solana Seeker and Saga phones have a hardware secure element that stores
- * seed phrases. The Seed Vault API is accessed via Android Intents / native modules.
+ * seed phrases. The Seed Vault is accessed via the Mobile Wallet Adapter (MWA)
+ * protocol — a standard WebSocket-based protocol the Seed Vault implements.
  *
  * This bridge provides:
  *   1. Detection: Is Seed Vault available on this device?
- *   2. Authorization: Request user approval to use the Seed Vault
+ *   2. Authorization: Request user approval to use the Seed Vault via MWA
  *   3. Key derivation: Get public keys for Solana (and other chains via BIP44)
  *   4. Signing: Sign transactions inside the secure element
  *
  * The private key NEVER leaves the hardware. All signing happens on-device
  * in the secure element. Only signed transactions and public keys are returned.
  *
- * For React Native, we use NativeModules to communicate with the Android side.
- * On non-Solana phones, all methods gracefully return false/null.
+ * MWA protocol: transact() opens a local WebSocket to the Seed Vault wallet
+ * service on the device. No native module required.
  */
 
 import { Platform, NativeModules } from 'react-native';
+import { transact } from '@solana-mobile/mobile-wallet-adapter-protocol';
+import { PublicKey } from '@solana/web3.js';
 
 // ─── Types ───
 
@@ -46,12 +49,6 @@ export async function detectSeedVault(): Promise<SeedVaultInfo> {
   }
 
   try {
-    // React Native on Android provides Platform.constants with device info
-    // Fields: Model (string), Brand (string), Manufacturer (string)
-    // On Seeker: Model="Seeker", Brand="solanamobile", Manufacturer="Solana Mobile Inc."
-    // On Saga: Model="Saga", Brand="OSOM", Manufacturer="OSOM Products Inc."
-
-    // Access constants - try multiple paths since RN versions differ
     let deviceModel = '';
     let deviceBrand = '';
     let deviceManufacturer = '';
@@ -81,7 +78,6 @@ export async function detectSeedVault(): Promise<SeedVaultInfo> {
     if (!deviceModel && !deviceBrand) {
       try {
         const modules = NativeModules as any;
-        // Some RN versions put it under different names
         for (const key of ['PlatformConstants', 'DeviceInfo', 'RNDeviceInfo', 'AndroidConstants']) {
           if (modules[key]) {
             const info = modules[key].getConstants ? modules[key].getConstants() : modules[key];
@@ -96,58 +92,25 @@ export async function detectSeedVault(): Promise<SeedVaultInfo> {
       } catch { /* ignore */ }
     }
 
-    // Log for debugging (visible in Metro console)
     console.log(`[SeedVault] Device detection: model="${deviceModel}" brand="${deviceBrand}" manufacturer="${deviceManufacturer}"`);
 
-    // Detect Seeker: model="seeker", brand="solanamobile", manufacturer="solana mobile inc."
     const isSeeker = deviceModel.includes('seeker') ||
                      deviceBrand.includes('solanamobile') ||
                      deviceBrand.includes('solana mobile') ||
                      deviceManufacturer.includes('solana');
 
-    // Detect Saga: model="saga", brand="osom", manufacturer="osom"
     const isSaga = deviceModel.includes('saga') ||
                    deviceBrand.includes('osom') ||
                    deviceManufacturer.includes('osom');
 
     if (!isSeeker && !isSaga) {
-      // Method 3: Check if Seed Vault app/service exists on the device
-      // Some Solana phones might not match model strings but still have Seed Vault
-      try {
-        const SeedVaultModule = NativeModules.SeedVaultModule;
-        if (SeedVaultModule) {
-          return {
-            available: true,
-            model: 'unknown',
-            apiVersion: 1,
-            hasAuthorizedSeed: false,
-          };
-        }
-      } catch { /* no seed vault module */ }
-
       return { available: false, model: 'unknown', apiVersion: 0, hasAuthorizedSeed: false };
     }
 
-    // Device is Seeker or Saga — Seed Vault is available
     const detectedModel = isSeeker ? 'seeker' : 'saga';
-
-    // Try to access Seed Vault native module for more info
-    try {
-      const SeedVaultModule = NativeModules.SeedVaultModule;
-      if (SeedVaultModule?.getInfo) {
-        const info = await SeedVaultModule.getInfo();
-        return {
-          available: true,
-          model: detectedModel as 'seeker' | 'saga',
-          apiVersion: info?.apiVersion || (isSeeker ? 2 : 1),
-          hasAuthorizedSeed: info?.hasAuthorizedSeed || false,
-        };
-      }
-    } catch { /* native module not available yet, but device is still Seeker/Saga */ }
-
     return {
       available: true,
-      model: detectedModel as 'seeker' | 'saga',
+      model: detectedModel,
       apiVersion: isSeeker ? 2 : 1,
       hasAuthorizedSeed: false,
     };
@@ -156,71 +119,147 @@ export async function detectSeedVault(): Promise<SeedVaultInfo> {
   }
 }
 
-// ─── Authorization ───
+// ─── MWA Authorization + Key Retrieval ───
 
 /**
- * Request user authorization to use the Seed Vault.
- * This opens the system Seed Vault prompt where the user approves access.
- * Returns true if authorized, false if denied or unavailable.
- */
-export async function authorizeSeedVault(): Promise<boolean> {
-  if (Platform.OS !== 'android') return false;
-
-  try {
-    const SeedVaultModule = NativeModules.SeedVaultModule;
-    if (SeedVaultModule?.authorize) {
-      const result = await SeedVaultModule.authorize();
-      return result === true;
-    }
-
-    // Fallback: use Android Intent to request Seed Vault authorization
-    const { Linking } = await import('react-native');
-    // The Seed Vault app on Seeker/Saga responds to this intent
-    const canOpen = await Linking.canOpenURL('solana-seed-vault://authorize');
-    if (canOpen) {
-      await Linking.openURL('solana-seed-vault://authorize');
-      return true; // User will be prompted by Seed Vault app
-    }
-
-    return false;
-  } catch {
-    return false;
-  }
-}
-
-// ─── Key Derivation ───
-
-/**
- * Get the Solana public key from the Seed Vault.
- * The private key stays in the secure element — only the public key is returned.
+ * Connect to the Seed Vault via Mobile Wallet Adapter.
+ * Opens the Seed Vault authorization UI, then returns the Solana public key.
+ * The private key NEVER leaves the hardware secure element.
  *
- * @param accountIndex - BIP44 account index (default 0)
- * @returns Solana public key in base58, or null if not available
+ * @returns base58 Solana public key, or null if failed/denied
  */
-export async function getSeedVaultPublicKey(accountIndex: number = 0): Promise<string | null> {
+export async function authorizeSeedVaultMWA(): Promise<{ publicKey: string; authToken: string } | null> {
   if (Platform.OS !== 'android') return null;
 
   try {
-    const SeedVaultModule = NativeModules.SeedVaultModule;
-    if (SeedVaultModule?.getPublicKey) {
-      const pubkey = await SeedVaultModule.getPublicKey(accountIndex);
-      return pubkey;
-    }
+    const result = await transact(async (wallet) => {
+      const authResult = await wallet.authorize({
+        cluster: 'mainnet-beta',
+        identity: {
+          name: 'Open Wallet',
+          uri: 'https://openwallet.app',
+          icon: 'favicon.ico',
+        },
+      });
 
-    // If native module not available, try via wallet standard
-    return null;
-  } catch {
+      if (!authResult.accounts || authResult.accounts.length === 0) {
+        return null;
+      }
+
+      // MWA returns base64-encoded public key bytes
+      const addressBase64 = authResult.accounts[0].address;
+      const addressBytes = Buffer.from(addressBase64, 'base64');
+      const pubkey = new PublicKey(addressBytes).toBase58();
+
+      return {
+        publicKey: pubkey,
+        authToken: authResult.auth_token,
+      };
+    });
+
+    return result ?? null;
+  } catch (err) {
+    console.log('[SeedVault] MWA authorize failed:', err);
     return null;
   }
 }
 
 /**
- * Get all accounts from the Seed Vault (Solana addresses).
+ * Sign a transaction using the Seed Vault via MWA.
+ * The transaction is signed inside the secure element — private key never leaves hardware.
+ *
+ * @param authToken - token from a previous authorize() call
+ * @param transactionBytes - base64 encoded transaction to sign
+ * @returns base64 encoded signed transaction, or null if failed
  */
+export async function signWithSeedVaultMWA(
+  authToken: string,
+  transactionBytes: string,
+): Promise<string | null> {
+  if (Platform.OS !== 'android') return null;
+
+  try {
+    const result = await transact(async (wallet) => {
+      // Reauthorize with existing token
+      await wallet.reauthorize({
+        auth_token: authToken,
+        identity: {
+          name: 'Open Wallet',
+          uri: 'https://openwallet.app',
+          icon: 'favicon.ico',
+        },
+      });
+
+      const txBytes = Buffer.from(transactionBytes, 'base64');
+      const signed = await wallet.signTransactions({
+        payloads: [txBytes.toString('base64')],
+      });
+
+      return signed.signed_payloads[0] ?? null;
+    });
+
+    return result ?? null;
+  } catch (err) {
+    console.log('[SeedVault] MWA sign failed:', err);
+    return null;
+  }
+}
+
+// ─── Legacy helpers (kept for backward compat) ───
+
+export async function authorizeSeedVault(): Promise<boolean> {
+  const result = await authorizeSeedVaultMWA();
+  return result !== null;
+}
+
+export async function getSeedVaultPublicKey(_accountIndex: number = 0): Promise<string | null> {
+  const result = await authorizeSeedVaultMWA();
+  return result?.publicKey ?? null;
+}
+
+export async function signWithSeedVault(transactionBytes: string): Promise<string | null> {
+  if (Platform.OS !== 'android') return null;
+  try {
+    const result = await transact(async (wallet) => {
+      const authResult = await wallet.authorize({
+        cluster: 'mainnet-beta',
+        identity: { name: 'Open Wallet', uri: 'https://openwallet.app', icon: 'favicon.ico' },
+      });
+      const signed = await wallet.signTransactions({
+        payloads: [transactionBytes],
+      });
+      return signed.signed_payloads[0] ?? null;
+    });
+    return result ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export async function signMessageWithSeedVault(message: string): Promise<string | null> {
+  if (Platform.OS !== 'android') return null;
+  try {
+    const msgBytes = Buffer.from(message, 'utf8');
+    const result = await transact(async (wallet) => {
+      const authResult = await wallet.authorize({
+        cluster: 'mainnet-beta',
+        identity: { name: 'Open Wallet', uri: 'https://openwallet.app', icon: 'favicon.ico' },
+      });
+      const signed = await wallet.signMessages({
+        addresses: [authResult.accounts[0].address],
+        payloads: [msgBytes.toString('base64')],
+      });
+      return signed.signed_payloads[0] ?? null;
+    });
+    return result ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export async function getSeedVaultAccounts(): Promise<SeedVaultAccount[]> {
   const pubkey = await getSeedVaultPublicKey(0);
   if (!pubkey) return [];
-
   return [{
     publicKey: pubkey,
     derivationPath: "m/44'/501'/0'/0'",
@@ -228,59 +267,13 @@ export async function getSeedVaultAccounts(): Promise<SeedVaultAccount[]> {
   }];
 }
 
-// ─── Signing ───
-
-/**
- * Sign a transaction using the Seed Vault.
- * The transaction bytes are sent to the secure element, signed there,
- * and only the signature is returned. Private key never leaves hardware.
- *
- * @param transactionBytes - base64 encoded transaction to sign
- * @returns base64 encoded signed transaction, or null if failed
- */
-export async function signWithSeedVault(transactionBytes: string): Promise<string | null> {
-  if (Platform.OS !== 'android') return null;
-
-  try {
-    const SeedVaultModule = NativeModules.SeedVaultModule;
-    if (SeedVaultModule?.signTransaction) {
-      const signed = await SeedVaultModule.signTransaction(transactionBytes);
-      return signed;
-    }
-    return null;
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Sign a message (not transaction) using the Seed Vault.
- * Used for authentication, proof-of-ownership, etc.
- */
-export async function signMessageWithSeedVault(message: string): Promise<string | null> {
-  if (Platform.OS !== 'android') return null;
-
-  try {
-    const SeedVaultModule = NativeModules.SeedVaultModule;
-    if (SeedVaultModule?.signMessage) {
-      return await SeedVaultModule.signMessage(message);
-    }
-    return null;
-  } catch {
-    return null;
-  }
-}
-
 // ─── High-level: Connect and Import ───
 
 /**
- * Full Seed Vault connection flow:
- * 1. Detect if Seed Vault is available
- * 2. Request authorization
- * 3. Get public key
- * 4. Return addresses for the wallet
- *
- * This is the main function called from OnboardingScreen.
+ * Full Seed Vault connection flow via MWA:
+ * 1. Detect if device is Seeker/Saga
+ * 2. Open MWA authorization (shows Seed Vault UI)
+ * 3. Return the Solana public key
  */
 export async function connectSeedVault(): Promise<{
   success: boolean;
@@ -288,49 +281,29 @@ export async function connectSeedVault(): Promise<{
   model: string;
   message: string;
 }> {
-  // Step 1: Detect
+  // Step 1: Detect device (Seeker/Saga check — but still attempt MWA even if unknown)
   const info = await detectSeedVault();
-  if (!info.available) {
-    return {
-      success: false,
-      addresses: {},
-      model: 'unknown',
-      message: 'This device does not have a Seed Vault. The Seed Vault is available on Solana Seeker and Solana Saga phones.',
-    };
-  }
 
-  // Step 2: Authorize
-  const authorized = await authorizeSeedVault();
-  if (!authorized) {
+  // Step 2: Authorize via MWA (this opens the Seed Vault UI on the device)
+  const mwaResult = await authorizeSeedVaultMWA();
+
+  if (!mwaResult) {
+    const deviceMsg = info.available
+      ? `This appears to be a ${info.model === 'seeker' ? 'Solana Seeker' : 'Solana Saga'}, but the Seed Vault authorization was denied or failed.`
+      : 'Could not connect to the Seed Vault.';
     return {
       success: false,
       addresses: {},
       model: info.model,
-      message: 'Seed Vault authorization was not granted. Please try again and approve the Seed Vault prompt.',
+      message: `${deviceMsg}\n\nPlease make sure:\n1. The Seed Vault has been set up in phone Settings\n2. You have created or imported a seed phrase in the Seed Vault\n3. Approve the authorization prompt when it appears`,
     };
   }
 
-  // Step 3: Get public key
-  const pubkey = await getSeedVaultPublicKey(0);
-  if (!pubkey) {
-    return {
-      success: false,
-      addresses: {},
-      model: info.model,
-      message: 'Could not retrieve your Solana address from the Seed Vault. Please ensure the Seed Vault has been initialized in your phone settings.',
-    };
-  }
-
-  // Step 4: Return addresses
-  // Seed Vault primarily gives us Solana addresses
-  // Other chain addresses would need separate derivation
   return {
     success: true,
-    addresses: {
-      solana: pubkey,
-    },
+    addresses: { solana: mwaResult.publicKey },
     model: info.model,
-    message: `Connected to ${info.model === 'seeker' ? 'Solana Seeker' : 'Solana Saga'} Seed Vault.\n\nYour Solana address: ${pubkey.slice(0, 8)}...${pubkey.slice(-6)}\n\nAll transactions will be signed inside the phone's secure element. Your private key never leaves the hardware.`,
+    message: `Connected to ${info.model === 'seeker' ? 'Solana Seeker' : 'Solana Saga'} Seed Vault.\n\nYour Solana address: ${mwaResult.publicKey.slice(0, 8)}...${mwaResult.publicKey.slice(-6)}\n\nAll transactions will be signed inside the phone's secure element. Your private key never leaves the hardware.`,
   };
 }
 
@@ -339,9 +312,11 @@ export async function connectSeedVault(): Promise<{
 export const SeedVault = {
   detect: detectSeedVault,
   authorize: authorizeSeedVault,
+  authorizeMWA: authorizeSeedVaultMWA,
   getPublicKey: getSeedVaultPublicKey,
   getAccounts: getSeedVaultAccounts,
   signTransaction: signWithSeedVault,
+  signTransactionMWA: signWithSeedVaultMWA,
   signMessage: signMessageWithSeedVault,
   connect: connectSeedVault,
 };
