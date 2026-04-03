@@ -371,7 +371,7 @@ import { NightModeScreen } from './NightModeScreen';
 import { FeedbackFormScreen } from './FeedbackFormScreen';
 import i18n from '../i18n';
 
-type SettingsView = 'main' | 'change-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury' | 'family-tree' | 'parenting-journey' | 'teacher-impact' | 'payment-request' | 'validator-dashboard' | 'volunteer' | 'community-board' | 'education-hub' | 'skill-cert' | 'mentorship' | 'wellness' | 'civic' | 'value-channels' | 'global-impact' | 'my-impact' | 'peace-index' | 'constitution-reader' | 'pledge' | 'ambassador' | 'eldercare' | 'intergeneration' | 'gratitude-wall' | 'needs-assessment' | 'resource-match' | 'basic-needs' | 'guardian' | 'cross-chain-id' | 'appeal' | 'pqc-key' | 'zk-proof' | 'data-sovereignty' | 'mediation' | 'curriculum' | 'health-emergency' | 'community-projects' | 'micro-grants' | 'inter-regional' | 'time-bank' | 'mentor-match' | 'environmental' | 'disaster-response' | 'cooperative' | 'youth-council' | 'cultural-heritage' | 'skill-verification' | 'family-finance' | 'reputation' | 'community-radio' | 'food-security' | 'water-sanitation' | 'housing' | 'mental-wellness' | 'digital-literacy' | 'legal-aid' | 'renewable-energy' | 'language-exchange' | 'elder-wisdom' | 'art-studio' | 'safety-net' | 'transport' | 'childcare' | 'disability-support' | 'emergency-prep' | 'immigration-support' | 'sports' | 'library' | 'waste-management' | 'conflict-prevention' | 'pet-welfare' | 'job-board' | 'marketplace' | 'maternal-health' | 'senior-activities' | 'grief-support' | 'recovery' | 'workshop' | 'civic-education' | 'farm-to-table' | 'volunteer-abroad' | 'research' | 'insurance-pool' | 'storytelling' | 'travel' | 'innovation' | 'barter' | 'music' | 'election' | 'budget' | 'news' | 'infrastructure' | 'weather' | 'homeschool' | 'meditation' | 'calendar' | 'ancestry' | 'arbitration' | 'supply-chain' | 'volunteer-match' | 'community-map' | 'prayer' | 'permaculture' | 'financial-literacy' | 'teen' | 'tutor' | 'coworking' | 'feedback' | 'gratitude-journal' | 'emergency-contacts' | 'vision-board' | 'petition' | 'barrier-free' | 'cleanup-drive' | 'nutrition' | 'sleep' | 'journal' | 'tree-planting' | 'book-club' | 'apprenticeship' | 'neighbor-help' | 'dance' | 'gardening' | 'photo' | 'poetry' | 'repair-cafe' | 'skill-swap' | 'ceremony' | 'wildlife' | 'games' | 'cooking' | 'end-of-life' | 'astronomy' | 'beekeeping' | 'textile' | 'veteran' | 'digital-archive' | 'yoga' | 'podcast' | 'child-safety' | 'climate-action' | 'habitat' | 'first-aid' | 'neighborhood' | 'digital-wellbeing' | 'allergy' | 'incident-report' | 'pen-pal' | 'seasonal' | 'memorial' | 'personal-timeline' | 'relationship' | 'philanthropy' | 'film' | 'debate' | 'stem' | 'aquaponics' | 'public-speaking' | 'networking' | 'parenting-stages' | 'soil' | 'persona-onboarding' | 'my-day' | 'global-search' | 'impact-report' | 'community-stats' | 'tokenomics' | 'constitution-quiz' | 'system-status' | 'leaderboard' | 'notification-center' | 'shortcuts' | 'data-export' | 'theme-studio' | 'referral' | 'wellness-hub' | 'dca' | 'yield-optimizer' | 'cross-chain-bridge' | 'swap-history' | 'portfolio-rebalance' | 'price-chart' | 'airdrop' | 'staking-calc' | 'liquidity-guide' | 'trading' | 'contracts' | 'governance-history' | 'multi-wallet' | 'gas-optimize' | 'seed-quiz' | 'app-info' | 'time-capsule' | 'community-awards' | 'microfinance' | 'prediction' | 'community-constitution' | 'crowdfund' | 'resource-sharing' | 'health-record' | 'community-goals' | 'education-fund' | 'energy-audit' | 'peer-review' | 'translation' | 'local-currency' | 'compost' | 'rainwater' | 'bike-share' | 'child-development' | 'community-kitchen' | 'anti-corruption' | 'accessibility-map' | 'open-data' | 'human-rights' | 'social-recovery' | 'multi-device' | 'constitution-dashboard' | 'world-map' | 'data-dashboard' | 'legacy-plan' | 'future-vision' | 'onboarding-complete' | 'retirement' | 'freelance' | 'volunteer-log' | 'carbon-tracker' | 'graduation' | 'support-group' | 'transparency' | 'mentor-directory' | 'community-bank' | 'emergency-fund' | 'community-radar' | 'skill-tree' | 'impact-calculator' | 'trust-network' | 'habit-tracker' | 'mood-map' | 'knowledge-base' | 'community-pledge' | 'token-burn' | 'chain-explorer' | 'qr-hub' | 'community-directory' | 'emergency-kit' | 'progress-report' | 'otk-flow' | 'community-health-index' | 'milestone-tracker' | 'donor-wall' | 'safe-space' | 'language-school' | 'community-radio-live' | 'wellness-check' | 'success-stories' | 'community-calendar-full' | 'verifier-dashboard' | 'gratitude-analytics' | 'community-partner' | 'digital-identity' | 'reward-shop' | 'community-map-live' | 'peace-ambassador' | 'open-source' | 'token-history' | 'regional-dashboard' | 'delegate-power' | 'contribution-history' | 'community-vault' | 'oracle-network' | 'network-stats' | 'fee-estimator' | 'achievement-gallery' | 'validator-list' | 'wallet-health' | 'cross-chain-portfolio' | 'roadmap' | 'changelog' | 'faq' | 'accessibility-settings' | 'connections' | 'backup-verify' | 'night-mode' | 'feedback-form';
+type SettingsView = 'main' | 'change-pin' | 'enable-biometric-pin' | 'new-pin' | 'confirm-pin' | 'backup' | 'alerts' | 'contacts' | 'hardware' | 'hardware-key' | 'walletconnect' | 'staking' | 'rewards' | 'uid' | 'ledger' | 'gratitude' | 'governance' | 'oracle' | 'scores' | 'privacy' | 'whatsnew' | 'defi' | 'p2p' | 'achievements' | 'rails' | 'notifications' | 'analytics' | 'market' | 'exchange' | 'import-wallet' | 'export' | 'dapp-browser' | 'token-launch' | 'nft-gallery' | 'security-audit' | 'cloud-backup' | 'messages' | 'social-feed' | 'profile' | 'recurring-payments' | 'automation' | 'multisig' | 'spending-limits' | 'liquidity' | 'yield-farm' | 'lend-borrow' | 'tax-calculator' | 'wallet-analytics' | 'watchlist' | 'tutorial' | 'help' | 'accessibility' | 'address-verify' | 'tx-simulator' | 'chain-info' | 'identity' | 'escrow' | 'disputes' | 'dao' | 'delegation' | 'voting-power' | 'milestones' | 'correction' | 'community-health' | 'dev-tools' | 'offline-queue' | 'pending-tx' | 'portfolio-chart' | 'advanced-alerts' | 'token-compare' | 'tx-notes' | 'gas-tracker' | 'batch-tx' | 'address-labels' | 'treasury' | 'family-tree' | 'parenting-journey' | 'teacher-impact' | 'payment-request' | 'validator-dashboard' | 'volunteer' | 'community-board' | 'education-hub' | 'skill-cert' | 'mentorship' | 'wellness' | 'civic' | 'value-channels' | 'global-impact' | 'my-impact' | 'peace-index' | 'constitution-reader' | 'pledge' | 'ambassador' | 'eldercare' | 'intergeneration' | 'gratitude-wall' | 'needs-assessment' | 'resource-match' | 'basic-needs' | 'guardian' | 'cross-chain-id' | 'appeal' | 'pqc-key' | 'zk-proof' | 'data-sovereignty' | 'mediation' | 'curriculum' | 'health-emergency' | 'community-projects' | 'micro-grants' | 'inter-regional' | 'time-bank' | 'mentor-match' | 'environmental' | 'disaster-response' | 'cooperative' | 'youth-council' | 'cultural-heritage' | 'skill-verification' | 'family-finance' | 'reputation' | 'community-radio' | 'food-security' | 'water-sanitation' | 'housing' | 'mental-wellness' | 'digital-literacy' | 'legal-aid' | 'renewable-energy' | 'language-exchange' | 'elder-wisdom' | 'art-studio' | 'safety-net' | 'transport' | 'childcare' | 'disability-support' | 'emergency-prep' | 'immigration-support' | 'sports' | 'library' | 'waste-management' | 'conflict-prevention' | 'pet-welfare' | 'job-board' | 'marketplace' | 'maternal-health' | 'senior-activities' | 'grief-support' | 'recovery' | 'workshop' | 'civic-education' | 'farm-to-table' | 'volunteer-abroad' | 'research' | 'insurance-pool' | 'storytelling' | 'travel' | 'innovation' | 'barter' | 'music' | 'election' | 'budget' | 'news' | 'infrastructure' | 'weather' | 'homeschool' | 'meditation' | 'calendar' | 'ancestry' | 'arbitration' | 'supply-chain' | 'volunteer-match' | 'community-map' | 'prayer' | 'permaculture' | 'financial-literacy' | 'teen' | 'tutor' | 'coworking' | 'feedback' | 'gratitude-journal' | 'emergency-contacts' | 'vision-board' | 'petition' | 'barrier-free' | 'cleanup-drive' | 'nutrition' | 'sleep' | 'journal' | 'tree-planting' | 'book-club' | 'apprenticeship' | 'neighbor-help' | 'dance' | 'gardening' | 'photo' | 'poetry' | 'repair-cafe' | 'skill-swap' | 'ceremony' | 'wildlife' | 'games' | 'cooking' | 'end-of-life' | 'astronomy' | 'beekeeping' | 'textile' | 'veteran' | 'digital-archive' | 'yoga' | 'podcast' | 'child-safety' | 'climate-action' | 'habitat' | 'first-aid' | 'neighborhood' | 'digital-wellbeing' | 'allergy' | 'incident-report' | 'pen-pal' | 'seasonal' | 'memorial' | 'personal-timeline' | 'relationship' | 'philanthropy' | 'film' | 'debate' | 'stem' | 'aquaponics' | 'public-speaking' | 'networking' | 'parenting-stages' | 'soil' | 'persona-onboarding' | 'my-day' | 'global-search' | 'impact-report' | 'community-stats' | 'tokenomics' | 'constitution-quiz' | 'system-status' | 'leaderboard' | 'notification-center' | 'shortcuts' | 'data-export' | 'theme-studio' | 'referral' | 'wellness-hub' | 'dca' | 'yield-optimizer' | 'cross-chain-bridge' | 'swap-history' | 'portfolio-rebalance' | 'price-chart' | 'airdrop' | 'staking-calc' | 'liquidity-guide' | 'trading' | 'contracts' | 'governance-history' | 'multi-wallet' | 'gas-optimize' | 'seed-quiz' | 'app-info' | 'time-capsule' | 'community-awards' | 'microfinance' | 'prediction' | 'community-constitution' | 'crowdfund' | 'resource-sharing' | 'health-record' | 'community-goals' | 'education-fund' | 'energy-audit' | 'peer-review' | 'translation' | 'local-currency' | 'compost' | 'rainwater' | 'bike-share' | 'child-development' | 'community-kitchen' | 'anti-corruption' | 'accessibility-map' | 'open-data' | 'human-rights' | 'social-recovery' | 'multi-device' | 'constitution-dashboard' | 'world-map' | 'data-dashboard' | 'legacy-plan' | 'future-vision' | 'onboarding-complete' | 'retirement' | 'freelance' | 'volunteer-log' | 'carbon-tracker' | 'graduation' | 'support-group' | 'transparency' | 'mentor-directory' | 'community-bank' | 'emergency-fund' | 'community-radar' | 'skill-tree' | 'impact-calculator' | 'trust-network' | 'habit-tracker' | 'mood-map' | 'knowledge-base' | 'community-pledge' | 'token-burn' | 'chain-explorer' | 'qr-hub' | 'community-directory' | 'emergency-kit' | 'progress-report' | 'otk-flow' | 'community-health-index' | 'milestone-tracker' | 'donor-wall' | 'safe-space' | 'language-school' | 'community-radio-live' | 'wellness-check' | 'success-stories' | 'community-calendar-full' | 'verifier-dashboard' | 'gratitude-analytics' | 'community-partner' | 'digital-identity' | 'reward-shop' | 'community-map-live' | 'peace-ambassador' | 'open-source' | 'token-history' | 'regional-dashboard' | 'delegate-power' | 'contribution-history' | 'community-vault' | 'oracle-network' | 'network-stats' | 'fee-estimator' | 'achievement-gallery' | 'validator-list' | 'wallet-health' | 'cross-chain-portfolio' | 'roadmap' | 'changelog' | 'faq' | 'accessibility-settings' | 'connections' | 'backup-verify' | 'night-mode' | 'feedback-form';
 
 type SettingsCategory = 'account' | 'network' | 'wallet' | 'exchange' | 'chain' | 'tools' | 'about' | 'support' | 'developer';
 
@@ -379,6 +379,7 @@ export function SettingsScreen() {
   const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode, autoLockTimeout, setAutoLockTimeout } = useWalletStore();
   const [view, setView] = useState<SettingsView>('main');
   const [category, setCategory] = useState<SettingsCategory | null>(null);
+  const [chainGroup, setChainGroup] = useState<string | null>(null);
   const [pinToChange, setPinToChange] = useState('');
   const [biometricAvailable, setBiometricAvailable] = useState(false);
   const [pinConfigured, setPinConfigured] = useState(false);
@@ -491,19 +492,56 @@ export function SettingsScreen() {
 
   const toggleBiometric = async (enable: boolean) => {
     if (enable) {
-      const success = await authManager.enableBiometric();
-      if (success) {
-        setBiometricEnabled(true);
-      } else {
-        Alert.alert('Failed', 'Could not enable biometric unlock.');
-      }
+      // Enabling biometrics requires PIN verification to retrieve the vault password
+      // so we can store it in the OS keychain with biometric protection.
+      setView('enable-biometric-pin');
     } else {
       await authManager.disableBiometric();
       setBiometricEnabled(false);
     }
   };
 
+  const handleEnableBiometricPin = async (pin: string) => {
+    try {
+      const valid = await authManager.verifyPin(pin);
+      if (!valid) {
+        Alert.alert('Wrong PIN', 'Incorrect PIN. Please try again.');
+        return;
+      }
+      const vaultPassword = await authManager.getVaultPassword(pin);
+      if (vaultPassword) {
+        await authManager.storeVaultPasswordBiometric(vaultPassword);
+      }
+      const success = await authManager.enableBiometric();
+      if (success) {
+        setBiometricEnabled(true);
+        setView('main');
+      } else {
+        Alert.alert('Unavailable', 'No biometrics enrolled on this device. Please enroll fingerprint, face, or iris in device Settings first.');
+        setView('main');
+      }
+    } catch (err) {
+      Alert.alert('Error', err instanceof Error ? err.message : 'Could not enable biometric unlock.');
+      setView('main');
+    }
+  };
+
   // ─── PIN Screens ───
+
+  if (view === 'enable-biometric-pin') {
+    return (
+      <SafeAreaView style={st.container}>
+        <PinPad
+          title="Verify Your PIN"
+          subtitle="Enter your PIN to enable biometric unlock"
+          onComplete={handleEnableBiometricPin}
+        />
+        <TouchableOpacity style={st.backBtn} onPress={() => setView('main')}>
+          <Text style={st.backText}>Cancel</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    );
+  }
 
   if (view === 'change-pin') {
     return (
@@ -2952,6 +2990,60 @@ export function SettingsScreen() {
         }
       }
 
+      // If a group is selected, show its items
+      if (chainGroup !== null) {
+        const selectedCard = cards.find((c) => c.title === chainGroup);
+        return (
+          <SafeAreaView style={st.container}>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={st.scroll}>
+              <View style={st.categoryHeader}>
+                <TouchableOpacity style={st.categoryBackBtn} onPress={() => setChainGroup(null)}>
+                  <Text style={st.categoryBackText}>{'\u2190'}</Text>
+                </TouchableOpacity>
+                <Text style={st.categoryTitle}>{chainGroup}</Text>
+              </View>
+              <View style={[st.card, { marginTop: 12 }]}>
+                {selectedCard && renderCollapsibleItems(`openchain-${chainGroup}`, selectedCard.items, selectedCard.items.length)}
+              </View>
+              <View style={{ height: 40 }} />
+            </ScrollView>
+          </SafeAreaView>
+        );
+      }
+
+      const GROUP_ICONS: Record<string, string> = {
+        'Dashboard & Discovery': '🔭',
+        'App & Settings': '⚙️',
+        'Finance & Savings': '💰',
+        'Trading & DeFi': '📈',
+        'OTK & Wallet': '🪙',
+        'Blockchain & Network': '⛓️',
+        'Governance & Voting': '🗳️',
+        'Rights & Transparency': '⚖️',
+        'Identity & Trust': '🪪',
+        'Community Life': '🏘️',
+        'Education & Learning': '🎓',
+        'Health & Wellness': '🌿',
+        'Environment & Climate': '🌍',
+        'Mutual Aid & Giving': '🤝',
+        'Inclusion & Care': '💙',
+        'Local Economy & Work': '🛒',
+        'Social & Communication': '💬',
+        'Impact & Peace': '🕊️',
+        'Family & Generations': '👨‍👩‍👧',
+        'Safety & Emergency': '🚨',
+        'Arts & Culture': '🎨',
+        'Rewards & Achievements': '🏆',
+        'Community Resources': '📦',
+        'Personal Growth': '🌱',
+        'Food & Farming': '🌾',
+        'Civic & Advocacy': '📣',
+        'Finance & Legal': '🏛️',
+        'Skills & Development': '🔧',
+        'Lifestyle & Hobbies': '🎭',
+        'More': '➕',
+      };
+
       return (
         <SafeAreaView style={st.container}>
           <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={st.scroll}>
@@ -2961,24 +3053,20 @@ export function SettingsScreen() {
               </TouchableOpacity>
               <Text style={st.categoryTitle}>{config.title}</Text>
             </View>
-            {cards.map((card) => (
-              <View key={card.title} style={{ marginTop: 12 }}>
-                <Text style={{
-                  color: t.text.secondary,
-                  fontSize: 11,
-                  fontWeight: '700',
-                  textTransform: 'uppercase',
-                  letterSpacing: 1.2,
-                  marginLeft: 4,
-                  marginBottom: 6,
-                }}>
-                  {card.title}
-                </Text>
-                <View style={st.card}>
-                  {renderCollapsibleItems(`openchain-${card.title}`, card.items, card.items.length)}
-                </View>
-              </View>
-            ))}
+            <View style={st.gridContainer}>
+              {cards.map((card) => (
+                <TouchableOpacity
+                  key={card.title}
+                  style={st.tile}
+                  onPress={() => setChainGroup(card.title)}
+                  activeOpacity={0.7}
+                >
+                  <Text style={st.tileIcon}>{GROUP_ICONS[card.title] ?? '📋'}</Text>
+                  <Text style={st.tileLabel}>{card.title}</Text>
+                  <Text style={st.tileBadge}>({card.items.length} items)</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
             <View style={{ height: 40 }} />
           </ScrollView>
         </SafeAreaView>

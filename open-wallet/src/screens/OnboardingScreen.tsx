@@ -669,6 +669,32 @@ export function OnboardingScreen() {
             Every token. Every chain. One app.
           </Text>
 
+          <View style={{
+            backgroundColor: t.bg.card, borderRadius: 12, padding: 12, marginBottom: 12,
+            borderWidth: 1, borderColor: t.accent.green,
+          }}>
+            <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: '700', textAlign: 'center', marginBottom: 6 }}>
+              Biometric Quick Unlock
+            </Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+              <View style={{ alignItems: 'center' }}>
+                <Text style={{ fontSize: 20 }}>🔏</Text>
+                <Text style={{ color: t.text.secondary, fontSize: 10, marginTop: 2 }}>Fingerprint</Text>
+              </View>
+              <View style={{ alignItems: 'center' }}>
+                <Text style={{ fontSize: 20 }}>🔓</Text>
+                <Text style={{ color: t.text.secondary, fontSize: 10, marginTop: 2 }}>Face</Text>
+              </View>
+              <View style={{ alignItems: 'center' }}>
+                <Text style={{ fontSize: 20 }}>👁</Text>
+                <Text style={{ color: t.text.secondary, fontSize: 10, marginTop: 2 }}>Iris</Text>
+              </View>
+            </View>
+            <Text style={{ color: t.text.muted, fontSize: 10, textAlign: 'center', marginTop: 6 }}>
+              Set up any biometric in device Settings for quick unlock after wallet creation
+            </Text>
+          </View>
+
           {/* ─── Software Wallet ─── */}
           <View style={styles.buttonGroup}>
             <TouchableOpacity

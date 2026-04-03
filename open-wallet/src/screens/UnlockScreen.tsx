@@ -2,15 +2,12 @@
  * Unlock Screen — Multiple sign-in options.
  *
  * Authentication methods:
- *   1. PIN (default)
- *   2. Biometric (Face ID / fingerprint — auto-try)
+ *   1. Biometric (fingerprint / Face ID — auto-triggered, prominent button)
+ *   2. PIN (default fallback)
  *   3. Password (vault password)
  *   4. Recover via Seed Phrase (12/24 words)
  *   5. Hardware Key (external device: Ledger, Trezor, Keystone)
  *   6. Phone Seed Vault (Solana Saga/Seeker — TRUE cold storage)
- *
- * Note: Phone security enhancements (Knox, SE, Titan) are not unlock methods.
- * They protect the app's keys but the user still unlocks via PIN/biometric/password.
  */
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -25,6 +22,7 @@ import {
   ActivityIndicator,
   ScrollView,
 } from 'react-native';
+import * as LocalAuthentication from 'expo-local-authentication';
 import { PinPad } from '../components/PinPad';
 import { authManager } from '../core/auth/auth';
 import { useWalletStore } from '../store/walletStore';
@@ -40,7 +38,6 @@ import {
 type UnlockMode = 'loading' | 'biometric' | 'pin' | 'password' | 'seed-recovery' | 'hardware-key' | 'builtin-key';
 
 export function UnlockScreen() {
-  // Show PIN immediately — fastest path. Check biometric in background.
   const [mode, setMode] = useState<UnlockMode>('pin');
   const [password, setPassword] = useState('');
   const [seedInput, setSeedInput] = useState('');
@@ -49,6 +46,8 @@ export function UnlockScreen() {
   const [pinError, setPinError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [builtinKey, setBuiltinKey] = useState<BuiltinKeyInfo | null>(null);
+  const [bioAvailable, setBioAvailable] = useState(false);
+  const [bioLabel, setBioLabel] = useState('Fingerprint');
   const { setStatus, setAddresses, biometricEnabled, demoMode } = useWalletStore();
   const t = useTheme();
 
@@ -78,7 +77,6 @@ export function UnlockScreen() {
     hwIcon: { fontSize: 48, marginBottom: 12 },
     hwTitle: { color: t.text.primary, fontSize: 18, fontWeight: '700', marginBottom: 4 },
     hwDesc: { color: t.text.muted, fontSize: 13, textAlign: 'center', lineHeight: 20 },
-    // Cold storage card (green border)
     coldStorageCard: {
       backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 16,
       alignItems: 'center', borderWidth: 2, borderColor: t.accent.green,
@@ -88,36 +86,66 @@ export function UnlockScreen() {
     },
     coldStorageProvider: { color: t.accent.green, fontSize: 14, fontWeight: '600', marginBottom: 8 },
     coldStorageDesc: { color: t.text.muted, fontSize: 13, textAlign: 'center', lineHeight: 20 },
+    biometricButton: {
+      backgroundColor: t.bg.card,
+      borderRadius: 16,
+      paddingVertical: 16,
+      alignItems: 'center',
+      marginHorizontal: 24,
+      marginBottom: 12,
+      borderWidth: 2,
+      borderColor: t.accent.green,
+    },
+    biometricButtonText: { color: t.accent.green, fontSize: 15, fontWeight: '700' },
+    biometricIcon: { fontSize: 32, marginBottom: 4 },
+    orDivider: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginVertical: 8, textTransform: 'uppercase', letterSpacing: 1 },
   }), [t]);
 
   useEffect(() => {
-    // Try biometric in background (non-blocking)
-    if (biometricEnabled) {
-      authManager.authenticateWithBiometric().then(async (result) => {
-        if (result.success) {
-          await unlockVaultWithStoredCredentials();
-        }
-      }).catch(() => {});
-    }
+    initBiometric();
 
     // Check if PIN is configured — if not, show password
     authManager.isPinConfigured().then((configured) => {
       if (!configured) setMode('password');
     });
 
-    // Detect built-in hardware key (cold storage only matters for unlock)
     detectBuiltinKeyAsync();
   }, []);
+
+  const initBiometric = async () => {
+    const hasHardware = await LocalAuthentication.hasHardwareAsync();
+    if (!hasHardware) return;
+    const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+    if (!isEnrolled) return;
+
+    setBioAvailable(true);
+
+    // Detect type — show the best available biometric
+    const types = await LocalAuthentication.supportedAuthenticationTypesAsync();
+    if (types.includes(LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION)) {
+      setBioLabel('Face ID');
+    } else if (types.includes(LocalAuthentication.AuthenticationType.IRIS)) {
+      setBioLabel('Iris Scan');
+    } else if (types.includes(LocalAuthentication.AuthenticationType.FINGERPRINT)) {
+      setBioLabel('Fingerprint');
+    } else {
+      setBioLabel('Biometrics');
+    }
+
+    // Only auto-trigger if keychain is set up — avoids blocking the screen
+    // when biometrics are enrolled but keychain hasn't been configured yet.
+    const isKeychainReady = await authManager.isBiometricKeychainReady();
+    if (isKeychainReady) {
+      handleBiometricUnlock();
+    }
+  };
 
   const detectBuiltinKeyAsync = async () => {
     try {
       const info = demoMode ? getDemoBuiltinKey() : await detectBuiltinKey();
-      // Only show the "Use Phone's Built-in Key" option if it's TRUE cold storage
-      // (Solana Saga/Seeker). Security enhancements (Knox/SE/Titan) don't unlock.
       if (info.available && info.isColdStorage) {
         setBuiltinKey(info);
       }
-      // If not cold storage, hide the option completely
     } catch {
       // No built-in key available
     }
@@ -141,15 +169,33 @@ export function UnlockScreen() {
     wallet.destroy();
   };
 
-  const unlockVaultWithStoredCredentials = async () => {
+  // ─── Biometric Unlock — uses OS keychain (fingerprint / Face ID / iris / device PIN) ───
+  const handleBiometricUnlock = async () => {
     try {
-      const { Vault } = await import('../core/vault/vault');
-      const vault = new Vault();
-      const contents = await vault.unlockWithBiometrics();
-      await deriveAddresses(contents.mnemonic);
-      setStatus('unlocked');
+      const vaultPassword = await authManager.getVaultPasswordBiometric('Unlock Open Wallet');
+      if (vaultPassword) {
+        setStatus('unlocked');
+        try {
+          const { Vault } = await import('../core/vault/vault');
+          const v = new Vault();
+          const contents = await v.unlock(vaultPassword);
+          await deriveAddresses(contents.mnemonic);
+        } catch {}
+        return;
+      }
+
+      // No keychain entry yet (existing user) — fall back to LocalAuthentication directly.
+      // Keychain migration happens automatically on next PIN unlock.
+      const isBioEnabled = await authManager.isBiometricEnabled();
+      if (!isBioEnabled) return;      const result = await LocalAuthentication.authenticateAsync({
+        promptMessage: 'Unlock Open Wallet',
+        cancelLabel: 'Use PIN',
+        disableDeviceFallback: false,
+        requireConfirmation: false,
+      });
+      if (result.success) setStatus('unlocked');
     } catch {
-      setMode('pin');
+      // Biometric error — PIN pad is already shown
     }
   };
 
@@ -163,10 +209,9 @@ export function UnlockScreen() {
       const valid = await authManager.verifyPin(pin);
       if (valid) {
         setPinError(null);
-        // UNLOCK IMMEDIATELY — show Home screen right away
         setStatus('unlocked');
 
-        // Vault decrypt + address refresh happens in background (non-blocking)
+        // Vault decrypt + address refresh in background
         authManager.getVaultPassword(pin).then(async (vaultPassword) => {
           if (vaultPassword) {
             try {
@@ -175,6 +220,13 @@ export function UnlockScreen() {
               const contents = await v.unlock(vaultPassword);
               await deriveAddresses(contents.mnemonic);
             } catch {}
+
+            // Migration: if biometric is enabled but keychain entry missing, store it now
+            // so subsequent unlocks can use biometrics without re-entering PIN.
+            const isBioEnabled = await authManager.isBiometricEnabled();
+            if (isBioEnabled) {
+              authManager.storeVaultPasswordBiometric(vaultPassword).catch(() => {});
+            }
           }
         });
       } else {
@@ -223,8 +275,6 @@ export function UnlockScreen() {
     setLoading(true);
     try {
       const mnemonic = words.join(' ');
-
-      // Re-create vault with the recovered seed
       const { Vault } = await import('../core/vault/vault');
       const vault = new Vault();
       await vault.create(recoveryPassword, {
@@ -252,7 +302,6 @@ export function UnlockScreen() {
   };
 
   const handleHardwareKeyUnlock = async () => {
-    // Hardware key unlock — would communicate with external device
     Alert.alert(
       'Hardware Key',
       'Connect your hardware wallet (Ledger, Trezor) via Bluetooth or USB, then confirm on the device to unlock.',
@@ -264,21 +313,14 @@ export function UnlockScreen() {
     if (!builtinKey) return;
     setLoading(true);
     try {
-      // Request addresses from Seed Vault API
-      // The seed never leaves the hardware — we only get public addresses
       let addresses: Record<string, string>;
-
       if (demoMode) {
         addresses = getDemoSeedVaultAddresses();
       } else {
         const result = await importFromSeedVault(builtinKey.provider);
         addresses = result.addresses;
       }
-
-      // Set the imported addresses in the store
       setAddresses(addresses);
-
-      // Unlock the wallet
       setStatus('unlocked');
     } catch (err) {
       Alert.alert(
@@ -289,6 +331,57 @@ export function UnlockScreen() {
       setLoading(false);
     }
   };
+
+  // ─── Manual Biometric Button ───
+  const triggerBiometric = async () => {
+    try {
+      const vaultPassword = await authManager.getVaultPasswordBiometric('Unlock Open Wallet');
+      if (vaultPassword) {
+        setStatus('unlocked');
+        try {
+          const { Vault } = await import('../core/vault/vault');
+          const v = new Vault();
+          const contents = await v.unlock(vaultPassword);
+          await deriveAddresses(contents.mnemonic);
+        } catch {}
+        return;
+      }
+
+      // No keychain entry yet (existing user) — fall back to LocalAuthentication silently.
+      const result = await LocalAuthentication.authenticateAsync({
+        promptMessage: 'Unlock Open Wallet',
+        cancelLabel: 'Cancel',
+        disableDeviceFallback: false,
+        requireConfirmation: false,
+      });
+      if (result.success) setStatus('unlocked');
+    } catch {
+      Alert.alert('Biometric Unavailable', 'Could not authenticate. Use PIN or enroll biometrics in device Settings.');
+    }
+  };
+
+  const renderAllBiometricOptions = () => (
+    <View>
+      <Text style={styles.orDivider}>— or unlock with biometrics —</Text>
+      <TouchableOpacity style={styles.biometricButton} onPress={triggerBiometric}>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 16 }}>
+          <View style={{ alignItems: 'center' }}>
+            <Text style={{ fontSize: 24 }}>🔏</Text>
+            <Text style={{ color: t.text.muted, fontSize: 9 }}>Fingerprint</Text>
+          </View>
+          <View style={{ alignItems: 'center' }}>
+            <Text style={{ fontSize: 24 }}>🔓</Text>
+            <Text style={{ color: t.text.muted, fontSize: 9 }}>Face</Text>
+          </View>
+          <View style={{ alignItems: 'center' }}>
+            <Text style={{ fontSize: 24 }}>👁</Text>
+            <Text style={{ color: t.text.muted, fontSize: 9 }}>Iris</Text>
+          </View>
+        </View>
+        <Text style={[styles.biometricButtonText, { marginTop: 8 }]}>Unlock with Biometrics</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   // ─── Alternative Methods Bottom Bar ───
   const renderAltMethods = (currentMode: UnlockMode) => (
@@ -320,18 +413,6 @@ export function UnlockScreen() {
             <Text style={[styles.altMethodText, styles.builtinText]}>Use Phone's Built-in Key</Text>
           </TouchableOpacity>
         )}
-        {biometricEnabled && currentMode !== 'biometric' && (
-          <TouchableOpacity
-            style={styles.altMethodBtn}
-            onPress={() => {
-              authManager.authenticateWithBiometric().then(async (result) => {
-                if (result.success) await unlockVaultWithStoredCredentials();
-              }).catch(() => {});
-            }}
-          >
-            <Text style={styles.altMethodText}>Try Biometric</Text>
-          </TouchableOpacity>
-        )}
       </View>
     </View>
   );
@@ -346,6 +427,7 @@ export function UnlockScreen() {
           onComplete={handlePinUnlock}
           error={pinError}
         />
+        {renderAllBiometricOptions()}
         {renderAltMethods('pin')}
         {(
           <TouchableOpacity
@@ -390,6 +472,8 @@ export function UnlockScreen() {
               <Text style={styles.unlockButtonText}>Unlock</Text>
             )}
           </TouchableOpacity>
+
+          {renderAllBiometricOptions()}
         </View>
         {renderAltMethods('password')}
       </SafeAreaView>

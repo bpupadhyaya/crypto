@@ -16,6 +16,7 @@
 
 import * as SecureStore from 'expo-secure-store';
 import * as LocalAuthentication from 'expo-local-authentication';
+import * as Keychain from 'react-native-keychain';
 import { sha256 } from '@noble/hashes/sha2.js';
 import { randomBytes } from '@noble/hashes/utils.js';
 
@@ -25,10 +26,12 @@ import { gcm } from '@noble/ciphers/aes.js';
 const PIN_HASH_KEY = 'open_wallet_pin_hash';
 const PIN_SALT_KEY = 'open_wallet_pin_salt';
 const BIOMETRIC_ENABLED_KEY = 'open_wallet_biometric_enabled';
+const BIOMETRIC_KEYCHAIN_READY_KEY = 'open_wallet_biometric_keychain_ready';
 const FAILED_ATTEMPTS_KEY = 'open_wallet_failed_attempts';
 const LOCK_UNTIL_KEY = 'open_wallet_lock_until';
 const ENCRYPTED_PASSWORD_KEY = 'open_wallet_enc_password';
 const ENCRYPTED_PASSWORD_IV_KEY = 'open_wallet_enc_password_iv';
+const BIOMETRIC_VAULT_SERVICE = 'open_wallet_biometric_vault';
 
 const MAX_PIN_ATTEMPTS = 5;
 const LOCKOUT_DURATION_MS = 30_000; // 30 seconds after max attempts
@@ -181,27 +184,67 @@ export class AuthManager {
   }
 
   /**
-   * Enable biometric unlock. Stores a flag — actual biometric prompt
-   * happens at unlock time via the OS.
+   * Store the vault password in the OS keychain protected by biometrics.
+   * Works generically across all biometric types (fingerprint, face, iris)
+   * on both iOS and Android via BIOMETRY_ANY_OR_DEVICE_PASSCODE.
+   */
+  async storeVaultPasswordBiometric(vaultPassword: string): Promise<void> {
+    try {
+      const { available } = await this.isBiometricAvailable();
+      if (!available) return;
+      await Keychain.setGenericPassword('open_wallet', vaultPassword, {
+        accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE,
+        accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+        service: BIOMETRIC_VAULT_SERVICE,
+      });
+      await SecureStore.setItemAsync(BIOMETRIC_KEYCHAIN_READY_KEY, 'true');
+    } catch {
+      // Keychain storage failed — PIN fallback still works
+    }
+  }
+
+  async isBiometricKeychainReady(): Promise<boolean> {
+    const ready = await SecureStore.getItemAsync(BIOMETRIC_KEYCHAIN_READY_KEY);
+    return ready === 'true';
+  }
+
+  /**
+   * Retrieve the vault password via biometric authentication.
+   * Triggers the native OS biometric prompt (fingerprint / Face ID / iris /
+   * device passcode) — the exact method depends on what the device supports.
+   * Returns null if biometric fails, is cancelled, or has no stored entry.
+   */
+  async getVaultPasswordBiometric(promptMessage?: string): Promise<string | null> {
+    try {
+      const result = await Keychain.getGenericPassword({
+        service: BIOMETRIC_VAULT_SERVICE,
+        authenticationPrompt: {
+          title: promptMessage ?? 'Unlock Open Wallet',
+          subtitle: 'Use biometrics or device PIN',
+          cancel: 'Use PIN instead',
+        },
+      });
+      if (result && result.password) return result.password;
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Enable biometric unlock. Stores a flag in SecureStore.
+   * The actual biometric prompt happens at unlock time via the OS keychain.
    */
   async enableBiometric(): Promise<boolean> {
     const { available } = await this.isBiometricAvailable();
     if (!available) return false;
-
-    // Verify biometric works by prompting
-    const result = await LocalAuthentication.authenticateAsync({
-      promptMessage: 'Enable biometric unlock for Open Wallet',
-      fallbackLabel: 'Cancel',
-    });
-
-    if (!result.success) return false;
-
     await SecureStore.setItemAsync(BIOMETRIC_ENABLED_KEY, 'true');
     return true;
   }
 
   async disableBiometric(): Promise<void> {
     await SecureStore.deleteItemAsync(BIOMETRIC_ENABLED_KEY);
+    await SecureStore.deleteItemAsync(BIOMETRIC_KEYCHAIN_READY_KEY);
   }
 
   async isBiometricEnabled(): Promise<boolean> {
