@@ -14,7 +14,7 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
-  StyleSheet, SafeAreaView, Alert, ActivityIndicator,
+  StyleSheet, SafeAreaView, Alert, ActivityIndicator, Modal,
 } from 'react-native';
 import { useWalletStore } from '../store/walletStore';
 import { ConfirmTransactionScreen } from './ConfirmTransactionScreen';
@@ -24,11 +24,12 @@ import { executeSwapTransaction } from '../core/swap/executor';
 import { checkRealTransactionAllowed, recordPaperTrade, getSwapFlow, getTrafficLightEmoji } from '../core/paperTrading';
 import { isTestnet } from '../core/network';
 import type { Token } from '../core/abstractions/types';
+import { detectChainFromAddress, STABLECOIN_CHAINS, CHAIN_ICONS, CHAIN_COLORS, type StablecoinChain } from '../core/chains/addressDetection';
 
 const SWAP_TOKENS = ['BTC', 'ETH', 'SOL', 'USDT', 'USDC', 'OTK', 'ATOM'];
 
 export function SwapScreen() {
-  const { mode, addresses } = useWalletStore();
+  const { mode, addresses, setStablecoinChain, demoMode, updateDevBalance } = useWalletStore();
   const [fromSymbol, setFromSymbol] = useState('BTC');
   const [toSymbol, setToSymbol] = useState('USDT');
   const [amountStr, setAmountStr] = useState('');
@@ -38,6 +39,16 @@ export function SwapScreen() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [showCompare, setShowCompare] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  // Stablecoin destination chain state
+  const isStablecoinSwap = toSymbol === 'USDC' || toSymbol === 'USDT';
+  const [destAddress, setDestAddress] = useState('');
+  const [detectedChain, setDetectedChain] = useState<StablecoinChain | null>(null);
+  const [isChainAmbiguous, setIsChainAmbiguous] = useState(false);
+  const [confirmedChain, setConfirmedChain] = useState<StablecoinChain | null>(null);
+  const [showChainPicker, setShowChainPicker] = useState(false);
+  const [chainPickerCandidates, setChainPickerCandidates] = useState<StablecoinChain[]>([]);
+
   const t = useTheme();
 
   const s = useMemo(() => StyleSheet.create({
@@ -126,7 +137,45 @@ export function SwapScreen() {
     setAmountStr('');
     setOptions([]);
     setSelectedOption(null);
+    setDestAddress('');
+    setDetectedChain(null);
+    setConfirmedChain(null);
+    setIsChainAmbiguous(false);
   }, [fromSymbol, toSymbol]);
+
+  // When destination address changes, detect chain
+  const handleDestAddressChange = useCallback((addr: string) => {
+    setDestAddress(addr);
+    setDetectedChain(null);
+    setConfirmedChain(null);
+    setIsChainAmbiguous(false);
+
+    if (addr.trim().length < 10) return;
+    const result = detectChainFromAddress(addr);
+    if (!result.chain) return;
+
+    setDetectedChain(result.chain);
+    setIsChainAmbiguous(result.ambiguous);
+
+    if (result.ambiguous) {
+      // EVM address — let user pick which chain
+      setChainPickerCandidates(result.candidates);
+      setShowChainPicker(true);
+    } else {
+      // Unambiguous — confirm with user
+      Alert.alert(
+        `${CHAIN_ICONS[result.chain]} Detected: ${result.chain}`,
+        `This address appears to be on ${result.chain}.\nReceive ${toSymbol} on ${result.chain}?`,
+        [
+          { text: 'Yes, use ' + result.chain, onPress: () => setConfirmedChain(result.chain) },
+          {
+            text: 'Choose different chain',
+            onPress: () => { setChainPickerCandidates(STABLECOIN_CHAINS); setShowChainPicker(true); },
+          },
+        ],
+      );
+    }
+  }, [toSymbol]);
 
   const [isPaperSwap, setIsPaperSwap] = useState(false);
 
@@ -162,11 +211,34 @@ export function SwapScreen() {
       await new Promise((r) => setTimeout(r, 1500));
       const flow = getSwapFlow(selectedOption?.id ?? '');
       const status = await recordPaperTrade(flow);
+      // Save chain association for dashboard display
+      if (isStablecoinSwap && confirmedChain) {
+        setStablecoinChain(toSymbol, confirmedChain);
+      }
+      // Update dev balances so dashboard reflects the swap
+      if (demoMode || isTestnet()) {
+        const toAmount = selectedOption?.toAmount ?? 0;
+        updateDevBalance(fromSymbol, -parseFloat(amountStr));
+        updateDevBalance(toSymbol, toAmount);
+      }
       Alert.alert(
         `${getTrafficLightEmoji(status.light)} Practice Swap Complete`,
-        `${amountStr} ${fromSymbol} → ${selectedOption?.toAmount.toFixed(4)} ${toSymbol} (simulated)\n\nVia: ${selectedOption?.name}\nPractice trades completed: ${status.count}/3 recommended\n\n${status.light === 'green' ? 'Wonderful! You\'re now cleared for real transactions. The path is verified and you\'re ready to go.' : `We recommend ${3 - status.count} more practice trade${3 - status.count > 1 ? 's' : ''} to fully verify this transaction path. Each one helps ensure your real funds will arrive safely.`}`
+        `${amountStr} ${fromSymbol} → ${selectedOption?.toAmount.toFixed(4)} ${toSymbol} (simulated)\n\nVia: ${selectedOption?.name}${confirmedChain ? `\nChain: ${CHAIN_ICONS[confirmedChain]} ${confirmedChain}` : ''}\nPractice trades completed: ${status.count}/3 recommended\n\n${status.light === 'green' ? 'Wonderful! You\'re now cleared for real transactions. The path is verified and you\'re ready to go.' : `We recommend ${3 - status.count} more practice trade${3 - status.count > 1 ? 's' : ''} to fully verify this transaction path. Each one helps ensure your real funds will arrive safely.`}`
       );
     } else {
+      // Demo mode — simulate a successful real swap without touching any network
+      if (demoMode || isTestnet()) {
+        await new Promise((r) => setTimeout(r, 1800));
+        const fakeTxHash = Array.from({ length: 32 }, () => Math.floor(Math.random() * 256).toString(16).padStart(2, '0')).join('');
+        const toAmount = selectedOption?.toAmount ?? 0;
+        if (isStablecoinSwap && confirmedChain) setStablecoinChain(toSymbol, confirmedChain);
+        updateDevBalance(fromSymbol, -parseFloat(amountStr));
+        updateDevBalance(toSymbol, toAmount);
+        Alert.alert(
+          '✅ Swap Executed (Dev Mode)',
+          `${amountStr} ${fromSymbol} → ~${selectedOption?.toAmount.toFixed(4)} ${toSymbol}\n\nVia: ${selectedOption?.name}${confirmedChain ? `\nChain: ${CHAIN_ICONS[confirmedChain]} ${confirmedChain}` : ''}\n\nTx: ${fakeTxHash.slice(0, 16)}...${fakeTxHash.slice(-8)}\n\n⚡ Simulated in dev/testnet mode. No real funds moved.`,
+        );
+      } else {
       // Real swap execution
       const password = vaultPassword ?? useWalletStore.getState().tempVaultPassword;
       if (!password) {
@@ -189,6 +261,10 @@ export function SwapScreen() {
           toAddress: addresses.ethereum ?? '',
         });
 
+        if (result.success && isStablecoinSwap && confirmedChain) {
+          setStablecoinChain(toSymbol, confirmedChain);
+        }
+
         Alert.alert(
           result.success ? 'Swap Initiated' : 'Swap Failed',
           result.message,
@@ -198,13 +274,14 @@ export function SwapScreen() {
       } catch (err) {
         throw err;
       }
+      } // end real-swap else
     }
     setAmountStr('');
     setOptions([]);
     setSelectedOption(null);
     setShowConfirm(false);
     setIsPaperSwap(false);
-  }, [amountStr, fromSymbol, toSymbol, selectedOption, isPaperSwap, addresses]);
+  }, [amountStr, fromSymbol, toSymbol, selectedOption, isPaperSwap, addresses, isStablecoinSwap, confirmedChain, setStablecoinChain, demoMode, updateDevBalance]);
 
   const getSecurityColor = (rating: number) => {
     if (rating >= 4.5) return t.accent.green;
@@ -324,11 +401,76 @@ export function SwapScreen() {
         <Text style={s.cardLabel}>To</Text>
         <View style={s.tokenRow}>
           {SWAP_TOKENS.filter((t) => t !== fromSymbol).map((sym) => (
-            <TouchableOpacity key={sym} style={[s.tokenChip, toSymbol === sym && s.tokenChipActive]} onPress={() => { setToSymbol(sym); setOptions([]); }}>
+            <TouchableOpacity key={sym} style={[s.tokenChip, toSymbol === sym && s.tokenChipActive]} onPress={() => { setToSymbol(sym); setOptions([]); setDestAddress(''); setDetectedChain(null); setConfirmedChain(null); }}>
               <Text style={[s.tokenChipText, toSymbol === sym && s.tokenChipTextActive]}>{sym}</Text>
             </TouchableOpacity>
           ))}
         </View>
+
+        {/* Destination address + chain detection for stablecoin swaps */}
+        {isStablecoinSwap && (
+          <View style={{ marginBottom: 16 }}>
+            <Text style={s.cardLabel}>Destination Address</Text>
+            <View style={[s.swapCard, { paddingVertical: 12 }]}>
+              <TextInput
+                style={[s.amountInput, { fontSize: 13 }]}
+                placeholder="Paste destination wallet address"
+                placeholderTextColor={t.text.muted}
+                value={destAddress}
+                onChangeText={handleDestAddressChange}
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+            </View>
+            {confirmedChain && (
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8, gap: 8 }}>
+                <View style={{ backgroundColor: CHAIN_COLORS[confirmedChain] + '25', borderRadius: 12, paddingHorizontal: 12, paddingVertical: 6, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                  <Text style={{ fontSize: 16 }}>{CHAIN_ICONS[confirmedChain]}</Text>
+                  <Text style={{ color: CHAIN_COLORS[confirmedChain], fontWeight: '700', fontSize: 13 }}>{confirmedChain}</Text>
+                  <Text style={{ color: t.text.muted, fontSize: 12 }}>confirmed</Text>
+                </View>
+                <TouchableOpacity onPress={() => { setChainPickerCandidates(STABLECOIN_CHAINS); setShowChainPicker(true); }}>
+                  <Text style={{ color: t.accent.blue, fontSize: 12, fontWeight: '600' }}>Change</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            {detectedChain && !confirmedChain && (
+              <Text style={{ color: t.text.muted, fontSize: 12, marginTop: 6 }}>
+                Detecting chain... tap address to re-detect
+              </Text>
+            )}
+          </View>
+        )}
+
+        {/* Chain Picker Modal */}
+        <Modal visible={showChainPicker} transparent animationType="slide" onRequestClose={() => setShowChainPicker(false)}>
+          <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.5)' }}>
+            <View style={{ backgroundColor: t.bg.card, borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: 20 }}>
+              <Text style={{ color: t.text.primary, fontSize: 17, fontWeight: '700', marginBottom: 4 }}>Select Destination Chain</Text>
+              <Text style={{ color: t.text.muted, fontSize: 13, marginBottom: 16 }}>
+                {isChainAmbiguous
+                  ? 'EVM address works on multiple chains — choose which one:'
+                  : `Select the chain to receive ${toSymbol} on:`}
+              </Text>
+              {chainPickerCandidates.map((chain) => (
+                <TouchableOpacity
+                  key={chain}
+                  style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: t.border, gap: 12 }}
+                  onPress={() => { setConfirmedChain(chain); setShowChainPicker(false); }}
+                >
+                  <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: CHAIN_COLORS[chain] + '25', justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={{ fontSize: 18 }}>{CHAIN_ICONS[chain]}</Text>
+                  </View>
+                  <Text style={{ flex: 1, color: t.text.primary, fontSize: 15, fontWeight: '600' }}>{chain}</Text>
+                  {confirmedChain === chain && <Text style={{ color: t.accent.green, fontSize: 18 }}>✓</Text>}
+                </TouchableOpacity>
+              ))}
+              <TouchableOpacity style={{ marginTop: 16, alignItems: 'center', paddingVertical: 14 }} onPress={() => setShowChainPicker(false)}>
+                <Text style={{ color: t.text.muted, fontSize: 15 }}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
 
         {/* Loading */}
         {loading && (
@@ -374,7 +516,9 @@ export function SwapScreen() {
               <Text style={s.swapBtnText}>📝 Paper Swap (Practice)</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[s.swapBtn, { marginTop: 10 }]} onPress={() => handleSwap(false)}>
-              <Text style={s.swapBtnText}>Swap via {selectedOption.name} (Real)</Text>
+              <Text style={s.swapBtnText}>
+                {demoMode || isTestnet() ? `⚡ Swap via ${selectedOption.name} (Dev)` : `Swap via ${selectedOption.name} (Real)`}
+              </Text>
             </TouchableOpacity>
           </>
         )}

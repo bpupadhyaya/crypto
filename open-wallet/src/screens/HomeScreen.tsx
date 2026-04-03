@@ -23,6 +23,7 @@ import { useAnimatedNumber } from '../utils/animations';
 import { formatCryptoAmount } from '../core/currency/formatter';
 import { ConstitutionSummary } from '../components/ConstitutionSummary';
 import type { Theme } from '../utils/theme';
+import { CHAIN_COLORS, CHAIN_ICONS } from '../core/chains/addressDetection';
 
 // Fallback allocations when no portfolio data
 const FALLBACK_ALLOCATIONS = [
@@ -60,7 +61,7 @@ function generateSparkline(price: number | undefined, change: number | undefined
 const keyExtractor = (item: TokenInfo) => item.symbol;
 
 const TokenRow = React.memo(({
-  token, price, balance, change, onPress, t, isRefreshing, prevPrice,
+  token, price, balance, change, onPress, t, isRefreshing, prevPrice, chainLabel, chainColor,
 }: {
   token: TokenInfo;
   price?: number;
@@ -70,6 +71,8 @@ const TokenRow = React.memo(({
   t: Theme & { isDark: boolean };
   isRefreshing?: boolean;
   prevPrice?: number;
+  chainLabel?: string;
+  chainColor?: string;
 }) => {
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const flashAnim = useRef(new Animated.Value(0)).current;
@@ -159,7 +162,14 @@ const TokenRow = React.memo(({
           <Text style={s.tokenIconText}>{token.symbol.charAt(0)}</Text>
         </View>
         <View style={s.tokenInfo}>
-          <Text style={s.tokenSymbol}>{token.symbol}</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+            <Text style={s.tokenSymbol}>{token.symbol}</Text>
+            {chainLabel && chainColor && (
+              <View style={{ backgroundColor: chainColor + '25', borderRadius: 8, paddingHorizontal: 6, paddingVertical: 2 }}>
+                <Text style={{ color: chainColor, fontSize: 10, fontWeight: '700' }}>{chainLabel}</Text>
+              </View>
+            )}
+          </View>
           <Text style={s.tokenName}>{token.name}</Text>
         </View>
         {sparklineData.length > 0 && (
@@ -353,6 +363,7 @@ export function HomeScreen() {
   const prevPricesRef = useRef<Record<string, number>>({});
   const enabledTokens = useWalletStore((s) => s.enabledTokens);
   const addresses = useWalletStore((s) => s.addresses);
+  const stablecoinChains = useWalletStore((s) => s.stablecoinChains);
   const { prices, changes, loading: pricesLoading, lastUpdated, refresh: refreshPrices } = usePrices();
   const t = useTheme();
 
@@ -483,18 +494,23 @@ export function HomeScreen() {
     return weightedSum;
   }, [portfolioBalances, changes, totalUsdValue]);
 
-  const renderItem = useCallback(({ item }: { item: TokenInfo }) => (
-    <TokenRow
-      token={item}
-      price={prices[item.symbol]}
-      balance={balanceMap[item.symbol]}
-      change={changes[item.symbol]}
-      onPress={() => setSelectedToken(item)}
-      t={t}
-      isRefreshing={isRefreshing}
-      prevPrice={prevPricesRef.current[item.symbol]}
-    />
-  ), [prices, changes, balanceMap, t, isRefreshing]);
+  const renderItem = useCallback(({ item }: { item: TokenInfo }) => {
+    const chain = (item.symbol === 'USDC' || item.symbol === 'USDT') ? stablecoinChains[item.symbol] : undefined;
+    return (
+      <TokenRow
+        token={item}
+        price={prices[item.symbol]}
+        balance={balanceMap[item.symbol]}
+        change={changes[item.symbol]}
+        onPress={() => setSelectedToken(item)}
+        t={t}
+        isRefreshing={isRefreshing}
+        prevPrice={prevPricesRef.current[item.symbol]}
+        chainLabel={chain ? `${CHAIN_ICONS[chain as keyof typeof CHAIN_ICONS] ?? ''} ${chain}` : undefined}
+        chainColor={chain ? CHAIN_COLORS[chain as keyof typeof CHAIN_COLORS] : undefined}
+      />
+    );
+  }, [prices, changes, balanceMap, t, isRefreshing, stablecoinChains]);
 
   const openManage = useCallback(() => setShowManage(true), []);
   const closeManage = useCallback(() => setShowManage(false), []);

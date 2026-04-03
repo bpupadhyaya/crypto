@@ -40,6 +40,14 @@ interface WalletState {
   enabledTokens: string[];
   toggleToken: (symbol: string, enabled: boolean) => void;
   hasVault: boolean;
+
+  // ─── Stablecoin Chain Tracking ───
+  stablecoinChains: Partial<Record<string, string>>;
+  setStablecoinChain: (symbol: string, chain: string) => void;
+
+  // ─── Dev/Demo Balances (mutable, updated by simulated swaps) ───
+  devBalances: Record<string, number>; // symbol → human-readable amount
+  updateDevBalance: (symbol: string, delta: number) => void;
   setHasVault: (has: boolean) => void;
   tempVaultPassword: string | null;
   setTempVaultPassword: (pw: string | null) => void;
@@ -143,6 +151,10 @@ export const useWalletStore = create<WalletState>((set) => ({
   },
   hasVault: false,
   setHasVault: (has) => { set({ hasVault: has }); schedulePersist(); },
+  stablecoinChains: {},
+  setStablecoinChain: (symbol, chain) => { set((s) => ({ stablecoinChains: { ...s.stablecoinChains, [symbol]: chain } })); schedulePersist(); },
+  devBalances: { BTC: 0.5, ETH: 5, SOL: 1000, ATOM: 100, OTK: 10000, USDT: 0, USDC: 0 },
+  updateDevBalance: (symbol, delta) => { set((s) => ({ devBalances: { ...s.devBalances, [symbol]: Math.max(0, (s.devBalances[symbol] ?? 0) + delta) } })); schedulePersist(); },
   tempVaultPassword: null,
   setTempVaultPassword: (pw) => set({ tempVaultPassword: pw }),
   contacts: [],
@@ -215,6 +227,8 @@ async function doPersist() {
       fontSize: s.fontSize, highContrast: s.highContrast, reduceMotion: s.reduceMotion, screenReaderHints: s.screenReaderHints, hapticFeedback: s.hapticFeedback,
       backendType: s.backendType, p2pEnabled: s.p2pEnabled, p2pBootstrapPeers: s.p2pBootstrapPeers, p2pEnableMDNS: s.p2pEnableMDNS,
       autoLockTimeout: s.autoLockTimeout,
+      stablecoinChains: s.stablecoinChains,
+      devBalances: s.devBalances,
       persona: s.persona, personaInterests: s.personaInterests, personaRegion: s.personaRegion, personaLanguage: s.personaLanguage, personaShortcuts: s.personaShortcuts,
     }));
   } catch {}
@@ -268,6 +282,8 @@ function ensureOTK(tokens: string[]): string[] {
         p2pBootstrapPeers: d.p2pBootstrapPeers ?? [],
         p2pEnableMDNS: d.p2pEnableMDNS ?? false,
         autoLockTimeout: d.autoLockTimeout ?? (5 * 60 * 1000),
+        stablecoinChains: d.stablecoinChains ?? {},
+        devBalances: d.devBalances ?? { BTC: 0.5, ETH: 5, SOL: 1000, ATOM: 100, OTK: 10000, USDT: 0, USDC: 0 },
         ...(shouldSetStatus ? { status: d.hasVault ? 'locked' : 'onboarding' } : {}),
       });
     }

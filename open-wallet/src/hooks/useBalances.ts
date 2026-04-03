@@ -9,15 +9,30 @@ import { registry } from '../core/abstractions/registry';
 import { useWalletStore } from '../store/walletStore';
 import type { ChainId, Token, Balance } from '../core/abstractions/types';
 
-// ─── Demo balances (simulated, never touches chain) ───
+// ─── Default dev balance template ───
 
-const DEMO_BALANCES: Balance[] = [
-  { token: { symbol: 'BTC', name: 'Bitcoin', chainId: 'bitcoin', decimals: 8 }, amount: BigInt(50000000), usdValue: undefined },        // 0.5 BTC
-  { token: { symbol: 'ETH', name: 'Ethereum', chainId: 'ethereum', decimals: 18 }, amount: BigInt('5000000000000000000'), usdValue: undefined }, // 5 ETH
-  { token: { symbol: 'SOL', name: 'Solana', chainId: 'solana', decimals: 9 }, amount: BigInt(1000000000000), usdValue: undefined },      // 1000 SOL
-  { token: { symbol: 'ATOM', name: 'Cosmos', chainId: 'cosmos', decimals: 6 }, amount: BigInt(100000000), usdValue: undefined },          // 100 ATOM
-  { token: { symbol: 'OTK', name: 'Open Token', chainId: 'openchain', decimals: 6 }, amount: BigInt(10000000000), usdValue: undefined }, // 10000 OTK
-];
+const DEV_BALANCE_DECIMALS: Record<string, { chainId: ChainId; name: string; decimals: number }> = {
+  BTC:  { chainId: 'bitcoin',   name: 'Bitcoin',    decimals: 8 },
+  ETH:  { chainId: 'ethereum',  name: 'Ethereum',   decimals: 18 },
+  SOL:  { chainId: 'solana',    name: 'Solana',     decimals: 9 },
+  ATOM: { chainId: 'cosmos',    name: 'Cosmos',     decimals: 6 },
+  OTK:  { chainId: 'openchain', name: 'Open Token', decimals: 6 },
+  USDT: { chainId: 'ethereum',  name: 'Tether',     decimals: 6 },
+  USDC: { chainId: 'ethereum',  name: 'USD Coin',   decimals: 6 },
+};
+
+function buildDemoBalances(devBalances: Record<string, number>): Balance[] {
+  return Object.entries(devBalances)
+    .filter(([sym, amount]) => amount > 0 && DEV_BALANCE_DECIMALS[sym])
+    .map(([sym, amount]) => {
+      const meta = DEV_BALANCE_DECIMALS[sym];
+      return {
+        token: { symbol: sym, name: meta.name, chainId: meta.chainId, decimals: meta.decimals },
+        amount: BigInt(Math.round(amount * Math.pow(10, meta.decimals))),
+        usdValue: undefined,
+      };
+    });
+}
 
 // ─── Well-known native tokens ───
 
@@ -53,6 +68,7 @@ export function useBalance(chainId: ChainId, address: string | undefined) {
 
 export function useAllBalances(addresses: Partial<Record<ChainId, string>>) {
   const demoMode = useWalletStore((s) => s.demoMode);
+  const devBalances = useWalletStore((s) => s.devBalances);
   const chains = Object.entries(addresses).filter(([_, addr]) => !!addr) as [ChainId, string][];
 
   // Always call useQueries (hooks must not be conditional), but disable when demo
@@ -77,7 +93,7 @@ export function useAllBalances(addresses: Partial<Record<ChainId, string>>) {
   });
 
   if (demoMode) {
-    return { balances: DEMO_BALANCES, isLoading: false, isError: false };
+    return { balances: buildDemoBalances(devBalances), isLoading: false, isError: false };
   }
 
   const balances = queries
