@@ -29,7 +29,7 @@ import { detectChainFromAddress, STABLECOIN_CHAINS, CHAIN_ICONS, CHAIN_COLORS, t
 const SWAP_TOKENS = ['BTC', 'ETH', 'SOL', 'USDT', 'USDC', 'OTK', 'ATOM'];
 
 export function SwapScreen() {
-  const { mode, addresses, setStablecoinChain, demoMode, updateDevBalance } = useWalletStore();
+  const { mode, addresses, setStablecoinChain, demoMode, updateDevBalance, devBalances } = useWalletStore();
   const [fromSymbol, setFromSymbol] = useState('BTC');
   const [toSymbol, setToSymbol] = useState('USDT');
   const [amountStr, setAmountStr] = useState('');
@@ -107,19 +107,21 @@ export function SwapScreen() {
     loadingText: { color: t.text.muted, fontSize: 14, marginTop: 12 },
   }), [t]);
 
-  // Fetch quotes when amount changes
+  // Fetch quotes when amount, tokens, or destination address changes
   useEffect(() => {
     const amount = parseFloat(amountStr);
-    if (!amount || amount <= 0) { setOptions([]); return; }
+    if (!amount || amount <= 0) { setOptions([]); setSelectedOption(null); return; }
 
     const timer = setTimeout(async () => {
       setLoading(true);
       try {
         const fromAddr = addresses.ethereum ?? addresses.bitcoin ?? '';
-        const toAddr = addresses.ethereum ?? '';
+        // For stablecoin swaps, use the user-entered destination address so that
+        // THORChain (and other providers) can return a quote for the correct destination.
+        const effectiveToAddr = destAddress.trim() || (addresses.ethereum ?? '');
         const results = await getAllSwapOptions({
           fromToken: fromSymbol, toToken: toSymbol,
-          fromAmount: amount, fromAddress: fromAddr, toAddress: toAddr,
+          fromAmount: amount, fromAddress: fromAddr, toAddress: effectiveToAddr,
         });
         setOptions(results);
       } catch {
@@ -129,7 +131,7 @@ export function SwapScreen() {
     }, 600);
 
     return () => clearTimeout(timer);
-  }, [amountStr, fromSymbol, toSymbol, addresses]);
+  }, [amountStr, fromSymbol, toSymbol, addresses, destAddress]);
 
   const flipTokens = useCallback(() => {
     setFromSymbol(toSymbol);
@@ -184,6 +186,36 @@ export function SwapScreen() {
       Alert.alert('Select Option', 'Please choose a swap method.');
       return;
     }
+
+    // Validate amount
+    const amountNum = parseFloat(amountStr);
+    if (isNaN(amountNum) || amountNum <= 0) {
+      Alert.alert('Invalid Amount', 'Please enter a valid amount to swap.');
+      return;
+    }
+
+    // Balance check — prevent attempting a swap with insufficient funds
+    if (demoMode || isTestnet()) {
+      const { devBalances: liveBalances } = useWalletStore.getState();
+      const available = liveBalances[fromSymbol] ?? 0;
+      if (amountNum > available) {
+        Alert.alert(
+          'Insufficient Balance',
+          `Available: ${available.toFixed(8)} ${fromSymbol}\nYou entered: ${amountNum} ${fromSymbol}`,
+        );
+        return;
+      }
+    }
+
+    // For stablecoin swaps, destination address is required so funds go to the right place
+    if (isStablecoinSwap && !destAddress.trim()) {
+      Alert.alert(
+        'Destination Address Required',
+        `Please enter the wallet address where you want to receive ${toSymbol}.`,
+      );
+      return;
+    }
+
     setIsPaperSwap(paperMode);
 
     // Check paper trading for real swaps
@@ -204,7 +236,7 @@ export function SwapScreen() {
     }
 
     setShowConfirm(true);
-  }, [selectedOption]);
+  }, [selectedOption, amountStr, fromSymbol, toSymbol, demoMode, isStablecoinSwap, destAddress]);
 
   const executeSwap = useCallback(async (vaultPassword?: string) => {
     if (isPaperSwap) {
@@ -258,7 +290,9 @@ export function SwapScreen() {
           mnemonic: contents.mnemonic,
           accountIndex: useWalletStore.getState().activeAccountIndex,
           fromAddress: addresses.bitcoin ?? addresses.ethereum ?? '',
-          toAddress: addresses.ethereum ?? '',
+          // Use the user-entered destination address for stablecoin swaps;
+          // fall back to own ETH address for same-chain swaps.
+          toAddress: destAddress.trim() || (addresses.ethereum ?? ''),
         });
 
         if (result.success && isStablecoinSwap && confirmedChain) {
@@ -383,7 +417,7 @@ export function SwapScreen() {
         <Text style={s.cardLabel}>From</Text>
         <View style={s.tokenRow}>
           {SWAP_TOKENS.filter((t) => t !== toSymbol).map((sym) => (
-            <TouchableOpacity key={sym} style={[s.tokenChip, fromSymbol === sym && s.tokenChipActive]} onPress={() => { setFromSymbol(sym); setOptions([]); }}>
+            <TouchableOpacity key={sym} style={[s.tokenChip, fromSymbol === sym && s.tokenChipActive]} onPress={() => { setFromSymbol(sym); setOptions([]); setSelectedOption(null); }}>
               <Text style={[s.tokenChipText, fromSymbol === sym && s.tokenChipTextActive]}>{sym}</Text>
             </TouchableOpacity>
           ))}
@@ -401,7 +435,7 @@ export function SwapScreen() {
         <Text style={s.cardLabel}>To</Text>
         <View style={s.tokenRow}>
           {SWAP_TOKENS.filter((t) => t !== fromSymbol).map((sym) => (
-            <TouchableOpacity key={sym} style={[s.tokenChip, toSymbol === sym && s.tokenChipActive]} onPress={() => { setToSymbol(sym); setOptions([]); setDestAddress(''); setDetectedChain(null); setConfirmedChain(null); }}>
+            <TouchableOpacity key={sym} style={[s.tokenChip, toSymbol === sym && s.tokenChipActive]} onPress={() => { setToSymbol(sym); setOptions([]); setDestAddress(''); setDetectedChain(null); setConfirmedChain(null); setSelectedOption(null); }}>
               <Text style={[s.tokenChipText, toSymbol === sym && s.tokenChipTextActive]}>{sym}</Text>
             </TouchableOpacity>
           ))}

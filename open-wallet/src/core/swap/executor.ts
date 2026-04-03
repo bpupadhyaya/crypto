@@ -15,6 +15,30 @@
 import type { SwapOption } from './index';
 import { getSwapQuote as getThorQuote } from './thorchain';
 
+// ─── Open Chain Connectivity Check ───
+
+/**
+ * Test whether the Open Chain RPC node is reachable.
+ * Open Chain mainnet is not yet live — this gives users a clear error
+ * instead of a cryptic network failure.
+ */
+async function isOpenChainReachable(): Promise<boolean> {
+  try {
+    const { getNetworkConfig } = await import('../network');
+    const config = getNetworkConfig();
+    const res = await fetch(
+      `${config.openchain.restUrl}/cosmos/base/tendermint/v1beta1/node_info`,
+      { signal: AbortSignal.timeout(5_000) },
+    );
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+const OPEN_CHAIN_UNAVAILABLE =
+  'Open Chain mainnet is not yet live. Your funds are safe — please use THORChain or another external provider for this swap. Open Chain will be available soon.';
+
 export interface SwapExecutionResult {
   success: boolean;
   txHash?: string;
@@ -158,6 +182,10 @@ async function executeOpenChainDEXSwap(params: {
 }): Promise<SwapExecutionResult> {
   const { fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex } = params;
 
+  if (!(await isOpenChainReachable())) {
+    return { success: false, message: OPEN_CHAIN_UNAVAILABLE, provider: 'Open Wallet DEX' };
+  }
+
   try {
     const denomMap: Record<string, string> = {
       OTK: 'uotk', BTC: 'ubtc', ETH: 'ueth', USDT: 'uusdt', USDC: 'uusdc', SOL: 'usol', ATOM: 'uatom',
@@ -213,6 +241,10 @@ async function executeOrderBookSwap(params: {
   mnemonic: string; accountIndex: number;
 }): Promise<SwapExecutionResult> {
   const { fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex } = params;
+
+  if (!(await isOpenChainReachable())) {
+    return { success: false, message: OPEN_CHAIN_UNAVAILABLE, provider: 'Open Wallet Order Book' };
+  }
 
   try {
     const { getLivePrice } = await import('./prices');
@@ -275,6 +307,10 @@ async function executeAtomicSwap(params: {
   mnemonic: string; accountIndex: number; toAddress: string;
 }): Promise<SwapExecutionResult> {
   const { fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex } = params;
+
+  if (!(await isOpenChainReachable())) {
+    return { success: false, message: OPEN_CHAIN_UNAVAILABLE, provider: 'Open Wallet Atomic Swap' };
+  }
 
   try {
     const { createSwapOrder, generateSecret, calculateTimelocks } = await import('./atomic');
@@ -341,8 +377,7 @@ async function executeAtomicSwap(params: {
 
     wallet.destroy();
 
-    // Store secret locally (never sent to chain — only revealed when claiming)
-    // In production, this would be persisted securely in the vault
+    // Build the local order record (secret stays client-side, never on chain)
     const order = createSwapOrder({
       initiatorAddress: signerAddress,
       fromChain: sourceChain,
@@ -351,6 +386,28 @@ async function executeAtomicSwap(params: {
       toAmount: expectedOutput.toFixed(6),
       fromSymbol, toSymbol,
     });
+
+    // Persist secret to AsyncStorage — critical for HTLC claim after app restart.
+    // Without this, if the app closes between HTLC creation and claim, the user's
+    // funds could be stuck until the HTLC timeout (48h) refunds them.
+    try {
+      const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
+      const raw = (await AsyncStorage.getItem('ow-atomic-secrets-v1')) ?? '{}';
+      const secrets = JSON.parse(raw);
+      secrets[secretHash] = {
+        secret,
+        orderId: order.id,
+        fromSymbol,
+        toSymbol,
+        fromAmount: fromAmount.toString(),
+        toAmount: expectedOutput.toFixed(6),
+        createdAt: order.createdAt,
+        expiresAt: order.expiresAt,
+      };
+      await AsyncStorage.setItem('ow-atomic-secrets-v1', JSON.stringify(secrets));
+    } catch {
+      // Non-critical — the swap order is on-chain regardless.
+    }
 
     return {
       success: true, txHash,
@@ -475,6 +532,18 @@ async function execute1inchSwap(params: {
 }): Promise<SwapExecutionResult> {
   const { fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, fromAddress } = params;
 
+  // 1inch v6 API requires an API key. Get one free at portal.1inch.dev
+  const apiKey = (typeof process !== 'undefined' ? process.env?.EXPO_PUBLIC_ONEINCH_API_KEY : undefined) ?? '';
+  if (!apiKey) {
+    return {
+      success: false,
+      message: '1inch requires an API key.\n\nTo enable 1inch swaps:\n1. Visit portal.1inch.dev and create a free account\n2. Add EXPO_PUBLIC_ONEINCH_API_KEY=your_key to your .env file\n3. Rebuild the app\n\nAlternatively, use THORChain or Open Wallet Atomic Swap.',
+      provider: '1inch',
+    };
+  }
+
+  const authHeaders = { 'Accept': 'application/json', 'Authorization': `Bearer ${apiKey}` };
+
   try {
     const TOKEN_ADDRESSES: Record<string, string> = {
       ETH: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
@@ -500,10 +569,13 @@ async function execute1inchSwap(params: {
     });
 
     const response = await fetch(`https://api.1inch.dev/swap/v6.0/1/swap?${swapParams}`, {
-      headers: { 'Accept': 'application/json' },
+      headers: authHeaders,
     });
 
     if (!response.ok) {
+      if (response.status === 401 || response.status === 403) {
+        return { success: false, message: '1inch API key is invalid or expired. Check EXPO_PUBLIC_ONEINCH_API_KEY in your .env file.', provider: '1inch' };
+      }
       return { success: false, message: `1inch API returned ${response.status}. Try THORChain or Atomic Swap instead.`, provider: '1inch' };
     }
 

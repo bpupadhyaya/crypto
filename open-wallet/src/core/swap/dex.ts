@@ -137,7 +137,11 @@ export async function getDEXQuote(
   fromAmount: number,
   slippageBps: number = 100,
 ): Promise<DEXQuote | null> {
-  const pools = await getPools();
+  // Fetch pools and live prices in parallel
+  const [pools, livePrices] = await Promise.all([
+    getPools(),
+    import('./prices').then((m) => m.getAllLivePrices()).catch(() => ({} as Record<string, number>)),
+  ]);
 
   // Find direct pool
   const pool = pools.find(
@@ -157,6 +161,10 @@ export async function getDEXQuote(
 
   const slippageMultiplier = 1 - slippageBps / 10000;
 
+  // Convert fee (denominated in output token) to USD using live prices.
+  // If toToken is a stablecoin the fee is already in USD; otherwise multiply by live price.
+  const toTokenPrice = toToken.includes('USD') ? 1 : (livePrices[toToken] ?? 0);
+
   return {
     pool: pool.id,
     fromToken,
@@ -165,7 +173,7 @@ export async function getDEXQuote(
     toAmount: output,
     priceImpact,
     fee,
-    feeUsd: fee * (toToken.includes('USD') ? 1 : 62000), // rough USD estimate
+    feeUsd: fee * toTokenPrice,
     route: `Open Wallet DEX (${pool.tokenA}/${pool.tokenB} pool)`,
     minimumReceived: output * slippageMultiplier,
   };

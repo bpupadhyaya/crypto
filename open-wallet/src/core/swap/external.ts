@@ -70,7 +70,9 @@ export async function getTHORChainQuote(
 
     return {
       ...base, toAmount: output, fee: totalFee,
-      feeUsd: data.fees?.total_usd ? `$${Number(data.fees.total_usd).toFixed(2)}` : `~$${(totalFee * 62000).toFixed(2)}`,
+      // THORChain always returns total_usd for valid quotes.
+      // Avoid hardcoded prices in the fallback — use 0 if unavailable.
+      feeUsd: `$${Number(data.fees?.total_usd || 0).toFixed(2)}`,
       available: true, priceImpact: Number(data.slippage_bps || 0) / 100,
     };
   } catch (e) {
@@ -108,19 +110,30 @@ export async function get1inchQuote(
     const decimals = fromToken === 'ETH' ? 18 : fromToken === 'WBTC' ? 8 : 6;
     const amountWei = BigInt(Math.round(amount * 10 ** decimals)).toString();
 
+    // 1inch v6 requires an API key. Without it the request returns 401.
+    const apiKey = (typeof process !== 'undefined' ? process.env?.EXPO_PUBLIC_ONEINCH_API_KEY : undefined) ?? '';
+    if (!apiKey) {
+      return { ...base, error: 'API key required (set EXPO_PUBLIC_ONEINCH_API_KEY — free at portal.1inch.dev)' };
+    }
+
     const url = `https://api.1inch.dev/swap/v6.0/1/quote?src=${from}&dst=${to}&amount=${amountWei}`;
     const res = await fetch(url, {
-      headers: { 'Accept': 'application/json' },
+      headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${apiKey}` },
       signal: AbortSignal.timeout(10_000),
     });
 
-    if (!res.ok) return { ...base, error: '1inch API unavailable' };
+    if (!res.ok) {
+      if (res.status === 401 || res.status === 403) {
+        return { ...base, error: 'API key invalid — check EXPO_PUBLIC_ONEINCH_API_KEY in .env' };
+      }
+      return { ...base, error: '1inch API unavailable' };
+    }
     const data = await res.json();
 
     const outDecimals = toToken === 'ETH' ? 18 : toToken === 'WBTC' ? 8 : 6;
     const output = Number(data.dstAmount || data.toAmount || 0) / 10 ** outDecimals;
 
-    return { ...base, toAmount: output, fee: amount * 0.002, feeUsd: `~$${(amount * 0.002 * 62000).toFixed(2)}`, available: output > 0, priceImpact: 0.1 };
+    return { ...base, toAmount: output, fee: amount * 0.002, feeUsd: '~0.2% + gas', available: output > 0, priceImpact: 0.1 };
   } catch (e) {
     return { ...base, error: e instanceof Error ? e.message : 'Failed' };
   }
