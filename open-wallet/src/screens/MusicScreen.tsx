@@ -203,45 +203,45 @@ export function MusicScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     tabRow: { flexDirection: 'row', marginHorizontal: 20, backgroundColor: t.bg.card, borderRadius: 12, padding: 4 },
     tab: { flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 10 },
     tabActive: { backgroundColor: t.accent.purple },
-    tabLabel: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
+    tabLabel: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabLabelActive: { color: '#fff' },
-    tabIcon: { fontSize: 18, marginBottom: 2 },
+    tabIcon: { fontSize: fonts.xl, marginBottom: 2 },
     heroCard: { backgroundColor: t.accent.purple + '10', borderRadius: 24, padding: 24, marginHorizontal: 20, marginTop: 16, alignItems: 'center' },
     heroIcon: { fontSize: 48, marginBottom: 8 },
-    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, textAlign: 'center' },
-    heroSubtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 4, lineHeight: 20 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
+    heroTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy, textAlign: 'center' },
+    heroSubtitle: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 4, lineHeight: 20 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    cardTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
-    cardSubtitle: { color: t.text.secondary, fontSize: 13, marginTop: 4 },
-    cardMuted: { color: t.text.muted, fontSize: 12, marginTop: 4 },
+    cardTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    cardSubtitle: { color: t.text.secondary, fontSize: fonts.sm, marginTop: 4 },
+    cardMuted: { color: t.text.muted, fontSize: fonts.sm, marginTop: 4 },
     badge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'flex-start', marginTop: 8 },
-    badgeText: { fontSize: 11, fontWeight: fonts.bold, color: '#fff' },
+    badgeText: { fontSize: fonts.xs, fontWeight: fonts.bold, color: '#fff' },
     row: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 8 },
     chipRow: { flexDirection: 'row', gap: 6, flexWrap: 'wrap', marginTop: 6 },
     chip: { backgroundColor: t.bg.primary, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
-    chipText: { color: t.text.secondary, fontSize: 11, fontWeight: fonts.semibold },
+    chipText: { color: t.text.secondary, fontSize: fonts.xs, fontWeight: fonts.semibold },
     appreciateBtn: { backgroundColor: t.accent.purple, borderRadius: 10, paddingVertical: 8, paddingHorizontal: 14, alignSelf: 'flex-start', marginTop: 10 },
-    appreciateBtnText: { color: '#fff', fontSize: 13, fontWeight: fonts.bold },
+    appreciateBtnText: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.bold },
     voteBtn: { backgroundColor: t.accent.blue + '20', borderRadius: 10, paddingVertical: 6, paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 4, alignSelf: 'flex-start', marginTop: 8 },
-    voteBtnText: { color: t.accent.blue, fontSize: 13, fontWeight: fonts.bold },
+    voteBtnText: { color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.bold },
     playlistBadge: { backgroundColor: t.accent.green, paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, alignSelf: 'flex-start', marginTop: 6 },
-    playlistBadgeText: { color: '#fff', fontSize: 10, fontWeight: fonts.bold },
+    playlistBadgeText: { color: '#fff', fontSize: fonts.xs, fontWeight: fonts.bold },
     rateRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 6 },
-    rateText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
-    eOTK: { color: t.accent.orange, fontSize: 13, fontWeight: fonts.bold },
+    rateText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    eOTK: { color: t.accent.orange, fontSize: fonts.sm, fontWeight: fonts.bold },
     levelBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, alignSelf: 'flex-start', marginTop: 6 },
-    levelText: { fontSize: 10, fontWeight: fonts.bold, color: '#fff' },
-    emptyText: { color: t.text.muted, textAlign: 'center', marginTop: 20, fontSize: 14 },
+    levelText: { fontSize: fonts.xs, fontWeight: fonts.bold, color: '#fff' },
+    emptyText: { color: t.text.muted, textAlign: 'center', marginTop: 20, fontSize: fonts.md },
     statsRow: { flexDirection: 'row', justifyContent: 'space-around', marginHorizontal: 20, marginTop: 12 },
     stat: { alignItems: 'center' },
-    statValue: { color: t.text.primary, fontSize: 22, fontWeight: fonts.heavy },
-    statLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
+    statValue: { color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.heavy },
+    statLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
   }), [t]);
 
   const levelColors: Record<string, string> = {
@@ -302,7 +302,7 @@ export function MusicScreen({ onClose }: Props) {
       {DEMO_EVENTS.map((evt) => (
         <View key={evt.id} style={s.card}>
           <View style={s.row}>
-            <Text style={{ fontSize: 24 }}>{EVENT_TYPE_ICONS[evt.type]}</Text>
+            <Text style={{ fontSize: fonts.xxl }}>{EVENT_TYPE_ICONS[evt.type]}</Text>
             <View style={{ flex: 1 }}>
               <Text style={s.cardTitle}>{evt.title}</Text>
               <Text style={s.cardSubtitle}>{evt.performer}</Text>
@@ -333,7 +333,7 @@ export function MusicScreen({ onClose }: Props) {
   const renderShare = () => (
     <>
       <Text style={s.section}>Shared Compositions</Text>
-      <Text style={{ color: t.text.muted, fontSize: 12, marginHorizontal: 24, marginBottom: 12 }}>
+      <Text style={{ color: t.text.muted, fontSize: fonts.sm, marginHorizontal: 24, marginBottom: 12 }}>
         Share your music with the community. Compositions are identified by audio hash for authenticity.
       </Text>
       {DEMO_TRACKS.map((trk) => (
@@ -367,7 +367,7 @@ export function MusicScreen({ onClose }: Props) {
       {DEMO_TRACKS.filter((tr) => tr.onPlaylist).map((trk) => (
         <View key={`pl-${trk.id}`} style={s.card}>
           <View style={s.row}>
-            <Text style={{ fontSize: 20 }}>{'\u{1F3B6}'}</Text>
+            <Text style={{ fontSize: fonts.xl }}>{'\u{1F3B6}'}</Text>
             <View style={{ flex: 1 }}>
               <Text style={s.cardTitle}>{trk.title}</Text>
               <Text style={s.cardSubtitle}>{trk.artist}  •  {trk.votes} votes</Text>
@@ -382,13 +382,13 @@ export function MusicScreen({ onClose }: Props) {
   const renderJam = () => (
     <>
       <Text style={s.section}>Jam Session Finder</Text>
-      <Text style={{ color: t.text.muted, fontSize: 12, marginHorizontal: 24, marginBottom: 12 }}>
+      <Text style={{ color: t.text.muted, fontSize: fonts.sm, marginHorizontal: 24, marginBottom: 12 }}>
         Find fellow musicians to play with. Match by instrument, genre, and availability.
       </Text>
       {DEMO_JAM_SEEKERS.map((js) => (
         <View key={js.id} style={s.card}>
           <View style={s.row}>
-            <Text style={{ fontSize: 24 }}>{'\u{1F3B8}'}</Text>
+            <Text style={{ fontSize: fonts.xxl }}>{'\u{1F3B8}'}</Text>
             <View style={{ flex: 1 }}>
               <Text style={s.cardTitle}>{js.musician}</Text>
               <Text style={s.cardSubtitle}>{js.instrument}  •  {js.experience}</Text>
@@ -414,13 +414,13 @@ export function MusicScreen({ onClose }: Props) {
   const renderLessons = () => (
     <>
       <Text style={s.section}>Music Lessons</Text>
-      <Text style={{ color: t.text.muted, fontSize: 12, marginHorizontal: 24, marginBottom: 12 }}>
+      <Text style={{ color: t.text.muted, fontSize: fonts.sm, marginHorizontal: 24, marginBottom: 12 }}>
         Community members teaching instruments. Teachers earn eOTK for sharing knowledge.
       </Text>
       {DEMO_LESSONS.map((les) => (
         <View key={les.id} style={s.card}>
           <View style={s.row}>
-            <Text style={{ fontSize: 24 }}>{'\u{1F3BC}'}</Text>
+            <Text style={{ fontSize: fonts.xxl }}>{'\u{1F3BC}'}</Text>
             <View style={{ flex: 1 }}>
               <Text style={s.cardTitle}>{les.teacher}</Text>
               <Text style={s.cardSubtitle}>{les.instrument}</Text>

@@ -167,61 +167,61 @@ export function ImpactReportScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
     card: { backgroundColor: t.bg.card, borderRadius: 20, padding: 20, marginHorizontal: 20, marginTop: 8 },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 12 },
-    demoTag: { color: t.accent.orange, fontSize: 10, fontWeight: fonts.bold, textAlign: 'center', marginTop: 12 },
+    demoTag: { color: t.accent.orange, fontSize: fonts.xs, fontWeight: fonts.bold, textAlign: 'center', marginTop: 12 },
     // Hero
     heroCard: { backgroundColor: t.accent.purple + '10', borderRadius: 24, padding: 24, marginHorizontal: 20, marginTop: 8, alignItems: 'center' },
     heroIcon: { fontSize: 48, marginBottom: 8 },
-    heroTitle: { color: t.text.primary, fontSize: 22, fontWeight: fonts.heavy, textAlign: 'center' },
-    heroSubtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 6, lineHeight: 20 },
+    heroTitle: { color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.heavy, textAlign: 'center' },
+    heroSubtitle: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 6, lineHeight: 20 },
     summaryRow: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 20, width: '100%' },
     summaryItem: { alignItems: 'center' },
-    summaryValue: { color: t.accent.green, fontSize: 22, fontWeight: fonts.heavy },
-    summaryLabel: { color: t.text.muted, fontSize: 10, marginTop: 2 },
+    summaryValue: { color: t.accent.green, fontSize: fonts.xxl, fontWeight: fonts.heavy },
+    summaryLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
     // Channel breakdown
     barRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-    barLabel: { color: t.text.primary, fontSize: 12, fontWeight: fonts.semibold, width: 80 },
+    barLabel: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold, width: 80 },
     barTrack: { flex: 1, height: 18, backgroundColor: t.border, borderRadius: 9, overflow: 'hidden', marginHorizontal: 8 },
     barFill: { height: 18, borderRadius: 9 },
-    barValue: { color: t.text.muted, fontSize: 11, width: 50, textAlign: 'right' },
+    barValue: { color: t.text.muted, fontSize: fonts.xs, width: 50, textAlign: 'right' },
     channelDetail: { flexDirection: 'row', justifyContent: 'space-around', paddingTop: 8 },
     channelDetailItem: { alignItems: 'center' },
-    channelDetailValue: { fontSize: 13, fontWeight: fonts.bold },
-    channelDetailLabel: { color: t.text.muted, fontSize: 10, marginTop: 2 },
+    channelDetailValue: { fontSize: fonts.sm, fontWeight: fonts.bold },
+    channelDetailLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
     // Milestones
     milestoneRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10 },
-    milestoneIcon: { fontSize: 24, width: 36, textAlign: 'center' },
+    milestoneIcon: { fontSize: fonts.xxl, width: 36, textAlign: 'center' },
     milestoneContent: { flex: 1, marginLeft: 10 },
-    milestoneTitle: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
-    milestoneDate: { color: t.text.muted, fontSize: 11, marginTop: 2 },
+    milestoneTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
+    milestoneDate: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
     // Metric grid
     metricGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' },
     metricItem: { width: '48%', backgroundColor: t.bg.primary, borderRadius: 16, padding: 16, marginBottom: 10, alignItems: 'center' },
-    metricIcon: { fontSize: 28, marginBottom: 6 },
-    metricValue: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    metricLabel: { color: t.text.muted, fontSize: 11, textAlign: 'center', marginTop: 4 },
+    metricIcon: { fontSize: fonts.xxxl, marginBottom: 6 },
+    metricValue: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    metricLabel: { color: t.text.muted, fontSize: fonts.xs, textAlign: 'center', marginTop: 4 },
     // Gratitude
     gratRow: { flexDirection: 'row', justifyContent: 'space-around', marginBottom: 16 },
     gratItem: { alignItems: 'center' },
-    gratValue: { fontSize: 28, fontWeight: fonts.heavy },
-    gratLabel: { color: t.text.muted, fontSize: 11, marginTop: 4 },
+    gratValue: { fontSize: fonts.xxxl, fontWeight: fonts.heavy },
+    gratLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 4 },
     gratConnection: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8, paddingHorizontal: 8 },
-    gratConnLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
-    gratConnValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.bold },
+    gratConnLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    gratConnValue: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.bold },
     // YoY
     yoyRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 10 },
-    yoyLabel: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold, flex: 1 },
+    yoyLabel: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold, flex: 1 },
     yoyValues: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-    yoyThisYear: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, width: 60, textAlign: 'right' },
-    yoyLastYear: { color: t.text.muted, fontSize: 12, width: 60, textAlign: 'right' },
-    yoyChange: { fontSize: 13, fontWeight: fonts.heavy, width: 60, textAlign: 'right' },
+    yoyThisYear: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, width: 60, textAlign: 'right' },
+    yoyLastYear: { color: t.text.muted, fontSize: fonts.sm, width: 60, textAlign: 'right' },
+    yoyChange: { fontSize: fonts.sm, fontWeight: fonts.heavy, width: 60, textAlign: 'right' },
     // Share
     shareBtn: { backgroundColor: t.accent.purple, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginHorizontal: 20, marginTop: 24 },
-    shareBtnText: { color: '#fff', fontSize: 17, fontWeight: fonts.bold },
+    shareBtnText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.bold },
     footer: { height: 40 },
   }), [t]);
 
@@ -378,11 +378,11 @@ export function ImpactReportScreen({ onClose }: Props) {
         <View style={s.card}>
           {/* Column headers */}
           <View style={[s.yoyRow, { paddingVertical: 4 }]}>
-            <Text style={[s.yoyLabel, { color: t.text.muted, fontSize: 11 }]}>Metric</Text>
+            <Text style={[s.yoyLabel, { color: t.text.muted, fontSize: fonts.xs }]}>Metric</Text>
             <View style={s.yoyValues}>
-              <Text style={[s.yoyThisYear, { color: t.text.muted, fontSize: 11 }]}>{reportYear}</Text>
-              <Text style={[s.yoyLastYear, { fontSize: 11 }]}>{reportYear - 1}</Text>
-              <Text style={[s.yoyChange, { color: t.text.muted, fontSize: 11 }]}>Change</Text>
+              <Text style={[s.yoyThisYear, { color: t.text.muted, fontSize: fonts.xs }]}>{reportYear}</Text>
+              <Text style={[s.yoyLastYear, { fontSize: fonts.xs }]}>{reportYear - 1}</Text>
+              <Text style={[s.yoyChange, { color: t.text.muted, fontSize: fonts.xs }]}>Change</Text>
             </View>
           </View>
           <View style={s.divider} />

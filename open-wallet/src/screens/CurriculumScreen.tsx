@@ -190,91 +190,91 @@ export function CurriculumScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     heroCard: { backgroundColor: t.accent.green + '10', borderRadius: 24, padding: 24, marginHorizontal: 20, marginTop: 8, alignItems: 'center' },
     heroIcon: { fontSize: 48, marginBottom: 8 },
-    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, textAlign: 'center' },
-    heroSub: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginTop: 6, lineHeight: 18, fontStyle: 'italic' },
+    heroTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy, textAlign: 'center' },
+    heroSub: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 6, lineHeight: 18, fontStyle: 'italic' },
     demoTag: { backgroundColor: t.accent.orange + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'center', marginTop: 12, marginBottom: 4 },
-    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: fonts.semibold },
+    demoText: { color: t.accent.orange, fontSize: fonts.xs, fontWeight: fonts.semibold },
     tabRow: { flexDirection: 'row', marginHorizontal: 20, marginTop: 16, backgroundColor: t.bg.card, borderRadius: 12, padding: 4 },
     tab: { flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 10 },
     tabActive: { backgroundColor: t.accent.green },
-    tabText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
+    tabText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: t.bg.primary },
     section: { marginHorizontal: 20, marginTop: 20 },
-    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 12 },
+    sectionTitle: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, marginBottom: 12 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    label: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
-    sublabel: { color: t.text.secondary, fontSize: 12, marginTop: 2 },
-    eotk: { color: t.accent.green, fontSize: 14, fontWeight: fonts.bold },
+    label: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
+    sublabel: { color: t.text.secondary, fontSize: fonts.sm, marginTop: 2 },
+    eotk: { color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.bold },
     statRow: { flexDirection: 'row', justifyContent: 'space-around', marginBottom: 16 },
     statItem: { alignItems: 'center' },
-    statValue: { color: t.text.primary, fontSize: 22, fontWeight: fonts.heavy },
-    statLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
+    statValue: { color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.heavy },
+    statLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
     // Category filter
     filterRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 12 },
     filterChip: { paddingVertical: 6, paddingHorizontal: 12, borderRadius: 10, backgroundColor: t.bg.card, borderWidth: 1, borderColor: t.border },
     filterChipActive: { borderColor: t.accent.green, backgroundColor: t.accent.green + '20' },
-    filterChipText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    filterChipText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     filterChipTextActive: { color: t.accent.green },
     // Pathway card
     pathwayCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12, borderLeftWidth: 4 },
     pathwayHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    pathwayIcon: { fontSize: 32, marginRight: 12 },
-    pathwayName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, flex: 1 },
-    pathwayCategory: { fontSize: 11, fontWeight: fonts.semibold, marginTop: 2 },
-    expandArrow: { color: t.text.muted, fontSize: 16, marginLeft: 8 },
+    pathwayIcon: { fontSize: fonts.hero, marginRight: 12 },
+    pathwayName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, flex: 1 },
+    pathwayCategory: { fontSize: fonts.xs, fontWeight: fonts.semibold, marginTop: 2 },
+    expandArrow: { color: t.text.muted, fontSize: fonts.lg, marginLeft: 8 },
     // Progress bar
     barContainer: { height: 8, backgroundColor: t.border, borderRadius: 4, marginTop: 10 },
     barFill: { height: 8, borderRadius: 4 },
-    progressText: { color: t.text.muted, fontSize: 11, marginTop: 4 },
+    progressText: { color: t.text.muted, fontSize: fonts.xs, marginTop: 4 },
     // Skill tree nodes
     nodeRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: t.border },
-    nodeStatus: { fontSize: 20, marginRight: 12 },
+    nodeStatus: { fontSize: fonts.xl, marginRight: 12 },
     nodeInfo: { flex: 1 },
-    nodeTitle: { fontSize: 13, fontWeight: fonts.semibold },
-    nodeReward: { color: t.accent.green, fontSize: 12, fontWeight: fonts.bold },
+    nodeTitle: { fontSize: fonts.sm, fontWeight: fonts.semibold },
+    nodeReward: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold },
     nodeLocked: { color: t.text.muted },
     nodeCompleted: { color: t.text.primary },
     nodeInProgress: { color: t.accent.blue },
     // Mentor
     mentorRow: { flexDirection: 'row', alignItems: 'center', marginTop: 10, paddingTop: 10, borderTopWidth: 1, borderTopColor: t.border },
-    mentorIcon: { fontSize: 20, marginRight: 8 },
-    mentorName: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold },
-    mentorUid: { color: t.text.muted, fontSize: 11 },
+    mentorIcon: { fontSize: fonts.xl, marginRight: 8 },
+    mentorName: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    mentorUid: { color: t.text.muted, fontSize: fonts.xs },
     // Certificate preview
     certPreview: { flexDirection: 'row', alignItems: 'center', marginTop: 10, paddingTop: 10, borderTopWidth: 1, borderTopColor: t.border },
-    certIcon: { fontSize: 20, marginRight: 8 },
-    certName: { color: t.accent.purple, fontSize: 12, fontWeight: fonts.bold },
-    certSoulbound: { color: t.accent.orange, fontSize: 10, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1, marginLeft: 8 },
+    certIcon: { fontSize: fonts.xl, marginRight: 8 },
+    certName: { color: t.accent.purple, fontSize: fonts.sm, fontWeight: fonts.bold },
+    certSoulbound: { color: t.accent.orange, fontSize: fonts.xs, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1, marginLeft: 8 },
     // Recommended
     recommendCard: { backgroundColor: t.accent.blue + '10', borderRadius: 14, padding: 14, marginTop: 8 },
-    recommendLabel: { color: t.accent.blue, fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 0.5 },
-    recommendTitle: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, marginTop: 4 },
-    recommendReward: { color: t.accent.green, fontSize: 12, fontWeight: fonts.semibold, marginTop: 2 },
+    recommendLabel: { color: t.accent.blue, fontSize: fonts.xs, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 0.5 },
+    recommendTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, marginTop: 4 },
+    recommendReward: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.semibold, marginTop: 2 },
     // Study groups
     groupCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
-    groupName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
-    groupPathway: { color: t.text.muted, fontSize: 11, marginTop: 2 },
+    groupName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    groupPathway: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
     groupDetail: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 },
     groupDetailItem: { alignItems: 'center' },
-    groupDetailValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
-    groupDetailLabel: { color: t.text.muted, fontSize: 10, marginTop: 2 },
-    groupTopic: { color: t.text.secondary, fontSize: 12, marginTop: 8 },
+    groupDetailValue: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    groupDetailLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
+    groupTopic: { color: t.text.secondary, fontSize: fonts.sm, marginTop: 8 },
     joinBtn: { backgroundColor: t.accent.green, borderRadius: 10, paddingVertical: 8, paddingHorizontal: 16, alignSelf: 'flex-start', marginTop: 10 },
-    joinBtnText: { color: t.bg.primary, fontSize: 13, fontWeight: fonts.bold },
+    joinBtnText: { color: t.bg.primary, fontSize: fonts.sm, fontWeight: fonts.bold },
     createBtn: { backgroundColor: t.accent.blue, borderRadius: 14, paddingVertical: 14, alignItems: 'center', marginTop: 16 },
-    createBtnText: { color: '#fff', fontSize: 16, fontWeight: fonts.bold },
+    createBtnText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.bold },
     // Progress tab
     progressCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
-    progressName: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
+    progressName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
     progressStats: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 },
     progressStatItem: { alignItems: 'center' },
-    progressStatValue: { color: t.text.primary, fontSize: 16, fontWeight: fonts.heavy },
-    progressStatLabel: { color: t.text.muted, fontSize: 10, marginTop: 2 },
+    progressStatValue: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.heavy },
+    progressStatLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
   }), [t]);
 
   /* ── tab renderers ── */
@@ -370,7 +370,7 @@ export function CurriculumScreen({ onClose }: Props) {
                         {node.title}
                       </Text>
                       {node.prerequisiteIds.length > 0 && (
-                        <Text style={[s.sublabel, { fontSize: 10 }]}>
+                        <Text style={[s.sublabel, { fontSize: fonts.xs }]}>
                           Requires: {node.prerequisiteIds.map(
                             (pid) => pw.nodes.find((n) => n.id === pid)?.title ?? pid
                           ).join(', ')}
@@ -452,7 +452,7 @@ export function CurriculumScreen({ onClose }: Props) {
         return (
           <View key={pw.id} style={s.progressCard}>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-              <Text style={{ fontSize: 24, marginRight: 10 }}>{pw.icon}</Text>
+              <Text style={{ fontSize: fonts.xxl, marginRight: 10 }}>{pw.icon}</Text>
               <View style={{ flex: 1 }}>
                 <Text style={s.progressName}>{pw.name}</Text>
                 <Text style={[s.sublabel, { color: pw.color }]}>{pw.category}</Text>
@@ -524,7 +524,7 @@ export function CurriculumScreen({ onClose }: Props) {
                 <Text style={s.groupDetailLabel}>Spots Left</Text>
               </View>
               <View style={s.groupDetailItem}>
-                <Text style={[s.groupDetailValue, { color: t.accent.blue, fontSize: 12 }]}>{group.nextSession}</Text>
+                <Text style={[s.groupDetailValue, { color: t.accent.blue, fontSize: fonts.sm }]}>{group.nextSession}</Text>
                 <Text style={s.groupDetailLabel}>Next Session</Text>
               </View>
             </View>

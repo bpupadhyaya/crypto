@@ -117,41 +117,41 @@ export function CommunityPledgeScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { flex: 1, paddingHorizontal: 16 },
-    subtitle: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 16 },
+    subtitle: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 19, marginBottom: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
-    label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
-    empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
+    label: { color: t.text.muted, fontSize: fonts.sm },
+    val: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    empty: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', marginTop: 40 },
     summaryRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
     summaryCard: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' },
-    summaryNum: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 2 },
-    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold, textAlign: 'center' },
-    pledgeTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 4 },
-    pledgeDesc: { color: t.text.secondary, fontSize: 12, lineHeight: 17, marginBottom: 8 },
+    summaryNum: { fontSize: fonts.xl, fontWeight: fonts.heavy, marginBottom: 2 },
+    summaryLabel: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold, textAlign: 'center' },
+    pledgeTitle: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, marginBottom: 4 },
+    pledgeDesc: { color: t.text.secondary, fontSize: fonts.sm, lineHeight: 17, marginBottom: 8 },
     barContainer: { height: 8, backgroundColor: t.border, borderRadius: 4, marginVertical: 6, overflow: 'hidden' },
     barFill: { height: 8, borderRadius: 4 },
     badge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
-    badgeText: { fontSize: 10, fontWeight: fonts.bold, color: '#fff' },
+    badgeText: { fontSize: fonts.xs, fontWeight: fonts.bold, color: '#fff' },
     signedBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, backgroundColor: t.accent.green + '20' },
-    signedText: { color: t.accent.green, fontSize: 12, fontWeight: fonts.bold },
+    signedText: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold },
     signBtn: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 10, backgroundColor: t.accent.blue },
-    signBtnText: { color: '#fff', fontSize: 13, fontWeight: fonts.bold },
+    signBtnText: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.bold },
     milestoneRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
     milestoneCheck: { width: 20, height: 20, borderRadius: 10, borderWidth: 2, marginRight: 10, alignItems: 'center', justifyContent: 'center' },
-    milestoneLabel: { color: t.text.primary, fontSize: 13, flex: 1 },
-    milestoneVal: { color: t.text.muted, fontSize: 11 },
+    milestoneLabel: { color: t.text.primary, fontSize: fonts.sm, flex: 1 },
+    milestoneVal: { color: t.text.muted, fontSize: fonts.xs },
     backBtn: { paddingVertical: 10, alignItems: 'center' },
-    backText: { color: t.accent.blue, fontSize: 15 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginBottom: 8, marginTop: 8 },
+    backText: { color: t.accent.blue, fontSize: fonts.md },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginBottom: 8, marginTop: 8 },
   }), [t]);
 
   const pledges = demoMode ? DEMO_PLEDGES : [];
@@ -187,7 +187,7 @@ export function CommunityPledgeScreen({ onClose }: Props) {
           {p.milestones.map((m, i) => (
             <View key={i} style={st.milestoneRow}>
               <View style={[st.milestoneCheck, { borderColor: m.completed ? t.accent.green : t.border, backgroundColor: m.completed ? t.accent.green : 'transparent' }]}>
-                {m.completed && <Text style={{ color: '#fff', fontSize: 12 }}>{'\u2713'}</Text>}
+                {m.completed && <Text style={{ color: '#fff', fontSize: fonts.sm }}>{'\u2713'}</Text>}
               </View>
               <Text style={st.milestoneLabel}>{m.label}</Text>
               <Text style={st.milestoneVal}>{formatCount(m.current)}/{formatCount(m.target)}</Text>
@@ -247,7 +247,7 @@ export function CommunityPledgeScreen({ onClose }: Props) {
             return (
               <TouchableOpacity key={p.id} style={st.card} onPress={() => setSelectedPledge(p)}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 6 }}>
-                  <Text style={{ fontSize: 22, marginRight: 8 }}>{p.icon}</Text>
+                  <Text style={{ fontSize: fonts.xxl, marginRight: 8 }}>{p.icon}</Text>
                   <Text style={[st.pledgeTitle, { flex: 1 }]}>{p.title}</Text>
                   {p.signed && <View style={st.signedBadge}><Text style={st.signedText}>Signed</Text></View>}
                 </View>
@@ -266,15 +266,15 @@ export function CommunityPledgeScreen({ onClose }: Props) {
         {activeTab === 'sign' && (
           unsignedPledges.length === 0 ? (
             <View style={st.card}>
-              <Text style={{ color: t.accent.green, fontSize: 15, fontWeight: fonts.bold, textAlign: 'center' }}>All Pledges Signed!</Text>
-              <Text style={{ color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 4 }}>You have signed every active pledge.</Text>
+              <Text style={{ color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.bold, textAlign: 'center' }}>All Pledges Signed!</Text>
+              <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 4 }}>You have signed every active pledge.</Text>
             </View>
           ) : unsignedPledges.map(p => {
             const catMeta = CATEGORY_META[p.category];
             return (
               <View key={p.id} style={st.card}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-                  <Text style={{ fontSize: 22, marginRight: 8 }}>{p.icon}</Text>
+                  <Text style={{ fontSize: fonts.xxl, marginRight: 8 }}>{p.icon}</Text>
                   <Text style={[st.pledgeTitle, { flex: 1 }]}>{p.title}</Text>
                 </View>
                 <Text style={st.pledgeDesc}>{p.description}</Text>
@@ -311,7 +311,7 @@ export function CommunityPledgeScreen({ onClose }: Props) {
 
         {!demoMode && (
           <View style={[st.card, { marginTop: 20 }]}>
-            <Text style={{ color: t.text.muted, fontSize: 13, textAlign: 'center' }}>
+            <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center' }}>
               Enable Demo Mode in Settings to see sample pledge data.
             </Text>
           </View>

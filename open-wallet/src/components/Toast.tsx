@@ -44,10 +44,10 @@ export const ToastContainer = React.memo(() => {
   const s = useMemo(() => StyleSheet.create({
     container: { position: 'absolute', top: 60, left: 16, right: 16, zIndex: 9999 },
     toast: { flexDirection: 'row', alignItems: 'center', borderRadius: 12, padding: 14, marginBottom: 8, borderLeftWidth: 4 },
-    icon: { fontSize: 18, fontWeight: fonts.bold, marginRight: 12 },
+    icon: { fontSize: fonts.xl, fontWeight: fonts.bold, marginRight: 12 },
     textContainer: { flex: 1 },
-    title: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
-    message: { color: t.text.secondary, fontSize: 12, marginTop: 2 },
+    title: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    message: { color: t.text.secondary, fontSize: fonts.sm, marginTop: 2 },
   }), [t]);
 
   useEffect(() => {

@@ -97,39 +97,39 @@ export function TrustNetworkScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: theme.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: theme.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeBtn: { color: theme.accent.blue, fontSize: 16 },
+    title: { color: theme.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeBtn: { color: theme.accent.blue, fontSize: fonts.lg },
     scroll: { flex: 1, paddingHorizontal: 16 },
-    subtitle: { color: theme.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 16 },
+    subtitle: { color: theme.text.muted, fontSize: fonts.sm, lineHeight: 19, marginBottom: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: theme.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: theme.accent.blue },
-    tabText: { color: theme.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    tabText: { color: theme.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: theme.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
-    label: { color: theme.text.muted, fontSize: 12 },
-    val: { color: theme.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
-    empty: { color: theme.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
+    label: { color: theme.text.muted, fontSize: fonts.sm },
+    val: { color: theme.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    empty: { color: theme.text.muted, fontSize: fonts.md, textAlign: 'center', marginTop: 40 },
     summaryRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
     summaryCard: { flex: 1, backgroundColor: theme.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' },
-    summaryNum: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 2 },
-    summaryLabel: { color: theme.text.muted, fontSize: 10, fontWeight: fonts.semibold, textAlign: 'center' },
-    nameText: { color: theme.text.primary, fontSize: 15, fontWeight: fonts.bold },
-    uidText: { color: theme.text.muted, fontSize: 11 },
+    summaryNum: { fontSize: fonts.xl, fontWeight: fonts.heavy, marginBottom: 2 },
+    summaryLabel: { color: theme.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold, textAlign: 'center' },
+    nameText: { color: theme.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    uidText: { color: theme.text.muted, fontSize: fonts.xs },
     badge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
-    badgeText: { fontSize: 10, fontWeight: fonts.bold, color: '#fff' },
+    badgeText: { fontSize: fonts.xs, fontWeight: fonts.bold, color: '#fff' },
     trustBar: { height: 6, backgroundColor: theme.border, borderRadius: 3, marginTop: 6, overflow: 'hidden' },
     trustFill: { height: 6, borderRadius: 3 },
     filterRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
     filterChip: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8, backgroundColor: theme.bg.card },
     filterChipActive: { backgroundColor: theme.accent.blue },
-    filterText: { color: theme.text.secondary, fontSize: 11, fontWeight: fonts.semibold },
+    filterText: { color: theme.text.secondary, fontSize: fonts.xs, fontWeight: fonts.semibold },
     filterTextActive: { color: '#fff' },
     statusDot: { width: 8, height: 8, borderRadius: 4, marginRight: 8 },
-    claimTitle: { color: theme.text.primary, fontSize: 14, fontWeight: fonts.bold, marginBottom: 2 },
-    claimDesc: { color: theme.text.secondary, fontSize: 12, lineHeight: 17 },
-    candidateScore: { fontSize: 18, fontWeight: fonts.heavy },
+    claimTitle: { color: theme.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, marginBottom: 2 },
+    claimDesc: { color: theme.text.secondary, fontSize: fonts.sm, lineHeight: 17 },
+    candidateScore: { fontSize: fonts.xl, fontWeight: fonts.heavy },
   }), [theme]);
 
   const connections = demoMode ? DEMO_CONNECTIONS : [];
@@ -231,13 +231,13 @@ export function TrustNetworkScreen({ onClose }: Props) {
             <Text style={st.empty}>Enable Demo Mode to see trust candidates.</Text>
           ) : (
             <>
-              <Text style={{ color: theme.text.muted, fontSize: 13, marginBottom: 12 }}>
+              <Text style={{ color: theme.text.muted, fontSize: fonts.sm, marginBottom: 12 }}>
                 Suggested connections based on mutual trust and contribution history.
               </Text>
               {candidates.map(c => (
                 <View key={c.uid} style={st.card}>
                   <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-                    <Text style={{ fontSize: 20, marginRight: 10 }}>{c.channelIcon}</Text>
+                    <Text style={{ fontSize: fonts.xl, marginRight: 10 }}>{c.channelIcon}</Text>
                     <View style={{ flex: 1 }}>
                       <Text style={st.nameText}>{c.displayName}</Text>
                       <Text style={st.uidText}>{c.uid}</Text>
@@ -275,7 +275,7 @@ export function TrustNetworkScreen({ onClose }: Props) {
 
         {!demoMode && (
           <View style={[st.card, { marginTop: 20 }]}>
-            <Text style={{ color: theme.text.muted, fontSize: 13, textAlign: 'center' }}>
+            <Text style={{ color: theme.text.muted, fontSize: fonts.sm, textAlign: 'center' }}>
               Enable Demo Mode in Settings to see sample trust network data.
             </Text>
           </View>

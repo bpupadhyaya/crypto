@@ -145,50 +145,50 @@ export function ResourceMatchScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { flex: 1, paddingHorizontal: 16 },
-    subtitle: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 16 },
+    subtitle: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 19, marginBottom: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 10, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.xs, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
-    label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 8, marginBottom: 8 },
+    label: { color: t.text.muted, fontSize: fonts.sm },
+    val: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 8, marginBottom: 8 },
     heroCard: { backgroundColor: t.accent.purple + '10', borderRadius: 20, padding: 20, marginBottom: 16, alignItems: 'center' },
     heroIcon: { fontSize: 40, marginBottom: 8 },
-    heroTitle: { color: t.text.primary, fontSize: 17, fontWeight: fonts.heavy, textAlign: 'center' },
-    heroSubtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 4, lineHeight: 20 },
+    heroTitle: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.heavy, textAlign: 'center' },
+    heroSubtitle: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 4, lineHeight: 20 },
     chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 12 },
     chip: { paddingVertical: 8, paddingHorizontal: 14, borderRadius: 10, backgroundColor: t.border },
     chipActive: { backgroundColor: t.accent.blue },
-    chipText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    chipText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     chipTextActive: { color: '#fff' },
-    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginTop: 8 },
-    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1, marginTop: 12 },
+    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md, marginTop: 8 },
+    inputLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1, marginTop: 12 },
     submitBtn: { backgroundColor: t.accent.purple, borderRadius: 14, paddingVertical: 16, alignItems: 'center', marginTop: 16, marginBottom: 16 },
-    submitBtnText: { color: '#fff', fontSize: 16, fontWeight: fonts.bold },
-    empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
+    submitBtnText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.bold },
+    empty: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', marginTop: 40 },
     statusBadge: { paddingHorizontal: 10, paddingVertical: 3, borderRadius: 6, alignSelf: 'flex-start', marginBottom: 6 },
-    statusText: { fontSize: 10, fontWeight: fonts.bold, color: '#fff', textTransform: 'uppercase' },
+    statusText: { fontSize: fonts.xs, fontWeight: fonts.bold, color: '#fff', textTransform: 'uppercase' },
     matchCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: t.accent.green + '30' },
     compatBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
-    compatText: { fontSize: 12, fontWeight: fonts.bold, color: '#fff' },
+    compatText: { fontSize: fonts.sm, fontWeight: fonts.bold, color: '#fff' },
     summaryRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
     summaryCard: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' },
-    summaryNum: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 2 },
-    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold, textAlign: 'center' },
+    summaryNum: { fontSize: fonts.xl, fontWeight: fonts.heavy, marginBottom: 2 },
+    summaryLabel: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold, textAlign: 'center' },
     barContainer: { height: 8, backgroundColor: t.border, borderRadius: 4, marginVertical: 4, overflow: 'hidden' },
     barFill: { height: 8, borderRadius: 4 },
     offerCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
-    privacyNote: { color: t.text.muted, fontSize: 11, textAlign: 'center', marginTop: 8, fontStyle: 'italic' },
+    privacyNote: { color: t.text.muted, fontSize: fonts.xs, textAlign: 'center', marginTop: 8, fontStyle: 'italic' },
     actionBtn: { backgroundColor: t.accent.green, borderRadius: 10, paddingVertical: 10, paddingHorizontal: 16, alignItems: 'center', marginTop: 8 },
-    actionBtnText: { color: '#fff', fontSize: 13, fontWeight: fonts.bold },
-    ratingText: { color: t.accent.yellow, fontSize: 12, fontWeight: fonts.bold },
+    actionBtnText: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.bold },
+    ratingText: { color: t.accent.yellow, fontSize: fonts.sm, fontWeight: fonts.bold },
   }), [t]);
 
   const offers = demoMode ? DEMO_OFFERS : [];
@@ -344,10 +344,10 @@ export function ResourceMatchScreen({ onClose }: Props) {
                 return (
                   <View key={offer.id} style={st.offerCard}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-                      <Text style={{ fontSize: 24, marginRight: 10 }}>{cat?.icon ?? '\u{2753}'}</Text>
+                      <Text style={{ fontSize: fonts.xxl, marginRight: 10 }}>{cat?.icon ?? '\u{2753}'}</Text>
                       <View style={{ flex: 1 }}>
-                        <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: fonts.bold }}>{cat?.label ?? offer.category}</Text>
-                        <Text style={{ color: t.text.muted, fontSize: 11 }}>{offer.region}</Text>
+                        <Text style={{ color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold }}>{cat?.label ?? offer.category}</Text>
+                        <Text style={{ color: t.text.muted, fontSize: fonts.xs }}>{offer.region}</Text>
                       </View>
                       {offer.available ? (
                         <View style={[st.statusBadge, { backgroundColor: '#22c55e', marginBottom: 0 }]}>
@@ -359,7 +359,7 @@ export function ResourceMatchScreen({ onClose }: Props) {
                         </View>
                       )}
                     </View>
-                    <Text style={{ color: t.text.secondary, fontSize: 13, lineHeight: 19, marginBottom: 8 }}>{offer.description}</Text>
+                    <Text style={{ color: t.text.secondary, fontSize: fonts.sm, lineHeight: 19, marginBottom: 8 }}>{offer.description}</Text>
                     <View style={st.row}>
                       <Text style={st.label}>Provider</Text>
                       <Text style={st.val}>{offer.provider}</Text>
@@ -412,15 +412,15 @@ export function ResourceMatchScreen({ onClose }: Props) {
                       </View>
                     </View>
 
-                    <Text style={{ color: t.text.muted, fontSize: 11, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>Need</Text>
+                    <Text style={{ color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>Need</Text>
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-                      <Text style={{ fontSize: 18, marginRight: 8 }}>{needCat?.icon ?? '\u{2753}'}</Text>
-                      <Text style={{ color: t.text.primary, fontSize: 13, flex: 1 }}>{match.needDescription}</Text>
+                      <Text style={{ fontSize: fonts.xl, marginRight: 8 }}>{needCat?.icon ?? '\u{2753}'}</Text>
+                      <Text style={{ color: t.text.primary, fontSize: fonts.sm, flex: 1 }}>{match.needDescription}</Text>
                     </View>
 
-                    <Text style={{ color: t.text.muted, fontSize: 11, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>Offer</Text>
-                    <Text style={{ color: t.text.secondary, fontSize: 13, marginBottom: 4 }}>{match.offerDescription}</Text>
-                    <Text style={{ color: t.text.muted, fontSize: 11 }}>by {match.offerProvider} in {match.needRegion}</Text>
+                    <Text style={{ color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>Offer</Text>
+                    <Text style={{ color: t.text.secondary, fontSize: fonts.sm, marginBottom: 4 }}>{match.offerDescription}</Text>
+                    <Text style={{ color: t.text.muted, fontSize: fonts.xs }}>by {match.offerProvider} in {match.needRegion}</Text>
 
                     {match.status === 'suggested' && (
                       <TouchableOpacity style={st.actionBtn} onPress={() => handleAcceptMatch(match.id)}>
@@ -450,16 +450,16 @@ export function ResourceMatchScreen({ onClose }: Props) {
                 return (
                   <View key={match.id} style={st.card}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-                      <Text style={{ fontSize: 24, marginRight: 10 }}>{cat?.icon ?? '\u{2753}'}</Text>
+                      <Text style={{ fontSize: fonts.xxl, marginRight: 10 }}>{cat?.icon ?? '\u{2753}'}</Text>
                       <View style={{ flex: 1 }}>
-                        <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: fonts.bold }}>{cat?.label ?? match.category}</Text>
-                        <Text style={{ color: t.text.muted, fontSize: 11 }}>You are the {match.role}</Text>
+                        <Text style={{ color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold }}>{cat?.label ?? match.category}</Text>
+                        <Text style={{ color: t.text.muted, fontSize: fonts.xs }}>You are the {match.role}</Text>
                       </View>
                       <View style={[st.statusBadge, { backgroundColor: '#3b82f6', marginBottom: 0 }]}>
                         <Text style={st.statusText}>Active</Text>
                       </View>
                     </View>
-                    <Text style={{ color: t.text.secondary, fontSize: 13, lineHeight: 19, marginBottom: 6 }}>{match.description}</Text>
+                    <Text style={{ color: t.text.secondary, fontSize: fonts.sm, lineHeight: 19, marginBottom: 6 }}>{match.description}</Text>
                     <View style={st.row}>
                       <Text style={st.label}>Partner</Text>
                       <Text style={st.val}>{match.partnerName}</Text>
@@ -471,7 +471,7 @@ export function ResourceMatchScreen({ onClose }: Props) {
                     {match.role === 'helper' && match.otkReward > 0 && (
                       <View style={st.row}>
                         <Text style={st.label}>cOTK reward on completion</Text>
-                        <Text style={{ color: t.accent.green, fontSize: 12, fontWeight: fonts.bold }}>+{match.otkReward} cOTK</Text>
+                        <Text style={{ color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold }}>+{match.otkReward} cOTK</Text>
                       </View>
                     )}
                     <TouchableOpacity style={st.actionBtn} onPress={() => Alert.alert('Mark Complete', 'Once both parties confirm, the match will be completed and cOTK rewards will be distributed.')}>
@@ -487,8 +487,8 @@ export function ResourceMatchScreen({ onClose }: Props) {
                 return (
                   <View key={match.id} style={st.card}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4 }}>
-                      <Text style={{ fontSize: 18, marginRight: 8 }}>{cat?.icon ?? '\u{2753}'}</Text>
-                      <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, flex: 1 }}>{match.description}</Text>
+                      <Text style={{ fontSize: fonts.xl, marginRight: 8 }}>{cat?.icon ?? '\u{2753}'}</Text>
+                      <Text style={{ color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold, flex: 1 }}>{match.description}</Text>
                       <View style={[st.statusBadge, { backgroundColor: '#22c55e', marginBottom: 0 }]}>
                         <Text style={st.statusText}>Done</Text>
                       </View>
@@ -538,7 +538,7 @@ export function ResourceMatchScreen({ onClose }: Props) {
               </View>
 
               <View style={st.card}>
-                <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, marginBottom: 12 }}>Help by Category</Text>
+                <Text style={{ color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, marginBottom: 12 }}>Help by Category</Text>
                 {RESOURCE_CATEGORIES.map(cat => {
                   const count = impact.categories[cat.key] ?? 0;
                   const maxCount = Math.max(...Object.values(impact.categories));
@@ -546,8 +546,8 @@ export function ResourceMatchScreen({ onClose }: Props) {
                   return (
                     <View key={cat.key} style={{ marginBottom: 8 }}>
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 }}>
-                        <Text style={{ color: t.text.secondary, fontSize: 12 }}>{cat.icon} {cat.label}</Text>
-                        <Text style={{ color: t.text.primary, fontSize: 12, fontWeight: fonts.bold }}>{count} people</Text>
+                        <Text style={{ color: t.text.secondary, fontSize: fonts.sm }}>{cat.icon} {cat.label}</Text>
+                        <Text style={{ color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.bold }}>{count} people</Text>
                       </View>
                       <View style={st.barContainer}>
                         <View style={[st.barFill, { width: `${pct}%`, backgroundColor: t.accent.green }]} />
@@ -558,12 +558,12 @@ export function ResourceMatchScreen({ onClose }: Props) {
               </View>
 
               <View style={st.card}>
-                <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, marginBottom: 12 }}>Monthly Growth</Text>
+                <Text style={{ color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, marginBottom: 12 }}>Monthly Growth</Text>
                 {impact.monthlyHelped.map(m => (
                   <View key={m.month} style={{ marginBottom: 8 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 }}>
-                      <Text style={{ color: t.text.muted, fontSize: 11 }}>{m.month}</Text>
-                      <Text style={{ color: t.accent.green, fontSize: 11, fontWeight: fonts.bold }}>{m.count} helped</Text>
+                      <Text style={{ color: t.text.muted, fontSize: fonts.xs }}>{m.month}</Text>
+                      <Text style={{ color: t.accent.green, fontSize: fonts.xs, fontWeight: fonts.bold }}>{m.count} helped</Text>
                     </View>
                     <View style={st.barContainer}>
                       <View style={[st.barFill, { width: `${(m.count / 15) * 100}%`, backgroundColor: t.accent.purple }]} />
@@ -573,10 +573,10 @@ export function ResourceMatchScreen({ onClose }: Props) {
               </View>
 
               <View style={[st.card, { backgroundColor: t.accent.green + '10', borderWidth: 1, borderColor: t.accent.green + '30' }]}>
-                <Text style={{ color: t.accent.green, fontSize: 14, fontWeight: fonts.bold, marginBottom: 4 }}>
+                <Text style={{ color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.bold, marginBottom: 4 }}>
                   You've helped {impact.peopleHelped} people meet {impact.needsMet} needs
                 </Text>
-                <Text style={{ color: t.text.muted, fontSize: 12, lineHeight: 18 }}>
+                <Text style={{ color: t.text.muted, fontSize: fonts.sm, lineHeight: 18 }}>
                   Every need met makes a community more resilient. Your {impact.totalCOTK} cOTK reflects the community value you've created — not as payment, but as recognition.
                 </Text>
               </View>
@@ -586,7 +586,7 @@ export function ResourceMatchScreen({ onClose }: Props) {
 
         {!demoMode && (
           <View style={[st.card, { marginTop: 20 }]}>
-            <Text style={{ color: t.text.muted, fontSize: 13, textAlign: 'center' }}>
+            <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center' }}>
               Enable Demo Mode in Settings to see sample resource matching data.
             </Text>
           </View>

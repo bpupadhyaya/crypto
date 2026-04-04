@@ -142,11 +142,11 @@ function AnimatedCounter({ counter }: { counter: GlobalCounter }) {
   const t = useTheme();
   return (
     <View style={{ width: '48%' as unknown as number, marginBottom: 16 }}>
-      <Text style={{ fontSize: 24, textAlign: 'center' }}>{counter.icon}</Text>
-      <Text style={{ color: t.accent.green, fontSize: 22, fontWeight: fonts.heavy, textAlign: 'center', marginTop: 4 }}>
+      <Text style={{ fontSize: fonts.xxl, textAlign: 'center' }}>{counter.icon}</Text>
+      <Text style={{ color: t.accent.green, fontSize: fonts.xxl, fontWeight: fonts.heavy, textAlign: 'center', marginTop: 4 }}>
         {formatNumber(animated)}{counter.suffix ? ` ${counter.suffix}` : ''}
       </Text>
-      <Text style={{ color: t.text.muted, fontSize: 11, textAlign: 'center', marginTop: 2 }}>
+      <Text style={{ color: t.text.muted, fontSize: fonts.xs, textAlign: 'center', marginTop: 2 }}>
         {counter.label}
       </Text>
     </View>
@@ -171,42 +171,42 @@ export function GlobalImpactScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
     card: { backgroundColor: t.bg.card, borderRadius: 20, padding: 20, marginHorizontal: 20, marginTop: 8 },
-    quote: { color: t.text.muted, fontSize: 12, fontStyle: 'italic', textAlign: 'center', marginHorizontal: 24, marginTop: 8, lineHeight: 18 },
-    attribution: { color: t.text.muted, fontSize: 10, textAlign: 'center', marginTop: 4, marginBottom: 8 },
-    demoTag: { color: t.accent.orange, fontSize: 10, fontWeight: fonts.bold, textAlign: 'center', marginTop: 12 },
+    quote: { color: t.text.muted, fontSize: fonts.sm, fontStyle: 'italic', textAlign: 'center', marginHorizontal: 24, marginTop: 8, lineHeight: 18 },
+    attribution: { color: t.text.muted, fontSize: fonts.xs, textAlign: 'center', marginTop: 4, marginBottom: 8 },
+    demoTag: { color: t.accent.orange, fontSize: fonts.xs, fontWeight: fonts.bold, textAlign: 'center', marginTop: 12 },
     // Map
     mapContainer: { marginHorizontal: 20, marginTop: 8 },
     regionRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10, paddingHorizontal: 16 },
     regionDot: { width: 12, height: 12, borderRadius: 6, marginRight: 12 },
-    regionName: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, flex: 1 },
-    regionScore: { fontSize: 13, fontWeight: fonts.bold },
-    regionMeta: { color: t.text.muted, fontSize: 11, marginLeft: 12 },
+    regionName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold, flex: 1 },
+    regionScore: { fontSize: fonts.sm, fontWeight: fonts.bold },
+    regionMeta: { color: t.text.muted, fontSize: fonts.xs, marginLeft: 12 },
     divider: { height: 1, backgroundColor: t.border, marginHorizontal: 16 },
     // Counters
     countersGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingHorizontal: 20, marginTop: 12 },
     // Channel bar chart
     barRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-    barLabel: { color: t.text.primary, fontSize: 12, fontWeight: fonts.semibold, width: 80 },
+    barLabel: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold, width: 80 },
     barTrack: { flex: 1, height: 20, backgroundColor: t.border, borderRadius: 10, overflow: 'hidden', marginHorizontal: 8 },
     barFill: { height: 20, borderRadius: 10 },
-    barValue: { color: t.text.muted, fontSize: 11, width: 50, textAlign: 'right' },
+    barValue: { color: t.text.muted, fontSize: fonts.xs, width: 50, textAlign: 'right' },
     // Chain of causation
     causationStep: { flexDirection: 'row', alignItems: 'center', paddingVertical: 12 },
-    causationIcon: { fontSize: 24, width: 40, textAlign: 'center' },
+    causationIcon: { fontSize: fonts.xxl, width: 40, textAlign: 'center' },
     causationContent: { flex: 1, marginLeft: 8 },
-    causationLabel: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
-    causationMetric: { color: t.text.muted, fontSize: 12, marginTop: 2 },
+    causationLabel: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    causationMetric: { color: t.text.muted, fontSize: fonts.sm, marginTop: 2 },
     causationValue: { color: t.accent.green, fontWeight: fonts.bold },
-    arrow: { color: t.text.muted, fontSize: 20, textAlign: 'center', marginVertical: -4 },
+    arrow: { color: t.text.muted, fontSize: fonts.xl, textAlign: 'center', marginVertical: -4 },
     // Legend
     legendRow: { flexDirection: 'row', justifyContent: 'center', gap: 16, marginTop: 12 },
     legendItem: { flexDirection: 'row', alignItems: 'center', gap: 6 },
     legendDot: { width: 10, height: 10, borderRadius: 5 },
-    legendText: { color: t.text.muted, fontSize: 11 },
+    legendText: { color: t.text.muted, fontSize: fonts.xs },
   }), [t]);
 
   return (
@@ -282,7 +282,7 @@ export function GlobalImpactScreen({ onClose }: Props) {
               <Text style={s.barValue}>{formatNumber(ch.transactions)}</Text>
             </View>
           ))}
-          <Text style={{ color: t.text.muted, fontSize: 11, textAlign: 'center', marginTop: 8 }}>
+          <Text style={{ color: t.text.muted, fontSize: fonts.xs, textAlign: 'center', marginTop: 8 }}>
             Total transactions by value channel
           </Text>
         </View>
@@ -290,7 +290,7 @@ export function GlobalImpactScreen({ onClose }: Props) {
         {/* ─── Chain of Causation (Article I) ─── */}
         <Text style={s.section}>The Chain of Causation</Text>
         <View style={s.card}>
-          <Text style={{ color: t.text.muted, fontSize: 12, textAlign: 'center', marginBottom: 16, lineHeight: 18 }}>
+          <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginBottom: 16, lineHeight: 18 }}>
             From Article I: The path from better upbringing to world peace, measured by Open Chain data.
           </Text>
           {CHAIN_OF_CAUSATION.map((step, idx) => (

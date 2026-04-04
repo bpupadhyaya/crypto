@@ -45,18 +45,18 @@ const TokenToggle = React.memo(({
 }) => (
   <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: t.border }}>
     <View style={{ width: 32, height: 32, borderRadius: 16, justifyContent: 'center', alignItems: 'center', marginRight: 12, backgroundColor: (token.color || '#606070') + '20' }}>
-      <Text style={{ fontSize: 13, fontWeight: fonts.bold, color: token.color || '#606070' }}>{token.symbol.charAt(0)}</Text>
+      <Text style={{ fontSize: fonts.sm, fontWeight: fonts.bold, color: token.color || '#606070' }}>{token.symbol.charAt(0)}</Text>
     </View>
     <View style={{ flex: 1 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Text style={{ color: t.text.primary, fontSize: 16, fontWeight: fonts.semibold }}>{token.symbol}</Text>
-        {isCustom && <View style={{ backgroundColor: t.accent.blue + '20', paddingHorizontal: 6, paddingVertical: 1, borderRadius: 4, marginLeft: 6 }}><Text style={{ color: t.accent.blue, fontSize: 9, fontWeight: fonts.bold }}>CUSTOM</Text></View>}
+        <Text style={{ color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.semibold }}>{token.symbol}</Text>
+        {isCustom && <View style={{ backgroundColor: t.accent.blue + '20', paddingHorizontal: 6, paddingVertical: 1, borderRadius: 4, marginLeft: 6 }}><Text style={{ color: t.accent.blue, fontSize: fonts.xxs, fontWeight: fonts.bold }}>CUSTOM</Text></View>}
       </View>
-      <Text style={{ color: t.text.muted, fontSize: 12, marginTop: 2 }}>{token.name} • {token.chainId}</Text>
+      <Text style={{ color: t.text.muted, fontSize: fonts.sm, marginTop: 2 }}>{token.name} • {token.chainId}</Text>
     </View>
     {isCustom && onRemove && (
       <TouchableOpacity style={{ paddingHorizontal: 8, paddingVertical: 4 }} onPress={onRemove}>
-        <Text style={{ color: t.accent.red, fontSize: 12, fontWeight: fonts.semibold }}>Remove</Text>
+        <Text style={{ color: t.accent.red, fontSize: fonts.sm, fontWeight: fonts.semibold }}>Remove</Text>
       </TouchableOpacity>
     )}
     <Switch value={enabled} onValueChange={(v) => onToggle(token.symbol, v)} trackColor={{ false: '#333', true: t.accent.green + '40' }} thumbColor={enabled ? t.accent.green : '#666'} />
@@ -154,32 +154,32 @@ export function ManageTokensScreen({ onClose }: { onClose: () => void }) {
   if (view === 'add-address') return (
     <SafeAreaView style={{ flex: 1, backgroundColor: t.bg.primary }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 12 }}>
-        <TouchableOpacity onPress={() => setView('list')}><Text style={{ color: t.accent.blue, fontSize: 16 }}>← Back</Text></TouchableOpacity>
-        <Text style={{ color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy }}>Add by Address</Text>
+        <TouchableOpacity onPress={() => setView('list')}><Text style={{ color: t.accent.blue, fontSize: fonts.lg }}>← Back</Text></TouchableOpacity>
+        <Text style={{ color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy }}>Add by Address</Text>
         <View style={{ width: 50 }} />
       </View>
       <ScrollView style={{ padding: 20 }}>
-        <Text style={{ color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8 }}>Chain</Text>
+        <Text style={{ color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 8 }}>Chain</Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 16 }}>
           {CHAIN_OPTIONS.map((ch) => (
             <TouchableOpacity key={ch.id} style={{ paddingVertical: 6, paddingHorizontal: 14, borderRadius: 20, backgroundColor: selectedChain === ch.id ? t.accent.green : t.bg.card }} onPress={() => setSelectedChain(ch.id)}>
-              <Text style={{ color: selectedChain === ch.id ? '#fff' : t.text.secondary, fontSize: 12, fontWeight: selectedChain === ch.id ? '700' : '400' }}>{ch.label}</Text>
+              <Text style={{ color: selectedChain === ch.id ? '#fff' : t.text.secondary, fontSize: fonts.sm, fontWeight: selectedChain === ch.id ? '700' : '400' }}>{ch.label}</Text>
             </TouchableOpacity>
           ))}
         </View>
-        <Text style={{ color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8 }}>Contract Address</Text>
-        <TextInput style={{ backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15 }} placeholder="0x... or mint address" placeholderTextColor={t.text.muted} value={contractAddress} onChangeText={setContractAddress} autoCapitalize="none" />
+        <Text style={{ color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 8 }}>Contract Address</Text>
+        <TextInput style={{ backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md }} placeholder="0x... or mint address" placeholderTextColor={t.text.muted} value={contractAddress} onChangeText={setContractAddress} autoCapitalize="none" />
         <TouchableOpacity style={{ backgroundColor: t.accent.blue, borderRadius: 12, padding: 14, alignItems: 'center', marginTop: 16 }} onPress={handleDetect} disabled={detecting}>
-          {detecting ? <ActivityIndicator color="#fff" /> : <Text style={{ color: '#fff', fontSize: 15, fontWeight: fonts.bold }}>Detect Token</Text>}
+          {detecting ? <ActivityIndicator color="#fff" /> : <Text style={{ color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold }}>Detect Token</Text>}
         </TouchableOpacity>
         {detectedToken && (
           <>
             <View style={{ backgroundColor: t.bg.card, borderRadius: 12, padding: 16, marginTop: 12 }}>
-              <Text style={{ color: t.text.primary, fontSize: 16, fontWeight: fonts.bold }}>{detectedToken.symbol} — {detectedToken.name}</Text>
-              <Text style={{ color: t.text.muted, fontSize: 13, marginTop: 4 }}>Decimals: {detectedToken.decimals} • Chain: {detectedToken.chainId}</Text>
+              <Text style={{ color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold }}>{detectedToken.symbol} — {detectedToken.name}</Text>
+              <Text style={{ color: t.text.muted, fontSize: fonts.sm, marginTop: 4 }}>Decimals: {detectedToken.decimals} • Chain: {detectedToken.chainId}</Text>
             </View>
             <TouchableOpacity style={{ backgroundColor: t.accent.green, borderRadius: 12, padding: 14, alignItems: 'center', marginTop: 12 }} onPress={handleAddDetected}>
-              <Text style={{ color: '#fff', fontSize: 15, fontWeight: fonts.bold }}>Add {detectedToken.symbol} to Wallet</Text>
+              <Text style={{ color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold }}>Add {detectedToken.symbol} to Wallet</Text>
             </TouchableOpacity>
           </>
         )}
@@ -191,23 +191,23 @@ export function ManageTokensScreen({ onClose }: { onClose: () => void }) {
   if (view === 'add-search') return (
     <SafeAreaView style={{ flex: 1, backgroundColor: t.bg.primary }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 12 }}>
-        <TouchableOpacity onPress={() => setView('list')}><Text style={{ color: t.accent.blue, fontSize: 16 }}>← Back</Text></TouchableOpacity>
-        <Text style={{ color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy }}>Search Token</Text>
+        <TouchableOpacity onPress={() => setView('list')}><Text style={{ color: t.accent.blue, fontSize: fonts.lg }}>← Back</Text></TouchableOpacity>
+        <Text style={{ color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy }}>Search Token</Text>
         <View style={{ width: 50 }} />
       </View>
-      <TextInput style={{ backgroundColor: t.bg.card, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 10, marginHorizontal: 20, marginTop: 16, color: t.text.primary, fontSize: 14 }} placeholder="Search by name or symbol..." placeholderTextColor={t.text.muted} value={searchQuery} onChangeText={setSearchQuery} onSubmitEditing={handleSearchCG} returnKeyType="search" />
+      <TextInput style={{ backgroundColor: t.bg.card, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 10, marginHorizontal: 20, marginTop: 16, color: t.text.primary, fontSize: fonts.md }} placeholder="Search by name or symbol..." placeholderTextColor={t.text.muted} value={searchQuery} onChangeText={setSearchQuery} onSubmitEditing={handleSearchCG} returnKeyType="search" />
       <TouchableOpacity style={{ backgroundColor: t.accent.blue, borderRadius: 12, padding: 14, alignItems: 'center', marginHorizontal: 20, marginTop: 8, marginBottom: 12 }} onPress={handleSearchCG} disabled={searching}>
-        {searching ? <ActivityIndicator color="#fff" /> : <Text style={{ color: '#fff', fontSize: 15, fontWeight: fonts.bold }}>Search CoinGecko</Text>}
+        {searching ? <ActivityIndicator color="#fff" /> : <Text style={{ color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold }}>Search CoinGecko</Text>}
       </TouchableOpacity>
       <FlatList data={searchResults} keyExtractor={(item) => item.id} renderItem={({ item }) => (
         <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: t.border }}>
-          <Text style={{ fontSize: 20 }}>🪙</Text>
+          <Text style={{ fontSize: fonts.xl }}>🪙</Text>
           <View style={{ flex: 1, marginLeft: 12 }}>
-            <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold }}>{item.symbol.toUpperCase()}</Text>
-            <Text style={{ color: t.text.muted, fontSize: 12 }}>{item.name} {item.market_cap_rank ? `• #${item.market_cap_rank}` : ''}</Text>
+            <Text style={{ color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold }}>{item.symbol.toUpperCase()}</Text>
+            <Text style={{ color: t.text.muted, fontSize: fonts.sm }}>{item.name} {item.market_cap_rank ? `• #${item.market_cap_rank}` : ''}</Text>
           </View>
           <TouchableOpacity style={{ backgroundColor: t.accent.green, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 8 }} onPress={() => handleAddFromSearch(item)}>
-            <Text style={{ color: '#fff', fontSize: 13, fontWeight: fonts.bold }}>Add</Text>
+            <Text style={{ color: '#fff', fontSize: fonts.sm, fontWeight: fonts.bold }}>Add</Text>
           </TouchableOpacity>
         </View>
       )} ListEmptyComponent={<Text style={{ color: t.text.muted, textAlign: 'center', marginTop: 40 }}>Search for any token</Text>} />
@@ -218,29 +218,29 @@ export function ManageTokensScreen({ onClose }: { onClose: () => void }) {
   if (view === 'add-manual') return (
     <SafeAreaView style={{ flex: 1, backgroundColor: t.bg.primary }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 12 }}>
-        <TouchableOpacity onPress={() => setView('list')}><Text style={{ color: t.accent.blue, fontSize: 16 }}>← Back</Text></TouchableOpacity>
-        <Text style={{ color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy }}>Manual Entry</Text>
+        <TouchableOpacity onPress={() => setView('list')}><Text style={{ color: t.accent.blue, fontSize: fonts.lg }}>← Back</Text></TouchableOpacity>
+        <Text style={{ color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy }}>Manual Entry</Text>
         <View style={{ width: 50 }} />
       </View>
       <ScrollView style={{ padding: 20 }}>
-        <Text style={{ color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8 }}>Symbol *</Text>
-        <TextInput style={{ backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginBottom: 12 }} placeholder="e.g. PEPE" placeholderTextColor={t.text.muted} value={manualSymbol} onChangeText={setManualSymbol} autoCapitalize="characters" />
-        <Text style={{ color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8 }}>Name *</Text>
-        <TextInput style={{ backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginBottom: 12 }} placeholder="e.g. Pepe Token" placeholderTextColor={t.text.muted} value={manualName} onChangeText={setManualName} />
-        <Text style={{ color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8 }}>Chain</Text>
+        <Text style={{ color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 8 }}>Symbol *</Text>
+        <TextInput style={{ backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md, marginBottom: 12 }} placeholder="e.g. PEPE" placeholderTextColor={t.text.muted} value={manualSymbol} onChangeText={setManualSymbol} autoCapitalize="characters" />
+        <Text style={{ color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 8 }}>Name *</Text>
+        <TextInput style={{ backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md, marginBottom: 12 }} placeholder="e.g. Pepe Token" placeholderTextColor={t.text.muted} value={manualName} onChangeText={setManualName} />
+        <Text style={{ color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 8 }}>Chain</Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
           {CHAIN_OPTIONS.map((ch) => (
             <TouchableOpacity key={ch.id} style={{ paddingVertical: 6, paddingHorizontal: 14, borderRadius: 20, backgroundColor: manualChain === ch.id ? t.accent.green : t.bg.card }} onPress={() => setManualChain(ch.id)}>
-              <Text style={{ color: manualChain === ch.id ? '#fff' : t.text.secondary, fontSize: 12, fontWeight: manualChain === ch.id ? '700' : '400' }}>{ch.label}</Text>
+              <Text style={{ color: manualChain === ch.id ? '#fff' : t.text.secondary, fontSize: fonts.sm, fontWeight: manualChain === ch.id ? '700' : '400' }}>{ch.label}</Text>
             </TouchableOpacity>
           ))}
         </View>
-        <Text style={{ color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8 }}>Decimals</Text>
-        <TextInput style={{ backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginBottom: 12 }} placeholder="18" placeholderTextColor={t.text.muted} value={manualDecimals} onChangeText={setManualDecimals} keyboardType="number-pad" />
-        <Text style={{ color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8 }}>Contract Address (optional)</Text>
-        <TextInput style={{ backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginBottom: 16 }} placeholder="0x..." placeholderTextColor={t.text.muted} value={manualContract} onChangeText={setManualContract} autoCapitalize="none" />
+        <Text style={{ color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 8 }}>Decimals</Text>
+        <TextInput style={{ backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md, marginBottom: 12 }} placeholder="18" placeholderTextColor={t.text.muted} value={manualDecimals} onChangeText={setManualDecimals} keyboardType="number-pad" />
+        <Text style={{ color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 8 }}>Contract Address (optional)</Text>
+        <TextInput style={{ backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md, marginBottom: 16 }} placeholder="0x..." placeholderTextColor={t.text.muted} value={manualContract} onChangeText={setManualContract} autoCapitalize="none" />
         <TouchableOpacity style={{ backgroundColor: t.accent.green, borderRadius: 12, padding: 14, alignItems: 'center' }} onPress={handleAddManual}>
-          <Text style={{ color: '#fff', fontSize: 15, fontWeight: fonts.bold }}>Add Token</Text>
+          <Text style={{ color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold }}>Add Token</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
@@ -250,11 +250,11 @@ export function ManageTokensScreen({ onClose }: { onClose: () => void }) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: t.bg.primary }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 12 }}>
-        <Text style={{ color: t.text.primary, fontSize: 22, fontWeight: fonts.heavy }}>Manage Tokens</Text>
-        <TouchableOpacity onPress={onClose}><Text style={{ color: t.accent.green, fontSize: 16, fontWeight: fonts.bold }}>Done</Text></TouchableOpacity>
+        <Text style={{ color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.heavy }}>Manage Tokens</Text>
+        <TouchableOpacity onPress={onClose}><Text style={{ color: t.accent.green, fontSize: fonts.lg, fontWeight: fonts.bold }}>Done</Text></TouchableOpacity>
       </View>
-      <Text style={{ color: t.text.muted, fontSize: 13, paddingHorizontal: 20, marginTop: 4, marginBottom: 12 }}>Toggle tokens or add new ones</Text>
-      <TextInput style={{ backgroundColor: t.bg.card, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 10, marginHorizontal: 20, marginBottom: 8, color: t.text.primary, fontSize: 14 }} placeholder="Filter tokens..." placeholderTextColor={t.text.muted} value={filterQuery} onChangeText={setFilterQuery} />
+      <Text style={{ color: t.text.muted, fontSize: fonts.sm, paddingHorizontal: 20, marginTop: 4, marginBottom: 12 }}>Toggle tokens or add new ones</Text>
+      <TextInput style={{ backgroundColor: t.bg.card, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 10, marginHorizontal: 20, marginBottom: 8, color: t.text.primary, fontSize: fonts.md }} placeholder="Filter tokens..." placeholderTextColor={t.text.muted} value={filterQuery} onChangeText={setFilterQuery} />
       <FlatList
         data={filteredTokens}
         keyExtractor={(tk) => `${tk.chainId}-${tk.symbol}`}
@@ -265,19 +265,19 @@ export function ManageTokensScreen({ onClose }: { onClose: () => void }) {
         contentContainerStyle={{ paddingBottom: 40 }}
         ListFooterComponent={
           <View style={{ paddingHorizontal: 20, paddingVertical: 20, borderTopWidth: 1, borderTopColor: t.border }}>
-            <Text style={{ color: t.text.secondary, fontSize: 13, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12 }}>Can't find a token?</Text>
+            <Text style={{ color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12 }}>Can't find a token?</Text>
             <View style={{ flexDirection: 'row', gap: 8 }}>
               <TouchableOpacity style={{ flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' }} onPress={() => setView('add-address')}>
-                <Text style={{ fontSize: 20, marginBottom: 4 }}>📋</Text>
-                <Text style={{ color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold }}>Paste Address</Text>
+                <Text style={{ fontSize: fonts.xl, marginBottom: 4 }}>📋</Text>
+                <Text style={{ color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold }}>Paste Address</Text>
               </TouchableOpacity>
               <TouchableOpacity style={{ flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' }} onPress={() => setView('add-search')}>
-                <Text style={{ fontSize: 20, marginBottom: 4 }}>🔍</Text>
-                <Text style={{ color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold }}>Search</Text>
+                <Text style={{ fontSize: fonts.xl, marginBottom: 4 }}>🔍</Text>
+                <Text style={{ color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold }}>Search</Text>
               </TouchableOpacity>
               <TouchableOpacity style={{ flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' }} onPress={() => setView('add-manual')}>
-                <Text style={{ fontSize: 20, marginBottom: 4 }}>✏️</Text>
-                <Text style={{ color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold }}>Manual</Text>
+                <Text style={{ fontSize: fonts.xl, marginBottom: 4 }}>✏️</Text>
+                <Text style={{ color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold }}>Manual</Text>
               </TouchableOpacity>
             </View>
           </View>

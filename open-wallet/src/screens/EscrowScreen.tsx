@@ -107,39 +107,39 @@ export function EscrowScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { paddingHorizontal: 16 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
-    label: { color: t.text.secondary, fontSize: 13 },
-    value: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
+    label: { color: t.text.secondary, fontSize: fonts.sm },
+    value: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
     statusBadge: { paddingHorizontal: 10, paddingVertical: 3, borderRadius: 8 },
-    statusText: { fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase', color: '#fff' },
-    descText: { color: t.text.secondary, fontSize: 13, marginBottom: 8, lineHeight: 18 },
-    amountText: { color: t.text.primary, fontSize: 22, fontWeight: fonts.bold, marginBottom: 4 },
-    input: { backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginBottom: 12, borderWidth: 1, borderColor: t.border },
-    inputLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold, marginBottom: 4, marginLeft: 4 },
+    statusText: { fontSize: fonts.xs, fontWeight: fonts.bold, textTransform: 'uppercase', color: '#fff' },
+    descText: { color: t.text.secondary, fontSize: fonts.sm, marginBottom: 8, lineHeight: 18 },
+    amountText: { color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.bold, marginBottom: 4 },
+    input: { backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md, marginBottom: 12, borderWidth: 1, borderColor: t.border },
+    inputLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 4, marginLeft: 4 },
     btn: { borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 10 },
     btnPrimary: { backgroundColor: t.accent.green },
     btnDanger: { backgroundColor: t.accent.red },
     btnSecondary: { backgroundColor: t.accent.blue },
-    btnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
+    btnText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
     tabRow: { flexDirection: 'row', gap: 8, marginBottom: 16 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, alignItems: 'center', backgroundColor: t.bg.card },
     tabActive: { backgroundColor: t.accent.green },
-    tabText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     denomRow: { flexDirection: 'row', gap: 6, marginBottom: 12 },
     denomChip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 8, backgroundColor: t.bg.card, borderWidth: 1, borderColor: t.border },
     denomActive: { backgroundColor: t.accent.green, borderColor: t.accent.green },
-    denomText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    denomText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     denomTextActive: { color: '#fff' },
-    emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', paddingVertical: 40 },
+    emptyText: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', paddingVertical: 40 },
     detailRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: t.border },
-    detailLabel: { color: t.text.secondary, fontSize: 13 },
-    detailValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold, maxWidth: '60%', textAlign: 'right' },
+    detailLabel: { color: t.text.secondary, fontSize: fonts.sm },
+    detailValue: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold, maxWidth: '60%', textAlign: 'right' },
     actionRow: { flexDirection: 'row', gap: 10, marginTop: 16 },
   }), [t]);
 
@@ -222,11 +222,11 @@ export function EscrowScreen({ onClose }: Props) {
       <Text style={st.descText}>{escrow.description}</Text>
       <View style={st.row}>
         <Text style={st.label}>Seller</Text>
-        <Text style={[st.value, { fontSize: 12 }]}>{escrow.seller.slice(0, 20)}...</Text>
+        <Text style={[st.value, { fontSize: fonts.sm }]}>{escrow.seller.slice(0, 20)}...</Text>
       </View>
       <View style={st.row}>
         <Text style={st.label}>Buyer</Text>
-        <Text style={[st.value, { fontSize: 12 }]}>{escrow.buyer.slice(0, 20)}...</Text>
+        <Text style={[st.value, { fontSize: fonts.sm }]}>{escrow.buyer.slice(0, 20)}...</Text>
       </View>
       <View style={st.row}>
         <Text style={st.label}>Expires</Text>
@@ -316,7 +316,7 @@ export function EscrowScreen({ onClose }: Props) {
           )}
           {e.status === 'disputed' && (
             <View style={[st.card, { backgroundColor: STATUS_COLORS.disputed + '20' }]}>
-              <Text style={{ color: STATUS_COLORS.disputed, fontSize: 14, fontWeight: fonts.semibold, textAlign: 'center' }}>
+              <Text style={{ color: STATUS_COLORS.disputed, fontSize: fonts.md, fontWeight: fonts.semibold, textAlign: 'center' }}>
                 Dispute in progress — awaiting arbiter resolution
               </Text>
             </View>
@@ -433,7 +433,7 @@ export function EscrowScreen({ onClose }: Props) {
 
         {!demoMode && activeEscrows.length === 0 && !showHistory && (
           <View style={[st.card, { alignItems: 'center' }]}>
-            <Text style={{ color: t.text.muted, fontSize: 13, textAlign: 'center', lineHeight: 20 }}>
+            <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', lineHeight: 20 }}>
               Enable Demo Mode in Settings to see sample escrows, or create a new escrow to get started with real trades.
             </Text>
           </View>

@@ -59,37 +59,37 @@ export function CrossChainPortfolioScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeText: { color: t.accent.blue, fontSize: 16 },
+    headerTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeText: { color: t.accent.blue, fontSize: fonts.lg },
     tabRow: { flexDirection: 'row', marginHorizontal: 16, marginBottom: 12, borderRadius: 10, backgroundColor: t.bg.card, overflow: 'hidden' },
     tabBtn: { flex: 1, paddingVertical: 10, alignItems: 'center' },
     tabBtnActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
+    tabText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 16, marginBottom: 8 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 16, marginBottom: 8 },
     totalCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 24, alignItems: 'center', marginBottom: 16 },
-    totalLabel: { color: t.text.muted, fontSize: 12, marginBottom: 4 },
-    totalValue: { color: t.text.primary, fontSize: 36, fontWeight: fonts.heavy },
-    totalChains: { color: t.text.secondary, fontSize: 13, marginTop: 8 },
+    totalLabel: { color: t.text.muted, fontSize: fonts.sm, marginBottom: 4 },
+    totalValue: { color: t.text.primary, fontSize: fonts.hero, fontWeight: fonts.heavy },
+    totalChains: { color: t.text.secondary, fontSize: fonts.sm, marginTop: 8 },
     chainCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 10, flexDirection: 'row', alignItems: 'center', borderLeftWidth: 4 },
-    chainIcon: { fontSize: 28, marginRight: 14, width: 36, textAlign: 'center' },
+    chainIcon: { fontSize: fonts.xxxl, marginRight: 14, width: 36, textAlign: 'center' },
     chainInfo: { flex: 1 },
-    chainName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
-    chainBalance: { color: t.text.secondary, fontSize: 13, marginTop: 2 },
-    chainUsd: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
-    chainPercent: { color: t.text.muted, fontSize: 11, marginTop: 2, textAlign: 'right' },
+    chainName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    chainBalance: { color: t.text.secondary, fontSize: fonts.sm, marginTop: 2 },
+    chainUsd: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold },
+    chainPercent: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2, textAlign: 'right' },
     allocCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 10 },
     allocRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
     allocBar: { height: 10, borderRadius: 5, marginLeft: 8, flex: 1 },
-    allocLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold, width: 80 },
-    allocPercent: { color: t.text.primary, fontSize: 12, fontWeight: fonts.bold, width: 44, textAlign: 'right' },
+    allocLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, width: 80 },
+    allocPercent: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.bold, width: 44, textAlign: 'right' },
     barBg: { height: 10, borderRadius: 5, backgroundColor: t.border, flex: 1, marginHorizontal: 8, overflow: 'hidden' },
     barFill: { height: 10, borderRadius: 5 },
     noteCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginTop: 8 },
-    noteText: { color: t.text.muted, fontSize: 12, lineHeight: 18, fontStyle: 'italic' },
+    noteText: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 18, fontStyle: 'italic' },
     demoTag: { backgroundColor: t.accent.purple + '30', borderRadius: 8, paddingVertical: 4, paddingHorizontal: 10, alignSelf: 'center', marginBottom: 12 },
-    demoTagText: { color: t.accent.purple, fontSize: 11, fontWeight: fonts.bold },
+    demoTagText: { color: t.accent.purple, fontSize: fonts.xs, fontWeight: fonts.bold },
   }), [t]);
 
   return (
@@ -141,16 +141,16 @@ export function CrossChainPortfolioScreen({ onClose }: Props) {
               <View key={h.chain} style={st.allocCard}>
                 <Text style={[st.chainName, { marginBottom: 8 }]}>{h.icon} {h.chain}</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
-                  <Text style={{ color: t.text.muted, fontSize: 12 }}>Balance</Text>
-                  <Text style={{ color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold }}>{h.balance.toLocaleString()} {h.symbol}</Text>
+                  <Text style={{ color: t.text.muted, fontSize: fonts.sm }}>Balance</Text>
+                  <Text style={{ color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold }}>{h.balance.toLocaleString()} {h.symbol}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
-                  <Text style={{ color: t.text.muted, fontSize: 12 }}>USD Value</Text>
-                  <Text style={{ color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold }}>{h.usdValue > 0 ? `$${h.usdValue.toLocaleString()}` : 'Non-monetary'}</Text>
+                  <Text style={{ color: t.text.muted, fontSize: fonts.sm }}>USD Value</Text>
+                  <Text style={{ color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold }}>{h.usdValue > 0 ? `$${h.usdValue.toLocaleString()}` : 'Non-monetary'}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text style={{ color: t.text.muted, fontSize: 12 }}>Status</Text>
-                  <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: fonts.semibold }}>Connected</Text>
+                  <Text style={{ color: t.text.muted, fontSize: fonts.sm }}>Status</Text>
+                  <Text style={{ color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.semibold }}>Connected</Text>
                 </View>
               </View>
             ))}

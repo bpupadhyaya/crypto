@@ -91,56 +91,56 @@ export function MultiWalletScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    back: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
-    title: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
+    back: { color: t.accent.blue, fontSize: fonts.lg, fontWeight: fonts.semibold },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
     placeholder: { width: 50 },
     tabRow: { flexDirection: 'row', paddingHorizontal: 12, marginBottom: 12, gap: 6 },
     tabBtn: { paddingVertical: 8, paddingHorizontal: 14, borderRadius: 20, backgroundColor: t.bg.card },
     tabBtnActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff', fontWeight: fonts.bold },
     card: { backgroundColor: t.bg.card, marginHorizontal: 16, borderRadius: 16, padding: 16, marginBottom: 12 },
     walletRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
     walletInfo: { flex: 1 },
-    walletName: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
-    walletAddress: { color: t.text.muted, fontSize: 12, marginTop: 2 },
-    walletChain: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold, marginTop: 4 },
-    walletLabel: { color: t.accent.blue, fontSize: 11, fontStyle: 'italic', marginTop: 2 },
+    walletName: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold },
+    walletAddress: { color: t.text.muted, fontSize: fonts.sm, marginTop: 2 },
+    walletChain: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginTop: 4 },
+    walletLabel: { color: t.accent.blue, fontSize: fonts.xs, fontStyle: 'italic', marginTop: 2 },
     walletBalance: { alignItems: 'flex-end' },
-    balanceAmount: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
-    balanceSymbol: { color: t.text.muted, fontSize: 12 },
+    balanceAmount: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    balanceSymbol: { color: t.text.muted, fontSize: fonts.sm },
     activeBadge: { backgroundColor: t.accent.green + '22', paddingHorizontal: 10, paddingVertical: 3, borderRadius: 12, marginTop: 6 },
-    activeBadgeText: { color: t.accent.green, fontSize: 11, fontWeight: fonts.bold },
+    activeBadgeText: { color: t.accent.green, fontSize: fonts.xs, fontWeight: fonts.bold },
     switchBtn: { backgroundColor: t.accent.blue + '22', paddingHorizontal: 10, paddingVertical: 3, borderRadius: 12, marginTop: 6 },
-    switchBtnText: { color: t.accent.blue, fontSize: 11, fontWeight: fonts.bold },
+    switchBtnText: { color: t.accent.blue, fontSize: fonts.xs, fontWeight: fonts.bold },
     actionRow: { flexDirection: 'row', gap: 8, marginTop: 10 },
     actionBtn: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 10, backgroundColor: t.bg.primary },
-    actionBtnText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
-    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginBottom: 10 },
+    actionBtnText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md, marginBottom: 10 },
     chainRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 12 },
     chainChip: { paddingVertical: 6, paddingHorizontal: 14, borderRadius: 20, backgroundColor: t.bg.primary },
     chainChipActive: { backgroundColor: t.accent.green },
-    chainChipText: { color: t.text.secondary, fontSize: 13 },
+    chainChipText: { color: t.text.secondary, fontSize: fonts.sm },
     chainChipTextActive: { color: '#fff', fontWeight: fonts.bold },
     modeRow: { flexDirection: 'row', gap: 8, marginBottom: 16 },
     modeBtn: { flex: 1, paddingVertical: 10, borderRadius: 12, alignItems: 'center', backgroundColor: t.bg.primary },
     modeBtnActive: { backgroundColor: t.accent.blue },
-    modeBtnText: { color: t.text.secondary, fontSize: 14, fontWeight: fonts.semibold },
+    modeBtnText: { color: t.text.secondary, fontSize: fonts.md, fontWeight: fonts.semibold },
     modeBtnTextActive: { color: '#fff', fontWeight: fonts.bold },
     createBtn: { backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginTop: 8 },
-    createBtnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
+    createBtnText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
     aggTotal: { alignItems: 'center', paddingVertical: 20 },
-    aggTotalLabel: { color: t.text.muted, fontSize: 13 },
-    aggTotalValue: { color: t.text.primary, fontSize: 32, fontWeight: fonts.heavy, marginTop: 4 },
-    aggMeta: { color: t.text.secondary, fontSize: 13, marginTop: 4 },
+    aggTotalLabel: { color: t.text.muted, fontSize: fonts.sm },
+    aggTotalValue: { color: t.text.primary, fontSize: fonts.hero, fontWeight: fonts.heavy, marginTop: 4 },
+    aggMeta: { color: t.text.secondary, fontSize: fonts.sm, marginTop: 4 },
     aggRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: t.border },
-    aggChain: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold },
-    aggBalance: { color: t.text.secondary, fontSize: 13 },
-    aggUsd: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, textAlign: 'right' },
+    aggChain: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
+    aggBalance: { color: t.text.secondary, fontSize: fonts.sm },
+    aggUsd: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, textAlign: 'right' },
     empty: { alignItems: 'center', paddingTop: 60 },
-    emptyText: { color: t.text.secondary, fontSize: 16, fontWeight: fonts.semibold },
-    emptyHint: { color: t.text.muted, fontSize: 13, marginTop: 4 },
-    labelInput: { backgroundColor: t.bg.primary, borderRadius: 8, padding: 8, color: t.text.primary, fontSize: 12, marginTop: 4 },
+    emptyText: { color: t.text.secondary, fontSize: fonts.lg, fontWeight: fonts.semibold },
+    emptyHint: { color: t.text.muted, fontSize: fonts.sm, marginTop: 4 },
+    labelInput: { backgroundColor: t.bg.primary, borderRadius: 8, padding: 8, color: t.text.primary, fontSize: fonts.sm, marginTop: 4 },
   }), [t]);
 
   const handleSwitch = (id: string) => {
@@ -204,7 +204,7 @@ export function MultiWalletScreen({ onClose }: Props) {
                     placeholderTextColor={t.text.muted}
                   />
                   <TouchableOpacity onPress={() => handleSaveLabel(item.id)}>
-                    <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: fonts.bold }}>Save</Text>
+                    <Text style={{ color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold }}>Save</Text>
                   </TouchableOpacity>
                 </View>
               )}
@@ -268,7 +268,7 @@ export function MultiWalletScreen({ onClose }: Props) {
 
         <TextInput style={s.input} placeholder="Wallet Name" placeholderTextColor={t.text.muted} value={newName} onChangeText={setNewName} />
 
-        <Text style={{ color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8 }}>Chain</Text>
+        <Text style={{ color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 8 }}>Chain</Text>
         <View style={s.chainRow}>
           {chains.map((c) => (
             <TouchableOpacity key={c} style={[s.chainChip, newChain === c && s.chainChipActive]} onPress={() => setNewChain(c)}>

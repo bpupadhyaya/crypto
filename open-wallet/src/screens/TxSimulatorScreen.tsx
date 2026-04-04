@@ -77,56 +77,56 @@ export const TxSimulatorScreen = React.memo(({ onClose }: Props) => {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     scroll: { paddingHorizontal: 20, paddingTop: 16 },
-    title: { color: t.text.primary, fontSize: 22, fontWeight: fonts.heavy, textAlign: 'center', marginBottom: 4 },
-    subtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginBottom: 20 },
+    title: { color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.heavy, textAlign: 'center', marginBottom: 4 },
+    subtitle: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginBottom: 20 },
     // Type selector
     typeRow: { flexDirection: 'row', gap: 8, marginBottom: 20, justifyContent: 'center' },
     typeBtn: { paddingVertical: 10, paddingHorizontal: 20, borderRadius: 20, backgroundColor: t.bg.card },
     typeBtnActive: { backgroundColor: t.accent.blue },
-    typeBtnText: { color: t.text.secondary, fontSize: 14, fontWeight: fonts.semibold },
+    typeBtnText: { color: t.text.secondary, fontSize: fonts.md, fontWeight: fonts.semibold },
     typeBtnTextActive: { color: '#fff' },
     // Chain selector
     chainRow: { flexDirection: 'row', gap: 8, marginBottom: 16, flexWrap: 'wrap' },
     chainBtn: { backgroundColor: t.bg.card, borderRadius: 16, paddingVertical: 8, paddingHorizontal: 14 },
     chainBtnActive: { backgroundColor: t.accent.orange },
-    chainBtnText: { color: t.text.secondary, fontSize: 13 },
+    chainBtnText: { color: t.text.secondary, fontSize: fonts.sm },
     chainBtnTextActive: { color: t.bg.primary, fontWeight: fonts.bold },
     // Inputs
-    label: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6, marginLeft: 4 },
-    input: { backgroundColor: t.bg.card, borderRadius: 14, padding: 14, color: t.text.primary, fontSize: 14, fontFamily: 'monospace', marginBottom: 14 },
+    label: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6, marginLeft: 4 },
+    input: { backgroundColor: t.bg.card, borderRadius: 14, padding: 14, color: t.text.primary, fontSize: fonts.md, fontFamily: 'monospace', marginBottom: 14 },
     amountRow: { flexDirection: 'row', gap: 10, marginBottom: 14 },
     tokenBadge: { backgroundColor: t.bg.card, borderRadius: 14, paddingVertical: 14, paddingHorizontal: 14, justifyContent: 'center' },
-    tokenText: { color: t.text.secondary, fontSize: 14, fontWeight: fonts.bold },
+    tokenText: { color: t.text.secondary, fontSize: fonts.md, fontWeight: fonts.bold },
     // Simulate button
     simBtn: { backgroundColor: t.accent.blue, borderRadius: 16, paddingVertical: 16, alignItems: 'center', marginBottom: 20 },
-    simBtnText: { color: '#fff', fontSize: 16, fontWeight: fonts.bold },
+    simBtnText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.bold },
     // Result card
     resultCard: { backgroundColor: t.bg.card, borderRadius: 20, padding: 20, marginBottom: 16 },
-    resultTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 16, textAlign: 'center' },
+    resultTitle: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, marginBottom: 16, textAlign: 'center' },
     resultRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: t.border },
-    resultLabel: { color: t.text.muted, fontSize: 14 },
-    resultValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, maxWidth: '55%', textAlign: 'right' },
-    resultValueGreen: { color: t.accent.green, fontSize: 14, fontWeight: fonts.semibold },
-    resultValueOrange: { color: t.accent.orange, fontSize: 14, fontWeight: fonts.semibold },
-    resultValueRed: { color: t.accent.red, fontSize: 14, fontWeight: fonts.semibold },
+    resultLabel: { color: t.text.muted, fontSize: fonts.md },
+    resultValue: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold, maxWidth: '55%', textAlign: 'right' },
+    resultValueGreen: { color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.semibold },
+    resultValueOrange: { color: t.accent.orange, fontSize: fonts.md, fontWeight: fonts.semibold },
+    resultValueRed: { color: t.accent.red, fontSize: fonts.md, fontWeight: fonts.semibold },
     // Swap / bridge specific
     swapSection: { backgroundColor: t.accent.purple + '10', borderRadius: 16, padding: 16, marginBottom: 16 },
-    swapTitle: { color: t.accent.purple, fontSize: 14, fontWeight: fonts.bold, marginBottom: 10 },
+    swapTitle: { color: t.accent.purple, fontSize: fonts.md, fontWeight: fonts.bold, marginBottom: 10 },
     bridgeSection: { backgroundColor: t.accent.blue + '10', borderRadius: 16, padding: 16, marginBottom: 16 },
-    bridgeTitle: { color: t.accent.blue, fontSize: 14, fontWeight: fonts.bold, marginBottom: 10 },
+    bridgeTitle: { color: t.accent.blue, fontSize: fonts.md, fontWeight: fonts.bold, marginBottom: 10 },
     // Action buttons
     actionRow: { flexDirection: 'row', gap: 12, marginBottom: 16 },
     executeBtn: { flex: 1, backgroundColor: t.accent.green, borderRadius: 16, paddingVertical: 16, alignItems: 'center' },
-    executeBtnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
+    executeBtnText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
     modifyBtn: { flex: 1, backgroundColor: t.bg.card, borderRadius: 16, paddingVertical: 16, alignItems: 'center' },
-    modifyBtnText: { color: t.text.secondary, fontSize: 15, fontWeight: fonts.semibold },
+    modifyBtnText: { color: t.text.secondary, fontSize: fonts.md, fontWeight: fonts.semibold },
     // Disclaimer
-    disclaimer: { color: t.text.muted, fontSize: 11, textAlign: 'center', lineHeight: 16, marginBottom: 16 },
+    disclaimer: { color: t.text.muted, fontSize: fonts.xs, textAlign: 'center', lineHeight: 16, marginBottom: 16 },
     // Back
     backBtn: { paddingVertical: 16, alignItems: 'center' },
-    backText: { color: t.accent.blue, fontSize: 16 },
+    backText: { color: t.accent.blue, fontSize: fonts.lg },
     // Dest chain
-    destLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6, marginLeft: 4, marginTop: 4 },
+    destLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6, marginLeft: 4, marginTop: 4 },
   }), [t]);
 
   const runSimulation = useCallback(async () => {
@@ -414,10 +414,10 @@ export const TxSimulatorScreen = React.memo(({ onClose }: Props) => {
             {/* Insufficient balance warning */}
             {parseFloat(result.balanceAfterCrypto) < 0 && (
               <View style={{ backgroundColor: t.accent.red + '15', borderRadius: 12, padding: 14, marginBottom: 16 }}>
-                <Text style={{ color: t.accent.red, fontSize: 14, fontWeight: fonts.bold, marginBottom: 4 }}>
+                <Text style={{ color: t.accent.red, fontSize: fonts.md, fontWeight: fonts.bold, marginBottom: 4 }}>
                   Insufficient Balance
                 </Text>
-                <Text style={{ color: t.text.secondary, fontSize: 13 }}>
+                <Text style={{ color: t.text.secondary, fontSize: fonts.sm }}>
                   This transaction would require more {symbol} than your current balance.
                   {demoMode ? ' (Demo balances used for simulation)' : ''}
                 </Text>

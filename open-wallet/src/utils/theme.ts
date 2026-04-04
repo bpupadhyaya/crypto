@@ -64,6 +64,10 @@ function _buildFonts() {
  *  Properties are updated in-place by applyDisplayScales(). */
 export const fonts = _buildFonts();
 
+/** Monotonic counter — increments on every applyDisplayScales call.
+ *  Used by useTheme to force style rebuilds across the app. */
+export let fontVersion = 0;
+
 /** Call when display scale settings change. */
 export function applyDisplayScales(scales: Partial<DisplayScales>) {
   if (scales.appScale != null) _state.appScale = scales.appScale;
@@ -72,6 +76,7 @@ export function applyDisplayScales(scales: Partial<DisplayScales>) {
   if (scales.iconScale != null) _state.iconScale = scales.iconScale;
   if (scales.weightBoost != null) _state.weightBoost = scales.weightBoost;
   Object.assign(fonts, _buildFonts());
+  fontVersion++;
 }
 
 /** Get current active scales (for UI display) */

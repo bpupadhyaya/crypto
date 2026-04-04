@@ -35,6 +35,6 @@ export function LoadingOverlay({ visible, message = 'Loading...', subMessage }: 
 const styles = StyleSheet.create({
   overlay: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   card: { borderRadius: 20, padding: 32, alignItems: 'center', minWidth: 200 },
-  message: { fontSize: 16, fontWeight: fonts.semibold, marginTop: 16 },
-  sub: { fontSize: 13, marginTop: 8, textAlign: 'center' },
+  message: { fontSize: fonts.lg, fontWeight: fonts.semibold, marginTop: 16 },
+  sub: { fontSize: fonts.sm, marginTop: 8, textAlign: 'center' },
 });

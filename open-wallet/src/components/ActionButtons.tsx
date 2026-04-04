@@ -90,12 +90,12 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   simpleIcon: {
-    fontSize: 28,
+    fontSize: fonts.xxxl,
     fontWeight: fonts.bold,
   },
   simpleLabel: {
     color: '#f0f0f5',
-    fontSize: 16,
+    fontSize: fonts.lg,
     fontWeight: fonts.semibold,
   },
 
@@ -118,12 +118,12 @@ const styles = StyleSheet.create({
     minWidth: 52,
   },
   proIcon: {
-    fontSize: 18,
+    fontSize: fonts.xl,
     fontWeight: fonts.bold,
     marginBottom: 4,
   },
   proLabel: {
     color: '#a0a0b0',
-    fontSize: 11,
+    fontSize: fonts.xs,
   },
 });

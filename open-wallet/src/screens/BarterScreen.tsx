@@ -162,73 +162,73 @@ export function BarterScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { paddingBottom: 40 },
     tabRow: { flexDirection: 'row', paddingHorizontal: 12, marginBottom: 12 },
     tabBtn: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 16, marginHorizontal: 4 },
     tabActive: { backgroundColor: t.accent.purple + '20' },
-    tabText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
+    tabText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: t.accent.purple },
     card: { backgroundColor: t.bg.secondary, borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16 },
-    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 12, marginHorizontal: 20 },
+    sectionTitle: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, marginBottom: 12, marginHorizontal: 20 },
     filterRow: { flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 16, gap: 6, marginBottom: 12 },
     filterChip: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12, borderWidth: 1, borderColor: t.bg.secondary },
     filterActive: { backgroundColor: t.accent.purple + '20', borderColor: t.accent.purple },
-    filterText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
+    filterText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
     filterTextActive: { color: t.accent.purple },
     // Barter offer cards
     offerCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
     offerHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
-    offerName: { color: t.accent.purple, fontSize: 13, fontWeight: fonts.bold },
+    offerName: { color: t.accent.purple, fontSize: fonts.sm, fontWeight: fonts.bold },
     matchBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8 },
-    matchText: { fontSize: 11, fontWeight: fonts.bold },
+    matchText: { fontSize: fonts.xs, fontWeight: fonts.bold },
     exchangeRow: { flexDirection: 'row', alignItems: 'stretch', marginBottom: 8 },
     exchangeBox: { flex: 1, borderRadius: 10, padding: 10 },
-    exchangeLabel: { fontSize: 10, fontWeight: fonts.bold, marginBottom: 4, textTransform: 'uppercase' as const },
-    exchangeTitle: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
-    exchangeDesc: { color: t.text.muted, fontSize: 12, marginTop: 4, lineHeight: 17 },
+    exchangeLabel: { fontSize: fonts.xs, fontWeight: fonts.bold, marginBottom: 4, textTransform: 'uppercase' as const },
+    exchangeTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
+    exchangeDesc: { color: t.text.muted, fontSize: fonts.sm, marginTop: 4, lineHeight: 17 },
     exchangeArrow: { justifyContent: 'center', paddingHorizontal: 8 },
-    arrowText: { color: t.text.muted, fontSize: 20, fontWeight: '300' },
-    offerMeta: { color: t.text.muted, fontSize: 12, marginTop: 4 },
+    arrowText: { color: t.text.muted, fontSize: fonts.xl, fontWeight: '300' },
+    offerMeta: { color: t.text.muted, fontSize: fonts.sm, marginTop: 4 },
     proposeBtn: { backgroundColor: t.accent.blue, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 10, alignSelf: 'flex-start' as const, marginTop: 10 },
-    proposeBtnText: { color: '#fff', fontSize: 13, fontWeight: fonts.semibold },
+    proposeBtnText: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.semibold },
     proposedBadge: { backgroundColor: t.accent.orange + '20', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 10, alignSelf: 'flex-start' as const, marginTop: 10 },
-    proposedText: { color: t.accent.orange, fontSize: 12, fontWeight: fonts.semibold },
-    proposeInput: { backgroundColor: t.bg.primary, borderRadius: 10, padding: 10, color: t.text.primary, fontSize: 14, marginTop: 8 },
+    proposedText: { color: t.accent.orange, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    proposeInput: { backgroundColor: t.bg.primary, borderRadius: 10, padding: 10, color: t.text.primary, fontSize: fonts.md, marginTop: 8 },
     proposeRow: { marginTop: 8 },
     proposeConfirmBtn: { backgroundColor: t.accent.blue, paddingVertical: 10, borderRadius: 10, alignItems: 'center', marginTop: 8 },
-    proposeConfirmText: { color: '#fff', fontSize: 13, fontWeight: fonts.semibold },
+    proposeConfirmText: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.semibold },
     // Trade status
     tradeCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    tradeStatus: { fontSize: 12, fontWeight: fonts.bold },
-    tradeExchange: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, marginTop: 6 },
-    tradeDetail: { color: t.text.muted, fontSize: 12, marginTop: 4 },
+    tradeStatus: { fontSize: fonts.sm, fontWeight: fonts.bold },
+    tradeExchange: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold, marginTop: 6 },
+    tradeDetail: { color: t.text.muted, fontSize: fonts.sm, marginTop: 4 },
     // History
     historyCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    historyTitle: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
-    historyMeta: { color: t.text.muted, fontSize: 12, marginTop: 4 },
+    historyTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
+    historyMeta: { color: t.text.muted, fontSize: fonts.sm, marginTop: 4 },
     ratingRow: { flexDirection: 'row', gap: 4, marginTop: 6 },
-    starFilled: { color: t.accent.orange, fontSize: 14 },
-    starEmpty: { color: t.text.muted, fontSize: 14 },
+    starFilled: { color: t.accent.orange, fontSize: fonts.md },
+    starEmpty: { color: t.text.muted, fontSize: fonts.md },
     // Form
-    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginBottom: 12 },
+    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md, marginBottom: 12 },
     typeGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 12 },
     typeChip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 12, borderWidth: 1, borderColor: t.bg.primary },
     typeChipSelected: { backgroundColor: t.accent.purple + '20', borderColor: t.accent.purple },
-    typeChipText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
+    typeChipText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
     typeChipTextSelected: { color: t.accent.purple },
     submitBtn: { backgroundColor: t.accent.purple, borderRadius: 14, paddingVertical: 14, alignItems: 'center', marginTop: 8 },
-    submitText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
+    submitText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
     demoTag: { backgroundColor: t.accent.orange + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'center', marginBottom: 12 },
-    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: fonts.bold },
+    demoText: { color: t.accent.orange, fontSize: fonts.xs, fontWeight: fonts.bold },
     philosophy: { backgroundColor: t.accent.green + '15', borderRadius: 12, padding: 14, marginHorizontal: 20, marginBottom: 16, alignItems: 'center' as const },
-    philosophyText: { color: t.accent.green, fontSize: 12, fontWeight: fonts.bold, textAlign: 'center', fontStyle: 'italic' },
+    philosophyText: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold, textAlign: 'center', fontStyle: 'italic' },
     statsCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 16 },
     statsRow: { flexDirection: 'row', justifyContent: 'space-around' },
     statBox: { alignItems: 'center' as const },
-    statNum: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    statLabel: { color: t.text.muted, fontSize: 11, marginTop: 4, textAlign: 'center' },
+    statNum: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    statLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 4, textAlign: 'center' },
   }), [t]);
 
   const matchColor = (score: number) => {
@@ -366,7 +366,7 @@ export function BarterScreen({ onClose }: Props) {
     <View style={s.card}>
       <Text style={[s.sectionTitle, { marginHorizontal: 0 }]}>Create a Barter Offer</Text>
 
-      <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: fonts.bold, marginBottom: 8 }}>What You Have</Text>
+      <Text style={{ color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold, marginBottom: 8 }}>What You Have</Text>
       <TextInput
         style={s.input}
         placeholder="Item or service title"
@@ -382,7 +382,7 @@ export function BarterScreen({ onClose }: Props) {
         onChangeText={setHaveDesc}
         multiline
       />
-      <Text style={{ color: t.text.muted, fontSize: 12, marginBottom: 6 }}>Category (have)</Text>
+      <Text style={{ color: t.text.muted, fontSize: fonts.sm, marginBottom: 6 }}>Category (have)</Text>
       <View style={s.typeGrid}>
         {CATEGORIES.filter((c) => c.key !== 'all').map((cat) => (
           <TouchableOpacity
@@ -399,7 +399,7 @@ export function BarterScreen({ onClose }: Props) {
 
       <View style={{ height: 1, backgroundColor: t.bg.primary, marginVertical: 12 }} />
 
-      <Text style={{ color: t.accent.blue, fontSize: 13, fontWeight: fonts.bold, marginBottom: 8 }}>What You Want</Text>
+      <Text style={{ color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.bold, marginBottom: 8 }}>What You Want</Text>
       <TextInput
         style={s.input}
         placeholder="Item or service you want"
@@ -415,7 +415,7 @@ export function BarterScreen({ onClose }: Props) {
         onChangeText={setWantDesc}
         multiline
       />
-      <Text style={{ color: t.text.muted, fontSize: 12, marginBottom: 6 }}>Category (want)</Text>
+      <Text style={{ color: t.text.muted, fontSize: fonts.sm, marginBottom: 6 }}>Category (want)</Text>
       <View style={s.typeGrid}>
         {CATEGORIES.filter((c) => c.key !== 'all').map((cat) => (
           <TouchableOpacity
@@ -532,19 +532,19 @@ export function BarterScreen({ onClose }: Props) {
             <Text style={s.historyTitle}>with {trade.partnerName}</Text>
             <Text style={s.historyMeta}>{trade.date}</Text>
           </View>
-          <Text style={{ color: t.accent.green, fontSize: 13, marginTop: 6 }}>
+          <Text style={{ color: t.accent.green, fontSize: fonts.sm, marginTop: 6 }}>
             You gave: {trade.youGave}
           </Text>
-          <Text style={{ color: t.accent.blue, fontSize: 13, marginTop: 2 }}>
+          <Text style={{ color: t.accent.blue, fontSize: fonts.sm, marginTop: 2 }}>
             You received: {trade.youReceived}
           </Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
             <View>
-              <Text style={{ color: t.text.muted, fontSize: 11 }}>Your rating</Text>
+              <Text style={{ color: t.text.muted, fontSize: fonts.xs }}>Your rating</Text>
               <View style={s.ratingRow}>{renderStars(trade.rating)}</View>
             </View>
             <View style={{ alignItems: 'flex-end' as const }}>
-              <Text style={{ color: t.text.muted, fontSize: 11 }}>Their rating</Text>
+              <Text style={{ color: t.text.muted, fontSize: fonts.xs }}>Their rating</Text>
               <View style={s.ratingRow}>{renderStars(trade.partnerRating)}</View>
             </View>
           </View>
@@ -552,10 +552,10 @@ export function BarterScreen({ onClose }: Props) {
       ))}
 
       <View style={[s.card, { alignItems: 'center' }]}>
-        <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold }}>
+        <Text style={{ color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold }}>
           {DEMO_COMPLETED.length} trades completed
         </Text>
-        <Text style={{ color: t.text.muted, fontSize: 12, marginTop: 4 }}>
+        <Text style={{ color: t.text.muted, fontSize: fonts.sm, marginTop: 4 }}>
           Average rating: {(DEMO_COMPLETED.reduce((sum, t) => sum + t.rating, 0) / DEMO_COMPLETED.length).toFixed(1)} / 5
         </Text>
       </View>

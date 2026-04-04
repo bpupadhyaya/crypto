@@ -110,40 +110,40 @@ export function CommunityRadarScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { flex: 1, paddingHorizontal: 16 },
-    subtitle: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 16 },
+    subtitle: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 19, marginBottom: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
-    label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
-    empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
+    label: { color: t.text.muted, fontSize: fonts.sm },
+    val: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    empty: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', marginTop: 40 },
     activityIcon: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
-    activityActor: { color: t.accent.blue, fontSize: 12, fontWeight: fonts.bold },
-    activityDesc: { color: t.text.primary, fontSize: 13, marginTop: 2 },
-    activityTime: { color: t.text.muted, fontSize: 11, marginTop: 2 },
-    activityAmount: { fontSize: 14, fontWeight: fonts.heavy },
-    trendScore: { color: t.text.primary, fontSize: 16, fontWeight: fonts.heavy },
-    trendChange: { fontSize: 12, fontWeight: fonts.bold },
-    trendLabel: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
-    trendCategory: { color: t.text.muted, fontSize: 11 },
-    alertTitle: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, marginBottom: 4 },
-    alertBody: { color: t.text.secondary, fontSize: 13, lineHeight: 18 },
-    alertTime: { color: t.text.muted, fontSize: 11, marginTop: 6 },
+    activityActor: { color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.bold },
+    activityDesc: { color: t.text.primary, fontSize: fonts.sm, marginTop: 2 },
+    activityTime: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
+    activityAmount: { fontSize: fonts.md, fontWeight: fonts.heavy },
+    trendScore: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.heavy },
+    trendChange: { fontSize: fonts.sm, fontWeight: fonts.bold },
+    trendLabel: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
+    trendCategory: { color: t.text.muted, fontSize: fonts.xs },
+    alertTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, marginBottom: 4 },
+    alertBody: { color: t.text.secondary, fontSize: fonts.sm, lineHeight: 18 },
+    alertTime: { color: t.text.muted, fontSize: fonts.xs, marginTop: 6 },
     severityDot: { width: 8, height: 8, borderRadius: 4, marginRight: 8 },
     liveIndicator: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
     liveDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#22c55e', marginRight: 6 },
-    liveText: { color: '#22c55e', fontSize: 12, fontWeight: fonts.bold },
+    liveText: { color: '#22c55e', fontSize: fonts.sm, fontWeight: fonts.bold },
     summaryRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
     summaryCard: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' },
-    summaryNum: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 2 },
-    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold, textAlign: 'center' },
+    summaryNum: { fontSize: fonts.xl, fontWeight: fonts.heavy, marginBottom: 2 },
+    summaryLabel: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold, textAlign: 'center' },
   }), [t]);
 
   const activity = demoMode ? DEMO_ACTIVITY : [];
@@ -209,7 +209,7 @@ export function CommunityRadarScreen({ onClose }: Props) {
               {activity.map(item => (
                 <View key={item.id} style={[st.card, { flexDirection: 'row', alignItems: 'center' }]}>
                   <View style={[st.activityIcon, { backgroundColor: (TYPE_COLORS[item.type] || t.accent.blue) + '20' }]}>
-                    <Text style={{ fontSize: 18 }}>{item.icon}</Text>
+                    <Text style={{ fontSize: fonts.xl }}>{item.icon}</Text>
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text style={st.activityActor}>{item.actor}</Text>
@@ -232,7 +232,7 @@ export function CommunityRadarScreen({ onClose }: Props) {
             <Text style={st.empty}>Enable Demo Mode to see trending topics.</Text>
           ) : trending.map((item, i) => (
             <View key={item.id} style={[st.card, { flexDirection: 'row', alignItems: 'center' }]}>
-              <Text style={{ fontSize: 20, marginRight: 12 }}>{item.icon}</Text>
+              <Text style={{ fontSize: fonts.xl, marginRight: 12 }}>{item.icon}</Text>
               <View style={{ flex: 1 }}>
                 <Text style={st.trendLabel}>{item.label}</Text>
                 <Text style={st.trendCategory}>{item.category} #{i + 1}</Text>
@@ -262,7 +262,7 @@ export function CommunityRadarScreen({ onClose }: Props) {
 
         {!demoMode && (
           <View style={[st.card, { marginTop: 20 }]}>
-            <Text style={{ color: t.text.muted, fontSize: 13, textAlign: 'center' }}>
+            <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center' }}>
               Enable Demo Mode in Settings to see sample community radar data.
             </Text>
           </View>

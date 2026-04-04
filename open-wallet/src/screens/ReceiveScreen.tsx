@@ -53,7 +53,7 @@ export function ReceiveScreen() {
     },
     title: {
       color: t.text.primary,
-      fontSize: 24,
+      fontSize: fonts.xxl,
       fontWeight: fonts.heavy,
       marginTop: 16,
       marginBottom: 20,
@@ -75,7 +75,7 @@ export function ReceiveScreen() {
     },
     chainButtonText: {
       color: t.text.secondary,
-      fontSize: 14,
+      fontSize: fonts.md,
     },
     chainButtonTextActive: {
       color: t.bg.primary,
@@ -92,7 +92,7 @@ export function ReceiveScreen() {
     },
     qrHint: {
       color: t.text.muted,
-      fontSize: 13,
+      fontSize: fonts.sm,
       marginTop: 12,
     },
     addressCard: {
@@ -103,14 +103,14 @@ export function ReceiveScreen() {
     },
     addressLabel: {
       color: t.text.muted,
-      fontSize: 12,
+      fontSize: fonts.sm,
       marginBottom: 8,
       textTransform: 'uppercase',
       letterSpacing: 1,
     },
     address: {
       color: t.text.primary,
-      fontSize: 13,
+      fontSize: fonts.sm,
       fontFamily: 'monospace',
       marginBottom: 8,
       textAlign: 'center',
@@ -118,12 +118,12 @@ export function ReceiveScreen() {
     },
     copyHint: {
       color: t.accent.green,
-      fontSize: 13,
+      fontSize: fonts.sm,
       fontWeight: fonts.semibold,
     },
     warningText: {
       color: t.accent.orange,
-      fontSize: 12,
+      fontSize: fonts.sm,
       marginTop: 16,
       textAlign: 'center',
       lineHeight: 18,

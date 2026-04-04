@@ -85,7 +85,7 @@ export function PinSetupScreen() {
           onPress={handleDevAutoPin}
           style={{ alignItems: 'center', paddingVertical: 12, paddingBottom: 24 }}
         >
-          <Text style={{ color: '#f59e0b', fontSize: 13, fontWeight: fonts.semibold }}>⚡ Dev: Set PIN 123456 & Continue</Text>
+          <Text style={{ color: '#f59e0b', fontSize: fonts.sm, fontWeight: fonts.semibold }}>⚡ Dev: Set PIN 123456 & Continue</Text>
         </TouchableOpacity>
       )}
     </SafeAreaView>

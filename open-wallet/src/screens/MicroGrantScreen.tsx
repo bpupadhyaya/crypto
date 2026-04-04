@@ -207,55 +207,55 @@ export function MicroGrantScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     tabRow: { flexDirection: 'row', marginHorizontal: 20, marginBottom: 16, backgroundColor: t.bg.card, borderRadius: 12, padding: 4 },
     tabBtn: { flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 10 },
     tabBtnActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
-    tabTextActive: { color: '#fff', fontSize: 13, fontWeight: fonts.bold },
+    tabText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    tabTextActive: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.bold },
     heroCard: { backgroundColor: t.accent.blue + '10', borderRadius: 24, padding: 24, marginHorizontal: 20, alignItems: 'center', marginBottom: 16 },
-    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, textAlign: 'center' },
-    heroSubtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 8, lineHeight: 20 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 20 },
+    heroTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy, textAlign: 'center' },
+    heroSubtitle: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 8, lineHeight: 20 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 20 },
     grantCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    grantTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
+    grantTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
     grantRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 },
-    grantAmount: { color: t.accent.green, fontSize: 16, fontWeight: fonts.heavy },
+    grantAmount: { color: t.accent.green, fontSize: fonts.lg, fontWeight: fonts.heavy },
     categoryBadge: { borderRadius: 8, paddingHorizontal: 8, paddingVertical: 3 },
-    categoryText: { color: '#fff', fontSize: 11, fontWeight: fonts.bold },
+    categoryText: { color: '#fff', fontSize: fonts.xs, fontWeight: fonts.bold },
     grantMeta: { flexDirection: 'row', gap: 16, marginTop: 8 },
-    metaText: { color: t.text.muted, fontSize: 12 },
+    metaText: { color: t.text.muted, fontSize: fonts.sm },
     statusBadge: { alignSelf: 'flex-start', borderRadius: 8, paddingHorizontal: 8, paddingVertical: 3, marginTop: 8 },
-    statusText: { color: '#fff', fontSize: 11, fontWeight: fonts.bold },
-    detailDesc: { color: t.text.secondary, fontSize: 14, lineHeight: 22, marginTop: 12 },
-    postedBy: { color: t.text.muted, fontSize: 12, marginTop: 8 },
+    statusText: { color: '#fff', fontSize: fonts.xs, fontWeight: fonts.bold },
+    detailDesc: { color: t.text.secondary, fontSize: fonts.md, lineHeight: 22, marginTop: 12 },
+    postedBy: { color: t.text.muted, fontSize: fonts.sm, marginTop: 8 },
     applyBtn: { backgroundColor: t.accent.blue, borderRadius: 12, paddingVertical: 12, paddingHorizontal: 24, marginTop: 16, alignSelf: 'center' },
-    applyBtnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
-    backBtn: { color: t.accent.blue, fontSize: 16 },
+    applyBtnText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
+    backBtn: { color: t.accent.blue, fontSize: fonts.lg },
     inputCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginTop: 12 },
-    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8 },
-    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15 },
+    inputLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 8 },
+    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md },
     descInput: { minHeight: 100, textAlignVertical: 'top' },
     submitBtn: { backgroundColor: t.accent.blue, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginHorizontal: 20, marginTop: 24 },
-    submitBtnText: { color: '#fff', fontSize: 17, fontWeight: fonts.bold },
+    submitBtnText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.bold },
     milestoneItem: { flexDirection: 'row', alignItems: 'center', marginTop: 8, gap: 8 },
     milestoneCheck: { width: 20, height: 20, borderRadius: 10, borderWidth: 2, alignItems: 'center', justifyContent: 'center' },
-    milestoneText: { color: t.text.primary, fontSize: 13, flex: 1 },
-    milestoneTarget: { color: t.text.muted, fontSize: 11 },
+    milestoneText: { color: t.text.primary, fontSize: fonts.sm, flex: 1 },
+    milestoneTarget: { color: t.text.muted, fontSize: fonts.xs },
     impactCard: { backgroundColor: t.accent.green + '10', borderRadius: 16, padding: 16, marginHorizontal: 20, marginTop: 12 },
-    impactTitle: { color: t.accent.green, fontSize: 14, fontWeight: fonts.bold, marginBottom: 8 },
-    impactText: { color: t.text.secondary, fontSize: 13, lineHeight: 20 },
+    impactTitle: { color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.bold, marginBottom: 8 },
+    impactText: { color: t.text.secondary, fontSize: fonts.sm, lineHeight: 20 },
     progressBar: { height: 6, backgroundColor: t.border, borderRadius: 3, marginTop: 8 },
     progressFill: { height: 6, borderRadius: 3, backgroundColor: t.accent.green },
     fundsRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 },
-    fundsLabel: { color: t.text.muted, fontSize: 12 },
-    fundsValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
-    emptyText: { color: t.text.muted, textAlign: 'center', marginTop: 40, fontSize: 14 },
+    fundsLabel: { color: t.text.muted, fontSize: fonts.sm },
+    fundsValue: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    emptyText: { color: t.text.muted, textAlign: 'center', marginTop: 40, fontSize: fonts.md },
     selectGrantBtn: { backgroundColor: t.bg.card, borderRadius: 12, padding: 14, marginHorizontal: 20, marginTop: 8, borderWidth: 2, borderColor: t.border },
     selectGrantBtnActive: { borderColor: t.accent.blue },
-    selectGrantText: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
-    selectGrantAmount: { color: t.accent.green, fontSize: 12, fontWeight: fonts.bold, marginTop: 2 },
+    selectGrantText: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
+    selectGrantAmount: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold, marginTop: 2 },
   }), [t]);
 
   // ─── Grant Detail View ───
@@ -335,7 +335,7 @@ export function MicroGrantScreen({ onClose }: Props) {
             {a.milestones.map((m, idx) => (
               <View key={idx} style={s.milestoneItem}>
                 <View style={[s.milestoneCheck, { borderColor: m.completed ? t.accent.green : t.border, backgroundColor: m.completed ? t.accent.green : 'transparent' }]}>
-                  {m.completed && <Text style={{ color: '#fff', fontSize: 12, fontWeight: fonts.bold }}>✓</Text>}
+                  {m.completed && <Text style={{ color: '#fff', fontSize: fonts.sm, fontWeight: fonts.bold }}>✓</Text>}
                 </View>
                 <Text style={[s.milestoneText, m.completed && { textDecorationLine: 'line-through', color: t.text.muted }]}>{m.title}</Text>
                 <Text style={s.milestoneTarget}>{m.target}</Text>
@@ -555,7 +555,7 @@ export function MicroGrantScreen({ onClose }: Props) {
           {loading ? <ActivityIndicator color="#fff" /> : <Text style={s.submitBtnText}>Submit Application</Text>}
         </TouchableOpacity>
 
-        <Text style={{ color: t.text.muted, fontSize: 12, textAlign: 'center', marginTop: 16, marginHorizontal: 24, lineHeight: 18 }}>
+        <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 16, marginHorizontal: 24, lineHeight: 18 }}>
           Applications are reviewed by the DAO that posted the grant. Funded applicants must report milestone progress and demonstrate community benefit.
         </Text>
       </>

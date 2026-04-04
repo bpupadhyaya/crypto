@@ -102,37 +102,37 @@ export function DisputeScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { paddingHorizontal: 16 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
-    label: { color: t.text.secondary, fontSize: 13 },
-    value: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
+    label: { color: t.text.secondary, fontSize: fonts.sm },
+    value: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
     statusBadge: { paddingHorizontal: 10, paddingVertical: 3, borderRadius: 8 },
-    statusText: { fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase', color: '#fff' },
-    amountText: { color: t.text.primary, fontSize: 22, fontWeight: fonts.bold, marginBottom: 4 },
-    descText: { color: t.text.secondary, fontSize: 13, marginBottom: 8, lineHeight: 18 },
+    statusText: { fontSize: fonts.xs, fontWeight: fonts.bold, textTransform: 'uppercase', color: '#fff' },
+    amountText: { color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.bold, marginBottom: 4 },
+    descText: { color: t.text.secondary, fontSize: fonts.sm, marginBottom: 8, lineHeight: 18 },
     tabRow: { flexDirection: 'row', gap: 8, marginBottom: 16 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, alignItems: 'center', backgroundColor: t.bg.card },
     tabActive: { backgroundColor: t.accent.green },
-    tabText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
-    emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', paddingVertical: 40 },
+    emptyText: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', paddingVertical: 40 },
     messageCard: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, marginBottom: 12, borderLeftWidth: 3 },
-    messageSender: { fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 },
-    messageText: { color: t.text.primary, fontSize: 14, lineHeight: 20 },
+    messageSender: { fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 },
+    messageText: { color: t.text.primary, fontSize: fonts.md, lineHeight: 20 },
     detailRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: t.border },
-    detailLabel: { color: t.text.secondary, fontSize: 13 },
-    detailValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold, maxWidth: '60%', textAlign: 'right' },
+    detailLabel: { color: t.text.secondary, fontSize: fonts.sm },
+    detailValue: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold, maxWidth: '60%', textAlign: 'right' },
     btn: { borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 10 },
     btnPrimary: { backgroundColor: t.accent.green },
     btnDanger: { backgroundColor: t.accent.red },
-    btnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
+    btnText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
     actionRow: { flexDirection: 'row', gap: 10, marginTop: 16 },
     warningCard: { backgroundColor: t.accent.yellow + '15', borderRadius: 12, padding: 14, marginBottom: 16 },
-    warningText: { color: t.accent.yellow, fontSize: 13, lineHeight: 18, textAlign: 'center' },
+    warningText: { color: t.accent.yellow, fontSize: fonts.sm, lineHeight: 18, textAlign: 'center' },
   }), [t]);
 
   const handleResolve = useCallback((dispute: DisputeCase, releaseToSeller: boolean) => {
@@ -175,7 +175,7 @@ export function DisputeScreen({ onClose }: Props) {
       <Text style={st.descText}>{dispute.description}</Text>
       <View style={st.row}>
         <Text style={st.label}>Escrow</Text>
-        <Text style={[st.value, { fontSize: 12 }]}>{dispute.escrowId}</Text>
+        <Text style={[st.value, { fontSize: fonts.sm }]}>{dispute.escrowId}</Text>
       </View>
       <View style={st.row}>
         <Text style={st.label}>Raised</Text>
@@ -283,7 +283,7 @@ export function DisputeScreen({ onClose }: Props) {
 
           {d.status !== 'pending' && (
             <View style={[st.card, { backgroundColor: (STATUS_COLORS[d.status] || '#666') + '20' }]}>
-              <Text style={{ color: STATUS_COLORS[d.status], fontSize: 14, fontWeight: fonts.semibold, textAlign: 'center' }}>
+              <Text style={{ color: STATUS_COLORS[d.status], fontSize: fonts.md, fontWeight: fonts.semibold, textAlign: 'center' }}>
                 {d.status === 'resolved_seller'
                   ? 'Resolved: Funds released to seller'
                   : 'Resolved: Funds refunded to buyer'}
@@ -334,7 +334,7 @@ export function DisputeScreen({ onClose }: Props) {
 
         {!demoMode && pendingDisputes.length === 0 && !showHistory && (
           <View style={[st.card, { alignItems: 'center' }]}>
-            <Text style={{ color: t.text.muted, fontSize: 13, textAlign: 'center', lineHeight: 20 }}>
+            <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', lineHeight: 20 }}>
               Enable Demo Mode in Settings to see sample disputes. Disputes are created when escrow parties raise an issue.
             </Text>
           </View>

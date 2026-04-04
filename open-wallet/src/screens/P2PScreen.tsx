@@ -51,50 +51,50 @@ export function P2PScreen({ onClose }: P2PScreenProps) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     scroll: { paddingHorizontal: 16, paddingTop: 8 },
-    header: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold, textAlign: 'center', marginVertical: 16 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 8, marginLeft: 4 },
+    header: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold, textAlign: 'center', marginVertical: 16 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 8, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 4 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 },
-    label: { color: t.text.primary, fontSize: 15 },
-    value: { color: t.text.secondary, fontSize: 14 },
-    valueGreen: { color: t.accent.green, fontSize: 13, fontWeight: fonts.semibold },
-    valueRed: { color: t.accent.red, fontSize: 13, fontWeight: fonts.semibold },
-    valueMono: { color: t.text.secondary, fontSize: 11, fontFamily: 'monospace' },
+    label: { color: t.text.primary, fontSize: fonts.md },
+    value: { color: t.text.secondary, fontSize: fonts.md },
+    valueGreen: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    valueRed: { color: t.accent.red, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    valueMono: { color: t.text.secondary, fontSize: fonts.xs, fontFamily: 'monospace' },
     divider: { height: 1, backgroundColor: t.border, marginHorizontal: 16 },
     modeToggle: { flexDirection: 'row', gap: 4 },
     modeBtn: { paddingVertical: 6, paddingHorizontal: 16, borderRadius: 8, backgroundColor: t.border },
     modeBtnActive: { backgroundColor: t.accent.green },
-    modeBtnText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    modeBtnText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     modeBtnTextActive: { color: t.bg.primary },
     startBtn: { backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginTop: 16 },
     stopBtn: { backgroundColor: t.accent.red + '20', borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginTop: 16 },
-    btnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
-    stopBtnText: { color: t.accent.red, fontSize: 15, fontWeight: fonts.bold },
+    btnText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
+    stopBtnText: { color: t.accent.red, fontSize: fonts.md, fontWeight: fonts.bold },
     peerCard: { backgroundColor: t.bg.card, borderRadius: 12, padding: 12, marginBottom: 8 },
     peerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    peerId: { color: t.text.primary, fontSize: 13, fontFamily: 'monospace', flex: 1 },
-    peerLatency: { color: t.accent.green, fontSize: 12, fontWeight: fonts.semibold, marginLeft: 8 },
-    peerAge: { color: t.text.muted, fontSize: 11, marginTop: 4 },
-    input: { backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 14, fontFamily: 'monospace', marginTop: 8 },
+    peerId: { color: t.text.primary, fontSize: fonts.sm, fontFamily: 'monospace', flex: 1 },
+    peerLatency: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.semibold, marginLeft: 8 },
+    peerAge: { color: t.text.muted, fontSize: fonts.xs, marginTop: 4 },
+    input: { backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md, fontFamily: 'monospace', marginTop: 8 },
     addPeerBtn: { backgroundColor: t.accent.blue, borderRadius: 10, paddingVertical: 10, alignItems: 'center', marginTop: 8 },
-    addPeerText: { color: '#fff', fontSize: 14, fontWeight: fonts.semibold },
-    emptyText: { color: t.text.muted, fontSize: 13, textAlign: 'center', padding: 20 },
+    addPeerText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.semibold },
+    emptyText: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', padding: 20 },
     backBtn: { paddingVertical: 20, alignItems: 'center' },
-    backText: { color: t.accent.blue, fontSize: 16 },
+    backText: { color: t.accent.blue, fontSize: fonts.lg },
     statusDot: { width: 8, height: 8, borderRadius: 4, marginRight: 8 },
     statusRow: { flexDirection: 'row', alignItems: 'center' },
     qrRow: { flexDirection: 'row', gap: 8, marginTop: 12 },
     qrBtn: { flex: 1, backgroundColor: t.accent.blue, borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
     qrBtnScan: { flex: 1, backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
-    qrBtnText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
+    qrBtnText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
     qrOverlay: { flex: 1, backgroundColor: t.bg.primary, justifyContent: 'center', alignItems: 'center', padding: 24 },
-    qrTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.bold, marginBottom: 20 },
+    qrTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold, marginBottom: 20 },
     qrWrapper: { padding: 20, backgroundColor: '#ffffff', borderRadius: 20, marginBottom: 20 },
-    qrInfo: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginBottom: 20, lineHeight: 18 },
+    qrInfo: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginBottom: 20, lineHeight: 18 },
     qrCloseBtn: { backgroundColor: t.accent.red + '20', borderRadius: 12, paddingVertical: 14, paddingHorizontal: 40, alignItems: 'center' },
-    qrCloseText: { color: t.accent.red, fontSize: 15, fontWeight: fonts.bold },
+    qrCloseText: { color: t.accent.red, fontSize: fonts.md, fontWeight: fonts.bold },
     setupGuideBtn: { backgroundColor: t.accent.blue + '15', borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginTop: 12 },
-    setupGuideBtnText: { color: t.accent.blue, fontSize: 15, fontWeight: fonts.bold },
+    setupGuideBtnText: { color: t.accent.blue, fontSize: fonts.md, fontWeight: fonts.bold },
   }), [t]);
 
   // ─── Peer & Block Updates ───
@@ -302,7 +302,7 @@ export function P2PScreen({ onClose }: P2PScreenProps) {
             </View>
           </View>
           <View style={{ paddingHorizontal: 16, paddingBottom: 12 }}>
-            <Text style={{ color: t.text.muted, fontSize: 12 }}>
+            <Text style={{ color: t.text.muted, fontSize: fonts.sm }}>
               {backendType === 'server' && 'All queries go through centralized RPC servers.'}
               {backendType === 'mobile' && 'All queries go directly to peer nodes. No central server.'}
               {backendType === 'hybrid' && 'Uses P2P for Open Chain, servers for other chains.'}
@@ -360,7 +360,7 @@ export function P2PScreen({ onClose }: P2PScreenProps) {
             />
           </View>
           <View style={{ paddingHorizontal: 16, paddingBottom: 12 }}>
-            <Text style={{ color: t.text.muted, fontSize: 12 }}>
+            <Text style={{ color: t.text.muted, fontSize: fonts.sm }}>
               Auto-discover Open Wallet peers on your local Wi-Fi network. Useful for testing with multiple phones.
             </Text>
           </View>
@@ -371,7 +371,7 @@ export function P2PScreen({ onClose }: P2PScreenProps) {
         <View style={st.card}>
           {p2pBootstrapPeers.length === 0 ? (
             <View style={{ padding: 16 }}>
-              <Text style={{ color: t.text.muted, fontSize: 13 }}>
+              <Text style={{ color: t.text.muted, fontSize: fonts.sm }}>
                 No bootstrap peers configured. Add peers above or use mDNS for local discovery.
               </Text>
             </View>

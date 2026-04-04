@@ -111,72 +111,72 @@ export function ThemeStudioScreen({ onClose }: Props) {
     container: { flex: 1, backgroundColor: t.bg.primary },
     scroll: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 40 },
     header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 12 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    backText: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    backText: { color: t.accent.blue, fontSize: fonts.lg },
     tabs: { flexDirection: 'row', marginHorizontal: 16, marginTop: 4, marginBottom: 12, backgroundColor: t.bg.card, borderRadius: 12, padding: 3 },
     tab: { flex: 1, paddingVertical: 8, alignItems: 'center', borderRadius: 10 },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: '#FFFFFF' },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 8, marginLeft: 4 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 8, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16 },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 12 },
 
     /* Preview */
     previewCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 16 },
-    previewTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 12 },
+    previewTitle: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, marginBottom: 12 },
     previewMockup: { borderRadius: 12, padding: 16, minHeight: 140 },
-    previewHeader: { fontSize: 14, fontWeight: fonts.bold, marginBottom: 8 },
-    previewBalance: { fontSize: 24, fontWeight: fonts.bold, marginBottom: 4 },
-    previewSub: { fontSize: 12, opacity: 0.7 },
+    previewHeader: { fontSize: fonts.md, fontWeight: fonts.bold, marginBottom: 8 },
+    previewBalance: { fontSize: fonts.xxl, fontWeight: fonts.bold, marginBottom: 4 },
+    previewSub: { fontSize: fonts.sm, opacity: 0.7 },
     previewBtnRow: { flexDirection: 'row', gap: 8, marginTop: 12 },
     previewBtn: { flex: 1, paddingVertical: 8, borderRadius: 8, alignItems: 'center' },
-    previewBtnText: { fontSize: 12, fontWeight: fonts.bold },
-    activeLabel: { color: t.accent.green, fontSize: 11, fontWeight: fonts.bold, marginTop: 8, textAlign: 'center' },
+    previewBtnText: { fontSize: fonts.sm, fontWeight: fonts.bold },
+    activeLabel: { color: t.accent.green, fontSize: fonts.xs, fontWeight: fonts.bold, marginTop: 8, textAlign: 'center' },
 
     /* Theme Grid */
     themeGrid: { gap: 12 },
     themeItem: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, borderWidth: 2, borderColor: t.border },
     themeItemActive: { borderColor: t.accent.green },
     themeRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
-    themeIcon: { fontSize: 24, marginRight: 10 },
-    themeName: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, flex: 1 },
+    themeIcon: { fontSize: fonts.xxl, marginRight: 10 },
+    themeName: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, flex: 1 },
     themeActiveBadge: { backgroundColor: t.accent.green + '20', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 6 },
-    themeActiveBadgeText: { color: t.accent.green, fontSize: 10, fontWeight: fonts.bold },
+    themeActiveBadgeText: { color: t.accent.green, fontSize: fonts.xs, fontWeight: fonts.bold },
     swatchRow: { flexDirection: 'row', gap: 6 },
     swatch: { width: 28, height: 28, borderRadius: 8, borderWidth: 1, borderColor: t.border },
     applyBtn: { marginTop: 12, backgroundColor: t.accent.blue, borderRadius: 10, paddingVertical: 10, alignItems: 'center' },
-    applyBtnText: { color: '#FFFFFF', fontSize: 13, fontWeight: fonts.bold },
+    applyBtnText: { color: '#FFFFFF', fontSize: fonts.sm, fontWeight: fonts.bold },
 
     /* Create */
-    nameInput: { backgroundColor: t.bg.primary, color: t.text.primary, fontSize: 16, fontWeight: fonts.semibold, padding: 14, borderRadius: 12, borderWidth: 1, borderColor: t.border, marginBottom: 16 },
+    nameInput: { backgroundColor: t.bg.primary, color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.semibold, padding: 14, borderRadius: 12, borderWidth: 1, borderColor: t.border, marginBottom: 16 },
     colorRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 10 },
-    colorLabel: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, flex: 1 },
-    colorInput: { backgroundColor: t.bg.primary, color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 8, borderWidth: 1, borderColor: t.border, width: 100, textAlign: 'center' },
+    colorLabel: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold, flex: 1 },
+    colorInput: { backgroundColor: t.bg.primary, color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 8, borderWidth: 1, borderColor: t.border, width: 100, textAlign: 'center' },
     colorSwatch: { width: 32, height: 32, borderRadius: 8, marginLeft: 10, borderWidth: 1, borderColor: t.border },
     createBtnRow: { flexDirection: 'row', gap: 10, marginTop: 20 },
     createBtn: { flex: 1, paddingVertical: 14, borderRadius: 14, alignItems: 'center' },
     createBtnPrimary: { backgroundColor: t.accent.green },
     createBtnSecondary: { backgroundColor: t.accent.blue },
-    createBtnText: { color: '#FFFFFF', fontSize: 14, fontWeight: fonts.bold },
+    createBtnText: { color: '#FFFFFF', fontSize: fonts.md, fontWeight: fonts.bold },
 
     /* Community */
     communityCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     communityRow: { flexDirection: 'row', alignItems: 'center' },
     communityInfo: { flex: 1, marginLeft: 10 },
-    communityName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
-    communityAuthor: { color: t.text.secondary, fontSize: 12, marginTop: 2 },
-    communityDownloads: { color: t.text.secondary, fontSize: 11, marginTop: 2 },
+    communityName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    communityAuthor: { color: t.text.secondary, fontSize: fonts.sm, marginTop: 2 },
+    communityDownloads: { color: t.text.secondary, fontSize: fonts.xs, marginTop: 2 },
     communityActions: { flexDirection: 'row', gap: 8, marginTop: 12 },
     communityBtn: { flex: 1, paddingVertical: 8, borderRadius: 10, alignItems: 'center', backgroundColor: t.accent.blue + '20' },
-    communityBtnText: { color: t.accent.blue, fontSize: 13, fontWeight: fonts.semibold },
+    communityBtnText: { color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.semibold },
     importBtn: { backgroundColor: t.bg.card, borderRadius: 14, paddingVertical: 14, alignItems: 'center', borderWidth: 1, borderColor: t.border, marginTop: 16 },
-    importBtnText: { color: t.accent.blue, fontSize: 14, fontWeight: fonts.bold },
+    importBtnText: { color: t.accent.blue, fontSize: fonts.md, fontWeight: fonts.bold },
 
     /* Feedback */
     toast: { backgroundColor: t.accent.green + '20', borderRadius: 12, padding: 14, alignItems: 'center', marginTop: 12 },
-    toastText: { color: t.accent.green, fontSize: 14, fontWeight: fonts.bold },
-    emptyHint: { color: t.text.secondary, fontSize: 13, textAlign: 'center', marginTop: 40 },
+    toastText: { color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.bold },
+    emptyHint: { color: t.text.secondary, fontSize: fonts.sm, textAlign: 'center', marginTop: 40 },
   }), [t]);
 
   const TABS: { key: Tab; label: string }[] = [
@@ -330,7 +330,7 @@ export function ThemeStudioScreen({ onClose }: Props) {
       {COMMUNITY_THEMES.map((theme) => (
         <View key={theme.id} style={st.communityCard}>
           <View style={st.communityRow}>
-            <Text style={{ fontSize: 32 }}>{theme.icon}</Text>
+            <Text style={{ fontSize: fonts.hero }}>{theme.icon}</Text>
             <View style={st.communityInfo}>
               <Text style={st.communityName}>{theme.name}</Text>
               <Text style={st.communityAuthor}>by {theme.author}</Text>

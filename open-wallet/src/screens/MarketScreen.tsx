@@ -81,27 +81,27 @@ export const MarketScreen = React.memo(({ onClose }: Props) => {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    back: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
-    title: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
-    searchBox: { marginHorizontal: 16, marginBottom: 12, backgroundColor: t.bg.card, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10, color: t.text.primary, fontSize: 15 },
-    sectionLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 20, marginTop: 16, marginBottom: 8 },
+    back: { color: t.accent.blue, fontSize: fonts.lg, fontWeight: fonts.semibold },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    searchBox: { marginHorizontal: 16, marginBottom: 12, backgroundColor: t.bg.card, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10, color: t.text.primary, fontSize: fonts.md },
+    sectionLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 20, marginTop: 16, marginBottom: 8 },
     trendingRow: { flexDirection: 'row', gap: 8, paddingHorizontal: 16, marginBottom: 8 },
     trendingChip: { backgroundColor: t.bg.card, borderRadius: 20, paddingVertical: 6, paddingHorizontal: 14 },
     trendingChipActive: { backgroundColor: t.accent.green + '20' },
-    trendingText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    trendingText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     trendingTextActive: { color: t.accent.green, fontWeight: fonts.bold },
     tokenRow: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: t.border },
-    rank: { width: 28, color: t.text.muted, fontSize: 12, textAlign: 'center' },
+    rank: { width: 28, color: t.text.muted, fontSize: fonts.sm, textAlign: 'center' },
     dot: { width: 10, height: 10, borderRadius: 5, marginRight: 10 },
     tokenInfo: { flex: 1 },
-    tokenSymbol: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
-    tokenName: { color: t.text.muted, fontSize: 12, marginTop: 1 },
+    tokenSymbol: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    tokenName: { color: t.text.muted, fontSize: fonts.sm, marginTop: 1 },
     priceCol: { alignItems: 'flex-end' },
-    price: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
-    change: { fontSize: 12, fontWeight: fonts.bold, marginTop: 2 },
-    marketCap: { color: t.text.muted, fontSize: 10, marginTop: 1 },
+    price: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
+    change: { fontSize: fonts.sm, fontWeight: fonts.bold, marginTop: 2 },
+    marketCap: { color: t.text.muted, fontSize: fonts.xs, marginTop: 1 },
     loadingWrap: { paddingVertical: 40, alignItems: 'center' },
-    emptyText: { color: t.text.muted, textAlign: 'center', paddingVertical: 40, fontSize: 14 },
+    emptyText: { color: t.text.muted, textAlign: 'center', paddingVertical: 40, fontSize: fonts.md },
   }), [t]);
 
   const fetchMarket = useCallback(async () => {
@@ -262,7 +262,7 @@ export const MarketScreen = React.memo(({ onClose }: Props) => {
       {loading && !refreshing ? (
         <View style={s.loadingWrap}>
           <ActivityIndicator color={t.accent.green} />
-          <Text style={{ color: t.text.muted, marginTop: 8, fontSize: 13 }}>Loading market data...</Text>
+          <Text style={{ color: t.text.muted, marginTop: 8, fontSize: fonts.sm }}>Loading market data...</Text>
         </View>
       ) : (
         <FlatList

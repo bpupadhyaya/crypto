@@ -169,10 +169,10 @@ function AsciiBarChart({ data, color, theme }: {
     <View style={{ marginVertical: 16 }}>
       {/* Y-axis labels */}
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
-        <Text style={{ color: theme.text.muted, fontSize: 10 }}>
+        <Text style={{ color: theme.text.muted, fontSize: fonts.xs }}>
           {max >= 1000 ? `$${(max / 1000).toFixed(1)}k` : `$${max.toFixed(2)}`}
         </Text>
-        <Text style={{ color: theme.text.muted, fontSize: 10 }}>High</Text>
+        <Text style={{ color: theme.text.muted, fontSize: fonts.xs }}>High</Text>
       </View>
 
       {/* Bars */}
@@ -201,10 +201,10 @@ function AsciiBarChart({ data, color, theme }: {
 
       {/* X-axis / low label */}
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 4 }}>
-        <Text style={{ color: theme.text.muted, fontSize: 10 }}>
+        <Text style={{ color: theme.text.muted, fontSize: fonts.xs }}>
           {min >= 1000 ? `$${(min / 1000).toFixed(1)}k` : `$${min.toFixed(2)}`}
         </Text>
-        <Text style={{ color: theme.text.muted, fontSize: 10 }}>Low</Text>
+        <Text style={{ color: theme.text.muted, fontSize: fonts.xs }}>Low</Text>
       </View>
     </View>
   );
@@ -233,63 +233,63 @@ export function PriceChartScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    back: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
-    title: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
+    back: { color: t.accent.blue, fontSize: fonts.lg, fontWeight: fonts.semibold },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
     // Token selector
     tokenRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 16, paddingHorizontal: 16 },
     tokenChip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: t.bg.card },
     tokenChipActive: { backgroundColor: t.accent.blue },
-    tokenChipText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.bold },
+    tokenChipText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.bold },
     tokenChipTextActive: { color: '#fff' },
     // Tabs
     tabRow: { flexDirection: 'row', marginHorizontal: 16, marginBottom: 16, gap: 6 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 12, alignItems: 'center', backgroundColor: t.bg.card },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase' },
+    tabText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase' },
     tabTextActive: { color: '#fff' },
     // Time range
     timeRow: { flexDirection: 'row', gap: 6, marginBottom: 16 },
     timeBtn: { flex: 1, paddingVertical: 8, borderRadius: 10, alignItems: 'center', backgroundColor: t.bg.card },
     timeBtnActive: { backgroundColor: t.accent.blue + '30' },
-    timeBtnText: { color: t.text.muted, fontSize: 11, fontWeight: fonts.bold },
+    timeBtnText: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.bold },
     timeBtnTextActive: { color: t.accent.blue },
     // Price display
     priceCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 16 },
-    priceMain: { color: t.text.primary, fontSize: 32, fontWeight: fonts.heavy },
-    priceChange: { fontSize: 16, fontWeight: fonts.bold, marginTop: 4 },
+    priceMain: { color: t.text.primary, fontSize: fonts.hero, fontWeight: fonts.heavy },
+    priceChange: { fontSize: fonts.lg, fontWeight: fonts.bold, marginTop: 4 },
     priceRow: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 16 },
     priceStat: { alignItems: 'center' },
-    priceStatLabel: { color: t.text.muted, fontSize: 11, marginBottom: 2 },
-    priceStatValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
+    priceStatLabel: { color: t.text.muted, fontSize: fonts.xs, marginBottom: 2 },
+    priceStatValue: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
     // Chart area
     chartCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 16 },
     // Section
-    sectionLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 10, marginLeft: 4 },
+    sectionLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 10, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16 },
     metricRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10 },
-    metricLabel: { color: t.text.muted, fontSize: 14 },
-    metricValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
+    metricLabel: { color: t.text.muted, fontSize: fonts.md },
+    metricValue: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
     divider: { height: 1, backgroundColor: t.border },
     // Alerts
     alertCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 14, marginBottom: 10 },
     alertRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    alertText: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
-    alertMeta: { color: t.text.muted, fontSize: 12, marginTop: 4 },
+    alertText: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
+    alertMeta: { color: t.text.muted, fontSize: fonts.sm, marginTop: 4 },
     alertToggle: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8 },
-    alertToggleText: { fontSize: 12, fontWeight: fonts.bold },
+    alertToggleText: { fontSize: fonts.sm, fontWeight: fonts.bold },
     // New alert
     newAlertRow: { flexDirection: 'row', gap: 8, marginTop: 12 },
-    alertInput: { flex: 1, backgroundColor: t.bg.primary, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10, color: t.text.primary, fontSize: 14 },
+    alertInput: { flex: 1, backgroundColor: t.bg.primary, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10, color: t.text.primary, fontSize: fonts.md },
     directionBtn: { paddingHorizontal: 14, paddingVertical: 10, borderRadius: 12, backgroundColor: t.bg.primary },
     directionBtnActive: { backgroundColor: t.accent.blue + '30' },
-    directionBtnText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
+    directionBtnText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
     directionBtnTextActive: { color: t.accent.blue },
     addAlertBtn: { backgroundColor: t.accent.blue, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 10, justifyContent: 'center' },
-    addAlertBtnText: { color: '#fff', fontSize: 13, fontWeight: fonts.bold },
+    addAlertBtnText: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.bold },
     demoBanner: { backgroundColor: t.accent.yellow + '20', borderRadius: 12, padding: 12, marginBottom: 16 },
-    demoText: { color: t.accent.yellow, fontSize: 13, fontWeight: fonts.semibold, textAlign: 'center' },
-    placeholder: { color: t.text.muted, fontSize: 14 },
+    demoText: { color: t.accent.yellow, fontSize: fonts.sm, fontWeight: fonts.semibold, textAlign: 'center' },
+    placeholder: { color: t.text.muted, fontSize: fonts.md },
   }), [t]);
 
   const formatUsd = (v: number) => {
@@ -376,7 +376,7 @@ export function PriceChartScreen({ onClose }: Props) {
     <>
       {/* Price display */}
       <View style={s.priceCard}>
-        <Text style={{ color: t.text.muted, fontSize: 14, marginBottom: 4 }}>
+        <Text style={{ color: t.text.muted, fontSize: fonts.md, marginBottom: 4 }}>
           {token.name} ({token.symbol})
         </Text>
         <Text style={s.priceMain}>{formatUsd(token.price)}</Text>
@@ -416,7 +416,7 @@ export function PriceChartScreen({ onClose }: Props) {
 
       {/* Price chart */}
       <View style={s.chartCard}>
-        <Text style={{ color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 4 }}>
+        <Text style={{ color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 4 }}>
           {token.symbol} Price -- {timeRange}
         </Text>
         {priceData.length > 0 ? (
@@ -461,7 +461,7 @@ export function PriceChartScreen({ onClose }: Props) {
 
         <Text style={s.sectionLabel}>About {token.name}</Text>
         <View style={s.card}>
-          <Text style={{ color: t.text.secondary, fontSize: 14, lineHeight: 20 }}>
+          <Text style={{ color: t.text.secondary, fontSize: fonts.md, lineHeight: 20 }}>
             {token.symbol === 'BTC' && 'Bitcoin is a decentralized digital currency. It is the first and most well-known cryptocurrency, operating on a peer-to-peer network using proof-of-work consensus.'}
             {token.symbol === 'ETH' && 'Ethereum is a decentralized platform that enables smart contracts and decentralized applications. It uses proof-of-stake consensus and supports the ERC-20 token standard.'}
             {token.symbol === 'SOL' && 'Solana is a high-performance blockchain supporting fast, low-cost transactions. It uses proof-of-history combined with proof-of-stake for consensus.'}

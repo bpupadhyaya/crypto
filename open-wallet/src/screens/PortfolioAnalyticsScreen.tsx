@@ -28,7 +28,7 @@ function BarChart({ items, theme }: {
     <View style={{ gap: 8 }}>
       {items.map((item) => (
         <View key={item.label} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-          <Text style={{ color: theme.text.secondary, fontSize: 13, width: 50, textAlign: 'right' }}>
+          <Text style={{ color: theme.text.secondary, fontSize: fonts.sm, width: 50, textAlign: 'right' }}>
             {item.label}
           </Text>
           <View style={{ flex: 1, height: 24, backgroundColor: theme.border, borderRadius: 6, overflow: 'hidden' }}>
@@ -41,14 +41,14 @@ function BarChart({ items, theme }: {
               paddingLeft: 6,
             }}>
               {item.pct >= 8 && (
-                <Text style={{ color: '#fff', fontSize: 11, fontWeight: fonts.bold }}>
+                <Text style={{ color: '#fff', fontSize: fonts.xs, fontWeight: fonts.bold }}>
                   {item.pct.toFixed(1)}%
                 </Text>
               )}
             </View>
           </View>
           {item.pct < 8 && (
-            <Text style={{ color: theme.text.muted, fontSize: 11 }}>{item.pct.toFixed(1)}%</Text>
+            <Text style={{ color: theme.text.muted, fontSize: fonts.xs }}>{item.pct.toFixed(1)}%</Text>
           )}
         </View>
       ))}
@@ -93,27 +93,27 @@ export const PortfolioAnalyticsScreen = React.memo(({ onClose }: Props) => {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    back: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
-    title: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
+    back: { color: t.accent.blue, fontSize: fonts.lg, fontWeight: fonts.semibold },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
-    sectionLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 10, marginLeft: 4 },
+    sectionLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 10, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16 },
     metricRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10 },
-    metricLabel: { color: t.text.muted, fontSize: 14 },
-    metricValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
+    metricLabel: { color: t.text.muted, fontSize: fonts.md },
+    metricValue: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
     divider: { height: 1, backgroundColor: t.border },
     // Table
     tableHeader: { flexDirection: 'row', paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: t.border },
-    tableHeaderText: { color: t.text.muted, fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase' },
+    tableHeaderText: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.bold, textTransform: 'uppercase' },
     tableRow: { flexDirection: 'row', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: t.border },
-    tableCell: { fontSize: 13 },
+    tableCell: { fontSize: fonts.sm },
     // Risk
     scoreCircle: { width: 60, height: 60, borderRadius: 30, justifyContent: 'center', alignItems: 'center', marginBottom: 8 },
-    scoreText: { color: '#fff', fontSize: 22, fontWeight: fonts.heavy },
-    scoreLabel: { color: t.text.muted, fontSize: 12, textAlign: 'center' },
+    scoreText: { color: '#fff', fontSize: fonts.xxl, fontWeight: fonts.heavy },
+    scoreLabel: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center' },
     riskItem: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 12, marginTop: 8 },
-    riskText: { color: t.text.secondary, fontSize: 13, lineHeight: 18 },
-    suggestionText: { color: t.accent.blue, fontSize: 13, lineHeight: 18, marginTop: 4 },
+    riskText: { color: t.text.secondary, fontSize: fonts.sm, lineHeight: 18 },
+    suggestionText: { color: t.accent.blue, fontSize: fonts.sm, lineHeight: 18, marginTop: 4 },
   }), [t]);
 
   // ─── Derived analytics ───

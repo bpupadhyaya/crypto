@@ -205,39 +205,39 @@ export function CommunityHealthScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { flex: 1, paddingHorizontal: 16 },
-    subtitle: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 16 },
+    subtitle: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 19, marginBottom: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 11, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.xs, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
-    regionName: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 2 },
+    regionName: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, marginBottom: 2 },
     row: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 },
-    label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
-    netOTK: { fontSize: 18, fontWeight: fonts.heavy, marginBottom: 4 },
+    label: { color: t.text.muted, fontSize: fonts.sm },
+    val: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    netOTK: { fontSize: fonts.xl, fontWeight: fonts.heavy, marginBottom: 4 },
     alertBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'flex-start', marginBottom: 8 },
-    alertText: { fontSize: 11, fontWeight: fonts.bold, color: '#fff' },
-    trendText: { fontSize: 13, fontWeight: fonts.bold },
+    alertText: { fontSize: fonts.xs, fontWeight: fonts.bold, color: '#fff' },
+    trendText: { fontSize: fonts.sm, fontWeight: fonts.bold },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 8 },
     barContainer: { height: 8, backgroundColor: t.border, borderRadius: 4, marginVertical: 4, overflow: 'hidden' },
     barPositive: { height: 8, borderRadius: 4 },
     channelRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 10, gap: 10 },
     channelIcon: { width: 32, height: 32, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
-    channelLabel: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, flex: 1 },
-    empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
+    channelLabel: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold, flex: 1 },
+    empty: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', marginTop: 40 },
     summaryRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
     summaryCard: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' },
-    summaryNum: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 2 },
-    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold, textAlign: 'center' },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 8, marginBottom: 8 },
+    summaryNum: { fontSize: fonts.xl, fontWeight: fonts.heavy, marginBottom: 2 },
+    summaryLabel: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold, textAlign: 'center' },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 8, marginBottom: 8 },
     backBtn: { paddingVertical: 12, alignItems: 'center' },
-    backText: { color: t.accent.blue, fontSize: 15 },
-    leaderRank: { color: t.text.muted, fontSize: 18, fontWeight: fonts.heavy, width: 30 },
+    backText: { color: t.accent.blue, fontSize: fonts.md },
+    leaderRank: { color: t.text.muted, fontSize: fonts.xl, fontWeight: fonts.heavy, width: 30 },
   }), [t]);
 
   const regions = demoMode ? DEMO_REGIONS : [];
@@ -320,11 +320,11 @@ export function CommunityHealthScreen({ onClose }: Props) {
             return (
               <View key={ch} style={st.card}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 6 }}>
-                  <Text style={{ fontSize: 18, marginRight: 8 }}>{meta.icon}</Text>
-                  <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, flex: 1 }}>{meta.label}</Text>
-                  <Text style={{ color: t.accent.green, fontSize: 12, fontWeight: fonts.bold }}>+{formatOTK(data.positive)}</Text>
-                  <Text style={{ color: t.text.muted, fontSize: 12, marginHorizontal: 4 }}>/</Text>
-                  <Text style={{ color: t.accent.red, fontSize: 12, fontWeight: fonts.bold }}>-{formatOTK(data.negative)}</Text>
+                  <Text style={{ fontSize: fonts.xl, marginRight: 8 }}>{meta.icon}</Text>
+                  <Text style={{ color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, flex: 1 }}>{meta.label}</Text>
+                  <Text style={{ color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold }}>+{formatOTK(data.positive)}</Text>
+                  <Text style={{ color: t.text.muted, fontSize: fonts.sm, marginHorizontal: 4 }}>/</Text>
+                  <Text style={{ color: t.accent.red, fontSize: fonts.sm, fontWeight: fonts.bold }}>-{formatOTK(data.negative)}</Text>
                 </View>
                 <View style={st.barContainer}>
                   <View style={[st.barPositive, { width: `${pct}%`, backgroundColor: meta.color }]} />
@@ -421,18 +421,18 @@ export function CommunityHealthScreen({ onClose }: Props) {
               <View key={ch.channel} style={st.card}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
                   <View style={[st.channelIcon, { backgroundColor: ch.color + '20' }]}>
-                    <Text style={{ fontSize: 16 }}>{ch.icon}</Text>
+                    <Text style={{ fontSize: fonts.lg }}>{ch.icon}</Text>
                   </View>
                   <Text style={st.channelLabel}>{ch.label}</Text>
                   <Text style={[st.trendText, { color: trendColors[ch.netTrend] }]}>{TREND_ICONS[ch.netTrend]}</Text>
                 </View>
                 <View style={st.row}>
                   <Text style={st.label}>Positive</Text>
-                  <Text style={{ color: t.accent.green, fontSize: 12, fontWeight: fonts.bold }}>+{formatOTK(ch.globalPositive)}</Text>
+                  <Text style={{ color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold }}>+{formatOTK(ch.globalPositive)}</Text>
                 </View>
                 <View style={st.row}>
                   <Text style={st.label}>Negative</Text>
-                  <Text style={{ color: t.accent.red, fontSize: 12, fontWeight: fonts.bold }}>-{formatOTK(ch.globalNegative)}</Text>
+                  <Text style={{ color: t.accent.red, fontSize: fonts.sm, fontWeight: fonts.bold }}>-{formatOTK(ch.globalNegative)}</Text>
                 </View>
                 <View style={st.barContainer}>
                   <View style={[st.barPositive, { width: `${posPct}%`, backgroundColor: ch.color }]} />
@@ -446,8 +446,8 @@ export function CommunityHealthScreen({ onClose }: Props) {
         {activeTab === 'alerts' && (
           alertZones.length === 0 ? (
             <View style={st.card}>
-              <Text style={{ color: t.accent.green, fontSize: 15, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 4 }}>All Communities Healthy</Text>
-              <Text style={{ color: t.text.muted, fontSize: 13, textAlign: 'center' }}>No communities currently need intervention.</Text>
+              <Text style={{ color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 4 }}>All Communities Healthy</Text>
+              <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center' }}>No communities currently need intervention.</Text>
             </View>
           ) : (
             <>
@@ -466,7 +466,7 @@ export function CommunityHealthScreen({ onClose }: Props) {
                   <Text style={[st.netOTK, { color: t.accent.red }]}>Net: {formatOTK(r.netOTK)} OTK</Text>
                   <View style={st.row}>
                     <Text style={st.label}>Negative ratio</Text>
-                    <Text style={{ color: t.accent.red, fontSize: 12, fontWeight: fonts.bold }}>
+                    <Text style={{ color: t.accent.red, fontSize: fonts.sm, fontWeight: fonts.bold }}>
                       {((r.totalNegativeOTK / (r.totalPositiveOTK + r.totalNegativeOTK)) * 100).toFixed(1)}%
                     </Text>
                   </View>
@@ -501,13 +501,13 @@ export function CommunityHealthScreen({ onClose }: Props) {
               <View style={{ flex: 1, marginLeft: 8 }}>
                 <Text style={st.regionName}>{r.name}</Text>
                 <View style={{ flexDirection: 'row', gap: 12, marginTop: 2 }}>
-                  <Text style={{ color: t.accent.green, fontSize: 12, fontWeight: fonts.bold }}>+{formatOTK(r.totalPositiveOTK)}</Text>
-                  <Text style={{ color: t.accent.red, fontSize: 12, fontWeight: fonts.bold }}>-{formatOTK(r.totalNegativeOTK)}</Text>
+                  <Text style={{ color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold }}>+{formatOTK(r.totalPositiveOTK)}</Text>
+                  <Text style={{ color: t.accent.red, fontSize: fonts.sm, fontWeight: fonts.bold }}>-{formatOTK(r.totalNegativeOTK)}</Text>
                 </View>
               </View>
               <View style={{ alignItems: 'flex-end' }}>
                 <Text style={[st.netOTK, { color: t.accent.green, marginBottom: 0 }]}>{formatOTK(r.netOTK)}</Text>
-                <Text style={[st.trendText, { color: trendColors[r.trend], fontSize: 11 }]}>{TREND_ICONS[r.trend]} {r.trend}</Text>
+                <Text style={[st.trendText, { color: trendColors[r.trend], fontSize: fonts.xs }]}>{TREND_ICONS[r.trend]} {r.trend}</Text>
               </View>
             </TouchableOpacity>
           ))
@@ -515,7 +515,7 @@ export function CommunityHealthScreen({ onClose }: Props) {
 
         {!demoMode && (
           <View style={[st.card, { marginTop: 20 }]}>
-            <Text style={{ color: t.text.muted, fontSize: 13, textAlign: 'center' }}>
+            <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center' }}>
               Enable Demo Mode in Settings to see sample community health data.
             </Text>
           </View>

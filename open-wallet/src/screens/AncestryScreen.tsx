@@ -301,12 +301,12 @@ export function AncestryScreen({ onClose }: Props) {
       paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1,
       borderBottomColor: t.border,
     },
-    title: { fontSize: 20, fontWeight: fonts.bold, color: t.text.primary },
+    title: { fontSize: fonts.xl, fontWeight: fonts.bold, color: t.text.primary },
     closeBtn: {
       paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8,
       backgroundColor: t.bg.card,
     },
-    closeTxt: { color: t.text.secondary, fontSize: 14, fontWeight: fonts.semibold },
+    closeTxt: { color: t.text.secondary, fontSize: fonts.md, fontWeight: fonts.semibold },
 
     tabs: {
       flexDirection: 'row', paddingHorizontal: 12, paddingVertical: 8, gap: 8,
@@ -316,15 +316,15 @@ export function AncestryScreen({ onClose }: Props) {
       backgroundColor: t.bg.card,
     },
     tabActive: { backgroundColor: t.accent.green },
-    tabTxt: { fontSize: 13, fontWeight: fonts.semibold, color: t.text.secondary },
+    tabTxt: { fontSize: fonts.sm, fontWeight: fonts.semibold, color: t.text.secondary },
     tabTxtActive: { color: '#fff' },
 
     notkBanner: {
       flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
       paddingVertical: 8, backgroundColor: t.accent + '12', gap: 8,
     },
-    notkTxt: { fontSize: 13, fontWeight: fonts.bold, color: t.accent.green },
-    notkSub: { fontSize: 11, color: t.text.secondary },
+    notkTxt: { fontSize: fonts.sm, fontWeight: fonts.bold, color: t.accent.green },
+    notkSub: { fontSize: fonts.xs, color: t.text.secondary },
 
     statsRow: {
       flexDirection: 'row', paddingHorizontal: 16, paddingVertical: 10, gap: 8,
@@ -333,8 +333,8 @@ export function AncestryScreen({ onClose }: Props) {
       flex: 1, padding: 10, borderRadius: 10, backgroundColor: t.bg.card,
       alignItems: 'center',
     },
-    statVal: { fontSize: 18, fontWeight: fonts.bold, color: t.accent.green },
-    statLabel: { fontSize: 10, color: t.text.secondary, marginTop: 2, textAlign: 'center' },
+    statVal: { fontSize: fonts.xl, fontWeight: fonts.bold, color: t.accent.green },
+    statLabel: { fontSize: fonts.xs, color: t.text.secondary, marginTop: 2, textAlign: 'center' },
 
     scroll: { flex: 1 },
 
@@ -344,8 +344,8 @@ export function AncestryScreen({ onClose }: Props) {
       flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16,
       paddingTop: 14, paddingBottom: 6, gap: 8,
     },
-    genIcon: { fontSize: 20 },
-    genLabel: { fontSize: 14, fontWeight: fonts.bold, color: t.text.secondary },
+    genIcon: { fontSize: fonts.xl },
+    genLabel: { fontSize: fonts.md, fontWeight: fonts.bold, color: t.text.secondary },
     genLine: { height: 1, flex: 1, backgroundColor: t.border, marginLeft: 8 },
 
     memberCard: {
@@ -353,21 +353,21 @@ export function AncestryScreen({ onClose }: Props) {
       backgroundColor: t.bg.card, borderLeftWidth: 4, flexDirection: 'row',
     },
     memberInfo: { flex: 1 },
-    memberName: { fontSize: 15, fontWeight: fonts.semibold, color: t.text.primary },
-    memberRel: { fontSize: 12, color: t.text.secondary, marginTop: 2 },
-    memberDates: { fontSize: 11, color: t.text.secondary, marginTop: 2 },
-    memberRegion: { fontSize: 12, color: t.accent.green, marginTop: 4 },
+    memberName: { fontSize: fonts.md, fontWeight: fonts.semibold, color: t.text.primary },
+    memberRel: { fontSize: fonts.sm, color: t.text.secondary, marginTop: 2 },
+    memberDates: { fontSize: fonts.xs, color: t.text.secondary, marginTop: 2 },
+    memberRegion: { fontSize: fonts.sm, color: t.accent.green, marginTop: 4 },
     memberRight: { alignItems: 'flex-end', justifyContent: 'center' },
     migBadge: {
       flexDirection: 'row', alignItems: 'center', backgroundColor: t.bg.primary,
       paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6,
     },
-    migTxt: { fontSize: 10, color: t.text.secondary, marginLeft: 4 },
+    migTxt: { fontSize: fonts.xs, color: t.text.secondary, marginLeft: 4 },
     storyBadge: {
       flexDirection: 'row', alignItems: 'center', marginTop: 4,
       backgroundColor: '#fef3c7', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6,
     },
-    storyBadgeTxt: { fontSize: 10, color: '#92400e', marginLeft: 4 },
+    storyBadgeTxt: { fontSize: fonts.xs, color: '#92400e', marginLeft: 4 },
 
     connector: {
       width: 2, height: 20, backgroundColor: t.border, marginLeft: 32,
@@ -378,10 +378,10 @@ export function AncestryScreen({ onClose }: Props) {
       marginHorizontal: 16, marginBottom: 12, padding: 16, borderRadius: 12,
       backgroundColor: t.bg.card, borderLeftWidth: 4, borderLeftColor: '#f59e0b',
     },
-    storyTitle: { fontSize: 15, fontWeight: fonts.semibold, color: t.text.primary },
-    storyEra: { fontSize: 12, color: t.text.secondary, marginTop: 2 },
-    storyAncestor: { fontSize: 12, color: t.accent.green, marginTop: 2 },
-    storyContent: { fontSize: 14, color: t.text.primary, lineHeight: 21, marginTop: 8 },
+    storyTitle: { fontSize: fonts.md, fontWeight: fonts.semibold, color: t.text.primary },
+    storyEra: { fontSize: fonts.sm, color: t.text.secondary, marginTop: 2 },
+    storyAncestor: { fontSize: fonts.sm, color: t.accent.green, marginTop: 2 },
+    storyContent: { fontSize: fonts.md, color: t.text.primary, lineHeight: 21, marginTop: 8 },
 
     // Heritage
     heritageCard: {
@@ -389,26 +389,26 @@ export function AncestryScreen({ onClose }: Props) {
       backgroundColor: t.bg.card,
     },
     heritageRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 6 },
-    heritageRegion: { fontSize: 15, fontWeight: fonts.semibold, color: t.text.primary, flex: 1 },
-    heritagePct: { fontSize: 16, fontWeight: fonts.bold, color: t.accent.green },
+    heritageRegion: { fontSize: fonts.md, fontWeight: fonts.semibold, color: t.text.primary, flex: 1 },
+    heritagePct: { fontSize: fonts.lg, fontWeight: fonts.bold, color: t.accent.green },
     heritageBar: {
       height: 6, borderRadius: 3, backgroundColor: t.border, marginBottom: 6,
     },
     heritageFill: { height: 6, borderRadius: 3, backgroundColor: t.accent.green },
-    heritageNotes: { fontSize: 12, color: t.text.secondary },
+    heritageNotes: { fontSize: fonts.sm, color: t.text.secondary },
 
     // Milestones
     milestoneSection: { paddingHorizontal: 16, paddingTop: 14, paddingBottom: 6 },
-    milestoneSectionTitle: { fontSize: 15, fontWeight: fonts.bold, color: t.text.primary, marginBottom: 8 },
+    milestoneSectionTitle: { fontSize: fonts.md, fontWeight: fonts.bold, color: t.text.primary, marginBottom: 8 },
     milestoneCard: {
       marginHorizontal: 16, marginBottom: 8, padding: 12, borderRadius: 10,
       backgroundColor: t.bg.card, flexDirection: 'row', gap: 10,
     },
-    msIcon: { fontSize: 22, marginTop: 2 },
+    msIcon: { fontSize: fonts.xxl, marginTop: 2 },
     msInfo: { flex: 1 },
-    msTitle: { fontSize: 14, fontWeight: fonts.semibold, color: t.text.primary },
-    msYear: { fontSize: 12, color: t.accent.green, marginTop: 2 },
-    msDesc: { fontSize: 12, color: t.text.secondary, marginTop: 4, lineHeight: 18 },
+    msTitle: { fontSize: fonts.md, fontWeight: fonts.semibold, color: t.text.primary },
+    msYear: { fontSize: fonts.sm, color: t.accent.green, marginTop: 2 },
+    msDesc: { fontSize: fonts.sm, color: t.text.secondary, marginTop: 4, lineHeight: 18 },
 
     // Detail modal
     modalOverlay: {
@@ -418,22 +418,22 @@ export function AncestryScreen({ onClose }: Props) {
     modalCard: {
       backgroundColor: t.bg.primary, borderRadius: 16, padding: 20,
     },
-    modalTitle: { fontSize: 18, fontWeight: fonts.bold, color: t.text.primary, marginBottom: 4 },
-    modalSub: { fontSize: 13, color: t.text.secondary, marginBottom: 12 },
-    modalBody: { fontSize: 14, color: t.text.primary, lineHeight: 21, marginBottom: 12 },
-    modalInfo: { fontSize: 13, color: t.text.secondary, marginBottom: 4 },
+    modalTitle: { fontSize: fonts.xl, fontWeight: fonts.bold, color: t.text.primary, marginBottom: 4 },
+    modalSub: { fontSize: fonts.sm, color: t.text.secondary, marginBottom: 12 },
+    modalBody: { fontSize: fonts.md, color: t.text.primary, lineHeight: 21, marginBottom: 12 },
+    modalInfo: { fontSize: fonts.sm, color: t.text.secondary, marginBottom: 4 },
     modalClose: {
       marginTop: 12, paddingVertical: 10, borderRadius: 10,
       backgroundColor: t.bg.card, alignItems: 'center',
     },
-    modalCloseTxt: { fontWeight: fonts.semibold, color: t.text.secondary, fontSize: 14 },
+    modalCloseTxt: { fontWeight: fonts.semibold, color: t.text.secondary, fontSize: fonts.md },
 
     // Form
     formSection: { paddingHorizontal: 16, paddingTop: 12 },
-    formLabel: { fontSize: 13, fontWeight: fonts.semibold, color: t.text.secondary, marginBottom: 4, marginTop: 12 },
+    formLabel: { fontSize: fonts.sm, fontWeight: fonts.semibold, color: t.text.secondary, marginBottom: 4, marginTop: 12 },
     formInput: {
       borderWidth: 1, borderColor: t.border, borderRadius: 10, padding: 10,
-      fontSize: 14, color: t.text.primary, backgroundColor: t.bg.card,
+      fontSize: fonts.md, color: t.text.primary, backgroundColor: t.bg.card,
     },
     formTextArea: { minHeight: 80, textAlignVertical: 'top' },
     relPicker: {
@@ -444,23 +444,23 @@ export function AncestryScreen({ onClose }: Props) {
       borderWidth: 1, borderColor: t.border,
     },
     relOptionActive: { borderWidth: 2 },
-    relOptionTxt: { fontSize: 12, fontWeight: fonts.semibold },
+    relOptionTxt: { fontSize: fonts.sm, fontWeight: fonts.semibold },
     addBtn: {
       marginTop: 20, marginBottom: 20, paddingVertical: 14, borderRadius: 12,
       backgroundColor: t.accent.green, alignItems: 'center',
     },
-    addBtnTxt: { color: '#fff', fontWeight: fonts.bold, fontSize: 15 },
+    addBtnTxt: { color: '#fff', fontWeight: fonts.bold, fontSize: fonts.md },
 
     divider: { height: 1, backgroundColor: t.border, marginHorizontal: 16, marginVertical: 16 },
 
     empty: { alignItems: 'center', paddingTop: 60 },
     emptyIcon: { fontSize: 48, marginBottom: 12 },
-    emptyTxt: { fontSize: 15, color: t.text.secondary },
+    emptyTxt: { fontSize: fonts.md, color: t.text.secondary },
 
     demoBar: {
       backgroundColor: '#fef3c7', paddingVertical: 6, alignItems: 'center',
     },
-    demoTxt: { fontSize: 11, color: '#92400e', fontWeight: fonts.semibold },
+    demoTxt: { fontSize: fonts.xs, color: '#92400e', fontWeight: fonts.semibold },
   }), [t]);
 
   // --- Render helpers ---
@@ -559,13 +559,13 @@ export function AncestryScreen({ onClose }: Props) {
                   <View style={styles.memberRight}>
                     {anc.migrationPath && anc.migrationPath.length > 1 && (
                       <View style={styles.migBadge}>
-                        <Text style={{ fontSize: 10 }}>{'\u{1F30D}'}</Text>
+                        <Text style={{ fontSize: fonts.xs }}>{'\u{1F30D}'}</Text>
                         <Text style={styles.migTxt}>{anc.migrationPath.length} places</Text>
                       </View>
                     )}
                     {anc.stories.length > 0 && (
                       <View style={styles.storyBadge}>
-                        <Text style={{ fontSize: 10 }}>{'\u{1F4D6}'}</Text>
+                        <Text style={{ fontSize: fonts.xs }}>{'\u{1F4D6}'}</Text>
                         <Text style={styles.storyBadgeTxt}>{anc.stories.length} stories</Text>
                       </View>
                     )}
@@ -646,7 +646,7 @@ export function AncestryScreen({ onClose }: Props) {
           <Text style={styles.milestoneSectionTitle}>
             {'\u{1F30D}'} Heritage Regions (Self-Reported)
           </Text>
-          <Text style={{ fontSize: 12, color: t.text.secondary, marginBottom: 12 }}>
+          <Text style={{ fontSize: fonts.sm, color: t.text.secondary, marginBottom: 12 }}>
             Based on family knowledge and oral history, not genetic testing.
           </Text>
         </View>
@@ -697,7 +697,7 @@ export function AncestryScreen({ onClose }: Props) {
       <ScrollView style={styles.scroll}>
         <View style={styles.formSection}>
           <Text style={[styles.title, { marginBottom: 4 }]}>Add Family Member</Text>
-          <Text style={{ fontSize: 13, color: t.text.secondary }}>
+          <Text style={{ fontSize: fonts.sm, color: t.text.secondary }}>
             Document your ancestry and earn {NOTK_PER_ANCESTOR} nOTK per member
           </Text>
 
@@ -771,7 +771,7 @@ export function AncestryScreen({ onClose }: Props) {
 
         <View style={styles.formSection}>
           <Text style={[styles.title, { marginBottom: 4 }]}>Add Family Story</Text>
-          <Text style={{ fontSize: 13, color: t.text.secondary }}>
+          <Text style={{ fontSize: fonts.sm, color: t.text.secondary }}>
             Preserve oral history and earn {NOTK_PER_STORY} nOTK per story
           </Text>
 

@@ -92,43 +92,43 @@ export function KnowledgeBaseScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { flex: 1, paddingHorizontal: 16 },
-    subtitle: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 16 },
+    subtitle: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 19, marginBottom: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
-    label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
-    empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
+    label: { color: t.text.muted, fontSize: fonts.sm },
+    val: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    empty: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', marginTop: 40 },
     summaryRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
     summaryCard: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' },
-    summaryNum: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 2 },
-    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold, textAlign: 'center' },
+    summaryNum: { fontSize: fonts.xl, fontWeight: fonts.heavy, marginBottom: 2 },
+    summaryLabel: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold, textAlign: 'center' },
     catGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 16 },
     catCard: { width: '47%', backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' },
-    catIcon: { fontSize: 28, marginBottom: 6 },
-    catName: { color: t.text.primary, fontSize: 13, fontWeight: fonts.bold, textAlign: 'center' },
-    catCount: { color: t.text.muted, fontSize: 11, marginTop: 2 },
-    articleTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, marginBottom: 4 },
-    articleSummary: { color: t.text.secondary, fontSize: 12, lineHeight: 17, marginBottom: 8 },
+    catIcon: { fontSize: fonts.xxxl, marginBottom: 6 },
+    catName: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.bold, textAlign: 'center' },
+    catCount: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
+    articleTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, marginBottom: 4 },
+    articleSummary: { color: t.text.secondary, fontSize: fonts.sm, lineHeight: 17, marginBottom: 8 },
     articleMeta: { flexDirection: 'row', gap: 12, flexWrap: 'wrap' },
-    metaText: { color: t.text.muted, fontSize: 11 },
-    ratingText: { color: t.accent.yellow, fontSize: 12, fontWeight: fonts.bold },
-    verifiedBadge: { color: t.accent.green, fontSize: 11, fontWeight: fonts.bold },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginBottom: 8, marginTop: 8 },
-    guideTitle: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
-    guideDesc: { color: t.text.secondary, fontSize: 12, lineHeight: 17, marginTop: 4 },
+    metaText: { color: t.text.muted, fontSize: fonts.xs },
+    ratingText: { color: t.accent.yellow, fontSize: fonts.sm, fontWeight: fonts.bold },
+    verifiedBadge: { color: t.accent.green, fontSize: fonts.xs, fontWeight: fonts.bold },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginBottom: 8, marginTop: 8 },
+    guideTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    guideDesc: { color: t.text.secondary, fontSize: fonts.sm, lineHeight: 17, marginTop: 4 },
     rewardBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, backgroundColor: t.accent.green + '20', marginTop: 6, alignSelf: 'flex-start' },
-    rewardText: { color: t.accent.green, fontSize: 11, fontWeight: fonts.bold },
+    rewardText: { color: t.accent.green, fontSize: fonts.xs, fontWeight: fonts.bold },
     backBtn: { paddingVertical: 10, alignItems: 'center' },
-    backText: { color: t.accent.blue, fontSize: 15 },
-    searchHint: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 20, lineHeight: 19 },
+    backText: { color: t.accent.blue, fontSize: fonts.md },
+    searchHint: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 20, lineHeight: 19 },
   }), [t]);
 
   const articles = demoMode ? DEMO_ARTICLES : [];
@@ -235,7 +235,7 @@ export function KnowledgeBaseScreen({ onClose }: Props) {
             {CONTRIBUTION_GUIDES.map((guide, i) => (
               <View key={i} style={st.card}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={{ fontSize: 22, marginRight: 12 }}>{guide.icon}</Text>
+                  <Text style={{ fontSize: fonts.xxl, marginRight: 12 }}>{guide.icon}</Text>
                   <View style={{ flex: 1 }}>
                     <Text style={st.guideTitle}>{guide.title}</Text>
                     <Text style={st.guideDesc}>{guide.description}</Text>
@@ -251,7 +251,7 @@ export function KnowledgeBaseScreen({ onClose }: Props) {
 
         {!demoMode && activeTab !== 'contribute' && (
           <View style={[st.card, { marginTop: 20 }]}>
-            <Text style={{ color: t.text.muted, fontSize: 13, textAlign: 'center' }}>
+            <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center' }}>
               Enable Demo Mode in Settings to see sample knowledge base data.
             </Text>
           </View>

@@ -126,47 +126,47 @@ export function MessagesScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeText: { color: t.accent.blue, fontSize: 16 },
+    headerTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeText: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 40 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
     demoTag: { backgroundColor: t.accent.purple + '30', borderRadius: 8, paddingVertical: 4, paddingHorizontal: 10, alignSelf: 'center', marginBottom: 12 },
-    demoTagText: { color: t.accent.purple, fontSize: 11, fontWeight: fonts.bold },
+    demoTagText: { color: t.accent.purple, fontSize: fonts.xs, fontWeight: fonts.bold },
     card: { backgroundColor: t.bg.card, borderRadius: 16, overflow: 'hidden' },
     convRow: { flexDirection: 'row', padding: 16, alignItems: 'center' },
     convAvatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: t.accent.blue + '20', justifyContent: 'center', alignItems: 'center', marginRight: 12 },
-    convAvatarText: { color: t.accent.blue, fontSize: 18, fontWeight: fonts.bold },
+    convAvatarText: { color: t.accent.blue, fontSize: fonts.xl, fontWeight: fonts.bold },
     convInfo: { flex: 1 },
     convNameRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
-    convName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold },
-    convTime: { color: t.text.muted, fontSize: 11 },
-    convLastMsg: { color: t.text.secondary, fontSize: 13 },
+    convName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
+    convTime: { color: t.text.muted, fontSize: fonts.xs },
+    convLastMsg: { color: t.text.secondary, fontSize: fonts.sm },
     convUnread: { backgroundColor: t.accent.green, borderRadius: 10, minWidth: 20, height: 20, justifyContent: 'center', alignItems: 'center', marginLeft: 8, paddingHorizontal: 6 },
-    convUnreadText: { color: '#fff', fontSize: 11, fontWeight: fonts.bold },
+    convUnreadText: { color: '#fff', fontSize: fonts.xs, fontWeight: fonts.bold },
     divider: { height: 1, backgroundColor: t.border, marginLeft: 72 },
     composeBtn: { backgroundColor: t.accent.green, borderRadius: 16, paddingVertical: 16, alignItems: 'center', marginTop: 20 },
-    composeBtnText: { color: '#fff', fontSize: 16, fontWeight: fonts.bold },
+    composeBtnText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.bold },
     // Thread
     bubbleRow: { marginBottom: 12 },
     bubbleSelf: { alignSelf: 'flex-end', backgroundColor: t.accent.blue + '20', borderRadius: 16, borderBottomRightRadius: 4, padding: 12, maxWidth: '80%' as any },
     bubbleOther: { alignSelf: 'flex-start', backgroundColor: t.bg.card, borderRadius: 16, borderBottomLeftRadius: 4, padding: 12, maxWidth: '80%' as any },
-    bubbleText: { color: t.text.primary, fontSize: 14, lineHeight: 20 },
+    bubbleText: { color: t.text.primary, fontSize: fonts.md, lineHeight: 20 },
     bubbleMeta: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 6, gap: 8 },
-    bubbleTime: { color: t.text.muted, fontSize: 10 },
-    bubbleTx: { color: t.accent.blue, fontSize: 10 },
+    bubbleTime: { color: t.text.muted, fontSize: fonts.xs },
+    bubbleTx: { color: t.accent.blue, fontSize: fonts.xs },
     // Compose / Reply
     inputCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginTop: 12 },
-    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 },
-    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15 },
-    charCount: { color: t.text.muted, fontSize: 11, textAlign: 'right', marginTop: 4 },
+    inputLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 },
+    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md },
+    charCount: { color: t.text.muted, fontSize: fonts.xs, textAlign: 'right', marginTop: 4 },
     replyBar: { flexDirection: 'row', backgroundColor: t.bg.card, borderRadius: 16, padding: 8, marginTop: 12, alignItems: 'center', gap: 8 },
-    replyInput: { flex: 1, backgroundColor: t.bg.primary, borderRadius: 12, padding: 12, color: t.text.primary, fontSize: 14, maxHeight: 80 },
+    replyInput: { flex: 1, backgroundColor: t.bg.primary, borderRadius: 12, padding: 12, color: t.text.primary, fontSize: fonts.md, maxHeight: 80 },
     sendMsgBtn: { backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 10, paddingHorizontal: 16 },
-    sendMsgBtnText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
+    sendMsgBtnText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
     encryptionNote: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 12, gap: 4 },
-    encryptionText: { color: t.text.muted, fontSize: 11 },
-    emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
-    costNote: { color: t.text.muted, fontSize: 11, textAlign: 'center', marginTop: 8 },
+    encryptionText: { color: t.text.muted, fontSize: fonts.xs },
+    emptyText: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', marginTop: 40 },
+    costNote: { color: t.text.muted, fontSize: fonts.xs, textAlign: 'center', marginTop: 8 },
   }), [t]);
 
   const openThread = useCallback((conv: Conversation) => {
@@ -249,7 +249,7 @@ export function MessagesScreen({ onClose }: Props) {
 
         <ScrollView contentContainerStyle={st.scroll}>
           <View style={st.encryptionNote}>
-            <Text style={{ fontSize: 12 }}>{'\u{1F512}'}</Text>
+            <Text style={{ fontSize: fonts.sm }}>{'\u{1F512}'}</Text>
             <Text style={st.encryptionText}>End-to-end encrypted via recipient public key</Text>
           </View>
 
@@ -309,7 +309,7 @@ export function MessagesScreen({ onClose }: Props) {
 
         <ScrollView contentContainerStyle={st.scroll}>
           <View style={st.encryptionNote}>
-            <Text style={{ fontSize: 12 }}>{'\u{1F512}'}</Text>
+            <Text style={{ fontSize: fonts.sm }}>{'\u{1F512}'}</Text>
             <Text style={st.encryptionText}>Messages are encrypted with recipient's public key</Text>
           </View>
 
@@ -371,7 +371,7 @@ export function MessagesScreen({ onClose }: Props) {
         </View>
 
         <View style={st.encryptionNote}>
-          <Text style={{ fontSize: 12 }}>{'\u{1F512}'}</Text>
+          <Text style={{ fontSize: fonts.sm }}>{'\u{1F512}'}</Text>
           <Text style={st.encryptionText}>All messages are end-to-end encrypted on Open Chain</Text>
         </View>
 

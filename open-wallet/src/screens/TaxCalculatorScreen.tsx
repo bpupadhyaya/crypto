@@ -238,45 +238,45 @@ export const TaxCalculatorScreen = React.memo(({ onClose }: Props) => {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    back: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
-    title: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
+    back: { color: t.accent.blue, fontSize: fonts.lg, fontWeight: fonts.semibold },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
     placeholder: { width: 50 },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 8 },
-    label: { color: t.text.secondary, fontSize: 14 },
-    value: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
-    valueGreen: { color: t.accent.green, fontSize: 14, fontWeight: fonts.bold },
-    valueRed: { color: t.accent.red, fontSize: 14, fontWeight: fonts.bold },
+    label: { color: t.text.secondary, fontSize: fonts.md },
+    value: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
+    valueGreen: { color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.bold },
+    valueRed: { color: t.accent.red, fontSize: fonts.md, fontWeight: fonts.bold },
     chipRow: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
     chip: { paddingVertical: 8, paddingHorizontal: 16, borderRadius: 10, backgroundColor: t.border },
     chipActive: { backgroundColor: t.accent.green },
-    chipText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    chipText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     chipTextActive: { color: t.bg.primary, fontWeight: fonts.bold },
     countryBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: t.bg.card, borderRadius: 12, paddingVertical: 12, paddingHorizontal: 16, marginBottom: 12 },
-    countryName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold, flex: 1 },
-    countryNote: { color: t.text.muted, fontSize: 12, marginTop: 2 },
+    countryName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold, flex: 1 },
+    countryNote: { color: t.text.muted, fontSize: fonts.sm, marginTop: 2 },
     countryList: { backgroundColor: t.bg.card, borderRadius: 16, marginBottom: 12, overflow: 'hidden' },
     countryItem: { flexDirection: 'row', alignItems: 'center', paddingVertical: 14, paddingHorizontal: 16, borderBottomWidth: 1, borderBottomColor: t.border },
     countryItemActive: { backgroundColor: t.accent.green + '15' },
     summaryCard: { backgroundColor: t.accent.green + '10', borderRadius: 16, padding: 20, marginBottom: 12, borderWidth: 1, borderColor: t.accent.green + '30' },
-    summaryTitle: { color: t.accent.green, fontSize: 16, fontWeight: fonts.heavy, marginBottom: 12 },
+    summaryTitle: { color: t.accent.green, fontSize: fonts.lg, fontWeight: fonts.heavy, marginBottom: 12 },
     summaryRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6 },
-    summaryLabel: { color: t.text.secondary, fontSize: 14 },
-    summaryValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
-    summaryBig: { color: t.accent.green, fontSize: 22, fontWeight: fonts.heavy },
+    summaryLabel: { color: t.text.secondary, fontSize: fonts.md },
+    summaryValue: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    summaryBig: { color: t.accent.green, fontSize: fonts.xxl, fontWeight: fonts.heavy },
     tokenRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: t.border },
-    tokenSymbol: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, width: 60 },
-    tokenGain: { color: t.accent.green, fontSize: 13, fontWeight: fonts.semibold, width: 80, textAlign: 'right' },
-    tokenLoss: { color: t.accent.red, fontSize: 13, fontWeight: fonts.semibold, width: 80, textAlign: 'right' },
-    tokenNet: { fontSize: 14, fontWeight: fonts.bold, width: 90, textAlign: 'right' },
+    tokenSymbol: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, width: 60 },
+    tokenGain: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.semibold, width: 80, textAlign: 'right' },
+    tokenLoss: { color: t.accent.red, fontSize: fonts.sm, fontWeight: fonts.semibold, width: 80, textAlign: 'right' },
+    tokenNet: { fontSize: fonts.md, fontWeight: fonts.bold, width: 90, textAlign: 'right' },
     calculateBtn: { backgroundColor: t.accent.green, borderRadius: 14, paddingVertical: 16, alignItems: 'center', marginTop: 8, marginBottom: 12 },
-    calculateText: { color: '#fff', fontSize: 16, fontWeight: fonts.bold },
+    calculateText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.bold },
     exportBtn: { backgroundColor: t.accent.blue, borderRadius: 14, paddingVertical: 14, alignItems: 'center', marginBottom: 12 },
-    exportText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
+    exportText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
     demoTag: { backgroundColor: t.accent.purple + '20', borderRadius: 8, paddingVertical: 4, paddingHorizontal: 10, alignSelf: 'flex-start', marginBottom: 12 },
-    demoText: { color: t.accent.purple, fontSize: 12, fontWeight: fonts.semibold },
+    demoText: { color: t.accent.purple, fontSize: fonts.sm, fontWeight: fonts.semibold },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 4 },
   }), [t]);
 
@@ -326,7 +326,7 @@ export const TaxCalculatorScreen = React.memo(({ onClose }: Props) => {
             </TouchableOpacity>
           ))}
         </View>
-        <Text style={{ color: t.text.muted, fontSize: 12, marginTop: 4 }}>
+        <Text style={{ color: t.text.muted, fontSize: fonts.sm, marginTop: 4 }}>
           {TAX_METHODS.find((m) => m.key === method)?.desc}
         </Text>
 
@@ -337,7 +337,7 @@ export const TaxCalculatorScreen = React.memo(({ onClose }: Props) => {
             <Text style={s.countryName}>{COUNTRIES[country].flag} {COUNTRIES[country].name}</Text>
             <Text style={s.countryNote}>{COUNTRIES[country].notes}</Text>
           </View>
-          <Text style={{ color: t.text.muted, fontSize: 16 }}>{showCountries ? 'v' : '>'}</Text>
+          <Text style={{ color: t.text.muted, fontSize: fonts.lg }}>{showCountries ? 'v' : '>'}</Text>
         </TouchableOpacity>
 
         {showCountries && (
@@ -349,18 +349,18 @@ export const TaxCalculatorScreen = React.memo(({ onClose }: Props) => {
                 onPress={() => { setCountry(c); setShowCountries(false); setCalculated(false); }}
               >
                 <View style={{ flex: 1 }}>
-                  <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold }}>
+                  <Text style={{ color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold }}>
                     {COUNTRIES[c].flag} {COUNTRIES[c].name}
                   </Text>
-                  <Text style={{ color: t.text.muted, fontSize: 11, marginTop: 2 }}>
+                  <Text style={{ color: t.text.muted, fontSize: fonts.xs, marginTop: 2 }}>
                     {COUNTRIES[c].notes}
                   </Text>
                 </View>
                 <View style={{ alignItems: 'flex-end' }}>
-                  <Text style={{ color: t.text.secondary, fontSize: 12 }}>
+                  <Text style={{ color: t.text.secondary, fontSize: fonts.sm }}>
                     ST: {(COUNTRIES[c].shortTermRate * 100).toFixed(0)}%
                   </Text>
-                  <Text style={{ color: t.text.secondary, fontSize: 12 }}>
+                  <Text style={{ color: t.text.secondary, fontSize: fonts.sm }}>
                     LT: {(COUNTRIES[c].longTermRate * 100).toFixed(0)}%
                   </Text>
                 </View>
@@ -416,10 +416,10 @@ export const TaxCalculatorScreen = React.memo(({ onClose }: Props) => {
               </View>
               <View style={s.divider} />
               <View style={s.row}>
-                <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: fonts.bold }}>Net Gain/Loss</Text>
+                <Text style={{ color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold }}>Net Gain/Loss</Text>
                 <Text style={{
                   color: result.netGainLoss >= 0 ? t.accent.green : t.accent.red,
-                  fontSize: 16, fontWeight: fonts.heavy,
+                  fontSize: fonts.lg, fontWeight: fonts.heavy,
                 }}>
                   {fmt(result.netGainLoss)}
                 </Text>
@@ -430,10 +430,10 @@ export const TaxCalculatorScreen = React.memo(({ onClose }: Props) => {
             <Text style={s.section}>Breakdown by Token</Text>
             <View style={s.card}>
               <View style={{ flexDirection: 'row', paddingBottom: 8, borderBottomWidth: 1, borderBottomColor: t.border }}>
-                <Text style={{ color: t.text.muted, fontSize: 12, width: 60 }}>Token</Text>
-                <Text style={{ color: t.text.muted, fontSize: 12, width: 80, textAlign: 'right' }}>Gains</Text>
-                <Text style={{ color: t.text.muted, fontSize: 12, width: 80, textAlign: 'right' }}>Losses</Text>
-                <Text style={{ color: t.text.muted, fontSize: 12, flex: 1, textAlign: 'right' }}>Net</Text>
+                <Text style={{ color: t.text.muted, fontSize: fonts.sm, width: 60 }}>Token</Text>
+                <Text style={{ color: t.text.muted, fontSize: fonts.sm, width: 80, textAlign: 'right' }}>Gains</Text>
+                <Text style={{ color: t.text.muted, fontSize: fonts.sm, width: 80, textAlign: 'right' }}>Losses</Text>
+                <Text style={{ color: t.text.muted, fontSize: fonts.sm, flex: 1, textAlign: 'right' }}>Net</Text>
               </View>
               {result.byToken.map((item) => (
                 <View key={item.token} style={s.tokenRow}>
@@ -460,7 +460,7 @@ export const TaxCalculatorScreen = React.memo(({ onClose }: Props) => {
               </View>
               <View style={s.row}>
                 <Text style={s.label}>Notes</Text>
-                <Text style={{ color: t.text.muted, fontSize: 12, flex: 1, textAlign: 'right', marginLeft: 16 }}>
+                <Text style={{ color: t.text.muted, fontSize: fonts.sm, flex: 1, textAlign: 'right', marginLeft: 16 }}>
                   {COUNTRIES[country].notes}
                 </Text>
               </View>
@@ -473,7 +473,7 @@ export const TaxCalculatorScreen = React.memo(({ onClose }: Props) => {
           </>
         )}
 
-        <Text style={{ color: t.text.muted, fontSize: 11, textAlign: 'center', marginTop: 8, marginBottom: 32, lineHeight: 16 }}>
+        <Text style={{ color: t.text.muted, fontSize: fonts.xs, textAlign: 'center', marginTop: 8, marginBottom: 32, lineHeight: 16 }}>
           This is an estimate only. Consult a qualified tax professional for actual tax obligations.
           Tax rates shown are simplified approximations.
         </Text>

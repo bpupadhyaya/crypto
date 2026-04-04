@@ -179,59 +179,59 @@ export function CrowdfundScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { paddingBottom: 40 },
     tabRow: { flexDirection: 'row', paddingHorizontal: 12, marginBottom: 12 },
     tabBtn: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 16, marginHorizontal: 4 },
     tabActive: { backgroundColor: t.accent.purple + '20' },
-    tabText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
+    tabText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: t.accent.purple },
     card: { backgroundColor: t.bg.secondary, borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16 },
-    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 12, marginHorizontal: 20 },
+    sectionTitle: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, marginBottom: 12, marginHorizontal: 20 },
     filterRow: { flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 16, gap: 6, marginBottom: 12 },
     filterChip: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12, borderWidth: 1, borderColor: t.bg.secondary },
     filterActive: { backgroundColor: t.accent.purple + '20', borderColor: t.accent.purple },
-    filterText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
+    filterText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
     filterTextActive: { color: t.accent.purple },
     campaignCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    campaignTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
-    campaignDesc: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginTop: 6 },
-    campaignMeta: { color: t.text.muted, fontSize: 12, marginTop: 8 },
+    campaignTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    campaignDesc: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 19, marginTop: 6 },
+    campaignMeta: { color: t.text.muted, fontSize: fonts.sm, marginTop: 8 },
     progressBarBg: { height: 8, backgroundColor: t.bg.primary, borderRadius: 4, marginTop: 10 },
     progressBarFill: { height: 8, borderRadius: 4, backgroundColor: t.accent.green },
     progressRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 6 },
-    progressText: { color: t.text.muted, fontSize: 12 },
-    raisedText: { color: t.accent.green, fontSize: 14, fontWeight: fonts.bold },
-    goalText: { color: t.text.muted, fontSize: 12 },
-    backersText: { color: t.accent.blue, fontSize: 12, fontWeight: fonts.semibold, marginTop: 4 },
+    progressText: { color: t.text.muted, fontSize: fonts.sm },
+    raisedText: { color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.bold },
+    goalText: { color: t.text.muted, fontSize: fonts.sm },
+    backersText: { color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.semibold, marginTop: 4 },
     pledgeRow: { flexDirection: 'row', alignItems: 'center', marginTop: 12, gap: 8 },
-    pledgeInput: { flex: 1, backgroundColor: t.bg.primary, borderRadius: 10, padding: 10, color: t.text.primary, fontSize: 14 },
+    pledgeInput: { flex: 1, backgroundColor: t.bg.primary, borderRadius: 10, padding: 10, color: t.text.primary, fontSize: fonts.md },
     pledgeBtn: { backgroundColor: t.accent.blue, paddingHorizontal: 16, paddingVertical: 10, borderRadius: 10 },
-    pledgeText: { color: '#fff', fontSize: 13, fontWeight: fonts.semibold },
+    pledgeText: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.semibold },
     backedBadge: { backgroundColor: t.accent.green + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'flex-start', marginTop: 8 },
-    backedText: { color: t.accent.green, fontSize: 12, fontWeight: fonts.semibold },
+    backedText: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tierRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6, borderBottomColor: t.bg.primary, borderBottomWidth: 1 },
-    tierMin: { color: t.accent.purple, fontSize: 12, fontWeight: fonts.semibold },
-    tierReward: { color: t.text.muted, fontSize: 12, flex: 1, marginLeft: 10 },
-    tiersLabel: { color: t.text.primary, fontSize: 13, fontWeight: fonts.bold, marginTop: 12, marginBottom: 6 },
-    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginBottom: 12 },
+    tierMin: { color: t.accent.purple, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    tierReward: { color: t.text.muted, fontSize: fonts.sm, flex: 1, marginLeft: 10 },
+    tiersLabel: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.bold, marginTop: 12, marginBottom: 6 },
+    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md, marginBottom: 12 },
     inputMulti: { minHeight: 80, textAlignVertical: 'top' },
     categoryGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 12 },
     categoryChip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 12, borderWidth: 1, borderColor: t.bg.primary },
     categoryChipSelected: { backgroundColor: t.accent.purple + '20', borderColor: t.accent.purple },
-    categoryChipText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
+    categoryChipText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
     categoryChipTextSelected: { color: t.accent.purple },
     submitBtn: { backgroundColor: t.accent.purple, borderRadius: 14, paddingVertical: 14, alignItems: 'center', marginTop: 8 },
-    submitText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
+    submitText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
     tierInputRow: { flexDirection: 'row', gap: 8, marginBottom: 8 },
-    tierMinInput: { width: 80, backgroundColor: t.bg.primary, borderRadius: 10, padding: 10, color: t.text.primary, fontSize: 13 },
-    tierRewardInput: { flex: 1, backgroundColor: t.bg.primary, borderRadius: 10, padding: 10, color: t.text.primary, fontSize: 13 },
+    tierMinInput: { width: 80, backgroundColor: t.bg.primary, borderRadius: 10, padding: 10, color: t.text.primary, fontSize: fonts.sm },
+    tierRewardInput: { flex: 1, backgroundColor: t.bg.primary, borderRadius: 10, padding: 10, color: t.text.primary, fontSize: fonts.sm },
     demoTag: { backgroundColor: t.accent.orange + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'center', marginBottom: 12 },
-    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: fonts.bold },
-    emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', paddingVertical: 40 },
-    myPledge: { color: t.accent.blue, fontSize: 12, fontWeight: fonts.semibold, marginTop: 4 },
-    deadlineText: { color: t.accent.orange, fontSize: 12, fontWeight: fonts.semibold, marginTop: 4 },
+    demoText: { color: t.accent.orange, fontSize: fonts.xs, fontWeight: fonts.bold },
+    emptyText: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', paddingVertical: 40 },
+    myPledge: { color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.semibold, marginTop: 4 },
+    deadlineText: { color: t.accent.orange, fontSize: fonts.sm, fontWeight: fonts.semibold, marginTop: 4 },
   }), [t]);
 
   const tabs: Array<{ key: Tab; label: string }> = [
@@ -318,7 +318,7 @@ export function CrowdfundScreen({ onClose }: Props) {
       <TextInput style={[s.input, s.inputMulti]} placeholder="Description — what are you raising funds for?" placeholderTextColor={t.text.muted} value={createDesc} onChangeText={setCreateDesc} multiline />
       <TextInput style={s.input} placeholder="Goal (OTK)" placeholderTextColor={t.text.muted} keyboardType="numeric" value={createGoal} onChangeText={setCreateGoal} />
       <TextInput style={s.input} placeholder="Deadline (YYYY-MM-DD)" placeholderTextColor={t.text.muted} value={createDeadline} onChangeText={setCreateDeadline} />
-      <Text style={{ color: t.text.muted, fontSize: 13, marginBottom: 8 }}>Category</Text>
+      <Text style={{ color: t.text.muted, fontSize: fonts.sm, marginBottom: 8 }}>Category</Text>
       <View style={s.categoryGrid}>
         {CATEGORIES.filter((c) => c !== 'All').map((cat) => (
           <TouchableOpacity
@@ -330,7 +330,7 @@ export function CrowdfundScreen({ onClose }: Props) {
           </TouchableOpacity>
         ))}
       </View>
-      <Text style={{ color: t.text.muted, fontSize: 13, marginBottom: 8 }}>Reward Tiers (optional)</Text>
+      <Text style={{ color: t.text.muted, fontSize: fonts.sm, marginBottom: 8 }}>Reward Tiers (optional)</Text>
       <View style={s.tierInputRow}>
         <TextInput style={s.tierMinInput} placeholder="Min OTK" placeholderTextColor={t.text.muted} keyboardType="numeric" value={createTier1Min} onChangeText={setCreateTier1Min} />
         <TextInput style={s.tierRewardInput} placeholder="Reward description" placeholderTextColor={t.text.muted} value={createTier1Reward} onChangeText={setCreateTier1Reward} />

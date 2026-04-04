@@ -72,19 +72,19 @@ export function GuardianScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8 },
-    title: { color: t.text.primary, fontSize: 22, fontWeight: fonts.heavy },
-    close: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.heavy },
+    close: { color: t.accent.blue, fontSize: fonts.lg },
     tabs: { flexDirection: 'row', paddingHorizontal: 16, gap: 8, marginBottom: 16 },
     tab: { paddingVertical: 8, paddingHorizontal: 16, borderRadius: 20, backgroundColor: t.bg.card },
     tabActive: { backgroundColor: t.accent.green },
-    tabText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: t.bg.primary },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 16, marginBottom: 12 },
-    cardTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 4 },
-    cardSub: { color: t.text.secondary, fontSize: 13 },
+    cardTitle: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, marginBottom: 4 },
+    cardSub: { color: t.text.secondary, fontSize: fonts.sm },
     cardMeta: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 },
     badge: { paddingVertical: 2, paddingHorizontal: 8, borderRadius: 8, backgroundColor: t.accent.yellow + '30' },
-    badgeText: { color: t.accent.yellow, fontSize: 11, fontWeight: fonts.bold },
+    badgeText: { color: t.accent.yellow, fontSize: fonts.xs, fontWeight: fonts.bold },
     badgeActive: { backgroundColor: t.accent.green + '30' },
     badgeActiveText: { color: t.accent.green },
     badgeAlert: { backgroundColor: t.accent.red + '30' },
@@ -93,19 +93,19 @@ export function GuardianScreen({ onClose }: Props) {
     actionRow: { flexDirection: 'row', gap: 8, marginTop: 12 },
     approveBtn: { flex: 1, paddingVertical: 10, borderRadius: 12, backgroundColor: t.accent.green, alignItems: 'center' },
     rejectBtn: { flex: 1, paddingVertical: 10, borderRadius: 12, backgroundColor: t.accent.red, alignItems: 'center' },
-    btnText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
-    input: { backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginHorizontal: 16, marginBottom: 12 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 20, marginTop: 16, marginBottom: 8 },
+    btnText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
+    input: { backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md, marginHorizontal: 16, marginBottom: 12 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 20, marginTop: 16, marginBottom: 8 },
     addBtn: { marginHorizontal: 16, paddingVertical: 14, borderRadius: 12, backgroundColor: t.accent.green, alignItems: 'center', marginTop: 8 },
-    emptyText: { color: t.text.muted, textAlign: 'center', marginTop: 40, fontSize: 14 },
+    emptyText: { color: t.text.muted, textAlign: 'center', marginTop: 40, fontSize: fonts.md },
     detailRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8 },
-    detailLabel: { color: t.text.secondary, fontSize: 14 },
-    detailValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
+    detailLabel: { color: t.text.secondary, fontSize: fonts.md },
+    detailValue: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
     guardianList: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 4 },
     guardianChip: { paddingVertical: 3, paddingHorizontal: 10, borderRadius: 12, backgroundColor: t.accent.blue + '20' },
-    guardianText: { color: t.accent.blue, fontSize: 12, fontWeight: fonts.semibold },
+    guardianText: { color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.semibold },
     emergencyBtn: { marginHorizontal: 16, paddingVertical: 12, borderRadius: 12, backgroundColor: t.accent.red + '20', alignItems: 'center', marginTop: 12 },
-    emergencyText: { color: t.accent.red, fontSize: 14, fontWeight: fonts.bold },
+    emergencyText: { color: t.accent.red, fontSize: fonts.md, fontWeight: fonts.bold },
     statusRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
     relChip: { paddingVertical: 2, paddingHorizontal: 8, borderRadius: 8 },
   }), [t]);
@@ -150,7 +150,7 @@ export function GuardianScreen({ onClose }: Props) {
               </View>
             </View>
             <View style={st.detailRow}><Text style={st.detailLabel}>Daily Limit</Text><Text style={st.detailValue}>{(d.spendingLimit / 1000000).toFixed(1)} OTK</Text></View>
-            <View style={st.detailRow}><Text style={st.detailLabel}>UID</Text><Text style={[st.detailValue, { fontSize: 12 }]}>{d.uid}</Text></View>
+            <View style={st.detailRow}><Text style={st.detailLabel}>UID</Text><Text style={[st.detailValue, { fontSize: fonts.sm }]}>{d.uid}</Text></View>
             <View style={st.detailRow}><Text style={st.detailLabel}>Added</Text><Text style={st.detailValue}>{d.addedAt}</Text></View>
           </View>
 
@@ -160,7 +160,7 @@ export function GuardianScreen({ onClose }: Props) {
               <View key={i} style={st.guardianChip}><Text style={st.guardianText}>{g}</Text></View>
             ))}
             <TouchableOpacity style={[st.guardianChip, { backgroundColor: t.border }]} onPress={() => Alert.alert('Add Guardian', 'Enter the UID of the additional guardian.')}>
-              <Text style={{ color: t.text.muted, fontSize: 12 }}>+ Add Guardian</Text>
+              <Text style={{ color: t.text.muted, fontSize: fonts.sm }}>+ Add Guardian</Text>
             </TouchableOpacity>
           </View>
 
@@ -227,7 +227,7 @@ export function GuardianScreen({ onClose }: Props) {
               <View style={st.statusRow}>
                 <Text style={st.cardTitle}>{d.name}</Text>
                 <View style={[st.relChip, { backgroundColor: d.relationship === 'child' ? t.accent.blue + '20' : t.accent.yellow + '20' }]}>
-                  <Text style={{ color: d.relationship === 'child' ? t.accent.blue : t.accent.yellow, fontSize: 11, fontWeight: fonts.bold }}>{d.relationship}</Text>
+                  <Text style={{ color: d.relationship === 'child' ? t.accent.blue : t.accent.yellow, fontSize: fonts.xs, fontWeight: fonts.bold }}>{d.relationship}</Text>
                 </View>
               </View>
               <Text style={st.cardSub}>Age {d.age} | Limit: {(d.spendingLimit / 1000000).toFixed(1)} OTK/day</Text>
@@ -255,7 +255,7 @@ export function GuardianScreen({ onClose }: Props) {
               </View>
               <Text style={st.cardSub}>{a.description}</Text>
               {a.amount && <Text style={[st.cardSub, { marginTop: 4, fontWeight: fonts.semibold, color: t.text.primary }]}>{(a.amount / 1000000).toFixed(2)} OTK</Text>}
-              <Text style={[st.cardSub, { fontSize: 11 }]}>{a.timestamp}</Text>
+              <Text style={[st.cardSub, { fontSize: fonts.xs }]}>{a.timestamp}</Text>
               <View style={st.actionRow}>
                 <TouchableOpacity style={st.approveBtn} onPress={() => handleApprove(a.id)}><Text style={st.btnText}>Approve</Text></TouchableOpacity>
                 <TouchableOpacity style={st.rejectBtn} onPress={() => handleReject(a.id)}><Text style={st.btnText}>Reject</Text></TouchableOpacity>

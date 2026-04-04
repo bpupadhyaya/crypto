@@ -385,14 +385,14 @@ export function GlobalSearchScreen({ onClose, onNavigate }: Props & { onNavigate
       backgroundColor: t.bg.card, borderRadius: 14, paddingHorizontal: 14,
       height: 48,
     },
-    searchIcon: { fontSize: 18, marginRight: 8 },
+    searchIcon: { fontSize: fonts.xl, marginRight: 8 },
     searchInput: {
-      flex: 1, color: t.text.primary, fontSize: 16, padding: 0,
+      flex: 1, color: t.text.primary, fontSize: fonts.lg, padding: 0,
     },
     clearBtn: { padding: 4 },
-    clearText: { color: t.text.muted, fontSize: 18 },
+    clearText: { color: t.text.muted, fontSize: fonts.xl },
     closeBtn: { paddingVertical: 4 },
-    closeBtnText: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
+    closeBtnText: { color: t.accent.blue, fontSize: fonts.lg, fontWeight: fonts.semibold },
 
     // Category chips
     chipRow: { paddingHorizontal: 12, paddingBottom: 12 },
@@ -402,32 +402,32 @@ export function GlobalSearchScreen({ onClose, onNavigate }: Props & { onNavigate
       backgroundColor: t.bg.card, flexDirection: 'row', alignItems: 'center', gap: 4,
     },
     chipActive: { backgroundColor: t.accent.blue },
-    chipEmoji: { fontSize: 14 },
-    chipLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    chipEmoji: { fontSize: fonts.md },
+    chipLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     chipLabelActive: { color: '#fff' },
 
     // Empty state
     emptyContainer: { paddingHorizontal: 20, paddingTop: 16 },
     sectionHeader: {
-      color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold,
+      color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold,
       textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12, marginTop: 8,
     },
     suggestionChip: {
       backgroundColor: t.bg.card, paddingHorizontal: 14, paddingVertical: 10,
       borderRadius: 12, marginRight: 8, marginBottom: 8,
     },
-    suggestionText: { color: t.text.primary, fontSize: 14 },
+    suggestionText: { color: t.text.primary, fontSize: fonts.md },
     recentRow: {
       flexDirection: 'row', alignItems: 'center', paddingVertical: 12,
       borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: t.bg.card,
     },
-    recentIcon: { fontSize: 16, marginRight: 10, color: t.text.muted },
-    recentText: { color: t.text.primary, fontSize: 15 },
+    recentIcon: { fontSize: fonts.lg, marginRight: 10, color: t.text.muted },
+    recentText: { color: t.text.primary, fontSize: fonts.md },
 
     // Results
     resultsList: { flex: 1, paddingHorizontal: 16 },
     categoryHeader: {
-      color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold,
+      color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold,
       textTransform: 'uppercase', letterSpacing: 1.5,
       marginTop: 20, marginBottom: 8, paddingLeft: 4,
     },
@@ -435,32 +435,32 @@ export function GlobalSearchScreen({ onClose, onNavigate }: Props & { onNavigate
       flexDirection: 'row', alignItems: 'center', paddingVertical: 14, paddingHorizontal: 8,
       borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: t.bg.card,
     },
-    resultEmoji: { fontSize: 28, marginRight: 14, width: 36, textAlign: 'center' },
+    resultEmoji: { fontSize: fonts.xxxl, marginRight: 14, width: 36, textAlign: 'center' },
     resultContent: { flex: 1 },
     resultTop: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 2 },
-    resultName: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
+    resultName: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold },
     categoryBadge: {
       paddingHorizontal: 8, paddingVertical: 2, borderRadius: 8,
     },
-    categoryBadgeText: { color: '#fff', fontSize: 10, fontWeight: fonts.bold, textTransform: 'uppercase' },
-    resultDesc: { color: t.text.muted, fontSize: 13, lineHeight: 18 },
-    resultArrow: { color: t.text.muted, fontSize: 18, marginLeft: 8 },
+    categoryBadgeText: { color: '#fff', fontSize: fonts.xs, fontWeight: fonts.bold, textTransform: 'uppercase' },
+    resultDesc: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 18 },
+    resultArrow: { color: t.text.muted, fontSize: fonts.xl, marginLeft: 8 },
 
     // Count
     countText: {
-      color: t.text.muted, fontSize: 12, textAlign: 'center',
+      color: t.text.muted, fontSize: fonts.sm, textAlign: 'center',
       paddingVertical: 16,
     },
     noResults: { alignItems: 'center', paddingTop: 60 },
     noResultsEmoji: { fontSize: 48, marginBottom: 12 },
-    noResultsTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.bold },
-    noResultsSub: { color: t.text.muted, fontSize: 14, marginTop: 4 },
+    noResultsTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    noResultsSub: { color: t.text.muted, fontSize: fonts.md, marginTop: 4 },
 
     demoTag: {
       backgroundColor: t.accent.purple + '20', paddingHorizontal: 8,
       paddingVertical: 2, borderRadius: 8, alignSelf: 'center', marginBottom: 4,
     },
-    demoText: { color: t.accent.purple, fontSize: 11, fontWeight: fonts.bold },
+    demoText: { color: t.accent.purple, fontSize: fonts.xs, fontWeight: fonts.bold },
   }), [t]);
 
   const renderEmpty = () => (

@@ -87,8 +87,8 @@ export function FaqScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeText: { color: t.accent.blue, fontSize: 16 },
+    headerTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeText: { color: t.accent.blue, fontSize: fonts.lg },
     tabRow: {
       flexDirection: 'row',
       marginHorizontal: 16,
@@ -99,19 +99,19 @@ export function FaqScreen({ onClose }: Props) {
     },
     tabBtn: { flex: 1, paddingVertical: 10, alignItems: 'center' },
     tabBtnActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
+    tabText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 8, marginBottom: 12 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 8, marginBottom: 12 },
     faqCard: { backgroundColor: t.bg.card, borderRadius: 14, marginBottom: 10, overflow: 'hidden' },
     faqHeader: { flexDirection: 'row', alignItems: 'center', padding: 16 },
-    faqIcon: { fontSize: 16, marginRight: 10 },
-    faqQuestion: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, flex: 1 },
-    faqArrow: { color: t.text.muted, fontSize: 16, fontWeight: fonts.bold },
+    faqIcon: { fontSize: fonts.lg, marginRight: 10 },
+    faqQuestion: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold, flex: 1 },
+    faqArrow: { color: t.text.muted, fontSize: fonts.lg, fontWeight: fonts.bold },
     faqAnswer: { paddingHorizontal: 16, paddingBottom: 16, paddingTop: 0 },
-    faqAnswerText: { color: t.text.secondary, fontSize: 13, lineHeight: 20 },
+    faqAnswerText: { color: t.text.secondary, fontSize: fonts.sm, lineHeight: 20 },
     divider: { height: 1, backgroundColor: t.border, marginHorizontal: 16 },
-    countBadge: { color: t.text.muted, fontSize: 11, textAlign: 'center', marginBottom: 12 },
+    countBadge: { color: t.text.muted, fontSize: fonts.xs, textAlign: 'center', marginBottom: 12 },
   }), [t]);
 
   const questions = FAQ_DATA[tab];
@@ -162,7 +162,7 @@ export function FaqScreen({ onClose }: Props) {
         }}>
           <Text style={{
             color: t.accent.blue,
-            fontSize: 13,
+            fontSize: fonts.sm,
             fontWeight: fonts.bold,
             marginBottom: 4,
           }}>
@@ -170,7 +170,7 @@ export function FaqScreen({ onClose }: Props) {
           </Text>
           <Text style={{
             color: t.text.secondary,
-            fontSize: 12,
+            fontSize: fonts.sm,
             lineHeight: 18,
           }}>
             Visit our community forum or submit feedback through the Feedback screen. We respond to every question within 48 hours.

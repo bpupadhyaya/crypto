@@ -24,20 +24,20 @@ export function PinPad({ title, subtitle, onComplete, error, maxLength = 6 }: Pi
 
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: t.bg.primary, paddingHorizontal: 40 },
-    title: { color: t.text.primary, fontSize: 24, fontWeight: fonts.heavy, marginBottom: 8 },
-    subtitle: { color: t.text.secondary, fontSize: 14, marginBottom: 32 },
+    title: { color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.heavy, marginBottom: 8 },
+    subtitle: { color: t.text.secondary, fontSize: fonts.md, marginBottom: 32 },
     dotsRow: { flexDirection: 'row', gap: 16, marginBottom: 16 },
     dot: { width: 16, height: 16, borderRadius: 8, borderWidth: 2, borderColor: t.text.muted },
     dotFilled: { backgroundColor: t.accent.green, borderColor: t.accent.green },
     dotError: { backgroundColor: t.accent.red, borderColor: t.accent.red },
-    error: { color: t.accent.red, fontSize: 13, marginBottom: 16, fontWeight: fonts.semibold },
+    error: { color: t.accent.red, fontSize: fonts.sm, marginBottom: 16, fontWeight: fonts.semibold },
     keypad: { marginTop: 24, width: '100%' },
     keyRow: { flexDirection: 'row', justifyContent: 'center', marginBottom: 12 },
     key: { width: 72, height: 72, borderRadius: 36, backgroundColor: t.bg.card, justifyContent: 'center', alignItems: 'center', marginHorizontal: 12 },
     keyPressed: { backgroundColor: t.accent.green + '30', transform: [{ scale: 0.95 }] },
     keyEmpty: { width: 72, height: 72, marginHorizontal: 12 },
-    keyText: { color: t.text.primary, fontSize: 28, fontWeight: fonts.semibold },
-    keyTextDel: { color: t.text.secondary, fontSize: 24, fontWeight: fonts.semibold },
+    keyText: { color: t.text.primary, fontSize: fonts.xxxl, fontWeight: fonts.semibold },
+    keyTextDel: { color: t.text.secondary, fontSize: fonts.xxl, fontWeight: fonts.semibold },
   }), [t]);
 
   const handlePress = useCallback((digit: string) => {

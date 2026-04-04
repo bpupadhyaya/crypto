@@ -134,56 +134,56 @@ export function ResourceSharingScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { paddingBottom: 40 },
     tabRow: { flexDirection: 'row', paddingHorizontal: 12, marginBottom: 12 },
     tabBtn: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 16, marginHorizontal: 4 },
     tabActive: { backgroundColor: t.accent.purple + '20' },
-    tabText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
+    tabText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: t.accent.purple },
     card: { backgroundColor: t.bg.secondary, borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16 },
-    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 12, marginHorizontal: 20 },
+    sectionTitle: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, marginBottom: 12, marginHorizontal: 20 },
     filterRow: { flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 16, gap: 6, marginBottom: 12 },
     filterChip: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12, borderWidth: 1, borderColor: t.bg.secondary },
     filterActive: { backgroundColor: t.accent.purple + '20', borderColor: t.accent.purple },
-    filterText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
+    filterText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
     filterTextActive: { color: t.accent.purple },
     resourceCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    resourceName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
-    resourceDesc: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginTop: 6 },
-    resourceMeta: { color: t.text.muted, fontSize: 12, marginTop: 8 },
-    resourceOwner: { color: t.accent.blue, fontSize: 12, fontWeight: fonts.semibold },
-    resourceDeposit: { color: t.accent.orange, fontSize: 13, fontWeight: fonts.bold, marginTop: 6 },
-    resourceCondition: { color: t.accent.green, fontSize: 12, fontWeight: fonts.semibold },
+    resourceName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    resourceDesc: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 19, marginTop: 6 },
+    resourceMeta: { color: t.text.muted, fontSize: fonts.sm, marginTop: 8 },
+    resourceOwner: { color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    resourceDeposit: { color: t.accent.orange, fontSize: fonts.sm, fontWeight: fonts.bold, marginTop: 6 },
+    resourceCondition: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.semibold },
     reserveBtn: { backgroundColor: t.accent.blue, paddingHorizontal: 16, paddingVertical: 10, borderRadius: 10, alignSelf: 'flex-start', marginTop: 10 },
-    reserveBtnText: { color: '#fff', fontSize: 13, fontWeight: fonts.semibold },
+    reserveBtnText: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.semibold },
     reserveForm: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, marginTop: 10 },
-    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginBottom: 12 },
+    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md, marginBottom: 12 },
     inputMulti: { minHeight: 80, textAlignVertical: 'top' },
     categoryGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 12 },
     categoryChip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 12, borderWidth: 1, borderColor: t.bg.primary },
     categoryChipSelected: { backgroundColor: t.accent.purple + '20', borderColor: t.accent.purple },
-    categoryChipText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
+    categoryChipText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
     categoryChipTextSelected: { color: t.accent.purple },
     submitBtn: { backgroundColor: t.accent.purple, borderRadius: 14, paddingVertical: 14, alignItems: 'center', marginTop: 8 },
-    submitText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
+    submitText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
     confirmBtn: { backgroundColor: t.accent.green, paddingHorizontal: 16, paddingVertical: 10, borderRadius: 10, alignSelf: 'flex-start', marginTop: 8 },
-    confirmText: { color: '#fff', fontSize: 13, fontWeight: fonts.semibold },
+    confirmText: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.semibold },
     cancelBtn: { paddingHorizontal: 16, paddingVertical: 10, alignSelf: 'flex-start', marginTop: 8 },
-    cancelText: { color: t.accent.blue, fontSize: 13, fontWeight: fonts.semibold },
+    cancelText: { color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.semibold },
     reservationCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    resName: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
-    resDates: { color: t.text.muted, fontSize: 12, marginTop: 4 },
-    resStatus: { fontSize: 12, fontWeight: fonts.bold, marginTop: 6 },
-    resDeposit: { color: t.accent.orange, fontSize: 12, fontWeight: fonts.semibold, marginTop: 4 },
+    resName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    resDates: { color: t.text.muted, fontSize: fonts.sm, marginTop: 4 },
+    resStatus: { fontSize: fonts.sm, fontWeight: fonts.bold, marginTop: 6 },
+    resDeposit: { color: t.accent.orange, fontSize: fonts.sm, fontWeight: fonts.semibold, marginTop: 4 },
     unavailableBadge: { backgroundColor: t.accent.orange + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'flex-start', marginTop: 6 },
-    unavailableText: { color: t.accent.orange, fontSize: 11, fontWeight: fonts.semibold },
+    unavailableText: { color: t.accent.orange, fontSize: fonts.xs, fontWeight: fonts.semibold },
     demoTag: { backgroundColor: t.accent.orange + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'center', marginBottom: 12 },
-    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: fonts.bold },
-    emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', paddingVertical: 40 },
+    demoText: { color: t.accent.orange, fontSize: fonts.xs, fontWeight: fonts.bold },
+    emptyText: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', paddingVertical: 40 },
     dateRow: { flexDirection: 'row', gap: 8, marginTop: 8 },
-    dateInput: { flex: 1, backgroundColor: t.bg.secondary, borderRadius: 10, padding: 10, color: t.text.primary, fontSize: 13 },
+    dateInput: { flex: 1, backgroundColor: t.bg.secondary, borderRadius: 10, padding: 10, color: t.text.primary, fontSize: fonts.sm },
     btnRow: { flexDirection: 'row', gap: 8, marginTop: 8 },
   }), [t]);
 
@@ -207,7 +207,7 @@ export function ResourceSharingScreen({ onClose }: Props) {
       )}
       {reserveId === r.id ? (
         <View style={s.reserveForm}>
-          <Text style={{ color: t.text.muted, fontSize: 12, marginBottom: 4 }}>Select dates</Text>
+          <Text style={{ color: t.text.muted, fontSize: fonts.sm, marginBottom: 4 }}>Select dates</Text>
           <View style={s.dateRow}>
             <TextInput style={s.dateInput} placeholder="Start (YYYY-MM-DD)" placeholderTextColor={t.text.muted} value={reserveStart} onChangeText={setReserveStart} />
             <TextInput style={s.dateInput} placeholder="End (YYYY-MM-DD)" placeholderTextColor={t.text.muted} value={reserveEnd} onChangeText={setReserveEnd} />
@@ -252,7 +252,7 @@ export function ResourceSharingScreen({ onClose }: Props) {
       <Text style={s.sectionTitle}>Share a Resource</Text>
       <TextInput style={s.input} placeholder="Resource Name" placeholderTextColor={t.text.muted} value={shareName} onChangeText={setShareName} />
       <TextInput style={[s.input, s.inputMulti]} placeholder="Description — what is it, any instructions?" placeholderTextColor={t.text.muted} value={shareDesc} onChangeText={setShareDesc} multiline />
-      <Text style={{ color: t.text.muted, fontSize: 13, marginBottom: 8 }}>Category</Text>
+      <Text style={{ color: t.text.muted, fontSize: fonts.sm, marginBottom: 8 }}>Category</Text>
       <View style={s.categoryGrid}>
         {RESOURCE_CATEGORIES.filter((c) => c !== 'All').map((cat) => (
           <TouchableOpacity

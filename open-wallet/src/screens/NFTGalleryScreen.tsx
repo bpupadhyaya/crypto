@@ -160,43 +160,43 @@ export function NFTGalleryScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { paddingHorizontal: 20, paddingBottom: 40 },
     filterRow: { flexDirection: 'row', gap: 8, marginBottom: 16 },
     filterBtn: { paddingVertical: 6, paddingHorizontal: 14, borderRadius: 8, backgroundColor: t.border },
     filterBtnActive: { backgroundColor: t.accent.blue },
-    filterText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    filterText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     filterTextActive: { color: '#fff' },
     grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
     nftCard: { width: cardSize, backgroundColor: t.bg.card, borderRadius: 16, overflow: 'hidden' },
     nftImage: { width: cardSize, height: cardSize, justifyContent: 'center', alignItems: 'center' },
-    nftImageText: { color: '#ffffff80', fontSize: 28, fontWeight: fonts.heavy },
+    nftImageText: { color: '#ffffff80', fontSize: fonts.xxxl, fontWeight: fonts.heavy },
     nftInfo: { padding: 12 },
-    nftName: { color: t.text.primary, fontSize: 13, fontWeight: fonts.bold, marginBottom: 2 },
-    nftCollection: { color: t.text.muted, fontSize: 11 },
+    nftName: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.bold, marginBottom: 2 },
+    nftCollection: { color: t.text.muted, fontSize: fonts.xs },
     chainBadge: { position: 'absolute', top: 8, right: 8, paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
-    chainBadgeText: { color: '#fff', fontSize: 10, fontWeight: fonts.bold },
-    emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', paddingVertical: 60 },
-    countText: { color: t.text.muted, fontSize: 13, marginBottom: 12 },
+    chainBadgeText: { color: '#fff', fontSize: fonts.xs, fontWeight: fonts.bold },
+    emptyText: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', paddingVertical: 60 },
+    countText: { color: t.text.muted, fontSize: fonts.sm, marginBottom: 12 },
 
     // Detail view
     detailContainer: { flex: 1, backgroundColor: t.bg.primary },
     detailImage: { width: '100%', height: 300, justifyContent: 'center', alignItems: 'center' },
     detailImageText: { color: '#ffffff40', fontSize: 56, fontWeight: fonts.heavy },
     detailContent: { padding: 20 },
-    detailName: { color: t.text.primary, fontSize: 24, fontWeight: fonts.heavy, marginBottom: 4 },
-    detailCollection: { color: t.accent.blue, fontSize: 15, fontWeight: fonts.semibold, marginBottom: 12 },
-    detailDesc: { color: t.text.secondary, fontSize: 14, lineHeight: 22, marginBottom: 20 },
+    detailName: { color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.heavy, marginBottom: 4 },
+    detailCollection: { color: t.accent.blue, fontSize: fonts.md, fontWeight: fonts.semibold, marginBottom: 12 },
+    detailDesc: { color: t.text.secondary, fontSize: fonts.md, lineHeight: 22, marginBottom: 20 },
     detailCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 16 },
     detailRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: t.border },
-    detailLabel: { color: t.text.muted, fontSize: 13 },
-    detailValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold },
+    detailLabel: { color: t.text.muted, fontSize: fonts.sm },
+    detailValue: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     attributeGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
     attributeCard: { backgroundColor: t.bg.secondary, borderRadius: 10, padding: 10, minWidth: '45%', borderWidth: 1, borderColor: t.border },
-    attributeTrait: { color: t.text.muted, fontSize: 10, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 2 },
-    attributeValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
-    sectionTitle: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12 },
+    attributeTrait: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 2 },
+    attributeValue: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
+    sectionTitle: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12 },
   }), [t]);
 
   useEffect(() => {
@@ -227,7 +227,7 @@ export function NFTGalleryScreen({ onClose }: Props) {
           <TouchableOpacity onPress={() => setSelectedNFT(null)}>
             <Text style={s.closeBtn}>Back</Text>
           </TouchableOpacity>
-          <Text style={[s.title, { fontSize: 16 }]}>NFT Details</Text>
+          <Text style={[s.title, { fontSize: fonts.lg }]}>NFT Details</Text>
           <View style={{ width: 40 }} />
         </View>
 
@@ -247,7 +247,7 @@ export function NFTGalleryScreen({ onClose }: Props) {
             {rarity ? (
               <View style={{ flexDirection: 'row', marginBottom: 12 }}>
                 <View style={{ backgroundColor: rarityColor + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 }}>
-                  <Text style={{ color: rarityColor, fontSize: 12, fontWeight: fonts.bold }}>{rarity}</Text>
+                  <Text style={{ color: rarityColor, fontSize: fonts.sm, fontWeight: fonts.bold }}>{rarity}</Text>
                 </View>
               </View>
             ) : null}
@@ -348,7 +348,7 @@ export function NFTGalleryScreen({ onClose }: Props) {
         )}
 
         {demoMode && nfts.length > 0 && (
-          <Text style={{ color: t.text.muted, fontSize: 11, textAlign: 'center', marginTop: 16 }}>
+          <Text style={{ color: t.text.muted, fontSize: fonts.xs, textAlign: 'center', marginTop: 16 }}>
             Demo mode — showing sample NFTs
           </Text>
         )}

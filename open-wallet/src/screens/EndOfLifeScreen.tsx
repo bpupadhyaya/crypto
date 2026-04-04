@@ -182,63 +182,63 @@ export function EndOfLifeScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     heroCard: { backgroundColor: t.accent.purple + '10', borderRadius: 24, padding: 24, marginHorizontal: 20, marginTop: 8, alignItems: 'center' },
     heroIcon: { fontSize: 48, marginBottom: 8 },
-    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, textAlign: 'center' },
-    heroSubtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 4, lineHeight: 20 },
+    heroTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy, textAlign: 'center' },
+    heroSubtitle: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 4, lineHeight: 20 },
     tabRow: { flexDirection: 'row', marginHorizontal: 20, marginTop: 20, backgroundColor: t.bg.card, borderRadius: 16, padding: 4 },
     tabBtn: { flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 12 },
     tabBtnActive: { backgroundColor: t.accent.purple },
-    tabText: { color: t.text.secondary, fontSize: 11, fontWeight: fonts.bold },
+    tabText: { color: t.text.secondary, fontSize: fonts.xs, fontWeight: fonts.bold },
     tabTextActive: { color: '#fff' },
-    tabIcon: { fontSize: 18, marginBottom: 2 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
+    tabIcon: { fontSize: fonts.xl, marginBottom: 2 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 12 },
     cardHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
-    cardIcon: { fontSize: 24, marginRight: 10 },
-    cardTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, flex: 1 },
-    cardSubtitle: { color: t.text.secondary, fontSize: 12 },
-    cardValue: { color: t.text.primary, fontSize: 14, lineHeight: 22 },
-    cardMeta: { color: t.text.muted, fontSize: 11, marginTop: 8 },
+    cardIcon: { fontSize: fonts.xxl, marginRight: 10 },
+    cardTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, flex: 1 },
+    cardSubtitle: { color: t.text.secondary, fontSize: fonts.sm },
+    cardValue: { color: t.text.primary, fontSize: fonts.md, lineHeight: 22 },
+    cardMeta: { color: t.text.muted, fontSize: fonts.xs, marginTop: 8 },
     badge: { backgroundColor: t.accent.green + '20', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 8 },
-    badgeText: { color: t.accent.green, fontSize: 11, fontWeight: fonts.bold },
+    badgeText: { color: t.accent.green, fontSize: fonts.xs, fontWeight: fonts.bold },
     proxyRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: t.bg.primary, borderRadius: 12, padding: 12, marginTop: 8 },
-    proxyLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
-    proxyUid: { color: t.accent.blue, fontSize: 13, fontWeight: fonts.bold, marginLeft: 8 },
+    proxyLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    proxyUid: { color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.bold, marginLeft: 8 },
     letterCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    letterSubject: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
-    letterRecipient: { color: t.text.secondary, fontSize: 13, marginTop: 4 },
-    letterHash: { color: t.text.muted, fontSize: 11, fontFamily: 'Courier', marginTop: 8 },
-    letterDate: { color: t.text.muted, fontSize: 11, marginTop: 4 },
+    letterSubject: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    letterRecipient: { color: t.text.secondary, fontSize: fonts.sm, marginTop: 4 },
+    letterHash: { color: t.text.muted, fontSize: fonts.xs, fontFamily: 'Courier', marginTop: 8 },
+    letterDate: { color: t.text.muted, fontSize: fonts.xs, marginTop: 4 },
     encryptedBadge: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 8 },
-    encryptedText: { color: t.accent.green, fontSize: 11, fontWeight: fonts.bold },
+    encryptedText: { color: t.accent.green, fontSize: fonts.xs, fontWeight: fonts.bold },
     memorialSection: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    memLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 },
-    memValue: { color: t.text.primary, fontSize: 14, lineHeight: 22 },
+    memLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 },
+    memValue: { color: t.text.primary, fontSize: fonts.md, lineHeight: 22 },
     memList: { marginTop: 4 },
-    memListItem: { color: t.text.primary, fontSize: 14, lineHeight: 24, paddingLeft: 8 },
+    memListItem: { color: t.text.primary, fontSize: fonts.md, lineHeight: 24, paddingLeft: 8 },
     estateRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, marginBottom: 8 },
-    estateLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
-    estateName: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
-    estateUid: { color: t.text.muted, fontSize: 11 },
+    estateLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    estateName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    estateUid: { color: t.text.muted, fontSize: fonts.xs },
     guardianCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 12 },
     guardianRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    guardianLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
-    guardianName: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
+    guardianLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    guardianName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
     actionBtn: { backgroundColor: t.accent.purple, borderRadius: 16, paddingVertical: 16, alignItems: 'center', marginHorizontal: 20, marginTop: 16 },
-    actionBtnText: { color: '#fff', fontSize: 16, fontWeight: fonts.bold },
+    actionBtnText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.bold },
     secondaryBtn: { backgroundColor: t.bg.card, borderRadius: 16, paddingVertical: 16, alignItems: 'center', marginHorizontal: 20, marginTop: 10 },
-    secondaryBtnText: { color: t.accent.purple, fontSize: 16, fontWeight: fonts.bold },
-    disclaimer: { color: t.text.muted, fontSize: 11, textAlign: 'center', marginHorizontal: 32, marginTop: 16, lineHeight: 18 },
+    secondaryBtnText: { color: t.accent.purple, fontSize: fonts.lg, fontWeight: fonts.bold },
+    disclaimer: { color: t.text.muted, fontSize: fonts.xs, textAlign: 'center', marginHorizontal: 32, marginTop: 16, lineHeight: 18 },
     emptyState: { alignItems: 'center', paddingVertical: 40, paddingHorizontal: 32 },
     emptyIcon: { fontSize: 48, marginBottom: 12 },
-    emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', lineHeight: 22 },
+    emptyText: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', lineHeight: 22 },
     statsRow: { flexDirection: 'row', justifyContent: 'space-around', marginHorizontal: 20, marginTop: 16 },
     statBox: { alignItems: 'center', flex: 1 },
-    statValue: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    statLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
+    statValue: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    statLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
   }), [t]);
 
   // ─── Directives Tab ───
@@ -363,7 +363,7 @@ export function EndOfLifeScreen({ onClose }: Props) {
             <Text style={s.estateName}>{estate.walletInheritorName}</Text>
             <Text style={s.estateUid}>{estate.walletInheritorUid}</Text>
           </View>
-          <Text style={{ fontSize: 24 }}>{'\u{1F4B0}'}</Text>
+          <Text style={{ fontSize: fonts.xxl }}>{'\u{1F4B0}'}</Text>
         </View>
         <View style={[s.estateRow, { marginTop: 8 }]}>
           <View>
@@ -371,7 +371,7 @@ export function EndOfLifeScreen({ onClose }: Props) {
             <Text style={s.estateName}>{estate.uidSuccessorName}</Text>
             <Text style={s.estateUid}>{estate.uidSuccessorUid}</Text>
           </View>
-          <Text style={{ fontSize: 24 }}>{'\u{1F194}'}</Text>
+          <Text style={{ fontSize: fonts.xxl }}>{'\u{1F194}'}</Text>
         </View>
         <View style={[s.estateRow, { marginTop: 8 }]}>
           <View>
@@ -379,7 +379,7 @@ export function EndOfLifeScreen({ onClose }: Props) {
             <Text style={s.estateName}>{estate.achievementRecipientName}</Text>
             <Text style={s.estateUid}>{estate.achievementRecipientUid}</Text>
           </View>
-          <Text style={{ fontSize: 24 }}>{'\u{1F3C6}'}</Text>
+          <Text style={{ fontSize: fonts.xxl }}>{'\u{1F3C6}'}</Text>
         </View>
       </View>
 
@@ -392,7 +392,7 @@ export function EndOfLifeScreen({ onClose }: Props) {
               <Text style={s.guardianName}>{g.dependentName}</Text>
               <Text style={s.estateUid}>{g.dependentUid}</Text>
             </View>
-            <Text style={{ fontSize: 28 }}>{'\u{1F9D2}'}</Text>
+            <Text style={{ fontSize: fonts.xxxl }}>{'\u{1F9D2}'}</Text>
           </View>
           <View style={[s.guardianRow, { marginTop: 12 }]}>
             <View>
@@ -400,7 +400,7 @@ export function EndOfLifeScreen({ onClose }: Props) {
               <Text style={s.guardianName}>{g.guardianName}</Text>
               <Text style={s.estateUid}>{g.guardianUid}</Text>
             </View>
-            <Text style={{ fontSize: 20 }}>{'\u{1F6E1}\uFE0F'}</Text>
+            <Text style={{ fontSize: fonts.xl }}>{'\u{1F6E1}\uFE0F'}</Text>
           </View>
           <View style={[s.guardianRow, { marginTop: 12 }]}>
             <View>
@@ -408,7 +408,7 @@ export function EndOfLifeScreen({ onClose }: Props) {
               <Text style={s.guardianName}>{g.alternateGuardianName}</Text>
               <Text style={s.estateUid}>{g.alternateGuardianUid}</Text>
             </View>
-            <Text style={{ fontSize: 20 }}>{'\u{1F91D}'}</Text>
+            <Text style={{ fontSize: fonts.xl }}>{'\u{1F91D}'}</Text>
           </View>
         </View>
       ))}

@@ -68,33 +68,33 @@ export function BridgeScreen({ onClose }: { onClose: () => void }) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    back: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
-    title: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
+    back: { color: t.accent.blue, fontSize: fonts.lg, fontWeight: fonts.semibold },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
     scroll: { paddingHorizontal: 20 },
-    subtitle: { color: t.text.muted, fontSize: 13, marginBottom: 20 },
-    label: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8, marginTop: 16 },
+    subtitle: { color: t.text.muted, fontSize: fonts.sm, marginBottom: 20 },
+    label: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8, marginTop: 16 },
     chainRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
     chainChip: { backgroundColor: t.bg.card, borderRadius: 20, paddingVertical: 8, paddingHorizontal: 14 },
     chainChipActive: { backgroundColor: t.accent.purple },
-    chainText: { color: t.text.secondary, fontSize: 13 },
+    chainText: { color: t.text.secondary, fontSize: fonts.sm },
     chainTextActive: { color: '#fff', fontWeight: fonts.bold },
     amountCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginTop: 16, flexDirection: 'row', alignItems: 'center' },
-    amountLabel: { color: t.text.secondary, fontSize: 16, fontWeight: fonts.bold, marginRight: 12 },
-    amountInput: { flex: 1, color: t.text.primary, fontSize: 24, fontWeight: fonts.semibold, textAlign: 'right' },
+    amountLabel: { color: t.text.secondary, fontSize: fonts.lg, fontWeight: fonts.bold, marginRight: 12 },
+    amountInput: { flex: 1, color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.semibold, textAlign: 'right' },
     flipBtn: { alignSelf: 'center', backgroundColor: t.accent.purple, width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center', marginVertical: -8, zIndex: 1 },
-    flipIcon: { color: '#fff', fontSize: 20, fontWeight: fonts.heavy },
+    flipIcon: { color: '#fff', fontSize: fonts.xl, fontWeight: fonts.heavy },
     receiveCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, alignItems: 'center', marginTop: 16 },
-    receiveLabel: { color: t.text.muted, fontSize: 12, textTransform: 'uppercase', letterSpacing: 1 },
-    receiveAmount: { color: t.text.primary, fontSize: 24, fontWeight: fonts.bold, marginTop: 8 },
-    receiveNote: { color: t.text.muted, fontSize: 12, marginTop: 4 },
+    receiveLabel: { color: t.text.muted, fontSize: fonts.sm, textTransform: 'uppercase', letterSpacing: 1 },
+    receiveAmount: { color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.bold, marginTop: 8 },
+    receiveNote: { color: t.text.muted, fontSize: fonts.sm, marginTop: 4 },
     routeCard: { flexDirection: 'row', justifyContent: 'space-between', backgroundColor: t.bg.card, borderRadius: 12, padding: 14, marginTop: 12 },
-    routeLabel: { color: t.text.muted, fontSize: 13 },
-    routeValue: { color: t.text.secondary, fontSize: 13 },
+    routeLabel: { color: t.text.muted, fontSize: fonts.sm },
+    routeValue: { color: t.text.secondary, fontSize: fonts.sm },
     bridgeBtn: { backgroundColor: t.accent.purple, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginTop: 24 },
     paperBtn: { backgroundColor: t.accent.blue, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginTop: 12 },
     bridgeBtnDisabled: { opacity: 0.6 },
-    bridgeBtnText: { color: '#fff', fontSize: 17, fontWeight: fonts.bold },
-    hint: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginTop: 16, lineHeight: 18 },
+    bridgeBtnText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.bold },
+    hint: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 16, lineHeight: 18 },
   }), [t]);
 
   const flipChains = useCallback(() => {
@@ -362,7 +362,7 @@ export function BridgeScreen({ onClose }: { onClose: () => void }) {
         </TouchableOpacity>
 
         {paperLight === 'orange' && (
-          <Text style={{ color: t.accent.orange, fontSize: 12, textAlign: 'center', marginTop: 8 }}>
+          <Text style={{ color: t.accent.orange, fontSize: fonts.sm, textAlign: 'center', marginTop: 8 }}>
             You have less than 3 paper trades. We recommend more practice before real bridge transactions.
           </Text>
         )}

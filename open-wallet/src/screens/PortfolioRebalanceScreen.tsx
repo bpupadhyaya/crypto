@@ -80,7 +80,7 @@ function AllocationBar({ items, theme }: {
     <View style={{ gap: 8 }}>
       {items.map((item) => (
         <View key={item.symbol} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-          <Text style={{ color: theme.text.secondary, fontSize: 13, width: 48, textAlign: 'right', fontWeight: fonts.semibold }}>
+          <Text style={{ color: theme.text.secondary, fontSize: fonts.sm, width: 48, textAlign: 'right', fontWeight: fonts.semibold }}>
             {item.symbol}
           </Text>
           <View style={{ flex: 1, height: 26, backgroundColor: theme.border, borderRadius: 6, overflow: 'hidden' }}>
@@ -93,14 +93,14 @@ function AllocationBar({ items, theme }: {
               paddingLeft: 6,
             }}>
               {item.pct >= 8 && (
-                <Text style={{ color: '#fff', fontSize: 11, fontWeight: fonts.bold }}>
+                <Text style={{ color: '#fff', fontSize: fonts.xs, fontWeight: fonts.bold }}>
                   {item.pct.toFixed(1)}%
                 </Text>
               )}
             </View>
           </View>
           {item.pct < 8 && (
-            <Text style={{ color: theme.text.muted, fontSize: 11 }}>{item.pct.toFixed(1)}%</Text>
+            <Text style={{ color: theme.text.muted, fontSize: fonts.xs }}>{item.pct.toFixed(1)}%</Text>
           )}
         </View>
       ))}
@@ -121,51 +121,51 @@ export function PortfolioRebalanceScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    back: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
-    title: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
+    back: { color: t.accent.blue, fontSize: fonts.lg, fontWeight: fonts.semibold },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
     tabRow: { flexDirection: 'row', marginHorizontal: 16, marginBottom: 16, gap: 6 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 12, alignItems: 'center', backgroundColor: t.bg.card },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase' },
+    tabText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase' },
     tabTextActive: { color: '#fff' },
-    sectionLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 10, marginLeft: 4 },
+    sectionLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 10, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16 },
     metricRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10 },
-    metricLabel: { color: t.text.muted, fontSize: 14 },
-    metricValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
+    metricLabel: { color: t.text.muted, fontSize: fonts.md },
+    metricValue: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
     divider: { height: 1, backgroundColor: t.border },
     // Drift
     driftRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: t.border },
-    driftSymbol: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, width: 50 },
-    driftPct: { fontSize: 14, fontWeight: fonts.semibold },
+    driftSymbol: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, width: 50 },
+    driftPct: { fontSize: fonts.md, fontWeight: fonts.semibold },
     // Trade
     tradeCard: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, marginBottom: 10 },
-    tradeAction: { fontSize: 13, fontWeight: fonts.heavy, letterSpacing: 1 },
-    tradeDetail: { color: t.text.secondary, fontSize: 13, marginTop: 4 },
+    tradeAction: { fontSize: fonts.sm, fontWeight: fonts.heavy, letterSpacing: 1 },
+    tradeDetail: { color: t.text.secondary, fontSize: fonts.sm, marginTop: 4 },
     // Execute button
     executeBtn: { backgroundColor: t.accent.green, borderRadius: 14, paddingVertical: 16, alignItems: 'center', marginTop: 20 },
-    executeBtnText: { color: '#fff', fontSize: 16, fontWeight: fonts.heavy },
+    executeBtnText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.heavy },
     executeBtnDisabled: { opacity: 0.5 },
     // Target input row
     targetRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: t.border },
-    targetSymbol: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, width: 50 },
+    targetSymbol: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, width: 50 },
     targetPctGroup: { flexDirection: 'row', alignItems: 'center', gap: 10 },
     targetBtn: { width: 32, height: 32, borderRadius: 16, backgroundColor: t.bg.primary, justifyContent: 'center', alignItems: 'center' },
-    targetBtnText: { color: t.accent.blue, fontSize: 18, fontWeight: fonts.bold },
-    targetPct: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, width: 48, textAlign: 'center' },
+    targetBtnText: { color: t.accent.blue, fontSize: fonts.xl, fontWeight: fonts.bold },
+    targetPct: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, width: 48, textAlign: 'center' },
     // History
     historyCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 14, marginBottom: 10 },
-    historyDate: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
-    historyMeta: { color: t.text.muted, fontSize: 13, marginTop: 4 },
+    historyDate: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    historyMeta: { color: t.text.muted, fontSize: fonts.sm, marginTop: 4 },
     statusBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'flex-start', marginTop: 8 },
-    statusText: { fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase' },
+    statusText: { fontSize: fonts.xs, fontWeight: fonts.bold, textTransform: 'uppercase' },
     demoBanner: { backgroundColor: t.accent.yellow + '20', borderRadius: 12, padding: 12, marginBottom: 16 },
-    demoText: { color: t.accent.yellow, fontSize: 13, fontWeight: fonts.semibold, textAlign: 'center' },
+    demoText: { color: t.accent.yellow, fontSize: fonts.sm, fontWeight: fonts.semibold, textAlign: 'center' },
     totalRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8 },
-    totalLabel: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
-    totalValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.bold },
-    placeholder: { color: t.text.muted, fontSize: 14 },
+    totalLabel: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    totalValue: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.bold },
+    placeholder: { color: t.text.muted, fontSize: fonts.md },
   }), [t]);
 
   // ─── Derived data ───
@@ -270,7 +270,7 @@ export function PortfolioRebalanceScreen({ onClose }: Props) {
               </Text>
               <View style={{ alignItems: 'flex-end' }}>
                 <Text style={s.metricValue}>{alloc.pct}%</Text>
-                <Text style={{ color: t.text.muted, fontSize: 12 }}>{formatUsd(alloc.usdValue)}</Text>
+                <Text style={{ color: t.text.muted, fontSize: fonts.sm }}>{formatUsd(alloc.usdValue)}</Text>
               </View>
             </View>
             {i < currentAllocations.length - 1 && <View style={s.divider} />}
@@ -308,7 +308,7 @@ export function PortfolioRebalanceScreen({ onClose }: Props) {
           </Text>
         </View>
         {targetTotal !== 100 && (
-          <Text style={{ color: t.accent.red, fontSize: 12, marginTop: 4, textAlign: 'center' }}>
+          <Text style={{ color: t.accent.red, fontSize: fonts.sm, marginTop: 4, textAlign: 'center' }}>
             Target must equal 100% (currently {targetTotal}%)
           </Text>
         )}
@@ -338,7 +338,7 @@ export function PortfolioRebalanceScreen({ onClose }: Props) {
         {driftAnalysis.map((d) => (
           <View key={d.symbol} style={s.driftRow}>
             <Text style={s.driftSymbol}>{d.symbol}</Text>
-            <Text style={{ color: t.text.muted, fontSize: 13 }}>
+            <Text style={{ color: t.text.muted, fontSize: fonts.sm }}>
               {d.currentPct}% → {d.targetPct}%
             </Text>
             <Text style={[s.driftPct, {
@@ -365,7 +365,7 @@ export function PortfolioRebalanceScreen({ onClose }: Props) {
                 }]}>
                   {trade.action}
                 </Text>
-                <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: fonts.bold }}>
+                <Text style={{ color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold }}>
                   {trade.symbol}
                 </Text>
               </View>
@@ -391,7 +391,7 @@ export function PortfolioRebalanceScreen({ onClose }: Props) {
       )}
 
       {targetTotal !== 100 && trades.length > 0 && (
-        <Text style={{ color: t.accent.red, fontSize: 13, textAlign: 'center', marginTop: 16 }}>
+        <Text style={{ color: t.accent.red, fontSize: fonts.sm, textAlign: 'center', marginTop: 16 }}>
           Adjust target allocation to 100% before executing.
         </Text>
       )}

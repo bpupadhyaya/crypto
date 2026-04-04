@@ -130,63 +130,63 @@ export function AirdropScreen({ onClose }: Props) {
     container: { flex: 1, backgroundColor: t.bg.primary },
     scroll: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 40 },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeText: { color: t.accent.blue, fontSize: 16 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
+    headerTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeText: { color: t.accent.blue, fontSize: fonts.lg },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
 
     // Stats
     statsCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16 },
     statsRow: { flexDirection: 'row', justifyContent: 'space-around' },
     statBox: { alignItems: 'center' },
-    statNumber: { color: t.text.primary, fontSize: 24, fontWeight: fonts.bold },
-    statLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
+    statNumber: { color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.bold },
+    statLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
 
     // Tabs
     tabRow: { flexDirection: 'row', gap: 8, marginTop: 20, marginBottom: 12 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 12, alignItems: 'center', backgroundColor: t.bg.card },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: '#ffffff' },
 
     // Cards
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 14, marginBottom: 10 },
     cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
     tokenRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-    tokenName: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
-    amountBadge: { color: t.accent.green, fontSize: 15, fontWeight: fonts.bold },
-    criteria: { color: t.text.secondary, fontSize: 13, marginBottom: 6 },
-    deadline: { color: t.text.muted, fontSize: 11 },
+    tokenName: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold },
+    amountBadge: { color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.bold },
+    criteria: { color: t.text.secondary, fontSize: fonts.sm, marginBottom: 6 },
+    deadline: { color: t.text.muted, fontSize: fonts.xs },
     eligibleBadge: { flexDirection: 'row', alignItems: 'center', backgroundColor: t.accent.green + '18', borderRadius: 8, paddingVertical: 4, paddingHorizontal: 10, alignSelf: 'flex-start', marginTop: 6 },
-    eligibleText: { color: t.accent.green, fontSize: 12, fontWeight: fonts.semibold, marginLeft: 4 },
-    notEligible: { color: t.text.muted, fontSize: 12, fontWeight: fonts.medium, marginTop: 6 },
+    eligibleText: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.semibold, marginLeft: 4 },
+    notEligible: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.medium, marginTop: 6 },
 
     // Claim button
     claimBtn: { backgroundColor: t.accent.blue, borderRadius: 10, paddingVertical: 10, alignItems: 'center', marginTop: 10 },
     claimBtnDisabled: { backgroundColor: t.bg.primary, borderRadius: 10, paddingVertical: 10, alignItems: 'center', marginTop: 10 },
-    claimText: { color: '#ffffff', fontSize: 14, fontWeight: fonts.bold },
-    claimTextDisabled: { color: t.text.muted, fontSize: 14, fontWeight: fonts.bold },
+    claimText: { color: '#ffffff', fontSize: fonts.md, fontWeight: fonts.bold },
+    claimTextDisabled: { color: t.text.muted, fontSize: fonts.md, fontWeight: fonts.bold },
 
     // Claimed
-    claimedDate: { color: t.text.muted, fontSize: 11, marginTop: 4 },
+    claimedDate: { color: t.text.muted, fontSize: fonts.xs, marginTop: 4 },
 
     // Upcoming
-    sourceText: { color: t.text.secondary, fontSize: 12, fontStyle: 'italic', marginTop: 4 },
-    announcedText: { color: t.text.muted, fontSize: 11, marginTop: 2 },
+    sourceText: { color: t.text.secondary, fontSize: fonts.sm, fontStyle: 'italic', marginTop: 4 },
+    announcedText: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
 
     // Demo banner
     demoBanner: { backgroundColor: t.accent.orange + '20', borderRadius: 10, padding: 10, alignItems: 'center', marginBottom: 12 },
-    demoText: { color: t.accent.orange, fontSize: 12, fontWeight: fonts.semibold },
+    demoText: { color: t.accent.orange, fontSize: fonts.sm, fontWeight: fonts.semibold },
 
     empty: { alignItems: 'center', paddingVertical: 40 },
     emptyIcon: { fontSize: 40, marginBottom: 12 },
-    emptyText: { color: t.text.muted, fontSize: 14 },
+    emptyText: { color: t.text.muted, fontSize: fonts.md },
   }), [t]);
 
   const renderAvailableCard = (airdrop: Airdrop) => (
     <View key={airdrop.id} style={st.card}>
       <View style={st.cardHeader}>
         <View style={st.tokenRow}>
-          <Text style={{ fontSize: 20 }}>{STATUS_ICONS.available}</Text>
+          <Text style={{ fontSize: fonts.xl }}>{STATUS_ICONS.available}</Text>
           <Text style={st.tokenName}>{airdrop.token}</Text>
         </View>
         <Text style={st.amountBadge}>+{airdrop.amount.toLocaleString()}</Text>
@@ -196,7 +196,7 @@ export function AirdropScreen({ onClose }: Props) {
       {airdrop.eligible ? (
         <>
           <View style={st.eligibleBadge}>
-            <Text style={{ fontSize: 12 }}>{'\u2705'}</Text>
+            <Text style={{ fontSize: fonts.sm }}>{'\u2705'}</Text>
             <Text style={st.eligibleText}>Eligible</Text>
           </View>
           <TouchableOpacity style={st.claimBtn} onPress={() => handleClaim(airdrop)}>
@@ -218,7 +218,7 @@ export function AirdropScreen({ onClose }: Props) {
     <View key={airdrop.id} style={st.card}>
       <View style={st.cardHeader}>
         <View style={st.tokenRow}>
-          <Text style={{ fontSize: 20 }}>{STATUS_ICONS.claimed}</Text>
+          <Text style={{ fontSize: fonts.xl }}>{STATUS_ICONS.claimed}</Text>
           <Text style={st.tokenName}>{airdrop.token}</Text>
         </View>
         <Text style={st.amountBadge}>+{airdrop.amount.toLocaleString()}</Text>
@@ -232,7 +232,7 @@ export function AirdropScreen({ onClose }: Props) {
     <View key={airdrop.id} style={st.card}>
       <View style={st.cardHeader}>
         <View style={st.tokenRow}>
-          <Text style={{ fontSize: 20 }}>{STATUS_ICONS.upcoming}</Text>
+          <Text style={{ fontSize: fonts.xl }}>{STATUS_ICONS.upcoming}</Text>
           <Text style={st.tokenName}>{airdrop.token}</Text>
         </View>
         <Text style={st.amountBadge}>~{airdrop.amount.toLocaleString()}</Text>

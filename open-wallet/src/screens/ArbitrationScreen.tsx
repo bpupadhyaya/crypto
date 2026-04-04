@@ -159,55 +159,55 @@ export function ArbitrationScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { paddingHorizontal: 16 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
-    label: { color: t.text.secondary, fontSize: 13 },
-    value: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
+    label: { color: t.text.secondary, fontSize: fonts.sm },
+    value: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
     statusBadge: { paddingHorizontal: 10, paddingVertical: 3, borderRadius: 8 },
-    statusText: { fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase', color: '#fff' },
-    titleText: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 4 },
-    descText: { color: t.text.secondary, fontSize: 13, marginBottom: 8, lineHeight: 18 },
+    statusText: { fontSize: fonts.xs, fontWeight: fonts.bold, textTransform: 'uppercase', color: '#fff' },
+    titleText: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, marginBottom: 4 },
+    descText: { color: t.text.secondary, fontSize: fonts.sm, marginBottom: 8, lineHeight: 18 },
     tabRow: { flexDirection: 'row', gap: 6, marginBottom: 16, flexWrap: 'wrap' },
     tab: { flex: 1, minWidth: 70, paddingVertical: 10, borderRadius: 10, alignItems: 'center', backgroundColor: t.bg.card },
     tabActive: { backgroundColor: t.accent.green },
-    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
-    emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', paddingVertical: 40 },
+    emptyText: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', paddingVertical: 40 },
     detailRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: t.border },
-    detailLabel: { color: t.text.secondary, fontSize: 13 },
-    detailValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold, maxWidth: '60%', textAlign: 'right' },
+    detailLabel: { color: t.text.secondary, fontSize: fonts.sm },
+    detailValue: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold, maxWidth: '60%', textAlign: 'right' },
     btn: { borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 10 },
     btnPrimary: { backgroundColor: t.accent.green },
     btnSecondary: { backgroundColor: t.accent.blue },
     btnDanger: { backgroundColor: t.accent.red },
-    btnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
-    input: { backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 14, marginBottom: 12 },
+    btnText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
+    input: { backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md, marginBottom: 12 },
     inputMulti: { minHeight: 80, textAlignVertical: 'top' },
     hearingCard: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 12, marginBottom: 8, borderLeftWidth: 3 },
-    hearingType: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
-    hearingDate: { color: t.text.secondary, fontSize: 12 },
-    hearingStatus: { fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase' },
+    hearingType: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
+    hearingDate: { color: t.text.secondary, fontSize: fonts.sm },
+    hearingStatus: { fontSize: fonts.xs, fontWeight: fonts.bold, textTransform: 'uppercase' },
     arbiterCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
-    arbiterName: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 4 },
+    arbiterName: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, marginBottom: 4 },
     expertiseRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginVertical: 8 },
     expertiseTag: { backgroundColor: t.accent.blue + '20', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
-    expertiseText: { color: t.accent.blue, fontSize: 11, fontWeight: fonts.semibold },
+    expertiseText: { color: t.accent.blue, fontSize: fonts.xs, fontWeight: fonts.semibold },
     trustBar: { height: 6, borderRadius: 3, backgroundColor: t.bg.primary, marginTop: 4 },
     trustFill: { height: 6, borderRadius: 3 },
     rulingCard: { backgroundColor: t.accent.green + '15', borderRadius: 12, padding: 14, marginBottom: 16, borderLeftWidth: 3, borderLeftColor: t.accent.green },
-    rulingText: { color: t.text.primary, fontSize: 14, lineHeight: 20 },
+    rulingText: { color: t.text.primary, fontSize: fonts.md, lineHeight: 20 },
     transferCard: { backgroundColor: t.accent.blue + '15', borderRadius: 12, padding: 14, marginBottom: 12 },
     selectRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 12 },
     selectChip: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 8, backgroundColor: t.bg.card },
     selectChipActive: { backgroundColor: t.accent.green },
-    selectChipText: { color: t.text.secondary, fontSize: 13 },
+    selectChipText: { color: t.text.secondary, fontSize: fonts.sm },
     selectChipTextActive: { color: '#fff', fontWeight: fonts.semibold },
     warningCard: { backgroundColor: t.accent.yellow + '15', borderRadius: 12, padding: 14, marginBottom: 16 },
-    warningText: { color: t.accent.yellow, fontSize: 13, lineHeight: 18, textAlign: 'center' },
+    warningText: { color: t.accent.yellow, fontSize: fonts.sm, lineHeight: 18, textAlign: 'center' },
   }), [t]);
 
   const handleSubmitRequest = useCallback(() => {
@@ -332,10 +332,10 @@ export function ArbitrationScreen({ onClose }: Props) {
                 <Text style={st.label}>On-Chain Transfer</Text>
                 <Text style={[st.value, { color: t.accent.green }]}>{c.otkTransfer.amount} OTK</Text>
               </View>
-              <Text style={[st.label, { fontSize: 11 }]}>
+              <Text style={[st.label, { fontSize: fonts.xs }]}>
                 From: {c.otkTransfer.from}
               </Text>
-              <Text style={[st.label, { fontSize: 11, marginTop: 2 }]}>
+              <Text style={[st.label, { fontSize: fonts.xs, marginTop: 2 }]}>
                 To: {c.otkTransfer.to}
               </Text>
             </View>
@@ -565,7 +565,7 @@ export function ArbitrationScreen({ onClose }: Props) {
 
         {!demoMode && activeCases.length === 0 && tab === 'cases' && (
           <View style={[st.card, { alignItems: 'center' }]}>
-            <Text style={{ color: t.text.muted, fontSize: 13, textAlign: 'center', lineHeight: 20 }}>
+            <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', lineHeight: 20 }}>
               Enable Demo Mode in Settings to see sample arbitration cases. Cases are created when mediation fails to resolve a dispute.
             </Text>
           </View>

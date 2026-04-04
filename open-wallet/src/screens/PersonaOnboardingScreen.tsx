@@ -167,7 +167,7 @@ export function PersonaOnboardingScreen({ onClose }: Props) {
     },
     backText: {
       color: t.accent.green,
-      fontSize: 16,
+      fontSize: fonts.lg,
       fontWeight: fonts.semibold,
     },
     skipBtn: {
@@ -176,7 +176,7 @@ export function PersonaOnboardingScreen({ onClose }: Props) {
     },
     skipText: {
       color: t.text.muted,
-      fontSize: 14,
+      fontSize: fonts.md,
     },
     progressRow: {
       flexDirection: 'row',
@@ -210,7 +210,7 @@ export function PersonaOnboardingScreen({ onClose }: Props) {
     },
     stepSubtitle: {
       color: t.text.secondary,
-      fontSize: 14,
+      fontSize: fonts.md,
       textAlign: 'center',
       marginBottom: 24,
     },
@@ -229,17 +229,17 @@ export function PersonaOnboardingScreen({ onClose }: Props) {
       backgroundColor: t.bg.card,
     },
     personaIcon: {
-      fontSize: 32,
+      fontSize: fonts.hero,
       marginRight: 14,
     },
     personaLabel: {
       color: t.text.primary,
-      fontSize: 16,
+      fontSize: fonts.lg,
       fontWeight: fonts.bold,
     },
     personaFocus: {
       color: t.text.muted,
-      fontSize: 12,
+      fontSize: fonts.sm,
       marginTop: 2,
     },
     interestGrid: {
@@ -262,7 +262,7 @@ export function PersonaOnboardingScreen({ onClose }: Props) {
     },
     interestText: {
       color: t.text.secondary,
-      fontSize: 14,
+      fontSize: fonts.md,
       fontWeight: fonts.semibold,
     },
     interestTextSelected: {
@@ -282,19 +282,19 @@ export function PersonaOnboardingScreen({ onClose }: Props) {
     },
     optionLabel: {
       color: t.text.primary,
-      fontSize: 16,
+      fontSize: fonts.lg,
       fontWeight: fonts.semibold,
     },
     readyTitle: {
       color: t.accent.green,
-      fontSize: 32,
+      fontSize: fonts.hero,
       fontWeight: fonts.heavy,
       textAlign: 'center',
       marginBottom: 8,
     },
     readySummary: {
       color: t.text.secondary,
-      fontSize: 15,
+      fontSize: fonts.md,
       textAlign: 'center',
       marginBottom: 24,
       lineHeight: 22,
@@ -315,7 +315,7 @@ export function PersonaOnboardingScreen({ onClose }: Props) {
     },
     shortcutLabel: {
       color: t.text.primary,
-      fontSize: 12,
+      fontSize: fonts.sm,
       fontWeight: fonts.semibold,
       textAlign: 'center',
       marginTop: 4,
@@ -341,12 +341,12 @@ export function PersonaOnboardingScreen({ onClose }: Props) {
     },
     nextText: {
       color: '#000',
-      fontSize: 17,
+      fontSize: fonts.lg,
       fontWeight: fonts.heavy,
     },
     demoTag: {
       color: t.accent.yellow,
-      fontSize: 11,
+      fontSize: fonts.xs,
       fontWeight: fonts.bold,
       textAlign: 'center',
       marginBottom: 8,

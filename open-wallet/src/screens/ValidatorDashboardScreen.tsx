@@ -59,20 +59,20 @@ export function ValidatorDashboardScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { paddingHorizontal: 20, paddingBottom: 40 },
     statusCard: { borderRadius: 24, padding: 24, alignItems: 'center', marginBottom: 16 },
     statusIcon: { fontSize: 48, marginBottom: 8 },
-    statusText: { fontSize: 18, fontWeight: fonts.heavy },
-    statusSub: { color: t.text.muted, fontSize: 13, marginTop: 4 },
+    statusText: { fontSize: fonts.xl, fontWeight: fonts.heavy },
+    statusSub: { color: t.text.muted, fontSize: fonts.sm, marginTop: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 12 },
-    cardTitle: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12 },
+    cardTitle: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 },
-    label: { color: t.text.muted, fontSize: 14 },
-    value: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
-    valueGreen: { color: t.accent.green, fontSize: 14, fontWeight: fonts.semibold },
-    valueRed: { color: t.accent.red, fontSize: 14, fontWeight: fonts.semibold },
+    label: { color: t.text.muted, fontSize: fonts.md },
+    value: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
+    valueGreen: { color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.semibold },
+    valueRed: { color: t.accent.red, fontSize: fonts.md, fontWeight: fonts.semibold },
     uptimeBar: { height: 8, backgroundColor: t.border, borderRadius: 4, marginTop: 4, marginBottom: 8 },
     uptimeFill: { height: 8, borderRadius: 4 },
   }), [t]);
@@ -127,7 +127,7 @@ export function ValidatorDashboardScreen({ onClose }: Props) {
       <SafeAreaView style={s.container}>
         <View style={s.header}><Text style={s.title}>Validator Dashboard</Text><TouchableOpacity onPress={onClose}><Text style={s.closeBtn}>Close</Text></TouchableOpacity></View>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 40 }}>
-          <Text style={{ color: t.text.muted, fontSize: 16, textAlign: 'center' }}>Not running as a validator. Start your P2P node first.</Text>
+          <Text style={{ color: t.text.muted, fontSize: fonts.lg, textAlign: 'center' }}>Not running as a validator. Start your P2P node first.</Text>
         </View>
       </SafeAreaView>
     );

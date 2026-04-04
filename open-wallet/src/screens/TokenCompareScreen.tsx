@@ -314,37 +314,37 @@ export const TokenCompareScreen = React.memo(({ onClose }: Props) => {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    back: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
-    title: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
+    back: { color: t.accent.blue, fontSize: fonts.lg, fontWeight: fonts.semibold },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
-    demoTag: { color: t.accent.yellow, fontSize: 11, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 8 },
+    demoTag: { color: t.accent.yellow, fontSize: fonts.xs, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 8 },
     selectorSection: { marginBottom: 16 },
-    selectorLabel: { color: t.text.muted, fontSize: 12, fontWeight: fonts.bold, marginBottom: 6 },
+    selectorLabel: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.bold, marginBottom: 6 },
     tokenRow: { flexDirection: 'row', gap: 6, flexWrap: 'wrap' },
     tokenChip: { borderRadius: 20, paddingVertical: 8, paddingHorizontal: 14, borderWidth: 2, borderColor: 'transparent' },
-    tokenText: { fontSize: 14, fontWeight: fonts.bold },
-    sectionLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 10, marginLeft: 4 },
+    tokenText: { fontSize: fonts.md, fontWeight: fonts.bold },
+    sectionLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 10, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16 },
     chartLegend: { flexDirection: 'row', justifyContent: 'center', gap: 20, marginBottom: 12 },
     legendItem: { flexDirection: 'row', alignItems: 'center', gap: 6 },
     legendDot: { width: 10, height: 10, borderRadius: 5 },
-    legendText: { fontSize: 13, fontWeight: fonts.semibold },
+    legendText: { fontSize: fonts.sm, fontWeight: fonts.semibold },
     touchInfo: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 8 },
-    touchVal: { fontSize: 13, fontWeight: fonts.bold },
+    touchVal: { fontSize: fonts.sm, fontWeight: fonts.bold },
     metricRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10 },
-    metricLabel: { color: t.text.muted, fontSize: 14, flex: 1.2 },
-    metricValA: { fontSize: 13, fontWeight: fonts.bold, flex: 1, textAlign: 'right' },
-    metricValB: { fontSize: 13, fontWeight: fonts.bold, flex: 1, textAlign: 'right' },
+    metricLabel: { color: t.text.muted, fontSize: fonts.md, flex: 1.2 },
+    metricValA: { fontSize: fonts.sm, fontWeight: fonts.bold, flex: 1, textAlign: 'right' },
+    metricValB: { fontSize: fonts.sm, fontWeight: fonts.bold, flex: 1, textAlign: 'right' },
     divider: { height: 1, backgroundColor: t.border },
     correlationRow: { alignItems: 'center', paddingVertical: 16 },
-    correlationValue: { fontSize: 36, fontWeight: fonts.heavy },
-    correlationLabel: { color: t.text.muted, fontSize: 13, marginTop: 4 },
-    correlationDesc: { color: t.text.secondary, fontSize: 12, marginTop: 8, textAlign: 'center', paddingHorizontal: 20 },
+    correlationValue: { fontSize: fonts.hero, fontWeight: fonts.heavy },
+    correlationLabel: { color: t.text.muted, fontSize: fonts.sm, marginTop: 4 },
+    correlationDesc: { color: t.text.secondary, fontSize: fonts.sm, marginTop: 8, textAlign: 'center', paddingHorizontal: 20 },
     perfRow: { flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 16 },
     perfItem: { alignItems: 'center' },
-    perfSymbol: { fontSize: 14, fontWeight: fonts.bold, marginBottom: 4 },
-    perfValue: { fontSize: 22, fontWeight: fonts.heavy },
-    perfLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
+    perfSymbol: { fontSize: fonts.md, fontWeight: fonts.bold, marginBottom: 4 },
+    perfValue: { fontSize: fonts.xxl, fontWeight: fonts.heavy },
+    perfLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
   }), [t]);
 
   const correlationColor = Math.abs(correlation) > 0.7 ? t.accent.green :
@@ -482,8 +482,8 @@ export const TokenCompareScreen = React.memo(({ onClose }: Props) => {
           </View>
           <View style={s.divider} />
           <View style={{ alignItems: 'center', paddingTop: 12 }}>
-            <Text style={{ color: t.text.muted, fontSize: 12 }}>Outperformer</Text>
-            <Text style={{ color: perfA > perfB ? colorA : colorB, fontSize: 16, fontWeight: fonts.heavy, marginTop: 4 }}>
+            <Text style={{ color: t.text.muted, fontSize: fonts.sm }}>Outperformer</Text>
+            <Text style={{ color: perfA > perfB ? colorA : colorB, fontSize: fonts.lg, fontWeight: fonts.heavy, marginTop: 4 }}>
               {perfA > perfB ? tokenA : tokenB} by {Math.abs(perfA - perfB).toFixed(2)}%
             </Text>
           </View>

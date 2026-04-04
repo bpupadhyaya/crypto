@@ -231,80 +231,80 @@ export function ElderWisdomScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     heroCard: { backgroundColor: t.accent.purple + '10', borderRadius: 24, padding: 24, marginHorizontal: 20, marginTop: 8, alignItems: 'center' },
     heroIcon: { fontSize: 48, marginBottom: 8 },
-    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, textAlign: 'center' },
-    heroSub: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginTop: 6, lineHeight: 18, fontStyle: 'italic' },
+    heroTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy, textAlign: 'center' },
+    heroSub: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 6, lineHeight: 18, fontStyle: 'italic' },
     tabRow: { flexDirection: 'row', marginHorizontal: 20, marginTop: 16, backgroundColor: t.bg.card, borderRadius: 12, padding: 4 },
     tab: { flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 10 },
     tabActive: { backgroundColor: t.accent.purple },
-    tabText: { color: t.text.muted, fontSize: 11, fontWeight: fonts.semibold },
+    tabText: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     demoTag: { backgroundColor: t.accent.orange + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'center', marginTop: 12, marginBottom: 4 },
-    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: fonts.semibold },
+    demoText: { color: t.accent.orange, fontSize: fonts.xs, fontWeight: fonts.semibold },
     section: { marginHorizontal: 20, marginTop: 20 },
-    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 12 },
-    sectionSub: { color: t.text.muted, fontSize: 12, marginBottom: 12, lineHeight: 18 },
+    sectionTitle: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, marginBottom: 12 },
+    sectionSub: { color: t.text.muted, fontSize: fonts.sm, marginBottom: 12, lineHeight: 18 },
     // Category filter
     catRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginHorizontal: 20, marginTop: 12 },
     catChip: { paddingVertical: 6, paddingHorizontal: 12, borderRadius: 10, backgroundColor: t.bg.card, flexDirection: 'row', alignItems: 'center', gap: 4 },
     catChipActive: { backgroundColor: t.accent.purple },
-    catLabel: { color: t.text.secondary, fontSize: 11, fontWeight: fonts.semibold },
+    catLabel: { color: t.text.secondary, fontSize: fonts.xs, fontWeight: fonts.semibold },
     catLabelActive: { color: '#fff' },
     // Wisdom cards
     wisdomCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     wisdomHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
     wisdomCat: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: t.accent.purple + '15', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8 },
-    wisdomCatText: { color: t.accent.purple, fontSize: 10, fontWeight: fonts.semibold },
-    wisdomTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, marginTop: 8 },
-    wisdomExcerpt: { color: t.text.secondary, fontSize: 13, lineHeight: 20, marginTop: 6 },
-    wisdomElderName: { color: t.text.muted, fontSize: 12, marginTop: 8, fontStyle: 'italic' },
+    wisdomCatText: { color: t.accent.purple, fontSize: fonts.xs, fontWeight: fonts.semibold },
+    wisdomTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, marginTop: 8 },
+    wisdomExcerpt: { color: t.text.secondary, fontSize: fonts.sm, lineHeight: 20, marginTop: 6 },
+    wisdomElderName: { color: t.text.muted, fontSize: fonts.sm, marginTop: 8, fontStyle: 'italic' },
     wisdomFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 12, paddingTop: 10, borderTopWidth: 1, borderTopColor: t.border },
-    wisdomStat: { color: t.text.muted, fontSize: 11 },
+    wisdomStat: { color: t.text.muted, fontSize: fonts.xs },
     wisdomActions: { flexDirection: 'row', gap: 12 },
     actionBtn: { paddingVertical: 4, paddingHorizontal: 8 },
-    actionText: { fontSize: 16 },
+    actionText: { fontSize: fonts.lg },
     nOTKBadge: { backgroundColor: t.accent.green + '20', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 4 },
-    nOTKText: { color: t.accent.green, fontSize: 11, fontWeight: fonts.bold },
+    nOTKText: { color: t.accent.green, fontSize: fonts.xs, fontWeight: fonts.bold },
     // Ask section
-    askInput: { backgroundColor: t.bg.card, borderRadius: 14, padding: 14, color: t.text.primary, fontSize: 14, minHeight: 100, textAlignVertical: 'top', borderWidth: 1, borderColor: t.border },
+    askInput: { backgroundColor: t.bg.card, borderRadius: 14, padding: 14, color: t.text.primary, fontSize: fonts.md, minHeight: 100, textAlignVertical: 'top', borderWidth: 1, borderColor: t.border },
     askCatRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 12 },
     askSubmitBtn: { backgroundColor: t.accent.purple, borderRadius: 14, paddingVertical: 14, alignItems: 'center', marginTop: 16 },
-    askSubmitText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
+    askSubmitText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
     questionCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
-    questionText: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, lineHeight: 20 },
+    questionText: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold, lineHeight: 20 },
     questionMeta: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 },
-    questionAsker: { color: t.text.muted, fontSize: 12 },
+    questionAsker: { color: t.text.muted, fontSize: fonts.sm },
     questionStatus: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8 },
-    questionStatusText: { fontSize: 11, fontWeight: fonts.bold },
-    questionAnswers: { color: t.text.secondary, fontSize: 12, marginTop: 6 },
+    questionStatusText: { fontSize: fonts.xs, fontWeight: fonts.bold },
+    questionAnswers: { color: t.text.secondary, fontSize: fonts.sm, marginTop: 6 },
     // Elder profiles
     elderCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
-    elderName: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
-    elderBio: { color: t.text.secondary, fontSize: 13, lineHeight: 20, marginTop: 6 },
+    elderName: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold },
+    elderBio: { color: t.text.secondary, fontSize: fonts.sm, lineHeight: 20, marginTop: 6 },
     elderExpertise: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 10 },
     expertTag: { backgroundColor: t.accent.purple + '15', paddingVertical: 4, paddingHorizontal: 10, borderRadius: 8 },
-    expertTagText: { color: t.accent.purple, fontSize: 11, fontWeight: fonts.semibold },
+    expertTagText: { color: t.accent.purple, fontSize: fonts.xs, fontWeight: fonts.semibold },
     elderStats: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 12, paddingTop: 12, borderTopWidth: 1, borderTopColor: t.border },
     elderStatBox: { alignItems: 'center' },
-    elderStatVal: { color: t.text.primary, fontSize: 16, fontWeight: fonts.heavy },
-    elderStatLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold, marginTop: 2, textTransform: 'uppercase', letterSpacing: 0.5 },
+    elderStatVal: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.heavy },
+    elderStatLabel: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold, marginTop: 2, textTransform: 'uppercase', letterSpacing: 0.5 },
     gratitudeRow: { flexDirection: 'row', gap: 8, marginTop: 12, alignItems: 'center' },
-    gratitudeInput: { flex: 1, backgroundColor: t.bg.primary, borderRadius: 10, padding: 10, color: t.text.primary, fontSize: 14, borderWidth: 1, borderColor: t.border },
+    gratitudeInput: { flex: 1, backgroundColor: t.bg.primary, borderRadius: 10, padding: 10, color: t.text.primary, fontSize: fonts.md, borderWidth: 1, borderColor: t.border },
     gratitudeBtn: { backgroundColor: t.accent.green, borderRadius: 10, paddingVertical: 10, paddingHorizontal: 16 },
-    gratitudeBtnText: { color: '#fff', fontSize: 13, fontWeight: fonts.bold },
+    gratitudeBtnText: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.bold },
     // Legacy stories
     legacyCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12, borderLeftWidth: 4, borderLeftColor: t.accent.purple },
-    legacyTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
-    legacyElder: { color: t.accent.purple, fontSize: 12, fontWeight: fonts.semibold, marginTop: 4 },
-    legacyPreview: { color: t.text.secondary, fontSize: 13, lineHeight: 20, marginTop: 8, fontStyle: 'italic' },
+    legacyTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    legacyElder: { color: t.accent.purple, fontSize: fonts.sm, fontWeight: fonts.semibold, marginTop: 4 },
+    legacyPreview: { color: t.text.secondary, fontSize: fonts.sm, lineHeight: 20, marginTop: 8, fontStyle: 'italic' },
     legacyMeta: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 12, paddingTop: 10, borderTopWidth: 1, borderTopColor: t.border },
-    legacyHash: { color: t.text.muted, fontSize: 10, fontFamily: 'monospace' },
-    legacyWords: { color: t.text.muted, fontSize: 11 },
-    emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40, lineHeight: 22 },
-    note: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginHorizontal: 24, marginTop: 20, lineHeight: 18 },
+    legacyHash: { color: t.text.muted, fontSize: fonts.xs, fontFamily: 'monospace' },
+    legacyWords: { color: t.text.muted, fontSize: fonts.xs },
+    emptyText: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', marginTop: 40, lineHeight: 22 },
+    note: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginHorizontal: 24, marginTop: 20, lineHeight: 18 },
   }), [t]);
 
   /* ── renderers ── */
@@ -340,7 +340,7 @@ export function ElderWisdomScreen({ onClose }: Props) {
             <View key={w.id} style={s.wisdomCard}>
               <View style={s.wisdomHeader}>
                 <View style={s.wisdomCat}>
-                  <Text style={{ fontSize: 12 }}>{getCategoryIcon(w.category)}</Text>
+                  <Text style={{ fontSize: fonts.sm }}>{getCategoryIcon(w.category)}</Text>
                   <Text style={s.wisdomCatText}>{getCategoryLabel(w.category)}</Text>
                 </View>
                 <View style={s.nOTKBadge}>
@@ -390,7 +390,7 @@ export function ElderWisdomScreen({ onClose }: Props) {
               style={[s.catChip, questionCategory === cat.key && s.catChipActive]}
               onPress={() => setQuestionCategory(cat.key)}
             >
-              <Text style={{ fontSize: 12 }}>{cat.icon}</Text>
+              <Text style={{ fontSize: fonts.sm }}>{cat.icon}</Text>
               <Text style={[s.catLabel, questionCategory === cat.key && s.catLabelActive]}>{cat.label}</Text>
             </TouchableOpacity>
           ))}
@@ -405,7 +405,7 @@ export function ElderWisdomScreen({ onClose }: Props) {
         {DEMO_QUESTIONS.map((q) => (
           <View key={q.id} style={s.questionCard}>
             <View style={s.wisdomCat}>
-              <Text style={{ fontSize: 12 }}>{getCategoryIcon(q.category)}</Text>
+              <Text style={{ fontSize: fonts.sm }}>{getCategoryIcon(q.category)}</Text>
               <Text style={s.wisdomCatText}>{getCategoryLabel(q.category)}</Text>
             </View>
             <Text style={[s.questionText, { marginTop: 8 }]}>{q.question}</Text>
@@ -434,7 +434,7 @@ export function ElderWisdomScreen({ onClose }: Props) {
       </Text>
       {DEMO_ELDERS.map((elder) => (
         <View key={elder.uid} style={s.elderCard}>
-          <Text style={{ fontSize: 32, marginBottom: 6 }}>{'\u{1F9D3}'}</Text>
+          <Text style={{ fontSize: fonts.hero, marginBottom: 6 }}>{'\u{1F9D3}'}</Text>
           <Text style={s.elderName}>{elder.name}</Text>
           <Text style={s.elderBio}>{elder.bio}</Text>
           <View style={s.elderExpertise}>

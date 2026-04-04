@@ -82,25 +82,25 @@ export function AccessibilitySettingsScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeText: { color: t.accent.blue, fontSize: 16 },
+    headerTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeText: { color: t.accent.blue, fontSize: fonts.lg },
     tabRow: { flexDirection: 'row', marginHorizontal: 16, marginBottom: 12, borderRadius: 10, backgroundColor: t.bg.card, overflow: 'hidden' },
     tabBtn: { flex: 1, paddingVertical: 10, alignItems: 'center' },
     tabBtnActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
+    tabText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 8, marginBottom: 12 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 8, marginBottom: 12 },
     settingCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 10 },
     settingRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-    settingLabel: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold, flex: 1, marginRight: 12 },
-    settingDesc: { color: t.text.muted, fontSize: 12, lineHeight: 17, marginTop: 8 },
+    settingLabel: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold, flex: 1, marginRight: 12 },
+    settingDesc: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 17, marginTop: 8 },
     articleBanner: { backgroundColor: t.accent.purple + '20', borderRadius: 14, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: t.accent.purple + '40' },
-    articleTitle: { color: t.accent.purple, fontSize: 13, fontWeight: fonts.bold, marginBottom: 4 },
-    articleText: { color: t.text.secondary, fontSize: 12, lineHeight: 18 },
+    articleTitle: { color: t.accent.purple, fontSize: fonts.sm, fontWeight: fonts.bold, marginBottom: 4 },
+    articleText: { color: t.text.secondary, fontSize: fonts.sm, lineHeight: 18 },
     resetBtn: { backgroundColor: t.bg.card, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginTop: 16, borderWidth: 1, borderColor: t.border },
-    resetText: { color: t.accent.red, fontSize: 14, fontWeight: fonts.bold },
-    activeCount: { color: t.text.muted, fontSize: 11, textAlign: 'center', marginBottom: 12 },
+    resetText: { color: t.accent.red, fontSize: fonts.md, fontWeight: fonts.bold },
+    activeCount: { color: t.text.muted, fontSize: fonts.xs, textAlign: 'center', marginBottom: 12 },
   }), [t]);
 
   const activeCount = settings.filter(s => toggles[s.id]).length;
@@ -162,7 +162,7 @@ export function AccessibilitySettingsScreen({ onClose }: Props) {
         }}>
           <Text style={{
             color: t.accent.green,
-            fontSize: 13,
+            fontSize: fonts.sm,
             fontWeight: fonts.bold,
             marginBottom: 4,
           }}>
@@ -170,7 +170,7 @@ export function AccessibilitySettingsScreen({ onClose }: Props) {
           </Text>
           <Text style={{
             color: t.text.secondary,
-            fontSize: 12,
+            fontSize: fonts.sm,
             lineHeight: 18,
           }}>
             Open Wallet is committed to WCAG 2.1 AA compliance. These settings go beyond minimum requirements to ensure the best possible experience for all users regardless of ability.

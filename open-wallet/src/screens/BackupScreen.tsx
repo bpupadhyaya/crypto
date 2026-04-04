@@ -30,18 +30,18 @@ export const BackupScreen = React.memo(({ onClose }: Props) => {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     scroll: { padding: 24 },
-    title: { color: t.text.primary, fontSize: 24, fontWeight: fonts.heavy, marginBottom: 12 },
-    warning: { color: t.accent.red, fontSize: 14, lineHeight: 20, marginBottom: 24, backgroundColor: t.accent.red + '10', padding: 16, borderRadius: 12 },
+    title: { color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.heavy, marginBottom: 12 },
+    warning: { color: t.accent.red, fontSize: fonts.md, lineHeight: 20, marginBottom: 24, backgroundColor: t.accent.red + '10', padding: 16, borderRadius: 12 },
     wordGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 32 },
     wordItem: { flexDirection: 'row', alignItems: 'center', backgroundColor: t.bg.card, borderRadius: 10, paddingVertical: 8, paddingHorizontal: 12, width: '30%' },
-    wordNumber: { color: t.text.muted, fontSize: 12, marginRight: 6, width: 20 },
-    wordText: { color: t.text.primary, fontSize: 14, fontWeight: fonts.medium },
+    wordNumber: { color: t.text.muted, fontSize: fonts.sm, marginRight: 6, width: 20 },
+    wordText: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.medium },
     doneBtn: { backgroundColor: t.accent.green, borderRadius: 16, paddingVertical: 18, alignItems: 'center' },
-    doneBtnText: { color: t.bg.primary, fontSize: 17, fontWeight: fonts.bold },
+    doneBtnText: { color: t.bg.primary, fontSize: fonts.lg, fontWeight: fonts.bold },
     deleteBtn: { backgroundColor: t.accent.red + '20', borderRadius: 16, paddingVertical: 16, alignItems: 'center', marginTop: 24 },
-    deleteText: { color: t.accent.red, fontSize: 16, fontWeight: fonts.bold },
+    deleteText: { color: t.accent.red, fontSize: fonts.lg, fontWeight: fonts.bold },
     cancelBtn: { paddingVertical: 20, alignItems: 'center' },
-    cancelText: { color: t.accent.blue, fontSize: 16 },
+    cancelText: { color: t.accent.blue, fontSize: fonts.lg },
   }), [t]);
 
   const handlePinAuth = useCallback(async (pin: string) => {

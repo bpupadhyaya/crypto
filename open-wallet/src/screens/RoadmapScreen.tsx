@@ -81,25 +81,25 @@ export function RoadmapScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeText: { color: t.accent.blue, fontSize: 16 },
+    headerTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeText: { color: t.accent.blue, fontSize: fonts.lg },
     tabRow: { flexDirection: 'row', marginHorizontal: 16, marginBottom: 12, borderRadius: 10, backgroundColor: t.bg.card, overflow: 'hidden' },
     tabBtn: { flex: 1, paddingVertical: 10, alignItems: 'center' },
     tabBtnActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
+    tabText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 16, marginBottom: 8 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 16, marginBottom: 8 },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12, borderLeftWidth: 4 },
     cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
-    cardTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, flex: 1 },
-    cardTarget: { color: t.text.muted, fontSize: 11, fontWeight: fonts.semibold },
-    cardDesc: { color: t.text.secondary, fontSize: 13, lineHeight: 19, marginBottom: 10 },
+    cardTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, flex: 1 },
+    cardTarget: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold },
+    cardDesc: { color: t.text.secondary, fontSize: fonts.sm, lineHeight: 19, marginBottom: 10 },
     projectBadge: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
-    projectText: { color: t.text.muted, fontSize: 11, fontWeight: fonts.semibold, marginLeft: 4 },
+    projectText: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold, marginLeft: 4 },
     progressBg: { height: 6, borderRadius: 3, backgroundColor: t.border, overflow: 'hidden' },
     progressFill: { height: 6, borderRadius: 3 },
-    progressLabel: { color: t.text.muted, fontSize: 11, marginTop: 4, textAlign: 'right' },
+    progressLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 4, textAlign: 'right' },
     summaryCard: {
       backgroundColor: t.bg.card,
       borderRadius: 14,
@@ -108,8 +108,8 @@ export function RoadmapScreen({ onClose }: Props) {
     },
     summaryRow: { flexDirection: 'row', justifyContent: 'space-around' },
     summaryBox: { alignItems: 'center' },
-    summaryNum: { fontSize: 20, fontWeight: fonts.bold, color: t.text.primary },
-    summaryLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
+    summaryNum: { fontSize: fonts.xl, fontWeight: fonts.bold, color: t.text.primary },
+    summaryLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
   }), [t]);
 
   const projectColor = (p: string) => p === 'wallet' ? t.accent.blue : p === 'chain' ? t.accent.green : t.accent.purple;
@@ -151,7 +151,7 @@ export function RoadmapScreen({ onClose }: Props) {
         {data.map(item => (
           <View key={item.id} style={[st.card, { borderLeftColor: projectColor(item.project) }]}>
             <View style={st.projectBadge}>
-              <Text style={{ fontSize: 14 }}>{PROJECT_ICON[item.project]}</Text>
+              <Text style={{ fontSize: fonts.md }}>{PROJECT_ICON[item.project]}</Text>
               <Text style={st.projectText}>{PROJECT_LABEL[item.project]}</Text>
             </View>
             <View style={st.cardHeader}>
@@ -168,10 +168,10 @@ export function RoadmapScreen({ onClose }: Props) {
         {/* Vision note */}
         {tab === 'upcoming' && (
           <View style={{ backgroundColor: t.accent.green + '15', borderRadius: 14, padding: 16, marginTop: 8 }}>
-            <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: fonts.bold, marginBottom: 4 }}>
+            <Text style={{ color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold, marginBottom: 4 }}>
               Our Vision
             </Text>
-            <Text style={{ color: t.text.secondary, fontSize: 12, lineHeight: 18 }}>
+            <Text style={{ color: t.text.secondary, fontSize: fonts.sm, lineHeight: 18 }}>
               Open Chain models all human value transfer. Raising children, education, community building — quantified and rewarded. World peace through better upbringing.
             </Text>
           </View>

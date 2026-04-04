@@ -113,9 +113,9 @@ export function PQCKeyScreen({ onClose }: Props) {
       flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
       paddingHorizontal: 20, paddingVertical: 16,
     },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
-    subtitle: { color: t.text.secondary, fontSize: 13, marginHorizontal: 20, marginBottom: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
+    subtitle: { color: t.text.secondary, fontSize: fonts.sm, marginHorizontal: 20, marginBottom: 16 },
 
     // ─── Tabs ───
     tabRow: {
@@ -126,8 +126,8 @@ export function PQCKeyScreen({ onClose }: Props) {
       flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 10,
     },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
-    tabTextActive: { color: '#fff', fontSize: 13, fontWeight: fonts.bold },
+    tabText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    tabTextActive: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.bold },
 
     // ─── Cards ───
     card: {
@@ -139,20 +139,20 @@ export function PQCKeyScreen({ onClose }: Props) {
     cardFuture: { borderWidth: 1, borderColor: t.border },
 
     sectionHeader: {
-      color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase',
+      color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase',
       letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 20,
     },
 
     // ─── Key Type Cards ───
     keyTypeHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
     keyTypeDot: { width: 10, height: 10, borderRadius: 5, marginRight: 10 },
-    keyTypeLabel: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, flex: 1 },
+    keyTypeLabel: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, flex: 1 },
     keyTypeBadge: {
       paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6,
     },
-    keyTypeBadgeText: { fontSize: 11, fontWeight: fonts.bold },
-    keyTypeAlgo: { color: t.accent.blue, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 6 },
-    keyTypeDesc: { color: t.text.muted, fontSize: 13, lineHeight: 19 },
+    keyTypeBadgeText: { fontSize: fonts.xs, fontWeight: fonts.bold },
+    keyTypeAlgo: { color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 6 },
+    keyTypeDesc: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 19 },
 
     // ─── Readiness Score ───
     readinessContainer: {
@@ -161,7 +161,7 @@ export function PQCKeyScreen({ onClose }: Props) {
       paddingVertical: 24, marginHorizontal: 20, marginBottom: 16,
     },
     readinessNumber: { fontSize: 52, fontWeight: fonts.heavy },
-    readinessLabel: { color: t.text.secondary, fontSize: 13, marginTop: 4 },
+    readinessLabel: { color: t.text.secondary, fontSize: fonts.sm, marginTop: 4 },
     readinessBar: {
       height: 8, backgroundColor: t.border, borderRadius: 4,
       marginHorizontal: 32, marginTop: 16, width: '80%' as any,
@@ -172,8 +172,8 @@ export function PQCKeyScreen({ onClose }: Props) {
       marginTop: 16, width: '100%',
     },
     readinessStat: { alignItems: 'center' },
-    readinessStatValue: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
-    readinessStatLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
+    readinessStatValue: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold },
+    readinessStatLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
 
     // ─── Threat Warning ───
     warningCard: {
@@ -181,8 +181,8 @@ export function PQCKeyScreen({ onClose }: Props) {
       marginHorizontal: 20, marginBottom: 12, borderWidth: 1,
       borderColor: t.accent.yellow + '40',
     },
-    warningTitle: { color: t.accent.yellow, fontSize: 14, fontWeight: fonts.bold, marginBottom: 6 },
-    warningText: { color: t.text.primary, fontSize: 13, lineHeight: 19 },
+    warningTitle: { color: t.accent.yellow, fontSize: fonts.md, fontWeight: fonts.bold, marginBottom: 6 },
+    warningText: { color: t.text.primary, fontSize: fonts.sm, lineHeight: 19 },
 
     // ─── Migration Wizard ───
     wizardStepRow: {
@@ -194,7 +194,7 @@ export function PQCKeyScreen({ onClose }: Props) {
     wizardStepCircleActive: { backgroundColor: t.accent.blue },
     wizardStepCircleDone: { backgroundColor: t.accent.green },
     wizardStepCirclePending: { backgroundColor: t.border },
-    wizardStepNumber: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
+    wizardStepNumber: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
     wizardStepLine: { flex: 1, height: 2, marginHorizontal: 8 },
     wizardStepLineDone: { backgroundColor: t.accent.green },
     wizardStepLinePending: { backgroundColor: t.border },
@@ -203,9 +203,9 @@ export function PQCKeyScreen({ onClose }: Props) {
       backgroundColor: t.bg.card, borderRadius: 16, padding: 20,
       marginHorizontal: 20, marginBottom: 16,
     },
-    wizardTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, marginBottom: 8 },
-    wizardDesc: { color: t.text.muted, fontSize: 14, lineHeight: 21, marginBottom: 16 },
-    wizardDetail: { color: t.text.secondary, fontSize: 13, lineHeight: 20, marginBottom: 12 },
+    wizardTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy, marginBottom: 8 },
+    wizardDesc: { color: t.text.muted, fontSize: fonts.md, lineHeight: 21, marginBottom: 16 },
+    wizardDetail: { color: t.text.secondary, fontSize: fonts.sm, lineHeight: 20, marginBottom: 12 },
 
     actionBtn: {
       backgroundColor: t.accent.blue, borderRadius: 12,
@@ -213,15 +213,15 @@ export function PQCKeyScreen({ onClose }: Props) {
     },
     actionBtnGreen: { backgroundColor: t.accent.green },
     actionBtnDisabled: { backgroundColor: t.border },
-    actionBtnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
+    actionBtnText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
 
     // ─── Info Tab ───
     infoRow: {
       flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
       paddingVertical: 10,
     },
-    infoLabel: { color: t.text.muted, fontSize: 13 },
-    infoValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold },
+    infoLabel: { color: t.text.muted, fontSize: fonts.sm },
+    infoValue: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     infoDivider: { height: 1, backgroundColor: t.border },
 
     // ─── Comparison Table ───
@@ -230,7 +230,7 @@ export function PQCKeyScreen({ onClose }: Props) {
       borderBottomColor: t.border,
     },
     tableHeaderCell: {
-      flex: 1, color: t.text.secondary, fontSize: 11, fontWeight: fonts.bold,
+      flex: 1, color: t.text.secondary, fontSize: fonts.xs, fontWeight: fonts.bold,
       textTransform: 'uppercase', textAlign: 'center',
     },
     tableHeaderCellFirst: { flex: 1.2, textAlign: 'left' },
@@ -239,7 +239,7 @@ export function PQCKeyScreen({ onClose }: Props) {
       borderBottomWidth: 1, borderBottomColor: t.border + '40',
     },
     tableCell: {
-      flex: 1, color: t.text.primary, fontSize: 12, textAlign: 'center',
+      flex: 1, color: t.text.primary, fontSize: fonts.sm, textAlign: 'center',
     },
     tableCellFirst: { flex: 1.2, textAlign: 'left', color: t.text.muted, fontWeight: fonts.semibold },
     tableCellHighlight: { color: t.accent.green, fontWeight: fonts.bold },
@@ -566,7 +566,7 @@ export function PQCKeyScreen({ onClose }: Props) {
             );
           }}
         >
-          <Text style={{ color: t.accent.red, fontSize: 14, fontWeight: fonts.semibold }}>
+          <Text style={{ color: t.accent.red, fontSize: fonts.md, fontWeight: fonts.semibold }}>
             Reset Migration
           </Text>
         </TouchableOpacity>

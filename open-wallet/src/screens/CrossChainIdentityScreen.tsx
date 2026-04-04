@@ -62,44 +62,44 @@ export function CrossChainIdentityScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8 },
-    title: { color: t.text.primary, fontSize: 22, fontWeight: fonts.heavy },
-    close: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.heavy },
+    close: { color: t.accent.blue, fontSize: fonts.lg },
     tabs: { flexDirection: 'row', paddingHorizontal: 16, gap: 8, marginBottom: 16 },
     tab: { paddingVertical: 8, paddingHorizontal: 14, borderRadius: 20, backgroundColor: t.bg.card },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 16, marginBottom: 12 },
     chainRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
     chainIcon: { width: 44, height: 44, borderRadius: 22, backgroundColor: t.border, alignItems: 'center', justifyContent: 'center' },
-    chainIconText: { color: t.text.primary, fontSize: 14, fontWeight: fonts.heavy },
-    chainName: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
-    chainAddr: { color: t.text.secondary, fontSize: 13, fontFamily: 'monospace' },
+    chainIconText: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.heavy },
+    chainName: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold },
+    chainAddr: { color: t.text.secondary, fontSize: fonts.sm, fontFamily: 'monospace' },
     verifiedBadge: { flexDirection: 'row', alignItems: 'center', gap: 4 },
     verifiedDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: t.accent.green },
     unverifiedDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: t.text.muted },
-    verifiedText: { color: t.accent.green, fontSize: 12, fontWeight: fonts.semibold },
+    verifiedText: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.semibold },
     metaRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 10, paddingTop: 10, borderTopWidth: 1, borderTopColor: t.border },
-    metaLabel: { color: t.text.muted, fontSize: 12 },
-    metaValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold },
+    metaLabel: { color: t.text.muted, fontSize: fonts.sm },
+    metaValue: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     privacyChip: { paddingVertical: 2, paddingHorizontal: 8, borderRadius: 8 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 20, marginTop: 16, marginBottom: 8 },
-    input: { backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginHorizontal: 16, marginBottom: 12 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 20, marginTop: 16, marginBottom: 8 },
+    input: { backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md, marginHorizontal: 16, marginBottom: 12 },
     chainGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, paddingHorizontal: 16, marginBottom: 16 },
     chainTile: { width: '22%' as any, paddingVertical: 12, borderRadius: 12, backgroundColor: t.bg.card, alignItems: 'center' },
     chainTileActive: { borderWidth: 2, borderColor: t.accent.blue },
-    chainTileIcon: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 4 },
-    chainTileName: { color: t.text.secondary, fontSize: 10, fontWeight: fonts.semibold },
+    chainTileIcon: { fontSize: fonts.xl, fontWeight: fonts.heavy, marginBottom: 4 },
+    chainTileName: { color: t.text.secondary, fontSize: fonts.xs, fontWeight: fonts.semibold },
     verifyBtn: { marginHorizontal: 16, paddingVertical: 14, borderRadius: 12, backgroundColor: t.accent.blue, alignItems: 'center', marginTop: 8 },
-    btnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
+    btnText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
     repCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 16, marginBottom: 12, alignItems: 'center' },
     repScore: { color: t.accent.green, fontSize: 48, fontWeight: fonts.heavy },
-    repLabel: { color: t.text.secondary, fontSize: 13 },
+    repLabel: { color: t.text.secondary, fontSize: fonts.sm },
     repBreakdown: { marginTop: 12, width: '100%' },
     repRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6 },
-    emptyText: { color: t.text.muted, textAlign: 'center', marginTop: 40, fontSize: 14 },
+    emptyText: { color: t.text.muted, textAlign: 'center', marginTop: 40, fontSize: fonts.md },
     infoBox: { backgroundColor: t.accent.blue + '15', borderRadius: 12, padding: 14, marginHorizontal: 16, marginBottom: 16 },
-    infoText: { color: t.accent.blue, fontSize: 13, lineHeight: 20 },
+    infoText: { color: t.accent.blue, fontSize: fonts.sm, lineHeight: 20 },
   }), [t]);
 
   const aggregateReputation = identities.filter(i => i.verified).reduce((sum, i) => sum + i.reputationScore, 0);
@@ -163,7 +163,7 @@ export function CrossChainIdentityScreen({ onClose }: Props) {
                     <View><Text style={st.metaLabel}>Linked</Text><Text style={st.metaValue}>{id.linkedAt}</Text></View>
                     <View><Text style={st.metaLabel}>Privacy</Text>
                       <View style={[st.privacyChip, { backgroundColor: privacyColor(id.privacy) + '20' }]}>
-                        <Text style={{ color: privacyColor(id.privacy), fontSize: 11, fontWeight: fonts.bold }}>{id.privacy}</Text>
+                        <Text style={{ color: privacyColor(id.privacy), fontSize: fonts.xs, fontWeight: fonts.bold }}>{id.privacy}</Text>
                       </View>
                     </View>
                   </View>

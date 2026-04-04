@@ -191,12 +191,12 @@ export function PeaceIndexScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
     card: { backgroundColor: t.bg.card, borderRadius: 20, padding: 20, marginHorizontal: 20, marginTop: 8 },
     divider: { height: 1, backgroundColor: t.border, marginHorizontal: 0 },
-    demoTag: { color: t.accent.orange, fontSize: 10, fontWeight: fonts.bold, textAlign: 'center', marginTop: 12 },
+    demoTag: { color: t.accent.orange, fontSize: fonts.xs, fontWeight: fonts.bold, textAlign: 'center', marginTop: 12 },
     // Main score
     scoreCard: { alignItems: 'center', paddingVertical: 32, marginHorizontal: 20, marginTop: 8, backgroundColor: t.bg.card, borderRadius: 24 },
     scoreCircle: {
@@ -204,42 +204,42 @@ export function PeaceIndexScreen({ onClose }: Props) {
       borderWidth: 8, justifyContent: 'center', alignItems: 'center',
     },
     scoreNumber: { fontSize: 56, fontWeight: fonts.heavy },
-    scoreMax: { color: t.text.muted, fontSize: 16, fontWeight: fonts.semibold },
-    scoreLabel: { color: t.text.muted, fontSize: 14, fontWeight: fonts.semibold, marginTop: 16, textTransform: 'uppercase', letterSpacing: 2 },
+    scoreMax: { color: t.text.muted, fontSize: fonts.lg, fontWeight: fonts.semibold },
+    scoreLabel: { color: t.text.muted, fontSize: fonts.md, fontWeight: fonts.semibold, marginTop: 16, textTransform: 'uppercase', letterSpacing: 2 },
     scoreTrend: { flexDirection: 'row', alignItems: 'center', marginTop: 8, gap: 6 },
-    trendText: { fontSize: 14, fontWeight: fonts.bold },
+    trendText: { fontSize: fonts.md, fontWeight: fonts.bold },
     // Components
     componentRow: { paddingVertical: 14 },
     componentHeader: { flexDirection: 'row', alignItems: 'center' },
-    componentIcon: { fontSize: 24, width: 36, textAlign: 'center' },
+    componentIcon: { fontSize: fonts.xxl, width: 36, textAlign: 'center' },
     componentInfo: { flex: 1, marginLeft: 8 },
-    componentName: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
+    componentName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
     componentBar: { height: 8, borderRadius: 4, marginTop: 6 },
     componentBarTrack: { height: 8, backgroundColor: t.border, borderRadius: 4, overflow: 'hidden' },
     componentBarFill: { height: 8, borderRadius: 4 },
     componentScoreRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginLeft: 8 },
-    componentScore: { fontSize: 16, fontWeight: fonts.heavy, width: 32, textAlign: 'right' },
-    componentTrend: { fontSize: 14, fontWeight: fonts.bold },
-    componentDesc: { color: t.text.muted, fontSize: 12, lineHeight: 18, marginTop: 8, marginLeft: 44 },
-    componentWeight: { color: t.text.muted, fontSize: 10, marginTop: 4, marginLeft: 44 },
+    componentScore: { fontSize: fonts.lg, fontWeight: fonts.heavy, width: 32, textAlign: 'right' },
+    componentTrend: { fontSize: fonts.md, fontWeight: fonts.bold },
+    componentDesc: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 18, marginTop: 8, marginLeft: 44 },
+    componentWeight: { color: t.text.muted, fontSize: fonts.xs, marginTop: 4, marginLeft: 44 },
     // Regions
     regionRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 12 },
-    regionName: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, flex: 1 },
-    regionScore: { fontSize: 16, fontWeight: fonts.heavy, width: 36, textAlign: 'right' },
-    regionTrend: { fontSize: 14, fontWeight: fonts.bold, width: 24, textAlign: 'center', marginLeft: 4 },
-    regionMeta: { color: t.text.muted, fontSize: 10, marginTop: 2 },
+    regionName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold, flex: 1 },
+    regionScore: { fontSize: fonts.lg, fontWeight: fonts.heavy, width: 36, textAlign: 'right' },
+    regionTrend: { fontSize: fonts.md, fontWeight: fonts.bold, width: 24, textAlign: 'center', marginLeft: 4 },
+    regionMeta: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
     // Trend chart
     trendContainer: { paddingVertical: 16 },
     trendRow: { flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-around', height: 120, paddingHorizontal: 8 },
     trendBar: { alignItems: 'center', flex: 1 },
     trendBarFill: { width: 28, borderRadius: 8 },
-    trendBarLabel: { color: t.text.muted, fontSize: 9, marginTop: 6, textAlign: 'center' },
-    trendBarScore: { color: t.text.primary, fontSize: 11, fontWeight: fonts.bold, marginBottom: 4 },
+    trendBarLabel: { color: t.text.muted, fontSize: fonts.xxs, marginTop: 6, textAlign: 'center' },
+    trendBarScore: { color: t.text.primary, fontSize: fonts.xs, fontWeight: fonts.bold, marginBottom: 4 },
     // Philosophy
     philosophyCard: { backgroundColor: t.accent.green + '10', borderRadius: 20, padding: 24, marginHorizontal: 20, marginTop: 8 },
-    philosophyTitle: { color: t.accent.green, fontSize: 16, fontWeight: fonts.heavy, marginBottom: 12 },
-    philosophyText: { color: t.text.primary, fontSize: 14, lineHeight: 22 },
-    philosophyQuote: { color: t.text.muted, fontSize: 13, fontStyle: 'italic', marginTop: 16, lineHeight: 20, textAlign: 'center' },
+    philosophyTitle: { color: t.accent.green, fontSize: fonts.lg, fontWeight: fonts.heavy, marginBottom: 12 },
+    philosophyText: { color: t.text.primary, fontSize: fonts.md, lineHeight: 22 },
+    philosophyQuote: { color: t.text.muted, fontSize: fonts.sm, fontStyle: 'italic', marginTop: 16, lineHeight: 20, textAlign: 'center' },
   }), [t]);
 
   return (
@@ -263,7 +263,7 @@ export function PeaceIndexScreen({ onClose }: Props) {
           <Text style={s.scoreLabel}>Open Chain Peace Index</Text>
           <View style={s.scoreTrend}>
             <Text style={[s.trendText, { color: t.accent.green }]}>{'\u2191'} +6</Text>
-            <Text style={{ color: t.text.muted, fontSize: 12 }}>from last quarter</Text>
+            <Text style={{ color: t.text.muted, fontSize: fonts.sm }}>from last quarter</Text>
           </View>
         </View>
 
@@ -335,7 +335,7 @@ export function PeaceIndexScreen({ onClose }: Props) {
         {/* ─── Trend Over Time ─── */}
         <Text style={s.section}>Trend</Text>
         <View style={s.card}>
-          <Text style={{ color: t.text.muted, fontSize: 11, textAlign: 'center', marginBottom: 12 }}>
+          <Text style={{ color: t.text.muted, fontSize: fonts.xs, textAlign: 'center', marginBottom: 12 }}>
             Global Peace Index over time — is the world getting better?
           </Text>
           <View style={s.trendRow}>
@@ -354,7 +354,7 @@ export function PeaceIndexScreen({ onClose }: Props) {
               );
             })}
           </View>
-          <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: fonts.bold, textAlign: 'center', marginTop: 12 }}>
+          <Text style={{ color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold, textAlign: 'center', marginTop: 12 }}>
             {'\u2191'} +{DEMO_TREND[DEMO_TREND.length - 1].score - DEMO_TREND[0].score} points over {DEMO_TREND.length} quarters
           </Text>
         </View>

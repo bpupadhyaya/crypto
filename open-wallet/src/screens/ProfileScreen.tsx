@@ -91,49 +91,49 @@ export function ProfileScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeText: { color: t.accent.blue, fontSize: 16 },
+    headerTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeText: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 40 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
     demoTag: { backgroundColor: t.accent.purple + '30', borderRadius: 8, paddingVertical: 4, paddingHorizontal: 10, alignSelf: 'center', marginBottom: 12 },
-    demoTagText: { color: t.accent.purple, fontSize: 11, fontWeight: fonts.bold },
+    demoTagText: { color: t.accent.purple, fontSize: fonts.xs, fontWeight: fonts.bold },
     // Profile hero
     heroCard: { backgroundColor: t.bg.card, borderRadius: 20, padding: 24, alignItems: 'center', marginBottom: 8 },
     avatarCircle: { width: 80, height: 80, borderRadius: 40, backgroundColor: t.accent.blue + '20', justifyContent: 'center', alignItems: 'center', marginBottom: 12 },
-    avatarText: { color: t.accent.blue, fontSize: 32, fontWeight: fonts.bold },
-    profileName: { color: t.text.primary, fontSize: 22, fontWeight: fonts.heavy, marginBottom: 4 },
-    profileUid: { color: t.text.muted, fontSize: 13, fontFamily: 'monospace', marginBottom: 8 },
-    profileMember: { color: t.text.secondary, fontSize: 12 },
+    avatarText: { color: t.accent.blue, fontSize: fonts.hero, fontWeight: fonts.bold },
+    profileName: { color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.heavy, marginBottom: 4 },
+    profileUid: { color: t.text.muted, fontSize: fonts.sm, fontFamily: 'monospace', marginBottom: 8 },
+    profileMember: { color: t.text.secondary, fontSize: fonts.sm },
     // QR
     qrCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, alignItems: 'center', marginBottom: 8 },
     qrPlaceholder: { width: 160, height: 160, backgroundColor: t.bg.primary, borderRadius: 12, justifyContent: 'center', alignItems: 'center', marginBottom: 12, borderWidth: 2, borderColor: t.border },
-    qrText: { color: t.text.muted, fontSize: 12, textAlign: 'center' },
-    qrLabel: { color: t.text.secondary, fontSize: 12 },
+    qrText: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center' },
+    qrLabel: { color: t.text.secondary, fontSize: fonts.sm },
     // Stats
     statsCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16 },
     statsRow: { flexDirection: 'row', justifyContent: 'space-around' },
     statBox: { alignItems: 'center' },
-    statNumber: { color: t.text.primary, fontSize: 24, fontWeight: fonts.bold },
-    statLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
+    statNumber: { color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.bold },
+    statLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
     rankBadge: { backgroundColor: t.accent.green + '20', borderRadius: 12, paddingVertical: 6, paddingHorizontal: 14, marginTop: 12, alignSelf: 'center' },
-    rankText: { color: t.accent.green, fontSize: 13, fontWeight: fonts.bold },
+    rankText: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold },
     // Cards
     card: { backgroundColor: t.bg.card, borderRadius: 16, overflow: 'hidden' },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 },
-    label: { color: t.text.primary, fontSize: 15 },
-    value: { color: t.text.secondary, fontSize: 14 },
-    valueGreen: { color: t.accent.green, fontSize: 14, fontWeight: fonts.semibold },
+    label: { color: t.text.primary, fontSize: fonts.md },
+    value: { color: t.text.secondary, fontSize: fonts.md },
+    valueGreen: { color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.semibold },
     divider: { height: 1, backgroundColor: t.border, marginHorizontal: 16 },
     // Badges grid
     badgesGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, padding: 16 },
     badgeChip: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: t.bg.primary, borderRadius: 10, paddingVertical: 8, paddingHorizontal: 12, borderWidth: 1 },
-    badgeTitle: { color: t.text.primary, fontSize: 12, fontWeight: fonts.semibold },
-    badgeLevel: { fontSize: 10, fontWeight: fonts.bold },
+    badgeTitle: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    badgeLevel: { fontSize: fonts.xs, fontWeight: fonts.bold },
     // Token list
     tokenRow: { flexDirection: 'row', justifyContent: 'space-between', padding: 16, alignItems: 'center' },
-    tokenSymbol: { color: t.accent.blue, fontSize: 15, fontWeight: fonts.bold },
-    tokenName: { color: t.text.secondary, fontSize: 13 },
-    tokenSupply: { color: t.text.muted, fontSize: 12 },
+    tokenSymbol: { color: t.accent.blue, fontSize: fonts.md, fontWeight: fonts.bold },
+    tokenName: { color: t.text.secondary, fontSize: fonts.sm },
+    tokenSupply: { color: t.text.muted, fontSize: fonts.sm },
   }), [t]);
 
   const scorePercentile = Math.round((1 - profile.rank / profile.totalParticipants) * 100);
@@ -203,7 +203,7 @@ export function ProfileScreen({ onClose }: Props) {
               const icon = CHANNEL_ICONS[ach.channel] || '\u2B50';
               return (
                 <View key={idx} style={[st.badgeChip, { borderColor: color }]}>
-                  <Text style={{ fontSize: 16 }}>{icon}</Text>
+                  <Text style={{ fontSize: fonts.lg }}>{icon}</Text>
                   <View>
                     <Text style={st.badgeTitle} numberOfLines={1}>{ach.title}</Text>
                     <Text style={[st.badgeLevel, { color }]}>{ach.level}</Text>
@@ -252,7 +252,7 @@ export function ProfileScreen({ onClose }: Props) {
         <View style={st.card}>
           {profile.createdTokens.length === 0 ? (
             <View style={st.row}>
-              <Text style={{ color: t.text.muted, fontSize: 14 }}>No tokens created yet.</Text>
+              <Text style={{ color: t.text.muted, fontSize: fonts.md }}>No tokens created yet.</Text>
             </View>
           ) : (
             profile.createdTokens.map((token, idx) => (
@@ -285,7 +285,7 @@ export function ProfileScreen({ onClose }: Props) {
           <View style={st.divider} />
           <View style={st.row}>
             <Text style={st.label}>Last Vote</Text>
-            <Text style={{ color: t.accent.blue, fontSize: 14 }}>{profile.governance.lastVote}</Text>
+            <Text style={{ color: t.accent.blue, fontSize: fonts.md }}>{profile.governance.lastVote}</Text>
           </View>
         </View>
 

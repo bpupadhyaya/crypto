@@ -154,68 +154,68 @@ export function StakingCalcScreen({ onClose }: Props) {
     container: { flex: 1, backgroundColor: t.bg.primary },
     scroll: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 40 },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeText: { color: t.accent.blue, fontSize: 16 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
+    headerTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeText: { color: t.accent.blue, fontSize: fonts.lg },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
 
     // Demo banner
     demoBanner: { backgroundColor: t.accent.orange + '20', borderRadius: 10, padding: 10, alignItems: 'center', marginBottom: 12 },
-    demoText: { color: t.accent.orange, fontSize: 12, fontWeight: fonts.semibold },
+    demoText: { color: t.accent.orange, fontSize: fonts.sm, fontWeight: fonts.semibold },
 
     // Input summary
     inputCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 4 },
     inputRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
-    inputLabel: { color: t.text.secondary, fontSize: 13 },
-    inputValue: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
+    inputLabel: { color: t.text.secondary, fontSize: fonts.sm },
+    inputValue: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold },
 
     // Period selector
     periodRow: { flexDirection: 'row', gap: 8, marginBottom: 4 },
     periodBtn: { flex: 1, paddingVertical: 8, borderRadius: 10, alignItems: 'center', backgroundColor: t.bg.card },
     periodBtnActive: { backgroundColor: t.accent.blue },
-    periodText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    periodText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     periodTextActive: { color: '#ffffff' },
 
     // APY breakdown
     apyCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16 },
     apyRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
-    apyLabel: { color: t.text.secondary, fontSize: 13 },
-    apyValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold },
-    apyBonus: { color: t.accent.green, fontSize: 13, fontWeight: fonts.semibold },
+    apyLabel: { color: t.text.secondary, fontSize: fonts.sm },
+    apyValue: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    apyBonus: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.semibold },
     apyDivider: { height: 1, backgroundColor: t.bg.primary, marginVertical: 8 },
-    apyTotal: { color: t.accent.green, fontSize: 18, fontWeight: fonts.bold },
+    apyTotal: { color: t.accent.green, fontSize: fonts.xl, fontWeight: fonts.bold },
 
     // Projections
     projCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16 },
     projHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 },
-    projColTitle: { color: t.text.muted, fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase', flex: 1, textAlign: 'center' },
+    projColTitle: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.bold, textTransform: 'uppercase', flex: 1, textAlign: 'center' },
     projColTitleFirst: { textAlign: 'left' },
     projRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
-    projPeriod: { color: t.text.secondary, fontSize: 13, flex: 1 },
-    projSimple: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold, flex: 1, textAlign: 'center' },
-    projCompound: { color: t.accent.green, fontSize: 13, fontWeight: fonts.bold, flex: 1, textAlign: 'center' },
+    projPeriod: { color: t.text.secondary, fontSize: fonts.sm, flex: 1 },
+    projSimple: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold, flex: 1, textAlign: 'center' },
+    projCompound: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold, flex: 1, textAlign: 'center' },
 
     // Compound advantage
     advantageRow: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: t.accent.green + '12', borderRadius: 10, paddingVertical: 8, paddingHorizontal: 12, marginTop: 10 },
-    advantageText: { color: t.accent.green, fontSize: 12, fontWeight: fonts.semibold, marginLeft: 6 },
+    advantageText: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.semibold, marginLeft: 6 },
 
     // Validator list
     validatorCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 14, marginBottom: 10 },
     validatorCardActive: { borderWidth: 2, borderColor: t.accent.blue },
-    validatorName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, marginBottom: 6 },
+    validatorName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, marginBottom: 6 },
     validatorRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 },
-    validatorLabel: { color: t.text.muted, fontSize: 12 },
-    validatorValue: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
-    validatorApy: { color: t.accent.green, fontSize: 12, fontWeight: fonts.bold },
+    validatorLabel: { color: t.text.muted, fontSize: fonts.sm },
+    validatorValue: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    validatorApy: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold },
 
     // Historical chart (simple bar)
     chartCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16 },
     chartRow: { flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-around', height: 100, marginBottom: 8 },
     chartBarWrap: { alignItems: 'center', flex: 1 },
     chartBar: { width: 24, borderRadius: 6, backgroundColor: t.accent.blue },
-    chartLabel: { color: t.text.muted, fontSize: 9, marginTop: 4 },
-    chartValue: { color: t.text.secondary, fontSize: 10, fontWeight: fonts.semibold, marginBottom: 2 },
+    chartLabel: { color: t.text.muted, fontSize: fonts.xxs, marginTop: 4 },
+    chartValue: { color: t.text.secondary, fontSize: fonts.xs, fontWeight: fonts.semibold, marginBottom: 2 },
     chartTotal: { flexDirection: 'row', justifyContent: 'center', marginTop: 8 },
-    chartTotalText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    chartTotalText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
   }), [t]);
 
   const compoundAdvantage = compound.yearly - simple.yearly;
@@ -322,7 +322,7 @@ export function StakingCalcScreen({ onClose }: Props) {
             </View>
           ))}
           <View style={st.advantageRow}>
-            <Text style={{ fontSize: 14 }}>{'\u{1F4C8}'}</Text>
+            <Text style={{ fontSize: fonts.md }}>{'\u{1F4C8}'}</Text>
             <Text style={st.advantageText}>
               Compounding earns +{formatNum(compoundAdvantage)} {token}/year more
             </Text>

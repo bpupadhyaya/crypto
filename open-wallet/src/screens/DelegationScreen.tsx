@@ -106,61 +106,61 @@ export function DelegationScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
-    backBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
+    backBtn: { color: t.accent.blue, fontSize: fonts.lg },
     summaryCard: { backgroundColor: t.accent.green + '10', borderRadius: 20, padding: 20, marginHorizontal: 20, marginBottom: 16, alignItems: 'center' },
-    summaryLabel: { color: t.text.muted, fontSize: 12, textTransform: 'uppercase', letterSpacing: 1.5 },
-    summaryValue: { color: t.accent.green, fontSize: 32, fontWeight: fonts.heavy, marginTop: 4 },
-    summarySubtext: { color: t.text.secondary, fontSize: 13, marginTop: 8 },
+    summaryLabel: { color: t.text.muted, fontSize: fonts.sm, textTransform: 'uppercase', letterSpacing: 1.5 },
+    summaryValue: { color: t.accent.green, fontSize: fonts.hero, fontWeight: fonts.heavy, marginTop: 4 },
+    summarySubtext: { color: t.text.secondary, fontSize: fonts.sm, marginTop: 8 },
     tabRow: { flexDirection: 'row', marginHorizontal: 20, marginBottom: 16, backgroundColor: t.bg.card, borderRadius: 12, padding: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.green },
-    tabText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: t.bg.primary },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 16 },
-    searchBar: { backgroundColor: t.bg.card, borderRadius: 12, padding: 12, marginHorizontal: 20, marginBottom: 12, color: t.text.primary, fontSize: 15 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 16 },
+    searchBar: { backgroundColor: t.bg.card, borderRadius: 12, padding: 12, marginHorizontal: 20, marginBottom: 12, color: t.text.primary, fontSize: fonts.md },
     sortRow: { flexDirection: 'row', gap: 6, marginHorizontal: 20, marginBottom: 12, flexWrap: 'wrap' },
     sortChip: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8, backgroundColor: t.border },
     sortChipActive: { backgroundColor: t.accent.green },
-    sortChipText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    sortChipText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     sortChipTextActive: { color: t.bg.primary },
     validatorCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 10 },
-    validatorName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
+    validatorName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
     validatorRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 6 },
-    validatorLabel: { color: t.text.muted, fontSize: 12 },
-    validatorValue: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    validatorLabel: { color: t.text.muted, fontSize: fonts.sm },
+    validatorValue: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     statusBadge: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 6 },
-    statusText: { fontSize: 10, fontWeight: fonts.bold },
+    statusText: { fontSize: fonts.xs, fontWeight: fonts.bold },
     delegationCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 10 },
-    delegationName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
+    delegationName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
     delegationRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 6 },
-    delegationLabel: { color: t.text.muted, fontSize: 13 },
-    delegationValue: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
-    rewardsValue: { color: t.accent.green, fontSize: 13, fontWeight: fonts.bold },
+    delegationLabel: { color: t.text.muted, fontSize: fonts.sm },
+    delegationValue: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    rewardsValue: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold },
     actionRow: { flexDirection: 'row', gap: 8, marginTop: 12 },
     actionBtn: { flex: 1, borderRadius: 10, paddingVertical: 10, alignItems: 'center' },
-    actionBtnText: { color: '#fff', fontSize: 13, fontWeight: fonts.bold },
+    actionBtnText: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.bold },
     undelegationCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 10 },
-    countdown: { color: t.accent.orange, fontSize: 14, fontWeight: fonts.bold, marginTop: 8 },
+    countdown: { color: t.accent.orange, fontSize: fonts.md, fontWeight: fonts.bold, marginTop: 8 },
     inputCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginTop: 12 },
-    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8 },
-    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15 },
+    inputLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 8 },
+    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md },
     submitBtn: { backgroundColor: t.accent.green, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginHorizontal: 20, marginTop: 24 },
-    submitBtnText: { color: '#fff', fontSize: 17, fontWeight: fonts.bold },
+    submitBtnText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.bold },
     detailCard: { backgroundColor: t.bg.card, borderRadius: 20, padding: 20, marginHorizontal: 20 },
-    detailName: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy, textAlign: 'center' },
+    detailName: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy, textAlign: 'center' },
     detailRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 },
-    detailLabel: { color: t.text.muted, fontSize: 14 },
-    detailValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
+    detailLabel: { color: t.text.muted, fontSize: fonts.md },
+    detailValue: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
     emptyState: { alignItems: 'center', paddingVertical: 40, paddingHorizontal: 40 },
-    emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', lineHeight: 22 },
+    emptyText: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', lineHeight: 22 },
     loadingContainer: { alignItems: 'center', paddingVertical: 30 },
     fromPicker: { backgroundColor: t.bg.card, borderRadius: 12, padding: 12, marginHorizontal: 20, marginTop: 8 },
     fromOption: { paddingVertical: 10, paddingHorizontal: 12, borderRadius: 8, marginBottom: 4 },
     fromOptionActive: { backgroundColor: t.accent.green + '20' },
-    fromOptionText: { color: t.text.primary, fontSize: 14 },
-    fromOptionAmount: { color: t.text.muted, fontSize: 12 },
+    fromOptionText: { color: t.text.primary, fontSize: fonts.md },
+    fromOptionAmount: { color: t.text.muted, fontSize: fonts.sm },
   }), [t]);
 
   /* ─── Fetch Data ─── */
@@ -363,7 +363,7 @@ export function DelegationScreen({ onClose }: Props) {
             <View style={s.detailRow}><Text style={s.detailLabel}>Blocks Proposed</Text><Text style={s.detailValue}>{v.blocksProposed.toLocaleString()}</Text></View>
             <View style={s.detailRow}><Text style={s.detailLabel}>Delegators</Text><Text style={s.detailValue}>{v.delegators}</Text></View>
             <View style={s.detailRow}><Text style={s.detailLabel}>Est. APY</Text><Text style={[s.detailValue, { color: t.accent.green }]}>{v.apy}%</Text></View>
-            <Text style={{ color: t.text.muted, fontSize: 11, marginTop: 12 }}>{v.address}</Text>
+            <Text style={{ color: t.text.muted, fontSize: fonts.xs, marginTop: 12 }}>{v.address}</Text>
           </View>
 
           {v.status !== 'jailed' && (
@@ -420,7 +420,7 @@ export function DelegationScreen({ onClose }: Props) {
           <TouchableOpacity style={s.submitBtn} onPress={handleRedelegate} disabled={processing}>
             {processing ? <ActivityIndicator color="#fff" /> : <Text style={s.submitBtnText}>Redelegate</Text>}
           </TouchableOpacity>
-          <Text style={{ color: t.text.muted, fontSize: 12, textAlign: 'center', marginTop: 16, marginHorizontal: 24, lineHeight: 18 }}>
+          <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 16, marginHorizontal: 24, lineHeight: 18 }}>
             Redelegation moves your stake without unbonding. No waiting period. You cannot redelegate the same tokens again for 21 days.
           </Text>
           <View style={{ height: 40 }} />
@@ -450,7 +450,7 @@ export function DelegationScreen({ onClose }: Props) {
           <TouchableOpacity style={[s.submitBtn, { backgroundColor: t.accent.red }]} onPress={handleUndelegate} disabled={processing}>
             {processing ? <ActivityIndicator color="#fff" /> : <Text style={s.submitBtnText}>Start Unbonding</Text>}
           </TouchableOpacity>
-          <Text style={{ color: t.accent.orange, fontSize: 13, textAlign: 'center', marginTop: 16, marginHorizontal: 24, lineHeight: 20, fontWeight: fonts.semibold }}>
+          <Text style={{ color: t.accent.orange, fontSize: fonts.sm, textAlign: 'center', marginTop: 16, marginHorizontal: 24, lineHeight: 20, fontWeight: fonts.semibold }}>
             Unbonding takes 21 days. During this period your tokens will not earn rewards and cannot be transferred.
           </Text>
           <View style={{ height: 40 }} />
@@ -622,7 +622,7 @@ export function DelegationScreen({ onClose }: Props) {
                         <Text style={s.delegationValue}>{u.amount} OTK</Text>
                       </View>
                       <Text style={s.countdown}>{getCountdown(u.completionTime)}</Text>
-                      <Text style={{ color: t.text.muted, fontSize: 11, marginTop: 4 }}>
+                      <Text style={{ color: t.text.muted, fontSize: fonts.xs, marginTop: 4 }}>
                         Completes: {new Date(u.completionTime).toLocaleDateString()}
                       </Text>
                     </View>

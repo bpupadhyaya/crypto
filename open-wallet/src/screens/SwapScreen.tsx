@@ -56,57 +56,57 @@ export function SwapScreen() {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     scroll: { paddingHorizontal: 20 },
-    title: { color: t.text.primary, fontSize: 24, fontWeight: fonts.heavy, marginTop: 16 },
-    subtitle: { color: t.text.muted, fontSize: 13, marginTop: 4, marginBottom: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.heavy, marginTop: 16 },
+    subtitle: { color: t.text.muted, fontSize: fonts.sm, marginTop: 4, marginBottom: 16 },
     // Token selector
     tokenRow: { flexDirection: 'row', gap: 8, marginBottom: 12, flexWrap: 'wrap' },
     tokenChip: { paddingVertical: 8, paddingHorizontal: 14, borderRadius: 16, backgroundColor: t.bg.card },
     tokenChipActive: { backgroundColor: t.accent.green },
-    tokenChipText: { color: t.text.secondary, fontSize: 14, fontWeight: fonts.semibold },
+    tokenChipText: { color: t.text.secondary, fontSize: fonts.md, fontWeight: fonts.semibold },
     tokenChipTextActive: { color: t.bg.primary },
     // Swap card
     swapCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 8 },
-    cardLabel: { color: t.text.muted, fontSize: 12, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 },
-    amountInput: { color: t.text.primary, fontSize: 24, fontWeight: fonts.semibold },
+    cardLabel: { color: t.text.muted, fontSize: fonts.sm, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 },
+    amountInput: { color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.semibold },
     flipBtn: { alignSelf: 'center', backgroundColor: t.accent.green, width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center', marginVertical: -12, zIndex: 1 },
-    flipIcon: { color: t.bg.primary, fontSize: 20, fontWeight: fonts.heavy },
+    flipIcon: { color: t.bg.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
     toCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 16, alignItems: 'center' },
-    toAmount: { color: t.text.secondary, fontSize: 20, fontWeight: fonts.bold },
-    toLabel: { color: t.text.muted, fontSize: 13, marginTop: 4 },
+    toAmount: { color: t.text.secondary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    toLabel: { color: t.text.muted, fontSize: fonts.sm, marginTop: 4 },
     // Section headers
     sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 20, marginBottom: 10 },
-    sectionTitle: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5 },
-    compareBtn: { color: t.accent.blue, fontSize: 13, fontWeight: fonts.semibold },
+    sectionTitle: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5 },
+    compareBtn: { color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.semibold },
     // Option cards
     optionCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 10 },
     optionCardSelected: { borderWidth: 2, borderColor: t.accent.green },
     optionCardUnavailable: { opacity: 0.5 },
     optionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
     optionLeft: { flexDirection: 'row', alignItems: 'center', flex: 1 },
-    optionIcon: { fontSize: 24, marginRight: 10 },
-    optionName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, flex: 1 },
-    optionAmount: { color: t.accent.green, fontSize: 16, fontWeight: fonts.heavy },
-    optionAmountUnavail: { color: t.text.muted, fontSize: 14 },
+    optionIcon: { fontSize: fonts.xxl, marginRight: 10 },
+    optionName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, flex: 1 },
+    optionAmount: { color: t.accent.green, fontSize: fonts.lg, fontWeight: fonts.heavy },
+    optionAmountUnavail: { color: t.text.muted, fontSize: fonts.md },
     optionMeta: { flexDirection: 'row', gap: 12, marginTop: 8, flexWrap: 'wrap' },
     metaBadge: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-    metaText: { color: t.text.muted, fontSize: 12 },
+    metaText: { color: t.text.muted, fontSize: fonts.sm },
     securityBadge: { paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4 },
-    securityText: { fontSize: 11, fontWeight: fonts.bold },
+    securityText: { fontSize: fonts.xs, fontWeight: fonts.bold },
     // Expanded details
     expandedBox: { marginTop: 12, paddingTop: 12, borderTopWidth: 1, borderTopColor: t.border },
-    expandedLabel: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold, marginTop: 8 },
-    expandedText: { color: t.text.secondary, fontSize: 13, lineHeight: 20, marginTop: 2 },
-    expandBtn: { color: t.accent.blue, fontSize: 12, fontWeight: fonts.semibold, marginTop: 8 },
+    expandedLabel: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold, marginTop: 8 },
+    expandedText: { color: t.text.secondary, fontSize: fonts.sm, lineHeight: 20, marginTop: 2 },
+    expandBtn: { color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.semibold, marginTop: 8 },
     // Fallback note
     fallbackNote: { backgroundColor: t.accent.green + '10', borderRadius: 12, padding: 14, marginTop: 16, marginBottom: 20 },
-    fallbackText: { color: t.accent.green, fontSize: 12, lineHeight: 18, textAlign: 'center' },
+    fallbackText: { color: t.accent.green, fontSize: fonts.sm, lineHeight: 18, textAlign: 'center' },
     // Swap button
     swapBtn: { backgroundColor: t.accent.blue, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginTop: 16 },
     swapBtnDisabled: { opacity: 0.5 },
-    swapBtnText: { color: '#fff', fontSize: 17, fontWeight: fonts.bold },
+    swapBtnText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.bold },
     // Loading
     loadingBox: { padding: 40, alignItems: 'center' },
-    loadingText: { color: t.text.muted, fontSize: 14, marginTop: 12 },
+    loadingText: { color: t.text.muted, fontSize: fonts.md, marginTop: 12 },
   }), [t]);
 
   // Fetch quotes when amount, tokens, or destination address changes
@@ -480,7 +480,7 @@ export function SwapScreen() {
                       }
                     }}
                   >
-                    <Text style={{ fontSize: 16 }}>{CHAIN_ICONS[chain]}</Text>
+                    <Text style={{ fontSize: fonts.lg }}>{CHAIN_ICONS[chain]}</Text>
                     <Text style={[
                       s.tokenChipText,
                       confirmedChain === chain && { color: CHAIN_COLORS[chain], fontWeight: fonts.bold },
@@ -520,7 +520,7 @@ export function SwapScreen() {
             {!useOwnAddress && (
               <View style={[s.swapCard, { paddingVertical: 12 }]}>
                 <TextInput
-                  style={[s.amountInput, { fontSize: 13 }]}
+                  style={[s.amountInput, { fontSize: fonts.sm }]}
                   placeholder="Paste destination wallet address"
                   placeholderTextColor={t.text.muted}
                   value={destAddress}
@@ -535,12 +535,12 @@ export function SwapScreen() {
             {confirmedChain && useOwnAddress && (
               <View style={{ backgroundColor: CHAIN_COLORS[confirmedChain] + '15', borderRadius: 12, padding: 12, marginTop: 4 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                  <Text style={{ fontSize: 16 }}>{CHAIN_ICONS[confirmedChain]}</Text>
-                  <Text style={{ color: CHAIN_COLORS[confirmedChain], fontWeight: fonts.bold, fontSize: 13 }}>
+                  <Text style={{ fontSize: fonts.lg }}>{CHAIN_ICONS[confirmedChain]}</Text>
+                  <Text style={{ color: CHAIN_COLORS[confirmedChain], fontWeight: fonts.bold, fontSize: fonts.sm }}>
                     Receive {toSymbol} on {confirmedChain}
                   </Text>
                 </View>
-                <Text style={{ color: t.text.muted, fontSize: 11, marginTop: 4 }} numberOfLines={1}>
+                <Text style={{ color: t.text.muted, fontSize: fonts.xs, marginTop: 4 }} numberOfLines={1}>
                   {destAddress ? `To: ${destAddress.slice(0, 12)}...${destAddress.slice(-8)}` : 'Using your own wallet address'}
                 </Text>
               </View>
@@ -552,8 +552,8 @@ export function SwapScreen() {
         <Modal visible={showChainPicker} transparent animationType="slide" onRequestClose={() => setShowChainPicker(false)}>
           <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.5)' }}>
             <View style={{ backgroundColor: t.bg.card, borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: 20 }}>
-              <Text style={{ color: t.text.primary, fontSize: 17, fontWeight: fonts.bold, marginBottom: 4 }}>Select Destination Chain</Text>
-              <Text style={{ color: t.text.muted, fontSize: 13, marginBottom: 16 }}>
+              <Text style={{ color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, marginBottom: 4 }}>Select Destination Chain</Text>
+              <Text style={{ color: t.text.muted, fontSize: fonts.sm, marginBottom: 16 }}>
                 {isChainAmbiguous
                   ? 'EVM address works on multiple chains — choose which one:'
                   : `Select the chain to receive ${toSymbol} on:`}
@@ -565,14 +565,14 @@ export function SwapScreen() {
                   onPress={() => { setConfirmedChain(chain); setShowChainPicker(false); }}
                 >
                   <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: CHAIN_COLORS[chain] + '25', justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={{ fontSize: 18 }}>{CHAIN_ICONS[chain]}</Text>
+                    <Text style={{ fontSize: fonts.xl }}>{CHAIN_ICONS[chain]}</Text>
                   </View>
-                  <Text style={{ flex: 1, color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold }}>{chain}</Text>
-                  {confirmedChain === chain && <Text style={{ color: t.accent.green, fontSize: 18 }}>✓</Text>}
+                  <Text style={{ flex: 1, color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold }}>{chain}</Text>
+                  {confirmedChain === chain && <Text style={{ color: t.accent.green, fontSize: fonts.xl }}>✓</Text>}
                 </TouchableOpacity>
               ))}
               <TouchableOpacity style={{ marginTop: 16, alignItems: 'center', paddingVertical: 14 }} onPress={() => setShowChainPicker(false)}>
-                <Text style={{ color: t.text.muted, fontSize: 15 }}>Cancel</Text>
+                <Text style={{ color: t.text.muted, fontSize: fonts.md }}>Cancel</Text>
               </TouchableOpacity>
             </View>
           </View>

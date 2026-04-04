@@ -102,41 +102,41 @@ export function MoodMapScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { flex: 1, paddingHorizontal: 16 },
-    subtitle: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 16 },
+    subtitle: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 19, marginBottom: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
-    label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
-    empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
+    label: { color: t.text.muted, fontSize: fonts.sm },
+    val: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    empty: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', marginTop: 40 },
     summaryRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
     summaryCard: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' },
-    summaryNum: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 2 },
-    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold, textAlign: 'center' },
-    moodIcon: { fontSize: 32, textAlign: 'center', marginBottom: 4 },
-    moodLabel: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
+    summaryNum: { fontSize: fonts.xl, fontWeight: fonts.heavy, marginBottom: 2 },
+    summaryLabel: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold, textAlign: 'center' },
+    moodIcon: { fontSize: fonts.hero, textAlign: 'center', marginBottom: 4 },
+    moodLabel: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
     barContainer: { height: 10, backgroundColor: t.border, borderRadius: 5, overflow: 'hidden', flex: 1, marginHorizontal: 10 },
     barFill: { height: 10, borderRadius: 5 },
-    moodCount: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold, width: 50, textAlign: 'right' },
-    moodPct: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.heavy, width: 40 },
+    moodCount: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold, width: 50, textAlign: 'right' },
+    moodPct: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.heavy, width: 40 },
     overallScore: { fontSize: 48, fontWeight: fonts.heavy, textAlign: 'center' },
-    overallLabel: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginBottom: 16 },
-    trendScore: { fontSize: 18, fontWeight: fonts.heavy },
-    trendChange: { fontSize: 12, fontWeight: fonts.bold },
-    trendPeriod: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
-    privacyNote: { color: t.text.muted, fontSize: 11, textAlign: 'center', fontStyle: 'italic', marginBottom: 16 },
-    resourceTitle: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, marginBottom: 4 },
-    resourceDesc: { color: t.text.secondary, fontSize: 12, lineHeight: 17 },
+    overallLabel: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', marginBottom: 16 },
+    trendScore: { fontSize: fonts.xl, fontWeight: fonts.heavy },
+    trendChange: { fontSize: fonts.sm, fontWeight: fonts.bold },
+    trendPeriod: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    privacyNote: { color: t.text.muted, fontSize: fonts.xs, textAlign: 'center', fontStyle: 'italic', marginBottom: 16 },
+    resourceTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, marginBottom: 4 },
+    resourceDesc: { color: t.text.secondary, fontSize: fonts.sm, lineHeight: 17 },
     actionBtn: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: 8 },
-    actionText: { color: '#fff', fontSize: 12, fontWeight: fonts.bold },
-    totalParticipants: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginBottom: 12 },
+    actionText: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.bold },
+    totalParticipants: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginBottom: 12 },
   }), [t]);
 
   const totalParticipants = MOOD_LEVELS.reduce((s, m) => s + m.count, 0);
@@ -182,7 +182,7 @@ export function MoodMapScreen({ onClose }: Props) {
             <>
               {MOOD_LEVELS.map(mood => (
                 <View key={mood.label} style={[st.card, { flexDirection: 'row', alignItems: 'center' }]}>
-                  <Text style={{ fontSize: 24, marginRight: 8 }}>{mood.icon}</Text>
+                  <Text style={{ fontSize: fonts.xxl, marginRight: 8 }}>{mood.icon}</Text>
                   <Text style={st.moodPct}>{mood.percentage}%</Text>
                   <View style={st.barContainer}>
                     <View style={[st.barFill, { width: `${mood.percentage}%`, backgroundColor: mood.color }]} />
@@ -215,7 +215,7 @@ export function MoodMapScreen({ onClose }: Props) {
             <View key={i} style={st.card}>
               <View style={st.row}>
                 <Text style={st.trendPeriod}>{tr.period}</Text>
-                <Text style={{ fontSize: 20 }}>{tr.dominantIcon}</Text>
+                <Text style={{ fontSize: fonts.xl }}>{tr.dominantIcon}</Text>
               </View>
               <View style={st.row}>
                 <Text style={st.label}>Average Score</Text>
@@ -243,7 +243,7 @@ export function MoodMapScreen({ onClose }: Props) {
             return (
               <View key={res.id} style={st.card}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-                  <Text style={{ fontSize: 22, marginRight: 10 }}>{res.icon}</Text>
+                  <Text style={{ fontSize: fonts.xxl, marginRight: 10 }}>{res.icon}</Text>
                   <View style={{ flex: 1 }}>
                     <Text style={st.resourceTitle}>{res.title}</Text>
                     <Text style={st.resourceDesc}>{res.description}</Text>
@@ -261,7 +261,7 @@ export function MoodMapScreen({ onClose }: Props) {
 
         {!demoMode && activeTab !== 'support' && (
           <View style={[st.card, { marginTop: 20 }]}>
-            <Text style={{ color: t.text.muted, fontSize: 13, textAlign: 'center' }}>
+            <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center' }}>
               Enable Demo Mode in Settings to see sample mood data.
             </Text>
           </View>

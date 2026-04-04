@@ -81,70 +81,70 @@ export function IdentityScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     // Identity card
     idCard: { backgroundColor: t.bg.card, borderRadius: 24, padding: 24, marginHorizontal: 20, marginTop: 8, alignItems: 'center', borderWidth: 1, borderColor: t.border },
     idIcon: { fontSize: 48, marginBottom: 12 },
-    idLabel: { color: t.text.muted, fontSize: 11, textTransform: 'uppercase', letterSpacing: 1.5 },
-    idValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, fontFamily: 'monospace', marginTop: 4 },
+    idLabel: { color: t.text.muted, fontSize: fonts.xs, textTransform: 'uppercase', letterSpacing: 1.5 },
+    idValue: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, fontFamily: 'monospace', marginTop: 4 },
     // Reputation section
     repCard: { backgroundColor: t.bg.card, borderRadius: 20, padding: 20, marginHorizontal: 20, marginTop: 16 },
     repHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
-    repTitle: { color: t.text.primary, fontSize: 17, fontWeight: fonts.bold },
+    repTitle: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold },
     repBadge: { width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center' },
-    repBadgeText: { color: '#fff', fontSize: 18, fontWeight: fonts.heavy },
-    repScore: { color: t.text.primary, fontSize: 36, fontWeight: fonts.heavy, textAlign: 'center' },
-    repScoreLabel: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginTop: 2 },
-    repLevel: { textAlign: 'center', fontSize: 16, fontWeight: fonts.bold, marginTop: 8 },
+    repBadgeText: { color: '#fff', fontSize: fonts.xl, fontWeight: fonts.heavy },
+    repScore: { color: t.text.primary, fontSize: fonts.hero, fontWeight: fonts.heavy, textAlign: 'center' },
+    repScoreLabel: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 2 },
+    repLevel: { textAlign: 'center', fontSize: fonts.lg, fontWeight: fonts.bold, marginTop: 8 },
     repBar: { height: 8, backgroundColor: t.border, borderRadius: 4, marginTop: 16 },
     repFill: { height: 8, borderRadius: 4 },
     // Score breakdown
     breakdownRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10 },
-    breakdownLabel: { color: t.text.secondary, fontSize: 14 },
-    breakdownValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
+    breakdownLabel: { color: t.text.secondary, fontSize: fonts.md },
+    breakdownValue: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
     breakdownBar: { height: 4, backgroundColor: t.border, borderRadius: 2, flex: 1, marginHorizontal: 12 },
     breakdownFill: { height: 4, borderRadius: 2 },
     divider: { height: 1, backgroundColor: t.border },
     // Linked addresses
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
     chainCard: { backgroundColor: t.bg.card, borderRadius: 16, marginHorizontal: 20, overflow: 'hidden' },
     chainRow: { flexDirection: 'row', alignItems: 'center', padding: 16 },
     chainDot: { width: 10, height: 10, borderRadius: 5, marginRight: 12 },
     chainInfo: { flex: 1 },
-    chainName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold },
-    chainAddr: { color: t.text.muted, fontSize: 12, fontFamily: 'monospace', marginTop: 2 },
+    chainName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
+    chainAddr: { color: t.text.muted, fontSize: fonts.sm, fontFamily: 'monospace', marginTop: 2 },
     verifiedBadge: { backgroundColor: t.accent.green + '20', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
-    verifiedText: { color: t.accent.green, fontSize: 11, fontWeight: fonts.bold },
+    verifiedText: { color: t.accent.green, fontSize: fonts.xs, fontWeight: fonts.bold },
     unverifiedBadge: { backgroundColor: t.accent.yellow + '20', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
-    unverifiedText: { color: t.accent.yellow, fontSize: 11, fontWeight: fonts.bold },
-    notLinkedText: { color: t.text.muted, fontSize: 13, fontStyle: 'italic' },
+    unverifiedText: { color: t.accent.yellow, fontSize: fonts.xs, fontWeight: fonts.bold },
+    notLinkedText: { color: t.text.muted, fontSize: fonts.sm, fontStyle: 'italic' },
     // Link button
     linkBtn: { backgroundColor: t.accent.blue, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginHorizontal: 20, marginTop: 16 },
-    linkBtnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
+    linkBtnText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
     // Chain selector
     selectorOverlay: { backgroundColor: t.bg.card, borderRadius: 20, padding: 20, marginHorizontal: 20, marginTop: 16 },
-    selectorTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 12 },
+    selectorTitle: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, marginBottom: 12 },
     selectorRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 14 },
-    selectorLabel: { color: t.text.primary, fontSize: 15, marginLeft: 12 },
-    selectorSymbol: { color: t.text.muted, fontSize: 13, marginLeft: 'auto' },
+    selectorLabel: { color: t.text.primary, fontSize: fonts.md, marginLeft: 12 },
+    selectorSymbol: { color: t.text.muted, fontSize: fonts.sm, marginLeft: 'auto' },
     cancelBtn: { paddingVertical: 12, alignItems: 'center' },
-    cancelText: { color: t.accent.red, fontSize: 15, fontWeight: fonts.semibold },
+    cancelText: { color: t.accent.red, fontSize: fonts.md, fontWeight: fonts.semibold },
     // QR
     qrCard: { backgroundColor: t.bg.card, borderRadius: 20, padding: 24, marginHorizontal: 20, marginTop: 16, alignItems: 'center' },
     qrPlaceholder: { width: 200, height: 200, backgroundColor: t.border, borderRadius: 12, justifyContent: 'center', alignItems: 'center', marginBottom: 16 },
-    qrText: { color: t.text.muted, fontSize: 14 },
+    qrText: { color: t.text.muted, fontSize: fonts.md },
     shareBtn: { backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 12, paddingHorizontal: 32, marginTop: 12 },
-    shareBtnText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
+    shareBtnText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
     // Level thresholds
     levelRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6 },
-    levelLabel: { fontSize: 13 },
-    levelRange: { color: t.text.muted, fontSize: 12 },
+    levelLabel: { fontSize: fonts.sm },
+    levelRange: { color: t.text.muted, fontSize: fonts.sm },
     // Empty state
     emptyCard: { backgroundColor: t.bg.card, borderRadius: 20, padding: 32, marginHorizontal: 20, marginTop: 16, alignItems: 'center' },
     emptyIcon: { fontSize: 48, marginBottom: 16 },
-    emptyTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 8 },
-    emptySubtitle: { color: t.text.muted, fontSize: 14, textAlign: 'center', lineHeight: 22 },
+    emptyTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 8 },
+    emptySubtitle: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', lineHeight: 22 },
   }), [t]);
 
   // Load identity data
@@ -365,7 +365,7 @@ export function IdentityScreen({ onClose }: Props) {
         </View>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <ActivityIndicator size="large" color={t.accent.green} />
-          <Text style={{ color: t.text.muted, fontSize: 14, marginTop: 12 }}>Loading identity...</Text>
+          <Text style={{ color: t.text.muted, fontSize: fonts.md, marginTop: 12 }}>Loading identity...</Text>
         </View>
       </SafeAreaView>
     );
@@ -506,7 +506,7 @@ export function IdentityScreen({ onClose }: Props) {
                     linkingState !== 'idle' && selectedChain === chain.id ? (
                       <ActivityIndicator size="small" color={t.accent.blue} />
                     ) : (
-                      <Text style={{ color: t.accent.blue, fontSize: 13, fontWeight: fonts.semibold }}>+ Link</Text>
+                      <Text style={{ color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.semibold }}>+ Link</Text>
                     )
                   )}
                 </TouchableOpacity>
@@ -522,16 +522,16 @@ export function IdentityScreen({ onClose }: Props) {
             <>
               <View style={s.qrPlaceholder}>
                 <Text style={s.qrText}>QR: {uid.slice(0, 16)}...</Text>
-                <Text style={[s.qrText, { fontSize: 11, marginTop: 4 }]}>(QR rendering requires expo-qrcode)</Text>
+                <Text style={[s.qrText, { fontSize: fonts.xs, marginTop: 4 }]}>(QR rendering requires expo-qrcode)</Text>
               </View>
-              <Text style={{ color: t.text.muted, fontSize: 12, textAlign: 'center' }}>
+              <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center' }}>
                 Scan to verify this identity on Open Chain
               </Text>
             </>
           ) : (
             <TouchableOpacity onPress={() => setShowQR(true)} style={{ alignItems: 'center' }}>
               <Text style={{ fontSize: 40, marginBottom: 8 }}>&#128206;</Text>
-              <Text style={{ color: t.accent.blue, fontSize: 15, fontWeight: fonts.semibold }}>Show QR Code</Text>
+              <Text style={{ color: t.accent.blue, fontSize: fonts.md, fontWeight: fonts.semibold }}>Show QR Code</Text>
             </TouchableOpacity>
           )}
           <TouchableOpacity style={s.shareBtn} onPress={handleShare}>

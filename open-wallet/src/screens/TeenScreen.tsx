@@ -112,91 +112,91 @@ export function TeenScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     heroCard: { backgroundColor: t.accent.purple + '10', borderRadius: 24, padding: 24, marginHorizontal: 20, marginTop: 8, alignItems: 'center' },
     heroIcon: { fontSize: 48, marginBottom: 8 },
-    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, textAlign: 'center' },
-    heroSubtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 4, lineHeight: 20 },
+    heroTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy, textAlign: 'center' },
+    heroSubtitle: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 4, lineHeight: 20 },
     statRow: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 16, width: '100%' },
     statItem: { alignItems: 'center' },
-    statValue: { color: t.text.primary, fontSize: 22, fontWeight: fonts.heavy },
-    statLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
+    statValue: { color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.heavy },
+    statLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
     tabRow: { flexDirection: 'row', marginHorizontal: 20, marginTop: 16, backgroundColor: t.bg.card, borderRadius: 12, padding: 4 },
     tab: { flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 10 },
     tabActive: { backgroundColor: t.accent.purple },
-    tabText: { color: t.text.muted, fontSize: 11, fontWeight: fonts.semibold },
+    tabText: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     section: { marginHorizontal: 20, marginTop: 20 },
-    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 12 },
+    sectionTitle: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, marginBottom: 12 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     cardRow: { flexDirection: 'row', alignItems: 'center' },
-    cardIcon: { fontSize: 32, marginRight: 14 },
+    cardIcon: { fontSize: fonts.hero, marginRight: 14 },
     cardInfo: { flex: 1 },
-    cardTitle: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
-    cardDesc: { color: t.text.muted, fontSize: 12, marginTop: 2 },
+    cardTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    cardDesc: { color: t.text.muted, fontSize: fonts.sm, marginTop: 2 },
     progressBar: { height: 6, backgroundColor: t.border, borderRadius: 3, marginTop: 8 },
     progressFill: { height: 6, borderRadius: 3, backgroundColor: t.accent.purple },
-    progressText: { color: t.text.secondary, fontSize: 11, marginTop: 4 },
-    eOTKBadge: { color: t.accent.green, fontSize: 13, fontWeight: fonts.bold, marginTop: 4 },
+    progressText: { color: t.text.secondary, fontSize: fonts.xs, marginTop: 4 },
+    eOTKBadge: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold, marginTop: 4 },
     // Challenge styles
     challengeCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     challengeHeader: { flexDirection: 'row', alignItems: 'center' },
-    challengeIcon: { fontSize: 28, marginRight: 12 },
+    challengeIcon: { fontSize: fonts.xxxl, marginRight: 12 },
     challengeInfo: { flex: 1 },
-    challengeTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
+    challengeTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
     challengeMeta: { flexDirection: 'row', gap: 12, marginTop: 4 },
-    challengeMetaText: { color: t.text.muted, fontSize: 11 },
+    challengeMetaText: { color: t.text.muted, fontSize: fonts.xs },
     challengeStatus: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
-    challengeStatusText: { fontSize: 11, fontWeight: fonts.bold },
+    challengeStatusText: { fontSize: fonts.xs, fontWeight: fonts.bold },
     challengeDetails: { marginTop: 12, paddingTop: 12, borderTopWidth: 1, borderTopColor: t.border },
-    challengeDesc: { color: t.text.secondary, fontSize: 13, lineHeight: 20 },
-    challengeReward: { color: t.accent.green, fontSize: 14, fontWeight: fonts.bold, marginTop: 8 },
+    challengeDesc: { color: t.text.secondary, fontSize: fonts.sm, lineHeight: 20 },
+    challengeReward: { color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.bold, marginTop: 8 },
     joinBtn: { backgroundColor: t.accent.purple, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 10, marginTop: 10, alignSelf: 'flex-start' },
-    joinBtnText: { color: '#fff', fontSize: 13, fontWeight: fonts.bold },
+    joinBtnText: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.bold },
     // Connection styles
     connectionCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12, flexDirection: 'row', alignItems: 'center' },
-    connectionIcon: { fontSize: 32, marginRight: 14 },
+    connectionIcon: { fontSize: fonts.hero, marginRight: 14 },
     connectionInfo: { flex: 1 },
-    connectionName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
-    connectionAge: { color: t.text.muted, fontSize: 12, marginTop: 2 },
+    connectionName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    connectionAge: { color: t.text.muted, fontSize: fonts.sm, marginTop: 2 },
     connectionInterests: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 6 },
     interestChip: { backgroundColor: t.accent.purple + '15', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
-    interestText: { color: t.accent.purple, fontSize: 11, fontWeight: fonts.semibold },
+    interestText: { color: t.accent.purple, fontSize: fonts.xs, fontWeight: fonts.semibold },
     approvedBadge: { backgroundColor: t.accent.green + '20', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6 },
-    approvedText: { color: t.accent.green, fontSize: 10, fontWeight: fonts.bold },
+    approvedText: { color: t.accent.green, fontSize: fonts.xs, fontWeight: fonts.bold },
     pendingBadge: { backgroundColor: t.accent.orange + '20', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6 },
-    pendingText: { color: t.accent.orange, fontSize: 10, fontWeight: fonts.bold },
+    pendingText: { color: t.accent.orange, fontSize: fonts.xs, fontWeight: fonts.bold },
     // Skill styles
     skillCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     skillRow: { flexDirection: 'row', alignItems: 'center' },
-    skillIcon: { fontSize: 28, marginRight: 12 },
+    skillIcon: { fontSize: fonts.xxxl, marginRight: 12 },
     skillInfo: { flex: 1 },
-    skillTitle: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
-    skillCategory: { color: t.text.muted, fontSize: 11, marginTop: 2 },
-    skillProgress: { color: t.text.secondary, fontSize: 11, marginTop: 4 },
+    skillTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    skillCategory: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
+    skillProgress: { color: t.text.secondary, fontSize: fonts.xs, marginTop: 4 },
     // Safety styles
     safetyCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     safetyRow: { flexDirection: 'row', alignItems: 'flex-start' },
-    safetyIcon: { fontSize: 28, marginRight: 14 },
+    safetyIcon: { fontSize: fonts.xxxl, marginRight: 14 },
     safetyInfo: { flex: 1 },
-    safetyTitle: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
-    safetyDesc: { color: t.text.muted, fontSize: 12, marginTop: 4, lineHeight: 18 },
+    safetyTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    safetyDesc: { color: t.text.muted, fontSize: fonts.sm, marginTop: 4, lineHeight: 18 },
     safetyType: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, marginTop: 8, alignSelf: 'flex-start' },
-    safetyTypeText: { fontSize: 10, fontWeight: fonts.bold },
+    safetyTypeText: { fontSize: fonts.xs, fontWeight: fonts.bold },
     emergencyCard: { backgroundColor: t.accent.red + '10', borderRadius: 20, padding: 20, marginBottom: 16, alignItems: 'center', borderWidth: 1, borderColor: t.accent.red + '30' },
-    emergencyTitle: { color: t.accent.red, fontSize: 16, fontWeight: fonts.heavy, marginTop: 8 },
-    emergencyDesc: { color: t.text.secondary, fontSize: 13, textAlign: 'center', marginTop: 4 },
+    emergencyTitle: { color: t.accent.red, fontSize: fonts.lg, fontWeight: fonts.heavy, marginTop: 8 },
+    emergencyDesc: { color: t.text.secondary, fontSize: fonts.sm, textAlign: 'center', marginTop: 4 },
     emergencyBtn: { backgroundColor: t.accent.red, paddingHorizontal: 24, paddingVertical: 10, borderRadius: 12, marginTop: 12 },
-    emergencyBtnText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
+    emergencyBtnText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
     // Voice / Council
     voiceCard: { backgroundColor: t.accent.blue + '10', borderRadius: 16, padding: 16, marginBottom: 12, alignItems: 'center' },
-    voiceTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
-    voiceDesc: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginTop: 4 },
+    voiceTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    voiceDesc: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 4 },
     voiceBtn: { backgroundColor: t.accent.blue, paddingHorizontal: 20, paddingVertical: 10, borderRadius: 10, marginTop: 12 },
-    voiceBtnText: { color: '#fff', fontSize: 13, fontWeight: fonts.bold },
+    voiceBtnText: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.bold },
     demoTag: { backgroundColor: t.accent.orange + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'center', marginTop: 12, marginBottom: 4 },
-    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: fonts.semibold },
+    demoText: { color: t.accent.orange, fontSize: fonts.xs, fontWeight: fonts.semibold },
   }), [t]);
 
   const getStatusStyle = (status: Challenge['status']) => {
@@ -246,9 +246,9 @@ export function TeenScreen({ onClose }: Props) {
         <Text style={s.cardTitle}>Active Challenges</Text>
         {DEMO_CHALLENGES.filter(c => c.status === 'active').map((ch) => (
           <View key={ch.id} style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: t.border }}>
-            <Text style={{ fontSize: 22, marginRight: 10 }}>{ch.icon}</Text>
+            <Text style={{ fontSize: fonts.xxl, marginRight: 10 }}>{ch.icon}</Text>
             <View style={{ flex: 1 }}>
-              <Text style={[s.cardTitle, { fontSize: 13 }]}>{ch.title}</Text>
+              <Text style={[s.cardTitle, { fontSize: fonts.sm }]}>{ch.title}</Text>
               <Text style={s.cardDesc}>Due {ch.deadline}</Text>
             </View>
             <Text style={s.eOTKBadge}>+{ch.eOTKReward}</Text>
@@ -260,9 +260,9 @@ export function TeenScreen({ onClose }: Props) {
         <Text style={s.cardTitle}>Peer Connections</Text>
         {DEMO_CONNECTIONS.filter(c => c.guardianApproved).map((conn) => (
           <View key={conn.id} style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 8 }}>
-            <Text style={{ fontSize: 22, marginRight: 10 }}>{conn.icon}</Text>
+            <Text style={{ fontSize: fonts.xxl, marginRight: 10 }}>{conn.icon}</Text>
             <View style={{ flex: 1 }}>
-              <Text style={[s.cardTitle, { fontSize: 13 }]}>{conn.name}, {conn.age}</Text>
+              <Text style={[s.cardTitle, { fontSize: fonts.sm }]}>{conn.name}, {conn.age}</Text>
               <Text style={s.cardDesc}>{conn.interests.join(', ')}</Text>
             </View>
           </View>
@@ -274,8 +274,8 @@ export function TeenScreen({ onClose }: Props) {
         {DEMO_SKILLS.map((skill) => (
           <View key={skill.id} style={{ paddingVertical: 8 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ fontSize: 20, marginRight: 10 }}>{skill.icon}</Text>
-              <Text style={[s.cardTitle, { fontSize: 13, flex: 1 }]}>{skill.title}</Text>
+              <Text style={{ fontSize: fonts.xl, marginRight: 10 }}>{skill.icon}</Text>
+              <Text style={[s.cardTitle, { fontSize: fonts.sm, flex: 1 }]}>{skill.title}</Text>
               <Text style={s.progressText}>{skill.progress}%</Text>
             </View>
             <View style={s.progressBar}>
@@ -286,7 +286,7 @@ export function TeenScreen({ onClose }: Props) {
       </View>
 
       <View style={s.voiceCard}>
-        <Text style={{ fontSize: 36 }}>{'\u{1F4E2}'}</Text>
+        <Text style={{ fontSize: fonts.hero }}>{'\u{1F4E2}'}</Text>
         <Text style={s.voiceTitle}>Teen Voice — Youth Council</Text>
         <Text style={s.voiceDesc}>
           Have an idea to make our community better? Submit it to the Youth Council for review and possible implementation.
@@ -370,7 +370,7 @@ export function TeenScreen({ onClose }: Props) {
       ))}
 
       <View style={[s.card, { alignItems: 'center' }]}>
-        <Text style={{ fontSize: 32, marginBottom: 8 }}>{'\u{1F31F}'}</Text>
+        <Text style={{ fontSize: fonts.hero, marginBottom: 8 }}>{'\u{1F31F}'}</Text>
         <Text style={s.cardTitle}>Suggest a Skill</Text>
         <Text style={[s.cardDesc, { textAlign: 'center', marginTop: 4 }]}>
           Want to learn something not listed? Submit a suggestion to the Youth Council.
@@ -382,7 +382,7 @@ export function TeenScreen({ onClose }: Props) {
   const renderSafety = () => (
     <View style={s.section}>
       <View style={s.emergencyCard}>
-        <Text style={{ fontSize: 36 }}>{'\u{1F198}'}</Text>
+        <Text style={{ fontSize: fonts.hero }}>{'\u{1F198}'}</Text>
         <Text style={s.emergencyTitle}>Need Help Right Now?</Text>
         <Text style={s.emergencyDesc}>
           If you are in danger or having a crisis, reach out immediately.
@@ -412,7 +412,7 @@ export function TeenScreen({ onClose }: Props) {
       })}
 
       <View style={[s.card, { alignItems: 'center', marginTop: 8 }]}>
-        <Text style={{ fontSize: 32, marginBottom: 8 }}>{'\u{1F49C}'}</Text>
+        <Text style={{ fontSize: fonts.hero, marginBottom: 8 }}>{'\u{1F49C}'}</Text>
         <Text style={s.cardTitle}>You Are Not Alone</Text>
         <Text style={[s.cardDesc, { textAlign: 'center', marginTop: 4, lineHeight: 20 }]}>
           Every adult in this community has pledged to protect young members. Your guardians are always notified of your connections and activities.

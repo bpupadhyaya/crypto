@@ -113,7 +113,7 @@ export const OfflineBanner = React.memo(() => {
     },
     text: {
       color: '#fff',
-      fontSize: 13,
+      fontSize: fonts.sm,
       fontWeight: fonts.semibold,
     },
     onlineBanner: {
@@ -127,7 +127,7 @@ export const OfflineBanner = React.memo(() => {
     },
     onlineText: {
       color: t.text.muted,
-      fontSize: 11,
+      fontSize: fonts.xs,
     },
     greenDot: {
       width: 6,
@@ -151,12 +151,12 @@ export const OfflineBanner = React.memo(() => {
     },
     modalTitle: {
       color: t.text.primary,
-      fontSize: 18,
+      fontSize: fonts.xl,
       fontWeight: fonts.bold,
     },
     closeBtn: {
       color: t.accent.orange,
-      fontSize: 15,
+      fontSize: fonts.md,
       fontWeight: fonts.semibold,
     },
     section: {
@@ -165,7 +165,7 @@ export const OfflineBanner = React.memo(() => {
     },
     sectionTitle: {
       color: t.text.secondary,
-      fontSize: 13,
+      fontSize: fonts.sm,
       fontWeight: fonts.semibold,
       textTransform: 'uppercase',
       letterSpacing: 1,
@@ -199,12 +199,12 @@ export const OfflineBanner = React.memo(() => {
     },
     chainName: {
       color: t.text.primary,
-      fontSize: 15,
+      fontSize: fonts.md,
       fontWeight: fonts.semibold,
     },
     latencyText: {
       color: t.text.muted,
-      fontSize: 12,
+      fontSize: fonts.sm,
     },
     peerRow: {
       backgroundColor: t.bg.card,
@@ -217,12 +217,12 @@ export const OfflineBanner = React.memo(() => {
     },
     peerLabel: {
       color: t.text.primary,
-      fontSize: 15,
+      fontSize: fonts.md,
       fontWeight: fonts.semibold,
     },
     peerCount: {
       color: t.accent.blue,
-      fontSize: 15,
+      fontSize: fonts.md,
       fontWeight: fonts.bold,
     },
     refreshBtn: {
@@ -235,12 +235,12 @@ export const OfflineBanner = React.memo(() => {
     },
     refreshBtnText: {
       color: t.bg.primary,
-      fontSize: 15,
+      fontSize: fonts.md,
       fontWeight: fonts.bold,
     },
     checkingText: {
       color: t.text.muted,
-      fontSize: 12,
+      fontSize: fonts.sm,
       textAlign: 'center',
       marginTop: 8,
     },

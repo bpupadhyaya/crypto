@@ -122,38 +122,38 @@ export function ConstitutionReaderScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { paddingHorizontal: 20, paddingBottom: 40 },
-    subtitle: { color: t.text.secondary, fontSize: 14, lineHeight: 22, marginBottom: 16 },
+    subtitle: { color: t.text.secondary, fontSize: fonts.md, lineHeight: 22, marginBottom: 16 },
     progressBar: { flexDirection: 'row', alignItems: 'center', backgroundColor: t.accent.green + '15', borderRadius: 12, padding: 12, marginBottom: 20 },
-    progressText: { color: t.accent.green, fontSize: 14, fontWeight: fonts.bold, marginLeft: 8 },
+    progressText: { color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.bold, marginLeft: 8 },
     articleCard: { backgroundColor: t.bg.card, borderRadius: 16, marginBottom: 12, overflow: 'hidden' },
     articleCardImmutable: { borderWidth: 2, borderColor: '#d4a017' },
     articleHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 },
     articleNumBadge: { width: 32, height: 32, borderRadius: 16, backgroundColor: t.accent.blue + '20', justifyContent: 'center', alignItems: 'center', marginRight: 12 },
     articleNumBadgeImmutable: { backgroundColor: '#d4a017' + '30' },
-    articleNum: { color: t.accent.blue, fontSize: 14, fontWeight: fonts.heavy },
+    articleNum: { color: t.accent.blue, fontSize: fonts.md, fontWeight: fonts.heavy },
     articleNumImmutable: { color: '#d4a017' },
     articleTitleRow: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8 },
-    articleTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, flex: 1 },
+    articleTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, flex: 1 },
     immutableBadge: { backgroundColor: '#d4a017' + '20', borderRadius: 8, paddingHorizontal: 8, paddingVertical: 3 },
-    immutableText: { color: '#d4a017', fontSize: 10, fontWeight: fonts.heavy, letterSpacing: 0.5 },
-    chevron: { color: t.text.muted, fontSize: 18, marginLeft: 8 },
+    immutableText: { color: '#d4a017', fontSize: fonts.xs, fontWeight: fonts.heavy, letterSpacing: 0.5 },
+    chevron: { color: t.text.muted, fontSize: fonts.xl, marginLeft: 8 },
     articleBody: { paddingHorizontal: 16, paddingBottom: 16 },
-    articleText: { color: t.text.secondary, fontSize: 14, lineHeight: 22, marginBottom: 12 },
+    articleText: { color: t.text.secondary, fontSize: fonts.md, lineHeight: 22, marginBottom: 12 },
     featureBox: { backgroundColor: t.accent.green + '10', borderRadius: 10, padding: 12, marginBottom: 8 },
-    featureLabel: { color: t.accent.green, fontSize: 11, fontWeight: fonts.bold, letterSpacing: 0.5, marginBottom: 4 },
-    featureText: { color: t.text.secondary, fontSize: 13, lineHeight: 20 },
+    featureLabel: { color: t.accent.green, fontSize: fonts.xs, fontWeight: fonts.bold, letterSpacing: 0.5, marginBottom: 4 },
+    featureText: { color: t.text.secondary, fontSize: fonts.sm, lineHeight: 20 },
     implementedBadge: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 8 },
     implementedDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: t.accent.green },
-    implementedText: { color: t.accent.green, fontSize: 12, fontWeight: fonts.bold },
+    implementedText: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold },
     articleActions: { flexDirection: 'row', gap: 12, marginTop: 4 },
-    shareBtn: { color: t.accent.blue, fontSize: 13, fontWeight: fonts.semibold },
-    amendBtn: { color: t.accent.purple, fontSize: 13, fontWeight: fonts.semibold },
+    shareBtn: { color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    amendBtn: { color: t.accent.purple, fontSize: fonts.sm, fontWeight: fonts.semibold },
     linksRow: { flexDirection: 'row', gap: 12, marginTop: 20, marginBottom: 16 },
     linkBtn: { flex: 1, backgroundColor: t.accent.blue + '15', borderRadius: 12, padding: 14, alignItems: 'center' },
-    linkText: { color: t.accent.blue, fontSize: 14, fontWeight: fonts.semibold },
+    linkText: { color: t.accent.blue, fontSize: fonts.md, fontWeight: fonts.semibold },
   }), [t]);
 
   return (
@@ -170,7 +170,7 @@ export function ConstitutionReaderScreen({ onClose }: Props) {
         </Text>
 
         <View style={s.progressBar}>
-          <Text style={{ fontSize: 18 }}>{'✓'}</Text>
+          <Text style={{ fontSize: fonts.xl }}>{'✓'}</Text>
           <Text style={s.progressText}>10/10 Articles Implemented</Text>
         </View>
 

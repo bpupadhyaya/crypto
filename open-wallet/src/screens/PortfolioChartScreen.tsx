@@ -263,7 +263,7 @@ function StackedBreakdown({
         {tokens.map((sym) => (
           <View key={sym} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
             <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: TOKEN_COLORS[sym] ?? theme.accent.green }} />
-            <Text style={{ color: theme.text.muted, fontSize: 11 }}>{sym}</Text>
+            <Text style={{ color: theme.text.muted, fontSize: fonts.xs }}>{sym}</Text>
           </View>
         ))}
       </View>
@@ -360,34 +360,34 @@ export const PortfolioChartScreen = React.memo(({ onClose }: Props) => {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    back: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
-    title: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
+    back: { color: t.accent.blue, fontSize: fonts.lg, fontWeight: fonts.semibold },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
     valueSection: { alignItems: 'center', paddingVertical: 20 },
-    currentValue: { color: t.text.primary, fontSize: 32, fontWeight: fonts.heavy },
+    currentValue: { color: t.text.primary, fontSize: fonts.hero, fontWeight: fonts.heavy },
     changeRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 4 },
-    changeText: { fontSize: 16, fontWeight: fonts.bold },
-    touchTime: { color: t.text.muted, fontSize: 12, marginTop: 4 },
+    changeText: { fontSize: fonts.lg, fontWeight: fonts.bold },
+    touchTime: { color: t.text.muted, fontSize: fonts.sm, marginTop: 4 },
     periodRow: { flexDirection: 'row', justifyContent: 'center', gap: 4, marginBottom: 20 },
     periodBtn: { paddingVertical: 8, paddingHorizontal: 18, borderRadius: 20, backgroundColor: t.bg.card },
     periodActive: { backgroundColor: t.accent.green },
-    periodText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    periodText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     periodTextActive: { color: t.bg.primary },
     chartContainer: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 16 },
-    sectionLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 10, marginLeft: 4 },
+    sectionLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 10, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16 },
     metricRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10 },
-    metricLabel: { color: t.text.muted, fontSize: 14 },
-    metricValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
+    metricLabel: { color: t.text.muted, fontSize: fonts.md },
+    metricValue: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
     divider: { height: 1, backgroundColor: t.border },
     toggleRow: { flexDirection: 'row', justifyContent: 'center', gap: 4, marginTop: 16, marginBottom: 8 },
     toggleBtn: { paddingVertical: 6, paddingHorizontal: 16, borderRadius: 12, backgroundColor: t.bg.card },
     toggleActive: { backgroundColor: t.accent.blue + '30' },
-    toggleText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    toggleText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     toggleTextActive: { color: t.accent.blue },
     empty: { alignItems: 'center', paddingVertical: 40 },
-    emptyText: { color: t.text.muted, fontSize: 15 },
-    demoTag: { color: t.accent.yellow, fontSize: 11, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 8 },
+    emptyText: { color: t.text.muted, fontSize: fonts.md },
+    demoTag: { color: t.accent.yellow, fontSize: fonts.xs, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 8 },
   }), [t]);
 
   return (

@@ -241,50 +241,50 @@ export const WatchlistScreen = React.memo(({ onClose }: Props) => {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    back: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
-    title: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
-    addBtnHeader: { color: t.accent.green, fontSize: 15, fontWeight: fonts.bold },
+    back: { color: t.accent.blue, fontSize: fonts.lg, fontWeight: fonts.semibold },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    addBtnHeader: { color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.bold },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
     sortRow: { flexDirection: 'row', gap: 6, marginBottom: 12 },
     sortChip: { paddingVertical: 6, paddingHorizontal: 12, borderRadius: 8, backgroundColor: t.border },
     sortChipActive: { backgroundColor: t.accent.green },
-    sortText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    sortText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     sortTextActive: { color: t.bg.primary, fontWeight: fonts.bold },
     card: { backgroundColor: t.bg.card, borderRadius: 16, overflow: 'hidden', marginBottom: 12 },
     tokenRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 14, paddingHorizontal: 16, borderBottomWidth: 1, borderBottomColor: t.border },
     tokenDot: { width: 32, height: 32, borderRadius: 16, justifyContent: 'center', alignItems: 'center', marginRight: 12 },
-    tokenSymbol: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
-    tokenName: { color: t.text.muted, fontSize: 12, marginTop: 1 },
+    tokenSymbol: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    tokenName: { color: t.text.muted, fontSize: fonts.sm, marginTop: 1 },
     priceCol: { alignItems: 'flex-end', marginLeft: 'auto' },
-    priceText: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
+    priceText: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
     changeRow: { flexDirection: 'row', gap: 8, marginTop: 2 },
     alertBadge: { backgroundColor: t.accent.orange + '20', borderRadius: 6, paddingVertical: 2, paddingHorizontal: 6, marginTop: 4 },
-    alertBadgeText: { color: t.accent.orange, fontSize: 10, fontWeight: fonts.semibold },
+    alertBadgeText: { color: t.accent.orange, fontSize: fonts.xs, fontWeight: fonts.semibold },
     actionsRow: { flexDirection: 'row', gap: 8, marginLeft: 8 },
     actionBtn: { padding: 4 },
-    actionText: { fontSize: 16, color: t.text.muted },
+    actionText: { fontSize: fonts.lg, color: t.text.muted },
     // Add token modal
     addOverlay: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
-    searchInput: { backgroundColor: t.bg.primary, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10, color: t.text.primary, fontSize: 14, marginBottom: 12, borderWidth: 1, borderColor: t.border },
+    searchInput: { backgroundColor: t.bg.primary, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10, color: t.text.primary, fontSize: fonts.md, marginBottom: 12, borderWidth: 1, borderColor: t.border },
     addTokenRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: t.border },
     addTokenBtn: { marginLeft: 'auto', backgroundColor: t.accent.green, borderRadius: 8, paddingVertical: 4, paddingHorizontal: 12 },
-    addTokenBtnText: { color: '#fff', fontSize: 12, fontWeight: fonts.bold },
+    addTokenBtnText: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.bold },
     // Alert form
     alertForm: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: t.accent.orange + '30' },
-    alertTitle: { color: t.accent.orange, fontSize: 14, fontWeight: fonts.bold, marginBottom: 12 },
-    alertInput: { backgroundColor: t.bg.primary, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 8, color: t.text.primary, fontSize: 14, marginBottom: 10, borderWidth: 1, borderColor: t.border },
+    alertTitle: { color: t.accent.orange, fontSize: fonts.md, fontWeight: fonts.bold, marginBottom: 12 },
+    alertInput: { backgroundColor: t.bg.primary, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 8, color: t.text.primary, fontSize: fonts.md, marginBottom: 10, borderWidth: 1, borderColor: t.border },
     dirRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
     dirChip: { paddingVertical: 6, paddingHorizontal: 14, borderRadius: 8, backgroundColor: t.border },
     dirActive: { backgroundColor: t.accent.orange },
-    dirText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    dirText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     dirTextActive: { color: '#fff', fontWeight: fonts.bold },
     setAlertBtn: { backgroundColor: t.accent.orange, borderRadius: 10, paddingVertical: 10, alignItems: 'center' },
-    setAlertText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
+    setAlertText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
     cancelBtn: { paddingVertical: 10, alignItems: 'center' },
-    cancelText: { color: t.text.muted, fontSize: 14 },
-    emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', paddingVertical: 40 },
+    cancelText: { color: t.text.muted, fontSize: fonts.md },
+    emptyText: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', paddingVertical: 40 },
     demoTag: { backgroundColor: t.accent.purple + '20', borderRadius: 8, paddingVertical: 4, paddingHorizontal: 10, alignSelf: 'flex-start', marginBottom: 12 },
-    demoText: { color: t.accent.purple, fontSize: 12, fontWeight: fonts.semibold },
+    demoText: { color: t.accent.purple, fontSize: fonts.sm, fontWeight: fonts.semibold },
   }), [t]);
 
   const getTokenInfo = useCallback((symbol: string): TokenInfo | undefined => {
@@ -336,7 +336,7 @@ export const WatchlistScreen = React.memo(({ onClose }: Props) => {
         {/* Add Token Form */}
         {showAddToken && (
           <View style={s.addOverlay}>
-            <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, marginBottom: 10 }}>
+            <Text style={{ color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, marginBottom: 10 }}>
               Add Token to Watchlist
             </Text>
             <TextInput
@@ -351,7 +351,7 @@ export const WatchlistScreen = React.memo(({ onClose }: Props) => {
               {availableTokens.map((tok) => (
                 <View key={tok.symbol} style={s.addTokenRow}>
                   <View style={[s.tokenDot, { backgroundColor: tok.color + '30' }]}>
-                    <Text style={{ color: tok.color, fontSize: 12, fontWeight: fonts.heavy }}>
+                    <Text style={{ color: tok.color, fontSize: fonts.sm, fontWeight: fonts.heavy }}>
                       {tok.symbol.slice(0, 2)}
                     </Text>
                   </View>
@@ -365,7 +365,7 @@ export const WatchlistScreen = React.memo(({ onClose }: Props) => {
                 </View>
               ))}
               {availableTokens.length === 0 && (
-                <Text style={{ color: t.text.muted, fontSize: 13, textAlign: 'center', paddingVertical: 20 }}>
+                <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', paddingVertical: 20 }}>
                   {searchQuery ? 'No matching tokens' : 'All tokens are in your watchlist'}
                 </Text>
               )}
@@ -377,7 +377,7 @@ export const WatchlistScreen = React.memo(({ onClose }: Props) => {
         {alertSymbol && (
           <View style={s.alertForm}>
             <Text style={s.alertTitle}>Set Price Alert for {alertSymbol}</Text>
-            <Text style={{ color: t.text.muted, fontSize: 12, marginBottom: 8 }}>
+            <Text style={{ color: t.text.muted, fontSize: fonts.sm, marginBottom: 8 }}>
               Current: {fmtPrice(getPrice(alertSymbol))}
             </Text>
             <TextInput
@@ -425,7 +425,7 @@ export const WatchlistScreen = React.memo(({ onClose }: Props) => {
               return (
                 <View key={item.symbol} style={s.tokenRow}>
                   <View style={[s.tokenDot, { backgroundColor: color + '30' }]}>
-                    <Text style={{ color, fontSize: 12, fontWeight: fonts.heavy }}>
+                    <Text style={{ color, fontSize: fonts.sm, fontWeight: fonts.heavy }}>
                       {item.symbol.slice(0, 2)}
                     </Text>
                   </View>
@@ -443,10 +443,10 @@ export const WatchlistScreen = React.memo(({ onClose }: Props) => {
                   <View style={s.priceCol}>
                     <Text style={s.priceText}>{fmtPrice(price)}</Text>
                     <View style={s.changeRow}>
-                      <Text style={{ color: change24h >= 0 ? t.accent.green : t.accent.red, fontSize: 11, fontWeight: fonts.semibold }}>
+                      <Text style={{ color: change24h >= 0 ? t.accent.green : t.accent.red, fontSize: fonts.xs, fontWeight: fonts.semibold }}>
                         24h: {fmtChange(change24h)}
                       </Text>
-                      <Text style={{ color: change7d >= 0 ? t.accent.green : t.accent.red, fontSize: 11, fontWeight: fonts.semibold }}>
+                      <Text style={{ color: change7d >= 0 ? t.accent.green : t.accent.red, fontSize: fonts.xs, fontWeight: fonts.semibold }}>
                         7d: {fmtChange(change7d)}
                       </Text>
                     </View>
@@ -463,10 +463,10 @@ export const WatchlistScreen = React.memo(({ onClose }: Props) => {
                       </>
                     )}
                     <TouchableOpacity style={s.actionBtn} onPress={() => { setAlertSymbol(item.symbol); setAlertTarget(''); }}>
-                      <Text style={{ fontSize: 14, color: t.accent.orange }}>!</Text>
+                      <Text style={{ fontSize: fonts.md, color: t.accent.orange }}>!</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={s.actionBtn} onPress={() => removeFromWatchlist(item.symbol)}>
-                      <Text style={{ fontSize: 14, color: t.accent.red }}>x</Text>
+                      <Text style={{ fontSize: fonts.md, color: t.accent.red }}>x</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -475,7 +475,7 @@ export const WatchlistScreen = React.memo(({ onClose }: Props) => {
           </View>
         )}
 
-        <Text style={{ color: t.text.muted, fontSize: 11, textAlign: 'center', marginTop: 8, marginBottom: 32 }}>
+        <Text style={{ color: t.text.muted, fontSize: fonts.xs, textAlign: 'center', marginTop: 8, marginBottom: 32 }}>
           Prices update with market data. Alerts are checked when the app is open.
         </Text>
       </ScrollView>

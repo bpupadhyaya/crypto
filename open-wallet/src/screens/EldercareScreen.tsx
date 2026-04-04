@@ -139,64 +139,64 @@ export function EldercareScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     heroCard: { backgroundColor: t.accent.purple + '10', borderRadius: 24, padding: 24, marginHorizontal: 20, marginTop: 8, alignItems: 'center' },
     heroIcon: { fontSize: 48, marginBottom: 8 },
-    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, textAlign: 'center' },
-    heroSubtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 4, lineHeight: 20, fontStyle: 'italic' },
+    heroTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy, textAlign: 'center' },
+    heroSubtitle: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 4, lineHeight: 20, fontStyle: 'italic' },
     tabRow: { flexDirection: 'row', paddingHorizontal: 12, marginTop: 16, gap: 4 },
     tabBtn: { flex: 1, paddingVertical: 10, borderRadius: 12, alignItems: 'center', backgroundColor: t.bg.card },
     tabBtnActive: { backgroundColor: t.accent.purple },
-    tabText: { color: t.text.secondary, fontSize: 11, fontWeight: fonts.bold },
+    tabText: { color: t.text.secondary, fontSize: fonts.xs, fontWeight: fonts.bold },
     tabTextActive: { color: '#fff' },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginTop: 8 },
     scoreRow: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 8 },
     scoreItem: { alignItems: 'center' },
-    scoreValue: { color: t.text.primary, fontSize: 22, fontWeight: fonts.heavy },
-    scoreLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
+    scoreValue: { color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.heavy },
+    scoreLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
     levelCard: { backgroundColor: t.accent.purple + '18', borderRadius: 16, padding: 16, marginHorizontal: 20, marginTop: 12, flexDirection: 'row', alignItems: 'center', gap: 12 },
-    levelBadge: { fontSize: 36 },
-    levelTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.heavy },
-    levelSub: { color: t.text.muted, fontSize: 12, marginTop: 2 },
+    levelBadge: { fontSize: fonts.hero },
+    levelTitle: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.heavy },
+    levelSub: { color: t.text.muted, fontSize: fonts.sm, marginTop: 2 },
     logItem: { backgroundColor: t.bg.card, borderRadius: 14, padding: 14, marginHorizontal: 20, marginTop: 8 },
     logHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    logType: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
-    logDate: { color: t.text.muted, fontSize: 12 },
-    logDesc: { color: t.text.secondary, fontSize: 13, marginTop: 6, lineHeight: 19 },
+    logType: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    logDate: { color: t.text.muted, fontSize: fonts.sm },
+    logDesc: { color: t.text.secondary, fontSize: fonts.sm, marginTop: 6, lineHeight: 19 },
     logFooter: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 },
-    logHours: { color: t.accent.blue, fontSize: 12, fontWeight: fonts.semibold },
-    logOTK: { color: t.accent.green, fontSize: 12, fontWeight: fonts.bold },
+    logHours: { color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    logOTK: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold },
     recipientCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginHorizontal: 20, marginTop: 8 },
-    recipientName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
-    recipientRel: { color: t.text.muted, fontSize: 12, marginTop: 2 },
+    recipientName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    recipientRel: { color: t.text.muted, fontSize: fonts.sm, marginTop: 2 },
     recipientStats: { flexDirection: 'row', gap: 16, marginTop: 8 },
-    recipientStat: { color: t.text.secondary, fontSize: 12 },
+    recipientStat: { color: t.text.secondary, fontSize: fonts.sm },
     milestoneCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginHorizontal: 20, marginTop: 8 },
     milestoneRow: { flexDirection: 'row', gap: 12, alignItems: 'center' },
-    milestoneBadge: { fontSize: 28 },
-    milestoneTitle: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
-    milestoneDesc: { color: t.text.muted, fontSize: 12, marginTop: 2, lineHeight: 17 },
+    milestoneBadge: { fontSize: fonts.xxxl },
+    milestoneTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    milestoneDesc: { color: t.text.muted, fontSize: fonts.sm, marginTop: 2, lineHeight: 17 },
     progressBar: { height: 6, backgroundColor: t.border, borderRadius: 3, marginTop: 10, overflow: 'hidden' },
     progressFill: { height: 6, backgroundColor: t.accent.green, borderRadius: 3 },
-    milestoneReward: { color: t.accent.purple, fontSize: 12, fontWeight: fonts.bold, marginTop: 6 },
+    milestoneReward: { color: t.accent.purple, fontSize: fonts.sm, fontWeight: fonts.bold, marginTop: 6 },
     communityStatRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8 },
-    communityLabel: { color: t.text.secondary, fontSize: 13 },
-    communityValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.bold },
+    communityLabel: { color: t.text.secondary, fontSize: fonts.sm },
+    communityValue: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.bold },
     inputCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginTop: 12 },
-    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 },
-    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15 },
-    descInput: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, minHeight: 80, textAlignVertical: 'top' },
+    inputLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 },
+    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md },
+    descInput: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md, minHeight: 80, textAlignVertical: 'top' },
     careTypeRow: { flexDirection: 'row', gap: 8, flexWrap: 'wrap', marginBottom: 12 },
     careChip: { paddingVertical: 8, paddingHorizontal: 12, borderRadius: 12, backgroundColor: t.bg.card, alignItems: 'center', minWidth: 70 },
     careChipActive: { backgroundColor: t.accent.purple },
-    careChipIcon: { fontSize: 20, marginBottom: 2 },
-    careChipLabel: { color: t.text.secondary, fontSize: 10, fontWeight: fonts.semibold },
+    careChipIcon: { fontSize: fonts.xl, marginBottom: 2 },
+    careChipLabel: { color: t.text.secondary, fontSize: fonts.xs, fontWeight: fonts.semibold },
     careChipLabelActive: { color: '#fff' },
     logBtn: { backgroundColor: t.accent.purple, borderRadius: 16, paddingVertical: 16, alignItems: 'center', marginHorizontal: 20, marginTop: 20, marginBottom: 30 },
-    logBtnText: { color: '#fff', fontSize: 17, fontWeight: fonts.bold },
-    achievedBadge: { color: t.accent.green, fontSize: 12, fontWeight: fonts.bold, marginTop: 4 },
+    logBtnText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.bold },
+    achievedBadge: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold, marginTop: 4 },
   }), [t]);
 
   const TABS: { key: TabKey; label: string }[] = [
@@ -268,10 +268,10 @@ export function EldercareScreen({ onClose }: Props) {
             <Text style={s.section}>CAREGIVER LEVELS</Text>
             {CARE_LEVELS.map(cl => (
               <View key={cl.label} style={[s.card, { flexDirection: 'row', gap: 12, alignItems: 'center' }]}>
-                <Text style={{ fontSize: 24 }}>{cl.badge}</Text>
+                <Text style={{ fontSize: fonts.xxl }}>{cl.badge}</Text>
                 <View>
-                  <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: fonts.bold }}>{cl.label}</Text>
-                  <Text style={{ color: t.text.muted, fontSize: 12 }}>
+                  <Text style={{ color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold }}>{cl.label}</Text>
+                  <Text style={{ color: t.text.muted, fontSize: fonts.sm }}>
                     {cl.minHours === 0 ? '0-50 hours' :
                      cl.minHours === 51 ? '51-200 hours' :
                      cl.minHours === 201 ? '201-500 hours' :
@@ -322,7 +322,7 @@ export function EldercareScreen({ onClose }: Props) {
                   </TouchableOpacity>
                 ))}
               </View>
-              <Text style={{ color: t.text.muted, fontSize: 12, marginBottom: 16 }}>
+              <Text style={{ color: t.text.muted, fontSize: fonts.sm, marginBottom: 16 }}>
                 {CARE_TYPES.find(c => c.key === logCareType)?.desc}
               </Text>
 

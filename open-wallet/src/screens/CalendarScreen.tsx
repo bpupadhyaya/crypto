@@ -303,12 +303,12 @@ export function CalendarScreen({ onClose }: Props) {
       paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1,
       borderBottomColor: t.border,
     },
-    title: { fontSize: 20, fontWeight: fonts.bold, color: t.text.primary },
+    title: { fontSize: fonts.xl, fontWeight: fonts.bold, color: t.text.primary },
     closeBtn: {
       paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8,
       backgroundColor: t.bg.card,
     },
-    closeTxt: { color: t.text.secondary, fontSize: 14, fontWeight: fonts.semibold },
+    closeTxt: { color: t.text.secondary, fontSize: fonts.md, fontWeight: fonts.semibold },
 
     tabs: {
       flexDirection: 'row', paddingHorizontal: 12, paddingVertical: 8, gap: 8,
@@ -318,7 +318,7 @@ export function CalendarScreen({ onClose }: Props) {
       backgroundColor: t.bg.card,
     },
     tabActive: { backgroundColor: t.accent.green },
-    tabTxt: { fontSize: 13, fontWeight: fonts.semibold, color: t.text.secondary },
+    tabTxt: { fontSize: fonts.sm, fontWeight: fonts.semibold, color: t.text.secondary },
     tabTxtActive: { color: '#fff' },
 
     filterRow: {
@@ -330,7 +330,7 @@ export function CalendarScreen({ onClose }: Props) {
       paddingVertical: 4, borderRadius: 12, borderWidth: 1, borderColor: t.border,
     },
     filterChipActive: { borderWidth: 2 },
-    filterChipTxt: { fontSize: 11, color: t.text.secondary, marginLeft: 4 },
+    filterChipTxt: { fontSize: fonts.xs, color: t.text.secondary, marginLeft: 4 },
 
     statsRow: {
       flexDirection: 'row', paddingHorizontal: 16, paddingVertical: 10, gap: 12,
@@ -339,24 +339,24 @@ export function CalendarScreen({ onClose }: Props) {
       flex: 1, padding: 10, borderRadius: 10, backgroundColor: t.bg.card,
       alignItems: 'center',
     },
-    statVal: { fontSize: 18, fontWeight: fonts.bold, color: t.accent.green },
-    statLabel: { fontSize: 11, color: t.text.secondary, marginTop: 2 },
+    statVal: { fontSize: fonts.xl, fontWeight: fonts.bold, color: t.accent.green },
+    statLabel: { fontSize: fonts.xs, color: t.text.secondary, marginTop: 2 },
 
     scroll: { flex: 1 },
     dateHeader: {
       paddingHorizontal: 16, paddingTop: 14, paddingBottom: 6,
     },
-    dateTxt: { fontSize: 14, fontWeight: fonts.bold, color: t.text.secondary },
+    dateTxt: { fontSize: fonts.md, fontWeight: fonts.bold, color: t.text.secondary },
 
     card: {
       marginHorizontal: 16, marginBottom: 8, padding: 14, borderRadius: 12,
       backgroundColor: t.bg.card, borderLeftWidth: 4,
     },
     cardRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 4 },
-    cardIcon: { fontSize: 18, marginRight: 8 },
-    cardTitle: { fontSize: 15, fontWeight: fonts.semibold, color: t.text.primary, flex: 1 },
-    cardTime: { fontSize: 12, color: t.text.secondary },
-    cardLoc: { fontSize: 12, color: t.text.secondary, marginTop: 2 },
+    cardIcon: { fontSize: fonts.xl, marginRight: 8 },
+    cardTitle: { fontSize: fonts.md, fontWeight: fonts.semibold, color: t.text.primary, flex: 1 },
+    cardTime: { fontSize: fonts.sm, color: t.text.secondary },
+    cardLoc: { fontSize: fonts.sm, color: t.text.secondary, marginTop: 2 },
     cardBottom: {
       flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
       marginTop: 8,
@@ -364,17 +364,17 @@ export function CalendarScreen({ onClose }: Props) {
     rsvpBadge: {
       paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8,
     },
-    rsvpTxt: { fontSize: 11, fontWeight: fonts.semibold },
-    rsvpCount: { fontSize: 11, color: t.text.secondary },
+    rsvpTxt: { fontSize: fonts.xs, fontWeight: fonts.semibold },
+    rsvpCount: { fontSize: fonts.xs, color: t.text.secondary },
     personalBadge: {
       flexDirection: 'row', alignItems: 'center', backgroundColor: t.bg.primary,
       paddingHorizontal: 8, paddingVertical: 2, borderRadius: 6,
     },
-    personalTxt: { fontSize: 10, color: t.text.secondary, marginLeft: 4 },
+    personalTxt: { fontSize: fonts.xs, color: t.text.secondary, marginLeft: 4 },
 
     empty: { alignItems: 'center', paddingTop: 60 },
     emptyIcon: { fontSize: 48, marginBottom: 12 },
-    emptyTxt: { fontSize: 15, color: t.text.secondary },
+    emptyTxt: { fontSize: fonts.md, color: t.text.secondary },
 
     // Detail modal
     modalOverlay: {
@@ -384,22 +384,22 @@ export function CalendarScreen({ onClose }: Props) {
     modalCard: {
       backgroundColor: t.bg.primary, borderRadius: 16, padding: 20, borderLeftWidth: 5,
     },
-    modalTitle: { fontSize: 18, fontWeight: fonts.bold, color: t.text.primary, marginBottom: 4 },
-    modalCat: { fontSize: 13, color: t.text.secondary, marginBottom: 12 },
-    modalDesc: { fontSize: 14, color: t.text.primary, lineHeight: 20, marginBottom: 12 },
-    modalInfo: { fontSize: 13, color: t.text.secondary, marginBottom: 4 },
+    modalTitle: { fontSize: fonts.xl, fontWeight: fonts.bold, color: t.text.primary, marginBottom: 4 },
+    modalCat: { fontSize: fonts.sm, color: t.text.secondary, marginBottom: 12 },
+    modalDesc: { fontSize: fonts.md, color: t.text.primary, lineHeight: 20, marginBottom: 12 },
+    modalInfo: { fontSize: fonts.sm, color: t.text.secondary, marginBottom: 4 },
     modalActions: { flexDirection: 'row', gap: 10, marginTop: 14 },
     modalBtn: {
       flex: 1, paddingVertical: 10, borderRadius: 10, alignItems: 'center',
     },
-    modalBtnTxt: { fontWeight: fonts.semibold, fontSize: 14 },
+    modalBtnTxt: { fontWeight: fonts.semibold, fontSize: fonts.md },
 
     // Add event form
     formSection: { paddingHorizontal: 16, paddingTop: 12 },
-    formLabel: { fontSize: 13, fontWeight: fonts.semibold, color: t.text.secondary, marginBottom: 4, marginTop: 12 },
+    formLabel: { fontSize: fonts.sm, fontWeight: fonts.semibold, color: t.text.secondary, marginBottom: 4, marginTop: 12 },
     formInput: {
       borderWidth: 1, borderColor: t.border, borderRadius: 10, padding: 10,
-      fontSize: 14, color: t.text.primary, backgroundColor: t.bg.card,
+      fontSize: fonts.md, color: t.text.primary, backgroundColor: t.bg.card,
     },
     formTextArea: { minHeight: 80, textAlignVertical: 'top' },
     catPicker: {
@@ -410,17 +410,17 @@ export function CalendarScreen({ onClose }: Props) {
       borderWidth: 1, borderColor: t.border,
     },
     catOptionActive: { borderWidth: 2 },
-    catOptionTxt: { fontSize: 12, fontWeight: fonts.semibold },
+    catOptionTxt: { fontSize: fonts.sm, fontWeight: fonts.semibold },
     addBtn: {
       marginTop: 20, marginBottom: 40, paddingVertical: 14, borderRadius: 12,
       backgroundColor: t.accent.green, alignItems: 'center',
     },
-    addBtnTxt: { color: '#fff', fontWeight: fonts.bold, fontSize: 15 },
+    addBtnTxt: { color: '#fff', fontWeight: fonts.bold, fontSize: fonts.md },
 
     demoBar: {
       backgroundColor: '#fef3c7', paddingVertical: 6, alignItems: 'center',
     },
-    demoTxt: { fontSize: 11, color: '#92400e', fontWeight: fonts.semibold },
+    demoTxt: { fontSize: fonts.xs, color: '#92400e', fontWeight: fonts.semibold },
   }), [t]);
 
   // --- Render helpers ---
@@ -473,7 +473,7 @@ export function CalendarScreen({ onClose }: Props) {
               ]}
               onPress={() => setFilterCategory(active ? null : cat)}
             >
-              <Text style={{ fontSize: 12 }}>{CATEGORY_ICONS[cat]}</Text>
+              <Text style={{ fontSize: fonts.sm }}>{CATEGORY_ICONS[cat]}</Text>
               <Text style={[styles.filterChipTxt, active && { color: CATEGORY_COLORS[cat], fontWeight: fonts.bold }]}>
                 {cat.charAt(0).toUpperCase() + cat.slice(1)}
               </Text>
@@ -520,7 +520,7 @@ export function CalendarScreen({ onClose }: Props) {
         <View style={styles.cardBottom}>
           {ev.isPersonal ? (
             <View style={styles.personalBadge}>
-              <Text style={{ fontSize: 10 }}>{CATEGORY_ICONS.personal}</Text>
+              <Text style={{ fontSize: fonts.xs }}>{CATEGORY_ICONS.personal}</Text>
               <Text style={styles.personalTxt}>Personal</Text>
             </View>
           ) : (
@@ -568,7 +568,7 @@ export function CalendarScreen({ onClose }: Props) {
       <ScrollView style={styles.scroll}>
         <View style={styles.formSection}>
           <Text style={[styles.title, { marginBottom: 4 }]}>Add Event</Text>
-          <Text style={{ fontSize: 13, color: t.text.secondary }}>
+          <Text style={{ fontSize: fonts.sm, color: t.text.secondary }}>
             Create a personal or community event
           </Text>
 

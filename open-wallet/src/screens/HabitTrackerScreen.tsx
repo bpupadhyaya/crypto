@@ -86,37 +86,37 @@ export function HabitTrackerScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { flex: 1, paddingHorizontal: 16 },
-    subtitle: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 16 },
+    subtitle: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 19, marginBottom: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
-    label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
-    empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
+    label: { color: t.text.muted, fontSize: fonts.sm },
+    val: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    empty: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', marginTop: 40 },
     summaryRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
     summaryCard: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' },
-    summaryNum: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 2 },
-    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold, textAlign: 'center' },
-    habitName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
-    habitMeta: { color: t.text.muted, fontSize: 11, marginTop: 2 },
+    summaryNum: { fontSize: fonts.xl, fontWeight: fonts.heavy, marginBottom: 2 },
+    summaryLabel: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold, textAlign: 'center' },
+    habitName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    habitMeta: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
     checkBox: { width: 28, height: 28, borderRadius: 14, borderWidth: 2, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
-    checkMark: { color: '#fff', fontSize: 14, fontWeight: fonts.heavy },
-    streakNum: { fontSize: 22, fontWeight: fonts.heavy },
-    streakLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold },
+    checkMark: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.heavy },
+    streakNum: { fontSize: fonts.xxl, fontWeight: fonts.heavy },
+    streakLabel: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold },
     streakContainer: { alignItems: 'center', marginRight: 16 },
     barContainer: { height: 6, backgroundColor: t.border, borderRadius: 3, marginTop: 6, overflow: 'hidden' },
     barFill: { height: 6, borderRadius: 3 },
-    templateDesc: { color: t.text.muted, fontSize: 12, lineHeight: 17, marginTop: 6 },
+    templateDesc: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 17, marginTop: 6 },
     rewardBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, backgroundColor: t.accent.green + '20' },
-    rewardText: { color: t.accent.green, fontSize: 11, fontWeight: fonts.bold },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginBottom: 8, marginTop: 8 },
+    rewardText: { color: t.accent.green, fontSize: fonts.xs, fontWeight: fonts.bold },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginBottom: 8, marginTop: 8 },
     categoryDot: { width: 10, height: 10, borderRadius: 5, marginRight: 8 },
   }), [t]);
 
@@ -226,7 +226,7 @@ export function HabitTrackerScreen({ onClose }: Props) {
                 <View key={i} style={st.card}>
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <View style={[st.categoryDot, { backgroundColor: color }]} />
-                    <Text style={{ fontSize: 18, marginRight: 8 }}>{tmpl.icon}</Text>
+                    <Text style={{ fontSize: fonts.xl, marginRight: 8 }}>{tmpl.icon}</Text>
                     <View style={{ flex: 1 }}>
                       <Text style={st.habitName}>{tmpl.name}</Text>
                       <Text style={st.habitMeta}>{tmpl.frequency} | +{tmpl.otkReward} hOTK</Text>
@@ -241,7 +241,7 @@ export function HabitTrackerScreen({ onClose }: Props) {
 
         {!demoMode && (
           <View style={[st.card, { marginTop: 20 }]}>
-            <Text style={{ color: t.text.muted, fontSize: 13, textAlign: 'center' }}>
+            <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center' }}>
               Enable Demo Mode in Settings to see sample habit data.
             </Text>
           </View>

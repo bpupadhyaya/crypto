@@ -85,13 +85,13 @@ export function OnboardingScreen() {
     },
     title: {
       color: t.text.primary,
-      fontSize: 32,
+      fontSize: fonts.hero,
       fontWeight: fonts.heavy,
       textAlign: 'center',
     },
     subtitle: {
       color: t.text.secondary,
-      fontSize: 16,
+      fontSize: fonts.lg,
       textAlign: 'center',
       marginTop: 12,
       lineHeight: 24,
@@ -117,7 +117,7 @@ export function OnboardingScreen() {
     },
     primaryButtonText: {
       color: t.bg.primary,
-      fontSize: 17,
+      fontSize: fonts.lg,
       fontWeight: fonts.bold,
     },
     secondaryButton: {
@@ -130,24 +130,24 @@ export function OnboardingScreen() {
     },
     secondaryButtonText: {
       color: t.text.secondary,
-      fontSize: 17,
+      fontSize: fonts.lg,
       fontWeight: fonts.semibold,
     },
     footer: {
       color: t.text.muted,
-      fontSize: 12,
+      fontSize: fonts.sm,
       textAlign: 'center',
       marginTop: 32,
     },
     stepTitle: {
       color: t.text.primary,
-      fontSize: 24,
+      fontSize: fonts.xxl,
       fontWeight: fonts.heavy,
       marginBottom: 12,
     },
     stepDesc: {
       color: t.text.secondary,
-      fontSize: 15,
+      fontSize: fonts.md,
       lineHeight: 22,
       marginBottom: 24,
     },
@@ -168,13 +168,13 @@ export function OnboardingScreen() {
     },
     wordNumber: {
       color: t.text.muted,
-      fontSize: 12,
+      fontSize: fonts.sm,
       marginRight: 6,
       width: 20,
     },
     wordText: {
       color: t.text.primary,
-      fontSize: 14,
+      fontSize: fonts.md,
       fontWeight: fonts.medium,
     },
     textArea: {
@@ -182,7 +182,7 @@ export function OnboardingScreen() {
       borderRadius: 16,
       padding: 16,
       color: t.text.primary,
-      fontSize: 16,
+      fontSize: fonts.lg,
       minHeight: 120,
       textAlignVertical: 'top',
       marginBottom: 8,
@@ -192,7 +192,7 @@ export function OnboardingScreen() {
       borderRadius: 16,
       padding: 16,
       color: t.text.primary,
-      fontSize: 16,
+      fontSize: fonts.lg,
       marginBottom: 12,
     },
     // Shuffle verification styles
@@ -216,7 +216,7 @@ export function OnboardingScreen() {
     },
     selectedWordText: {
       color: t.accent.green,
-      fontSize: 13,
+      fontSize: fonts.sm,
       fontWeight: fonts.semibold,
     },
     wordPool: {
@@ -236,7 +236,7 @@ export function OnboardingScreen() {
     },
     poolWordText: {
       color: t.text.primary,
-      fontSize: 13,
+      fontSize: fonts.sm,
       fontWeight: fonts.medium,
     },
     checkboxRow: {
@@ -262,12 +262,12 @@ export function OnboardingScreen() {
     },
     checkboxMark: {
       color: '#fff',
-      fontSize: 14,
+      fontSize: fonts.md,
       fontWeight: fonts.heavy,
     },
     checkboxLabel: {
       color: t.text.secondary,
-      fontSize: 14,
+      fontSize: fonts.md,
       flex: 1,
       lineHeight: 20,
     },
@@ -281,7 +281,7 @@ export function OnboardingScreen() {
     },
     warningText: {
       color: t.accent.yellow,
-      fontSize: 13,
+      fontSize: fonts.sm,
       lineHeight: 20,
       fontWeight: fonts.medium,
     },
@@ -293,7 +293,7 @@ export function OnboardingScreen() {
     },
     spotCheckLabel: {
       color: t.text.secondary,
-      fontSize: 13,
+      fontSize: fonts.sm,
       fontWeight: fonts.bold,
       marginBottom: 8,
     },
@@ -302,11 +302,11 @@ export function OnboardingScreen() {
       borderRadius: 10,
       padding: 12,
       color: t.text.primary,
-      fontSize: 16,
+      fontSize: fonts.lg,
     },
     progressText: {
       color: t.text.muted,
-      fontSize: 12,
+      fontSize: fonts.sm,
       textAlign: 'center',
       marginBottom: 8,
     },
@@ -663,9 +663,9 @@ export function OnboardingScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight ?? 0) + 8 : 8, paddingBottom: 30 }}>
-          <Text style={[styles.logo, { fontSize: 28, marginBottom: 0 }]}>OW</Text>
-          <Text style={[styles.title, { fontSize: 20 }]}>Open Wallet</Text>
-          <Text style={[styles.subtitle, { fontSize: 12, marginTop: 4, lineHeight: 18 }]}>
+          <Text style={[styles.logo, { fontSize: fonts.xxxl, marginBottom: 0 }]}>OW</Text>
+          <Text style={[styles.title, { fontSize: fonts.xl }]}>Open Wallet</Text>
+          <Text style={[styles.subtitle, { fontSize: fonts.sm, marginTop: 4, lineHeight: 18 }]}>
             Your money. Your control.{'\n'}
             Every token. Every chain. One app.
           </Text>
@@ -674,24 +674,24 @@ export function OnboardingScreen() {
             backgroundColor: t.bg.card, borderRadius: 12, padding: 12, marginBottom: 12,
             borderWidth: 1, borderColor: t.accent.green,
           }}>
-            <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 6 }}>
+            <Text style={{ color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 6 }}>
               Biometric Quick Unlock
             </Text>
             <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
               <View style={{ alignItems: 'center' }}>
-                <Text style={{ fontSize: 20 }}>🔏</Text>
-                <Text style={{ color: t.text.secondary, fontSize: 10, marginTop: 2 }}>Fingerprint</Text>
+                <Text style={{ fontSize: fonts.xl }}>🔏</Text>
+                <Text style={{ color: t.text.secondary, fontSize: fonts.xs, marginTop: 2 }}>Fingerprint</Text>
               </View>
               <View style={{ alignItems: 'center' }}>
-                <Text style={{ fontSize: 20 }}>🔓</Text>
-                <Text style={{ color: t.text.secondary, fontSize: 10, marginTop: 2 }}>Face</Text>
+                <Text style={{ fontSize: fonts.xl }}>🔓</Text>
+                <Text style={{ color: t.text.secondary, fontSize: fonts.xs, marginTop: 2 }}>Face</Text>
               </View>
               <View style={{ alignItems: 'center' }}>
-                <Text style={{ fontSize: 20 }}>👁</Text>
-                <Text style={{ color: t.text.secondary, fontSize: 10, marginTop: 2 }}>Iris</Text>
+                <Text style={{ fontSize: fonts.xl }}>👁</Text>
+                <Text style={{ color: t.text.secondary, fontSize: fonts.xs, marginTop: 2 }}>Iris</Text>
               </View>
             </View>
-            <Text style={{ color: t.text.muted, fontSize: 10, textAlign: 'center', marginTop: 6 }}>
+            <Text style={{ color: t.text.muted, fontSize: fonts.xs, textAlign: 'center', marginTop: 6 }}>
               Set up any biometric in device Settings for quick unlock after wallet creation
             </Text>
           </View>
@@ -720,7 +720,7 @@ export function OnboardingScreen() {
 
           {/* ─── Hardware Wallets (always visible) ─── */}
           <Text style={{
-            color: t.text.secondary, fontSize: 11, fontWeight: fonts.bold,
+            color: t.text.secondary, fontSize: fonts.xs, fontWeight: fonts.bold,
             textTransform: 'uppercase', letterSpacing: 1.2,
             marginTop: 16, marginBottom: 8, textAlign: 'center',
           }}>
@@ -734,8 +734,8 @@ export function OnboardingScreen() {
               onPress={() => handleHardwareWallet('seed-vault')}
               disabled={loading}
             >
-              <Text style={[styles.primaryButtonText, { fontSize: 14 }]}>Solana Seeker / Saga Seed Vault</Text>
-              <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 10, marginTop: 1 }}>Built-in secure element — keys never leave hardware</Text>
+              <Text style={[styles.primaryButtonText, { fontSize: fonts.md }]}>Solana Seeker / Saga Seed Vault</Text>
+              <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: fonts.xs, marginTop: 1 }}>Built-in secure element — keys never leave hardware</Text>
             </TouchableOpacity>
           )}
 
@@ -747,7 +747,7 @@ export function OnboardingScreen() {
           >
             <View>
               <Text style={styles.secondaryButtonText}>Ledger</Text>
-              <Text style={{ color: t.text.muted, fontSize: 11 }}>Nano S Plus / Nano X / Stax — via Bluetooth</Text>
+              <Text style={{ color: t.text.muted, fontSize: fonts.xs }}>Nano S Plus / Nano X / Stax — via Bluetooth</Text>
             </View>
           </TouchableOpacity>
 
@@ -759,7 +759,7 @@ export function OnboardingScreen() {
           >
             <View>
               <Text style={styles.secondaryButtonText}>Trezor</Text>
-              <Text style={{ color: t.text.muted, fontSize: 11 }}>Model T / Model One / Safe 3 — via USB-C</Text>
+              <Text style={{ color: t.text.muted, fontSize: fonts.xs }}>Model T / Model One / Safe 3 — via USB-C</Text>
             </View>
           </TouchableOpacity>
 
@@ -771,7 +771,7 @@ export function OnboardingScreen() {
           >
             <View>
               <Text style={styles.secondaryButtonText}>Keystone</Text>
-              <Text style={{ color: t.text.muted, fontSize: 11 }}>Air-gapped — via QR code scan</Text>
+              <Text style={{ color: t.text.muted, fontSize: fonts.xs }}>Air-gapped — via QR code scan</Text>
             </View>
           </TouchableOpacity>
 
@@ -783,8 +783,8 @@ export function OnboardingScreen() {
               disabled={loading}
             >
               <View>
-                <Text style={[styles.secondaryButtonText, { fontSize: 14 }]}>Solana Seeker / Saga</Text>
-                <Text style={{ color: t.text.muted, fontSize: 10 }}>Built-in Seed Vault — for Solana phones only</Text>
+                <Text style={[styles.secondaryButtonText, { fontSize: fonts.md }]}>Solana Seeker / Saga</Text>
+                <Text style={{ color: t.text.muted, fontSize: fonts.xs }}>Built-in Seed Vault — for Solana phones only</Text>
               </View>
             </TouchableOpacity>
           )}
@@ -795,15 +795,15 @@ export function OnboardingScreen() {
               onPress={handleDevQuickstart}
               disabled={loading}
             >
-              <Text style={[styles.secondaryButtonText, { color: '#f59e0b', fontSize: 13 }]}>⚡ Dev Quickstart</Text>
-              <Text style={{ color: '#f59e0b88', fontSize: 10, marginTop: 2 }}>test seed · devpassword123 · PIN 123456</Text>
+              <Text style={[styles.secondaryButtonText, { color: '#f59e0b', fontSize: fonts.sm }]}>⚡ Dev Quickstart</Text>
+              <Text style={{ color: '#f59e0b88', fontSize: fonts.xs, marginTop: 2 }}>test seed · devpassword123 · PIN 123456</Text>
             </TouchableOpacity>
           )}
 
-          <Text style={[styles.footer, { marginTop: 12, fontSize: 11 }]}>
+          <Text style={[styles.footer, { marginTop: 12, fontSize: fonts.xs }]}>
             Hardware wallets keep your keys offline.
           </Text>
-          <Text style={[styles.footer, { fontSize: 10, marginTop: 4 }]}>
+          <Text style={[styles.footer, { fontSize: fonts.xs, marginTop: 4 }]}>
             100% Open Source · Post-Quantum Encrypted
           </Text>
         </ScrollView>
@@ -899,7 +899,7 @@ export function OnboardingScreen() {
           {/* Selected words area */}
           <View style={styles.shuffleArea}>
             {selectedWords.length === 0 ? (
-              <Text style={{ color: t.text.muted, fontSize: 14 }}>Tap words below to add them in order...</Text>
+              <Text style={{ color: t.text.muted, fontSize: fonts.md }}>Tap words below to add them in order...</Text>
             ) : (
               selectedWords.map((word, i) => (
                 <TouchableOpacity

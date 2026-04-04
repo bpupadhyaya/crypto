@@ -392,33 +392,33 @@ export function SettingsScreen() {
     container: { flex: 1, backgroundColor: t.bg.primary },
     scroll: { paddingHorizontal: 16, paddingTop: 8 },
     headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 4, paddingTop: 12, paddingBottom: 8 },
-    headerTitle: { color: t.text.primary, fontSize: 24, fontWeight: fonts.heavy },
+    headerTitle: { color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.heavy },
     signOutBtn: { paddingVertical: 6, paddingHorizontal: 12 },
-    signOutText: { color: t.accent.red, fontSize: 14, fontWeight: fonts.semibold },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 8, marginLeft: 4 },
+    signOutText: { color: t.accent.red, fontSize: fonts.md, fontWeight: fonts.semibold },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 8, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 4 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 },
-    label: { color: t.text.primary, fontSize: 15 },
-    value: { color: t.text.secondary, fontSize: 14 },
-    valueGreen: { color: t.accent.green, fontSize: 13, fontWeight: fonts.semibold },
-    valueYellow: { color: t.accent.yellow, fontSize: 13, fontWeight: fonts.semibold },
+    label: { color: t.text.primary, fontSize: fonts.md },
+    value: { color: t.text.secondary, fontSize: fonts.md },
+    valueGreen: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    valueYellow: { color: t.accent.yellow, fontSize: fonts.sm, fontWeight: fonts.semibold },
     divider: { height: 1, backgroundColor: t.border, marginHorizontal: 16 },
     modeToggle: { flexDirection: 'row', gap: 4 },
     modeBtn: { paddingVertical: 6, paddingHorizontal: 16, borderRadius: 8, backgroundColor: t.border },
     modeBtnActive: { backgroundColor: t.accent.green },
     networkTestnet: { backgroundColor: t.accent.yellow },
     networkMainnet: { backgroundColor: t.accent.red },
-    modeBtnText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    modeBtnText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     modeBtnTextActive: { color: t.bg.primary },
     currencyRow: { flexDirection: 'row', gap: 4 },
     currencyChip: { paddingVertical: 4, paddingHorizontal: 10, borderRadius: 8, backgroundColor: t.border },
     currencyActive: { backgroundColor: t.accent.green },
-    currencyText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    currencyText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     currencyTextActive: { color: t.bg.primary },
     showMoreBtn: { paddingVertical: 10, paddingHorizontal: 16 },
-    showMoreText: { color: t.accent.blue, fontSize: 14, fontWeight: fonts.semibold },
+    showMoreText: { color: t.accent.blue, fontSize: fonts.md, fontWeight: fonts.semibold },
     backBtn: { paddingVertical: 20, alignItems: 'center' },
-    backText: { color: t.accent.blue, fontSize: 16 },
+    backText: { color: t.accent.blue, fontSize: fonts.lg },
     // Grid styles
     gridContainer: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, paddingHorizontal: 16, paddingTop: 12 },
     tile: {
@@ -430,13 +430,13 @@ export function SettingsScreen() {
       minHeight: 100,
       width: '47%' as unknown as number,
     },
-    tileIcon: { fontSize: 32, marginBottom: 8 },
-    tileLabel: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, textAlign: 'center' as const },
-    tileBadge: { color: t.text.muted, fontSize: 12, marginTop: 4 },
+    tileIcon: { fontSize: fonts.hero, marginBottom: 8 },
+    tileLabel: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, textAlign: 'center' as const },
+    tileBadge: { color: t.text.muted, fontSize: fonts.sm, marginTop: 4 },
     categoryHeader: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 4, paddingTop: 12, paddingBottom: 8, gap: 12 },
     categoryBackBtn: { paddingVertical: 4, paddingHorizontal: 8 },
-    categoryBackText: { color: t.accent.blue, fontSize: 22 },
-    categoryTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
+    categoryBackText: { color: t.accent.blue, fontSize: fonts.xxl },
+    categoryTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
   }), [t]);
 
   useEffect(() => {
@@ -963,7 +963,7 @@ export function SettingsScreen() {
             ) : (
               <TouchableOpacity style={st.row} onPress={item.onPress}>
                 <Text style={st.label}>{item.label}</Text>
-                <Text style={{ color: item.rightColor || t.text.secondary, fontSize: 14, fontWeight: item.rightColor ? '600' : '400' }}>
+                <Text style={{ color: item.rightColor || t.text.secondary, fontSize: fonts.md, fontWeight: item.rightColor ? '600' : '400' }}>
                   {item.rightText || '>'}
                 </Text>
               </TouchableOpacity>
@@ -2889,25 +2889,25 @@ export function SettingsScreen() {
               <Text style={st.categoryTitle}>Support the Mission</Text>
             </View>
             <View style={[st.card, { padding: 20, marginTop: 12 }]}>
-              <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, marginBottom: 8 }}>
+              <Text style={{ color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, marginBottom: 8 }}>
                 Help build financial infrastructure for all of humanity
               </Text>
-              <Text style={{ color: t.text.muted, fontSize: 13, lineHeight: 20, marginBottom: 16 }}>
+              <Text style={{ color: t.text.muted, fontSize: fonts.sm, lineHeight: 20, marginBottom: 16 }}>
                 Open Wallet, Open Chain, and Open Token are 100% open source with no VC funding, no pre-mine, and no founder allocation. Every line of code is a gift to humanity. Your donation keeps development going — toward a world where every parent's sacrifice is valued, every teacher's impact is visible, and every human has equal access to the global economy.
               </Text>
               <TouchableOpacity
                 style={{ backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 10 }}
                 onPress={() => Linking.openURL('https://github.com/sponsors/bpupadhyaya')}
               >
-                <Text style={{ color: '#fff', fontSize: 15, fontWeight: fonts.bold }}>Sponsor on GitHub</Text>
+                <Text style={{ color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold }}>Sponsor on GitHub</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={{ backgroundColor: t.accent.blue, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 10 }}
                 onPress={() => Linking.openURL('https://bpupadhyaya.github.io/support-openwallet.html')}
               >
-                <Text style={{ color: '#fff', fontSize: 15, fontWeight: fonts.bold }}>Donation Options</Text>
+                <Text style={{ color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold }}>Donation Options</Text>
               </TouchableOpacity>
-              <Text style={{ color: t.text.muted, fontSize: 11, textAlign: 'center', lineHeight: 16 }}>
+              <Text style={{ color: t.text.muted, fontSize: fonts.xs, textAlign: 'center', lineHeight: 16 }}>
                 No features are locked behind donations. Your support is entirely voluntary and goes directly toward building tools that serve humanity.
               </Text>
             </View>
@@ -2931,7 +2931,7 @@ export function SettingsScreen() {
             <View style={[st.card, { marginTop: 12 }]}>
               <TouchableOpacity style={st.row} onPress={() => setView('dev-tools')}>
                 <Text style={st.label}>Dev Tools</Text>
-                <Text style={{ color: t.accent.purple, fontSize: 14 }}>Debug</Text>
+                <Text style={{ color: t.accent.purple, fontSize: fonts.md }}>Debug</Text>
               </TouchableOpacity>
             </View>
             <View style={{ height: 40 }} />

@@ -63,8 +63,8 @@ export const PieChart = React.memo(({ slices, size = 160, centerLabel, centerVal
       </Svg>
       {/* Center text */}
       <View style={s.centerText}>
-        {centerLabel && <Text style={s.centerLabel}>{centerLabel}</Text>}
-        {centerValue && <Text style={s.centerValue}>{centerValue}</Text>}
+        {centerLabel && <Text style={{ color: '#a0a0b0', fontSize: fonts.xs }}>{centerLabel}</Text>}
+        {centerValue && <Text style={{ color: '#f0f0f5', fontSize: fonts.xl, fontWeight: fonts.heavy as any, marginTop: 2 }}>{centerValue}</Text>}
       </View>
     </View>
   );
@@ -73,6 +73,6 @@ export const PieChart = React.memo(({ slices, size = 160, centerLabel, centerVal
 const s = StyleSheet.create({
   container: { alignItems: 'center', justifyContent: 'center' },
   centerText: { position: 'absolute', alignItems: 'center' },
-  centerLabel: { color: '#a0a0b0', fontSize: 11 },
-  centerValue: { color: '#f0f0f5', fontSize: 20, fontWeight: fonts.heavy, marginTop: 2 },
+  centerLabel: { color: '#a0a0b0', fontSize: fonts.xs },
+  centerValue: { color: '#f0f0f5', fontSize: fonts.xl, fontWeight: fonts.heavy, marginTop: 2 },
 });

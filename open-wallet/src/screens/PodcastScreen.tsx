@@ -175,69 +175,69 @@ export function PodcastScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { paddingBottom: 40 },
     tabRow: { flexDirection: 'row', paddingHorizontal: 12, marginBottom: 12 },
     tabBtn: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 16, marginHorizontal: 4 },
     tabActive: { backgroundColor: t.accent.blue + '20' },
-    tabText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
+    tabText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: t.accent.blue },
     card: { backgroundColor: t.bg.secondary, borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16 },
-    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 12, marginHorizontal: 20 },
+    sectionTitle: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, marginBottom: 12, marginHorizontal: 20 },
     statRow: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 16 },
     statItem: { alignItems: 'center' },
-    statValue: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    statLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
+    statValue: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    statLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
     episodeCard: { backgroundColor: t.bg.secondary, borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 12 },
     episodeHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
     episodeTopicIcon: { width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center', marginRight: 12 },
-    episodeTopicIconText: { color: '#fff', fontSize: 16, fontWeight: fonts.bold },
-    episodeTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, flex: 1 },
-    episodeCreator: { color: t.accent.blue, fontSize: 13, fontWeight: fonts.semibold, marginTop: 2 },
-    episodeDesc: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 8 },
+    episodeTopicIconText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.bold },
+    episodeTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, flex: 1 },
+    episodeCreator: { color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.semibold, marginTop: 2 },
+    episodeDesc: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 19, marginBottom: 8 },
     episodeMeta: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    episodeDuration: { color: t.text.muted, fontSize: 12 },
-    episodeStats: { color: t.text.muted, fontSize: 12 },
-    episodeHotk: { color: t.accent.green, fontSize: 13, fontWeight: fonts.bold },
+    episodeDuration: { color: t.text.muted, fontSize: fonts.sm },
+    episodeStats: { color: t.text.muted, fontSize: fonts.sm },
+    episodeHotk: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold },
     episodeActions: { flexDirection: 'row', gap: 8, marginTop: 10 },
     playBtn: { backgroundColor: t.accent.blue, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 8 },
-    playBtnText: { color: '#fff', fontSize: 13, fontWeight: fonts.bold },
+    playBtnText: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.bold },
     favBtn: { backgroundColor: t.accent.orange + '20', borderRadius: 12, paddingHorizontal: 16, paddingVertical: 8 },
-    favBtnText: { color: t.accent.orange, fontSize: 13, fontWeight: fonts.bold },
+    favBtnText: { color: t.accent.orange, fontSize: fonts.sm, fontWeight: fonts.bold },
     topicTag: { paddingHorizontal: 10, paddingVertical: 3, borderRadius: 10, alignSelf: 'flex-start', marginTop: 6 },
-    topicTagText: { color: '#fff', fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase' },
+    topicTagText: { color: '#fff', fontSize: fonts.xs, fontWeight: fonts.bold, textTransform: 'uppercase' },
     featuredBanner: { backgroundColor: t.accent.orange + '12', borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16 },
-    featuredLabel: { color: t.accent.orange, fontSize: 12, fontWeight: fonts.heavy, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 },
-    featuredTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, marginBottom: 4 },
-    featuredCreator: { color: t.accent.blue, fontSize: 14, fontWeight: fonts.semibold, marginBottom: 8 },
-    featuredDesc: { color: t.text.muted, fontSize: 14, lineHeight: 20, marginBottom: 12 },
+    featuredLabel: { color: t.accent.orange, fontSize: fonts.sm, fontWeight: fonts.heavy, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 },
+    featuredTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy, marginBottom: 4 },
+    featuredCreator: { color: t.accent.blue, fontSize: fonts.md, fontWeight: fonts.semibold, marginBottom: 8 },
+    featuredDesc: { color: t.text.muted, fontSize: fonts.md, lineHeight: 20, marginBottom: 12 },
     featuredMeta: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    featuredPlays: { color: t.text.muted, fontSize: 13 },
-    featuredHotk: { color: t.accent.green, fontSize: 14, fontWeight: fonts.bold },
+    featuredPlays: { color: t.text.muted, fontSize: fonts.sm },
+    featuredHotk: { color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.bold },
     seriesCard: { backgroundColor: t.bg.secondary, borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    seriesTitle2: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
-    seriesCreator: { color: t.accent.blue, fontSize: 13, fontWeight: fonts.semibold, marginTop: 2 },
-    seriesDesc: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginTop: 6 },
+    seriesTitle2: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    seriesCreator: { color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.semibold, marginTop: 2 },
+    seriesDesc: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 19, marginTop: 6 },
     seriesMetaRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 },
-    seriesMetaText: { color: t.text.muted, fontSize: 12 },
-    seriesSchedule: { color: t.accent.blue, fontSize: 12, fontWeight: fonts.semibold, marginTop: 4 },
+    seriesMetaText: { color: t.text.muted, fontSize: fonts.sm },
+    seriesSchedule: { color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.semibold, marginTop: 4 },
     seriesStats: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 12, paddingTop: 12, borderTopWidth: 1, borderTopColor: t.bg.primary },
-    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginBottom: 12 },
+    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md, marginBottom: 12 },
     topicGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 12 },
     topicChip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 12, borderWidth: 1, borderColor: t.bg.primary },
     topicChipSelected: { backgroundColor: t.accent.blue + '20', borderColor: t.accent.blue },
-    topicChipText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
+    topicChipText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
     topicChipTextSelected: { color: t.accent.blue },
     submitBtn: { backgroundColor: t.accent.blue, borderRadius: 14, paddingVertical: 14, alignItems: 'center', marginTop: 8 },
-    submitText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
+    submitText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
     createSeriesSection: { backgroundColor: t.accent.blue + '12', borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16 },
-    createSeriesTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, marginBottom: 8 },
-    createSeriesDesc: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 12 },
+    createSeriesTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, marginBottom: 8 },
+    createSeriesDesc: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 19, marginBottom: 12 },
     demoTag: { backgroundColor: t.accent.orange + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'center', marginBottom: 12 },
-    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: fonts.bold },
+    demoText: { color: t.accent.orange, fontSize: fonts.xs, fontWeight: fonts.bold },
     educationCard: { backgroundColor: t.accent.blue + '12', borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16, alignItems: 'center' },
-    educationText: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold, textAlign: 'center', lineHeight: 22 },
+    educationText: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold, textAlign: 'center', lineHeight: 22 },
   }), [t]);
 
   // ─── Tabs ───
@@ -280,7 +280,7 @@ export function PodcastScreen({ onClose }: Props) {
             <Text style={s.statLabel}>Hours Listened</Text>
           </View>
           <View style={s.statItem}>
-            <Text style={[s.statValue, { fontSize: 13 }]}>{stats.topTopic}</Text>
+            <Text style={[s.statValue, { fontSize: fonts.sm }]}>{stats.topTopic}</Text>
             <Text style={s.statLabel}>Top Topic</Text>
           </View>
         </View>
@@ -349,7 +349,7 @@ export function PodcastScreen({ onClose }: Props) {
           multiline
         />
 
-        <Text style={[s.sectionTitle, { marginHorizontal: 0, fontSize: 14 }]}>Topic</Text>
+        <Text style={[s.sectionTitle, { marginHorizontal: 0, fontSize: fonts.md }]}>Topic</Text>
         <View style={s.topicGrid}>
           {PODCAST_TOPICS.map((topic) => (
             <TouchableOpacity
@@ -442,7 +442,7 @@ export function PodcastScreen({ onClose }: Props) {
           value={seriesSchedule}
           onChangeText={setSeriesSchedule}
         />
-        <Text style={[s.sectionTitle, { marginHorizontal: 0, fontSize: 14 }]}>Topic</Text>
+        <Text style={[s.sectionTitle, { marginHorizontal: 0, fontSize: fonts.md }]}>Topic</Text>
         <View style={s.topicGrid}>
           {PODCAST_TOPICS.map((topic) => (
             <TouchableOpacity

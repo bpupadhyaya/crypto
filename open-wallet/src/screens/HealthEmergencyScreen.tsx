@@ -232,106 +232,106 @@ export function HealthEmergencyScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { paddingBottom: 40 },
     tabRow: { flexDirection: 'row', paddingHorizontal: 12, marginBottom: 12 },
     tabBtn: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 16, marginHorizontal: 4 },
     tabActive: { backgroundColor: '#FF3B30' + '20' },
-    tabText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
+    tabText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: '#FF3B30' },
     card: { backgroundColor: t.bg.secondary, borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16 },
-    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 12, marginHorizontal: 20 },
+    sectionTitle: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, marginBottom: 12, marginHorizontal: 20 },
 
     // SOS
     sosContainer: { alignItems: 'center', marginVertical: 20, marginHorizontal: 20 },
     sosButton: { width: 160, height: 160, borderRadius: 80, backgroundColor: '#FF3B30', justifyContent: 'center', alignItems: 'center', shadowColor: '#FF3B30', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.5, shadowRadius: 20, elevation: 12 },
     sosButtonActive: { backgroundColor: '#FF9500' },
-    sosText: { color: '#fff', fontSize: 36, fontWeight: fonts.heavy, letterSpacing: 2 },
-    sosSubtext: { color: '#fff', fontSize: 11, fontWeight: fonts.semibold, marginTop: 4 },
-    sosHint: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 16, lineHeight: 20 },
+    sosText: { color: '#fff', fontSize: fonts.hero, fontWeight: fonts.heavy, letterSpacing: 2 },
+    sosSubtext: { color: '#fff', fontSize: fonts.xs, fontWeight: fonts.semibold, marginTop: 4 },
+    sosHint: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 16, lineHeight: 20 },
     sosActiveTag: { backgroundColor: '#FF3B30' + '20', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 12, marginTop: 12 },
-    sosActiveText: { color: '#FF3B30', fontSize: 13, fontWeight: fonts.bold },
+    sosActiveText: { color: '#FF3B30', fontSize: fonts.sm, fontWeight: fonts.bold },
 
     // Contacts
     contactRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 12, borderBottomColor: t.bg.primary, borderBottomWidth: 1 },
     contactAvatar: { width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center', marginRight: 12 },
-    contactAvatarText: { color: '#fff', fontSize: 16, fontWeight: fonts.bold },
+    contactAvatarText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.bold },
     contactInfo: { flex: 1 },
-    contactName: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
-    contactMeta: { color: t.text.muted, fontSize: 12, marginTop: 2 },
+    contactName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
+    contactMeta: { color: t.text.muted, fontSize: fonts.sm, marginTop: 2 },
     contactRight: { alignItems: 'flex-end' },
     roleBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8 },
-    roleBadgeText: { fontSize: 10, fontWeight: fonts.bold },
+    roleBadgeText: { fontSize: fonts.xs, fontWeight: fonts.bold },
     availDot: { width: 8, height: 8, borderRadius: 4, marginTop: 6 },
 
     // Medical profile
     profileSection: { marginBottom: 16 },
-    profileLabel: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 },
-    profileValue: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold },
+    profileLabel: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 },
+    profileValue: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
     profileChips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
     profileChip: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 10, backgroundColor: t.bg.primary },
-    profileChipText: { color: t.text.primary, fontSize: 13 },
+    profileChipText: { color: t.text.primary, fontSize: fonts.sm },
     profileChipAllergy: { backgroundColor: '#FF3B30' + '15' },
-    profileChipAllergyText: { color: '#FF3B30', fontSize: 13, fontWeight: fonts.semibold },
+    profileChipAllergyText: { color: '#FF3B30', fontSize: fonts.sm, fontWeight: fonts.semibold },
     profileChipCondition: { backgroundColor: '#FF9500' + '15' },
-    profileChipConditionText: { color: '#FF9500', fontSize: 13, fontWeight: fonts.semibold },
+    profileChipConditionText: { color: '#FF9500', fontSize: fonts.sm, fontWeight: fonts.semibold },
     zkBadge: { flexDirection: 'row', alignItems: 'center', backgroundColor: t.accent.green + '15', paddingHorizontal: 12, paddingVertical: 8, borderRadius: 10, marginTop: 12, alignSelf: 'flex-start' },
-    zkText: { color: t.accent.green, fontSize: 12, fontWeight: fonts.bold },
+    zkText: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold },
 
     // Responders
     responderRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 12, borderBottomColor: t.bg.primary, borderBottomWidth: 1 },
     responderInfo: { flex: 1, marginLeft: 12 },
-    responderName: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
-    responderRole: { color: t.text.muted, fontSize: 12, marginTop: 1 },
-    responderSpec: { color: t.accent.blue, fontSize: 12, marginTop: 1 },
+    responderName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
+    responderRole: { color: t.text.muted, fontSize: fonts.sm, marginTop: 1 },
+    responderSpec: { color: t.accent.blue, fontSize: fonts.sm, marginTop: 1 },
     responderRight: { alignItems: 'flex-end' },
-    responderDistance: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold },
-    responderTime: { color: t.text.muted, fontSize: 11, marginTop: 2 },
+    responderDistance: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    responderTime: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
 
     // History
     historyRow: { paddingVertical: 14, borderBottomColor: t.bg.primary, borderBottomWidth: 1 },
-    historyType: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
-    historyDesc: { color: t.text.muted, fontSize: 13, marginTop: 4, lineHeight: 18 },
+    historyType: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    historyDesc: { color: t.text.muted, fontSize: fonts.sm, marginTop: 4, lineHeight: 18 },
     historyMeta: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginTop: 8 },
     historyMetaItem: { flexDirection: 'row', alignItems: 'center' },
-    historyMetaLabel: { color: t.text.muted, fontSize: 11 },
-    historyMetaValue: { color: t.text.primary, fontSize: 11, fontWeight: fonts.semibold, marginLeft: 4 },
+    historyMetaLabel: { color: t.text.muted, fontSize: fonts.xs },
+    historyMetaValue: { color: t.text.primary, fontSize: fonts.xs, fontWeight: fonts.semibold, marginLeft: 4 },
     outcomeBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8 },
-    outcomeBadgeText: { fontSize: 10, fontWeight: fonts.bold },
+    outcomeBadgeText: { fontSize: fonts.xs, fontWeight: fonts.bold },
 
     // First Aid
     firstAidCard: { backgroundColor: t.bg.secondary, borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    firstAidTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
-    firstAidCategory: { color: t.accent.blue, fontSize: 11, fontWeight: fonts.semibold, marginTop: 2, textTransform: 'uppercase', letterSpacing: 0.5 },
+    firstAidTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    firstAidCategory: { color: t.accent.blue, fontSize: fonts.xs, fontWeight: fonts.semibold, marginTop: 2, textTransform: 'uppercase', letterSpacing: 0.5 },
     firstAidStep: { flexDirection: 'row', marginTop: 8 },
-    firstAidStepNum: { color: '#FF3B30', fontSize: 13, fontWeight: fonts.heavy, width: 22 },
-    firstAidStepText: { color: t.text.primary, fontSize: 13, flex: 1, lineHeight: 18 },
+    firstAidStepNum: { color: '#FF3B30', fontSize: fonts.sm, fontWeight: fonts.heavy, width: 22 },
+    firstAidStepText: { color: t.text.primary, fontSize: fonts.sm, flex: 1, lineHeight: 18 },
     offlineTag: { backgroundColor: t.accent.green + '15', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, alignSelf: 'flex-start', marginTop: 8 },
-    offlineTagText: { color: t.accent.green, fontSize: 10, fontWeight: fonts.bold },
+    offlineTagText: { color: t.accent.green, fontSize: fonts.xs, fontWeight: fonts.bold },
 
     // Fund
     fundCard: { backgroundColor: '#FF3B30' + '10', borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16 },
-    fundBalance: { color: t.text.primary, fontSize: 32, fontWeight: fonts.heavy },
-    fundLabel: { color: t.text.muted, fontSize: 12, marginTop: 2 },
+    fundBalance: { color: t.text.primary, fontSize: fonts.hero, fontWeight: fonts.heavy },
+    fundLabel: { color: t.text.muted, fontSize: fonts.sm, marginTop: 2 },
     fundRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 },
-    fundMeta: { color: t.text.muted, fontSize: 12 },
-    fundMetaValue: { color: t.text.primary, fontSize: 12, fontWeight: fonts.semibold },
+    fundMeta: { color: t.text.muted, fontSize: fonts.sm },
+    fundMetaValue: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     fundBtn: { backgroundColor: '#FF3B30', borderRadius: 12, paddingVertical: 12, alignItems: 'center', marginTop: 16 },
-    fundBtnText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
+    fundBtnText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
 
     // Stats
     statRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 12, borderBottomColor: t.bg.primary, borderBottomWidth: 1 },
-    statLabel: { color: t.text.muted, fontSize: 14 },
-    statValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
+    statLabel: { color: t.text.muted, fontSize: fonts.md },
+    statValue: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
 
     // Demo
     demoTag: { backgroundColor: t.accent.orange + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'center', marginBottom: 12 },
-    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: fonts.bold },
+    demoText: { color: t.accent.orange, fontSize: fonts.xs, fontWeight: fonts.bold },
 
     // Education
     educationCard: { backgroundColor: '#FF3B30' + '10', borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16, alignItems: 'center' },
-    educationText: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold, textAlign: 'center', lineHeight: 22 },
+    educationText: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold, textAlign: 'center', lineHeight: 22 },
   }), [t]);
 
   // ─── Tabs ───
@@ -494,7 +494,7 @@ export function HealthEmergencyScreen({ onClose }: Props) {
 
         <View style={s.profileSection}>
           <Text style={s.profileLabel}>Emergency Notes</Text>
-          <Text style={[s.profileValue, { fontSize: 13, lineHeight: 20 }]}>{profile.emergencyNotes}</Text>
+          <Text style={[s.profileValue, { fontSize: fonts.sm, lineHeight: 20 }]}>{profile.emergencyNotes}</Text>
         </View>
 
         <View style={s.zkBadge}>

@@ -53,33 +53,33 @@ export function GratitudeScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     heroCard: { backgroundColor: t.accent.purple + '10', borderRadius: 24, padding: 24, marginHorizontal: 20, marginTop: 8, alignItems: 'center' },
     heroIcon: { fontSize: 48, marginBottom: 8 },
-    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, textAlign: 'center' },
-    heroSubtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 4, lineHeight: 20 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
+    heroTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy, textAlign: 'center' },
+    heroSubtitle: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 4, lineHeight: 20 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
     typeRow: { flexDirection: 'row', gap: 8, paddingHorizontal: 20, flexWrap: 'wrap', marginBottom: 8 },
     typeChip: { paddingVertical: 10, paddingHorizontal: 14, borderRadius: 12, backgroundColor: t.bg.card, alignItems: 'center', minWidth: 80 },
     typeChipActive: { backgroundColor: t.accent.purple },
-    typeIcon: { fontSize: 24, marginBottom: 4 },
-    typeLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    typeIcon: { fontSize: fonts.xxl, marginBottom: 4 },
+    typeLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     typeLabelActive: { color: '#fff' },
     channelRow: { flexDirection: 'row', gap: 8, paddingHorizontal: 20, flexWrap: 'wrap' },
     channelChip: { paddingVertical: 10, paddingHorizontal: 14, borderRadius: 12, backgroundColor: t.bg.card, flexDirection: 'row', alignItems: 'center', gap: 6 },
     channelChipActive: { backgroundColor: t.accent.purple },
-    channelLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    channelLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     channelLabelActive: { color: '#fff' },
     inputCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginTop: 12 },
-    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 },
-    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15 },
-    messageInput: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, minHeight: 100, textAlignVertical: 'top' },
+    inputLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 },
+    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md },
+    messageInput: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md, minHeight: 100, textAlignVertical: 'top' },
     sendBtn: { backgroundColor: t.accent.purple, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginHorizontal: 20, marginTop: 24 },
-    sendBtnText: { color: '#fff', fontSize: 17, fontWeight: fonts.bold },
+    sendBtnText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.bold },
     paperBtn: { backgroundColor: t.bg.card, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginHorizontal: 20, marginTop: 12 },
-    paperBtnText: { color: t.accent.purple, fontSize: 17, fontWeight: fonts.bold },
-    note: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginHorizontal: 24, marginTop: 16, lineHeight: 18 },
+    paperBtnText: { color: t.accent.purple, fontSize: fonts.lg, fontWeight: fonts.bold },
+    note: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginHorizontal: 24, marginTop: 16, lineHeight: 18 },
   }), [t]);
 
   const handleSend = useCallback(async (paperMode: boolean) => {
@@ -320,7 +320,7 @@ export function GratitudeScreen({ onClose }: Props) {
         </TouchableOpacity>
 
         {paperLight === 'orange' && (
-          <Text style={{ color: t.accent.orange, fontSize: 12, textAlign: 'center', marginTop: 8, marginHorizontal: 20 }}>
+          <Text style={{ color: t.accent.orange, fontSize: fonts.sm, textAlign: 'center', marginTop: 8, marginHorizontal: 20 }}>
             You have less than 3 paper trades. We recommend more practice before real gratitude transactions.
           </Text>
         )}

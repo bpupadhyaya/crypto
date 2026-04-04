@@ -94,34 +94,34 @@ export function GovernanceScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     heroCard: { backgroundColor: t.accent.blue + '10', borderRadius: 24, padding: 24, marginHorizontal: 20, alignItems: 'center' },
-    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, textAlign: 'center' },
-    heroSubtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 8, lineHeight: 20 },
+    heroTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy, textAlign: 'center' },
+    heroSubtitle: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 8, lineHeight: 20 },
     createBtn: { backgroundColor: t.accent.blue, borderRadius: 12, paddingVertical: 12, paddingHorizontal: 24, marginTop: 16 },
-    createBtnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
+    createBtnText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
     propCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    propTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
-    propStatus: { fontSize: 12, fontWeight: fonts.bold, marginTop: 4 },
+    propTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    propStatus: { fontSize: fonts.sm, fontWeight: fonts.bold, marginTop: 4 },
     propVotes: { flexDirection: 'row', gap: 16, marginTop: 12 },
-    voteCount: { fontSize: 13, fontWeight: fonts.semibold },
+    voteCount: { fontSize: fonts.sm, fontWeight: fonts.semibold },
     progressBar: { height: 6, backgroundColor: t.border, borderRadius: 3, marginTop: 8 },
     progressFill: { height: 6, borderRadius: 3 },
-    quorum: { color: t.text.muted, fontSize: 11, marginTop: 4 },
+    quorum: { color: t.text.muted, fontSize: fonts.xs, marginTop: 4 },
     inputCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginTop: 12 },
-    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8 },
-    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15 },
+    inputLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 8 },
+    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md },
     descInput: { minHeight: 120, textAlignVertical: 'top' },
     submitBtn: { backgroundColor: t.accent.blue, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginHorizontal: 20, marginTop: 24 },
-    submitBtnText: { color: '#fff', fontSize: 17, fontWeight: fonts.bold },
+    submitBtnText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.bold },
     voteRow: { flexDirection: 'row', gap: 8, marginTop: 16 },
     voteBtn: { flex: 1, borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
-    voteBtnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
-    backBtn: { color: t.accent.blue, fontSize: 16 },
-    detailDesc: { color: t.text.secondary, fontSize: 14, lineHeight: 22, marginHorizontal: 20, marginTop: 12 },
-    detailProposer: { color: t.text.muted, fontSize: 12, marginHorizontal: 20, marginTop: 8 },
+    voteBtnText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
+    backBtn: { color: t.accent.blue, fontSize: fonts.lg },
+    detailDesc: { color: t.text.secondary, fontSize: fonts.md, lineHeight: 22, marginHorizontal: 20, marginTop: 12 },
+    detailProposer: { color: t.text.muted, fontSize: fonts.sm, marginHorizontal: 20, marginTop: 8 },
   }), [t]);
 
   // Fetch proposals
@@ -296,7 +296,7 @@ export function GovernanceScreen({ onClose }: Props) {
           <TouchableOpacity style={s.submitBtn} onPress={handleCreateProposal} disabled={loading}>
             {loading ? <ActivityIndicator color="#fff" /> : <Text style={s.submitBtnText}>Submit Proposal</Text>}
           </TouchableOpacity>
-          <Text style={{ color: t.text.muted, fontSize: 12, textAlign: 'center', marginTop: 16, marginHorizontal: 24, lineHeight: 18 }}>
+          <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 16, marginHorizontal: 24, lineHeight: 18 }}>
             Proposals require a registered Universal ID. Voting period is ~7 days. One human = one vote.
           </Text>
         </ScrollView>

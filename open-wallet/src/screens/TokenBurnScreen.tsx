@@ -99,41 +99,41 @@ export function TokenBurnScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { flex: 1, paddingHorizontal: 16 },
-    subtitle: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 16 },
+    subtitle: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 19, marginBottom: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
-    label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
-    empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
+    label: { color: t.text.muted, fontSize: fonts.sm },
+    val: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    empty: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', marginTop: 40 },
     summaryRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
     summaryCard: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' },
-    summaryNum: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 2 },
-    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold, textAlign: 'center' },
-    burnAmount: { color: t.accent.red, fontSize: 18, fontWeight: fonts.heavy },
-    burnReason: { color: t.text.secondary, fontSize: 12, lineHeight: 17, marginTop: 4 },
-    burnMeta: { color: t.text.muted, fontSize: 11, marginTop: 2 },
+    summaryNum: { fontSize: fonts.xl, fontWeight: fonts.heavy, marginBottom: 2 },
+    summaryLabel: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold, textAlign: 'center' },
+    burnAmount: { color: t.accent.red, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    burnReason: { color: t.text.secondary, fontSize: fonts.sm, lineHeight: 17, marginTop: 4 },
+    burnMeta: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
     barContainer: { height: 8, backgroundColor: t.border, borderRadius: 4, marginVertical: 6, overflow: 'hidden' },
     barFill: { height: 8, borderRadius: 4 },
-    reasonTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
-    reasonDesc: { color: t.text.muted, fontSize: 12, lineHeight: 17, marginTop: 4 },
-    reasonCount: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    reasonTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    reasonDesc: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 17, marginTop: 4 },
+    reasonCount: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     statCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12, flexDirection: 'row', alignItems: 'center' },
-    statIcon: { fontSize: 24, marginRight: 12 },
-    statLabel: { color: t.text.muted, fontSize: 12 },
-    statValue: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    statChange: { fontSize: 12, fontWeight: fonts.bold },
+    statIcon: { fontSize: fonts.xxl, marginRight: 12 },
+    statLabel: { color: t.text.muted, fontSize: fonts.sm },
+    statValue: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    statChange: { fontSize: fonts.sm, fontWeight: fonts.bold },
     verifiedBadge: { flexDirection: 'row', alignItems: 'center', marginTop: 6 },
-    verifiedText: { color: t.accent.green, fontSize: 11, fontWeight: fonts.semibold },
-    txHash: { color: t.accent.blue, fontSize: 11, fontFamily: 'monospace' },
-    transparencyNote: { color: t.text.muted, fontSize: 11, textAlign: 'center', fontStyle: 'italic', marginBottom: 16 },
+    verifiedText: { color: t.accent.green, fontSize: fonts.xs, fontWeight: fonts.semibold },
+    txHash: { color: t.accent.blue, fontSize: fonts.xs, fontFamily: 'monospace' },
+    transparencyNote: { color: t.text.muted, fontSize: fonts.xs, textAlign: 'center', fontStyle: 'italic', marginBottom: 16 },
   }), [t]);
 
   const burns = demoMode ? DEMO_BURNS : [];
@@ -190,7 +190,7 @@ export function TokenBurnScreen({ onClose }: Props) {
             <View key={b.id} style={[st.card, { borderLeftWidth: 3, borderLeftColor: t.accent.red }]}>
               <View style={st.row}>
                 <Text style={st.burnAmount}>-{b.amount} OTK</Text>
-                <Text style={{ fontSize: 18 }}>{b.channelIcon}</Text>
+                <Text style={{ fontSize: fonts.xl }}>{b.channelIcon}</Text>
               </View>
               <Text style={st.burnReason}>{b.reason}</Text>
               <View style={[st.row, { marginTop: 8 }]}>
@@ -219,12 +219,12 @@ export function TokenBurnScreen({ onClose }: Props) {
           ) : reasons.map(r => (
             <View key={r.category} style={st.card}>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-                <Text style={{ fontSize: 22, marginRight: 10 }}>{r.icon}</Text>
+                <Text style={{ fontSize: fonts.xxl, marginRight: 10 }}>{r.icon}</Text>
                 <View style={{ flex: 1 }}>
                   <Text style={st.reasonTitle}>{r.category}</Text>
                   <Text style={st.reasonCount}>{r.count} events | {formatOTK(r.totalBurned)} OTK burned</Text>
                 </View>
-                <Text style={{ color: r.color, fontSize: 16, fontWeight: fonts.heavy }}>{r.percentage}%</Text>
+                <Text style={{ color: r.color, fontSize: fonts.lg, fontWeight: fonts.heavy }}>{r.percentage}%</Text>
               </View>
               <View style={st.barContainer}>
                 <View style={[st.barFill, { width: `${r.percentage}%`, backgroundColor: r.color }]} />
@@ -253,7 +253,7 @@ export function TokenBurnScreen({ onClose }: Props) {
 
         {!demoMode && (
           <View style={[st.card, { marginTop: 20 }]}>
-            <Text style={{ color: t.text.muted, fontSize: 13, textAlign: 'center' }}>
+            <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center' }}>
               Enable Demo Mode in Settings to see sample burn data.
             </Text>
           </View>

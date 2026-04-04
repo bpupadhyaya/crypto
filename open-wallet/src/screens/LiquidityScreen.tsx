@@ -78,49 +78,49 @@ export function LiquidityScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { paddingHorizontal: 20, paddingBottom: 40 },
     summaryCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 16 },
-    summaryTitle: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12 },
+    summaryTitle: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12 },
     summaryRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
-    summaryLabel: { color: t.text.muted, fontSize: 14 },
-    summaryValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
-    summaryValueGreen: { color: t.accent.green, fontSize: 14, fontWeight: fonts.semibold },
+    summaryLabel: { color: t.text.muted, fontSize: fonts.md },
+    summaryValue: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
+    summaryValueGreen: { color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.semibold },
     poolCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     poolHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
-    poolPair: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
-    poolApy: { color: t.accent.green, fontSize: 14, fontWeight: fonts.bold },
+    poolPair: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold },
+    poolApy: { color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.bold },
     poolStats: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
-    poolStatLabel: { color: t.text.muted, fontSize: 12 },
-    poolStatValue: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    poolStatLabel: { color: t.text.muted, fontSize: fonts.sm },
+    poolStatValue: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     positionRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 6, paddingTop: 8, borderTopWidth: 1, borderTopColor: t.border },
-    positionLabel: { color: t.accent.green, fontSize: 12 },
-    positionValue: { color: t.accent.green, fontSize: 12, fontWeight: fonts.semibold },
+    positionLabel: { color: t.accent.green, fontSize: fonts.sm },
+    positionValue: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.semibold },
     actionRow: { flexDirection: 'row', gap: 8, marginTop: 10 },
     actionBtn: { flex: 1, paddingVertical: 10, borderRadius: 10, alignItems: 'center' },
     addBtn: { backgroundColor: t.accent.green + '20' },
     removeBtn: { backgroundColor: t.accent.red + '20' },
-    addBtnText: { color: t.accent.green, fontSize: 13, fontWeight: fonts.bold },
-    removeBtnText: { color: t.accent.red, fontSize: 13, fontWeight: fonts.bold },
+    addBtnText: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold },
+    removeBtnText: { color: t.accent.red, fontSize: fonts.sm, fontWeight: fonts.bold },
     modalCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 16 },
-    modalTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, marginBottom: 16 },
-    inputLabel: { color: t.text.muted, fontSize: 12, marginBottom: 4 },
-    input: { backgroundColor: t.bg.primary, borderRadius: 10, padding: 14, color: t.text.primary, fontSize: 16, marginBottom: 12, borderWidth: 1, borderColor: t.border },
+    modalTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy, marginBottom: 16 },
+    inputLabel: { color: t.text.muted, fontSize: fonts.sm, marginBottom: 4 },
+    input: { backgroundColor: t.bg.primary, borderRadius: 10, padding: 14, color: t.text.primary, fontSize: fonts.lg, marginBottom: 12, borderWidth: 1, borderColor: t.border },
     submitBtn: { backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginTop: 8 },
-    submitBtnText: { color: '#000', fontSize: 16, fontWeight: fonts.heavy },
+    submitBtnText: { color: '#000', fontSize: fonts.lg, fontWeight: fonts.heavy },
     cancelBtn: { paddingVertical: 14, alignItems: 'center', marginTop: 8 },
-    cancelBtnText: { color: t.accent.blue, fontSize: 15 },
+    cancelBtnText: { color: t.accent.blue, fontSize: fonts.md },
     warning: { backgroundColor: t.accent.yellow + '15', borderRadius: 10, padding: 12, marginBottom: 16 },
-    warningText: { color: t.accent.yellow, fontSize: 12, lineHeight: 18 },
+    warningText: { color: t.accent.yellow, fontSize: fonts.sm, lineHeight: 18 },
     createBtn: { backgroundColor: t.accent.purple + '20', borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 16 },
-    createBtnText: { color: t.accent.purple, fontSize: 15, fontWeight: fonts.bold },
+    createBtnText: { color: t.accent.purple, fontSize: fonts.md, fontWeight: fonts.bold },
     feeTag: { backgroundColor: t.border, borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 },
-    feeText: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold },
-    sectionTitle: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 8, marginTop: 16 },
+    feeText: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold },
+    sectionTitle: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 8, marginTop: 16 },
     lpRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4 },
-    lpLabel: { color: t.text.muted, fontSize: 13 },
-    lpValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold },
+    lpLabel: { color: t.text.muted, fontSize: fonts.sm },
+    lpValue: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold },
   }), [t]);
 
   const handleAddLiquidity = useCallback(() => {
@@ -291,7 +291,7 @@ export function LiquidityScreen({ onClose }: Props) {
                   style={{ flex: 1, paddingVertical: 8, borderRadius: 8, backgroundColor: t.border, alignItems: 'center' }}
                   onPress={() => setRemovePercent(String(pct))}
                 >
-                  <Text style={{ color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold }}>{pct}%</Text>
+                  <Text style={{ color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold }}>{pct}%</Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -499,7 +499,7 @@ export function LiquidityScreen({ onClose }: Props) {
         ))}
 
         {!demoMode && pools.length === 0 && (
-          <Text style={{ color: t.text.muted, fontSize: 14, textAlign: 'center', paddingVertical: 32 }}>
+          <Text style={{ color: t.text.muted, fontSize: fonts.md, textAlign: 'center', paddingVertical: 32 }}>
             No pools available. Enable Demo Mode to explore.
           </Text>
         )}

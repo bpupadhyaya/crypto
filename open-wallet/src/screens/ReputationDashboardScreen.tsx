@@ -124,63 +124,63 @@ export function ReputationDashboardScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
 
     // Overall score card
     scoreCard: { borderRadius: 24, padding: 28, marginHorizontal: 20, alignItems: 'center', marginTop: 8 },
     scoreValue: { fontSize: 56, fontWeight: fonts.heavy, marginTop: 8 },
-    scoreMax: { color: t.text.muted, fontSize: 14, marginTop: 2 },
+    scoreMax: { color: t.text.muted, fontSize: fonts.md, marginTop: 2 },
     levelBadge: { paddingHorizontal: 16, paddingVertical: 6, borderRadius: 20, marginTop: 12 },
-    levelText: { color: '#fff', fontSize: 14, fontWeight: fonts.heavy, textTransform: 'uppercase', letterSpacing: 1 },
+    levelText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.heavy, textTransform: 'uppercase', letterSpacing: 1 },
 
     // Section
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 28 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 28 },
 
     // Component breakdown
     compCard: { backgroundColor: t.bg.secondary, borderRadius: 16, marginHorizontal: 20, padding: 16, marginBottom: 8 },
     compHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
-    compLabel: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, flex: 1 },
-    compValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.heavy },
+    compLabel: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, flex: 1 },
+    compValue: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.heavy },
     compBarBg: { height: 8, borderRadius: 4, backgroundColor: t.border, overflow: 'hidden' as const },
     compBarFill: { height: 8, borderRadius: 4 },
-    compDesc: { color: t.text.muted, fontSize: 11, marginTop: 6 },
+    compDesc: { color: t.text.muted, fontSize: fonts.xs, marginTop: 6 },
 
     // Chart
     chartContainer: { backgroundColor: t.bg.secondary, borderRadius: 16, marginHorizontal: 20, padding: 16 },
     chartRow: { flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', height: 120, marginTop: 8 },
     chartBar: { alignItems: 'center', flex: 1 },
     chartBarInner: { width: 16, borderRadius: 4 },
-    chartLabel: { color: t.text.muted, fontSize: 10, marginTop: 4 },
-    chartValue: { color: t.text.primary, fontSize: 9, fontWeight: fonts.bold, marginBottom: 2 },
+    chartLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 4 },
+    chartValue: { color: t.text.primary, fontSize: fonts.xxs, fontWeight: fonts.bold, marginBottom: 2 },
 
     // Community comparison
     comparisonCard: { backgroundColor: t.bg.secondary, borderRadius: 16, marginHorizontal: 20, padding: 20 },
     compRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 },
-    compRowLabel: { color: t.text.muted, fontSize: 13 },
-    compRowValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.bold },
+    compRowLabel: { color: t.text.muted, fontSize: fonts.sm },
+    compRowValue: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.bold },
     percentileBar: { height: 10, borderRadius: 5, backgroundColor: t.border, marginTop: 4, overflow: 'hidden' as const },
     percentileFill: { height: 10, borderRadius: 5 },
-    percentileLabel: { color: t.text.muted, fontSize: 11, marginTop: 6 },
+    percentileLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 6 },
 
     // Tips
     tipCard: { backgroundColor: t.bg.secondary, borderRadius: 12, marginHorizontal: 20, padding: 14, marginBottom: 8 },
-    tipText: { color: t.text.primary, fontSize: 13, lineHeight: 19 },
-    tipIcon: { color: t.accent.yellow ?? '#f39c12', fontSize: 14, marginRight: 6 },
+    tipText: { color: t.text.primary, fontSize: fonts.sm, lineHeight: 19 },
+    tipIcon: { color: t.accent.yellow ?? '#f39c12', fontSize: fonts.md, marginRight: 6 },
     tipRow: { flexDirection: 'row', alignItems: 'flex-start' },
 
     // Cross-chain
     chainRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 12, paddingHorizontal: 20 },
-    chainName: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, flex: 1 },
-    chainScore: { color: t.text.primary, fontSize: 14, fontWeight: fonts.heavy, marginRight: 12 },
+    chainName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold, flex: 1 },
+    chainScore: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.heavy, marginRight: 12 },
     chainLevel: { paddingHorizontal: 10, paddingVertical: 3, borderRadius: 10 },
-    chainLevelText: { color: '#fff', fontSize: 11, fontWeight: fonts.bold },
+    chainLevelText: { color: '#fff', fontSize: fonts.xs, fontWeight: fonts.bold },
     divider: { height: 1, backgroundColor: t.border, marginHorizontal: 20 },
 
     // Attestation button
     attestBtn: { backgroundColor: t.accent.blue, borderRadius: 16, paddingVertical: 16, marginHorizontal: 20, alignItems: 'center', marginTop: 20, marginBottom: 40 },
-    attestBtnText: { color: '#fff', fontSize: 16, fontWeight: fonts.heavy },
-    attestNote: { color: t.text.muted, fontSize: 11, textAlign: 'center', marginHorizontal: 40, marginTop: 8, marginBottom: 40 },
+    attestBtnText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.heavy },
+    attestNote: { color: t.text.muted, fontSize: fonts.xs, textAlign: 'center', marginHorizontal: 40, marginTop: 8, marginBottom: 40 },
   }), [t]);
 
   const getBarColor = (value: number, max: number): string => {
@@ -200,7 +200,7 @@ export function ReputationDashboardScreen({ onClose }: Props) {
       <ScrollView>
         {/* Overall Score */}
         <View style={[s.scoreCard, { backgroundColor: level.color + '15' }]}>
-          <Text style={{ color: t.text.muted, fontSize: 13, textTransform: 'uppercase', letterSpacing: 1 }}>
+          <Text style={{ color: t.text.muted, fontSize: fonts.sm, textTransform: 'uppercase', letterSpacing: 1 }}>
             Reputation Score
           </Text>
           <Text style={[s.scoreValue, { color: level.color }]}>{score}</Text>

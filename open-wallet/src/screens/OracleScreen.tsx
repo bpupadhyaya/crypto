@@ -57,34 +57,34 @@ export function OracleScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     heroCard: { backgroundColor: t.accent.orange + '10', borderRadius: 24, padding: 24, marginHorizontal: 20, alignItems: 'center' },
-    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, textAlign: 'center' },
-    heroSub: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 8, lineHeight: 20 },
+    heroTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy, textAlign: 'center' },
+    heroSub: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 8, lineHeight: 20 },
     regBtn: { backgroundColor: t.accent.orange, borderRadius: 12, paddingVertical: 12, paddingHorizontal: 24, marginTop: 16 },
-    regBtnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
+    regBtnText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    msTitle: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
-    msChannel: { fontSize: 12, fontWeight: fonts.semibold, marginTop: 4 },
-    msUid: { color: t.text.muted, fontSize: 11, marginTop: 2 },
-    msMint: { color: t.accent.green, fontSize: 13, fontWeight: fonts.semibold, marginTop: 6 },
-    msStatus: { fontSize: 12, fontWeight: fonts.bold, marginTop: 4 },
+    msTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    msChannel: { fontSize: fonts.sm, fontWeight: fonts.semibold, marginTop: 4 },
+    msUid: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
+    msMint: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.semibold, marginTop: 6 },
+    msStatus: { fontSize: fonts.sm, fontWeight: fonts.bold, marginTop: 4 },
     attestRow: { flexDirection: 'row', gap: 8, marginTop: 12 },
     attestBtn: { flex: 1, borderRadius: 10, paddingVertical: 10, alignItems: 'center' },
-    attestText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
-    attestCount: { color: t.text.muted, fontSize: 11, marginTop: 8 },
+    attestText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
+    attestCount: { color: t.text.muted, fontSize: fonts.xs, marginTop: 8 },
     inputCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginTop: 12 },
-    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8 },
-    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15 },
+    inputLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 8 },
+    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md },
     chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 8 },
     chip: { paddingVertical: 8, paddingHorizontal: 14, borderRadius: 20, backgroundColor: t.bg.card },
     chipActive: { backgroundColor: t.accent.orange },
-    chipText: { color: t.text.secondary, fontSize: 13 },
+    chipText: { color: t.text.secondary, fontSize: fonts.sm },
     chipTextActive: { color: '#fff', fontWeight: fonts.bold },
     submitBtn: { backgroundColor: t.accent.orange, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginHorizontal: 20, marginTop: 24 },
-    submitText: { color: '#fff', fontSize: 17, fontWeight: fonts.bold },
+    submitText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.bold },
   }), [t]);
 
   const fetchMilestones = useCallback(async () => {
@@ -230,7 +230,7 @@ export function OracleScreen({ onClose }: Props) {
           <TouchableOpacity style={s.submitBtn} onPress={handleRegister} disabled={loading}>
             {loading ? <ActivityIndicator color="#fff" /> : <Text style={s.submitText}>Register as Verifier</Text>}
           </TouchableOpacity>
-          <Text style={{ color: t.text.muted, fontSize: 12, textAlign: 'center', marginTop: 16, marginHorizontal: 24, lineHeight: 18 }}>
+          <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 16, marginHorizontal: 24, lineHeight: 18 }}>
             Verifiers attest to human development milestones. When enough independent verifiers approve a milestone, OTK is minted for the achiever. Your accuracy is tracked.
           </Text>
         </ScrollView>

@@ -153,53 +153,53 @@ export const AutomationScreen = React.memo(({ onClose }: Props) => {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    back: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
-    title: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
-    addBtn: { color: t.accent.green, fontSize: 15, fontWeight: fonts.bold },
+    back: { color: t.accent.blue, fontSize: fonts.lg, fontWeight: fonts.semibold },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    addBtn: { color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.bold },
     tabs: { flexDirection: 'row', marginHorizontal: 16, marginBottom: 12, backgroundColor: t.bg.card, borderRadius: 12, padding: 4 },
     tab: { flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 10 },
     tabActive: { backgroundColor: t.accent.green },
-    tabText: { color: t.text.secondary, fontSize: 14, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.md, fontWeight: fonts.semibold },
     tabTextActive: { color: t.bg.primary },
     addForm: { backgroundColor: t.bg.card, marginHorizontal: 16, borderRadius: 16, padding: 16, marginBottom: 16 },
-    formLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 },
-    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginBottom: 12 },
+    formLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 },
+    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md, marginBottom: 12 },
     tokenRow: { flexDirection: 'row', gap: 6, marginBottom: 12, flexWrap: 'wrap' },
     tokenChip: { backgroundColor: t.bg.primary, borderRadius: 20, paddingVertical: 6, paddingHorizontal: 14 },
     tokenActive: { backgroundColor: t.accent.green },
-    tokenText: { color: t.text.secondary, fontSize: 13 },
+    tokenText: { color: t.text.secondary, fontSize: fonts.sm },
     tokenTextActive: { color: t.bg.primary, fontWeight: fonts.bold },
-    currentPrice: { color: t.text.muted, fontSize: 13, marginBottom: 12 },
+    currentPrice: { color: t.text.muted, fontSize: fonts.sm, marginBottom: 12 },
     dirRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
     dirBtn: { flex: 1, backgroundColor: t.bg.primary, borderRadius: 12, paddingVertical: 10, alignItems: 'center' },
     dirActive: { backgroundColor: t.accent.green + '20' },
     dirActiveRed: { backgroundColor: t.accent.red + '20' },
-    dirText: { color: t.text.secondary, fontSize: 14, fontWeight: fonts.semibold },
+    dirText: { color: t.text.secondary, fontSize: fonts.md, fontWeight: fonts.semibold },
     dirTextActive: { color: t.accent.green },
     dirTextActiveRed: { color: t.accent.red },
     actionRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
     actionBtn: { flex: 1, backgroundColor: t.bg.primary, borderRadius: 12, paddingVertical: 10, alignItems: 'center' },
     actionActive: { borderWidth: 2 },
     saveBtn: { backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
-    saveBtnText: { color: t.bg.primary, fontSize: 15, fontWeight: fonts.bold },
+    saveBtnText: { color: t.bg.primary, fontSize: fonts.md, fontWeight: fonts.bold },
     card: { backgroundColor: t.bg.card, marginHorizontal: 16, borderRadius: 16, padding: 16, marginBottom: 12 },
-    cardDesc: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, lineHeight: 20, marginBottom: 8 },
+    cardDesc: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold, lineHeight: 20, marginBottom: 8 },
     cardMeta: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
     badge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8 },
-    badgeText: { fontSize: 11, fontWeight: fonts.bold },
+    badgeText: { fontSize: fonts.xs, fontWeight: fonts.bold },
     cardActions: { flexDirection: 'row', gap: 12, marginTop: 12, borderTopWidth: 1, borderTopColor: t.border, paddingTop: 12, alignItems: 'center' },
-    toggleLabel: { color: t.text.secondary, fontSize: 13, marginRight: 4 },
+    toggleLabel: { color: t.text.secondary, fontSize: fonts.sm, marginRight: 4 },
     deleteBtn: { marginLeft: 'auto' },
-    deleteBtnText: { color: t.accent.red, fontSize: 13, fontWeight: fonts.semibold },
-    sectionLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1, marginHorizontal: 16, marginTop: 16, marginBottom: 8 },
+    deleteBtnText: { color: t.accent.red, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    sectionLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1, marginHorizontal: 16, marginTop: 16, marginBottom: 8 },
     historyRow: { backgroundColor: t.bg.card, marginHorizontal: 16, borderRadius: 12, padding: 14, marginBottom: 8 },
     historyHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    historyAction: { fontSize: 14, fontWeight: fonts.semibold },
-    historyDate: { color: t.text.muted, fontSize: 12 },
-    historyDetail: { color: t.text.muted, fontSize: 12, marginTop: 2 },
+    historyAction: { fontSize: fonts.md, fontWeight: fonts.semibold },
+    historyDate: { color: t.text.muted, fontSize: fonts.sm },
+    historyDetail: { color: t.text.muted, fontSize: fonts.sm, marginTop: 2 },
     empty: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 80 },
-    emptyText: { color: t.text.secondary, fontSize: 16, fontWeight: fonts.semibold },
-    emptyHint: { color: t.text.muted, fontSize: 13, marginTop: 4, textAlign: 'center', paddingHorizontal: 32 },
+    emptyText: { color: t.text.secondary, fontSize: fonts.lg, fontWeight: fonts.semibold },
+    emptyHint: { color: t.text.muted, fontSize: fonts.sm, marginTop: 4, textAlign: 'center', paddingHorizontal: 32 },
   }), [t]);
 
   const renderRule = useCallback(({ item }: { item: AutomationRule }) => {
@@ -210,7 +210,7 @@ export const AutomationScreen = React.memo(({ onClose }: Props) => {
       <View style={s.card}>
         <Text style={s.cardDesc}>{describeRule(item)}</Text>
         {item.label && (
-          <Text style={{ color: t.text.muted, fontSize: 12, marginBottom: 6 }}>{item.label}</Text>
+          <Text style={{ color: t.text.muted, fontSize: fonts.sm, marginBottom: 6 }}>{item.label}</Text>
         )}
         <View style={s.cardMeta}>
           <View style={[s.badge, { backgroundColor: t.accent[colorKey] + '20' }]}>
@@ -218,7 +218,7 @@ export const AutomationScreen = React.memo(({ onClose }: Props) => {
               {ACTION_LABELS[item.action].toUpperCase()}
             </Text>
           </View>
-          <Text style={{ color: t.text.muted, fontSize: 11 }}>
+          <Text style={{ color: t.text.muted, fontSize: fonts.xs }}>
             Created {formatDate(item.createdAt)}
           </Text>
         </View>
@@ -249,7 +249,7 @@ export const AutomationScreen = React.memo(({ onClose }: Props) => {
             <Text style={[s.badgeText, { color: t.accent[colorKey] }]}>TRIGGERED</Text>
           </View>
           {item.triggeredAt && (
-            <Text style={{ color: t.text.muted, fontSize: 11 }}>
+            <Text style={{ color: t.text.muted, fontSize: fonts.xs }}>
               {formatDate(item.triggeredAt)}
             </Text>
           )}

@@ -222,62 +222,62 @@ export function ClimateActionScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { flex: 1, paddingHorizontal: 16 },
-    subtitle: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 16 },
+    subtitle: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 19, marginBottom: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 11, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.xs, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
-    cardTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 4 },
+    cardTitle: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, marginBottom: 4 },
     row: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 },
-    label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    label: { color: t.text.muted, fontSize: fonts.sm },
+    val: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     badge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'flex-start', marginBottom: 8 },
-    badgeText: { fontSize: 11, fontWeight: fonts.bold, color: '#fff' },
+    badgeText: { fontSize: fonts.xs, fontWeight: fonts.bold, color: '#fff' },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 8 },
-    empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
+    empty: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', marginTop: 40 },
     summaryRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
     summaryCard: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' },
-    summaryNum: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 2 },
-    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold, textAlign: 'center' },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 8, marginBottom: 8 },
-    bigNum: { fontSize: 36, fontWeight: fonts.heavy, textAlign: 'center', marginBottom: 4 },
-    bigLabel: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginBottom: 16 },
+    summaryNum: { fontSize: fonts.xl, fontWeight: fonts.heavy, marginBottom: 2 },
+    summaryLabel: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold, textAlign: 'center' },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 8, marginBottom: 8 },
+    bigNum: { fontSize: fonts.hero, fontWeight: fonts.heavy, textAlign: 'center', marginBottom: 4 },
+    bigLabel: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginBottom: 16 },
     barContainer: { height: 10, backgroundColor: t.border, borderRadius: 5, marginVertical: 6, overflow: 'hidden' },
     barFill: { height: 10, borderRadius: 5 },
-    progressLabel: { color: t.text.muted, fontSize: 11, marginBottom: 2 },
+    progressLabel: { color: t.text.muted, fontSize: fonts.xs, marginBottom: 2 },
     categoryRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-    categoryIcon: { fontSize: 24, marginRight: 12 },
+    categoryIcon: { fontSize: fonts.xxl, marginRight: 12 },
     categoryMeta: { flex: 1 },
-    categoryLabel: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
-    categoryTons: { color: t.text.muted, fontSize: 12, marginTop: 2 },
+    categoryLabel: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
+    categoryTons: { color: t.text.muted, fontSize: fonts.sm, marginTop: 2 },
     tipRow: { flexDirection: 'row', flexWrap: 'wrap', marginTop: 6, gap: 6 },
     tipTag: { backgroundColor: t.bg.primary, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6 },
-    tipText: { color: t.text.secondary, fontSize: 11 },
+    tipText: { color: t.text.secondary, fontSize: fonts.xs },
     pledgeProgress: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-    pledgePercent: { fontSize: 14, fontWeight: fonts.heavy, width: 45, textAlign: 'right' },
+    pledgePercent: { fontSize: fonts.md, fontWeight: fonts.heavy, width: 45, textAlign: 'right' },
     scoreCircle: { width: 100, height: 100, borderRadius: 50, borderWidth: 6, alignItems: 'center', justifyContent: 'center', alignSelf: 'center', marginBottom: 12 },
-    scoreNum: { fontSize: 32, fontWeight: fonts.heavy },
-    scoreLabel: { fontSize: 10, fontWeight: fonts.semibold },
-    eventIcon: { fontSize: 28, marginRight: 12 },
+    scoreNum: { fontSize: fonts.hero, fontWeight: fonts.heavy },
+    scoreLabel: { fontSize: fonts.xs, fontWeight: fonts.semibold },
+    eventIcon: { fontSize: fonts.xxxl, marginRight: 12 },
     eventMeta: { flex: 1 },
-    eventDate: { color: t.text.muted, fontSize: 11 },
-    eventDesc: { color: t.text.muted, fontSize: 12, marginTop: 4, lineHeight: 17 },
+    eventDate: { color: t.text.muted, fontSize: fonts.xs },
+    eventDesc: { color: t.text.muted, fontSize: fonts.sm, marginTop: 4, lineHeight: 17 },
     eventFooter: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 8, alignItems: 'center' },
-    participants: { color: t.text.secondary, fontSize: 11 },
-    otkReward: { color: t.accent.green, fontSize: 12, fontWeight: fonts.bold },
+    participants: { color: t.text.secondary, fontSize: fonts.xs },
+    otkReward: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold },
     offsetCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
-    offsetName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, marginBottom: 4 },
-    offsetType: { fontSize: 10, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 },
-    stars: { color: '#f59e0b', fontSize: 12, letterSpacing: 2 },
+    offsetName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, marginBottom: 4 },
+    offsetType: { fontSize: fonts.xs, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 },
+    stars: { color: '#f59e0b', fontSize: fonts.sm, letterSpacing: 2 },
     joinBtn: { backgroundColor: t.accent.green, borderRadius: 10, paddingVertical: 8, paddingHorizontal: 16, alignItems: 'center' },
-    joinText: { color: '#fff', fontSize: 13, fontWeight: fonts.bold },
+    joinText: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.bold },
     offsetBtn: { backgroundColor: t.accent.blue, borderRadius: 10, paddingVertical: 8, paddingHorizontal: 16, alignItems: 'center', marginTop: 8 },
-    offsetBtnText: { color: '#fff', fontSize: 13, fontWeight: fonts.bold },
+    offsetBtnText: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.bold },
   }), [t]);
 
   const footprint = demoMode ? DEMO_FOOTPRINT : [];
@@ -360,10 +360,10 @@ export function ClimateActionScreen({ onClose }: Props) {
       {pledges.map(pledge => (
         <View key={pledge.id} style={st.card}>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 6 }}>
-            <Text style={{ fontSize: 20, marginRight: 10 }}>{CATEGORY_ICONS[pledge.category]}</Text>
+            <Text style={{ fontSize: fonts.xl, marginRight: 10 }}>{CATEGORY_ICONS[pledge.category]}</Text>
             <View style={{ flex: 1 }}>
               <Text style={st.cardTitle}>{pledge.title}</Text>
-              <Text style={[st.label, { textTransform: 'uppercase', letterSpacing: 1, fontSize: 10 }]}>
+              <Text style={[st.label, { textTransform: 'uppercase', letterSpacing: 1, fontSize: fonts.xs }]}>
                 {pledge.category}
               </Text>
             </View>
@@ -449,7 +449,7 @@ export function ClimateActionScreen({ onClose }: Props) {
           <View key={i} style={st.card}>
             <View style={st.row}>
               <Text style={st.cardTitle}>{cat.label}</Text>
-              <Text style={[st.val, { color: t.accent.green, fontSize: 14 }]}>-{cat.tons} tons</Text>
+              <Text style={[st.val, { color: t.accent.green, fontSize: fonts.md }]}>-{cat.tons} tons</Text>
             </View>
             <View style={st.barContainer}>
               <View style={[st.barFill, {

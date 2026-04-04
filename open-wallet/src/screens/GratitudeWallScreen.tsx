@@ -116,58 +116,58 @@ export function GratitudeWallScreen({ onClose, onSendGratitude }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     heroCard: { backgroundColor: t.accent.purple + '15', borderRadius: 24, padding: 28, marginHorizontal: 20, marginTop: 8, alignItems: 'center' },
     heroIcon: { fontSize: 56, marginBottom: 8 },
-    heroTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy, textAlign: 'center' },
-    heroSubtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 6, lineHeight: 20, fontStyle: 'italic' },
+    heroTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy, textAlign: 'center' },
+    heroSubtitle: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 6, lineHeight: 20, fontStyle: 'italic' },
     heroStatsRow: { flexDirection: 'row', justifyContent: 'space-around', width: '100%', marginTop: 16 },
     heroStat: { alignItems: 'center' },
-    heroStatValue: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
-    heroStatLabel: { color: t.text.muted, fontSize: 10, marginTop: 2 },
+    heroStatValue: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    heroStatLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
     tabRow: { flexDirection: 'row', paddingHorizontal: 12, marginTop: 16, gap: 4 },
     tabBtn: { flex: 1, paddingVertical: 10, borderRadius: 12, alignItems: 'center', backgroundColor: t.bg.card },
     tabBtnActive: { backgroundColor: t.accent.purple },
-    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold },
+    tabText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold },
     tabTextActive: { color: '#fff' },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
     // Feed styles
     feedCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginTop: 8 },
     feedHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
     feedChannel: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-    feedChannelIcon: { fontSize: 20 },
-    feedChannelLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    feedChannelIcon: { fontSize: fonts.xl },
+    feedChannelLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     feedTier: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-    feedTierIcon: { fontSize: 16 },
-    feedTierLabel: { fontSize: 12, fontWeight: fonts.bold },
-    feedUIDs: { color: t.text.muted, fontSize: 11, marginTop: 6 },
-    feedMessage: { color: t.text.primary, fontSize: 14, marginTop: 8, lineHeight: 20 },
+    feedTierIcon: { fontSize: fonts.lg },
+    feedTierLabel: { fontSize: fonts.sm, fontWeight: fonts.bold },
+    feedUIDs: { color: t.text.muted, fontSize: fonts.xs, marginTop: 6 },
+    feedMessage: { color: t.text.primary, fontSize: fonts.md, marginTop: 8, lineHeight: 20 },
     feedFooter: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 10, alignItems: 'center' },
-    feedAmount: { color: t.accent.green, fontSize: 14, fontWeight: fonts.heavy },
-    feedTime: { color: t.text.muted, fontSize: 11 },
+    feedAmount: { color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.heavy },
+    feedTime: { color: t.text.muted, fontSize: fonts.xs },
     // Stats styles
     statsCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginHorizontal: 20, marginTop: 8 },
     statsRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8 },
-    statsLabel: { color: t.text.secondary, fontSize: 13 },
-    statsValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.bold },
+    statsLabel: { color: t.text.secondary, fontSize: fonts.sm },
+    statsValue: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.bold },
     // Channel styles
     channelCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 14, marginHorizontal: 20, marginTop: 8 },
     channelRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-    channelIcon: { fontSize: 24 },
-    channelName: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, flex: 1 },
-    channelCount: { color: t.text.secondary, fontSize: 12 },
+    channelIcon: { fontSize: fonts.xxl },
+    channelName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold, flex: 1 },
+    channelCount: { color: t.text.secondary, fontSize: fonts.sm },
     channelBar: { height: 6, backgroundColor: t.border, borderRadius: 3, marginTop: 8, overflow: 'hidden' },
     channelBarFill: { height: 6, backgroundColor: t.accent.purple, borderRadius: 3 },
-    channelPct: { color: t.accent.purple, fontSize: 12, fontWeight: fonts.bold, marginTop: 4 },
+    channelPct: { color: t.accent.purple, fontSize: fonts.sm, fontWeight: fonts.bold, marginTop: 4 },
     // Wall of Thanks
     wallCard: { borderRadius: 20, padding: 20, marginHorizontal: 20, marginTop: 8, borderWidth: 2 },
-    wallMessage: { color: t.text.primary, fontSize: 16, fontWeight: fonts.semibold, lineHeight: 24, textAlign: 'center' },
-    wallFrom: { color: t.text.muted, fontSize: 12, marginTop: 10, textAlign: 'center' },
-    wallAmount: { fontSize: 14, fontWeight: fonts.heavy, textAlign: 'center', marginTop: 6 },
+    wallMessage: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.semibold, lineHeight: 24, textAlign: 'center' },
+    wallFrom: { color: t.text.muted, fontSize: fonts.sm, marginTop: 10, textAlign: 'center' },
+    wallAmount: { fontSize: fonts.md, fontWeight: fonts.heavy, textAlign: 'center', marginTop: 6 },
     // Send button
     sendBtn: { backgroundColor: t.accent.purple, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginHorizontal: 20, marginTop: 24, marginBottom: 30 },
-    sendBtnText: { color: '#fff', fontSize: 17, fontWeight: fonts.bold },
+    sendBtnText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.bold },
   }), [t]);
 
   const TABS: { key: TabKey; label: string }[] = [
@@ -255,7 +255,7 @@ export function GratitudeWallScreen({ onClose, onSendGratitude }: Props) {
           <>
             <Text style={s.section}>GRATITUDE STATISTICS</Text>
             <View style={s.statsCard}>
-              <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, marginBottom: 12 }}>Transaction Count</Text>
+              <Text style={{ color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, marginBottom: 12 }}>Transaction Count</Text>
               <View style={s.statsRow}>
                 <Text style={s.statsLabel}>Today</Text>
                 <Text style={s.statsValue}>{DEMO_STATS.today.toLocaleString()}</Text>
@@ -271,7 +271,7 @@ export function GratitudeWallScreen({ onClose, onSendGratitude }: Props) {
             </View>
 
             <View style={[s.statsCard, { marginTop: 12 }]}>
-              <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, marginBottom: 12 }}>OTK Volume</Text>
+              <Text style={{ color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, marginBottom: 12 }}>OTK Volume</Text>
               <View style={s.statsRow}>
                 <Text style={s.statsLabel}>Today</Text>
                 <Text style={[s.statsValue, { color: t.accent.green }]}>{(DEMO_STATS.todayAmount / 1000).toLocaleString()}k OTK</Text>
@@ -290,7 +290,7 @@ export function GratitudeWallScreen({ onClose, onSendGratitude }: Props) {
             <View style={s.statsCard}>
               {Object.entries(TIER_CONFIG).map(([key, cfg]) => (
                 <View key={key} style={[s.statsRow, { alignItems: 'center' }]}>
-                  <Text style={{ color: t.text.secondary, fontSize: 13 }}>
+                  <Text style={{ color: t.text.secondary, fontSize: fonts.sm }}>
                     {cfg.icon} {cfg.label}
                   </Text>
                   <Text style={[s.statsValue, { color: cfg.color }]}>
@@ -307,7 +307,7 @@ export function GratitudeWallScreen({ onClose, onSendGratitude }: Props) {
           <>
             <Text style={s.section}>WALL OF THANKS</Text>
             <View style={[{ backgroundColor: t.bg.card, borderRadius: 16, padding: 14, marginHorizontal: 20, marginBottom: 8 }]}>
-              <Text style={{ color: t.text.secondary, fontSize: 13, lineHeight: 19, textAlign: 'center' }}>
+              <Text style={{ color: t.text.secondary, fontSize: fonts.sm, lineHeight: 19, textAlign: 'center' }}>
                 Featured gratitude messages from people who chose to share their thanks publicly. Opt in when sending gratitude to appear here.
               </Text>
             </View>
@@ -315,7 +315,7 @@ export function GratitudeWallScreen({ onClose, onSendGratitude }: Props) {
               const tierCfg = TIER_CONFIG[entry.tier];
               return (
                 <View key={entry.id} style={[s.wallCard, { borderColor: tierCfg.color, backgroundColor: tierCfg.color + '10' }]}>
-                  <Text style={{ fontSize: 32, textAlign: 'center', marginBottom: 8 }}>{tierCfg.icon}</Text>
+                  <Text style={{ fontSize: fonts.hero, textAlign: 'center', marginBottom: 8 }}>{tierCfg.icon}</Text>
                   <Text style={s.wallMessage}>"{entry.message}"</Text>
                   <Text style={s.wallFrom}>{entry.fromUID} {'\u{2192}'} {entry.toUID} via {entry.channel}</Text>
                   <Text style={[s.wallAmount, { color: tierCfg.color }]}>+{entry.amount.toLocaleString()} {entry.channel}</Text>
@@ -327,7 +327,7 @@ export function GratitudeWallScreen({ onClose, onSendGratitude }: Props) {
               const tierCfg = TIER_CONFIG[entry.tier];
               return (
                 <View key={entry.id} style={[s.wallCard, { borderColor: tierCfg.color + '40', backgroundColor: t.bg.card }]}>
-                  <Text style={[s.wallMessage, { fontSize: 14 }]}>"{entry.message}"</Text>
+                  <Text style={[s.wallMessage, { fontSize: fonts.md }]}>"{entry.message}"</Text>
                   <Text style={s.wallFrom}>{entry.channelIcon} {entry.channel} — {entry.timestamp}</Text>
                 </View>
               );

@@ -307,81 +307,81 @@ export function MentalWellnessScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { flex: 1, paddingHorizontal: 16 },
-    subtitle: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 16 },
+    subtitle: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 19, marginBottom: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 11, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.xs, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
     heroCard: { backgroundColor: t.accent.purple + '10', borderRadius: 24, padding: 24, marginBottom: 16, alignItems: 'center' },
     heroIcon: { fontSize: 48, marginBottom: 8 },
-    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, textAlign: 'center' },
-    heroSubtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 4, lineHeight: 20 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 8, marginBottom: 8 },
+    heroTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy, textAlign: 'center' },
+    heroSubtitle: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 4, lineHeight: 20 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 8, marginBottom: 8 },
     summaryRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
     summaryCard: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' },
-    summaryNum: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 2 },
-    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold, textAlign: 'center' },
+    summaryNum: { fontSize: fonts.xl, fontWeight: fonts.heavy, marginBottom: 2 },
+    summaryLabel: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold, textAlign: 'center' },
     moodRow: { flexDirection: 'row', justifyContent: 'space-around', marginBottom: 16 },
     moodBtn: { alignItems: 'center', padding: 10, borderRadius: 14, minWidth: 56 },
     moodBtnActive: { backgroundColor: t.accent.blue + '20', borderWidth: 2, borderColor: t.accent.blue },
-    moodEmoji: { fontSize: 32, marginBottom: 4 },
-    moodLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold },
-    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, minHeight: 80, textAlignVertical: 'top' },
-    inputSmall: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, minHeight: 50, textAlignVertical: 'top' },
-    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 },
-    promptText: { color: t.accent.purple, fontSize: 14, fontStyle: 'italic', marginBottom: 12, lineHeight: 20 },
+    moodEmoji: { fontSize: fonts.hero, marginBottom: 4 },
+    moodLabel: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold },
+    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md, minHeight: 80, textAlignVertical: 'top' },
+    inputSmall: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md, minHeight: 50, textAlignVertical: 'top' },
+    inputLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 },
+    promptText: { color: t.accent.purple, fontSize: fonts.md, fontStyle: 'italic', marginBottom: 12, lineHeight: 20 },
     actionBtn: { backgroundColor: t.accent.purple, borderRadius: 14, paddingVertical: 14, alignItems: 'center', marginTop: 12 },
-    actionBtnText: { color: '#fff', fontSize: 16, fontWeight: fonts.bold },
+    actionBtnText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.bold },
     secondaryBtn: { backgroundColor: t.bg.card, borderRadius: 14, paddingVertical: 14, alignItems: 'center', marginTop: 8, borderWidth: 1, borderColor: t.accent.red },
-    secondaryBtnText: { color: t.accent.red, fontSize: 16, fontWeight: fonts.bold },
+    secondaryBtnText: { color: t.accent.red, fontSize: fonts.lg, fontWeight: fonts.bold },
     moodBar: { height: 24, borderRadius: 6, marginBottom: 4 },
-    moodDate: { color: t.text.muted, fontSize: 10, marginBottom: 2 },
-    moodNote: { color: t.text.secondary, fontSize: 11, marginTop: 2 },
+    moodDate: { color: t.text.muted, fontSize: fonts.xs, marginBottom: 2 },
+    moodNote: { color: t.text.secondary, fontSize: fonts.xs, marginTop: 2 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
-    label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    label: { color: t.text.muted, fontSize: fonts.sm },
+    val: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     listenerCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 10, flexDirection: 'row', alignItems: 'center' },
-    listenerIcon: { fontSize: 28, marginRight: 12 },
+    listenerIcon: { fontSize: fonts.xxxl, marginRight: 12 },
     listenerInfo: { flex: 1 },
-    listenerName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
-    listenerSpec: { color: t.text.muted, fontSize: 12, marginTop: 2 },
+    listenerName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    listenerSpec: { color: t.text.muted, fontSize: fonts.sm, marginTop: 2 },
     connectBtn: { backgroundColor: t.accent.green, paddingHorizontal: 14, paddingVertical: 8, borderRadius: 10 },
     connectBtnOff: { backgroundColor: t.bg.primary },
-    connectBtnText: { color: '#fff', fontSize: 13, fontWeight: fonts.bold },
+    connectBtnText: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.bold },
     connectBtnTextOff: { color: t.text.muted },
     crisisCard: { backgroundColor: t.accent.red + '10', borderRadius: 14, padding: 16, marginBottom: 10, borderWidth: 1, borderColor: t.accent.red + '30' },
-    crisisRegion: { color: t.accent.red, fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1 },
-    crisisName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, marginTop: 4 },
-    crisisNumber: { color: t.accent.blue, fontSize: 18, fontWeight: fonts.heavy, marginTop: 4 },
-    crisisAvail: { color: t.text.muted, fontSize: 11, marginTop: 2 },
+    crisisRegion: { color: t.accent.red, fontSize: fonts.xs, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1 },
+    crisisName: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, marginTop: 4 },
+    crisisNumber: { color: t.accent.blue, fontSize: fonts.xl, fontWeight: fonts.heavy, marginTop: 4 },
+    crisisAvail: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
     circleCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
     circleHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
-    circleIcon: { fontSize: 28, marginRight: 10 },
-    circleName: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, flex: 1 },
-    circleDesc: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 8 },
+    circleIcon: { fontSize: fonts.xxxl, marginRight: 10 },
+    circleName: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, flex: 1 },
+    circleDesc: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 19, marginBottom: 8 },
     badge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, alignSelf: 'flex-start' },
-    badgeText: { fontSize: 10, fontWeight: fonts.bold, color: '#fff' },
+    badgeText: { fontSize: fonts.xs, fontWeight: fonts.bold, color: '#fff' },
     exerciseCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 10 },
     exerciseHeader: { flexDirection: 'row', alignItems: 'center' },
-    exerciseIcon: { fontSize: 24, marginRight: 10 },
-    exerciseTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, flex: 1 },
-    exerciseDuration: { color: t.text.muted, fontSize: 12 },
-    exerciseStep: { color: t.text.secondary, fontSize: 13, lineHeight: 22, marginLeft: 8 },
-    exerciseStepNum: { color: t.accent.purple, fontSize: 13, fontWeight: fonts.bold },
+    exerciseIcon: { fontSize: fonts.xxl, marginRight: 10 },
+    exerciseTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, flex: 1 },
+    exerciseDuration: { color: t.text.muted, fontSize: fonts.sm },
+    exerciseStep: { color: t.text.secondary, fontSize: fonts.sm, lineHeight: 22, marginLeft: 8 },
+    exerciseStepNum: { color: t.accent.purple, fontSize: fonts.sm, fontWeight: fonts.bold },
     eventCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 10, flexDirection: 'row', alignItems: 'center' },
-    eventIcon: { fontSize: 28, marginRight: 12 },
+    eventIcon: { fontSize: fonts.xxxl, marginRight: 12 },
     eventInfo: { flex: 1 },
-    eventTitle: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
-    eventDate: { color: t.text.muted, fontSize: 12, marginTop: 2 },
-    eventAttendees: { color: t.text.secondary, fontSize: 11, marginTop: 2 },
+    eventTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    eventDate: { color: t.text.muted, fontSize: fonts.sm, marginTop: 2 },
+    eventAttendees: { color: t.text.secondary, fontSize: fonts.xs, marginTop: 2 },
     joinBtn: { backgroundColor: t.accent.blue, paddingHorizontal: 14, paddingVertical: 8, borderRadius: 10 },
-    joinBtnText: { color: '#fff', fontSize: 13, fontWeight: fonts.bold },
-    empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
+    joinBtnText: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.bold },
+    empty: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', marginTop: 40 },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 12 },
   }), [t]);
 
@@ -486,7 +486,7 @@ export function MentalWellnessScreen({ onClose }: Props) {
               <View key={i} style={s.card}>
                 <View style={s.row}>
                   <Text style={s.moodDate}>{entry.date}</Text>
-                  <Text style={{ fontSize: 18 }}>{m.emoji}</Text>
+                  <Text style={{ fontSize: fonts.xl }}>{m.emoji}</Text>
                 </View>
                 <View style={[s.moodBar, { width: `${barWidth}%`, backgroundColor: m.color + '40' }]} />
                 <Text style={s.moodNote}>{entry.note}</Text>
@@ -547,7 +547,7 @@ export function MentalWellnessScreen({ onClose }: Props) {
             <View style={s.listenerInfo}>
               <Text style={s.listenerName}>{listener.name}</Text>
               <Text style={s.listenerSpec}>{listener.specialty}</Text>
-              <Text style={{ color: t.text.muted, fontSize: 11, marginTop: 2 }}>
+              <Text style={{ color: t.text.muted, fontSize: fonts.xs, marginTop: 2 }}>
                 {listener.rating}/5 \u2605 \u00B7 {listener.sessions} sessions
               </Text>
             </View>
@@ -619,7 +619,7 @@ export function MentalWellnessScreen({ onClose }: Props) {
               </View>
               <View style={[s.row, { marginTop: 6, marginBottom: 0 }]}>
                 <Text style={s.exerciseDuration}>{ex.duration}</Text>
-                <Text style={{ color: t.accent.blue, fontSize: 12 }}>
+                <Text style={{ color: t.accent.blue, fontSize: fonts.sm }}>
                   {isExpanded ? 'Collapse' : 'Start'}
                 </Text>
               </View>

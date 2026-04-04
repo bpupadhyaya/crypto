@@ -40,19 +40,19 @@ export function TokenSelector({ visible, onSelect, onClose, title, filterChain }
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg, fontWeight: fonts.semibold },
     searchBox: {
       marginHorizontal: 20, marginBottom: 12, backgroundColor: t.bg.card,
       borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12,
-      color: t.text.primary, fontSize: 15,
+      color: t.text.primary, fontSize: fonts.md,
     },
     sectionHeader: {
       paddingHorizontal: 20, paddingVertical: 8,
       backgroundColor: t.bg.secondary,
     },
     sectionTitle: {
-      color: t.text.muted, fontSize: 12, fontWeight: fonts.bold,
+      color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.bold,
       textTransform: 'uppercase', letterSpacing: 1.2,
     },
     tokenRow: {
@@ -61,16 +61,16 @@ export function TokenSelector({ visible, onSelect, onClose, title, filterChain }
       borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: t.border,
     },
     dot: { width: 36, height: 36, borderRadius: 18, justifyContent: 'center', alignItems: 'center', marginRight: 14 },
-    dotText: { color: '#fff', fontSize: 13, fontWeight: fonts.heavy },
+    dotText: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.heavy },
     tokenInfo: { flex: 1 },
-    tokenSymbol: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
-    tokenName: { color: t.text.muted, fontSize: 13, marginTop: 1 },
-    tokenChainBadge: { color: t.text.muted, fontSize: 11, marginTop: 2 },
+    tokenSymbol: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold },
+    tokenName: { color: t.text.muted, fontSize: fonts.sm, marginTop: 1 },
+    tokenChainBadge: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
     tokenRight: { alignItems: 'flex-end' },
-    tokenPrice: { color: t.text.secondary, fontSize: 14, fontWeight: fonts.semibold },
-    tokenBalance: { color: t.text.muted, fontSize: 12, marginTop: 2 },
+    tokenPrice: { color: t.text.secondary, fontSize: fonts.md, fontWeight: fonts.semibold },
+    tokenBalance: { color: t.text.muted, fontSize: fonts.sm, marginTop: 2 },
     empty: { padding: 40, alignItems: 'center' },
-    emptyText: { color: t.text.muted, fontSize: 14 },
+    emptyText: { color: t.text.muted, fontSize: fonts.md },
   }), [t]);
 
   // Build filtered + grouped list

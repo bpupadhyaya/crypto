@@ -89,64 +89,64 @@ export function LendBorrowScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { paddingHorizontal: 20, paddingBottom: 40 },
     summaryCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 16 },
-    summaryTitle: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12 },
+    summaryTitle: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12 },
     summaryRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
-    summaryLabel: { color: t.text.muted, fontSize: 14 },
-    summaryValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
-    summaryValueGreen: { color: t.accent.green, fontSize: 14, fontWeight: fonts.semibold },
-    summaryValueRed: { color: t.accent.red, fontSize: 14, fontWeight: fonts.semibold },
+    summaryLabel: { color: t.text.muted, fontSize: fonts.md },
+    summaryValue: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
+    summaryValueGreen: { color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.semibold },
+    summaryValueRed: { color: t.accent.red, fontSize: fonts.md, fontWeight: fonts.semibold },
     healthBar: { height: 8, backgroundColor: t.border, borderRadius: 4, marginTop: 8, marginBottom: 4 },
     healthFill: { height: 8, borderRadius: 4 },
-    healthLabel: { color: t.text.muted, fontSize: 11, textAlign: 'right' },
+    healthLabel: { color: t.text.muted, fontSize: fonts.xs, textAlign: 'right' },
     warningCard: { backgroundColor: t.accent.red + '15', borderRadius: 12, padding: 14, marginBottom: 16, borderWidth: 1, borderColor: t.accent.red + '30' },
-    warningTitle: { color: t.accent.red, fontSize: 14, fontWeight: fonts.heavy, marginBottom: 4 },
-    warningText: { color: t.accent.red, fontSize: 12, lineHeight: 18 },
+    warningTitle: { color: t.accent.red, fontSize: fonts.md, fontWeight: fonts.heavy, marginBottom: 4 },
+    warningText: { color: t.accent.red, fontSize: fonts.sm, lineHeight: 18 },
     cautionCard: { backgroundColor: t.accent.yellow + '15', borderRadius: 12, padding: 14, marginBottom: 16, borderWidth: 1, borderColor: t.accent.yellow + '30' },
-    cautionTitle: { color: t.accent.yellow, fontSize: 14, fontWeight: fonts.heavy, marginBottom: 4 },
-    cautionText: { color: t.accent.yellow, fontSize: 12, lineHeight: 18 },
-    sectionTitle: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 8, marginTop: 16 },
+    cautionTitle: { color: t.accent.yellow, fontSize: fonts.md, fontWeight: fonts.heavy, marginBottom: 4 },
+    cautionText: { color: t.accent.yellow, fontSize: fonts.sm, lineHeight: 18 },
+    sectionTitle: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 8, marginTop: 16 },
     marketCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     marketHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
-    marketToken: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
-    marketPrice: { color: t.text.muted, fontSize: 13 },
+    marketToken: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold },
+    marketPrice: { color: t.text.muted, fontSize: fonts.sm },
     apyRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
-    apyLabel: { color: t.text.muted, fontSize: 12 },
-    apyValueGreen: { color: t.accent.green, fontSize: 12, fontWeight: fonts.bold },
-    apyValueRed: { color: t.accent.red, fontSize: 12, fontWeight: fonts.semibold },
+    apyLabel: { color: t.text.muted, fontSize: fonts.sm },
+    apyValueGreen: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold },
+    apyValueRed: { color: t.accent.red, fontSize: fonts.sm, fontWeight: fonts.semibold },
     statsRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 },
-    statLabel: { color: t.text.muted, fontSize: 11 },
-    statValue: { color: t.text.secondary, fontSize: 11, fontWeight: fonts.semibold },
+    statLabel: { color: t.text.muted, fontSize: fonts.xs },
+    statValue: { color: t.text.secondary, fontSize: fonts.xs, fontWeight: fonts.semibold },
     positionRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 8, paddingTop: 8, borderTopWidth: 1, borderTopColor: t.border },
-    positionLabel: { color: t.accent.green, fontSize: 12 },
-    positionValue: { color: t.accent.green, fontSize: 12, fontWeight: fonts.semibold },
-    borrowedLabel: { color: t.accent.red, fontSize: 12 },
-    borrowedValue: { color: t.accent.red, fontSize: 12, fontWeight: fonts.semibold },
+    positionLabel: { color: t.accent.green, fontSize: fonts.sm },
+    positionValue: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    borrowedLabel: { color: t.accent.red, fontSize: fonts.sm },
+    borrowedValue: { color: t.accent.red, fontSize: fonts.sm, fontWeight: fonts.semibold },
     actionRow: { flexDirection: 'row', gap: 6, marginTop: 10 },
     actionBtn: { flex: 1, paddingVertical: 10, borderRadius: 10, alignItems: 'center' },
     supplyBtn: { backgroundColor: t.accent.green + '20' },
     withdrawBtn: { backgroundColor: t.accent.yellow + '20' },
     borrowBtn: { backgroundColor: t.accent.blue + '20' },
     repayBtn: { backgroundColor: t.accent.red + '20' },
-    supplyBtnText: { color: t.accent.green, fontSize: 12, fontWeight: fonts.bold },
-    withdrawBtnText: { color: t.accent.yellow, fontSize: 12, fontWeight: fonts.bold },
-    borrowBtnText: { color: t.accent.blue, fontSize: 12, fontWeight: fonts.bold },
-    repayBtnText: { color: t.accent.red, fontSize: 12, fontWeight: fonts.bold },
+    supplyBtnText: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold },
+    withdrawBtnText: { color: t.accent.yellow, fontSize: fonts.sm, fontWeight: fonts.bold },
+    borrowBtnText: { color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.bold },
+    repayBtnText: { color: t.accent.red, fontSize: fonts.sm, fontWeight: fonts.bold },
     utilizationBar: { height: 4, backgroundColor: t.border, borderRadius: 2, marginTop: 4, marginBottom: 6 },
     utilizationFill: { height: 4, borderRadius: 2, backgroundColor: t.accent.blue },
     modalCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 16 },
-    modalTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, marginBottom: 16 },
-    inputLabel: { color: t.text.muted, fontSize: 12, marginBottom: 4 },
-    input: { backgroundColor: t.bg.primary, borderRadius: 10, padding: 14, color: t.text.primary, fontSize: 16, marginBottom: 12, borderWidth: 1, borderColor: t.border },
+    modalTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy, marginBottom: 16 },
+    inputLabel: { color: t.text.muted, fontSize: fonts.sm, marginBottom: 4 },
+    input: { backgroundColor: t.bg.primary, borderRadius: 10, padding: 14, color: t.text.primary, fontSize: fonts.lg, marginBottom: 12, borderWidth: 1, borderColor: t.border },
     submitBtn: { backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginTop: 8 },
-    submitBtnText: { color: '#000', fontSize: 16, fontWeight: fonts.heavy },
+    submitBtnText: { color: '#000', fontSize: fonts.lg, fontWeight: fonts.heavy },
     cancelBtn: { paddingVertical: 14, alignItems: 'center', marginTop: 8 },
-    cancelBtnText: { color: t.accent.blue, fontSize: 15 },
+    cancelBtnText: { color: t.accent.blue, fontSize: fonts.md },
     collateralTag: { backgroundColor: t.border, borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 },
-    collateralText: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold },
+    collateralText: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold },
   }), [t]);
 
   const handleSupply = useCallback(() => {
@@ -330,7 +330,7 @@ export function LendBorrowScreen({ onClose }: Props) {
                       style={{ flex: 1, paddingVertical: 8, borderRadius: 8, backgroundColor: t.border, alignItems: 'center' }}
                       onPress={() => setAmount(((base * pct) / 100).toFixed(selectedMarket.token === 'BTC' ? 4 : 2))}
                     >
-                      <Text style={{ color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold }}>{pct}%</Text>
+                      <Text style={{ color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold }}>{pct}%</Text>
                     </TouchableOpacity>
                   );
                 })}
@@ -515,7 +515,7 @@ export function LendBorrowScreen({ onClose }: Props) {
             <View style={s.utilizationBar}>
               <View style={[s.utilizationFill, { width: `${market.utilization}%` }]} />
             </View>
-            <Text style={{ color: t.text.muted, fontSize: 10, textAlign: 'right' }}>
+            <Text style={{ color: t.text.muted, fontSize: fonts.xs, textAlign: 'right' }}>
               {market.utilization.toFixed(1)}% utilization
             </Text>
 
@@ -570,7 +570,7 @@ export function LendBorrowScreen({ onClose }: Props) {
         ))}
 
         {!demoMode && markets.length === 0 && (
-          <Text style={{ color: t.text.muted, fontSize: 14, textAlign: 'center', paddingVertical: 32 }}>
+          <Text style={{ color: t.text.muted, fontSize: fonts.md, textAlign: 'center', paddingVertical: 32 }}>
             No lending markets available. Enable Demo Mode to explore.
           </Text>
         )}

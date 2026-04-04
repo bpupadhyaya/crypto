@@ -57,27 +57,27 @@ export function UnlockScreen() {
     center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
     content: { flex: 1, justifyContent: 'center', paddingHorizontal: 24 },
     logo: { color: t.accent.green, fontSize: 40, fontWeight: fonts.heavy, textAlign: 'center', marginBottom: 8 },
-    title: { color: t.text.primary, fontSize: 28, fontWeight: fonts.heavy, textAlign: 'center' },
-    subtitle: { color: t.text.secondary, fontSize: 15, textAlign: 'center', marginTop: 8, marginBottom: 32 },
-    input: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, color: t.text.primary, fontSize: 16, marginBottom: 12 },
-    textArea: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, color: t.text.primary, fontSize: 16, minHeight: 120, textAlignVertical: 'top', marginBottom: 12 },
+    title: { color: t.text.primary, fontSize: fonts.xxxl, fontWeight: fonts.heavy, textAlign: 'center' },
+    subtitle: { color: t.text.secondary, fontSize: fonts.md, textAlign: 'center', marginTop: 8, marginBottom: 32 },
+    input: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, color: t.text.primary, fontSize: fonts.lg, marginBottom: 12 },
+    textArea: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, color: t.text.primary, fontSize: fonts.lg, minHeight: 120, textAlignVertical: 'top', marginBottom: 12 },
     unlockButton: { backgroundColor: t.accent.green, borderRadius: 16, paddingVertical: 18, alignItems: 'center' },
     buttonDisabled: { opacity: 0.6 },
-    unlockButtonText: { color: t.bg.primary, fontSize: 17, fontWeight: fonts.bold },
-    linkText: { color: t.accent.blue, fontSize: 14, textAlign: 'center' },
+    unlockButtonText: { color: t.bg.primary, fontSize: fonts.lg, fontWeight: fonts.bold },
+    linkText: { color: t.accent.blue, fontSize: fonts.md, textAlign: 'center' },
     bottomActions: { paddingHorizontal: 24, paddingBottom: 32 },
-    altMethodsTitle: { color: t.text.muted, fontSize: 12, textTransform: 'uppercase', letterSpacing: 1.5, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 12, marginTop: 8 },
+    altMethodsTitle: { color: t.text.muted, fontSize: fonts.sm, textTransform: 'uppercase', letterSpacing: 1.5, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 12, marginTop: 8 },
     altMethodRow: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 8, marginBottom: 8 },
     altMethodBtn: { borderWidth: 1, borderColor: t.border, borderRadius: 12, paddingVertical: 10, paddingHorizontal: 16 },
-    altMethodText: { color: t.accent.blue, fontSize: 13, fontWeight: fonts.semibold },
+    altMethodText: { color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.semibold },
     builtinIndicator: { borderColor: t.accent.green },
     builtinText: { color: t.accent.green },
     backLink: { marginTop: 16, alignItems: 'center' },
-    warningText: { color: t.accent.yellow, fontSize: 12, textAlign: 'center', marginTop: 12, lineHeight: 18 },
+    warningText: { color: t.accent.yellow, fontSize: fonts.sm, textAlign: 'center', marginTop: 12, lineHeight: 18 },
     hwCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 16, alignItems: 'center' },
     hwIcon: { fontSize: 48, marginBottom: 12 },
-    hwTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.bold, marginBottom: 4 },
-    hwDesc: { color: t.text.muted, fontSize: 13, textAlign: 'center', lineHeight: 20 },
+    hwTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold, marginBottom: 4 },
+    hwDesc: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', lineHeight: 20 },
     coldStorageCard: {
       backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 16,
       alignItems: 'center', borderWidth: 2, borderColor: t.accent.green,
@@ -85,8 +85,8 @@ export function UnlockScreen() {
     coldStorageDot: {
       width: 10, height: 10, borderRadius: 5, backgroundColor: t.accent.green, marginBottom: 8,
     },
-    coldStorageProvider: { color: t.accent.green, fontSize: 14, fontWeight: fonts.semibold, marginBottom: 8 },
-    coldStorageDesc: { color: t.text.muted, fontSize: 13, textAlign: 'center', lineHeight: 20 },
+    coldStorageProvider: { color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.semibold, marginBottom: 8 },
+    coldStorageDesc: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', lineHeight: 20 },
     biometricButton: {
       backgroundColor: t.bg.card,
       borderRadius: 16,
@@ -97,9 +97,9 @@ export function UnlockScreen() {
       borderWidth: 2,
       borderColor: t.accent.green,
     },
-    biometricButtonText: { color: t.accent.green, fontSize: 15, fontWeight: fonts.bold },
-    biometricIcon: { fontSize: 32, marginBottom: 4 },
-    orDivider: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginVertical: 8, textTransform: 'uppercase', letterSpacing: 1 },
+    biometricButtonText: { color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.bold },
+    biometricIcon: { fontSize: fonts.hero, marginBottom: 4 },
+    orDivider: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginVertical: 8, textTransform: 'uppercase', letterSpacing: 1 },
   }), [t]);
 
   useEffect(() => {
@@ -367,16 +367,16 @@ export function UnlockScreen() {
       <TouchableOpacity style={styles.biometricButton} onPress={triggerBiometric}>
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 16 }}>
           <View style={{ alignItems: 'center' }}>
-            <Text style={{ fontSize: 24 }}>🔏</Text>
-            <Text style={{ color: t.text.muted, fontSize: 9 }}>Fingerprint</Text>
+            <Text style={{ fontSize: fonts.xxl }}>🔏</Text>
+            <Text style={{ color: t.text.muted, fontSize: fonts.xxs }}>Fingerprint</Text>
           </View>
           <View style={{ alignItems: 'center' }}>
-            <Text style={{ fontSize: 24 }}>🔓</Text>
-            <Text style={{ color: t.text.muted, fontSize: 9 }}>Face</Text>
+            <Text style={{ fontSize: fonts.xxl }}>🔓</Text>
+            <Text style={{ color: t.text.muted, fontSize: fonts.xxs }}>Face</Text>
           </View>
           <View style={{ alignItems: 'center' }}>
-            <Text style={{ fontSize: 24 }}>👁</Text>
-            <Text style={{ color: t.text.muted, fontSize: 9 }}>Iris</Text>
+            <Text style={{ fontSize: fonts.xxl }}>👁</Text>
+            <Text style={{ color: t.text.muted, fontSize: fonts.xxs }}>Iris</Text>
           </View>
         </View>
         <Text style={[styles.biometricButtonText, { marginTop: 8 }]}>Unlock with Biometrics</Text>
@@ -435,7 +435,7 @@ export function UnlockScreen() {
             onPress={handleDevAutoUnlock}
             style={{ alignItems: 'center', paddingVertical: 10, paddingBottom: 20 }}
           >
-            <Text style={{ color: '#f59e0b', fontSize: 13, fontWeight: fonts.semibold }}>⚡ Dev: Unlock with PIN 123456</Text>
+            <Text style={{ color: '#f59e0b', fontSize: fonts.sm, fontWeight: fonts.semibold }}>⚡ Dev: Unlock with PIN 123456</Text>
           </TouchableOpacity>
         )}
       </SafeAreaView>

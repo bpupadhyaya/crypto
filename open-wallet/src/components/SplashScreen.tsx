@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   appName: {
-    fontSize: 20,
+    fontSize: fonts.xl,
     fontWeight: fonts.semibold,
     color: '#22c55e',
     opacity: 0.7,

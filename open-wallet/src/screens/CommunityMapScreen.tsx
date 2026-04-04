@@ -206,48 +206,48 @@ export function CommunityMapScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { flex: 1, paddingHorizontal: 16 },
-    subtitle: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 16 },
+    subtitle: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 19, marginBottom: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 11, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.xs, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
-    cardTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 2 },
+    cardTitle: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, marginBottom: 2 },
     row: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 },
-    label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    label: { color: t.text.muted, fontSize: fonts.sm },
+    val: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 8 },
     catRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 16 },
     catChip: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 10, backgroundColor: t.bg.card, flexDirection: 'row', alignItems: 'center', gap: 4 },
     catChipActive: { borderWidth: 2 },
-    catChipText: { fontSize: 12, fontWeight: fonts.semibold },
+    catChipText: { fontSize: fonts.sm, fontWeight: fonts.semibold },
     ratingRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-    ratingText: { color: '#eab308', fontSize: 14, fontWeight: fonts.bold },
-    ratingCount: { color: t.text.muted, fontSize: 11 },
+    ratingText: { color: '#eab308', fontSize: fonts.md, fontWeight: fonts.bold },
+    ratingCount: { color: t.text.muted, fontSize: fonts.xs },
     verifiedBadge: { backgroundColor: '#22c55e', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 6 },
-    verifiedText: { color: '#fff', fontSize: 9, fontWeight: fonts.bold },
+    verifiedText: { color: '#fff', fontSize: fonts.xxs, fontWeight: fonts.bold },
     unverifiedBadge: { backgroundColor: t.border, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 6 },
-    unverifiedText: { color: t.text.muted, fontSize: 9, fontWeight: fonts.bold },
+    unverifiedText: { color: t.text.muted, fontSize: fonts.xxs, fontWeight: fonts.bold },
     accessRow: { flexDirection: 'row', gap: 8, marginTop: 6 },
     accessBadge: { flexDirection: 'row', alignItems: 'center', gap: 2, backgroundColor: t.accent.blue + '18', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 6 },
-    accessText: { color: t.accent.blue, fontSize: 10, fontWeight: fonts.semibold },
+    accessText: { color: t.accent.blue, fontSize: fonts.xs, fontWeight: fonts.semibold },
     favBtn: { padding: 6 },
-    favText: { fontSize: 20 },
-    searchInput: { backgroundColor: t.bg.card, borderRadius: 10, padding: 14, color: t.text.primary, fontSize: 15, marginBottom: 12, borderWidth: 1, borderColor: t.border },
-    formInput: { backgroundColor: t.bg.card, borderRadius: 10, padding: 14, color: t.text.primary, fontSize: 14, marginBottom: 10, borderWidth: 1, borderColor: t.border },
-    formLabel: { color: t.text.muted, fontSize: 11, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 },
+    favText: { fontSize: fonts.xl },
+    searchInput: { backgroundColor: t.bg.card, borderRadius: 10, padding: 14, color: t.text.primary, fontSize: fonts.md, marginBottom: 12, borderWidth: 1, borderColor: t.border },
+    formInput: { backgroundColor: t.bg.card, borderRadius: 10, padding: 14, color: t.text.primary, fontSize: fonts.md, marginBottom: 10, borderWidth: 1, borderColor: t.border },
+    formLabel: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 },
     ctaBtn: { backgroundColor: t.accent.blue, paddingVertical: 12, borderRadius: 10, alignItems: 'center', marginTop: 8 },
-    ctaText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
-    empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 8, marginBottom: 8 },
+    ctaText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
+    empty: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', marginTop: 40 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 8, marginBottom: 8 },
     iconCircle: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center', marginRight: 10 },
     successCard: { backgroundColor: '#22c55e' + '18', borderRadius: 14, padding: 20, alignItems: 'center', marginBottom: 12 },
-    successText: { color: '#22c55e', fontSize: 16, fontWeight: fonts.bold, marginTop: 8 },
-    successSub: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 4 },
+    successText: { color: '#22c55e', fontSize: fonts.lg, fontWeight: fonts.bold, marginTop: 8 },
+    successSub: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 4 },
   }), [t]);
 
   const resources = demoMode ? DEMO_RESOURCES : [];
@@ -279,7 +279,7 @@ export function CommunityMapScreen({ onClose }: Props) {
         <View style={[st.row, { alignItems: 'center', marginBottom: 8 }]}>
           <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
             <View style={[st.iconCircle, { backgroundColor: meta.color + '22' }]}>
-              <Text style={{ fontSize: 18 }}>{meta.icon}</Text>
+              <Text style={{ fontSize: fonts.xl }}>{meta.icon}</Text>
             </View>
             <View style={{ flex: 1 }}>
               <Text style={st.cardTitle}>{res.name}</Text>
@@ -319,7 +319,7 @@ export function CommunityMapScreen({ onClose }: Props) {
           <View style={st.accessRow}>
             {accessFeatures.map(a => (
               <View key={a.key} style={st.accessBadge}>
-                <Text style={{ fontSize: 12 }}>{a.icon}</Text>
+                <Text style={{ fontSize: fonts.sm }}>{a.icon}</Text>
                 <Text style={st.accessText}>{a.label}</Text>
               </View>
             ))}
@@ -358,7 +358,7 @@ export function CommunityMapScreen({ onClose }: Props) {
               style={[st.catChip, active && { backgroundColor: meta.color + '22', borderColor: meta.color, borderWidth: 2 }]}
               onPress={() => setSelectedCategory(active ? null : cat)}
             >
-              <Text style={{ fontSize: 14 }}>{meta.icon}</Text>
+              <Text style={{ fontSize: fonts.md }}>{meta.icon}</Text>
               <Text style={[st.catChipText, { color: active ? meta.color : t.text.secondary }]}>{meta.label}</Text>
             </TouchableOpacity>
           );
@@ -461,8 +461,8 @@ export function CommunityMapScreen({ onClose }: Props) {
                   style={[st.catChip, active && { backgroundColor: meta.color + '22', borderColor: meta.color, borderWidth: 2 }]}
                   onPress={() => setNewCategory(active ? null : cat)}
                 >
-                  <Text style={{ fontSize: 12 }}>{meta.icon}</Text>
-                  <Text style={[st.catChipText, { color: active ? meta.color : t.text.secondary, fontSize: 10 }]}>{meta.label}</Text>
+                  <Text style={{ fontSize: fonts.sm }}>{meta.icon}</Text>
+                  <Text style={[st.catChipText, { color: active ? meta.color : t.text.secondary, fontSize: fonts.xs }]}>{meta.label}</Text>
                 </TouchableOpacity>
               );
             })}

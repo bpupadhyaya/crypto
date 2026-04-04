@@ -75,33 +75,33 @@ export function DAppBrowserScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 12 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     addressBar: { flexDirection: 'row', alignItems: 'center', backgroundColor: t.bg.card, marginHorizontal: 16, borderRadius: 12, paddingHorizontal: 12, marginBottom: 8 },
     addressChip: { backgroundColor: t.accent.green + '20', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, marginHorizontal: 16, marginBottom: 12, alignSelf: 'flex-start' },
-    addressText: { color: t.accent.green, fontSize: 12, fontWeight: fonts.semibold },
-    urlInput: { flex: 1, color: t.text.primary, fontSize: 14, paddingVertical: 12 },
+    addressText: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    urlInput: { flex: 1, color: t.text.primary, fontSize: fonts.md, paddingVertical: 12 },
     navBtn: { paddingHorizontal: 8, paddingVertical: 10 },
-    navBtnText: { fontSize: 18 },
+    navBtnText: { fontSize: fonts.xl },
     navBtnDisabled: { opacity: 0.3 },
     content: { flex: 1, paddingHorizontal: 20 },
-    sectionTitle: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12 },
+    sectionTitle: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12 },
     bookmarkGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
     bookmarkCard: { width: '30%', backgroundColor: t.bg.card, borderRadius: 16, padding: 16, alignItems: 'center', marginBottom: 4 },
     bookmarkIcon: { width: 48, height: 48, borderRadius: 24, justifyContent: 'center', alignItems: 'center', marginBottom: 8 },
-    bookmarkIconText: { color: '#fff', fontSize: 14, fontWeight: fonts.heavy },
-    bookmarkName: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold, textAlign: 'center' },
-    bookmarkChain: { color: t.text.muted, fontSize: 11, marginTop: 2 },
-    introText: { color: t.text.muted, fontSize: 14, lineHeight: 22, marginBottom: 24, textAlign: 'center' },
+    bookmarkIconText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.heavy },
+    bookmarkName: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold, textAlign: 'center' },
+    bookmarkChain: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
+    introText: { color: t.text.muted, fontSize: fonts.md, lineHeight: 22, marginBottom: 24, textAlign: 'center' },
     historyItem: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: t.border },
-    historyUrl: { color: t.text.primary, fontSize: 14, flex: 1 },
-    historyTime: { color: t.text.muted, fontSize: 12 },
+    historyUrl: { color: t.text.primary, fontSize: fonts.md, flex: 1 },
+    historyTime: { color: t.text.muted, fontSize: fonts.sm },
     webviewContainer: { flex: 1 },
-    emptyHistory: { color: t.text.muted, fontSize: 14, textAlign: 'center', paddingTop: 20 },
+    emptyHistory: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', paddingTop: 20 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 8 },
     tab: { paddingVertical: 6, paddingHorizontal: 16, borderRadius: 8, backgroundColor: t.border },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
   }), [t]);
 
@@ -149,7 +149,7 @@ export function DAppBrowserScreen({ onClose }: Props) {
           <TouchableOpacity onPress={() => setBrowsing(false)}>
             <Text style={s.closeBtn}>Home</Text>
           </TouchableOpacity>
-          <Text style={[s.title, { fontSize: 16 }]}>DApp Browser</Text>
+          <Text style={[s.title, { fontSize: fonts.lg }]}>DApp Browser</Text>
           <TouchableOpacity onPress={onClose}>
             <Text style={s.closeBtn}>Close</Text>
           </TouchableOpacity>
@@ -217,7 +217,7 @@ export function DAppBrowserScreen({ onClose }: Props) {
           <TouchableOpacity onPress={() => setBrowsing(false)}>
             <Text style={s.closeBtn}>Home</Text>
           </TouchableOpacity>
-          <Text style={[s.title, { fontSize: 16 }]}>DApp Browser</Text>
+          <Text style={[s.title, { fontSize: fonts.lg }]}>DApp Browser</Text>
           <TouchableOpacity onPress={onClose}>
             <Text style={s.closeBtn}>Close</Text>
           </TouchableOpacity>
@@ -241,10 +241,10 @@ export function DAppBrowserScreen({ onClose }: Props) {
         </View>
 
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 40 }}>
-          <Text style={{ color: t.text.primary, fontSize: 18, fontWeight: fonts.bold, marginBottom: 8, textAlign: 'center' }}>
+          <Text style={{ color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold, marginBottom: 8, textAlign: 'center' }}>
             {demoMode ? 'Demo Mode' : 'WebView Unavailable'}
           </Text>
-          <Text style={{ color: t.text.muted, fontSize: 14, textAlign: 'center', lineHeight: 22 }}>
+          <Text style={{ color: t.text.muted, fontSize: fonts.md, textAlign: 'center', lineHeight: 22 }}>
             {demoMode
               ? `Navigating to ${currentUrl}\n\nIn demo mode, DApp pages are not loaded. Disable demo mode to browse real DApps.`
               : 'WebView is not available in this environment. Install react-native-webview to enable DApp browsing.'}

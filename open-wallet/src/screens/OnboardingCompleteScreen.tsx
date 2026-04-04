@@ -105,8 +105,8 @@ export function OnboardingCompleteScreen({ onClose }: Props) {
       paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1,
       borderBottomColor: t.border,
     },
-    title: { fontSize: 18, fontWeight: fonts.bold, color: t.text.primary },
-    closeBtn: { fontSize: 16, color: t.accent.green },
+    title: { fontSize: fonts.xl, fontWeight: fonts.bold, color: t.text.primary },
+    closeBtn: { fontSize: fonts.lg, color: t.accent.green },
     scroll: { flex: 1 },
     heroSection: {
       padding: 24, alignItems: 'center', borderBottomWidth: 1,
@@ -114,25 +114,25 @@ export function OnboardingCompleteScreen({ onClose }: Props) {
     },
     heroIcon: { fontSize: 64, marginBottom: 12 },
     congratsText: {
-      fontSize: 24, fontWeight: fonts.heavy, color: t.accent.green,
+      fontSize: fonts.xxl, fontWeight: fonts.heavy, color: t.accent.green,
       textAlign: 'center', marginBottom: 8,
     },
     personaLabel: {
-      fontSize: 16, fontWeight: fonts.semibold, color: t.text.primary,
+      fontSize: fonts.lg, fontWeight: fonts.semibold, color: t.text.primary,
       textAlign: 'center', marginBottom: 12,
     },
     greetingText: {
-      fontSize: 14, color: t.text.secondary, textAlign: 'center',
+      fontSize: fonts.md, color: t.text.secondary, textAlign: 'center',
       lineHeight: 22, paddingHorizontal: 8,
     },
     section: { padding: 16, borderBottomWidth: 1, borderBottomColor: t.border },
-    sectionTitle: { fontSize: 16, fontWeight: fonts.semibold, color: t.text.primary, marginBottom: 10 },
+    sectionTitle: { fontSize: fonts.lg, fontWeight: fonts.semibold, color: t.text.primary, marginBottom: 10 },
     tipBox: {
       backgroundColor: '#f0fdf4', borderRadius: 12, padding: 16,
       borderWidth: 1, borderColor: '#bbf7d0',
     },
-    tipLabel: { fontSize: 12, fontWeight: fonts.bold, color: '#16a34a', marginBottom: 6 },
-    tipText: { fontSize: 14, color: '#166534', lineHeight: 22 },
+    tipLabel: { fontSize: fonts.sm, fontWeight: fonts.bold, color: '#16a34a', marginBottom: 6 },
+    tipText: { fontSize: fonts.md, color: '#166534', lineHeight: 22 },
     featureCard: {
       backgroundColor: t.bg.card, borderRadius: 12, padding: 14,
       marginBottom: 10, borderWidth: 1, borderColor: t.border,
@@ -140,11 +140,11 @@ export function OnboardingCompleteScreen({ onClose }: Props) {
     featureHeader: {
       flexDirection: 'row', alignItems: 'center',
     },
-    featureIcon: { fontSize: 28, marginRight: 12 },
-    featureName: { fontSize: 15, fontWeight: fonts.semibold, color: t.text.primary },
-    featureScreen: { fontSize: 11, color: t.text.secondary },
+    featureIcon: { fontSize: fonts.xxxl, marginRight: 12 },
+    featureName: { fontSize: fonts.md, fontWeight: fonts.semibold, color: t.text.primary },
+    featureScreen: { fontSize: fonts.xs, color: t.text.secondary },
     featureDesc: {
-      fontSize: 13, color: t.text.secondary, lineHeight: 20,
+      fontSize: fonts.sm, color: t.text.secondary, lineHeight: 20,
       marginTop: 8, paddingLeft: 40,
     },
     stepIndicator: {
@@ -158,9 +158,9 @@ export function OnboardingCompleteScreen({ onClose }: Props) {
       borderWidth: 2, borderColor: t.accent.green, alignItems: 'center',
     },
     tourIcon: { fontSize: 48, marginBottom: 10 },
-    tourTitle: { fontSize: 18, fontWeight: fonts.bold, color: t.text.primary, marginBottom: 6 },
+    tourTitle: { fontSize: fonts.xl, fontWeight: fonts.bold, color: t.text.primary, marginBottom: 6 },
     tourDesc: {
-      fontSize: 14, color: t.text.secondary, textAlign: 'center',
+      fontSize: fonts.md, color: t.text.secondary, textAlign: 'center',
       lineHeight: 22, marginBottom: 16,
     },
     tourNav: {
@@ -169,12 +169,12 @@ export function OnboardingCompleteScreen({ onClose }: Props) {
     tourBtn: {
       paddingVertical: 8, paddingHorizontal: 16, borderRadius: 8,
     },
-    tourBtnText: { fontSize: 14, fontWeight: fonts.semibold, color: t.accent.green },
+    tourBtnText: { fontSize: fonts.md, fontWeight: fonts.semibold, color: t.accent.green },
     startButton: {
       backgroundColor: t.accent.green, borderRadius: 14, paddingVertical: 16,
       alignItems: 'center', marginHorizontal: 16, marginVertical: 16,
     },
-    startButtonText: { color: '#fff', fontWeight: fonts.bold, fontSize: 18 },
+    startButtonText: { color: '#fff', fontWeight: fonts.bold, fontSize: fonts.xl },
     personaGrid: {
       flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center',
     },
@@ -184,9 +184,9 @@ export function OnboardingCompleteScreen({ onClose }: Props) {
       borderColor: t.border, alignItems: 'center',
     },
     personaChipActive: { borderColor: t.accent.green, borderWidth: 2 },
-    personaChipText: { fontSize: 12, color: t.text.primary, marginTop: 2 },
-    label: { fontSize: 13, color: t.text.secondary },
-    infoText: { fontSize: 13, color: t.text.secondary, lineHeight: 20 },
+    personaChipText: { fontSize: fonts.sm, color: t.text.primary, marginTop: 2 },
+    label: { fontSize: fonts.sm, color: t.text.secondary },
+    infoText: { fontSize: fonts.sm, color: t.text.secondary, lineHeight: 20 },
   }), [t]);
 
   const currentTourFeature = persona.topFeatures[tourStep];
@@ -247,7 +247,7 @@ export function OnboardingCompleteScreen({ onClose }: Props) {
               style={[styles.startButton, { backgroundColor: t.bg.card, borderWidth: 1, borderColor: t.accent.green }]}
               onPress={() => setShowTour(true)}
             >
-              <Text style={[styles.startButtonText, { color: t.accent.green, fontSize: 15 }]}>
+              <Text style={[styles.startButtonText, { color: t.accent.green, fontSize: fonts.md }]}>
                 Take Guided Tour
               </Text>
             </TouchableOpacity>
@@ -303,7 +303,7 @@ export function OnboardingCompleteScreen({ onClose }: Props) {
             {ALL_PERSONAS.map((p, i) => (
               <View key={i} style={[styles.personaChip,
                 p.name === persona.name && styles.personaChipActive]}>
-                <Text style={{ fontSize: 20 }}>{p.icon}</Text>
+                <Text style={{ fontSize: fonts.xl }}>{p.icon}</Text>
                 <Text style={styles.personaChipText}>{p.name}</Text>
               </View>
             ))}

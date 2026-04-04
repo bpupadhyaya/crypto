@@ -97,36 +97,36 @@ export function ImpactCalculatorScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { flex: 1, paddingHorizontal: 16 },
-    subtitle: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 16 },
+    subtitle: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 19, marginBottom: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
-    label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
-    empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
-    optionLabel: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
+    label: { color: t.text.muted, fontSize: fonts.sm },
+    val: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    empty: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', marginTop: 40 },
+    optionLabel: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.semibold },
     summaryRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
     summaryCard: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' },
-    summaryNum: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 2 },
-    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold, textAlign: 'center' },
+    summaryNum: { fontSize: fonts.xl, fontWeight: fonts.heavy, marginBottom: 2 },
+    summaryLabel: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold, textAlign: 'center' },
     resultCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 20, marginBottom: 16, borderWidth: 1, borderColor: t.accent.green + '30' },
-    resultTitle: { color: t.accent.green, fontSize: 16, fontWeight: fonts.heavy, textAlign: 'center', marginBottom: 12 },
-    resultNum: { fontSize: 28, fontWeight: fonts.heavy, color: t.accent.green, textAlign: 'center' },
-    resultSubtext: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginTop: 4 },
+    resultTitle: { color: t.accent.green, fontSize: fonts.lg, fontWeight: fonts.heavy, textAlign: 'center', marginBottom: 12 },
+    resultNum: { fontSize: fonts.xxxl, fontWeight: fonts.heavy, color: t.accent.green, textAlign: 'center' },
+    resultSubtext: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 4 },
     barContainer: { height: 8, backgroundColor: t.border, borderRadius: 4, marginVertical: 4, overflow: 'hidden' },
     barFill: { height: 8, borderRadius: 4 },
-    compareYours: { color: t.accent.green, fontSize: 16, fontWeight: fonts.heavy },
-    compareAvg: { color: t.text.muted, fontSize: 14, fontWeight: fonts.semibold },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginBottom: 8 },
+    compareYours: { color: t.accent.green, fontSize: fonts.lg, fontWeight: fonts.heavy },
+    compareAvg: { color: t.text.muted, fontSize: fonts.md, fontWeight: fonts.semibold },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginBottom: 8 },
     backBtn: { paddingVertical: 12, alignItems: 'center' },
-    backText: { color: t.accent.blue, fontSize: 15 },
+    backText: { color: t.accent.blue, fontSize: fonts.md },
   }), [t]);
 
   const ripples = demoMode ? DEMO_RIPPLES : [];
@@ -201,7 +201,7 @@ export function ImpactCalculatorScreen({ onClose }: Props) {
               {CALCULATOR_OPTIONS.map((opt, i) => (
                 <TouchableOpacity key={i} style={st.card} onPress={() => setSelectedOption(opt)}>
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={{ fontSize: 22, marginRight: 12 }}>{opt.icon}</Text>
+                    <Text style={{ fontSize: fonts.xxl, marginRight: 12 }}>{opt.icon}</Text>
                     <View style={{ flex: 1 }}>
                       <Text style={st.optionLabel}>{opt.label}</Text>
                       <Text style={st.label}>{opt.baseOTK} base OTK | {opt.multiplier}x multiplier</Text>
@@ -219,15 +219,15 @@ export function ImpactCalculatorScreen({ onClose }: Props) {
           ) : ripples.map(r => (
             <View key={r.id} style={st.card}>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-                <Text style={{ fontSize: 20, marginRight: 10 }}>{r.icon}</Text>
+                <Text style={{ fontSize: fonts.xl, marginRight: 10 }}>{r.icon}</Text>
                 <View style={{ flex: 1 }}>
-                  <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: fonts.bold }}>{r.originalAction}</Text>
-                  <Text style={{ color: t.text.muted, fontSize: 11 }}>{r.timestamp}</Text>
+                  <Text style={{ color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold }}>{r.originalAction}</Text>
+                  <Text style={{ color: t.text.muted, fontSize: fonts.xs }}>{r.timestamp}</Text>
                 </View>
               </View>
               <View style={st.row}><Text style={st.label}>Direct</Text><Text style={st.val}>{r.directOTK} OTK</Text></View>
-              <View style={st.row}><Text style={st.label}>Multiplier</Text><Text style={{ color: t.accent.green, fontSize: 12, fontWeight: fonts.bold }}>{r.rippleMultiplier}x</Text></View>
-              <View style={st.row}><Text style={st.label}>Total Impact</Text><Text style={{ color: t.accent.green, fontSize: 14, fontWeight: fonts.heavy }}>{formatNum(r.totalImpact)} OTK</Text></View>
+              <View style={st.row}><Text style={st.label}>Multiplier</Text><Text style={{ color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.bold }}>{r.rippleMultiplier}x</Text></View>
+              <View style={st.row}><Text style={st.label}>Total Impact</Text><Text style={{ color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.heavy }}>{formatNum(r.totalImpact)} OTK</Text></View>
               <View style={st.row}><Text style={st.label}>People Reached</Text><Text style={st.val}>{r.peopleReached}</Text></View>
               <View style={st.row}><Text style={st.label}>Ripple Generations</Text><Text style={st.val}>{r.generations}</Text></View>
             </View>
@@ -242,8 +242,8 @@ export function ImpactCalculatorScreen({ onClose }: Props) {
             return (
               <View key={i} style={st.card}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-                  <Text style={{ fontSize: 20, marginRight: 10 }}>{m.icon}</Text>
-                  <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, flex: 1 }}>{m.label}</Text>
+                  <Text style={{ fontSize: fonts.xl, marginRight: 10 }}>{m.icon}</Text>
+                  <Text style={{ color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, flex: 1 }}>{m.label}</Text>
                 </View>
                 <View style={st.row}>
                   <View><Text style={st.label}>You</Text><Text style={st.compareYours}>{m.yours}{m.unit}</Text></View>
@@ -259,7 +259,7 @@ export function ImpactCalculatorScreen({ onClose }: Props) {
 
         {!demoMode && (
           <View style={[st.card, { marginTop: 20 }]}>
-            <Text style={{ color: t.text.muted, fontSize: 13, textAlign: 'center' }}>
+            <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center' }}>
               Enable Demo Mode in Settings to see sample impact data.
             </Text>
           </View>

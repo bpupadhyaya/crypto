@@ -89,16 +89,16 @@ export function TutorialScreen({ onClose }: Props) {
       flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
       paddingHorizontal: 20, paddingTop: 16, paddingBottom: 8,
     },
-    stepIndicator: { color: t.text.muted, fontSize: 14 },
+    stepIndicator: { color: t.text.muted, fontSize: fonts.md },
     skipBtn: { paddingVertical: 8, paddingHorizontal: 16 },
-    skipText: { color: t.accent.blue, fontSize: 15 },
+    skipText: { color: t.accent.blue, fontSize: fonts.md },
     card: {
       width: SCREEN_WIDTH - 40, marginHorizontal: 20, flex: 1,
       justifyContent: 'center', alignItems: 'center', paddingHorizontal: 24,
     },
     icon: { fontSize: 72, marginBottom: 24 },
-    title: { color: t.text.primary, fontSize: 24, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 16 },
-    description: { color: t.text.secondary, fontSize: 16, lineHeight: 24, textAlign: 'center' },
+    title: { color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 16 },
+    description: { color: t.text.secondary, fontSize: fonts.lg, lineHeight: 24, textAlign: 'center' },
     footer: {
       flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
       paddingHorizontal: 20, paddingBottom: 40, paddingTop: 16,
@@ -110,9 +110,9 @@ export function TutorialScreen({ onClose }: Props) {
       backgroundColor: t.accent.green, borderRadius: 12,
       paddingVertical: 14, paddingHorizontal: 32,
     },
-    nextText: { color: '#fff', fontSize: 16, fontWeight: fonts.bold },
+    nextText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.bold },
     backBtn: { paddingVertical: 14, paddingHorizontal: 16 },
-    backText: { color: t.text.muted, fontSize: 15 },
+    backText: { color: t.text.muted, fontSize: fonts.md },
   }), [t]);
 
   const handleComplete = async () => {

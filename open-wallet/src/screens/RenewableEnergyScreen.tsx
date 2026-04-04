@@ -274,12 +274,12 @@ export function RenewableEnergyScreen({ onClose }: Props) {
       borderBottomColor: t.border,
     },
     headerTitle: {
-      fontSize: 18,
+      fontSize: fonts.xl,
       fontWeight: fonts.bold,
       color: t.text.primary,
     },
     headerSub: {
-      fontSize: 11,
+      fontSize: fonts.xs,
       color: t.text.muted,
       marginTop: 2,
     },
@@ -291,7 +291,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
     },
     closeTxt: {
       color: t.text.secondary,
-      fontSize: 14,
+      fontSize: fonts.md,
       fontWeight: fonts.semibold,
     },
     tabBar: {
@@ -309,7 +309,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
       borderBottomColor: t.accent.green,
     },
     tabText: {
-      fontSize: 11,
+      fontSize: fonts.xs,
       color: t.text.muted,
       marginTop: 2,
     },
@@ -318,7 +318,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
       fontWeight: fonts.bold,
     },
     tabIcon: {
-      fontSize: 16,
+      fontSize: fonts.lg,
     },
     scroll: {
       flex: 1,
@@ -336,13 +336,13 @@ export function RenewableEnergyScreen({ onClose }: Props) {
       borderColor: t.border,
     },
     cardTitle: {
-      fontSize: 15,
+      fontSize: fonts.md,
       fontWeight: fonts.bold,
       color: t.text.primary,
       marginBottom: 8,
     },
     cardSubtitle: {
-      fontSize: 12,
+      fontSize: fonts.sm,
       color: t.text.secondary,
       marginBottom: 12,
     },
@@ -367,22 +367,22 @@ export function RenewableEnergyScreen({ onClose }: Props) {
       alignItems: 'center',
     },
     statValue: {
-      fontSize: 20,
+      fontSize: fonts.xl,
       fontWeight: fonts.heavy,
       color: t.text.primary,
     },
     statLabel: {
-      fontSize: 10,
+      fontSize: fonts.xs,
       color: t.text.muted,
       marginTop: 4,
       textAlign: 'center',
     },
     statIcon: {
-      fontSize: 22,
+      fontSize: fonts.xxl,
       marginBottom: 4,
     },
     sectionTitle: {
-      fontSize: 16,
+      fontSize: fonts.lg,
       fontWeight: fonts.bold,
       color: t.text.primary,
       marginBottom: 12,
@@ -402,21 +402,21 @@ export function RenewableEnergyScreen({ onClose }: Props) {
       marginBottom: 8,
     },
     projectIcon: {
-      fontSize: 28,
+      fontSize: fonts.xxxl,
       marginRight: 10,
     },
     projectName: {
-      fontSize: 14,
+      fontSize: fonts.md,
       fontWeight: fonts.bold,
       color: t.text.primary,
     },
     projectType: {
-      fontSize: 11,
+      fontSize: fonts.xs,
       fontWeight: fonts.semibold,
       marginTop: 2,
     },
     projectLocation: {
-      fontSize: 11,
+      fontSize: fonts.xs,
       color: t.text.muted,
       marginTop: 1,
     },
@@ -427,7 +427,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
       alignSelf: 'flex-start',
     },
     statusText: {
-      fontSize: 10,
+      fontSize: fonts.xs,
       fontWeight: fonts.bold,
       color: '#fff',
     },
@@ -444,7 +444,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
       borderRadius: 4,
     },
     progressLabel: {
-      fontSize: 10,
+      fontSize: fonts.xs,
       color: t.text.muted,
     },
     metricRow: {
@@ -459,12 +459,12 @@ export function RenewableEnergyScreen({ onClose }: Props) {
       alignItems: 'center',
     },
     metricValue: {
-      fontSize: 14,
+      fontSize: fonts.md,
       fontWeight: fonts.bold,
       color: t.text.primary,
     },
     metricLabel: {
-      fontSize: 9,
+      fontSize: fonts.xxs,
       color: t.text.muted,
       marginTop: 2,
     },
@@ -475,13 +475,13 @@ export function RenewableEnergyScreen({ onClose }: Props) {
       marginTop: 8,
     },
     chartTitle: {
-      fontSize: 12,
+      fontSize: fonts.sm,
       fontWeight: fonts.semibold,
       color: t.text.secondary,
       marginBottom: 6,
     },
     chartBars: {
-      fontSize: 20,
+      fontSize: fonts.xl,
       letterSpacing: 2,
       color: t.accent.green,
     },
@@ -509,7 +509,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
       backgroundColor: t.accent.green,
     },
     periodTxt: {
-      fontSize: 11,
+      fontSize: fonts.xs,
       color: t.text.secondary,
     },
     periodTxtActive: {
@@ -536,7 +536,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
       alignItems: 'center',
     },
     investBtnTxt: {
-      fontSize: 12,
+      fontSize: fonts.sm,
       fontWeight: fonts.bold,
       color: '#fff',
     },
@@ -552,11 +552,11 @@ export function RenewableEnergyScreen({ onClose }: Props) {
       marginBottom: 4,
     },
     yourStatsLabel: {
-      fontSize: 11,
+      fontSize: fonts.xs,
       color: t.text.muted,
     },
     yourStatsValue: {
-      fontSize: 11,
+      fontSize: fonts.xs,
       fontWeight: fonts.bold,
       color: t.text.primary,
     },
@@ -575,17 +575,17 @@ export function RenewableEnergyScreen({ onClose }: Props) {
       marginBottom: 6,
     },
     shareRequester: {
-      fontSize: 14,
+      fontSize: fonts.md,
       fontWeight: fonts.bold,
       color: t.text.primary,
     },
     shareReason: {
-      fontSize: 12,
+      fontSize: fonts.sm,
       color: t.text.secondary,
       marginBottom: 8,
     },
     shareProgress: {
-      fontSize: 11,
+      fontSize: fonts.xs,
       color: t.text.muted,
       marginTop: 4,
     },
@@ -598,7 +598,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
       marginTop: 8,
     },
     shareBtnTxt: {
-      fontSize: 12,
+      fontSize: fonts.sm,
       fontWeight: fonts.bold,
       color: '#fff',
     },
@@ -608,18 +608,18 @@ export function RenewableEnergyScreen({ onClose }: Props) {
       borderRadius: 4,
     },
     urgencyText: {
-      fontSize: 9,
+      fontSize: fonts.xxs,
       fontWeight: fonts.bold,
       color: '#fff',
     },
     emptyText: {
-      fontSize: 13,
+      fontSize: fonts.sm,
       color: t.text.muted,
       textAlign: 'center',
       marginTop: 24,
     },
     demoNote: {
-      fontSize: 10,
+      fontSize: fonts.xs,
       color: t.text.muted,
       textAlign: 'center',
       marginTop: 16,
@@ -634,13 +634,13 @@ export function RenewableEnergyScreen({ onClose }: Props) {
       borderColor: '#22c55e40',
     },
     carbonTitle: {
-      fontSize: 13,
+      fontSize: fonts.sm,
       fontWeight: fonts.bold,
       color: t.accent.green,
       marginBottom: 4,
     },
     carbonText: {
-      fontSize: 11,
+      fontSize: fonts.xs,
       color: t.text.secondary,
       lineHeight: 16,
     },
@@ -716,10 +716,10 @@ export function RenewableEnergyScreen({ onClose }: Props) {
         <Text style={styles.cardTitle}>Active Projects</Text>
         {projects.map(p => (
           <View key={p.id} style={styles.row}>
-            <Text style={{ fontSize: 12, color: t.text.secondary }}>
+            <Text style={{ fontSize: fonts.sm, color: t.text.secondary }}>
               {p.icon} {p.name}
             </Text>
-            <Text style={{ fontSize: 12, fontWeight: fonts.bold, color: t.text.primary }}>
+            <Text style={{ fontSize: fonts.sm, fontWeight: fonts.bold, color: t.text.primary }}>
               {formatNum(p.totalGenerated_kWh)} kWh
             </Text>
           </View>
@@ -839,10 +839,10 @@ export function RenewableEnergyScreen({ onClose }: Props) {
                     ))}
                   </View>
                   <View style={[styles.row, { marginTop: 8, marginBottom: 0 }]}>
-                    <Text style={{ fontSize: 10, color: t.text.muted }}>
+                    <Text style={{ fontSize: fonts.xs, color: t.text.muted }}>
                       Avg: {Math.round(chart.data.reduce((a, b) => a + b, 0) / chart.data.length)} kWh
                     </Text>
-                    <Text style={{ fontSize: 10, color: t.text.muted }}>
+                    <Text style={{ fontSize: fonts.xs, color: t.text.muted }}>
                       Peak: {Math.max(...chart.data)} kWh
                     </Text>
                   </View>
@@ -868,8 +868,8 @@ export function RenewableEnergyScreen({ onClose }: Props) {
           shared with neighbors in need.
         </Text>
         <View style={styles.row}>
-          <Text style={{ fontSize: 11, color: t.text.muted }}>1 OTK invested</Text>
-          <Text style={{ fontSize: 11, color: t.text.secondary }}>
+          <Text style={{ fontSize: fonts.xs, color: t.text.muted }}>1 OTK invested</Text>
+          <Text style={{ fontSize: fonts.xs, color: t.text.secondary }}>
             {'\u2192'} Proportional kWh credits + carbon credits
           </Text>
         </View>
@@ -960,16 +960,16 @@ export function RenewableEnergyScreen({ onClose }: Props) {
           power when the community has abundance.
         </Text>
         <View style={styles.row}>
-          <Text style={{ fontSize: 12, color: t.text.secondary }}>
+          <Text style={{ fontSize: fonts.sm, color: t.text.secondary }}>
             Community Surplus Available
           </Text>
-          <Text style={{ fontSize: 14, fontWeight: fonts.bold, color: t.accent.green }}>
+          <Text style={{ fontSize: fonts.md, fontWeight: fonts.bold, color: t.accent.green }}>
             {totals.totalSurplus} kWh
           </Text>
         </View>
       </View>
 
-      <Text style={[styles.sectionTitle, { fontSize: 14 }]}>Neighbors Requesting Help</Text>
+      <Text style={[styles.sectionTitle, { fontSize: fonts.md }]}>Neighbors Requesting Help</Text>
 
       {shareRequests.map(req => {
         const progress = req.fulfilled_kWh / req.needed_kWh;

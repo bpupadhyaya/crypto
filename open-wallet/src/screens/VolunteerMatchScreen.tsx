@@ -193,41 +193,41 @@ export function VolunteerMatchScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     scroll: { flex: 1, paddingHorizontal: 16 },
-    subtitle: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 16 },
+    subtitle: { color: t.text.muted, fontSize: fonts.sm, lineHeight: 19, marginBottom: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 11, fontWeight: fonts.semibold },
+    tabText: { color: t.text.secondary, fontSize: fonts.xs, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
-    cardTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 2 },
+    cardTitle: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold, marginBottom: 2 },
     row: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 },
-    label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    label: { color: t.text.muted, fontSize: fonts.sm },
+    val: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     urgencyBadge: { paddingHorizontal: 10, paddingVertical: 3, borderRadius: 8, alignSelf: 'flex-start', marginBottom: 8 },
-    urgencyText: { fontSize: 10, fontWeight: fonts.bold, color: '#fff' },
+    urgencyText: { fontSize: fonts.xs, fontWeight: fonts.bold, color: '#fff' },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 8 },
     progressBar: { height: 8, backgroundColor: t.border, borderRadius: 4, marginVertical: 4, overflow: 'hidden' },
     progressFill: { height: 8, borderRadius: 4 },
     skillTag: { backgroundColor: t.accent.blue + '22', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, marginRight: 6, marginBottom: 6 },
-    skillText: { color: t.accent.blue, fontSize: 11, fontWeight: fonts.semibold },
-    matchScore: { fontSize: 28, fontWeight: fonts.heavy },
-    matchReason: { color: t.text.secondary, fontSize: 12, marginBottom: 2 },
+    skillText: { color: t.accent.blue, fontSize: fonts.xs, fontWeight: fonts.semibold },
+    matchScore: { fontSize: fonts.xxxl, fontWeight: fonts.heavy },
+    matchReason: { color: t.text.secondary, fontSize: fonts.sm, marginBottom: 2 },
     summaryRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
     summaryCard: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' },
-    summaryNum: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 2 },
-    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold, textAlign: 'center' },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 8, marginBottom: 8 },
+    summaryNum: { fontSize: fonts.xl, fontWeight: fonts.heavy, marginBottom: 2 },
+    summaryLabel: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold, textAlign: 'center' },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 8, marginBottom: 8 },
     ctaBtn: { backgroundColor: t.accent.blue, paddingVertical: 12, borderRadius: 10, alignItems: 'center', marginTop: 8 },
-    ctaText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
-    empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
+    ctaText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
+    empty: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', marginTop: 40 },
     statusBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, alignSelf: 'flex-start' },
-    statusText: { fontSize: 10, fontWeight: fonts.bold, color: '#fff' },
+    statusText: { fontSize: fonts.xs, fontWeight: fonts.bold, color: '#fff' },
     profileSection: { marginBottom: 16 },
-    profileLabel: { color: t.text.muted, fontSize: 11, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 },
+    profileLabel: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 },
     tagsWrap: { flexDirection: 'row', flexWrap: 'wrap' },
     iconCircle: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center', marginRight: 10 },
   }), [t]);
@@ -250,7 +250,7 @@ export function VolunteerMatchScreen({ onClose }: Props) {
         <View style={[st.row, { alignItems: 'center', marginBottom: 8 }]}>
           <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
             <View style={[st.iconCircle, { backgroundColor: URGENCY_COLORS[need.urgency] + '22' }]}>
-              <Text style={{ fontSize: 18 }}>{need.icon}</Text>
+              <Text style={{ fontSize: fonts.xl }}>{need.icon}</Text>
             </View>
             <View style={{ flex: 1 }}>
               <Text style={st.cardTitle}>{need.title}</Text>
@@ -299,7 +299,7 @@ export function VolunteerMatchScreen({ onClose }: Props) {
           </View>
           <View style={{ alignItems: 'center' }}>
             <Text style={[st.matchScore, { color: scoreColor }]}>{match.matchScore}%</Text>
-            <Text style={[st.label, { fontSize: 10 }]}>Match</Text>
+            <Text style={[st.label, { fontSize: fonts.xs }]}>Match</Text>
           </View>
         </View>
 
@@ -395,7 +395,7 @@ export function VolunteerMatchScreen({ onClose }: Props) {
     <View key={rec.id} style={st.card}>
       <View style={[st.row, { alignItems: 'center', marginBottom: 6 }]}>
         <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-          <Text style={{ fontSize: 20, marginRight: 8 }}>{rec.icon}</Text>
+          <Text style={{ fontSize: fonts.xl, marginRight: 8 }}>{rec.icon}</Text>
           <View style={{ flex: 1 }}>
             <Text style={st.cardTitle}>{rec.needTitle}</Text>
             <Text style={st.label}>{rec.category} \u2022 {rec.date}</Text>

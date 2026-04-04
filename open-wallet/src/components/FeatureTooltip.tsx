@@ -47,7 +47,7 @@ export function FeatureTooltip({ id, text, position, children }: FeatureTooltipP
       shadowRadius: 4,
       elevation: 5,
     },
-    tooltipText: { color: '#fff', fontSize: 13, lineHeight: 18, textAlign: 'center' },
+    tooltipText: { color: '#fff', fontSize: fonts.sm, lineHeight: 18, textAlign: 'center' },
     arrow: {
       width: 0, height: 0,
       borderLeftWidth: 8, borderRightWidth: 8,

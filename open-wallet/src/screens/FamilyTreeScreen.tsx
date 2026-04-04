@@ -91,58 +91,58 @@ export function FamilyTreeScreen({ onClose, onSendGratitude }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     heroCard: { backgroundColor: t.accent.green + '10', borderRadius: 24, padding: 24, marginHorizontal: 20, marginTop: 8, alignItems: 'center' },
     heroIcon: { fontSize: 48, marginBottom: 8 },
-    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, textAlign: 'center' },
-    heroSubtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 4, lineHeight: 20 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
+    heroTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy, textAlign: 'center' },
+    heroSubtitle: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 4, lineHeight: 20 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
     // Tree visualization
     treeContainer: { paddingHorizontal: 20, marginTop: 8 },
-    tierLabel: { color: t.text.muted, fontSize: 11, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8, textAlign: 'center' },
+    tierLabel: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8, textAlign: 'center' },
     nodeRow: { flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', gap: 12, marginBottom: 16 },
     node: { backgroundColor: t.bg.card, borderRadius: 16, padding: 14, alignItems: 'center', minWidth: 100, maxWidth: 140 },
     nodeVerified: { borderWidth: 2, borderColor: t.accent.green },
     nodeUnverified: { borderWidth: 2, borderColor: t.accent.yellow, borderStyle: 'dashed' },
-    nodeIcon: { fontSize: 28, marginBottom: 4 },
-    nodeName: { color: t.text.primary, fontSize: 13, fontWeight: fonts.bold, textAlign: 'center' },
-    nodeUID: { color: t.text.muted, fontSize: 10, marginTop: 2, fontFamily: 'monospace' },
-    nodeRelLabel: { color: t.accent.blue, fontSize: 11, fontWeight: fonts.semibold, marginTop: 4 },
-    nodeVerifiedBadge: { color: t.accent.green, fontSize: 10, fontWeight: fonts.bold, marginTop: 2 },
-    nodeUnverifiedBadge: { color: t.accent.yellow, fontSize: 10, fontWeight: fonts.bold, marginTop: 2 },
+    nodeIcon: { fontSize: fonts.xxxl, marginBottom: 4 },
+    nodeName: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.bold, textAlign: 'center' },
+    nodeUID: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2, fontFamily: 'monospace' },
+    nodeRelLabel: { color: t.accent.blue, fontSize: fonts.xs, fontWeight: fonts.semibold, marginTop: 4 },
+    nodeVerifiedBadge: { color: t.accent.green, fontSize: fonts.xs, fontWeight: fonts.bold, marginTop: 2 },
+    nodeUnverifiedBadge: { color: t.accent.yellow, fontSize: fonts.xs, fontWeight: fonts.bold, marginTop: 2 },
     // You (center)
     youNode: { backgroundColor: t.accent.purple + '20', borderRadius: 20, padding: 18, alignItems: 'center', alignSelf: 'center', minWidth: 120, marginVertical: 8, borderWidth: 2, borderColor: t.accent.purple },
-    youIcon: { fontSize: 36, marginBottom: 4 },
-    youLabel: { color: t.accent.purple, fontSize: 15, fontWeight: fonts.heavy },
+    youIcon: { fontSize: fonts.hero, marginBottom: 4 },
+    youLabel: { color: t.accent.purple, fontSize: fonts.md, fontWeight: fonts.heavy },
     // Connector lines
     connector: { height: 24, width: 2, backgroundColor: t.border, alignSelf: 'center', marginVertical: 4 },
     // Pending
     pendingCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginTop: 8, flexDirection: 'row', alignItems: 'center', gap: 12 },
-    pendingText: { color: t.text.primary, fontSize: 14, flex: 1 },
+    pendingText: { color: t.text.primary, fontSize: fonts.md, flex: 1 },
     confirmBtn: { backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 8, paddingHorizontal: 16 },
-    confirmBtnText: { color: '#fff', fontSize: 13, fontWeight: fonts.bold },
+    confirmBtnText: { color: '#fff', fontSize: fonts.sm, fontWeight: fonts.bold },
     // Add relationship
     addBtn: { backgroundColor: t.accent.purple, borderRadius: 16, paddingVertical: 16, alignItems: 'center', marginHorizontal: 20, marginTop: 16 },
-    addBtnText: { color: '#fff', fontSize: 16, fontWeight: fonts.bold },
+    addBtnText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.bold },
     addForm: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginTop: 12 },
-    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 },
-    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginBottom: 12 },
+    inputLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 },
+    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md, marginBottom: 12 },
     typeRow: { flexDirection: 'row', gap: 8, flexWrap: 'wrap', marginBottom: 12 },
     typeChip: { paddingVertical: 8, paddingHorizontal: 12, borderRadius: 10, backgroundColor: t.bg.primary },
     typeChipActive: { backgroundColor: t.accent.purple },
-    typeChipLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    typeChipLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     typeChipLabelActive: { color: '#fff' },
     submitBtn: { backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
-    submitBtnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
+    submitBtnText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
     // Ripple visualization
     rippleBtn: { backgroundColor: t.bg.card, borderRadius: 16, paddingVertical: 14, alignItems: 'center', marginHorizontal: 20, marginTop: 12 },
-    rippleBtnText: { color: t.accent.orange, fontSize: 15, fontWeight: fonts.bold },
+    rippleBtnText: { color: t.accent.orange, fontSize: fonts.md, fontWeight: fonts.bold },
     rippleCard: { backgroundColor: t.accent.orange + '10', borderRadius: 16, padding: 16, marginHorizontal: 20, marginTop: 8 },
-    rippleMilestone: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
-    rippleOTK: { color: t.accent.orange, fontSize: 13, fontWeight: fonts.semibold, marginTop: 4 },
-    rippleRecipient: { color: t.text.secondary, fontSize: 13, marginTop: 2, marginLeft: 8 },
-    note: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginHorizontal: 24, marginTop: 16, lineHeight: 18 },
+    rippleMilestone: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    rippleOTK: { color: t.accent.orange, fontSize: fonts.sm, fontWeight: fonts.semibold, marginTop: 4 },
+    rippleRecipient: { color: t.text.secondary, fontSize: fonts.sm, marginTop: 2, marginLeft: 8 },
+    note: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginHorizontal: 24, marginTop: 16, lineHeight: 18 },
   }), [t]);
 
   const handleAddRelationship = useCallback(() => {
@@ -229,7 +229,7 @@ export function FamilyTreeScreen({ onClose, onSendGratitude }: Props) {
           <Text style={s.tierLabel}>Below You</Text>
           <View style={s.nodeRow}>
             {children.length > 0 ? children.map(renderNode) : (
-              <Text style={{ color: t.text.muted, fontSize: 13, textAlign: 'center' }}>No children registered yet</Text>
+              <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center' }}>No children registered yet</Text>
             )}
           </View>
         </View>
@@ -253,7 +253,7 @@ export function FamilyTreeScreen({ onClose, onSendGratitude }: Props) {
             <Text style={s.section}>Pending Confirmations</Text>
             {pending.map(p => (
               <View key={p.uid} style={s.pendingCard}>
-                <Text style={{ fontSize: 24 }}>{RELATIONSHIP_ICONS[p.relationship]}</Text>
+                <Text style={{ fontSize: fonts.xxl }}>{RELATIONSHIP_ICONS[p.relationship]}</Text>
                 <Text style={s.pendingText}>
                   {p.name || truncUID(p.uid)} wants to connect as your {RELATIONSHIP_LABELS[p.relationship].toLowerCase()}
                 </Text>

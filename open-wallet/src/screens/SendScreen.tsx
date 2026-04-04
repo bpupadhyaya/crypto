@@ -91,38 +91,38 @@ export function SendScreen() {
     chainSelector: { flexDirection: 'row', gap: 8, marginBottom: 24, flexWrap: 'wrap', marginTop: 8 },
     chainButton: { backgroundColor: t.bg.card, borderRadius: 20, paddingVertical: 8, paddingHorizontal: 16 },
     chainButtonActive: { backgroundColor: t.accent.orange },
-    chainButtonText: { color: t.text.secondary, fontSize: 14 },
+    chainButtonText: { color: t.text.secondary, fontSize: fonts.md },
     chainButtonTextActive: { color: t.bg.primary, fontWeight: fonts.bold },
     fromCard: { backgroundColor: t.bg.card, borderRadius: 12, padding: 12, marginBottom: 16 },
-    fromAddress: { color: t.text.muted, fontSize: 12, fontFamily: 'monospace' },
-    fieldLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 },
+    fromAddress: { color: t.text.muted, fontSize: fonts.sm, fontFamily: 'monospace' },
+    fieldLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 },
     inputWrapper: { position: 'relative', marginBottom: 16 },
-    input: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, color: t.text.primary, fontSize: 16, borderWidth: 1, borderColor: 'transparent' },
+    input: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, color: t.text.primary, fontSize: fonts.lg, borderWidth: 1, borderColor: 'transparent' },
     inputError: { borderColor: t.accent.red + '40' },
     inputValid: { borderColor: t.accent.green + '40' },
-    validIcon: { position: 'absolute', right: 16, top: 16, color: t.accent.green, fontSize: 18, fontWeight: fonts.bold },
-    invalidIcon: { position: 'absolute', right: 16, top: 16, color: t.accent.red, fontSize: 18, fontWeight: fonts.bold },
+    validIcon: { position: 'absolute', right: 16, top: 16, color: t.accent.green, fontSize: fonts.xl, fontWeight: fonts.bold },
+    invalidIcon: { position: 'absolute', right: 16, top: 16, color: t.accent.red, fontSize: fonts.xl, fontWeight: fonts.bold },
     amountRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 16 },
     tokenBadge: { backgroundColor: t.bg.card, borderRadius: 12, paddingVertical: 16, paddingHorizontal: 16 },
-    tokenBadgeText: { color: t.text.secondary, fontSize: 14, fontWeight: fonts.bold },
+    tokenBadgeText: { color: t.text.secondary, fontSize: fonts.md, fontWeight: fonts.bold },
     feeCard: { backgroundColor: t.bg.card, borderRadius: 12, padding: 16, marginBottom: 16 },
     feeRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4 },
-    feeLabel: { color: t.text.muted, fontSize: 13 },
-    feeValue: { color: t.text.secondary, fontSize: 13 },
-    feeValueBold: { color: t.text.primary, fontSize: 13, fontWeight: fonts.bold },
+    feeLabel: { color: t.text.muted, fontSize: fonts.sm },
+    feeValue: { color: t.text.secondary, fontSize: fonts.sm },
+    feeValueBold: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.bold },
     sendButton: { backgroundColor: t.accent.orange, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginTop: 8 },
     sendButtonDisabled: { opacity: 0.6 },
-    sendButtonText: { color: t.bg.primary, fontSize: 17, fontWeight: fonts.bold },
-    hint: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginTop: 16, lineHeight: 18 },
+    sendButtonText: { color: t.bg.primary, fontSize: fonts.lg, fontWeight: fonts.bold },
+    hint: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 16, lineHeight: 18 },
     feeSpeedRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
     feeSpeedBtn: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, paddingVertical: 10, paddingHorizontal: 8, alignItems: 'center', borderWidth: 1.5, borderColor: 'transparent' },
     feeSpeedBtnActive: { borderColor: t.accent.orange },
-    feeSpeedLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, marginBottom: 2 },
+    feeSpeedLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, marginBottom: 2 },
     feeSpeedLabelActive: { color: t.accent.orange },
-    feeSpeedFee: { color: t.text.muted, fontSize: 10 },
-    feeSpeedTime: { color: t.text.muted, fontSize: 10, marginTop: 1 },
-    feeUsd: { color: t.text.muted, fontSize: 11, marginTop: 4, textAlign: 'right' },
-    nearZeroFee: { color: t.accent.green, fontSize: 13, fontWeight: fonts.semibold, textAlign: 'center', paddingVertical: 8 },
+    feeSpeedFee: { color: t.text.muted, fontSize: fonts.xs },
+    feeSpeedTime: { color: t.text.muted, fontSize: fonts.xs, marginTop: 1 },
+    feeUsd: { color: t.text.muted, fontSize: fonts.xs, marginTop: 4, textAlign: 'right' },
+    nearZeroFee: { color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.semibold, textAlign: 'center', paddingVertical: 8 },
   }), [t]);
 
   const senderAddress = addresses[selectedChain] ?? '';
@@ -432,11 +432,11 @@ export function SendScreen() {
           <View style={{ flexDirection: 'row', gap: 12 }}>
             {isTestnet() && (
               <TouchableOpacity onPress={fillTestAddress}>
-                <Text style={{ color: t.accent.yellow, fontSize: 13, fontWeight: fonts.semibold }}>Test Address</Text>
+                <Text style={{ color: t.accent.yellow, fontSize: fonts.sm, fontWeight: fonts.semibold }}>Test Address</Text>
               </TouchableOpacity>
             )}
             <TouchableOpacity onPress={() => setShowScanner(true)}>
-              <Text style={{ color: t.accent.blue, fontSize: 13, fontWeight: fonts.semibold }}>Scan QR</Text>
+              <Text style={{ color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.semibold }}>Scan QR</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -461,21 +461,21 @@ export function SendScreen() {
         {isResolving && (
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8, gap: 6 }}>
             <ActivityIndicator size="small" color={t.text.muted} />
-            <Text style={{ color: t.text.muted, fontSize: 12 }}>Resolving name...</Text>
+            <Text style={{ color: t.text.muted, fontSize: fonts.sm }}>Resolving name...</Text>
           </View>
         )}
         {resolvedAddr && !isResolving && (
           <View style={{ backgroundColor: t.bg.card, borderRadius: 8, padding: 10, marginBottom: 12 }}>
-            <Text style={{ color: t.accent.green, fontSize: 12, fontWeight: fonts.semibold, marginBottom: 2 }}>
+            <Text style={{ color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 2 }}>
               Resolved via {resolvedAddr.nameService}
             </Text>
-            <Text style={{ color: t.text.secondary, fontSize: 12, fontFamily: 'monospace' }} numberOfLines={1} ellipsizeMode="middle">
+            <Text style={{ color: t.text.secondary, fontSize: fonts.sm, fontFamily: 'monospace' }} numberOfLines={1} ellipsizeMode="middle">
               {resolvedAddr.address}
             </Text>
           </View>
         )}
         {isNameServiceInput(recipient) && !isResolving && !resolvedAddr && recipient.trim().length > 0 && (
-          <Text style={{ color: t.accent.red, fontSize: 12, marginBottom: 8 }}>
+          <Text style={{ color: t.accent.red, fontSize: fonts.sm, marginBottom: 8 }}>
             Could not resolve this name. Check spelling and try again.
           </Text>
         )}
@@ -576,7 +576,7 @@ export function SendScreen() {
         </TouchableOpacity>
 
         {paperLight === 'orange' && (
-          <Text style={{ color: t.accent.orange, fontSize: 12, textAlign: 'center', marginTop: 8 }}>
+          <Text style={{ color: t.accent.orange, fontSize: fonts.sm, textAlign: 'center', marginTop: 8 }}>
             🟡 You have less than 3 paper trades. We recommend more practice before real transactions.
           </Text>
         )}

@@ -110,47 +110,47 @@ export function WorldMapScreen({ onClose }: Props) {
       paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1,
       borderBottomColor: t.border,
     },
-    title: { fontSize: 18, fontWeight: fonts.bold, color: t.text.primary },
-    closeBtn: { fontSize: 16, color: t.accent.green },
+    title: { fontSize: fonts.xl, fontWeight: fonts.bold, color: t.text.primary },
+    closeBtn: { fontSize: fonts.lg, color: t.accent.green },
     tabRow: { flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: t.border },
     tab: { flex: 1, paddingVertical: 10, alignItems: 'center' },
     tabActive: { borderBottomWidth: 2, borderBottomColor: t.accent.green },
-    tabText: { fontSize: 14, color: t.text.secondary },
+    tabText: { fontSize: fonts.md, color: t.text.secondary },
     tabTextActive: { color: t.accent.green, fontWeight: fonts.semibold },
     scroll: { flex: 1 },
     section: { padding: 16, borderBottomWidth: 1, borderBottomColor: t.border },
-    sectionTitle: { fontSize: 16, fontWeight: fonts.semibold, color: t.text.primary, marginBottom: 10 },
+    sectionTitle: { fontSize: fonts.lg, fontWeight: fonts.semibold, color: t.text.primary, marginBottom: 10 },
     card: {
       backgroundColor: t.bg.card, borderRadius: 12, padding: 14,
       marginBottom: 10, borderWidth: 1, borderColor: t.border,
     },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    label: { fontSize: 13, color: t.text.secondary },
-    value: { fontSize: 15, color: t.text.primary, fontWeight: fonts.medium },
-    subtext: { fontSize: 12, color: t.text.secondary },
-    peaceScore: { fontSize: 20, fontWeight: fonts.heavy },
-    trendText: { fontSize: 14, fontWeight: fonts.semibold },
+    label: { fontSize: fonts.sm, color: t.text.secondary },
+    value: { fontSize: fonts.md, color: t.text.primary, fontWeight: fonts.medium },
+    subtext: { fontSize: fonts.sm, color: t.text.secondary },
+    peaceScore: { fontSize: fonts.xl, fontWeight: fonts.heavy },
+    trendText: { fontSize: fonts.md, fontWeight: fonts.semibold },
     statsGrid: {
       flexDirection: 'row', flexWrap: 'wrap', marginTop: 8,
     },
     statBox: { width: '50%', paddingVertical: 4 },
-    statValue: { fontSize: 14, fontWeight: fonts.semibold, color: t.text.primary },
-    statLabel: { fontSize: 11, color: t.text.secondary },
+    statValue: { fontSize: fonts.md, fontWeight: fonts.semibold, color: t.text.primary },
+    statLabel: { fontSize: fonts.xs, color: t.text.secondary },
     rankBadge: {
       width: 28, height: 28, borderRadius: 14, alignItems: 'center',
       justifyContent: 'center', marginRight: 10,
     },
-    rankText: { fontSize: 13, fontWeight: fonts.bold, color: '#fff' },
+    rankText: { fontSize: fonts.sm, fontWeight: fonts.bold, color: '#fff' },
     compareCol: { flex: 1, padding: 8 },
-    compareHeader: { fontSize: 14, fontWeight: fonts.bold, color: t.accent.green, marginBottom: 8 },
+    compareHeader: { fontSize: fonts.md, fontWeight: fonts.bold, color: t.accent.green, marginBottom: 8 },
     compareDivider: { width: 1, backgroundColor: t.border },
     compareRow: {
       flexDirection: 'row', paddingVertical: 8, borderBottomWidth: 1,
       borderBottomColor: t.border,
     },
-    compareLabel: { fontSize: 13, color: t.text.secondary, marginBottom: 12 },
+    compareLabel: { fontSize: fonts.sm, color: t.text.secondary, marginBottom: 12 },
     selectedBorder: { borderColor: t.accent.green, borderWidth: 2 },
-    infoText: { fontSize: 13, color: t.text.secondary, lineHeight: 20 },
+    infoText: { fontSize: fonts.sm, color: t.text.secondary, lineHeight: 20 },
   }), [t]);
 
   const renderRegions = () => (
@@ -284,10 +284,10 @@ export function WorldMapScreen({ onClose }: Props) {
               </View>
             </View>
             <View style={{ alignItems: 'flex-end' }}>
-              <Text style={[styles.peaceScore, { color: peaceColor(r.peaceIndex), fontSize: 18 }]}>
+              <Text style={[styles.peaceScore, { color: peaceColor(r.peaceIndex), fontSize: fonts.xl }]}>
                 {r.peaceIndex}
               </Text>
-              <Text style={[styles.trendText, { fontSize: 12,
+              <Text style={[styles.trendText, { fontSize: fonts.sm,
                 color: r.trend === 'up' ? '#22c55e' : r.trend === 'down' ? '#ef4444' : '#6b7280',
               }]}>
                 {trendIcon(r.trend)} {r.trend}

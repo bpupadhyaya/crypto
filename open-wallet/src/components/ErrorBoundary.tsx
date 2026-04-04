@@ -202,14 +202,14 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#f0f0f5',
-    fontSize: 22,
+    fontSize: fonts.xxl,
     fontWeight: fonts.bold,
     marginBottom: 8,
     textAlign: 'center',
   },
   subtitle: {
     color: '#a0a0b0',
-    fontSize: 15,
+    fontSize: fonts.md,
     lineHeight: 22,
     textAlign: 'center',
     marginBottom: 32,
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
   },
   primaryBtnText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: fonts.lg,
     fontWeight: fonts.bold,
   },
   secondaryBtn: {
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
   },
   secondaryBtnText: {
     color: '#f0f0f5',
-    fontSize: 16,
+    fontSize: fonts.lg,
     fontWeight: fonts.semibold,
   },
   linkBtn: {
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
   },
   linkBtnText: {
     color: '#3b82f6',
-    fontSize: 15,
+    fontSize: fonts.md,
     fontWeight: fonts.semibold,
   },
   detailsToggle: {
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   },
   detailsToggleText: {
     color: '#606070',
-    fontSize: 13,
+    fontSize: fonts.sm,
     fontWeight: fonts.semibold,
   },
   detailsScroll: {
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
   },
   detailsLabel: {
     color: '#a0a0b0',
-    fontSize: 12,
+    fontSize: fonts.sm,
     fontWeight: fonts.bold,
     textTransform: 'uppercase',
     letterSpacing: 1,
@@ -280,12 +280,12 @@ const styles = StyleSheet.create({
   },
   detailsText: {
     color: '#ef4444',
-    fontSize: 13,
+    fontSize: fonts.sm,
     lineHeight: 18,
   },
   detailsCode: {
     color: '#a0a0b0',
-    fontSize: 11,
+    fontSize: fonts.xs,
     fontFamily: 'Courier',
     lineHeight: 16,
   },

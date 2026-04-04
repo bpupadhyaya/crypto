@@ -147,46 +147,46 @@ export function AchievementsScreen({ onClose }: Props) {
     container: { flex: 1, backgroundColor: t.bg.primary },
     scroll: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 40 },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
-    closeText: { color: t.accent.blue, fontSize: 16 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
+    headerTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    closeText: { color: t.accent.blue, fontSize: fonts.lg },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
     statsCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16 },
     statsRow: { flexDirection: 'row', justifyContent: 'space-around', marginBottom: 12 },
     statBox: { alignItems: 'center' },
-    statNumber: { color: t.text.primary, fontSize: 24, fontWeight: fonts.bold },
-    statLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
+    statNumber: { color: t.text.primary, fontSize: fonts.xxl, fontWeight: fonts.bold },
+    statLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
     soulboundBadge: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: t.bg.primary, borderRadius: 8, paddingVertical: 6, paddingHorizontal: 12, marginTop: 8 },
-    soulboundText: { color: t.text.secondary, fontSize: 11, fontWeight: fonts.semibold, marginLeft: 6 },
+    soulboundText: { color: t.text.secondary, fontSize: fonts.xs, fontWeight: fonts.semibold, marginLeft: 6 },
     filterRow: { flexDirection: 'row', gap: 6, marginBottom: 12 },
     filterChip: { paddingVertical: 6, paddingHorizontal: 12, borderRadius: 8, backgroundColor: t.border },
     filterChipActive: { backgroundColor: t.accent.green },
-    filterText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    filterText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     filterTextActive: { color: t.bg.primary },
     grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
     badge: { width: '47%' as any, backgroundColor: t.bg.card, borderRadius: 16, padding: 14, alignItems: 'center', borderWidth: 2 },
-    badgeIcon: { fontSize: 32, marginBottom: 6 },
-    badgeTitle: { color: t.text.primary, fontSize: 13, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 4 },
-    badgeChannel: { fontSize: 11, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1 },
-    badgeLevel: { fontSize: 11, fontWeight: fonts.bold, marginTop: 4 },
-    badgeBlock: { color: t.text.muted, fontSize: 10, marginTop: 2 },
+    badgeIcon: { fontSize: fonts.hero, marginBottom: 6 },
+    badgeTitle: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 4 },
+    badgeChannel: { fontSize: fonts.xs, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1 },
+    badgeLevel: { fontSize: fonts.xs, fontWeight: fonts.bold, marginTop: 4 },
+    badgeBlock: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
     // Detail modal
     modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', alignItems: 'center', padding: 20 },
     modalCard: { backgroundColor: t.bg.card, borderRadius: 20, padding: 24, width: '100%', maxWidth: 360, borderWidth: 3 },
     modalIcon: { fontSize: 48, textAlign: 'center', marginBottom: 8 },
-    modalTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 4 },
-    modalLevel: { fontSize: 14, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 12 },
-    modalDesc: { color: t.text.secondary, fontSize: 14, lineHeight: 20, marginBottom: 16 },
+    modalTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 4 },
+    modalLevel: { fontSize: fonts.md, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 12 },
+    modalDesc: { color: t.text.secondary, fontSize: fonts.md, lineHeight: 20, marginBottom: 16 },
     modalMeta: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 12, marginBottom: 16 },
     modalMetaRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4 },
-    modalMetaLabel: { color: t.text.muted, fontSize: 12 },
-    modalMetaValue: { color: t.text.primary, fontSize: 12, fontWeight: fonts.semibold },
+    modalMetaLabel: { color: t.text.muted, fontSize: fonts.sm },
+    modalMetaValue: { color: t.text.primary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     modalSoulbound: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: t.bg.primary, borderRadius: 8, paddingVertical: 8, marginBottom: 16 },
-    modalSoulboundText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, marginLeft: 6 },
+    modalSoulboundText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, marginLeft: 6 },
     modalClose: { backgroundColor: t.accent.blue, borderRadius: 12, paddingVertical: 12, alignItems: 'center' },
-    modalCloseText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
-    emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
+    modalCloseText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
+    emptyText: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', marginTop: 40 },
     demoTag: { backgroundColor: t.accent.purple + '30', borderRadius: 8, paddingVertical: 4, paddingHorizontal: 10, alignSelf: 'center', marginBottom: 12 },
-    demoTagText: { color: t.accent.purple, fontSize: 11, fontWeight: fonts.bold },
+    demoTagText: { color: t.accent.purple, fontSize: fonts.xs, fontWeight: fonts.bold },
   }), [t]);
 
   const renderBadge = (ach: Achievement) => {
@@ -255,7 +255,7 @@ export function AchievementsScreen({ onClose }: Props) {
               if (count === 0) return null;
               return (
                 <View key={level} style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-                  <Text style={{ color: LEVEL_COLORS[level], fontSize: 12, fontWeight: fonts.bold }}>
+                  <Text style={{ color: LEVEL_COLORS[level], fontSize: fonts.sm, fontWeight: fonts.bold }}>
                     {LEVEL_ICONS[level]} {count}
                   </Text>
                 </View>
@@ -265,7 +265,7 @@ export function AchievementsScreen({ onClose }: Props) {
 
           {/* Soulbound badge */}
           <View style={st.soulboundBadge}>
-            <Text style={{ fontSize: 14 }}>{'\u{1F512}'}</Text>
+            <Text style={{ fontSize: fonts.md }}>{'\u{1F512}'}</Text>
             <Text style={st.soulboundText}>Soulbound — Non-Transferable</Text>
           </View>
         </View>
@@ -345,7 +345,7 @@ export function AchievementsScreen({ onClose }: Props) {
               </View>
 
               <View style={st.modalSoulbound}>
-                <Text style={{ fontSize: 14 }}>{'\u{1F512}'}</Text>
+                <Text style={{ fontSize: fonts.md }}>{'\u{1F512}'}</Text>
                 <Text style={st.modalSoulboundText}>Soulbound — Cannot be transferred or traded</Text>
               </View>
 

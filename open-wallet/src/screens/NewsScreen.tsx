@@ -223,75 +223,75 @@ export function NewsScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     tabRow: { flexDirection: 'row', marginHorizontal: 20, marginBottom: 16, backgroundColor: t.bg.card, borderRadius: 12, padding: 4 },
     tab: { flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 10 },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
+    tabText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     scroll: { paddingHorizontal: 20, paddingBottom: 40 },
     catRow: { flexDirection: 'row', marginBottom: 16, paddingHorizontal: 20 },
     catChip: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 10, marginRight: 8, backgroundColor: t.bg.card },
     catChipActive: { backgroundColor: t.accent.blue },
-    catChipText: { fontSize: 12, fontWeight: fonts.semibold, color: t.text.muted },
+    catChipText: { fontSize: fonts.sm, fontWeight: fonts.semibold, color: t.text.muted },
     catChipTextActive: { color: '#fff' },
     breakingBanner: { backgroundColor: '#ef4444' + '15', borderRadius: 16, padding: 16, marginBottom: 12, borderLeftWidth: 4, borderLeftColor: '#ef4444' },
-    breakingLabel: { color: '#ef4444', fontSize: 11, fontWeight: fonts.heavy, textTransform: 'uppercase', letterSpacing: 1.5 },
-    breakingTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, marginTop: 4 },
+    breakingLabel: { color: '#ef4444', fontSize: fonts.xs, fontWeight: fonts.heavy, textTransform: 'uppercase', letterSpacing: 1.5 },
+    breakingTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, marginTop: 4 },
     articleCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
-    articleTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
+    articleTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
     articleMeta: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 6 },
-    articleAuthor: { color: t.accent.blue, fontSize: 12, fontWeight: fonts.semibold },
-    articleDate: { color: t.text.muted, fontSize: 12 },
+    articleAuthor: { color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    articleDate: { color: t.text.muted, fontSize: fonts.sm },
     articleCatBadge: { flexDirection: 'row', alignItems: 'center', marginTop: 8 },
-    articleCatText: { fontSize: 12, fontWeight: fonts.semibold, marginLeft: 4 },
-    articleContent: { color: t.text.secondary, fontSize: 13, lineHeight: 20, marginTop: 10 },
+    articleCatText: { fontSize: fonts.sm, fontWeight: fonts.semibold, marginLeft: 4 },
+    articleContent: { color: t.text.secondary, fontSize: fonts.sm, lineHeight: 20, marginTop: 10 },
     factCheckRow: { flexDirection: 'row', alignItems: 'center', marginTop: 10, gap: 12 },
     factBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
-    factBadgeText: { fontSize: 11, fontWeight: fonts.bold, color: '#fff' },
-    verifyCount: { fontSize: 12, fontWeight: fonts.semibold },
-    sourcesLabel: { color: t.text.muted, fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1, marginTop: 12 },
-    sourceItem: { color: t.accent.blue, fontSize: 12, marginTop: 4 },
-    backBtn: { color: t.accent.blue, fontSize: 16 },
-    detailTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy, marginHorizontal: 20, marginTop: 8 },
+    factBadgeText: { fontSize: fonts.xs, fontWeight: fonts.bold, color: '#fff' },
+    verifyCount: { fontSize: fonts.sm, fontWeight: fonts.semibold },
+    sourcesLabel: { color: t.text.muted, fontSize: fonts.xs, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1, marginTop: 12 },
+    sourceItem: { color: t.accent.blue, fontSize: fonts.sm, marginTop: 4 },
+    backBtn: { color: t.accent.blue, fontSize: fonts.lg },
+    detailTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy, marginHorizontal: 20, marginTop: 8 },
     detailMeta: { flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, marginTop: 8 },
-    detailContent: { color: t.text.primary, fontSize: 15, lineHeight: 24, marginHorizontal: 20, marginTop: 16 },
+    detailContent: { color: t.text.primary, fontSize: fonts.md, lineHeight: 24, marginHorizontal: 20, marginTop: 16 },
     detailFactRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginHorizontal: 20, marginTop: 16 },
     detailSources: { marginHorizontal: 20, marginTop: 16 },
     factActions: { flexDirection: 'row', gap: 12, marginHorizontal: 20, marginTop: 16 },
     factBtn: { flex: 1, borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
-    factBtnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
+    factBtnText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
     inputCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
-    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8 },
-    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15 },
+    inputLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold, marginBottom: 8 },
+    input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: fonts.md },
     contentInput: { minHeight: 160, textAlignVertical: 'top' },
     catPicker: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 4 },
     submitBtn: { backgroundColor: t.accent.blue, borderRadius: 16, paddingVertical: 16, alignItems: 'center', marginTop: 8 },
-    submitBtnText: { color: '#fff', fontSize: 17, fontWeight: fonts.bold },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 10, marginTop: 8 },
+    submitBtnText: { color: '#fff', fontSize: fonts.lg, fontWeight: fonts.bold },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 10, marginTop: 8 },
     reporterCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
-    reporterName: { color: t.text.primary, fontSize: 17, fontWeight: fonts.heavy },
-    reporterAddress: { color: t.text.muted, fontSize: 12, marginTop: 2 },
+    reporterName: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.heavy },
+    reporterAddress: { color: t.text.muted, fontSize: fonts.sm, marginTop: 2 },
     reporterStats: { flexDirection: 'row', gap: 16, marginTop: 12 },
     rStat: { alignItems: 'center' },
-    rStatValue: { color: t.text.primary, fontSize: 18, fontWeight: fonts.bold },
-    rStatLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
+    rStatValue: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.bold },
+    rStatLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
     credBar: { height: 8, backgroundColor: t.border, borderRadius: 4, marginTop: 12 },
     credFill: { height: 8, borderRadius: 4 },
-    credLabel: { color: t.text.muted, fontSize: 11, marginTop: 4 },
+    credLabel: { color: t.text.muted, fontSize: fonts.xs, marginTop: 4 },
     specialties: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 10 },
     specChip: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, backgroundColor: t.bg.primary },
-    specChipText: { color: t.text.secondary, fontSize: 11, fontWeight: fonts.semibold },
+    specChipText: { color: t.text.secondary, fontSize: fonts.xs, fontWeight: fonts.semibold },
     alertCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12, borderLeftWidth: 4 },
-    alertTime: { color: t.text.muted, fontSize: 11 },
-    alertTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, marginTop: 4 },
-    alertSummary: { color: t.text.secondary, fontSize: 13, lineHeight: 20, marginTop: 6 },
-    alertCategory: { color: t.text.muted, fontSize: 12, marginTop: 6 },
+    alertTime: { color: t.text.muted, fontSize: fonts.xs },
+    alertTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, marginTop: 4 },
+    alertSummary: { color: t.text.secondary, fontSize: fonts.sm, lineHeight: 20, marginTop: 6 },
+    alertCategory: { color: t.text.muted, fontSize: fonts.sm, marginTop: 6 },
     heroCard: { backgroundColor: t.accent.blue + '10', borderRadius: 24, padding: 24, alignItems: 'center', marginBottom: 20 },
-    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, textAlign: 'center' },
-    heroSub: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 8, lineHeight: 20 },
-    emptyText: { color: t.text.muted, textAlign: 'center', marginTop: 20, fontSize: 14 },
+    heroTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy, textAlign: 'center' },
+    heroSub: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 8, lineHeight: 20 },
+    emptyText: { color: t.text.muted, textAlign: 'center', marginTop: 20, fontSize: fonts.md },
   }), [t]);
 
   const handleSubmitArticle = useCallback(async () => {
@@ -378,13 +378,13 @@ export function NewsScreen({ onClose }: Props) {
         <ScrollView>
           <Text style={s.detailTitle}>{a.title}</Text>
           <View style={s.detailMeta}>
-            <Text style={{ color: t.accent.blue, fontSize: 13, fontWeight: fonts.semibold }}>{a.author}</Text>
-            <Text style={{ color: t.text.muted, fontSize: 13 }}>{a.date}</Text>
+            <Text style={{ color: t.accent.blue, fontSize: fonts.sm, fontWeight: fonts.semibold }}>{a.author}</Text>
+            <Text style={{ color: t.text.muted, fontSize: fonts.sm }}>{a.date}</Text>
           </View>
           {catMeta && (
             <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: 20, marginTop: 8 }}>
-              <Text style={{ fontSize: 14 }}>{catMeta.icon}</Text>
-              <Text style={{ color: catMeta.color, fontSize: 13, fontWeight: fonts.semibold, marginLeft: 4 }}>{catMeta.label}</Text>
+              <Text style={{ fontSize: fonts.md }}>{catMeta.icon}</Text>
+              <Text style={{ color: catMeta.color, fontSize: fonts.sm, fontWeight: fonts.semibold, marginLeft: 4 }}>{catMeta.label}</Text>
             </View>
           )}
           <Text style={s.detailContent}>{a.content}</Text>
@@ -463,7 +463,7 @@ export function NewsScreen({ onClose }: Props) {
                 </View>
                 {catMeta && (
                   <View style={s.articleCatBadge}>
-                    <Text style={{ fontSize: 12 }}>{catMeta.icon}</Text>
+                    <Text style={{ fontSize: fonts.sm }}>{catMeta.icon}</Text>
                     <Text style={[s.articleCatText, { color: catMeta.color }]}>{catMeta.label}</Text>
                   </View>
                 )}
@@ -524,7 +524,7 @@ export function NewsScreen({ onClose }: Props) {
       <TouchableOpacity style={s.submitBtn} onPress={handleSubmitArticle} disabled={loading}>
         {loading ? <ActivityIndicator color="#fff" /> : <Text style={s.submitBtnText}>Submit Article</Text>}
       </TouchableOpacity>
-      <Text style={{ color: t.text.muted, fontSize: 12, textAlign: 'center', marginTop: 16, lineHeight: 18 }}>
+      <Text style={{ color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 16, lineHeight: 18 }}>
         Articles are published immediately and subject to community fact-checking. Provide sources to increase credibility.
       </Text>
     </ScrollView>
@@ -588,7 +588,7 @@ export function NewsScreen({ onClose }: Props) {
             }}
           >
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ color: SEVERITY_COLORS[alert.severity], fontSize: 11, fontWeight: fonts.heavy, textTransform: 'uppercase', letterSpacing: 1 }}>
+              <Text style={{ color: SEVERITY_COLORS[alert.severity], fontSize: fonts.xs, fontWeight: fonts.heavy, textTransform: 'uppercase', letterSpacing: 1 }}>
                 {alert.severity}
               </Text>
               <Text style={s.alertTime}>{alert.timestamp}</Text>

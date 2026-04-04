@@ -186,64 +186,64 @@ export function ParentingStagesScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
-    closeBtn: { color: t.accent.blue, fontSize: 16 },
+    title: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: fonts.lg },
     tabRow: { flexDirection: 'row', paddingHorizontal: 16, gap: 4, marginBottom: 16 },
     tabBtn: { flex: 1, paddingVertical: 10, borderRadius: 12, backgroundColor: t.bg.card, alignItems: 'center' },
     tabBtnActive: { backgroundColor: t.accent.purple },
-    tabLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    tabLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     tabLabelActive: { color: '#fff' },
     heroCard: { backgroundColor: t.accent.purple + '10', borderRadius: 24, padding: 24, marginHorizontal: 20, marginBottom: 16, alignItems: 'center' },
     heroIcon: { fontSize: 40, marginBottom: 8 },
-    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, textAlign: 'center' },
-    heroSubtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 4, lineHeight: 20 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 20 },
+    heroTitle: { color: t.text.primary, fontSize: fonts.xl, fontWeight: fonts.heavy, textAlign: 'center' },
+    heroSubtitle: { color: t.text.muted, fontSize: fonts.sm, textAlign: 'center', marginTop: 4, lineHeight: 20 },
+    section: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 20 },
     stageCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 10, flexDirection: 'row', alignItems: 'center', gap: 14 },
     stageCardSelected: { borderWidth: 2, borderColor: t.accent.purple },
     stageIcon: { width: 48, height: 48, borderRadius: 24, justifyContent: 'center', alignItems: 'center' },
-    stageIconText: { color: '#fff', fontSize: 18, fontWeight: fonts.heavy },
+    stageIconText: { color: '#fff', fontSize: fonts.xl, fontWeight: fonts.heavy },
     stageInfo: { flex: 1 },
-    stageLabel: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
-    stageAge: { color: t.text.secondary, fontSize: 13, marginTop: 2 },
-    stageDesc: { color: t.text.muted, fontSize: 12, marginTop: 4 },
+    stageLabel: { color: t.text.primary, fontSize: fonts.lg, fontWeight: fonts.bold },
+    stageAge: { color: t.text.secondary, fontSize: fonts.sm, marginTop: 2 },
+    stageDesc: { color: t.text.muted, fontSize: fonts.sm, marginTop: 4 },
     milestonePill: { backgroundColor: t.accent.green + '20', borderRadius: 8, paddingHorizontal: 10, paddingVertical: 4, marginRight: 6, marginTop: 6 },
-    milestoneText: { color: t.accent.green, fontSize: 11, fontWeight: fonts.semibold },
+    milestoneText: { color: t.accent.green, fontSize: fonts.xs, fontWeight: fonts.semibold },
     milestoneRow: { flexDirection: 'row', flexWrap: 'wrap', marginTop: 4 },
     filterRow: { flexDirection: 'row', paddingHorizontal: 20, gap: 8, marginBottom: 12 },
     filterChip: { paddingVertical: 8, paddingHorizontal: 14, borderRadius: 10, backgroundColor: t.bg.card },
     filterChipActive: { backgroundColor: t.accent.blue },
-    filterLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    filterLabel: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
     filterLabelActive: { color: '#fff' },
     tipCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 10 },
-    tipCategory: { fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1 },
-    tipTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, marginTop: 6 },
-    tipSummary: { color: t.text.secondary, fontSize: 13, lineHeight: 20, marginTop: 6 },
+    tipCategory: { fontSize: fonts.xs, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1 },
+    tipTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold, marginTop: 6 },
+    tipSummary: { color: t.text.secondary, fontSize: fonts.sm, lineHeight: 20, marginTop: 6 },
     tipFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 },
-    tipAuthor: { color: t.text.muted, fontSize: 12 },
+    tipAuthor: { color: t.text.muted, fontSize: fonts.sm },
     tipStats: { flexDirection: 'row', gap: 12, alignItems: 'center' },
-    tipStatText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
-    notkBadge: { color: t.accent.purple, fontSize: 12, fontWeight: fonts.bold },
+    tipStatText: { color: t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.semibold },
+    notkBadge: { color: t.accent.purple, fontSize: fonts.sm, fontWeight: fonts.bold },
     communityCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 10 },
-    communityAuthor: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
-    communityDate: { color: t.text.muted, fontSize: 11, marginTop: 2 },
-    communityContent: { color: t.text.secondary, fontSize: 14, lineHeight: 22, marginTop: 8 },
+    communityAuthor: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    communityDate: { color: t.text.muted, fontSize: fonts.xs, marginTop: 2 },
+    communityContent: { color: t.text.secondary, fontSize: fonts.md, lineHeight: 22, marginTop: 8 },
     communityStats: { flexDirection: 'row', gap: 16, marginTop: 10 },
-    communityStatText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
+    communityStatText: { color: t.text.muted, fontSize: fonts.sm, fontWeight: fonts.semibold },
     resourceCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 10, flexDirection: 'row', gap: 12, alignItems: 'center' },
     resourceTypeBadge: { width: 44, height: 44, borderRadius: 12, justifyContent: 'center', alignItems: 'center' },
     resourceInfo: { flex: 1 },
-    resourceTitle: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
-    resourceSource: { color: t.text.secondary, fontSize: 12, marginTop: 2 },
-    resourceHash: { color: t.text.muted, fontSize: 10, fontFamily: 'Courier', marginTop: 4 },
-    resourceRating: { color: t.accent.orange || '#FF9500', fontSize: 13, fontWeight: fonts.bold },
+    resourceTitle: { color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold },
+    resourceSource: { color: t.text.secondary, fontSize: fonts.sm, marginTop: 2 },
+    resourceHash: { color: t.text.muted, fontSize: fonts.xs, fontFamily: 'Courier', marginTop: 4 },
+    resourceRating: { color: t.accent.orange || '#FF9500', fontSize: fonts.sm, fontWeight: fonts.bold },
     connectBtn: { backgroundColor: t.accent.purple, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginHorizontal: 20, marginTop: 12, marginBottom: 20 },
-    connectBtnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
-    emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', padding: 40 },
+    connectBtnText: { color: '#fff', fontSize: fonts.md, fontWeight: fonts.bold },
+    emptyText: { color: t.text.muted, fontSize: fonts.md, textAlign: 'center', padding: 40 },
     currentBadge: { backgroundColor: t.accent.purple, borderRadius: 6, paddingHorizontal: 8, paddingVertical: 2, marginLeft: 8 },
-    currentBadgeText: { color: '#fff', fontSize: 10, fontWeight: fonts.bold },
+    currentBadgeText: { color: '#fff', fontSize: fonts.xs, fontWeight: fonts.bold },
     notkEarnedCard: { backgroundColor: t.accent.purple + '10', borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    notkLabel: { color: t.text.secondary, fontSize: 13 },
-    notkValue: { color: t.accent.purple, fontSize: 20, fontWeight: fonts.heavy },
+    notkLabel: { color: t.text.secondary, fontSize: fonts.sm },
+    notkValue: { color: t.accent.purple, fontSize: fonts.xl, fontWeight: fonts.heavy },
   }), [t]);
 
   const currentStage = useMemo(() => STAGES.find(st => st.key === selectedStage), [selectedStage]);
@@ -284,7 +284,7 @@ export function ParentingStagesScreen({ onClose }: Props) {
       <View style={s.notkEarnedCard}>
         <View>
           <Text style={s.notkLabel}>nOTK earned from sharing tips</Text>
-          <Text style={{ color: t.text.muted, fontSize: 11, marginTop: 2 }}>Help others, earn nurture tokens</Text>
+          <Text style={{ color: t.text.muted, fontSize: fonts.xs, marginTop: 2 }}>Help others, earn nurture tokens</Text>
         </View>
         <Text style={s.notkValue}>10,620</Text>
       </View>
@@ -422,7 +422,7 @@ export function ParentingStagesScreen({ onClose }: Props) {
         stageResources.map(res => (
           <View key={res.id} style={s.resourceCard}>
             <View style={[s.resourceTypeBadge, { backgroundColor: res.type === 'article' ? t.accent.blue + '20' : '#FF3B30' + '20' }]}>
-              <Text style={{ color: res.type === 'article' ? t.accent.blue : '#FF3B30', fontSize: 16, fontWeight: fonts.heavy }}>
+              <Text style={{ color: res.type === 'article' ? t.accent.blue : '#FF3B30', fontSize: fonts.lg, fontWeight: fonts.heavy }}>
                 {res.type === 'article' ? 'A' : 'V'}
               </Text>
             </View>
