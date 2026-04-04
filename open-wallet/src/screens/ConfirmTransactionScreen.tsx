@@ -6,11 +6,12 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import {
   View, Text, TouchableOpacity, StyleSheet,
-  SafeAreaView, Alert, ActivityIndicator,
+  SafeAreaView, Alert, ActivityIndicator, ScrollView,
 } from 'react-native';
 import { authManager } from '../core/auth/auth';
 import { PinPad } from '../components/PinPad';
 import { useTheme } from '../hooks/useTheme';
+import { TransactionPipeline, getPipelineSteps, type PipelineStep, type StepStatus } from '../components/TransactionPipeline';
 import type { Theme } from '../utils/theme';
 
 interface TxDetails {
@@ -22,18 +23,43 @@ interface TxDetails {
   recipient?: string;
   fee?: string;
   route?: string;
+  /** Swap provider ID for pipeline display (e.g. 'ow-orderbook', 'ext-thorchain') */
+  swapProviderId?: string;
+  /** Swap provider name for display */
+  swapProviderName?: string;
 }
 
 interface Props {
   tx: TxDetails;
-  onConfirm: (vaultPassword?: string) => Promise<void>;
+  onConfirm: (vaultPassword?: string, onProgress?: (update: { stepId: string; status: StepStatus; detail?: string; info?: string }) => void) => Promise<void>;
   onCancel: () => void;
 }
 
 export const ConfirmTransactionScreen = React.memo(({ tx, onConfirm, onCancel }: Props) => {
   const [step, setStep] = useState<'review' | 'auth' | 'executing'>('review');
   const [pinError, setPinError] = useState<string | null>(null);
+  const [pipelineSteps, setPipelineSteps] = useState<PipelineStep[]>([]);
+  const [executionDone, setExecutionDone] = useState(false);
   const t = useTheme();
+
+  // Initialize pipeline steps when we have a swap provider
+  const initPipeline = useCallback(() => {
+    if (tx.swapProviderId && tx.toSymbol) {
+      const steps = getPipelineSteps(tx.swapProviderId, tx.fromSymbol, tx.toSymbol);
+      setPipelineSteps(steps);
+      return steps;
+    }
+    return [];
+  }, [tx]);
+
+  // Progress callback that updates pipeline steps in real time
+  const handleProgress = useCallback((update: { stepId: string; status: StepStatus; detail?: string; info?: string }) => {
+    setPipelineSteps(prev => prev.map(s =>
+      s.id === update.stepId
+        ? { ...s, status: update.status, ...(update.detail !== undefined ? { detail: update.detail } : {}), ...(update.info !== undefined ? { info: update.info } : {}) }
+        : s
+    ));
+  }, []);
 
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
@@ -68,15 +94,16 @@ export const ConfirmTransactionScreen = React.memo(({ tx, onConfirm, onCancel }:
   }, [s]);
 
   const executeWithPassword = useCallback(async (password?: string) => {
+    initPipeline();
     setStep('executing');
+    setExecutionDone(false);
     try {
-      await onConfirm(password);
+      await onConfirm(password, handleProgress);
+      setExecutionDone(true);
     } catch {
-      // Error already handled by onConfirm (SendScreen shows its own alert)
-      // Just reset the UI state
-      setStep('review');
+      setExecutionDone(true);
     }
-  }, [onConfirm]);
+  }, [onConfirm, initPipeline, handleProgress]);
 
   const handleConfirm = useCallback(async () => {
     // Try biometric first
@@ -124,14 +151,35 @@ export const ConfirmTransactionScreen = React.memo(({ tx, onConfirm, onCancel }:
     );
   }
 
-  // ─── Executing ───
+  // ─── Executing (with pipeline) ───
   if (step === 'executing') {
+    const hasPipeline = pipelineSteps.length > 0;
     return (
       <SafeAreaView style={s.container}>
-        <View style={s.executing}>
-          <ActivityIndicator color={t.accent.green} size="large" />
-          <Text style={s.executingText}>Processing transaction...</Text>
-        </View>
+        {hasPipeline ? (
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <TransactionPipeline
+              steps={pipelineSteps}
+              fromSymbol={tx.fromSymbol}
+              toSymbol={tx.toSymbol ?? ''}
+              amount={tx.fromAmount}
+              provider={tx.swapProviderName ?? tx.route ?? 'Swap'}
+            />
+            {executionDone && (
+              <TouchableOpacity
+                style={[s.confirmBtn, { marginHorizontal: 20, marginTop: 20, marginBottom: 40, backgroundColor: t.accent.blue }]}
+                onPress={onCancel}
+              >
+                <Text style={s.confirmText}>Done</Text>
+              </TouchableOpacity>
+            )}
+          </ScrollView>
+        ) : (
+          <View style={s.executing}>
+            <ActivityIndicator color={t.accent.green} size="large" />
+            <Text style={s.executingText}>Processing transaction...</Text>
+          </View>
+        )}
       </SafeAreaView>
     );
   }

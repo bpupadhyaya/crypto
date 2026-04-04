@@ -11,14 +11,24 @@ import type { ChainId, Token, Balance } from '../core/abstractions/types';
 
 // ─── Default dev balance template ───
 
-const DEV_BALANCE_DECIMALS: Record<string, { chainId: ChainId; name: string; decimals: number }> = {
-  BTC:  { chainId: 'bitcoin',   name: 'Bitcoin',    decimals: 8 },
-  ETH:  { chainId: 'ethereum',  name: 'Ethereum',   decimals: 18 },
-  SOL:  { chainId: 'solana',    name: 'Solana',     decimals: 9 },
-  ATOM: { chainId: 'cosmos',    name: 'Cosmos',     decimals: 6 },
-  OTK:  { chainId: 'openchain', name: 'Open Token', decimals: 6 },
-  USDT: { chainId: 'ethereum',  name: 'Tether',     decimals: 6 },
-  USDC: { chainId: 'ethereum',  name: 'USD Coin',   decimals: 6 },
+const DEV_BALANCE_DECIMALS: Record<string, { chainId: string; name: string; decimals: number }> = {
+  BTC:  { chainId: 'bitcoin',    name: 'Bitcoin',    decimals: 8 },
+  ETH:  { chainId: 'ethereum',   name: 'Ethereum',   decimals: 18 },
+  SOL:  { chainId: 'solana',     name: 'Solana',     decimals: 9 },
+  ADA:  { chainId: 'cardano',    name: 'Cardano',    decimals: 6 },
+  XRP:  { chainId: 'xrp',        name: 'XRP',        decimals: 6 },
+  DOGE: { chainId: 'dogecoin',   name: 'Dogecoin',   decimals: 8 },
+  DOT:  { chainId: 'polkadot',   name: 'Polkadot',   decimals: 10 },
+  AVAX: { chainId: 'avalanche',  name: 'Avalanche',  decimals: 18 },
+  LINK: { chainId: 'ethereum',   name: 'Chainlink',  decimals: 18 },
+  SUI:  { chainId: 'sui',        name: 'Sui',        decimals: 9 },
+  POL:  { chainId: 'polygon',    name: 'Polygon',    decimals: 18 },
+  BNB:  { chainId: 'bsc',        name: 'BNB',        decimals: 18 },
+  TON:  { chainId: 'ton',        name: 'Toncoin',    decimals: 9 },
+  USDT: { chainId: 'ethereum',   name: 'Tether',     decimals: 6 },
+  USDC: { chainId: 'ethereum',   name: 'USD Coin',   decimals: 6 },
+  OTK:  { chainId: 'openchain',  name: 'Open Token', decimals: 6 },
+  ATOM: { chainId: 'cosmos',     name: 'Cosmos',     decimals: 6 },
 };
 
 function buildDemoBalances(devBalances: Record<string, number>): Balance[] {
@@ -127,7 +137,10 @@ export function useTokenPrice(token: Token) {
 // ─── Demo prices (no network needed) ───
 
 const DEMO_PRICES = new Map<string, number>([
-  ['BTC', 87000], ['ETH', 2100], ['SOL', 140], ['ATOM', 7.50], ['OTK', 0.01],
+  ['BTC', 87000], ['ETH', 2100], ['SOL', 140], ['ADA', 0.45], ['XRP', 0.52],
+  ['DOGE', 0.08], ['DOT', 4.50], ['AVAX', 22], ['LINK', 14], ['SUI', 1.10],
+  ['POL', 0.55], ['BNB', 600], ['TON', 3.50], ['USDT', 1.00], ['USDC', 1.00],
+  ['OTK', 0.01], ['ATOM', 7.50],
 ]);
 
 // ─── All Prices Hook ───

@@ -209,6 +209,12 @@ export function DevToolsScreen({ onClose }: Props) {
     Alert.alert('Done', 'All feature tooltips reset.');
   }, []);
 
+  const handleResetDevBalances = useCallback(() => {
+    store.resetDevBalances();
+    Alert.alert('Done', 'Dev balances reset to defaults (all 16 tokens funded).');
+    refresh();
+  }, [store, refresh]);
+
   // ─── Render ───
 
   const priceCount = Object.keys(prices).length;
@@ -360,6 +366,10 @@ export function DevToolsScreen({ onClose }: Props) {
             </TouchableOpacity>
             <TouchableOpacity style={st.actionBtn} onPress={handleToggleDemo}>
               <Text style={st.actionLabel}>Toggle Demo Mode ({store.demoMode ? 'ON' : 'OFF'})</Text>
+              <Text style={st.actionIcon}>{'>'}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={st.actionBtn} onPress={handleResetDevBalances}>
+              <Text style={st.actionLabel}>Reset Dev Balances (all 16 tokens)</Text>
               <Text style={st.actionIcon}>{'>'}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[st.actionBtn, st.dangerBtn]} onPress={handleResetPaperTrading}>

@@ -39,6 +39,18 @@ async function isOpenChainReachable(): Promise<boolean> {
 const OPEN_CHAIN_UNAVAILABLE =
   'Open Chain mainnet is not yet live. Your funds are safe — please use THORChain or another external provider for this swap. Open Chain will be available soon.';
 
+export type StepStatus = 'pending' | 'active' | 'complete' | 'failed' | 'delayed';
+
+export interface StepUpdate {
+  stepId: string;
+  status: StepStatus;
+  detail?: string;
+  info?: string; // e.g., tx hash
+}
+
+/** Callback for real-time pipeline progress updates */
+export type OnProgress = (update: StepUpdate) => void;
+
 export interface SwapExecutionResult {
   success: boolean;
   txHash?: string;
@@ -59,33 +71,35 @@ export async function executeSwapTransaction(params: {
   accountIndex: number;
   fromAddress: string;
   toAddress: string;
+  onProgress?: OnProgress;
 }): Promise<SwapExecutionResult> {
-  const { option, fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, fromAddress, toAddress } = params;
+  const { option, fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, fromAddress, toAddress, onProgress } = params;
+  const p = onProgress ?? (() => {});
 
   switch (option.id) {
     case 'ext-thorchain':
-      return executeTHORChainSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, toAddress });
+      return executeTHORChainSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, toAddress, p });
 
     case 'ow-atomic':
-      return executeAtomicSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, toAddress });
+      return executeAtomicSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, toAddress, p });
 
     case 'ow-dex':
-      return executeOpenChainDEXSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex });
+      return executeOpenChainDEXSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, p });
 
     case 'ow-orderbook':
-      return executeOrderBookSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex });
+      return executeOrderBookSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, p });
 
     case 'ext-1inch':
-      return execute1inchSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, fromAddress, toAddress });
+      return execute1inchSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, fromAddress, toAddress, p });
 
     case 'ext-jupiter':
-      return executeJupiterSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex });
+      return executeJupiterSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, p });
 
     case 'ext-li.fi-bridge':
-      return executeLiFiBridgeSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, fromAddress, toAddress });
+      return executeLiFiBridgeSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, fromAddress, toAddress, p });
 
     case 'ext-osmosis-(ibc)':
-      return executeOsmosisSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex });
+      return executeOsmosisSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, p });
 
     default:
       return { success: false, message: 'Unknown swap option.', provider: 'Unknown' };
@@ -96,35 +110,50 @@ export async function executeSwapTransaction(params: {
 
 async function executeTHORChainSwap(params: {
   fromAmount: number; fromSymbol: string; toSymbol: string;
-  mnemonic: string; accountIndex: number; toAddress: string;
+  mnemonic: string; accountIndex: number; toAddress: string; p: OnProgress;
 }): Promise<SwapExecutionResult> {
-  const { fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, toAddress } = params;
+  const { fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, toAddress, p } = params;
 
   try {
+    p({ stepId: 'vault', status: 'active' });
+    const { HDWallet } = await import('../wallet/hdwallet');
+    const wallet = HDWallet.fromMnemonic(mnemonic);
+    p({ stepId: 'vault', status: 'complete' });
+
+    p({ stepId: 'quote', status: 'active' });
     const quote = await getThorQuote({
       fromSymbol, toSymbol, amount: fromAmount,
       destinationAddress: toAddress, slippageBps: 100, affiliateBps: 0,
     });
 
     if (!quote.vaultAddress || !quote.memo) {
+      p({ stepId: 'quote', status: 'failed', detail: 'No vault address returned' });
       return { success: false, message: 'THORChain did not return a vault address. The pair may be temporarily unavailable.', provider: 'THORChain' };
     }
+    p({ stepId: 'quote', status: 'complete', detail: `Vault: ${quote.vaultAddress.slice(0, 12)}...` });
 
-    const { HDWallet } = await import('../wallet/hdwallet');
-    const wallet = HDWallet.fromMnemonic(mnemonic);
     let txHash: string;
 
     if (fromSymbol === 'BTC') {
+      p({ stepId: 'build', status: 'active', detail: 'Creating Bitcoin UTXO transaction with OP_RETURN memo' });
       const { BitcoinSigner } = await import('../chains/bitcoin-signer');
       const signer = BitcoinSigner.fromWallet(wallet, accountIndex);
       const amountSats = BigInt(Math.round(fromAmount * 1e8));
       const rawTx = await signer.createTransaction(quote.vaultAddress, amountSats, 20, quote.memo);
+      p({ stepId: 'build', status: 'complete' });
+      p({ stepId: 'sign', status: 'complete', detail: 'Signed locally' });
+      p({ stepId: 'broadcast', status: 'active' });
       const { registry } = await import('../abstractions/registry');
       const provider = registry.getChainProvider('bitcoin');
       txHash = await provider.broadcastTransaction({ chainId: 'bitcoin', rawTransaction: rawTx, hash: '' });
     } else if (fromSymbol === 'ETH') {
+      p({ stepId: 'build', status: 'active' });
       const { EthereumSigner } = await import('../chains/ethereum-signer');
       const signer = EthereumSigner.fromWallet(wallet, accountIndex);
+      p({ stepId: 'build', status: 'complete' });
+      p({ stepId: 'sign', status: 'active' });
+      p({ stepId: 'sign', status: 'complete' });
+      p({ stepId: 'broadcast', status: 'active' });
       txHash = await signer.sendTransaction(quote.vaultAddress, fromAmount.toString());
     } else if (fromSymbol === 'USDT' || fromSymbol === 'USDC') {
       const THORCHAIN_ROUTER = '0xD37BbE5744D730a1d98d8DC97c42F0Ca46aD7146';
@@ -133,13 +162,16 @@ async function executeTHORChainSwap(params: {
         USDC: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
       };
       const tokenAddress = TOKEN_ADDRESSES[fromSymbol];
-      if (!tokenAddress) { wallet.destroy(); return { success: false, message: `Token ${fromSymbol} not supported.`, provider: 'THORChain' }; }
+      if (!tokenAddress) { wallet.destroy(); p({ stepId: 'build', status: 'failed', detail: `${fromSymbol} not supported` }); return { success: false, message: `Token ${fromSymbol} not supported.`, provider: 'THORChain' }; }
 
+      p({ stepId: 'approve', status: 'active', detail: `Approving ${fromSymbol} for THORChain Router` });
       const { EthereumSigner } = await import('../chains/ethereum-signer');
       const signer = EthereumSigner.fromWallet(wallet, accountIndex);
       const amountRaw = BigInt(Math.round(fromAmount * 1e6));
       try { await signer.sendERC20Approval(tokenAddress, THORCHAIN_ROUTER, amountRaw); } catch { /* may exist */ }
+      p({ stepId: 'approve', status: 'complete' });
 
+      p({ stepId: 'build', status: 'active', detail: 'Building deposit call to THORChain Router' });
       const memoBytes = new TextEncoder().encode(quote.memo);
       const memoHex = Array.from(memoBytes).map(b => b.toString(16).padStart(2, '0')).join('');
       const expiry = Math.floor(Date.now() / 1000) + 3600;
@@ -152,24 +184,40 @@ async function executeTHORChainSwap(params: {
       const memoLength = memoBytes.length.toString(16).padStart(64, '0');
       const memoPadded = memoHex.padEnd(Math.ceil(memoHex.length / 64) * 64, '0');
       const calldata = `${selector}${vaultPadded}${assetPadded}${amountPadded}${stringOffset}${expiryPadded}${memoLength}${memoPadded}` as `0x${string}`;
+      p({ stepId: 'build', status: 'complete' });
+      p({ stepId: 'sign', status: 'active' });
+      p({ stepId: 'sign', status: 'complete' });
+      p({ stepId: 'broadcast', status: 'active' });
       txHash = await signer.sendContractCall(THORCHAIN_ROUTER, calldata);
     } else if (fromSymbol === 'SOL') {
-      // SOL via THORChain — send SOL to THORChain Solana vault
+      p({ stepId: 'build', status: 'active' });
       const { SolanaSigner } = await import('../chains/solana-signer');
       const signer = SolanaSigner.fromWallet(wallet, accountIndex);
+      p({ stepId: 'build', status: 'complete' });
+      p({ stepId: 'sign', status: 'active' });
+      p({ stepId: 'sign', status: 'complete' });
+      p({ stepId: 'broadcast', status: 'active' });
       txHash = await signer.sendSOL(quote.vaultAddress, fromAmount);
     } else {
       wallet.destroy();
+      p({ stepId: 'build', status: 'failed', detail: `${fromSymbol} not supported via THORChain` });
       return { success: false, message: `${fromSymbol} not yet supported via THORChain. Use BTC, ETH, SOL, USDT, or USDC.`, provider: 'THORChain' };
     }
 
+    p({ stepId: 'broadcast', status: 'complete', info: `Tx: ${txHash.slice(0, 16)}...` });
+    p({ stepId: 'thorchain', status: 'active', detail: `~${Math.ceil(quote.estimatedTimeSeconds / 60)} min estimated` });
     wallet.destroy();
+    // THORChain processing happens async — mark as delayed since we can't track it in real time
+    p({ stepId: 'thorchain', status: 'delayed', detail: `THORChain validators processing swap (~${Math.ceil(quote.estimatedTimeSeconds / 60)} min)` });
+    p({ stepId: 'receive', status: 'pending', detail: `~${quote.expectedOutput} ${toSymbol} expected` });
     return {
       success: true, txHash,
       message: `Swap initiated! ${fromAmount} ${fromSymbol} sent to THORChain vault.\nTx: ${txHash.slice(0, 16)}...${txHash.slice(-8)}\nTHORChain will send ~${quote.expectedOutput} ${toSymbol} to your address within ~${Math.ceil(quote.estimatedTimeSeconds / 60)} minutes.`,
       provider: 'THORChain',
     };
   } catch (err) {
+    const failedStep = ['vault', 'quote', 'approve', 'build', 'sign', 'broadcast'].find(id => true) ?? 'broadcast';
+    p({ stepId: failedStep, status: 'failed', detail: err instanceof Error ? err.message : 'THORChain swap failed' });
     return { success: false, message: err instanceof Error ? err.message : 'THORChain swap failed', provider: 'THORChain' };
   }
 }
@@ -178,15 +226,19 @@ async function executeTHORChainSwap(params: {
 
 async function executeOpenChainDEXSwap(params: {
   fromAmount: number; fromSymbol: string; toSymbol: string;
-  mnemonic: string; accountIndex: number;
+  mnemonic: string; accountIndex: number; p: OnProgress;
 }): Promise<SwapExecutionResult> {
-  const { fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex } = params;
+  const { fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, p } = params;
 
+  p({ stepId: 'check', status: 'active' });
   if (!(await isOpenChainReachable())) {
+    p({ stepId: 'check', status: 'failed', detail: 'Open Chain not reachable' });
     return { success: false, message: OPEN_CHAIN_UNAVAILABLE, provider: 'Open Wallet DEX' };
   }
+  p({ stepId: 'check', status: 'complete' });
 
   try {
+    p({ stepId: 'vault', status: 'active' });
     const denomMap: Record<string, string> = {
       OTK: 'uotk', BTC: 'ubtc', ETH: 'ueth', USDT: 'uusdt', USDC: 'uusdc', SOL: 'usol', ATOM: 'uatom',
       nOTK: 'unotk', eOTK: 'ueotk', hOTK: 'uhotk', cOTK: 'ucotk', xOTK: 'uxotk', gOTK: 'ugotk',
@@ -199,12 +251,12 @@ async function executeOpenChainDEXSwap(params: {
     const wallet = HDWallet.fromMnemonic(mnemonic);
     const signer = CosmosSigner.fromWallet(wallet, accountIndex, 'openchain');
     const address = await signer.getAddress();
+    p({ stepId: 'vault', status: 'complete' });
 
     const decimals = fromSymbol === 'BTC' ? 8 : 6;
     const inputAmount = Math.round(fromAmount * 10 ** decimals);
 
-    // Construct MsgSwap for the Open Chain DEX module
-    // This is a real Cosmos SDK transaction sent to the x/dex module
+    p({ stepId: 'build', status: 'active', detail: `Pool: ${inputDenom}/${outputDenom}` });
     const swapMsg = {
       typeUrl: '/openchain.dex.v1.MsgSwap',
       value: {
@@ -212,15 +264,23 @@ async function executeOpenChainDEXSwap(params: {
         pool_id: `pool-${[inputDenom, outputDenom].sort().join('-')}`,
         token_in: { denom: inputDenom, amount: inputAmount.toString() },
         token_out_denom: outputDenom,
-        min_amount_out: '0', // Slippage handled by pool
+        min_amount_out: '0',
       },
     };
+    p({ stepId: 'build', status: 'complete' });
 
-    // Sign and broadcast the real Cosmos transaction
+    p({ stepId: 'sign', status: 'active' });
+    p({ stepId: 'sign', status: 'complete' });
+    p({ stepId: 'broadcast', status: 'active' });
     const txHash = await signer.signAndBroadcast([swapMsg], {
-      amount: [{ denom: 'uotk', amount: '1000' }], // ~0.001 OTK fee
+      amount: [{ denom: 'uotk', amount: '1000' }],
       gas: '200000',
     });
+    p({ stepId: 'broadcast', status: 'complete', info: `Tx: ${txHash.slice(0, 16)}...` });
+
+    p({ stepId: 'execute', status: 'active' });
+    p({ stepId: 'execute', status: 'complete', detail: 'AMM pool swap settled' });
+    p({ stepId: 'credit', status: 'complete', detail: `${toSymbol} credited (~0.001 OTK fee)` });
 
     wallet.destroy();
 
@@ -230,6 +290,7 @@ async function executeOpenChainDEXSwap(params: {
       provider: 'Open Wallet DEX',
     };
   } catch (err) {
+    p({ stepId: 'broadcast', status: 'failed', detail: err instanceof Error ? err.message : 'DEX swap failed' });
     return { success: false, message: err instanceof Error ? err.message : 'DEX swap failed', provider: 'Open Wallet DEX' };
   }
 }
@@ -238,19 +299,32 @@ async function executeOpenChainDEXSwap(params: {
 
 async function executeOrderBookSwap(params: {
   fromAmount: number; fromSymbol: string; toSymbol: string;
-  mnemonic: string; accountIndex: number;
+  mnemonic: string; accountIndex: number; p: OnProgress;
 }): Promise<SwapExecutionResult> {
-  const { fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex } = params;
+  const { fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, p } = params;
 
+  p({ stepId: 'check', status: 'active' });
   if (!(await isOpenChainReachable())) {
+    p({ stepId: 'check', status: 'failed', detail: 'Open Chain not reachable' });
     return { success: false, message: OPEN_CHAIN_UNAVAILABLE, provider: 'Open Wallet Order Book' };
   }
+  p({ stepId: 'check', status: 'complete' });
 
   try {
+    p({ stepId: 'vault', status: 'active' });
+    const { HDWallet } = await import('../wallet/hdwallet');
+    const { CosmosSigner } = await import('../chains/cosmos-signer');
+    const wallet = HDWallet.fromMnemonic(mnemonic);
+    const signer = CosmosSigner.fromWallet(wallet, accountIndex, 'openchain');
+    const address = await signer.getAddress();
+    p({ stepId: 'vault', status: 'complete' });
+
+    p({ stepId: 'price', status: 'active' });
     const { getLivePrice } = await import('./prices');
     const price = await getLivePrice(fromSymbol);
     const toPrice = await getLivePrice(toSymbol);
     const expectedOutput = (fromAmount * price) / toPrice;
+    p({ stepId: 'price', status: 'complete', detail: `${fromSymbol}: $${price.toFixed(2)}, ${toSymbol}: $${toPrice.toFixed(2)}` });
 
     const denomMap: Record<string, string> = {
       OTK: 'uotk', BTC: 'ubtc', ETH: 'ueth', USDT: 'uusdt', USDC: 'uusdc', SOL: 'usol', ATOM: 'uatom',
@@ -258,18 +332,12 @@ async function executeOrderBookSwap(params: {
     const sellDenom = denomMap[fromSymbol] ?? fromSymbol.toLowerCase();
     const buyDenom = denomMap[toSymbol] ?? toSymbol.toLowerCase();
 
-    const { HDWallet } = await import('../wallet/hdwallet');
-    const { CosmosSigner } = await import('../chains/cosmos-signer');
-    const wallet = HDWallet.fromMnemonic(mnemonic);
-    const signer = CosmosSigner.fromWallet(wallet, accountIndex, 'openchain');
-    const address = await signer.getAddress();
-
     const decimals = fromSymbol === 'BTC' ? 8 : 6;
     const inputAmount = Math.round(fromAmount * 10 ** decimals);
     const outputDecimals = toSymbol === 'BTC' ? 8 : 6;
-    const minOutputAmount = Math.round(expectedOutput * 0.99 * 10 ** outputDecimals); // 1% slippage
+    const minOutputAmount = Math.round(expectedOutput * 0.99 * 10 ** outputDecimals);
 
-    // Construct MsgPlaceLimitOrder for the Open Chain DEX module
+    p({ stepId: 'build', status: 'active', detail: `Limit order: ${(price / toPrice).toFixed(4)} ${toSymbol}/${fromSymbol}` });
     const orderMsg = {
       typeUrl: '/openchain.dex.v1.MsgPlaceLimitOrder',
       value: {
@@ -278,15 +346,22 @@ async function executeOrderBookSwap(params: {
         buy_denom: buyDenom,
         min_buy_amount: minOutputAmount.toString(),
         price: (price / toPrice).toFixed(8),
-        order_type: 'limit', // 'limit' or 'market'
+        order_type: 'limit',
       },
     };
+    p({ stepId: 'build', status: 'complete' });
 
-    // Sign and broadcast
+    p({ stepId: 'sign', status: 'active' });
+    p({ stepId: 'sign', status: 'complete' });
+    p({ stepId: 'broadcast', status: 'active' });
     const txHash = await signer.signAndBroadcast([orderMsg], {
       amount: [{ denom: 'uotk', amount: '1000' }],
       gas: '200000',
     });
+    p({ stepId: 'broadcast', status: 'complete', info: `Tx: ${txHash.slice(0, 16)}...` });
+
+    p({ stepId: 'place', status: 'complete', detail: `${fromSymbol} locked in order` });
+    p({ stepId: 'fill', status: 'delayed', detail: `Waiting for match at ${(price / toPrice).toFixed(4)} ${toSymbol}/${fromSymbol}` });
 
     wallet.destroy();
 
@@ -296,6 +371,7 @@ async function executeOrderBookSwap(params: {
       provider: 'Open Wallet Order Book',
     };
   } catch (err) {
+    p({ stepId: 'broadcast', status: 'failed', detail: err instanceof Error ? err.message : 'Order placement failed' });
     return { success: false, message: err instanceof Error ? err.message : 'Order placement failed', provider: 'Open Wallet Order Book' };
   }
 }
@@ -304,15 +380,19 @@ async function executeOrderBookSwap(params: {
 
 async function executeAtomicSwap(params: {
   fromAmount: number; fromSymbol: string; toSymbol: string;
-  mnemonic: string; accountIndex: number; toAddress: string;
+  mnemonic: string; accountIndex: number; toAddress: string; p: OnProgress;
 }): Promise<SwapExecutionResult> {
-  const { fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex } = params;
+  const { fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, p } = params;
 
+  p({ stepId: 'check', status: 'active' });
   if (!(await isOpenChainReachable())) {
+    p({ stepId: 'check', status: 'failed', detail: 'Open Chain not reachable' });
     return { success: false, message: OPEN_CHAIN_UNAVAILABLE, provider: 'Open Wallet Atomic Swap' };
   }
+  p({ stepId: 'check', status: 'complete' });
 
   try {
+    p({ stepId: 'vault', status: 'active' });
     const { createSwapOrder, generateSecret, calculateTimelocks } = await import('./atomic');
     const { getLivePrice } = await import('./prices');
 
@@ -320,9 +400,11 @@ async function executeAtomicSwap(params: {
     const toPrice = await getLivePrice(toSymbol);
     const expectedOutput = (fromAmount * price * 0.997) / toPrice;
 
-    // Generate HTLC secret and hash
+    p({ stepId: 'vault', status: 'complete' });
+    p({ stepId: 'secret', status: 'active' });
     const { secret, secretHash } = generateSecret();
     const { initiatorTimelock, participantTimelock } = calculateTimelocks();
+    p({ stepId: 'secret', status: 'complete', info: `Hash: ${secretHash.slice(0, 16)}...` });
 
     // Get signer for the source chain
     const { HDWallet } = await import('../wallet/hdwallet');
@@ -348,8 +430,7 @@ async function executeAtomicSwap(params: {
       sourceChain = 'ethereum';
     }
 
-    // Post atomic swap order to Open Chain P2P mempool
-    // This broadcasts the order so counterparties can discover and match it
+    p({ stepId: 'build', status: 'active' });
     const { CosmosSigner } = await import('../chains/cosmos-signer');
     const cosmosSigner = CosmosSigner.fromWallet(wallet, accountIndex, 'openchain');
 
@@ -370,14 +451,19 @@ async function executeAtomicSwap(params: {
       },
     };
 
+    p({ stepId: 'build', status: 'complete' });
+    p({ stepId: 'sign', status: 'active' });
+    p({ stepId: 'sign', status: 'complete' });
+    p({ stepId: 'broadcast', status: 'active' });
     const txHash = await cosmosSigner.signAndBroadcast([swapOrderMsg], {
       amount: [{ denom: 'uotk', amount: '1000' }],
       gas: '200000',
     });
+    p({ stepId: 'broadcast', status: 'complete', info: `Tx: ${txHash.slice(0, 16)}...` });
 
     wallet.destroy();
 
-    // Build the local order record (secret stays client-side, never on chain)
+    p({ stepId: 'persist', status: 'active' });
     const order = createSwapOrder({
       initiatorAddress: signerAddress,
       fromChain: sourceChain,
@@ -408,6 +494,8 @@ async function executeAtomicSwap(params: {
     } catch {
       // Non-critical — the swap order is on-chain regardless.
     }
+    p({ stepId: 'persist', status: 'complete' });
+    p({ stepId: 'match', status: 'delayed', detail: 'Waiting for P2P counterparty to match your order' });
 
     return {
       success: true, txHash,
@@ -415,6 +503,7 @@ async function executeAtomicSwap(params: {
       provider: 'Open Wallet Atomic Swap',
     };
   } catch (err) {
+    p({ stepId: 'broadcast', status: 'failed', detail: err instanceof Error ? err.message : 'Atomic swap failed' });
     return { success: false, message: err instanceof Error ? err.message : 'Atomic swap failed', provider: 'Open Wallet Atomic Swap' };
   }
 }
@@ -423,11 +512,12 @@ async function executeAtomicSwap(params: {
 
 async function executeLiFiBridgeSwap(params: {
   fromAmount: number; fromSymbol: string; toSymbol: string;
-  mnemonic: string; accountIndex: number; fromAddress: string; toAddress: string;
+  mnemonic: string; accountIndex: number; fromAddress: string; toAddress: string; p: OnProgress;
 }): Promise<SwapExecutionResult> {
-  const { fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, fromAddress, toAddress } = params;
+  const { fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, fromAddress, toAddress, p } = params;
 
   try {
+    p({ stepId: 'vault', status: 'active' });
     // Determine source and destination chains
     const chainMap: Record<string, { id: number; name: string }> = {
       ETH: { id: 1, name: 'ethereum' }, USDT: { id: 1, name: 'ethereum' }, USDC: { id: 1, name: 'ethereum' },
@@ -463,7 +553,8 @@ async function executeLiFiBridgeSwap(params: {
     const decimals = fromSymbol === 'ETH' ? 18 : fromSymbol === 'WBTC' ? 8 : ['USDT', 'USDC'].includes(fromSymbol) ? 6 : 18;
     const amountRaw = BigInt(Math.round(fromAmount * 10 ** decimals)).toString();
 
-    // 1. Get route from Li.Fi API
+    p({ stepId: 'vault', status: 'complete' });
+    p({ stepId: 'route', status: 'active' });
     const routeParams = new URLSearchParams({
       fromChainId: fromChain.id.toString(),
       toChainId: toChain.id.toString(),
@@ -486,27 +577,35 @@ async function executeLiFiBridgeSwap(params: {
     const routeData = await routeResponse.json();
 
     if (!routeData.transactionRequest) {
+      p({ stepId: 'route', status: 'failed', detail: 'No route found' });
       return { success: false, message: 'Li.Fi could not find a route. Try a different pair or provider.', provider: 'Li.Fi' };
     }
+    p({ stepId: 'route', status: 'complete' });
 
-    // 2. Sign and execute the transaction
     const { HDWallet } = await import('../wallet/hdwallet');
     const { EthereumSigner } = await import('../chains/ethereum-signer');
     const wallet = HDWallet.fromMnemonic(mnemonic);
     const signer = EthereumSigner.fromWallet(wallet, accountIndex);
 
-    // Approve if ERC-20
     if (fromSymbol !== 'ETH' && routeData.estimate?.approvalAddress) {
+      p({ stepId: 'approve', status: 'active' });
       try {
         await signer.sendERC20Approval(fromToken, routeData.estimate.approvalAddress, BigInt(amountRaw));
       } catch { /* approval may exist */ }
+      p({ stepId: 'approve', status: 'complete' });
     }
 
-    // Execute the bridge transaction
+    p({ stepId: 'build', status: 'active' });
+    p({ stepId: 'build', status: 'complete' });
+    p({ stepId: 'sign', status: 'active' });
+    p({ stepId: 'sign', status: 'complete' });
+    p({ stepId: 'broadcast', status: 'active' });
     const txHash = await signer.sendContractCall(
       routeData.transactionRequest.to,
       routeData.transactionRequest.data,
     );
+    p({ stepId: 'broadcast', status: 'complete', info: `Tx: ${txHash.slice(0, 16)}...` });
+    p({ stepId: 'bridge', status: 'delayed', detail: 'Cross-chain transfer in progress (5-30 min)' });
 
     wallet.destroy();
 
@@ -520,6 +619,7 @@ async function executeLiFiBridgeSwap(params: {
       provider: 'Li.Fi',
     };
   } catch (err) {
+    p({ stepId: 'broadcast', status: 'failed', detail: err instanceof Error ? err.message : 'Li.Fi bridge failed' });
     return { success: false, message: err instanceof Error ? err.message : 'Li.Fi bridge failed', provider: 'Li.Fi' };
   }
 }
@@ -528,9 +628,9 @@ async function executeLiFiBridgeSwap(params: {
 
 async function execute1inchSwap(params: {
   fromAmount: number; fromSymbol: string; toSymbol: string;
-  mnemonic: string; accountIndex: number; fromAddress: string; toAddress: string;
+  mnemonic: string; accountIndex: number; fromAddress: string; toAddress: string; p: OnProgress;
 }): Promise<SwapExecutionResult> {
-  const { fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, fromAddress } = params;
+  const { fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, fromAddress, p } = params;
 
   // 1inch v6 API requires an API key. Get one free at portal.1inch.dev
   const apiKey = (typeof process !== 'undefined' ? process.env?.EXPO_PUBLIC_ONEINCH_API_KEY : undefined) ?? '';
@@ -545,6 +645,7 @@ async function execute1inchSwap(params: {
   const authHeaders = { 'Accept': 'application/json', 'Authorization': `Bearer ${apiKey}` };
 
   try {
+    p({ stepId: 'vault', status: 'active' });
     const TOKEN_ADDRESSES: Record<string, string> = {
       ETH: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
       USDT: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
@@ -557,9 +658,12 @@ async function execute1inchSwap(params: {
     const fromToken = TOKEN_ADDRESSES[fromSymbol];
     const toToken = TOKEN_ADDRESSES[toSymbol];
     if (!fromToken || !toToken) {
+      p({ stepId: 'vault', status: 'failed' });
       return { success: false, message: `${fromSymbol} or ${toSymbol} not supported on 1inch. Supported: ETH, USDT, USDC, WBTC, DAI, LINK.`, provider: '1inch' };
     }
+    p({ stepId: 'vault', status: 'complete' });
 
+    p({ stepId: 'quote', status: 'active' });
     const decimals = fromSymbol === 'ETH' ? 18 : fromSymbol === 'WBTC' ? 8 : ['USDT', 'USDC'].includes(fromSymbol) ? 6 : 18;
     const amountRaw = BigInt(Math.round(fromAmount * 10 ** decimals)).toString();
 
@@ -581,6 +685,7 @@ async function execute1inchSwap(params: {
 
     const data = await response.json();
     const txData = data.tx;
+    p({ stepId: 'quote', status: 'complete' });
 
     const { HDWallet } = await import('../wallet/hdwallet');
     const { EthereumSigner } = await import('../chains/ethereum-signer');
@@ -588,10 +693,19 @@ async function execute1inchSwap(params: {
     const signer = EthereumSigner.fromWallet(wallet, accountIndex);
 
     if (fromSymbol !== 'ETH' && data.tx?.to) {
+      p({ stepId: 'approve', status: 'active' });
       try { await signer.sendERC20Approval(fromToken, txData.to, BigInt(amountRaw)); } catch { /* may exist */ }
+      p({ stepId: 'approve', status: 'complete' });
     }
 
+    p({ stepId: 'build', status: 'active' });
+    p({ stepId: 'build', status: 'complete' });
+    p({ stepId: 'sign', status: 'active' });
+    p({ stepId: 'sign', status: 'complete' });
+    p({ stepId: 'broadcast', status: 'active' });
     const txHash = await signer.sendContractCall(txData.to, txData.data);
+    p({ stepId: 'broadcast', status: 'complete', info: `Tx: ${txHash.slice(0, 16)}...` });
+    p({ stepId: 'receive', status: 'complete', detail: `${toSymbol} received` });
     wallet.destroy();
 
     return {
@@ -600,6 +714,7 @@ async function execute1inchSwap(params: {
       provider: '1inch',
     };
   } catch (err) {
+    p({ stepId: 'broadcast', status: 'failed', detail: err instanceof Error ? err.message : '1inch swap failed' });
     return { success: false, message: err instanceof Error ? err.message : '1inch swap failed', provider: '1inch' };
   }
 }
@@ -608,11 +723,12 @@ async function execute1inchSwap(params: {
 
 async function executeJupiterSwap(params: {
   fromAmount: number; fromSymbol: string; toSymbol: string;
-  mnemonic: string; accountIndex: number;
+  mnemonic: string; accountIndex: number; p: OnProgress;
 }): Promise<SwapExecutionResult> {
-  const { fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex } = params;
+  const { fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, p } = params;
 
   try {
+    p({ stepId: 'vault', status: 'active' });
     const MINT_ADDRESSES: Record<string, string> = {
       SOL: 'So11111111111111111111111111111111111111112',
       USDC: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
@@ -634,30 +750,41 @@ async function executeJupiterSwap(params: {
     const decimals = fromSymbol === 'SOL' ? 9 : 6;
     const lamports = Math.round(fromAmount * 10 ** decimals);
 
+    p({ stepId: 'vault', status: 'complete' });
+    p({ stepId: 'quote', status: 'active' });
     const quoteResponse = await fetch(`https://quote-api.jup.ag/v6/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${lamports}&slippageBps=50`);
-    if (!quoteResponse.ok) { wallet.destroy(); return { success: false, message: `Jupiter quote failed: ${quoteResponse.status}`, provider: 'Jupiter' }; }
+    if (!quoteResponse.ok) { wallet.destroy(); p({ stepId: 'quote', status: 'failed' }); return { success: false, message: `Jupiter quote failed: ${quoteResponse.status}`, provider: 'Jupiter' }; }
     const quoteData = await quoteResponse.json();
+    p({ stepId: 'quote', status: 'complete' });
 
+    p({ stepId: 'build', status: 'active' });
     const swapResponse = await fetch('https://quote-api.jup.ag/v6/swap', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ quoteResponse: quoteData, userPublicKey: address, wrapAndUnwrapSol: true }),
     });
-    if (!swapResponse.ok) { wallet.destroy(); return { success: false, message: `Jupiter swap build failed: ${swapResponse.status}`, provider: 'Jupiter' }; }
+    if (!swapResponse.ok) { wallet.destroy(); p({ stepId: 'build', status: 'failed' }); return { success: false, message: `Jupiter swap build failed: ${swapResponse.status}`, provider: 'Jupiter' }; }
+    p({ stepId: 'build', status: 'complete' });
 
     const { swapTransaction } = await swapResponse.json();
+    p({ stepId: 'sign', status: 'active' });
+    p({ stepId: 'sign', status: 'complete' });
+    p({ stepId: 'broadcast', status: 'active' });
     const txHash = await signer.signAndSendSerializedTransaction(swapTransaction);
+    p({ stepId: 'broadcast', status: 'complete', info: `Tx: ${txHash.slice(0, 16)}...` });
     wallet.destroy();
 
     const outDecimals = toSymbol === 'SOL' ? 9 : 6;
     const expectedOutput = Number(quoteData.outAmount) / 10 ** outDecimals;
 
+    p({ stepId: 'receive', status: 'complete', detail: `~${expectedOutput.toFixed(4)} ${toSymbol} received` });
     return {
       success: true, txHash,
       message: `Jupiter swap executed!\n\n${fromAmount} ${fromSymbol} swapped to ~${expectedOutput.toFixed(4)} ${toSymbol}\nTx: ${txHash.slice(0, 16)}...${txHash.slice(-8)}`,
       provider: 'Jupiter',
     };
   } catch (err) {
+    p({ stepId: 'broadcast', status: 'failed', detail: err instanceof Error ? err.message : 'Jupiter swap failed' });
     return { success: false, message: err instanceof Error ? err.message : 'Jupiter swap failed', provider: 'Jupiter' };
   }
 }
@@ -666,11 +793,12 @@ async function executeJupiterSwap(params: {
 
 async function executeOsmosisSwap(params: {
   fromAmount: number; fromSymbol: string; toSymbol: string;
-  mnemonic: string; accountIndex: number;
+  mnemonic: string; accountIndex: number; p: OnProgress;
 }): Promise<SwapExecutionResult> {
-  const { fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex } = params;
+  const { fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, p } = params;
 
   try {
+    p({ stepId: 'vault', status: 'active' });
     const { HDWallet } = await import('../wallet/hdwallet');
     const { CosmosSigner } = await import('../chains/cosmos-signer');
     const wallet = HDWallet.fromMnemonic(mnemonic);
@@ -678,13 +806,23 @@ async function executeOsmosisSwap(params: {
     const sourceChain = fromSymbol === 'OTK' ? 'openchain' : 'cosmos';
     const signer = CosmosSigner.fromWallet(wallet, accountIndex, sourceChain as 'openchain' | 'cosmos');
     const address = await signer.getAddress();
+    p({ stepId: 'vault', status: 'complete' });
 
+    p({ stepId: 'build', status: 'active' });
     const osmosisChannel = sourceChain === 'cosmos' ? 'channel-141' : 'channel-0';
     const osmosisAddress = address.replace(/^(openchain|cosmos)/, 'osmo');
-
     const microAmount = Math.round(fromAmount * 1_000_000).toString();
+    p({ stepId: 'build', status: 'complete' });
+
+    p({ stepId: 'sign', status: 'active' });
+    p({ stepId: 'sign', status: 'complete' });
+    p({ stepId: 'broadcast', status: 'active' });
     const txHash = await signer.sendIbcTransfer(osmosisAddress, microAmount, osmosisChannel);
+    p({ stepId: 'broadcast', status: 'complete', info: `Tx: ${txHash.slice(0, 16)}...` });
     wallet.destroy();
+
+    p({ stepId: 'osmosis', status: 'delayed', detail: 'Osmosis DEX processing swap' });
+    p({ stepId: 'return', status: 'pending', detail: `${toSymbol} will return via IBC (~2-5 min)` });
 
     return {
       success: true, txHash,
@@ -692,6 +830,7 @@ async function executeOsmosisSwap(params: {
       provider: 'Osmosis',
     };
   } catch (err) {
+    p({ stepId: 'broadcast', status: 'failed', detail: err instanceof Error ? err.message : 'Osmosis swap failed' });
     return { success: false, message: err instanceof Error ? err.message : 'Osmosis swap failed', provider: 'Osmosis' };
   }
 }

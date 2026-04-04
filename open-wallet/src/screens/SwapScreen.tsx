@@ -48,6 +48,7 @@ export function SwapScreen() {
   const [confirmedChain, setConfirmedChain] = useState<StablecoinChain | null>(null);
   const [showChainPicker, setShowChainPicker] = useState(false);
   const [chainPickerCandidates, setChainPickerCandidates] = useState<StablecoinChain[]>([]);
+  const [useOwnAddress, setUseOwnAddress] = useState(true); // default: receive to own wallet
 
   const t = useTheme();
 
@@ -143,6 +144,7 @@ export function SwapScreen() {
     setDetectedChain(null);
     setConfirmedChain(null);
     setIsChainAmbiguous(false);
+    setUseOwnAddress(true);
   }, [fromSymbol, toSymbol]);
 
   // When destination address changes, detect chain
@@ -207,8 +209,17 @@ export function SwapScreen() {
       }
     }
 
-    // For stablecoin swaps, destination address is required so funds go to the right place
-    if (isStablecoinSwap && !destAddress.trim()) {
+    // For stablecoin swaps, chain selection is required
+    if (isStablecoinSwap && !confirmedChain) {
+      Alert.alert(
+        'Select Chain',
+        `Please select which chain you want to receive ${toSymbol} on.`,
+      );
+      return;
+    }
+
+    // For external address, require address input
+    if (isStablecoinSwap && !useOwnAddress && !destAddress.trim()) {
       Alert.alert(
         'Destination Address Required',
         `Please enter the wallet address where you want to receive ${toSymbol}.`,
@@ -236,9 +247,9 @@ export function SwapScreen() {
     }
 
     setShowConfirm(true);
-  }, [selectedOption, amountStr, fromSymbol, toSymbol, demoMode, isStablecoinSwap, destAddress]);
+  }, [selectedOption, amountStr, fromSymbol, toSymbol, demoMode, isStablecoinSwap, destAddress, confirmedChain, useOwnAddress]);
 
-  const executeSwap = useCallback(async (vaultPassword?: string) => {
+  const executeSwap = useCallback(async (vaultPassword?: string, onProgress?: (update: any) => void) => {
     if (isPaperSwap) {
       await new Promise((r) => setTimeout(r, 1500));
       const flow = getSwapFlow(selectedOption?.id ?? '');
@@ -290,9 +301,8 @@ export function SwapScreen() {
           mnemonic: contents.mnemonic,
           accountIndex: useWalletStore.getState().activeAccountIndex,
           fromAddress: addresses.bitcoin ?? addresses.ethereum ?? '',
-          // Use the user-entered destination address for stablecoin swaps;
-          // fall back to own ETH address for same-chain swaps.
           toAddress: destAddress.trim() || (addresses.ethereum ?? ''),
+          onProgress,
         });
 
         if (result.success && isStablecoinSwap && confirmedChain) {
@@ -334,6 +344,8 @@ export function SwapScreen() {
           toSymbol, toAmount: selectedOption.toAmount.toFixed(4),
           fee: selectedOption.fee,
           route: `${selectedOption.name} (Security: ${selectedOption.securityRating}/5)`,
+          swapProviderId: selectedOption.id,
+          swapProviderName: selectedOption.name,
         }}
         onConfirm={executeSwap}
         onCancel={() => setShowConfirm(false)}
@@ -441,37 +453,96 @@ export function SwapScreen() {
           ))}
         </View>
 
-        {/* Destination address + chain detection for stablecoin swaps */}
+        {/* Stablecoin chain selection + optional external address */}
         {isStablecoinSwap && (
           <View style={{ marginBottom: 16 }}>
-            <Text style={s.cardLabel}>Destination Address</Text>
-            <View style={[s.swapCard, { paddingVertical: 12 }]}>
-              <TextInput
-                style={[s.amountInput, { fontSize: 13 }]}
-                placeholder="Paste destination wallet address"
-                placeholderTextColor={t.text.muted}
-                value={destAddress}
-                onChangeText={handleDestAddressChange}
-                autoCapitalize="none"
-                autoCorrect={false}
-              />
+            {/* Chain selector — always shown for stablecoin swaps */}
+            <Text style={s.cardLabel}>Receive {toSymbol} on which chain?</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 12 }}>
+              <View style={{ flexDirection: 'row', gap: 8, paddingVertical: 4 }}>
+                {STABLECOIN_CHAINS.map((chain) => (
+                  <TouchableOpacity
+                    key={chain}
+                    style={[
+                      s.tokenChip,
+                      { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 12 },
+                      confirmedChain === chain && { backgroundColor: CHAIN_COLORS[chain] + '30', borderWidth: 1.5, borderColor: CHAIN_COLORS[chain] },
+                    ]}
+                    onPress={() => {
+                      setConfirmedChain(chain);
+                      // Auto-set own address based on chain
+                      if (useOwnAddress) {
+                        const ownAddr = chain === 'Solana' ? (addresses.solana ?? '')
+                          : chain === 'Cosmos' ? (addresses.cosmos ?? '')
+                          : (addresses.ethereum ?? ''); // EVM chains share ETH address
+                        setDestAddress(ownAddr);
+                      }
+                    }}
+                  >
+                    <Text style={{ fontSize: 16 }}>{CHAIN_ICONS[chain]}</Text>
+                    <Text style={[
+                      s.tokenChipText,
+                      confirmedChain === chain && { color: CHAIN_COLORS[chain], fontWeight: '700' },
+                    ]}>{chain}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
+
+            {/* Own address vs external toggle */}
+            <View style={{ flexDirection: 'row', gap: 8, marginBottom: 10 }}>
+              <TouchableOpacity
+                style={[s.tokenChip, useOwnAddress && s.tokenChipActive]}
+                onPress={() => {
+                  setUseOwnAddress(true);
+                  setDestAddress('');
+                  // Re-set own address for selected chain
+                  if (confirmedChain) {
+                    const ownAddr = confirmedChain === 'Solana' ? (addresses.solana ?? '')
+                      : confirmedChain === 'Cosmos' ? (addresses.cosmos ?? '')
+                      : (addresses.ethereum ?? '');
+                    setDestAddress(ownAddr);
+                  }
+                }}
+              >
+                <Text style={[s.tokenChipText, useOwnAddress && s.tokenChipTextActive]}>My Wallet</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[s.tokenChip, !useOwnAddress && s.tokenChipActive]}
+                onPress={() => { setUseOwnAddress(false); setDestAddress(''); }}
+              >
+                <Text style={[s.tokenChipText, !useOwnAddress && s.tokenChipTextActive]}>External Address</Text>
+              </TouchableOpacity>
             </View>
-            {confirmedChain && (
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8, gap: 8 }}>
-                <View style={{ backgroundColor: CHAIN_COLORS[confirmedChain] + '25', borderRadius: 12, paddingHorizontal: 12, paddingVertical: 6, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                  <Text style={{ fontSize: 16 }}>{CHAIN_ICONS[confirmedChain]}</Text>
-                  <Text style={{ color: CHAIN_COLORS[confirmedChain], fontWeight: '700', fontSize: 13 }}>{confirmedChain}</Text>
-                  <Text style={{ color: t.text.muted, fontSize: 12 }}>confirmed</Text>
-                </View>
-                <TouchableOpacity onPress={() => { setChainPickerCandidates(STABLECOIN_CHAINS); setShowChainPicker(true); }}>
-                  <Text style={{ color: t.accent.blue, fontSize: 12, fontWeight: '600' }}>Change</Text>
-                </TouchableOpacity>
+
+            {/* Show address input only for external */}
+            {!useOwnAddress && (
+              <View style={[s.swapCard, { paddingVertical: 12 }]}>
+                <TextInput
+                  style={[s.amountInput, { fontSize: 13 }]}
+                  placeholder="Paste destination wallet address"
+                  placeholderTextColor={t.text.muted}
+                  value={destAddress}
+                  onChangeText={handleDestAddressChange}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
               </View>
             )}
-            {detectedChain && !confirmedChain && (
-              <Text style={{ color: t.text.muted, fontSize: 12, marginTop: 6 }}>
-                Detecting chain... tap address to re-detect
-              </Text>
+
+            {/* Show confirmed chain + address summary */}
+            {confirmedChain && useOwnAddress && (
+              <View style={{ backgroundColor: CHAIN_COLORS[confirmedChain] + '15', borderRadius: 12, padding: 12, marginTop: 4 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                  <Text style={{ fontSize: 16 }}>{CHAIN_ICONS[confirmedChain]}</Text>
+                  <Text style={{ color: CHAIN_COLORS[confirmedChain], fontWeight: '700', fontSize: 13 }}>
+                    Receive {toSymbol} on {confirmedChain}
+                  </Text>
+                </View>
+                <Text style={{ color: t.text.muted, fontSize: 11, marginTop: 4 }} numberOfLines={1}>
+                  {destAddress ? `To: ${destAddress.slice(0, 12)}...${destAddress.slice(-8)}` : 'Using your own wallet address'}
+                </Text>
+              </View>
             )}
           </View>
         )}

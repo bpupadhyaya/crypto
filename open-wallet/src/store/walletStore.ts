@@ -48,6 +48,7 @@ interface WalletState {
   // ─── Dev/Demo Balances (mutable, updated by simulated swaps) ───
   devBalances: Record<string, number>; // symbol → human-readable amount
   updateDevBalance: (symbol: string, delta: number) => void;
+  resetDevBalances: () => void;
   setHasVault: (has: boolean) => void;
   tempVaultPassword: string | null;
   setTempVaultPassword: (pw: string | null) => void;
@@ -115,6 +116,13 @@ interface WalletState {
 
 const DEFAULT_TOKENS = ['OTK', 'BTC', 'ETH', 'USDT', 'XRP', 'USDC', 'SOL', 'ADA', 'LINK', 'AVAX', 'SUI', 'POL', 'DOT', 'DOGE', 'BNB', 'TON'];
 
+/** Default dev balances for all supported tokens — only used in __DEV__ builds */
+const DEFAULT_DEV_BALANCES: Record<string, number> = {
+  BTC: 1.25, ETH: 12.5, SOL: 500, ADA: 10000, XRP: 8000, DOGE: 50000,
+  DOT: 800, AVAX: 250, LINK: 1500, SUI: 3000, POL: 20000, BNB: 15,
+  TON: 2000, USDT: 5000, USDC: 5000, OTK: 50000, ATOM: 500,
+};
+
 export const useWalletStore = create<WalletState>((set) => ({
   mode: 'simple',
   setMode: (mode) => { set({ mode }); schedulePersist(); },
@@ -153,7 +161,8 @@ export const useWalletStore = create<WalletState>((set) => ({
   setHasVault: (has) => { set({ hasVault: has }); schedulePersist(); },
   stablecoinChains: {},
   setStablecoinChain: (symbol, chain) => { set((s) => ({ stablecoinChains: { ...s.stablecoinChains, [symbol]: chain } })); schedulePersist(); },
-  devBalances: { BTC: 0.5, ETH: 5, SOL: 1000, ATOM: 100, OTK: 10000, USDT: 0, USDC: 0 },
+  devBalances: { ...DEFAULT_DEV_BALANCES },
+  resetDevBalances: () => { set({ devBalances: { ...DEFAULT_DEV_BALANCES } }); schedulePersist(); },
   updateDevBalance: (symbol, delta) => { set((s) => ({ devBalances: { ...s.devBalances, [symbol]: Math.max(0, (s.devBalances[symbol] ?? 0) + delta) } })); schedulePersist(); },
   tempVaultPassword: null,
   setTempVaultPassword: (pw) => set({ tempVaultPassword: pw }),
@@ -283,7 +292,7 @@ function ensureOTK(tokens: string[]): string[] {
         p2pEnableMDNS: d.p2pEnableMDNS ?? false,
         autoLockTimeout: d.autoLockTimeout ?? (5 * 60 * 1000),
         stablecoinChains: d.stablecoinChains ?? {},
-        devBalances: d.devBalances ?? { BTC: 0.5, ETH: 5, SOL: 1000, ATOM: 100, OTK: 10000, USDT: 0, USDC: 0 },
+        devBalances: d.devBalances ?? { ...DEFAULT_DEV_BALANCES },
         ...(shouldSetStatus ? { status: d.hasVault ? 'locked' : 'onboarding' } : {}),
       });
     }
