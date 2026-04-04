@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Basic Needs Dashboard — Article I, Section 3 of The Human Constitution.
  *
@@ -195,33 +196,33 @@ export function BasicNeedsScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { flex: 1, paddingHorizontal: 16 },
     subtitle: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 11, fontWeight: '600' },
+    tabText: { color: t.text.secondary, fontSize: 11, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
     label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 8, marginBottom: 8 },
+    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 8, marginBottom: 8 },
     summaryRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
     summaryCard: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' },
-    summaryNum: { fontSize: 20, fontWeight: '800', marginBottom: 2 },
-    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: '600', textAlign: 'center' },
-    regionName: { color: t.text.primary, fontSize: 16, fontWeight: '700', marginBottom: 2 },
+    summaryNum: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 2 },
+    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold, textAlign: 'center' },
+    regionName: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 2 },
     barContainer: { height: 8, backgroundColor: t.border, borderRadius: 4, marginVertical: 4, overflow: 'hidden' },
     barFill: { height: 8, borderRadius: 4 },
     scoreCircle: { width: 52, height: 52, borderRadius: 26, alignItems: 'center', justifyContent: 'center' },
-    scoreNum: { fontSize: 18, fontWeight: '800', color: '#fff' },
-    trendText: { fontSize: 13, fontWeight: '700' },
+    scoreNum: { fontSize: 18, fontWeight: fonts.heavy, color: '#fff' },
+    trendText: { fontSize: 13, fontWeight: fonts.bold },
     alertCard: { backgroundColor: t.accent.red + '10', borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: t.accent.red + '30' },
     ctaCard: { backgroundColor: t.accent.blue + '10', borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: t.accent.blue + '30' },
-    ctaTitle: { color: t.accent.blue, fontSize: 13, fontWeight: '700', marginBottom: 4 },
+    ctaTitle: { color: t.accent.blue, fontSize: 13, fontWeight: fonts.bold, marginBottom: 4 },
     ctaText: { color: t.text.muted, fontSize: 12, lineHeight: 18 },
     correlationCard: { backgroundColor: t.accent.green + '10', borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: t.accent.green + '30' },
     empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
@@ -293,8 +294,8 @@ export function BasicNeedsScreen({ onClose }: Props) {
               <View key={key} style={st.card}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 6 }}>
                   <Text style={{ fontSize: 18, marginRight: 8 }}>{cat?.icon ?? '\u{2753}'}</Text>
-                  <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: '600', flex: 1 }}>{cat?.label ?? key}</Text>
-                  <Text style={{ color: fulfillmentColor(score), fontSize: 16, fontWeight: '800' }}>{score}</Text>
+                  <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, flex: 1 }}>{cat?.label ?? key}</Text>
+                  <Text style={{ color: fulfillmentColor(score), fontSize: 16, fontWeight: fonts.heavy }}>{score}</Text>
                 </View>
                 <View style={st.barContainer}>
                   <View style={[st.barFill, { width: `${score}%`, backgroundColor: fulfillmentColor(score) }]} />
@@ -368,7 +369,7 @@ export function BasicNeedsScreen({ onClose }: Props) {
                   {sortedRegions.filter(r => r.fulfillmentScore < 40).map(r => (
                     <TouchableOpacity key={r.code} style={st.alertCard} onPress={() => setSelectedRegion(r)}>
                       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-                        <Text style={{ color: t.accent.red, fontSize: 16, fontWeight: '700' }}>{r.name}</Text>
+                        <Text style={{ color: t.accent.red, fontSize: 16, fontWeight: fonts.bold }}>{r.name}</Text>
                         <View style={[st.scoreCircle, { backgroundColor: fulfillmentColor(r.fulfillmentScore) }]}>
                           <Text style={st.scoreNum}>{r.fulfillmentScore}</Text>
                         </View>
@@ -382,7 +383,7 @@ export function BasicNeedsScreen({ onClose }: Props) {
                           {TREND_ICONS[r.trend]} {r.trend}
                         </Text>
                       </View>
-                      <Text style={{ color: t.accent.red, fontSize: 11, fontWeight: '600', marginTop: 4 }}>
+                      <Text style={{ color: t.accent.red, fontSize: 11, fontWeight: fonts.semibold, marginTop: 4 }}>
                         {r.callToAction}
                       </Text>
                     </TouchableOpacity>
@@ -434,7 +435,7 @@ export function BasicNeedsScreen({ onClose }: Props) {
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
                       <Text style={{ fontSize: 22, marginRight: 10 }}>{cat.icon}</Text>
                       <View style={{ flex: 1 }}>
-                        <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: '700' }}>{cat.label}</Text>
+                        <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: fonts.bold }}>{cat.label}</Text>
                         <Text style={{ color: t.text.muted, fontSize: 11 }}>Global average: {avg.toFixed(0)}/100</Text>
                       </View>
                       <View style={[st.scoreCircle, { backgroundColor: fulfillmentColor(avg), width: 42, height: 42, borderRadius: 21 }]}>
@@ -445,7 +446,7 @@ export function BasicNeedsScreen({ onClose }: Props) {
                       <View key={rs.code} style={{ marginBottom: 6 }}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 }}>
                           <Text style={{ color: t.text.muted, fontSize: 11 }}>{rs.name}</Text>
-                          <Text style={{ color: fulfillmentColor(rs.score), fontSize: 11, fontWeight: '700' }}>{rs.score}</Text>
+                          <Text style={{ color: fulfillmentColor(rs.score), fontSize: 11, fontWeight: fonts.bold }}>{rs.score}</Text>
                         </View>
                         <View style={st.barContainer}>
                           <View style={[st.barFill, { width: `${rs.score}%`, backgroundColor: fulfillmentColor(rs.score) }]} />
@@ -474,7 +475,7 @@ export function BasicNeedsScreen({ onClose }: Props) {
                 return (
                   <View key={region.code} style={st.card}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                      <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: '700' }}>{region.name}</Text>
+                      <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: fonts.bold }}>{region.name}</Text>
                       <Text style={[st.trendText, { color: trendColors[region.trend], fontSize: 12 }]}>
                         {TREND_ICONS[region.trend]} {region.trendDelta > 0 ? '+' : ''}{region.trendDelta.toFixed(1)} pts
                       </Text>
@@ -483,7 +484,7 @@ export function BasicNeedsScreen({ onClose }: Props) {
                       <View key={pt.month} style={{ marginBottom: 6 }}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 }}>
                           <Text style={{ color: t.text.muted, fontSize: 10 }}>{pt.month}</Text>
-                          <Text style={{ color: fulfillmentColor(pt.score), fontSize: 10, fontWeight: '700' }}>{pt.score}</Text>
+                          <Text style={{ color: fulfillmentColor(pt.score), fontSize: 10, fontWeight: fonts.bold }}>{pt.score}</Text>
                         </View>
                         <View style={st.barContainer}>
                           <View style={[st.barFill, { width: `${pt.score}%`, backgroundColor: fulfillmentColor(pt.score) }]} />
@@ -504,7 +505,7 @@ export function BasicNeedsScreen({ onClose }: Props) {
           ) : (
             <>
               <View style={st.correlationCard}>
-                <Text style={{ color: t.accent.green, fontSize: 15, fontWeight: '800', marginBottom: 6 }}>
+                <Text style={{ color: t.accent.green, fontSize: 15, fontWeight: fonts.heavy, marginBottom: 6 }}>
                   Met Needs = Peace
                 </Text>
                 <Text style={{ color: t.text.muted, fontSize: 13, lineHeight: 20 }}>
@@ -515,11 +516,11 @@ export function BasicNeedsScreen({ onClose }: Props) {
               <Text style={st.section}>Fulfillment vs Peace Index</Text>
               {sortedRegions.map(r => (
                 <View key={r.code} style={st.card}>
-                  <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: '700', marginBottom: 8 }}>{r.name}</Text>
+                  <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, marginBottom: 8 }}>{r.name}</Text>
                   <View style={{ marginBottom: 6 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 }}>
                       <Text style={{ color: t.text.muted, fontSize: 11 }}>Needs Fulfillment</Text>
-                      <Text style={{ color: fulfillmentColor(r.fulfillmentScore), fontSize: 11, fontWeight: '700' }}>{r.fulfillmentScore}/100</Text>
+                      <Text style={{ color: fulfillmentColor(r.fulfillmentScore), fontSize: 11, fontWeight: fonts.bold }}>{r.fulfillmentScore}/100</Text>
                     </View>
                     <View style={st.barContainer}>
                       <View style={[st.barFill, { width: `${r.fulfillmentScore}%`, backgroundColor: fulfillmentColor(r.fulfillmentScore) }]} />
@@ -528,7 +529,7 @@ export function BasicNeedsScreen({ onClose }: Props) {
                   <View style={{ marginBottom: 4 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 }}>
                       <Text style={{ color: t.text.muted, fontSize: 11 }}>Peace Index</Text>
-                      <Text style={{ color: t.accent.blue, fontSize: 11, fontWeight: '700' }}>{r.peaceIndex}/100</Text>
+                      <Text style={{ color: t.accent.blue, fontSize: 11, fontWeight: fonts.bold }}>{r.peaceIndex}/100</Text>
                     </View>
                     <View style={st.barContainer}>
                       <View style={[st.barFill, { width: `${r.peaceIndex}%`, backgroundColor: t.accent.blue }]} />
@@ -536,7 +537,7 @@ export function BasicNeedsScreen({ onClose }: Props) {
                   </View>
                   <View style={st.row}>
                     <Text style={st.label}>Correlation gap</Text>
-                    <Text style={{ color: t.text.secondary, fontSize: 12, fontWeight: '700' }}>
+                    <Text style={{ color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold }}>
                       {Math.abs(r.fulfillmentScore - r.peaceIndex)} pts
                     </Text>
                   </View>
@@ -545,28 +546,28 @@ export function BasicNeedsScreen({ onClose }: Props) {
 
               {/* Statistical summary */}
               <View style={st.card}>
-                <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: '700', marginBottom: 8 }}>Statistical Summary</Text>
+                <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, marginBottom: 8 }}>Statistical Summary</Text>
                 <View style={st.row}>
                   <Text style={st.label}>Highest fulfillment</Text>
-                  <Text style={{ color: t.accent.green, fontSize: 12, fontWeight: '600' }}>
+                  <Text style={{ color: t.accent.green, fontSize: 12, fontWeight: fonts.semibold }}>
                     {sortedRegions[sortedRegions.length - 1]?.name} ({sortedRegions[sortedRegions.length - 1]?.fulfillmentScore})
                   </Text>
                 </View>
                 <View style={st.row}>
                   <Text style={st.label}>Lowest fulfillment</Text>
-                  <Text style={{ color: t.accent.red, fontSize: 12, fontWeight: '600' }}>
+                  <Text style={{ color: t.accent.red, fontSize: 12, fontWeight: fonts.semibold }}>
                     {sortedRegions[0]?.name} ({sortedRegions[0]?.fulfillmentScore})
                   </Text>
                 </View>
                 <View style={st.row}>
                   <Text style={st.label}>Highest peace</Text>
-                  <Text style={{ color: t.accent.blue, fontSize: 12, fontWeight: '600' }}>
+                  <Text style={{ color: t.accent.blue, fontSize: 12, fontWeight: fonts.semibold }}>
                     Northern Europe (91)
                   </Text>
                 </View>
                 <View style={st.row}>
                   <Text style={st.label}>Lowest peace</Text>
-                  <Text style={{ color: t.accent.red, fontSize: 12, fontWeight: '600' }}>
+                  <Text style={{ color: t.accent.red, fontSize: 12, fontWeight: fonts.semibold }}>
                     Sahel Region (28)
                   </Text>
                 </View>

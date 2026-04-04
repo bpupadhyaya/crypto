@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Tutorial Screen — Interactive step-by-step onboarding for new users.
  * 8 swipeable tutorial cards introducing Open Wallet features.
@@ -96,7 +97,7 @@ export function TutorialScreen({ onClose }: Props) {
       justifyContent: 'center', alignItems: 'center', paddingHorizontal: 24,
     },
     icon: { fontSize: 72, marginBottom: 24 },
-    title: { color: t.text.primary, fontSize: 24, fontWeight: '700', textAlign: 'center', marginBottom: 16 },
+    title: { color: t.text.primary, fontSize: 24, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 16 },
     description: { color: t.text.secondary, fontSize: 16, lineHeight: 24, textAlign: 'center' },
     footer: {
       flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
@@ -109,7 +110,7 @@ export function TutorialScreen({ onClose }: Props) {
       backgroundColor: t.accent.green, borderRadius: 12,
       paddingVertical: 14, paddingHorizontal: 32,
     },
-    nextText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+    nextText: { color: '#fff', fontSize: 16, fontWeight: fonts.bold },
     backBtn: { paddingVertical: 14, paddingHorizontal: 16 },
     backText: { color: t.text.muted, fontSize: 15 },
   }), [t]);

@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Persona Onboarding Screen — Art IX
  *
@@ -167,7 +168,7 @@ export function PersonaOnboardingScreen({ onClose }: Props) {
     backText: {
       color: t.accent.green,
       fontSize: 16,
-      fontWeight: '600',
+      fontWeight: fonts.semibold,
     },
     skipBtn: {
       paddingHorizontal: 12,
@@ -203,7 +204,7 @@ export function PersonaOnboardingScreen({ onClose }: Props) {
     stepTitle: {
       color: t.text.primary,
       fontSize: 26,
-      fontWeight: '800',
+      fontWeight: fonts.heavy,
       textAlign: 'center',
       marginBottom: 4,
     },
@@ -234,7 +235,7 @@ export function PersonaOnboardingScreen({ onClose }: Props) {
     personaLabel: {
       color: t.text.primary,
       fontSize: 16,
-      fontWeight: '700',
+      fontWeight: fonts.bold,
     },
     personaFocus: {
       color: t.text.muted,
@@ -262,7 +263,7 @@ export function PersonaOnboardingScreen({ onClose }: Props) {
     interestText: {
       color: t.text.secondary,
       fontSize: 14,
-      fontWeight: '600',
+      fontWeight: fonts.semibold,
     },
     interestTextSelected: {
       color: t.accent.green,
@@ -282,12 +283,12 @@ export function PersonaOnboardingScreen({ onClose }: Props) {
     optionLabel: {
       color: t.text.primary,
       fontSize: 16,
-      fontWeight: '600',
+      fontWeight: fonts.semibold,
     },
     readyTitle: {
       color: t.accent.green,
       fontSize: 32,
-      fontWeight: '900',
+      fontWeight: fonts.heavy,
       textAlign: 'center',
       marginBottom: 8,
     },
@@ -315,7 +316,7 @@ export function PersonaOnboardingScreen({ onClose }: Props) {
     shortcutLabel: {
       color: t.text.primary,
       fontSize: 12,
-      fontWeight: '600',
+      fontWeight: fonts.semibold,
       textAlign: 'center',
       marginTop: 4,
     },
@@ -341,12 +342,12 @@ export function PersonaOnboardingScreen({ onClose }: Props) {
     nextText: {
       color: '#000',
       fontSize: 17,
-      fontWeight: '800',
+      fontWeight: fonts.heavy,
     },
     demoTag: {
       color: t.accent.yellow,
       fontSize: 11,
-      fontWeight: '700',
+      fontWeight: fonts.bold,
       textAlign: 'center',
       marginBottom: 8,
     },

@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Batch Transactions Screen — send multiple transactions at once.
  * CSV import, preview, sequential execution with progress, and completion summary.
@@ -162,36 +163,36 @@ export function BatchTxScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     backText: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingHorizontal: 16 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    label: { color: t.text.primary, fontSize: 15, fontWeight: '600' },
+    label: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold },
     muted: { color: t.text.muted, fontSize: 13 },
     input: { backgroundColor: t.bg.card, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12, color: t.text.primary, fontSize: 15, marginBottom: 10, borderWidth: 1, borderColor: t.border },
     multilineInput: { minHeight: 100, textAlignVertical: 'top' },
     tokenRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 12 },
     tokenChip: { paddingVertical: 4, paddingHorizontal: 12, borderRadius: 10, backgroundColor: t.border },
     tokenChipActive: { backgroundColor: t.accent.green },
-    tokenText: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
+    tokenText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
     tokenTextActive: { color: '#fff' },
     addBtn: { backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 16 },
-    addBtnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+    addBtnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
     dangerBtn: { backgroundColor: t.accent.red, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 16 },
     secondaryBtn: { backgroundColor: t.accent.blue, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 12 },
-    btnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+    btnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
     recipientCard: { backgroundColor: t.bg.card, borderRadius: 12, padding: 14, marginBottom: 8 },
     addressText: { color: t.text.primary, fontSize: 13, fontFamily: 'Courier' },
-    amountText: { color: t.accent.green, fontSize: 15, fontWeight: '700' },
+    amountText: { color: t.accent.green, fontSize: 15, fontWeight: fonts.bold },
     labelText: { color: t.text.muted, fontSize: 12, marginTop: 2 },
     statusBadge: { paddingVertical: 2, paddingHorizontal: 8, borderRadius: 8, marginTop: 6, alignSelf: 'flex-start' },
-    statusText: { fontSize: 11, fontWeight: '700', textTransform: 'uppercase' },
+    statusText: { fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase' },
     progressBar: { height: 8, backgroundColor: t.border, borderRadius: 4, marginVertical: 16 },
     progressFill: { height: 8, backgroundColor: t.accent.green, borderRadius: 4 },
     summaryCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 24, alignItems: 'center', marginBottom: 16 },
-    summaryBig: { color: t.text.primary, fontSize: 32, fontWeight: '700' },
+    summaryBig: { color: t.text.primary, fontSize: 32, fontWeight: fonts.bold },
     summaryLabel: { color: t.text.muted, fontSize: 14, marginTop: 4 },
     summaryRow: { flexDirection: 'row', justifyContent: 'space-around', width: '100%', marginTop: 16 },
     removeBtn: { marginTop: 6 },
@@ -199,7 +200,7 @@ export function BatchTxScreen({ onClose }: Props) {
     emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
     useCaseCard: { backgroundColor: t.bg.card, borderRadius: 12, padding: 14, marginBottom: 8 },
     useCaseText: { color: t.text.secondary, fontSize: 14, lineHeight: 20 },
-    useCaseLabel: { color: t.accent.purple, fontSize: 12, fontWeight: '700', marginBottom: 4 },
+    useCaseLabel: { color: t.accent.purple, fontSize: 12, fontWeight: fonts.bold, marginBottom: 4 },
   }), [t]);
 
   const getStatusColor = (status: BatchRecipient['status']) => {
@@ -389,7 +390,7 @@ export function BatchTxScreen({ onClose }: Props) {
         </TouchableOpacity>
         <Text style={st.title}>Batch Send</Text>
         <TouchableOpacity onPress={() => setBatchView('csv')}>
-          <Text style={[st.backText, { fontWeight: '700' }]}>CSV</Text>
+          <Text style={[st.backText, { fontWeight: fonts.bold }]}>CSV</Text>
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={st.scroll}>

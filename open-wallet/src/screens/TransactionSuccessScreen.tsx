@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Transaction Success Screen — shown after a transaction completes.
  * Displays confirmation details with explorer link and share options.
@@ -77,32 +78,32 @@ export const TransactionSuccessScreen = React.memo(({
     content: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 24 },
     checkmark: { fontSize: 72, marginBottom: 16 },
     celebration: { fontSize: 48, marginBottom: 8 },
-    title: { color: t.text.primary, fontSize: 28, fontWeight: '800', marginBottom: 8 },
-    subtitle: { color: t.accent.green, fontSize: 16, fontWeight: '600', marginBottom: 32 },
+    title: { color: t.text.primary, fontSize: 28, fontWeight: fonts.heavy, marginBottom: 8 },
+    subtitle: { color: t.accent.green, fontSize: 16, fontWeight: fonts.semibold, marginBottom: 32 },
     card: { backgroundColor: t.bg.card, borderRadius: 20, padding: 20, width: '100%', marginBottom: 24 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10 },
     label: { color: t.text.muted, fontSize: 14 },
-    value: { color: t.text.primary, fontSize: 14, fontWeight: '600', maxWidth: '60%', textAlign: 'right' },
+    value: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, maxWidth: '60%', textAlign: 'right' },
     hashRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10 },
-    hashText: { color: t.accent.blue, fontSize: 14, fontWeight: '600' },
+    hashText: { color: t.accent.blue, fontSize: 14, fontWeight: fonts.semibold },
     copyBtn: { paddingVertical: 4, paddingHorizontal: 12, borderRadius: 8, backgroundColor: t.accent.blue + '20' },
-    copyBtnText: { color: t.accent.blue, fontSize: 12, fontWeight: '700' },
+    copyBtnText: { color: t.accent.blue, fontSize: 12, fontWeight: fonts.bold },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 4 },
     explorerBtn: {
       width: '100%', paddingVertical: 16, borderRadius: 16,
       backgroundColor: t.accent.blue + '15', alignItems: 'center', marginBottom: 12,
     },
-    explorerBtnText: { color: t.accent.blue, fontSize: 16, fontWeight: '700' },
+    explorerBtnText: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.bold },
     shareBtn: {
       width: '100%', paddingVertical: 16, borderRadius: 16,
       backgroundColor: t.accent.purple + '15', alignItems: 'center', marginBottom: 12,
     },
-    shareBtnText: { color: t.accent.purple, fontSize: 16, fontWeight: '700' },
+    shareBtnText: { color: t.accent.purple, fontSize: 16, fontWeight: fonts.bold },
     doneBtn: {
       width: '100%', paddingVertical: 16, borderRadius: 16,
       backgroundColor: t.accent.green, alignItems: 'center', marginBottom: 32,
     },
-    doneBtnText: { color: '#000', fontSize: 16, fontWeight: '800' },
+    doneBtnText: { color: '#000', fontSize: 16, fontWeight: fonts.heavy },
   }), [t]);
 
   return (

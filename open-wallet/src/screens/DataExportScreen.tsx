@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Data Export Screen (Art VIII) — GDPR-style data export.
  *
@@ -132,54 +133,54 @@ export function DataExportScreen({ onClose }: Props) {
     container: { flex: 1, backgroundColor: t.bg.primary },
     scroll: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 40 },
     header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 12 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     backText: { color: t.accent.blue, fontSize: 16 },
     tabs: { flexDirection: 'row', marginHorizontal: 16, marginTop: 4, marginBottom: 12, backgroundColor: t.bg.card, borderRadius: 12, padding: 3 },
     tab: { flex: 1, paddingVertical: 8, alignItems: 'center', borderRadius: 10 },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
+    tabText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
     tabTextActive: { color: '#FFFFFF' },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 8, marginLeft: 4 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 8, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 4 },
     row: { flexDirection: 'row', alignItems: 'center', padding: 16 },
     divider: { height: 1, backgroundColor: t.border, marginHorizontal: 16 },
     catIcon: { fontSize: 22, width: 36 },
     catInfo: { flex: 1, marginRight: 8 },
-    catLabel: { color: t.text.primary, fontSize: 15, fontWeight: '600' },
+    catLabel: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold },
     catDesc: { color: t.text.secondary, fontSize: 12, marginTop: 2 },
     catMeta: { color: t.text.secondary, fontSize: 11, marginTop: 2 },
     selectRow: { flexDirection: 'row', justifyContent: 'flex-end', gap: 16, marginBottom: 8, marginRight: 4 },
-    selectBtn: { color: t.accent.blue, fontSize: 13, fontWeight: '600' },
+    selectBtn: { color: t.accent.blue, fontSize: 13, fontWeight: fonts.semibold },
     formatRow: { flexDirection: 'row', gap: 8, marginTop: 4 },
     formatBtn: { flex: 1, paddingVertical: 12, borderRadius: 12, alignItems: 'center', backgroundColor: t.bg.card, borderWidth: 2, borderColor: t.border },
     formatBtnActive: { borderColor: t.accent.blue, backgroundColor: t.accent.blue + '18' },
-    formatLabel: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
+    formatLabel: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
     formatLabelActive: { color: t.accent.blue },
     formatSub: { color: t.text.secondary, fontSize: 11, marginTop: 2 },
     summaryCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginTop: 16 },
     summaryRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
     summaryLabel: { color: t.text.secondary, fontSize: 13 },
-    summaryValue: { color: t.text.primary, fontSize: 13, fontWeight: '600' },
+    summaryValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold },
     exportBtn: { marginTop: 20, backgroundColor: t.accent.green, borderRadius: 14, paddingVertical: 16, alignItems: 'center' },
     exportBtnDisabled: { opacity: 0.4 },
-    exportBtnText: { color: '#FFFFFF', fontSize: 16, fontWeight: '700' },
+    exportBtnText: { color: '#FFFFFF', fontSize: 16, fontWeight: fonts.bold },
     successCard: { backgroundColor: t.accent.green + '18', borderRadius: 16, padding: 20, marginTop: 16, alignItems: 'center' },
     successIcon: { fontSize: 36, marginBottom: 8 },
-    successTitle: { color: t.accent.green, fontSize: 17, fontWeight: '700', marginBottom: 4 },
+    successTitle: { color: t.accent.green, fontSize: 17, fontWeight: fonts.bold, marginBottom: 4 },
     successSub: { color: t.text.secondary, fontSize: 13, textAlign: 'center' },
     historyCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     historyRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    historyDate: { color: t.text.primary, fontSize: 15, fontWeight: '600' },
+    historyDate: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold },
     historyBadge: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 6 },
-    historyBadgeText: { fontSize: 11, fontWeight: '700' },
+    historyBadgeText: { fontSize: 11, fontWeight: fonts.bold },
     historyMeta: { color: t.text.secondary, fontSize: 12, marginTop: 4 },
     historyCategories: { color: t.text.secondary, fontSize: 12, marginTop: 2 },
     privacyNotice: { backgroundColor: t.accent.blue + '15', borderRadius: 16, padding: 20, marginBottom: 20 },
     privacyIcon: { fontSize: 28, marginBottom: 8 },
-    privacyHeadline: { color: t.accent.blue, fontSize: 16, fontWeight: '700', marginBottom: 4 },
-    privacyQuote: { color: t.text.primary, fontSize: 15, fontWeight: '600', fontStyle: 'italic' },
+    privacyHeadline: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.bold, marginBottom: 4 },
+    privacyQuote: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold, fontStyle: 'italic' },
     privacySection: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
-    privacySectionTitle: { color: t.text.primary, fontSize: 15, fontWeight: '700', marginBottom: 6 },
+    privacySectionTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, marginBottom: 6 },
     privacySectionBody: { color: t.text.secondary, fontSize: 14, lineHeight: 20 },
     emptyHint: { color: t.text.secondary, fontSize: 13, textAlign: 'center', marginTop: 40 },
   }), [t]);
@@ -314,7 +315,7 @@ export function DataExportScreen({ onClose }: Props) {
             </Text>
             {!isExpired && (
               <TouchableOpacity style={{ marginTop: 10 }}>
-                <Text style={{ color: t.accent.blue, fontSize: 13, fontWeight: '600' }}>Download Again</Text>
+                <Text style={{ color: t.accent.blue, fontSize: 13, fontWeight: fonts.semibold }}>Download Again</Text>
               </TouchableOpacity>
             )}
           </View>

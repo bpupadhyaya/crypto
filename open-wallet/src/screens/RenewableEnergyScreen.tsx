@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Community Renewable Energy — Article I of The Human Constitution.
  *
@@ -274,7 +275,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
     },
     headerTitle: {
       fontSize: 18,
-      fontWeight: '700',
+      fontWeight: fonts.bold,
       color: t.text.primary,
     },
     headerSub: {
@@ -291,7 +292,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
     closeTxt: {
       color: t.text.secondary,
       fontSize: 14,
-      fontWeight: '600',
+      fontWeight: fonts.semibold,
     },
     tabBar: {
       flexDirection: 'row',
@@ -314,7 +315,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
     },
     tabTextActive: {
       color: t.accent.green,
-      fontWeight: '700',
+      fontWeight: fonts.bold,
     },
     tabIcon: {
       fontSize: 16,
@@ -336,7 +337,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
     },
     cardTitle: {
       fontSize: 15,
-      fontWeight: '700',
+      fontWeight: fonts.bold,
       color: t.text.primary,
       marginBottom: 8,
     },
@@ -367,7 +368,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
     },
     statValue: {
       fontSize: 20,
-      fontWeight: '800',
+      fontWeight: fonts.heavy,
       color: t.text.primary,
     },
     statLabel: {
@@ -382,7 +383,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
     },
     sectionTitle: {
       fontSize: 16,
-      fontWeight: '700',
+      fontWeight: fonts.bold,
       color: t.text.primary,
       marginBottom: 12,
       marginTop: 8,
@@ -406,12 +407,12 @@ export function RenewableEnergyScreen({ onClose }: Props) {
     },
     projectName: {
       fontSize: 14,
-      fontWeight: '700',
+      fontWeight: fonts.bold,
       color: t.text.primary,
     },
     projectType: {
       fontSize: 11,
-      fontWeight: '600',
+      fontWeight: fonts.semibold,
       marginTop: 2,
     },
     projectLocation: {
@@ -427,7 +428,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
     },
     statusText: {
       fontSize: 10,
-      fontWeight: '700',
+      fontWeight: fonts.bold,
       color: '#fff',
     },
     progressBarBg: {
@@ -459,7 +460,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
     },
     metricValue: {
       fontSize: 14,
-      fontWeight: '700',
+      fontWeight: fonts.bold,
       color: t.text.primary,
     },
     metricLabel: {
@@ -475,7 +476,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
     },
     chartTitle: {
       fontSize: 12,
-      fontWeight: '600',
+      fontWeight: fonts.semibold,
       color: t.text.secondary,
       marginBottom: 6,
     },
@@ -513,7 +514,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
     },
     periodTxtActive: {
       color: '#fff',
-      fontWeight: '700',
+      fontWeight: fonts.bold,
     },
     investCard: {
       backgroundColor: t.bg.secondary,
@@ -536,7 +537,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
     },
     investBtnTxt: {
       fontSize: 12,
-      fontWeight: '700',
+      fontWeight: fonts.bold,
       color: '#fff',
     },
     yourStats: {
@@ -556,7 +557,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
     },
     yourStatsValue: {
       fontSize: 11,
-      fontWeight: '700',
+      fontWeight: fonts.bold,
       color: t.text.primary,
     },
     shareCard: {
@@ -575,7 +576,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
     },
     shareRequester: {
       fontSize: 14,
-      fontWeight: '700',
+      fontWeight: fonts.bold,
       color: t.text.primary,
     },
     shareReason: {
@@ -598,7 +599,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
     },
     shareBtnTxt: {
       fontSize: 12,
-      fontWeight: '700',
+      fontWeight: fonts.bold,
       color: '#fff',
     },
     urgencyBadge: {
@@ -608,7 +609,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
     },
     urgencyText: {
       fontSize: 9,
-      fontWeight: '700',
+      fontWeight: fonts.bold,
       color: '#fff',
     },
     emptyText: {
@@ -634,7 +635,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
     },
     carbonTitle: {
       fontSize: 13,
-      fontWeight: '700',
+      fontWeight: fonts.bold,
       color: t.accent.green,
       marginBottom: 4,
     },
@@ -718,7 +719,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
             <Text style={{ fontSize: 12, color: t.text.secondary }}>
               {p.icon} {p.name}
             </Text>
-            <Text style={{ fontSize: 12, fontWeight: '700', color: t.text.primary }}>
+            <Text style={{ fontSize: 12, fontWeight: fonts.bold, color: t.text.primary }}>
               {formatNum(p.totalGenerated_kWh)} kWh
             </Text>
           </View>
@@ -962,7 +963,7 @@ export function RenewableEnergyScreen({ onClose }: Props) {
           <Text style={{ fontSize: 12, color: t.text.secondary }}>
             Community Surplus Available
           </Text>
-          <Text style={{ fontSize: 14, fontWeight: '700', color: t.accent.green }}>
+          <Text style={{ fontSize: 14, fontWeight: fonts.bold, color: t.accent.green }}>
             {totals.totalSurplus} kWh
           </Text>
         </View>

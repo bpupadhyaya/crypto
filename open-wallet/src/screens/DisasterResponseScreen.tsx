@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Disaster Response Screen — Coordinate disaster relief via The Human Constitution.
  *
@@ -291,32 +292,32 @@ export function DisasterResponseScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingBottom: 40 },
     tabRow: { flexDirection: 'row', paddingHorizontal: 12, marginBottom: 12 },
     tabBtn: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 16, marginHorizontal: 4 },
     tabActive: { backgroundColor: '#ef4444' + '20' },
-    tabText: { color: t.text.muted, fontSize: 12, fontWeight: '600' },
+    tabText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
     tabTextActive: { color: '#ef4444' },
     // Hero
     heroCard: { backgroundColor: '#ef4444' + '10', borderRadius: 24, padding: 24, marginHorizontal: 20, marginTop: 8, alignItems: 'center', marginBottom: 16 },
-    heroIcon: { fontSize: 40, fontWeight: '900', color: '#ef4444', marginBottom: 8 },
-    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: '800', textAlign: 'center' },
+    heroIcon: { fontSize: 40, fontWeight: fonts.heavy, color: '#ef4444', marginBottom: 8 },
+    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, textAlign: 'center' },
     heroSubtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 4, lineHeight: 20 },
     // Cards
     card: { backgroundColor: t.bg.secondary, borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16 },
     cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 },
     cardTitleRow: { flex: 1, marginRight: 8 },
-    cardTitle: { color: t.text.primary, fontSize: 16, fontWeight: '700' },
+    cardTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
     cardLocation: { color: t.text.muted, fontSize: 13, marginTop: 2 },
     severityBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
-    severityText: { color: '#fff', fontSize: 11, fontWeight: '700', textTransform: 'uppercase' },
+    severityText: { color: '#fff', fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase' },
     cardDescription: { color: t.text.secondary, fontSize: 13, lineHeight: 20, marginBottom: 12 },
     // Stats row
     statRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 12 },
     statBox: { backgroundColor: t.bg.primary, borderRadius: 10, padding: 10, minWidth: 80, alignItems: 'center', flex: 1 },
-    statValue: { color: t.text.primary, fontSize: 16, fontWeight: '800' },
+    statValue: { color: t.text.primary, fontSize: 16, fontWeight: fonts.heavy },
     statLabel: { color: t.text.muted, fontSize: 10, marginTop: 2, textTransform: 'uppercase', textAlign: 'center' },
     // Fund bar
     fundBar: { height: 8, backgroundColor: t.bg.primary, borderRadius: 4, marginTop: 8, overflow: 'hidden' },
@@ -331,59 +332,59 @@ export function DisasterResponseScreen({ onClose }: Props) {
     safeBtn: { flex: 1, backgroundColor: '#22c55e', borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
     safeBtnDone: { flex: 1, backgroundColor: '#22c55e' + '30', borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
     helpBtn: { flex: 1, backgroundColor: '#ef4444', borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
-    checkinText: { color: '#fff', fontSize: 14, fontWeight: '700' },
-    checkinTextDone: { color: '#22c55e', fontSize: 14, fontWeight: '700' },
+    checkinText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
+    checkinTextDone: { color: '#22c55e', fontSize: 14, fontWeight: fonts.bold },
     // Section
-    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: '700', marginBottom: 12, marginHorizontal: 20 },
+    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 12, marginHorizontal: 20 },
     sectionSubtitle: { color: t.text.muted, fontSize: 12, marginBottom: 16, marginHorizontal: 20, lineHeight: 18 },
     // Relief actions
     actionRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, paddingHorizontal: 20, marginBottom: 16 },
     actionChip: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 14, alignItems: 'center', minWidth: 90, flex: 1 },
     actionChipActive: { backgroundColor: '#ef4444' },
-    actionIcon: { fontSize: 22, fontWeight: '800', marginBottom: 4 },
-    actionLabel: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    actionIcon: { fontSize: 22, fontWeight: fonts.heavy, marginBottom: 4 },
+    actionLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     actionLabelActive: { color: '#fff' },
     actionDesc: { color: t.text.muted, fontSize: 11, textAlign: 'center', marginTop: 2 },
     // Selected action form
     actionForm: { backgroundColor: t.bg.secondary, borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16 },
-    actionFormTitle: { color: t.text.primary, fontSize: 15, fontWeight: '700', marginBottom: 12 },
+    actionFormTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, marginBottom: 12 },
     input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginBottom: 12 },
     submitBtn: { backgroundColor: '#ef4444', borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
-    submitBtnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+    submitBtnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
     // Resource needs
     filterRow: { flexDirection: 'row', paddingHorizontal: 20, gap: 8, marginBottom: 12 },
     filterChip: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12, backgroundColor: t.bg.secondary },
     filterChipActive: { backgroundColor: '#ef4444' + '20' },
-    filterText: { color: t.text.muted, fontSize: 12, fontWeight: '600' },
+    filterText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
     filterTextActive: { color: '#ef4444' },
     resourceCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 10 },
     resourceHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
-    resourceItem: { color: t.text.primary, fontSize: 14, fontWeight: '700' },
+    resourceItem: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
     urgencyBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
-    urgencyText: { color: '#fff', fontSize: 10, fontWeight: '700', textTransform: 'uppercase' },
+    urgencyText: { color: '#fff', fontSize: 10, fontWeight: fonts.bold, textTransform: 'uppercase' },
     resourceCategory: { color: t.text.muted, fontSize: 12, marginBottom: 6 },
     resourceBar: { height: 6, backgroundColor: t.bg.primary, borderRadius: 3, overflow: 'hidden', marginBottom: 4 },
     resourceFill: { height: 6, borderRadius: 3 },
     resourceNumbers: { flexDirection: 'row', justifyContent: 'space-between' },
     resourceNumText: { color: t.text.muted, fontSize: 11 },
-    gapText: { fontSize: 11, fontWeight: '700' },
+    gapText: { fontSize: 11, fontWeight: fonts.bold },
     // History
     historyCard: { backgroundColor: t.bg.secondary, borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16 },
     historyType: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 8 },
     historyTypeBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
-    historyTypeText: { color: '#fff', fontSize: 11, fontWeight: '700', textTransform: 'uppercase' },
-    historyName: { color: t.text.primary, fontSize: 16, fontWeight: '700' },
+    historyTypeText: { color: '#fff', fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase' },
+    historyName: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
     historyLocation: { color: t.text.muted, fontSize: 13, marginBottom: 4 },
     historyDates: { color: t.text.muted, fontSize: 12, marginBottom: 12 },
     historyGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
     historyStatBox: { backgroundColor: t.bg.primary, borderRadius: 10, padding: 10, minWidth: 80, flex: 1, alignItems: 'center' },
-    historyStatValue: { color: t.text.primary, fontSize: 15, fontWeight: '800' },
+    historyStatValue: { color: t.text.primary, fontSize: 15, fontWeight: fonts.heavy },
     historyStatLabel: { color: t.text.muted, fontSize: 10, marginTop: 2, textAlign: 'center' },
     // Disaster selector
     disasterSelector: { flexDirection: 'row', paddingHorizontal: 20, gap: 8, marginBottom: 16 },
     disasterChip: { flex: 1, backgroundColor: t.bg.secondary, borderRadius: 12, padding: 12, alignItems: 'center' },
     disasterChipActive: { borderWidth: 2, borderColor: '#ef4444' },
-    disasterChipText: { color: t.text.secondary, fontSize: 12, fontWeight: '600', marginTop: 4, textAlign: 'center' },
+    disasterChipText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold, marginTop: 4, textAlign: 'center' },
     disasterChipTextActive: { color: '#ef4444' },
     // Empty
     emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40, marginHorizontal: 40 },
@@ -507,7 +508,7 @@ export function DisasterResponseScreen({ onClose }: Props) {
             style={[s.disasterChip, selectedAlert === alert.id && s.disasterChipActive]}
             onPress={() => setSelectedAlert(alert.id)}
           >
-            <Text style={{ fontSize: 20, fontWeight: '800', color: DISASTER_COLORS[alert.type] }}>
+            <Text style={{ fontSize: 20, fontWeight: fonts.heavy, color: DISASTER_COLORS[alert.type] }}>
               {DISASTER_ICONS[alert.type]}
             </Text>
             <Text style={[s.disasterChipText, selectedAlert === alert.id && s.disasterChipTextActive]} numberOfLines={2}>

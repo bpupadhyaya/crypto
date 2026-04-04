@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Action buttons — adapts to Simple and Pro mode.
  * Simple: 3 large buttons (Send, Receive, Swap) — maximum clarity
@@ -90,12 +91,12 @@ const styles = StyleSheet.create({
   },
   simpleIcon: {
     fontSize: 28,
-    fontWeight: '700',
+    fontWeight: fonts.bold,
   },
   simpleLabel: {
     color: '#f0f0f5',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: fonts.semibold,
   },
 
   // ─── Pro Mode ───
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
   },
   proIcon: {
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: fonts.bold,
     marginBottom: 4,
   },
   proLabel: {

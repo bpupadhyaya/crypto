@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Value Channel Dashboard — Unified view of ALL 6 OTK value channels.
  *
@@ -161,17 +162,17 @@ export function ValueChannelScreen({ onClose, onNavigate }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingBottom: 40 },
     // Total score card
     totalCard: { backgroundColor: t.bg.secondary, borderRadius: 20, padding: 24, marginHorizontal: 20, marginBottom: 20, alignItems: 'center' },
     totalLabel: { color: t.text.muted, fontSize: 13, textTransform: 'uppercase', letterSpacing: 1 },
-    totalValue: { color: t.text.primary, fontSize: 48, fontWeight: '900', marginTop: 4 },
-    totalOtkLabel: { color: t.accent.green, fontSize: 14, fontWeight: '700', marginTop: 4 },
+    totalValue: { color: t.text.primary, fontSize: 48, fontWeight: fonts.heavy, marginTop: 4 },
+    totalOtkLabel: { color: t.accent.green, fontSize: 14, fontWeight: fonts.bold, marginTop: 4 },
     compositeRow: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 16, width: '100%' },
     compositeItem: { alignItems: 'center' },
-    compositeValue: { color: t.text.primary, fontSize: 18, fontWeight: '800' },
+    compositeValue: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
     compositeLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
     // Channel weight bar
     weightBarContainer: { flexDirection: 'row', height: 8, borderRadius: 4, overflow: 'hidden', marginTop: 16, width: '100%' },
@@ -184,20 +185,20 @@ export function ValueChannelScreen({ onClose, onNavigate }: Props) {
     channelGrid: { flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 14, gap: 12 },
     channelCard: { borderRadius: 16, padding: 16, width: '47%' },
     channelIconCircle: { width: 44, height: 44, borderRadius: 22, justifyContent: 'center', alignItems: 'center', marginBottom: 10 },
-    channelIconText: { color: '#fff', fontSize: 18, fontWeight: '900' },
-    channelSymbol: { fontSize: 13, fontWeight: '700', marginBottom: 2 },
+    channelIconText: { color: '#fff', fontSize: 18, fontWeight: fonts.heavy },
+    channelSymbol: { fontSize: 13, fontWeight: fonts.bold, marginBottom: 2 },
     channelName: { color: t.text.muted, fontSize: 11, marginBottom: 8 },
-    channelBalance: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
-    channelLevel: { fontSize: 11, fontWeight: '700', marginTop: 4 },
+    channelBalance: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
+    channelLevel: { fontSize: 11, fontWeight: fonts.bold, marginTop: 4 },
     channelActivity: { color: t.text.muted, fontSize: 11, marginTop: 6, lineHeight: 15 },
     channelDate: { color: t.text.muted, fontSize: 10, marginTop: 2 },
-    channelTapHint: { color: t.accent.blue, fontSize: 11, fontWeight: '600', marginTop: 8 },
+    channelTapHint: { color: t.accent.blue, fontSize: 11, fontWeight: fonts.semibold, marginTop: 8 },
     // Philosophy card
     philosophyCard: { backgroundColor: t.accent.green + '12', borderRadius: 16, padding: 20, marginHorizontal: 20, marginTop: 8, marginBottom: 16, alignItems: 'center' },
-    philosophyText: { color: t.text.primary, fontSize: 15, fontWeight: '600', textAlign: 'center', lineHeight: 22 },
-    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: '700', marginBottom: 12, marginHorizontal: 20 },
+    philosophyText: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold, textAlign: 'center', lineHeight: 22 },
+    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 12, marginHorizontal: 20 },
     demoTag: { backgroundColor: t.accent.orange + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'center', marginBottom: 12 },
-    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: '700' },
+    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: fonts.bold },
   }), [t]);
 
   const handleChannelTap = (channel: ChannelData) => {

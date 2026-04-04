@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Pending Transactions Screen — Shows all in-progress transactions across all chains.
  *
@@ -220,23 +221,23 @@ export function PendingTxScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     autoRefreshNote: { color: t.text.muted, fontSize: 11, textAlign: 'center', marginBottom: 12 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, marginHorizontal: 16, marginBottom: 12, overflow: 'hidden' },
     txContainer: { padding: 16 },
     txTopRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
     typeBadge: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-    typeText: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
+    typeText: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
     chainText: { color: t.text.secondary, fontSize: 12 },
     elapsedText: { color: t.text.muted, fontSize: 12 },
     amountRow: { flexDirection: 'row', alignItems: 'baseline', marginBottom: 6 },
-    amount: { color: t.text.primary, fontSize: 18, fontWeight: '600' },
+    amount: { color: t.text.primary, fontSize: 18, fontWeight: fonts.semibold },
     token: { color: t.text.secondary, fontSize: 14, marginLeft: 4 },
     description: { color: t.text.muted, fontSize: 13, marginBottom: 10 },
     statusRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
     statusBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
-    statusText: { fontSize: 12, fontWeight: '700' },
+    statusText: { fontSize: 12, fontWeight: fonts.bold },
     confirmText: { color: t.text.muted, fontSize: 12 },
     hashRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
     hashLabel: { color: t.text.muted, fontSize: 11 },
@@ -247,7 +248,7 @@ export function PendingTxScreen({ onClose }: Props) {
     emptyContainer: { alignItems: 'center', paddingTop: 80 },
     emptyText: { color: t.text.muted, fontSize: 16 },
     emptySubtext: { color: t.text.muted, fontSize: 13, marginTop: 8, textAlign: 'center', paddingHorizontal: 40 },
-    sectionHeader: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1, marginLeft: 20, marginBottom: 8, marginTop: 8 },
+    sectionHeader: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1, marginLeft: 20, marginBottom: 8, marginTop: 8 },
   }), [t]);
 
   return (

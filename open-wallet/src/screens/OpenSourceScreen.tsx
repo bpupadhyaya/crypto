@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 import React, { useState, useMemo, useCallback } from 'react';
 import {
   View,
@@ -78,37 +79,37 @@ export function OpenSourceScreen({ onClose }: Props) {
       StyleSheet.create({
         container: { flex: 1, backgroundColor: t.bg.primary },
         header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: t.border },
-        headerTitle: { fontSize: 18, fontWeight: '700', color: t.text.primary },
+        headerTitle: { fontSize: 18, fontWeight: fonts.bold, color: t.text.primary },
         closeButton: { padding: 8 },
         closeText: { fontSize: 16, color: t.accent.green },
         tabRow: { flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: t.border },
         tab: { flex: 1, paddingVertical: 12, alignItems: 'center' },
         activeTab: { borderBottomWidth: 2, borderBottomColor: t.accent.green },
         tabText: { fontSize: 14, color: t.text.secondary },
-        activeTabText: { color: t.accent.green, fontWeight: '600' },
+        activeTabText: { color: t.accent.green, fontWeight: fonts.semibold },
         content: { flex: 1 },
         issueCard: { marginHorizontal: 16, marginTop: 12, padding: 14, backgroundColor: t.bg.card, borderRadius: 12, borderWidth: 1, borderColor: t.border },
-        issueTitle: { fontSize: 14, fontWeight: '700', color: t.text.primary, marginBottom: 4 },
+        issueTitle: { fontSize: 14, fontWeight: fonts.bold, color: t.text.primary, marginBottom: 4 },
         labelRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 4, marginBottom: 6 },
         label: { paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, backgroundColor: t.bg.primary },
         labelText: { fontSize: 10, color: t.text.secondary },
         issueFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
         issueMeta: { fontSize: 11, color: t.text.secondary },
         priorityBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10 },
-        priorityText: { fontSize: 11, fontWeight: '600' },
+        priorityText: { fontSize: 11, fontWeight: fonts.semibold },
         guideCard: { marginHorizontal: 16, marginTop: 12, padding: 14, backgroundColor: t.bg.card, borderRadius: 12, borderWidth: 1, borderColor: t.border },
-        guideTitle: { fontSize: 15, fontWeight: '700', color: t.text.primary, marginBottom: 2 },
+        guideTitle: { fontSize: 15, fontWeight: fonts.bold, color: t.text.primary, marginBottom: 2 },
         guideDesc: { fontSize: 13, color: t.text.secondary, lineHeight: 18, marginBottom: 8 },
-        guideDifficulty: { fontSize: 12, fontWeight: '600' },
+        guideDifficulty: { fontSize: 12, fontWeight: fonts.semibold },
         bountyCard: { marginHorizontal: 16, marginTop: 12, padding: 14, backgroundColor: t.bg.card, borderRadius: 12, borderWidth: 1, borderColor: t.border },
-        bountyTitle: { fontSize: 15, fontWeight: '700', color: t.text.primary, marginBottom: 2 },
+        bountyTitle: { fontSize: 15, fontWeight: fonts.bold, color: t.text.primary, marginBottom: 2 },
         bountyDesc: { fontSize: 13, color: t.text.secondary, lineHeight: 18, marginBottom: 8 },
         bountyFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-        bountyReward: { fontSize: 16, fontWeight: '700', color: t.accent.green },
+        bountyReward: { fontSize: 16, fontWeight: fonts.bold, color: t.accent.green },
         statusBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10 },
-        statusText: { fontSize: 11, fontWeight: '600' },
+        statusText: { fontSize: 11, fontWeight: fonts.semibold },
         claimButton: { marginTop: 8, paddingVertical: 10, backgroundColor: t.accent.green, borderRadius: 8, alignItems: 'center' },
-        sectionLabel: { fontSize: 14, fontWeight: '600', color: t.text.secondary, marginHorizontal: 16, marginTop: 16, marginBottom: 4 },
+        sectionLabel: { fontSize: 14, fontWeight: fonts.semibold, color: t.text.secondary, marginHorizontal: 16, marginTop: 16, marginBottom: 4 },
         emptyState: { margin: 16, padding: 20, backgroundColor: t.bg.card, borderRadius: 12, alignItems: 'center' },
         emptyText: { fontSize: 13, color: t.text.secondary },
         listFooter: { height: 32 },
@@ -199,7 +200,7 @@ export function OpenSourceScreen({ onClose }: Props) {
                   </View>
                   {item.status === 'open' && (
                     <TouchableOpacity style={styles.claimButton}>
-                      <Text style={{ fontSize: 13, fontWeight: '600', color: '#FFF' }}>Claim Bounty</Text>
+                      <Text style={{ fontSize: 13, fontWeight: fonts.semibold, color: '#FFF' }}>Claim Bounty</Text>
                     </TouchableOpacity>
                   )}
                 </View>

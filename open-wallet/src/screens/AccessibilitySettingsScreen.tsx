@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Accessibility Settings Screen — Detailed accessibility configuration (Art IX).
  *
@@ -81,24 +82,24 @@ export function AccessibilitySettingsScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeText: { color: t.accent.blue, fontSize: 16 },
     tabRow: { flexDirection: 'row', marginHorizontal: 16, marginBottom: 12, borderRadius: 10, backgroundColor: t.bg.card, overflow: 'hidden' },
     tabBtn: { flex: 1, paddingVertical: 10, alignItems: 'center' },
     tabBtnActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.muted, fontSize: 13, fontWeight: '600' },
+    tabText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 8, marginBottom: 12 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 8, marginBottom: 12 },
     settingCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 10 },
     settingRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-    settingLabel: { color: t.text.primary, fontSize: 15, fontWeight: '600', flex: 1, marginRight: 12 },
+    settingLabel: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold, flex: 1, marginRight: 12 },
     settingDesc: { color: t.text.muted, fontSize: 12, lineHeight: 17, marginTop: 8 },
     articleBanner: { backgroundColor: t.accent.purple + '20', borderRadius: 14, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: t.accent.purple + '40' },
-    articleTitle: { color: t.accent.purple, fontSize: 13, fontWeight: '700', marginBottom: 4 },
+    articleTitle: { color: t.accent.purple, fontSize: 13, fontWeight: fonts.bold, marginBottom: 4 },
     articleText: { color: t.text.secondary, fontSize: 12, lineHeight: 18 },
     resetBtn: { backgroundColor: t.bg.card, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginTop: 16, borderWidth: 1, borderColor: t.border },
-    resetText: { color: t.accent.red, fontSize: 14, fontWeight: '700' },
+    resetText: { color: t.accent.red, fontSize: 14, fontWeight: fonts.bold },
     activeCount: { color: t.text.muted, fontSize: 11, textAlign: 'center', marginBottom: 12 },
   }), [t]);
 
@@ -162,7 +163,7 @@ export function AccessibilitySettingsScreen({ onClose }: Props) {
           <Text style={{
             color: t.accent.green,
             fontSize: 13,
-            fontWeight: '700',
+            fontWeight: fonts.bold,
             marginBottom: 4,
           }}>
             Accessibility Commitment

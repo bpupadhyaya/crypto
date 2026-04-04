@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Wallet Health Screen — Overall wallet security and health assessment.
  *
@@ -82,31 +83,31 @@ export function WalletHealthScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeText: { color: t.accent.blue, fontSize: 16 },
     tabRow: { flexDirection: 'row', marginHorizontal: 16, marginBottom: 12, borderRadius: 10, backgroundColor: t.bg.card, overflow: 'hidden' },
     tabBtn: { flex: 1, paddingVertical: 10, alignItems: 'center' },
     tabBtnActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.muted, fontSize: 13, fontWeight: '600' },
+    tabText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 16, marginBottom: 8 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 16, marginBottom: 8 },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 10 },
     scoreCircle: { alignSelf: 'center', width: 120, height: 120, borderRadius: 60, borderWidth: 6, justifyContent: 'center', alignItems: 'center', marginVertical: 16 },
-    scoreNum: { fontSize: 36, fontWeight: '800' },
+    scoreNum: { fontSize: 36, fontWeight: fonts.heavy },
     scoreLabel: { color: t.text.muted, fontSize: 12, marginTop: 2 },
     summaryRow: { flexDirection: 'row', justifyContent: 'space-around', marginBottom: 8 },
     summaryBox: { alignItems: 'center' },
-    summaryNum: { fontSize: 20, fontWeight: '700' },
+    summaryNum: { fontSize: 20, fontWeight: fonts.bold },
     summaryLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
     checkRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: t.bg.card, borderRadius: 12, padding: 14, marginBottom: 8 },
     checkIcon: { fontSize: 20, marginRight: 12 },
-    checkLabel: { color: t.text.primary, fontSize: 14, fontWeight: '600', flex: 1 },
+    checkLabel: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, flex: 1 },
     checkDetail: { color: t.text.muted, fontSize: 12, marginTop: 4 },
     impCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 10, borderLeftWidth: 4 },
-    impTitle: { color: t.text.primary, fontSize: 14, fontWeight: '700', marginBottom: 4 },
+    impTitle: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, marginBottom: 4 },
     impDesc: { color: t.text.secondary, fontSize: 13, lineHeight: 19 },
-    impPriority: { fontSize: 11, fontWeight: '700', marginTop: 6 },
+    impPriority: { fontSize: 11, fontWeight: fonts.bold, marginTop: 6 },
   }), [t]);
 
   const passCount = HEALTH_CHECKS.filter(c => c.status === 'pass').length;

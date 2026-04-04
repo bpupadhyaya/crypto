@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Error Boundary — Catches React crashes and shows a recovery screen.
  *
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     fontSize: 48,
-    fontWeight: '700',
+    fontWeight: fonts.bold,
     color: '#ef4444',
     marginBottom: 16,
     width: 72,
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
   title: {
     color: '#f0f0f5',
     fontSize: 22,
-    fontWeight: '700',
+    fontWeight: fonts.bold,
     marginBottom: 8,
     textAlign: 'center',
   },
@@ -225,7 +226,7 @@ const styles = StyleSheet.create({
   primaryBtnText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: fonts.bold,
   },
   secondaryBtn: {
     backgroundColor: 'rgba(255,255,255,0.06)',
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
   secondaryBtnText: {
     color: '#f0f0f5',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: fonts.semibold,
   },
   linkBtn: {
     paddingVertical: 12,
@@ -248,7 +249,7 @@ const styles = StyleSheet.create({
   linkBtnText: {
     color: '#3b82f6',
     fontSize: 15,
-    fontWeight: '600',
+    fontWeight: fonts.semibold,
   },
   detailsToggle: {
     paddingVertical: 8,
@@ -256,7 +257,7 @@ const styles = StyleSheet.create({
   detailsToggleText: {
     color: '#606070',
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: fonts.semibold,
   },
   detailsScroll: {
     maxHeight: 200,
@@ -271,7 +272,7 @@ const styles = StyleSheet.create({
   detailsLabel: {
     color: '#a0a0b0',
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: fonts.bold,
     textTransform: 'uppercase',
     letterSpacing: 1,
     marginBottom: 4,

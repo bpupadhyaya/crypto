@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Help & FAQ Screen — Searchable accordion of help topics and FAQ.
  * Covers getting started, security, Open Chain, DeFi, P2P, and troubleshooting.
@@ -215,7 +216,7 @@ export function HelpScreen({ onClose }: Props) {
       flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
       paddingHorizontal: 20, paddingTop: 16, paddingBottom: 8,
     },
-    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeBtn: { paddingVertical: 8, paddingHorizontal: 16 },
     closeText: { color: t.accent.blue, fontSize: 15 },
     searchContainer: {
@@ -229,7 +230,7 @@ export function HelpScreen({ onClose }: Props) {
       backgroundColor: t.bg.card, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 14,
       marginTop: 12,
     },
-    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: '600', flex: 1 },
+    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.semibold, flex: 1 },
     sectionArrow: { color: t.text.muted, fontSize: 18 },
     questionRow: {
       flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
@@ -245,7 +246,7 @@ export function HelpScreen({ onClose }: Props) {
     linksContainer: {
       marginTop: 24, backgroundColor: t.bg.card, borderRadius: 12, padding: 16,
     },
-    linksTitle: { color: t.text.primary, fontSize: 16, fontWeight: '600', marginBottom: 12 },
+    linksTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.semibold, marginBottom: 12 },
     linkRow: {
       flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
       paddingVertical: 12, borderTopWidth: 1, borderTopColor: t.border,

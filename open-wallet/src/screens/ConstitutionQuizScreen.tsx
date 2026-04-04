@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Constitution Quiz Screen — Art VI (gOTK): Test knowledge of The Human Constitution.
  *
@@ -184,66 +185,66 @@ export function ConstitutionQuizScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     backBtn: { color: t.accent.blue, fontSize: 16 },
     tabRow: { flexDirection: 'row', marginHorizontal: 20, marginBottom: 16, backgroundColor: t.bg.card, borderRadius: 12, padding: 3 },
     tabBtn: { flex: 1, paddingVertical: 10, borderRadius: 10, alignItems: 'center' },
     tabBtnActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.muted, fontSize: 12, fontWeight: '600' },
-    tabTextActive: { color: '#fff', fontWeight: '700' },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
+    tabText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
+    tabTextActive: { color: '#fff', fontWeight: fonts.bold },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    cardTitle: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
+    cardTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
     cardDesc: { color: t.text.secondary, fontSize: 13, lineHeight: 20, marginTop: 6 },
     articleRow: { flexDirection: 'row', alignItems: 'center' },
     articleNum: { width: 40, height: 40, borderRadius: 20, backgroundColor: t.accent.blue + '20', alignItems: 'center', justifyContent: 'center', marginRight: 14 },
-    articleNumText: { color: t.accent.blue, fontSize: 16, fontWeight: '800' },
+    articleNumText: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.heavy },
     articleInfo: { flex: 1 },
-    articleTitle: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
+    articleTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
     articleStatus: { fontSize: 12, marginTop: 3 },
     startBtn: { backgroundColor: t.accent.blue, borderRadius: 10, paddingVertical: 8, paddingHorizontal: 16, marginTop: 10, alignSelf: 'flex-start' },
-    startBtnText: { color: '#fff', fontSize: 13, fontWeight: '700' },
+    startBtnText: { color: '#fff', fontSize: 13, fontWeight: fonts.bold },
     progressRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
     progressText: { color: t.text.muted, fontSize: 13 },
     progressBar: { height: 6, backgroundColor: t.border, borderRadius: 3, marginBottom: 20 },
     progressFill: { height: 6, borderRadius: 3, backgroundColor: t.accent.blue },
-    questionText: { color: t.text.primary, fontSize: 17, fontWeight: '700', lineHeight: 24, marginBottom: 20 },
+    questionText: { color: t.text.primary, fontSize: 17, fontWeight: fonts.bold, lineHeight: 24, marginBottom: 20 },
     optionBtn: { backgroundColor: t.bg.primary, borderRadius: 12, paddingVertical: 14, paddingHorizontal: 16, marginBottom: 10, borderWidth: 2, borderColor: t.border },
     optionSelected: { borderColor: t.accent.blue, backgroundColor: t.accent.blue + '10' },
     optionCorrect: { borderColor: t.accent.green, backgroundColor: t.accent.green + '15' },
     optionWrong: { borderColor: t.accent.red, backgroundColor: t.accent.red + '10' },
     optionText: { color: t.text.primary, fontSize: 15 },
-    optionTextSelected: { color: t.accent.blue, fontWeight: '700' },
+    optionTextSelected: { color: t.accent.blue, fontWeight: fonts.bold },
     navRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 16 },
     navBtn: { backgroundColor: t.accent.blue, borderRadius: 12, paddingVertical: 14, paddingHorizontal: 24 },
     navBtnDisabled: { opacity: 0.4 },
-    navBtnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+    navBtnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
     resultCard: { backgroundColor: t.accent.green + '10', borderRadius: 24, padding: 24, marginHorizontal: 20, alignItems: 'center' },
-    resultScore: { color: t.text.primary, fontSize: 48, fontWeight: '800' },
+    resultScore: { color: t.text.primary, fontSize: 48, fontWeight: fonts.heavy },
     resultLabel: { color: t.text.muted, fontSize: 14, marginTop: 4 },
-    resultReward: { color: t.accent.green, fontSize: 18, fontWeight: '700', marginTop: 16 },
+    resultReward: { color: t.accent.green, fontSize: 18, fontWeight: fonts.bold, marginTop: 16 },
     historyCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 10 },
     historyRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    historyTitle: { color: t.text.primary, fontSize: 14, fontWeight: '700' },
-    historyScore: { color: t.accent.green, fontSize: 14, fontWeight: '700' },
+    historyTitle: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
+    historyScore: { color: t.accent.green, fontSize: 14, fontWeight: fonts.bold },
     historyDate: { color: t.text.muted, fontSize: 12, marginTop: 4 },
-    historyReward: { color: t.accent.blue, fontSize: 12, fontWeight: '600' },
+    historyReward: { color: t.accent.blue, fontSize: 12, fontWeight: fonts.semibold },
     lbRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 12, paddingHorizontal: 16, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: t.border },
-    lbRank: { width: 30, color: t.text.primary, fontSize: 15, fontWeight: '800' },
-    lbName: { flex: 1, color: t.text.primary, fontSize: 14, fontWeight: '600' },
-    lbScore: { color: t.accent.green, fontSize: 14, fontWeight: '700', width: 45, textAlign: 'right' },
-    lbGotk: { color: t.accent.blue, fontSize: 12, fontWeight: '600', width: 60, textAlign: 'right' },
+    lbRank: { width: 30, color: t.text.primary, fontSize: 15, fontWeight: fonts.heavy },
+    lbName: { flex: 1, color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
+    lbScore: { color: t.accent.green, fontSize: 14, fontWeight: fonts.bold, width: 45, textAlign: 'right' },
+    lbGotk: { color: t.accent.blue, fontSize: 12, fontWeight: fonts.semibold, width: 60, textAlign: 'right' },
     lbHighlight: { backgroundColor: t.accent.blue + '10' },
     certCard: { backgroundColor: t.bg.card, borderRadius: 24, padding: 28, marginHorizontal: 20, alignItems: 'center', borderWidth: 2, borderColor: t.accent.yellow ?? '#ffd700' },
-    certTitle: { color: t.accent.yellow ?? '#ffd700', fontSize: 20, fontWeight: '800', textAlign: 'center' },
-    certSubtitle: { color: t.text.primary, fontSize: 16, fontWeight: '700', textAlign: 'center', marginTop: 8 },
+    certTitle: { color: t.accent.yellow ?? '#ffd700', fontSize: 20, fontWeight: fonts.heavy, textAlign: 'center' },
+    certSubtitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, textAlign: 'center', marginTop: 8 },
     certDesc: { color: t.text.secondary, fontSize: 14, textAlign: 'center', marginTop: 12, lineHeight: 22 },
     certStatus: { color: t.text.muted, fontSize: 13, marginTop: 20 },
-    certProgress: { color: t.accent.blue, fontSize: 16, fontWeight: '800', marginTop: 8 },
+    certProgress: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.heavy, marginTop: 8 },
     overallCard: { backgroundColor: t.accent.blue + '10', borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 16, flexDirection: 'row', justifyContent: 'space-around' },
     overallStat: { alignItems: 'center' },
-    overallValue: { color: t.text.primary, fontSize: 22, fontWeight: '800' },
+    overallValue: { color: t.text.primary, fontSize: 22, fontWeight: fonts.heavy },
     overallLabel: { color: t.text.muted, fontSize: 11, marginTop: 4 },
   }), [t]);
 
@@ -404,7 +405,7 @@ export function ConstitutionQuizScreen({ onClose }: Props) {
                   >
                     <Text style={[
                       s.optionText,
-                      oi === q.correctIndex && { color: t.accent.green, fontWeight: '700' },
+                      oi === q.correctIndex && { color: t.accent.green, fontWeight: fonts.bold },
                       oi === answers[i] && oi !== q.correctIndex && { color: t.accent.red },
                     ]}>
                       {opt} {oi === q.correctIndex ? ' (correct)' : ''}{oi === answers[i] && oi !== q.correctIndex ? ' (your answer)' : ''}
@@ -499,15 +500,15 @@ export function ConstitutionQuizScreen({ onClose }: Props) {
       <Text style={s.section}>Top Constitution Scholars</Text>
       <View style={s.card}>
         <View style={[s.lbRow, { borderBottomColor: t.text.muted }]}>
-          <Text style={[s.lbRank, { fontWeight: '800', color: t.text.muted }]}>#</Text>
-          <Text style={[s.lbName, { color: t.text.muted, fontWeight: '700' }]}>Scholar</Text>
+          <Text style={[s.lbRank, { fontWeight: fonts.heavy, color: t.text.muted }]}>#</Text>
+          <Text style={[s.lbName, { color: t.text.muted, fontWeight: fonts.bold }]}>Scholar</Text>
           <Text style={[s.lbScore, { color: t.text.muted }]}>Score</Text>
           <Text style={[s.lbGotk, { color: t.text.muted }]}>gOTK</Text>
         </View>
         {DEMO_LEADERBOARD.map((entry) => (
           <View key={entry.rank} style={[s.lbRow, entry.name === 'You' && s.lbHighlight]}>
             <Text style={s.lbRank}>{entry.rank <= 3 ? ['', '\uD83E\uDD47', '\uD83E\uDD48', '\uD83E\uDD49'][entry.rank] : `${entry.rank}`}</Text>
-            <Text style={[s.lbName, entry.name === 'You' && { color: t.accent.blue, fontWeight: '800' }]}>{entry.name}</Text>
+            <Text style={[s.lbName, entry.name === 'You' && { color: t.accent.blue, fontWeight: fonts.heavy }]}>{entry.name}</Text>
             <Text style={s.lbScore}>{entry.score}%</Text>
             <Text style={s.lbGotk}>{entry.gOtkEarned}</Text>
           </View>

@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Settings Screen — Grid-based category home with drill-down item lists.
  * Tapping a category tile shows the full list of items for that category.
@@ -57,6 +58,7 @@ import { TaxCalculatorScreen } from './TaxCalculatorScreen';
 import { WalletAnalyticsScreen } from './WalletAnalyticsScreen';
 import { WatchlistScreen } from './WatchlistScreen';
 import { AccessibilityScreen } from './AccessibilityScreen';
+import { DisplaySettingsScreen } from './DisplaySettingsScreen';
 import { TutorialScreen } from './TutorialScreen';
 import { HelpScreen } from './HelpScreen';
 import { IdentityScreen } from './IdentityScreen';
@@ -390,31 +392,31 @@ export function SettingsScreen() {
     container: { flex: 1, backgroundColor: t.bg.primary },
     scroll: { paddingHorizontal: 16, paddingTop: 8 },
     headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 4, paddingTop: 12, paddingBottom: 8 },
-    headerTitle: { color: t.text.primary, fontSize: 24, fontWeight: '800' },
+    headerTitle: { color: t.text.primary, fontSize: 24, fontWeight: fonts.heavy },
     signOutBtn: { paddingVertical: 6, paddingHorizontal: 12 },
-    signOutText: { color: t.accent.red, fontSize: 14, fontWeight: '600' },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 8, marginLeft: 4 },
+    signOutText: { color: t.accent.red, fontSize: 14, fontWeight: fonts.semibold },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 8, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 4 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 },
     label: { color: t.text.primary, fontSize: 15 },
     value: { color: t.text.secondary, fontSize: 14 },
-    valueGreen: { color: t.accent.green, fontSize: 13, fontWeight: '600' },
-    valueYellow: { color: t.accent.yellow, fontSize: 13, fontWeight: '600' },
+    valueGreen: { color: t.accent.green, fontSize: 13, fontWeight: fonts.semibold },
+    valueYellow: { color: t.accent.yellow, fontSize: 13, fontWeight: fonts.semibold },
     divider: { height: 1, backgroundColor: t.border, marginHorizontal: 16 },
     modeToggle: { flexDirection: 'row', gap: 4 },
     modeBtn: { paddingVertical: 6, paddingHorizontal: 16, borderRadius: 8, backgroundColor: t.border },
     modeBtnActive: { backgroundColor: t.accent.green },
     networkTestnet: { backgroundColor: t.accent.yellow },
     networkMainnet: { backgroundColor: t.accent.red },
-    modeBtnText: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
+    modeBtnText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
     modeBtnTextActive: { color: t.bg.primary },
     currencyRow: { flexDirection: 'row', gap: 4 },
     currencyChip: { paddingVertical: 4, paddingHorizontal: 10, borderRadius: 8, backgroundColor: t.border },
     currencyActive: { backgroundColor: t.accent.green },
-    currencyText: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
+    currencyText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
     currencyTextActive: { color: t.bg.primary },
     showMoreBtn: { paddingVertical: 10, paddingHorizontal: 16 },
-    showMoreText: { color: t.accent.blue, fontSize: 14, fontWeight: '600' },
+    showMoreText: { color: t.accent.blue, fontSize: 14, fontWeight: fonts.semibold },
     backBtn: { paddingVertical: 20, alignItems: 'center' },
     backText: { color: t.accent.blue, fontSize: 16 },
     // Grid styles
@@ -429,12 +431,12 @@ export function SettingsScreen() {
       width: '47%' as unknown as number,
     },
     tileIcon: { fontSize: 32, marginBottom: 8 },
-    tileLabel: { color: t.text.primary, fontSize: 14, fontWeight: '700', textAlign: 'center' as const },
+    tileLabel: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, textAlign: 'center' as const },
     tileBadge: { color: t.text.muted, fontSize: 12, marginTop: 4 },
     categoryHeader: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 4, paddingTop: 12, paddingBottom: 8, gap: 12 },
     categoryBackBtn: { paddingVertical: 4, paddingHorizontal: 8 },
     categoryBackText: { color: t.accent.blue, fontSize: 22 },
-    categoryTitle: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    categoryTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
   }), [t]);
 
   useEffect(() => {
@@ -624,6 +626,7 @@ export function SettingsScreen() {
   if (view === 'tutorial') return <TutorialScreen onClose={() => setView('main')} />;
   if (view === 'help') return <HelpScreen onClose={() => setView('main')} />;
   if (view === 'accessibility') return <AccessibilityScreen onClose={() => setView('main')} />;
+  if (view === 'display-settings') return <DisplaySettingsScreen onClose={() => setView('main')} />;
   if (view === 'address-verify') return <AddressVerifyScreen onClose={() => setView('main')} />;
   if (view === 'tx-simulator') return <TxSimulatorScreen onClose={() => setView('main')} />;
   if (view === 'chain-info') return <ChainInfoScreen onClose={() => setView('main')} />;
@@ -2661,6 +2664,10 @@ export function SettingsScreen() {
 
   const toolsItems = [
     {
+      label: 'Display & Font Size',
+      onPress: () => setView('display-settings'),
+    },
+    {
       label: 'Price Alerts',
       onPress: () => setView('alerts'),
     },
@@ -2882,7 +2889,7 @@ export function SettingsScreen() {
               <Text style={st.categoryTitle}>Support the Mission</Text>
             </View>
             <View style={[st.card, { padding: 20, marginTop: 12 }]}>
-              <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: '700', marginBottom: 8 }}>
+              <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, marginBottom: 8 }}>
                 Help build financial infrastructure for all of humanity
               </Text>
               <Text style={{ color: t.text.muted, fontSize: 13, lineHeight: 20, marginBottom: 16 }}>
@@ -2892,13 +2899,13 @@ export function SettingsScreen() {
                 style={{ backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 10 }}
                 onPress={() => Linking.openURL('https://github.com/sponsors/bpupadhyaya')}
               >
-                <Text style={{ color: '#fff', fontSize: 15, fontWeight: '700' }}>Sponsor on GitHub</Text>
+                <Text style={{ color: '#fff', fontSize: 15, fontWeight: fonts.bold }}>Sponsor on GitHub</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={{ backgroundColor: t.accent.blue, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 10 }}
                 onPress={() => Linking.openURL('https://bpupadhyaya.github.io/support-openwallet.html')}
               >
-                <Text style={{ color: '#fff', fontSize: 15, fontWeight: '700' }}>Donation Options</Text>
+                <Text style={{ color: '#fff', fontSize: 15, fontWeight: fonts.bold }}>Donation Options</Text>
               </TouchableOpacity>
               <Text style={{ color: t.text.muted, fontSize: 11, textAlign: 'center', lineHeight: 16 }}>
                 No features are locked behind donations. Your support is entirely voluntary and goes directly toward building tools that serve humanity.

@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Future Vision Screen — The Human Constitution's vision for 2030 and 2035.
  *
@@ -154,28 +155,28 @@ export function FutureVisionScreen({ onClose }: Props) {
       paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1,
       borderBottomColor: t.border,
     },
-    title: { fontSize: 18, fontWeight: '700', color: t.text.primary },
+    title: { fontSize: 18, fontWeight: fonts.bold, color: t.text.primary },
     closeBtn: { fontSize: 16, color: t.accent.green },
     tabRow: { flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: t.border },
     tab: { flex: 1, paddingVertical: 10, alignItems: 'center' },
     tabActive: { borderBottomWidth: 2, borderBottomColor: t.accent.green },
     tabText: { fontSize: 13, color: t.text.secondary },
-    tabTextActive: { color: t.accent.green, fontWeight: '600' },
+    tabTextActive: { color: t.accent.green, fontWeight: fonts.semibold },
     scroll: { flex: 1 },
     section: { padding: 16, borderBottomWidth: 1, borderBottomColor: t.border },
-    sectionTitle: { fontSize: 16, fontWeight: '600', color: t.text.primary, marginBottom: 8 },
+    sectionTitle: { fontSize: 16, fontWeight: fonts.semibold, color: t.text.primary, marginBottom: 8 },
     overallBox: {
       backgroundColor: t.bg.card, borderRadius: 16, padding: 20,
       alignItems: 'center', borderWidth: 1, borderColor: t.border, marginBottom: 12,
     },
-    bigPct: { fontSize: 42, fontWeight: '800' },
+    bigPct: { fontSize: 42, fontWeight: fonts.heavy },
     overallLabel: { fontSize: 14, color: t.text.secondary, marginTop: 4 },
     card: {
       backgroundColor: t.bg.card, borderRadius: 12, padding: 14,
       marginBottom: 12, borderWidth: 1, borderColor: t.border,
     },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    value: { fontSize: 15, color: t.text.primary, fontWeight: '600' },
+    value: { fontSize: 15, color: t.text.primary, fontWeight: fonts.semibold },
     label: { fontSize: 13, color: t.text.secondary },
     desc: { fontSize: 12, color: t.text.secondary, lineHeight: 18, marginTop: 4 },
     bar: { height: 6, backgroundColor: t.border, borderRadius: 3, marginTop: 8 },
@@ -187,7 +188,7 @@ export function FutureVisionScreen({ onClose }: Props) {
     milestoneText: { fontSize: 11, color: t.text.primary },
     chipRow: { flexDirection: 'row', flexWrap: 'wrap' },
     contribution: {
-      fontSize: 12, color: t.accent.green, fontWeight: '500',
+      fontSize: 12, color: t.accent.green, fontWeight: fonts.medium,
       marginTop: 8, fontStyle: 'italic',
     },
     pledgeCard: {
@@ -195,7 +196,7 @@ export function FutureVisionScreen({ onClose }: Props) {
       marginBottom: 10, borderWidth: 1, borderColor: t.border,
       borderLeftWidth: 4, borderLeftColor: t.accent.green,
     },
-    pledgeName: { fontSize: 14, fontWeight: '600', color: t.text.primary },
+    pledgeName: { fontSize: 14, fontWeight: fonts.semibold, color: t.text.primary },
     pledgeMessage: { fontSize: 13, color: t.text.primary, lineHeight: 20, marginTop: 4 },
     pledgeDate: { fontSize: 11, color: t.text.secondary, marginTop: 4 },
     input: {
@@ -207,7 +208,7 @@ export function FutureVisionScreen({ onClose }: Props) {
       backgroundColor: t.accent.green, borderRadius: 10, paddingVertical: 12,
       alignItems: 'center', marginTop: 4,
     },
-    buttonText: { color: '#fff', fontWeight: '600', fontSize: 15 },
+    buttonText: { color: '#fff', fontWeight: fonts.semibold, fontSize: 15 },
     buttonDisabled: { opacity: 0.5 },
     infoText: { fontSize: 13, color: t.text.secondary, lineHeight: 20 },
   }), [t]);

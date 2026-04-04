@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Status Screen (Art VII) — System health, sync status, node status, app diagnostics.
  *
@@ -89,34 +90,34 @@ export function StatusScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     tabs: { flexDirection: 'row', marginHorizontal: 20, marginBottom: 16, borderRadius: 12, backgroundColor: t.bg.secondary, overflow: 'hidden' },
     tab: { flex: 1, paddingVertical: 10, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.muted, fontSize: 12, fontWeight: '700', textTransform: 'uppercase' },
+    tabText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase' },
     tabTextActive: { color: '#fff' },
     overallCard: { backgroundColor: t.accent.green + '12', borderRadius: 20, padding: 24, marginHorizontal: 20, alignItems: 'center', marginBottom: 20 },
     overallLabel: { color: t.text.muted, fontSize: 12, textTransform: 'uppercase', letterSpacing: 1 },
-    overallValue: { color: t.accent.green, fontSize: 32, fontWeight: '900', marginTop: 4 },
+    overallValue: { color: t.accent.green, fontSize: 32, fontWeight: fonts.heavy, marginTop: 4 },
     overallSub: { color: t.text.muted, fontSize: 12, marginTop: 8 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 20 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 20 },
     row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 14, paddingHorizontal: 20 },
-    rowLabel: { color: t.text.primary, fontSize: 14, fontWeight: '600', flex: 1 },
-    rowValue: { fontSize: 14, fontWeight: '600', textAlign: 'right' },
+    rowLabel: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, flex: 1 },
+    rowValue: { fontSize: 14, fontWeight: fonts.semibold, textAlign: 'right' },
     dot: { width: 8, height: 8, borderRadius: 4, marginRight: 10 },
     divider: { height: 1, backgroundColor: t.border, marginHorizontal: 20 },
     syncRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 14, paddingHorizontal: 20 },
     syncIcon: { width: 36, height: 36, borderRadius: 18, justifyContent: 'center', alignItems: 'center', marginRight: 12 },
     syncIconText: { fontSize: 16 },
     syncInfo: { flex: 1 },
-    syncType: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
+    syncType: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
     syncTarget: { color: t.text.muted, fontSize: 12, marginTop: 2 },
     syncBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 10 },
-    syncBadgeText: { fontSize: 11, fontWeight: '700', textTransform: 'uppercase' },
+    syncBadgeText: { fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase' },
     actionRow: { flexDirection: 'row', gap: 12, marginHorizontal: 20, marginTop: 24, marginBottom: 12 },
     actionBtn: { flex: 1, paddingVertical: 14, borderRadius: 14, alignItems: 'center' },
-    actionBtnText: { fontSize: 14, fontWeight: '700' },
+    actionBtnText: { fontSize: 14, fontWeight: fonts.bold },
     philosophy: { color: t.text.muted, fontSize: 11, textAlign: 'center', marginHorizontal: 40, marginTop: 16, lineHeight: 16 },
   }), [t]);
 

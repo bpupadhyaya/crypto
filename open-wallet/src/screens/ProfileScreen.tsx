@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Profile Screen — User's public profile on Open Chain.
  *
@@ -90,17 +91,17 @@ export function ProfileScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeText: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 40 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
     demoTag: { backgroundColor: t.accent.purple + '30', borderRadius: 8, paddingVertical: 4, paddingHorizontal: 10, alignSelf: 'center', marginBottom: 12 },
-    demoTagText: { color: t.accent.purple, fontSize: 11, fontWeight: '700' },
+    demoTagText: { color: t.accent.purple, fontSize: 11, fontWeight: fonts.bold },
     // Profile hero
     heroCard: { backgroundColor: t.bg.card, borderRadius: 20, padding: 24, alignItems: 'center', marginBottom: 8 },
     avatarCircle: { width: 80, height: 80, borderRadius: 40, backgroundColor: t.accent.blue + '20', justifyContent: 'center', alignItems: 'center', marginBottom: 12 },
-    avatarText: { color: t.accent.blue, fontSize: 32, fontWeight: '700' },
-    profileName: { color: t.text.primary, fontSize: 22, fontWeight: '800', marginBottom: 4 },
+    avatarText: { color: t.accent.blue, fontSize: 32, fontWeight: fonts.bold },
+    profileName: { color: t.text.primary, fontSize: 22, fontWeight: fonts.heavy, marginBottom: 4 },
     profileUid: { color: t.text.muted, fontSize: 13, fontFamily: 'monospace', marginBottom: 8 },
     profileMember: { color: t.text.secondary, fontSize: 12 },
     // QR
@@ -112,25 +113,25 @@ export function ProfileScreen({ onClose }: Props) {
     statsCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16 },
     statsRow: { flexDirection: 'row', justifyContent: 'space-around' },
     statBox: { alignItems: 'center' },
-    statNumber: { color: t.text.primary, fontSize: 24, fontWeight: '700' },
+    statNumber: { color: t.text.primary, fontSize: 24, fontWeight: fonts.bold },
     statLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
     rankBadge: { backgroundColor: t.accent.green + '20', borderRadius: 12, paddingVertical: 6, paddingHorizontal: 14, marginTop: 12, alignSelf: 'center' },
-    rankText: { color: t.accent.green, fontSize: 13, fontWeight: '700' },
+    rankText: { color: t.accent.green, fontSize: 13, fontWeight: fonts.bold },
     // Cards
     card: { backgroundColor: t.bg.card, borderRadius: 16, overflow: 'hidden' },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 },
     label: { color: t.text.primary, fontSize: 15 },
     value: { color: t.text.secondary, fontSize: 14 },
-    valueGreen: { color: t.accent.green, fontSize: 14, fontWeight: '600' },
+    valueGreen: { color: t.accent.green, fontSize: 14, fontWeight: fonts.semibold },
     divider: { height: 1, backgroundColor: t.border, marginHorizontal: 16 },
     // Badges grid
     badgesGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, padding: 16 },
     badgeChip: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: t.bg.primary, borderRadius: 10, paddingVertical: 8, paddingHorizontal: 12, borderWidth: 1 },
-    badgeTitle: { color: t.text.primary, fontSize: 12, fontWeight: '600' },
-    badgeLevel: { fontSize: 10, fontWeight: '700' },
+    badgeTitle: { color: t.text.primary, fontSize: 12, fontWeight: fonts.semibold },
+    badgeLevel: { fontSize: 10, fontWeight: fonts.bold },
     // Token list
     tokenRow: { flexDirection: 'row', justifyContent: 'space-between', padding: 16, alignItems: 'center' },
-    tokenSymbol: { color: t.accent.blue, fontSize: 15, fontWeight: '700' },
+    tokenSymbol: { color: t.accent.blue, fontSize: 15, fontWeight: fonts.bold },
     tokenName: { color: t.text.secondary, fontSize: 13 },
     tokenSupply: { color: t.text.muted, fontSize: 12 },
   }), [t]);

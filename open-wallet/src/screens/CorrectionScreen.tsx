@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Correction Screen — Article V of The Human Constitution.
  *
@@ -156,50 +157,50 @@ export function CorrectionScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { flex: 1, paddingHorizontal: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 6 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
-    cardTitle: { color: t.text.primary, fontSize: 15, fontWeight: '700', marginBottom: 4 },
+    cardTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, marginBottom: 4 },
     cardDesc: { color: t.text.secondary, fontSize: 13, lineHeight: 19, marginBottom: 8 },
     statusBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'flex-start', marginBottom: 8 },
-    statusText: { fontSize: 11, fontWeight: '700', color: '#fff' },
+    statusText: { fontSize: 11, fontWeight: fonts.bold, color: '#fff' },
     row: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 },
     label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
-    negOTK: { color: t.accent.red, fontSize: 16, fontWeight: '800' },
+    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    negOTK: { color: t.accent.red, fontSize: 16, fontWeight: fonts.heavy },
     channelChip: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'flex-start', marginBottom: 8 },
-    channelText: { fontSize: 11, fontWeight: '700', color: '#fff' },
+    channelText: { fontSize: 11, fontWeight: fonts.bold, color: '#fff' },
     warning: { backgroundColor: t.accent.red + '15', borderRadius: 12, padding: 14, marginBottom: 16, borderWidth: 1, borderColor: t.accent.red + '30' },
-    warningText: { color: t.accent.red, fontSize: 13, lineHeight: 19, fontWeight: '600' },
+    warningText: { color: t.accent.red, fontSize: 13, lineHeight: 19, fontWeight: fonts.semibold },
     input: { backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 14, marginBottom: 12, borderWidth: 1, borderColor: t.border },
-    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: '600', marginBottom: 6 },
+    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 6 },
     channelRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 14 },
     channelBtn: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 10, backgroundColor: t.bg.card, borderWidth: 1, borderColor: t.border },
     channelBtnActive: { borderColor: t.accent.blue, backgroundColor: t.accent.blue + '20' },
-    channelBtnText: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    channelBtnText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     channelBtnTextActive: { color: t.accent.blue },
     submitBtn: { backgroundColor: t.accent.red, borderRadius: 14, paddingVertical: 16, alignItems: 'center', marginTop: 8, marginBottom: 20 },
-    submitBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+    submitBtnText: { color: '#fff', fontSize: 16, fontWeight: fonts.bold },
     contestBtn: { backgroundColor: t.accent.purple, borderRadius: 12, paddingVertical: 12, alignItems: 'center', marginTop: 10 },
-    contestBtnText: { color: '#fff', fontSize: 14, fontWeight: '700' },
+    contestBtnText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
     verifyRow: { flexDirection: 'row', gap: 10, marginTop: 12 },
     approveBtn: { flex: 1, backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 12, alignItems: 'center' },
     denyBtn: { flex: 1, backgroundColor: t.accent.red, borderRadius: 12, paddingVertical: 12, alignItems: 'center' },
-    btnText: { color: '#fff', fontSize: 14, fontWeight: '700' },
+    btnText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
     empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
     backBtn: { paddingVertical: 16, alignItems: 'center' },
     backText: { color: t.accent.blue, fontSize: 16 },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 10 },
     verificationItem: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4 },
     verifierLabel: { color: t.text.muted, fontSize: 11 },
-    verifierResult: { fontSize: 11, fontWeight: '700' },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 12, marginBottom: 6 },
+    verifierResult: { fontSize: 11, fontWeight: fonts.bold },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 12, marginBottom: 6 },
   }), [t]);
 
   const reportsAgainstMe = demoMode ? DEMO_REPORTS_AGAINST_ME : [];
@@ -499,7 +500,7 @@ export function CorrectionScreen({ onClose }: Props) {
         {activeTab !== 'verify' && (
           <TouchableOpacity style={[st.card, { alignItems: 'center', borderWidth: 1, borderColor: t.accent.red + '40', borderStyle: 'dashed' }]}
             onPress={() => setCorrView('submit')}>
-            <Text style={{ color: t.accent.red, fontSize: 14, fontWeight: '700' }}>+ Submit Correction Report</Text>
+            <Text style={{ color: t.accent.red, fontSize: 14, fontWeight: fonts.bold }}>+ Submit Correction Report</Text>
           </TouchableOpacity>
         )}
 

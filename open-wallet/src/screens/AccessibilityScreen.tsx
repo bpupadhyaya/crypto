@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Accessibility Settings Screen — font size, contrast, motion, screen reader, haptics.
  * Includes a live preview section so users can see changes immediately.
@@ -53,9 +54,9 @@ export function AccessibilityScreen({ onClose }: Props) {
     container: { flex: 1, backgroundColor: hcBg },
     scroll: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 40 },
     header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 12 },
-    title: { color: hcText, fontSize: 20 * scale, fontWeight: '700' },
+    title: { color: hcText, fontSize: 20 * scale, fontWeight: fonts.bold },
     backText: { color: t.accent.blue, fontSize: 16 * scale },
-    section: { color: hcSecondary, fontSize: 12 * scale, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 8, marginLeft: 4 },
+    section: { color: hcSecondary, fontSize: 12 * scale, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 8, marginLeft: 4 },
     card: { backgroundColor: hcCard, borderRadius: 16, padding: 4 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 },
     label: { color: hcText, fontSize: 15 * scale, flex: 1 },
@@ -64,14 +65,14 @@ export function AccessibilityScreen({ onClose }: Props) {
     sizeToggle: { flexDirection: 'row', gap: 4 },
     sizeBtn: { paddingVertical: 6, paddingHorizontal: 14, borderRadius: 8, backgroundColor: hcBorder },
     sizeBtnActive: { backgroundColor: t.accent.green },
-    sizeBtnText: { color: hcSecondary, fontSize: 13 * scale, fontWeight: '600' },
+    sizeBtnText: { color: hcSecondary, fontSize: 13 * scale, fontWeight: fonts.semibold },
     sizeBtnTextActive: { color: hcBg },
     previewCard: { backgroundColor: hcCard, borderRadius: 16, padding: 20, marginTop: 8 },
-    previewTitle: { color: hcText, fontSize: 18 * scale, fontWeight: '700', marginBottom: 12 },
-    previewBalance: { color: t.accent.green, fontSize: 28 * scale, fontWeight: '700', marginBottom: 4 },
+    previewTitle: { color: hcText, fontSize: 18 * scale, fontWeight: fonts.bold, marginBottom: 12 },
+    previewBalance: { color: t.accent.green, fontSize: 28 * scale, fontWeight: fonts.bold, marginBottom: 4 },
     previewSub: { color: hcSecondary, fontSize: 13 * scale },
     previewRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 16 },
-    previewToken: { color: hcText, fontSize: 15 * scale, fontWeight: '600' },
+    previewToken: { color: hcText, fontSize: 15 * scale, fontWeight: fonts.semibold },
     previewAmount: { color: hcSecondary, fontSize: 14 * scale },
   });
 

@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Transaction Pipeline — Shows the end-to-end path of a swap transaction.
  * Each step displays real-time status with color coding:
@@ -54,27 +55,27 @@ export function TransactionPipeline({ steps, title, fromSymbol, toSymbol, amount
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, paddingHorizontal: 20, paddingTop: 16 },
     header: { alignItems: 'center', marginBottom: 24 },
-    title: { color: t.text.primary, fontSize: 18, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 18, fontWeight: fonts.bold },
     subtitle: { color: t.text.muted, fontSize: 13, marginTop: 4 },
     swapSummary: {
       flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
       backgroundColor: t.bg.card, borderRadius: 12, padding: 14, marginBottom: 20, gap: 8,
     },
-    swapToken: { color: t.text.primary, fontSize: 16, fontWeight: '700' },
+    swapToken: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
     swapArrow: { color: t.text.muted, fontSize: 16 },
     providerBadge: {
       alignSelf: 'center', backgroundColor: t.accent.blue + '15',
       borderRadius: 8, paddingHorizontal: 12, paddingVertical: 4, marginBottom: 20,
     },
-    providerText: { color: t.accent.blue, fontSize: 12, fontWeight: '600' },
+    providerText: { color: t.accent.blue, fontSize: 12, fontWeight: fonts.semibold },
     // Pipeline
     stepRow: { flexDirection: 'row', minHeight: 56 },
     lineCol: { width: 32, alignItems: 'center' },
     dot: { width: 24, height: 24, borderRadius: 12, justifyContent: 'center', alignItems: 'center' },
-    dotText: { fontSize: 13, fontWeight: '800' },
+    dotText: { fontSize: 13, fontWeight: fonts.heavy },
     line: { width: 2, flex: 1, marginVertical: 2 },
     contentCol: { flex: 1, paddingLeft: 12, paddingBottom: 16 },
-    stepLabel: { fontSize: 14, fontWeight: '600' },
+    stepLabel: { fontSize: 14, fontWeight: fonts.semibold },
     stepDetail: { fontSize: 12, marginTop: 2, lineHeight: 17 },
     stepInfo: { fontSize: 11, marginTop: 3, fontFamily: 'Courier' },
   }), [t]);

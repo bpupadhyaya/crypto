@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Roadmap Screen — Open Chain/Wallet development roadmap and milestones.
  *
@@ -80,22 +81,22 @@ export function RoadmapScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeText: { color: t.accent.blue, fontSize: 16 },
     tabRow: { flexDirection: 'row', marginHorizontal: 16, marginBottom: 12, borderRadius: 10, backgroundColor: t.bg.card, overflow: 'hidden' },
     tabBtn: { flex: 1, paddingVertical: 10, alignItems: 'center' },
     tabBtnActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.muted, fontSize: 13, fontWeight: '600' },
+    tabText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 16, marginBottom: 8 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 16, marginBottom: 8 },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12, borderLeftWidth: 4 },
     cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
-    cardTitle: { color: t.text.primary, fontSize: 15, fontWeight: '700', flex: 1 },
-    cardTarget: { color: t.text.muted, fontSize: 11, fontWeight: '600' },
+    cardTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, flex: 1 },
+    cardTarget: { color: t.text.muted, fontSize: 11, fontWeight: fonts.semibold },
     cardDesc: { color: t.text.secondary, fontSize: 13, lineHeight: 19, marginBottom: 10 },
     projectBadge: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
-    projectText: { color: t.text.muted, fontSize: 11, fontWeight: '600', marginLeft: 4 },
+    projectText: { color: t.text.muted, fontSize: 11, fontWeight: fonts.semibold, marginLeft: 4 },
     progressBg: { height: 6, borderRadius: 3, backgroundColor: t.border, overflow: 'hidden' },
     progressFill: { height: 6, borderRadius: 3 },
     progressLabel: { color: t.text.muted, fontSize: 11, marginTop: 4, textAlign: 'right' },
@@ -107,7 +108,7 @@ export function RoadmapScreen({ onClose }: Props) {
     },
     summaryRow: { flexDirection: 'row', justifyContent: 'space-around' },
     summaryBox: { alignItems: 'center' },
-    summaryNum: { fontSize: 20, fontWeight: '700', color: t.text.primary },
+    summaryNum: { fontSize: 20, fontWeight: fonts.bold, color: t.text.primary },
     summaryLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
   }), [t]);
 
@@ -167,7 +168,7 @@ export function RoadmapScreen({ onClose }: Props) {
         {/* Vision note */}
         {tab === 'upcoming' && (
           <View style={{ backgroundColor: t.accent.green + '15', borderRadius: 14, padding: 16, marginTop: 8 }}>
-            <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: '700', marginBottom: 4 }}>
+            <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: fonts.bold, marginBottom: 4 }}>
               Our Vision
             </Text>
             <Text style={{ color: t.text.secondary, fontSize: 12, lineHeight: 18 }}>

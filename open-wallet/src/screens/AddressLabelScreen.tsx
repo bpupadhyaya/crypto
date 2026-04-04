@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Address Label Manager — label known addresses that appear in transaction history.
  * Auto-detect frequent addresses, add custom labels, import/export.
@@ -208,10 +209,10 @@ export function AddressLabelScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     backText: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingHorizontal: 16 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
     input: { backgroundColor: t.bg.card, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12, color: t.text.primary, fontSize: 15, marginBottom: 10, borderWidth: 1, borderColor: t.border },
@@ -220,17 +221,17 @@ export function AddressLabelScreen({ onClose }: Props) {
     chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 12 },
     chip: { paddingVertical: 5, paddingHorizontal: 12, borderRadius: 12, backgroundColor: t.border },
     chipActive: { backgroundColor: t.accent.green },
-    chipText: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    chipText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     chipTextActive: { color: '#fff' },
     addBtn: { backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 16 },
-    addBtnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+    addBtnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
     secondaryBtn: { backgroundColor: t.accent.blue, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 12 },
-    btnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+    btnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
     labelCard: { backgroundColor: t.bg.card, borderRadius: 12, padding: 14, marginBottom: 8 },
-    labelName: { color: t.text.primary, fontSize: 16, fontWeight: '700' },
+    labelName: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
     addressText: { color: t.text.muted, fontSize: 12, fontFamily: 'Courier', marginTop: 4 },
     chainBadge: { paddingVertical: 2, paddingHorizontal: 8, borderRadius: 8 },
-    chainText: { fontSize: 10, fontWeight: '700', textTransform: 'uppercase', color: '#fff' },
+    chainText: { fontSize: 10, fontWeight: fonts.bold, textTransform: 'uppercase', color: '#fff' },
     metaRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 },
     metaText: { color: t.text.muted, fontSize: 12 },
     actionRow: { flexDirection: 'row', gap: 16, marginTop: 8 },
@@ -238,9 +239,9 @@ export function AddressLabelScreen({ onClose }: Props) {
     editText: { color: t.accent.blue, fontSize: 13 },
     emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
     customBadge: { paddingVertical: 1, paddingHorizontal: 6, borderRadius: 6, backgroundColor: t.accent.purple + '20', marginLeft: 8 },
-    customText: { color: t.accent.purple, fontSize: 10, fontWeight: '600' },
+    customText: { color: t.accent.purple, fontSize: 10, fontWeight: fonts.semibold },
     autoBadge: { paddingVertical: 1, paddingHorizontal: 6, borderRadius: 6, backgroundColor: t.accent.yellow + '20', marginLeft: 8 },
-    autoText: { color: t.accent.yellow, fontSize: 10, fontWeight: '600' },
+    autoText: { color: t.accent.yellow, fontSize: 10, fontWeight: fonts.semibold },
   }), [t]);
 
   // ─── Add / Edit View ───
@@ -254,7 +255,7 @@ export function AddressLabelScreen({ onClose }: Props) {
           </TouchableOpacity>
           <Text style={st.title}>{viewMode === 'add' ? 'Add Label' : 'Edit Label'}</Text>
           <TouchableOpacity onPress={handleSave}>
-            <Text style={[st.backText, { fontWeight: '700' }]}>Save</Text>
+            <Text style={[st.backText, { fontWeight: fonts.bold }]}>Save</Text>
           </TouchableOpacity>
         </View>
         <ScrollView contentContainerStyle={st.scroll}>
@@ -342,7 +343,7 @@ export function AddressLabelScreen({ onClose }: Props) {
         </TouchableOpacity>
         <Text style={st.title}>Address Labels</Text>
         <TouchableOpacity onPress={openAdd}>
-          <Text style={[st.backText, { fontWeight: '700' }]}>+ Add</Text>
+          <Text style={[st.backText, { fontWeight: fonts.bold }]}>+ Add</Text>
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={st.scroll}>

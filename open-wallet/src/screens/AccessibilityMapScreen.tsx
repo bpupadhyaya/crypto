@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Accessibility Map Screen — Map of wheelchair/hearing/vision-accessible locations.
  *
@@ -97,22 +98,22 @@ export function AccessibilityMapScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingBottom: 40 },
     tabRow: { flexDirection: 'row', paddingHorizontal: 12, marginBottom: 12 },
     tabBtn: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 16, marginHorizontal: 4 },
     tabActive: { backgroundColor: t.accent.blue + '20' },
-    tabText: { color: t.text.muted, fontSize: 13, fontWeight: '600' },
+    tabText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
     tabTextActive: { color: t.accent.blue },
     card: { backgroundColor: t.bg.secondary, borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16 },
-    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: '700', marginBottom: 12, marginHorizontal: 20 },
+    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 12, marginHorizontal: 20 },
     locCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    locName: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
+    locName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
     locMeta: { color: t.text.muted, fontSize: 12, marginTop: 4 },
     scoreRow: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 12 },
     scoreItem: { alignItems: 'center' },
-    scoreValue: { fontSize: 18, fontWeight: '800' },
+    scoreValue: { fontSize: 18, fontWeight: fonts.heavy },
     scoreLabel: { color: t.text.muted, fontSize: 10, marginTop: 2 },
     featureTags: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 10 },
     featureTag: { backgroundColor: t.bg.primary, paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8 },
@@ -121,19 +122,19 @@ export function AccessibilityMapScreen({ onClose }: Props) {
     chipGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 12 },
     chip: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12, borderWidth: 1, borderColor: t.bg.primary },
     chipSelected: { backgroundColor: t.accent.blue + '20', borderColor: t.accent.blue },
-    chipText: { color: t.text.muted, fontSize: 12, fontWeight: '600' },
+    chipText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
     chipTextSelected: { color: t.accent.blue },
     submitBtn: { backgroundColor: t.accent.blue, borderRadius: 14, paddingVertical: 14, alignItems: 'center', marginTop: 8 },
-    submitText: { color: '#fff', fontSize: 15, fontWeight: '700' },
-    labelText: { color: t.text.muted, fontSize: 12, marginBottom: 6, fontWeight: '600' },
+    submitText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
+    labelText: { color: t.text.muted, fontSize: 12, marginBottom: 6, fontWeight: fonts.semibold },
     reportCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    reportLoc: { color: t.text.primary, fontSize: 14, fontWeight: '700' },
+    reportLoc: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
     reportIssue: { color: t.text.muted, fontSize: 13, marginTop: 4, lineHeight: 19 },
     reportMeta: { color: t.text.muted, fontSize: 12, marginTop: 6 },
     statusBadge: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 8, alignSelf: 'flex-start', marginTop: 6 },
-    statusText: { color: '#fff', fontSize: 11, fontWeight: '600', textTransform: 'uppercase' },
+    statusText: { color: '#fff', fontSize: 11, fontWeight: fonts.semibold, textTransform: 'uppercase' },
     demoTag: { backgroundColor: t.accent.orange + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'center', marginBottom: 12 },
-    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: '700' },
+    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: fonts.bold },
   }), [t]);
 
   const tabs: Array<{ key: Tab; label: string }> = [

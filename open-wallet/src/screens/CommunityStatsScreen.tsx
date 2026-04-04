@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Community Stats Screen — Aggregate community statistics dashboard.
  *
@@ -150,44 +151,44 @@ export function CommunityStatsScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
     card: { backgroundColor: t.bg.card, borderRadius: 20, padding: 20, marginHorizontal: 20, marginTop: 8 },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 12 },
-    demoTag: { color: t.accent.orange, fontSize: 10, fontWeight: '700', textAlign: 'center', marginTop: 12 },
+    demoTag: { color: t.accent.orange, fontSize: 10, fontWeight: fonts.bold, textAlign: 'center', marginTop: 12 },
     // Overview grid
     overviewGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' },
     overviewItem: { width: '48%', backgroundColor: t.bg.primary, borderRadius: 16, padding: 16, marginBottom: 10, alignItems: 'center' },
     overviewIcon: { fontSize: 28, marginBottom: 6 },
-    overviewValue: { color: t.accent.green, fontSize: 22, fontWeight: '900' },
+    overviewValue: { color: t.accent.green, fontSize: 22, fontWeight: fonts.heavy },
     overviewLabel: { color: t.text.muted, fontSize: 11, textAlign: 'center', marginTop: 4 },
     // Bar chart
     barRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-    barLabel: { color: t.text.primary, fontSize: 12, fontWeight: '600', width: 80 },
+    barLabel: { color: t.text.primary, fontSize: 12, fontWeight: fonts.semibold, width: 80 },
     barTrack: { flex: 1, height: 20, backgroundColor: t.border, borderRadius: 10, overflow: 'hidden', marginHorizontal: 8 },
     barFill: { height: 20, borderRadius: 10 },
     barValue: { color: t.text.muted, fontSize: 11, width: 50, textAlign: 'right' },
     barPct: { color: t.text.muted, fontSize: 10, textAlign: 'right', width: 36 },
     // Top metrics
     topRow: { paddingVertical: 12 },
-    topLabel: { color: t.text.muted, fontSize: 11, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 1 },
-    topName: { color: t.text.primary, fontSize: 16, fontWeight: '800', marginTop: 4 },
-    topValue: { color: t.accent.green, fontSize: 13, fontWeight: '700', marginTop: 2 },
+    topLabel: { color: t.text.muted, fontSize: 11, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1 },
+    topName: { color: t.text.primary, fontSize: 16, fontWeight: fonts.heavy, marginTop: 4 },
+    topValue: { color: t.accent.green, fontSize: 13, fontWeight: fonts.bold, marginTop: 2 },
     topIcon: { fontSize: 20 },
     topHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
     // Growth trends
     growthRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 10 },
-    growthLabel: { color: t.text.primary, fontSize: 13, fontWeight: '600', flex: 1 },
+    growthLabel: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold, flex: 1 },
     growthValues: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-    growthCurrent: { color: t.text.primary, fontSize: 14, fontWeight: '700', width: 56, textAlign: 'right' },
+    growthCurrent: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, width: 56, textAlign: 'right' },
     growthPrev: { color: t.text.muted, fontSize: 12, width: 56, textAlign: 'right' },
-    growthChange: { fontSize: 13, fontWeight: '800', width: 50, textAlign: 'right' },
+    growthChange: { fontSize: 13, fontWeight: fonts.heavy, width: 50, textAlign: 'right' },
     // Metric grid (reused for economic, social, env, governance)
     metricGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' },
     metricItem: { width: '48%', backgroundColor: t.bg.primary, borderRadius: 16, padding: 16, marginBottom: 10, alignItems: 'center' },
     metricIcon: { fontSize: 28, marginBottom: 6 },
-    metricValue: { color: t.text.primary, fontSize: 20, fontWeight: '900' },
+    metricValue: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     metricLabel: { color: t.text.muted, fontSize: 11, textAlign: 'center', marginTop: 4 },
     footer: { height: 40 },
   }), [t]);

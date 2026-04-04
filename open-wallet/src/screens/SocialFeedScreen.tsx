@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Social Feed Screen — Community activity feed from Open Chain.
  *
@@ -140,21 +141,21 @@ export function SocialFeedScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeText: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 40 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
     demoTag: { backgroundColor: t.accent.purple + '30', borderRadius: 8, paddingVertical: 4, paddingHorizontal: 10, alignSelf: 'center', marginBottom: 12 },
-    demoTagText: { color: t.accent.purple, fontSize: 11, fontWeight: '700' },
+    demoTagText: { color: t.accent.purple, fontSize: 11, fontWeight: fonts.bold },
     filterRow: { flexDirection: 'row', gap: 6, marginBottom: 12 },
     filterChip: { paddingVertical: 6, paddingHorizontal: 12, borderRadius: 8, backgroundColor: t.border },
     filterChipActive: { backgroundColor: t.accent.green },
-    filterText: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    filterText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     filterTextActive: { color: t.bg.primary },
     feedCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     feedHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
     feedIcon: { fontSize: 24, marginRight: 10 },
-    feedTypeLabel: { fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1 },
+    feedTypeLabel: { fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1 },
     feedTime: { color: t.text.muted, fontSize: 11, marginLeft: 'auto' },
     feedDesc: { color: t.text.primary, fontSize: 14, lineHeight: 20, marginBottom: 8 },
     feedActor: { color: t.text.muted, fontSize: 12 },
@@ -165,7 +166,7 @@ export function SocialFeedScreen({ onClose }: Props) {
     statsCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 8 },
     statsRow: { flexDirection: 'row', justifyContent: 'space-around' },
     statBox: { alignItems: 'center' },
-    statNumber: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    statNumber: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     statLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
   }), [t]);
 

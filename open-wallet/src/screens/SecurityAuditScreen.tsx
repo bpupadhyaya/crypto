@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Security Audit Screen — Wallet security health check.
  *
@@ -47,17 +48,17 @@ export const SecurityAuditScreen = React.memo(({ onClose }: Props) => {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     scroll: { padding: 20, paddingBottom: 40 },
-    title: { color: t.text.primary, fontSize: 24, fontWeight: '800', marginBottom: 4 },
+    title: { color: t.text.primary, fontSize: 24, fontWeight: fonts.heavy, marginBottom: 4 },
     subtitle: { color: t.text.secondary, fontSize: 14, marginBottom: 24 },
     scoreContainer: {
       alignItems: 'center', justifyContent: 'center',
       backgroundColor: t.bg.card, borderRadius: 20,
       paddingVertical: 28, marginBottom: 24,
     },
-    scoreNumber: { fontSize: 56, fontWeight: '900' },
+    scoreNumber: { fontSize: 56, fontWeight: fonts.heavy },
     scoreLabel: { color: t.text.secondary, fontSize: 14, marginTop: 4 },
     sectionTitle: {
-      color: t.text.secondary, fontSize: 12, fontWeight: '700',
+      color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold,
       textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 10, marginLeft: 4,
     },
     card: { backgroundColor: t.bg.card, borderRadius: 16, overflow: 'hidden' },
@@ -67,9 +68,9 @@ export const SecurityAuditScreen = React.memo(({ onClose }: Props) => {
     },
     statusDot: { width: 10, height: 10, borderRadius: 5, marginRight: 12 },
     checkContent: { flex: 1 },
-    checkLabel: { color: t.text.primary, fontSize: 15, fontWeight: '600' },
+    checkLabel: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold },
     checkDesc: { color: t.text.muted, fontSize: 12, marginTop: 2 },
-    checkPoints: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    checkPoints: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     divider: { height: 1, backgroundColor: t.border, marginHorizontal: 16 },
     recCard: { backgroundColor: t.bg.card, borderRadius: 16, overflow: 'hidden' },
     recRow: {
@@ -83,7 +84,7 @@ export const SecurityAuditScreen = React.memo(({ onClose }: Props) => {
       paddingVertical: 18, alignItems: 'center', marginTop: 32,
       borderWidth: 1, borderColor: t.accent.red + '30',
     },
-    wipeBtnText: { color: t.accent.red, fontSize: 16, fontWeight: '700' },
+    wipeBtnText: { color: t.accent.red, fontSize: 16, fontWeight: fonts.bold },
     wipeWarning: {
       color: t.text.muted, fontSize: 11, textAlign: 'center',
       marginTop: 8, marginHorizontal: 20,

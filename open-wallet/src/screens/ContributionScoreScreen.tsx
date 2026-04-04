@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Contribution Score Screen — View your score and global leaderboard.
  *
@@ -51,26 +52,26 @@ export function ContributionScoreScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scoreCard: { backgroundColor: t.accent.green + '15', borderRadius: 24, padding: 28, marginHorizontal: 20, alignItems: 'center', marginTop: 8 },
     scoreLabel: { color: t.text.muted, fontSize: 13, textTransform: 'uppercase', letterSpacing: 1 },
-    scoreValue: { color: t.accent.green, fontSize: 48, fontWeight: '900', marginTop: 4 },
+    scoreValue: { color: t.accent.green, fontSize: 48, fontWeight: fonts.heavy, marginTop: 4 },
     rankRow: { flexDirection: 'row', gap: 24, marginTop: 16 },
     rankItem: { alignItems: 'center' },
-    rankNumber: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    rankNumber: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     rankLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
     formula: { color: t.text.muted, fontSize: 11, marginTop: 16, textAlign: 'center', lineHeight: 16 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
     row: { flexDirection: 'row', alignItems: 'center', paddingVertical: 12, paddingHorizontal: 20 },
     rankBadge: { width: 32, height: 32, borderRadius: 16, justifyContent: 'center', alignItems: 'center', marginRight: 12 },
-    rankBadgeText: { color: '#fff', fontSize: 14, fontWeight: '800' },
+    rankBadgeText: { color: '#fff', fontSize: 14, fontWeight: fonts.heavy },
     rowInfo: { flex: 1 },
-    rowUid: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
+    rowUid: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
     rowScore: { color: t.text.muted, fontSize: 12, marginTop: 2 },
     divider: { height: 1, backgroundColor: t.border, marginHorizontal: 20 },
     isYou: { backgroundColor: t.accent.green + '10', borderRadius: 12, marginHorizontal: 8 },
-    youBadge: { color: t.accent.green, fontSize: 11, fontWeight: '700' },
+    youBadge: { color: t.accent.green, fontSize: 11, fontWeight: fonts.bold },
   }), [t]);
 
   const fetchData = useCallback(async () => {

@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Liquidity Guide Screen (xOTK) — Educational guide for liquidity provision.
  *
@@ -173,54 +174,54 @@ export function LiquidityGuideScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     tabs: { flexDirection: 'row', paddingHorizontal: 16, marginBottom: 12 },
     tab: { flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 10, marginHorizontal: 4 },
     tabActive: { backgroundColor: t.accent.green },
     tabInactive: { backgroundColor: t.bg.card },
-    tabText: { fontSize: 13, fontWeight: '700' },
+    tabText: { fontSize: 13, fontWeight: fonts.bold },
     tabTextActive: { color: t.bg.primary },
     tabTextInactive: { color: t.text.muted },
     scroll: { paddingHorizontal: 20, paddingBottom: 40 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 16 },
-    cardTitle: { color: t.text.secondary, fontSize: 14, fontWeight: '800', marginBottom: 12 },
+    cardTitle: { color: t.text.secondary, fontSize: 14, fontWeight: fonts.heavy, marginBottom: 12 },
     cardBody: { color: t.text.primary, fontSize: 13, lineHeight: 20 },
-    sectionHeader: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 10, marginTop: 8 },
+    sectionHeader: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 10, marginTop: 8 },
     // Calculator
     calcCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 16 },
-    calcLabel: { color: t.text.muted, fontSize: 12, fontWeight: '600', marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 },
-    calcInput: { backgroundColor: t.bg.primary, color: t.text.primary, fontSize: 18, fontWeight: '700', padding: 14, borderRadius: 12, marginBottom: 16 },
+    calcLabel: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 },
+    calcInput: { backgroundColor: t.bg.primary, color: t.text.primary, fontSize: 18, fontWeight: fonts.bold, padding: 14, borderRadius: 12, marginBottom: 16 },
     calcResult: { alignItems: 'center', paddingVertical: 16, borderTopWidth: 1, borderTopColor: t.border },
     calcResultLabel: { color: t.text.muted, fontSize: 12, marginBottom: 4 },
-    calcResultValue: { fontSize: 28, fontWeight: '900' },
+    calcResultValue: { fontSize: 28, fontWeight: fonts.heavy },
     calcResultGreen: { color: t.accent.green },
     calcResultRed: { color: t.accent.red },
     calcDivider: { height: 1, backgroundColor: t.border, marginVertical: 12 },
     calcRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
     calcRowLabel: { color: t.text.muted, fontSize: 13 },
-    calcRowValue: { color: t.text.primary, fontSize: 13, fontWeight: '600' },
+    calcRowValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold },
     // Strategies
     strategyCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 16 },
     strategyHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
-    strategyName: { color: t.text.primary, fontSize: 16, fontWeight: '800', flex: 1 },
+    strategyName: { color: t.text.primary, fontSize: 16, fontWeight: fonts.heavy, flex: 1 },
     riskBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
-    riskText: { fontSize: 11, fontWeight: '800', color: t.bg.primary },
+    riskText: { fontSize: 11, fontWeight: fonts.heavy, color: t.bg.primary },
     strategyDesc: { color: t.text.primary, fontSize: 13, lineHeight: 20, marginBottom: 12 },
     strategyMeta: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
     strategyMetaLabel: { color: t.text.muted, fontSize: 12 },
-    strategyMetaValue: { color: t.text.primary, fontSize: 12, fontWeight: '600' },
+    strategyMetaValue: { color: t.text.primary, fontSize: 12, fontWeight: fonts.semibold },
     // Glossary
     glossaryCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 12 },
-    glossaryTerm: { color: t.accent.green, fontSize: 15, fontWeight: '800', marginBottom: 8 },
+    glossaryTerm: { color: t.accent.green, fontSize: 15, fontWeight: fonts.heavy, marginBottom: 8 },
     glossaryDef: { color: t.text.primary, fontSize: 13, lineHeight: 20 },
     // Quick IL table in calculator
     tableRow: { flexDirection: 'row', paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: t.border },
-    tableHeader: { fontWeight: '800' },
+    tableHeader: { fontWeight: fonts.heavy },
     tableCell: { flex: 1, color: t.text.primary, fontSize: 12, textAlign: 'center' },
     tableCellMuted: { flex: 1, color: t.text.muted, fontSize: 12, textAlign: 'center' },
     demoBanner: { backgroundColor: t.accent.blue + '20', paddingVertical: 8, paddingHorizontal: 16, borderRadius: 10, marginBottom: 12 },
-    demoBannerText: { color: t.accent.blue, fontSize: 12, fontWeight: '600', textAlign: 'center' },
+    demoBannerText: { color: t.accent.blue, fontSize: 12, fontWeight: fonts.semibold, textAlign: 'center' },
   }), [t]);
 
   const TABS: { key: Tab; label: string }[] = [

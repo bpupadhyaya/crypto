@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Import Wallet Screen — Import external wallets alongside the main HD wallet.
  *
@@ -48,13 +49,13 @@ export const ImportWalletScreen = React.memo(({ onClose }: Props) => {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     scroll: { padding: 20 },
-    title: { color: t.text.primary, fontSize: 24, fontWeight: '800', marginBottom: 4 },
+    title: { color: t.text.primary, fontSize: 24, fontWeight: fonts.heavy, marginBottom: 4 },
     subtitle: { color: t.text.muted, fontSize: 14, marginBottom: 24, lineHeight: 20 },
-    sectionLabel: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.2, marginBottom: 8, marginTop: 16 },
+    sectionLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginBottom: 8, marginTop: 16 },
     methodRow: { flexDirection: 'row', gap: 8, marginBottom: 16 },
     methodBtn: { flex: 1, paddingVertical: 12, borderRadius: 12, backgroundColor: t.bg.card, alignItems: 'center', borderWidth: 1, borderColor: 'transparent' },
     methodBtnActive: { borderColor: t.accent.green, backgroundColor: t.accent.green + '15' },
-    methodBtnText: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    methodBtnText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     methodBtnTextActive: { color: t.accent.green },
     methodIcon: { fontSize: 18, marginBottom: 4 },
     input: { backgroundColor: t.bg.card, borderRadius: 12, padding: 16, color: t.text.primary, fontSize: 15, borderWidth: 1, borderColor: t.border },
@@ -62,23 +63,23 @@ export const ImportWalletScreen = React.memo(({ onClose }: Props) => {
     chainRow: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
     chainChip: { paddingVertical: 8, paddingHorizontal: 14, borderRadius: 10, backgroundColor: t.bg.card, borderWidth: 1, borderColor: 'transparent' },
     chainChipActive: { borderColor: t.accent.green, backgroundColor: t.accent.green + '15' },
-    chainChipText: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
+    chainChipText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
     chainChipTextActive: { color: t.accent.green },
     importBtn: { backgroundColor: t.accent.green, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginTop: 24 },
     importBtnDisabled: { opacity: 0.4 },
-    importBtnText: { color: '#fff', fontSize: 17, fontWeight: '700' },
+    importBtnText: { color: '#fff', fontSize: 17, fontWeight: fonts.bold },
     cancelBtn: { paddingVertical: 20, alignItems: 'center' },
     cancelText: { color: t.accent.blue, fontSize: 16 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginTop: 16 },
     hint: { color: t.text.muted, fontSize: 12, marginTop: 8, lineHeight: 18 },
     walletList: { marginTop: 16 },
     walletItem: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: t.bg.card, borderRadius: 12, padding: 14, marginBottom: 8 },
-    walletName: { color: t.text.primary, fontSize: 15, fontWeight: '600' },
+    walletName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold },
     walletMeta: { color: t.text.muted, fontSize: 12, marginTop: 2 },
-    walletType: { fontSize: 11, fontWeight: '600', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, overflow: 'hidden' },
+    walletType: { fontSize: 11, fontWeight: fonts.semibold, paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, overflow: 'hidden' },
     removeBtn: { paddingHorizontal: 10, paddingVertical: 6 },
-    removeText: { color: t.accent.red, fontSize: 13, fontWeight: '600' },
-    demoTag: { color: t.accent.purple, fontSize: 11, fontWeight: '700', marginLeft: 6 },
+    removeText: { color: t.accent.red, fontSize: 13, fontWeight: fonts.semibold },
+    demoTag: { color: t.accent.purple, fontSize: 11, fontWeight: fonts.bold, marginLeft: 6 },
   }), [t]);
 
   const validateSeedPhrase = useCallback((phrase: string): boolean => {

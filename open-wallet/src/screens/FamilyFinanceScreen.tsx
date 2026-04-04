@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Family Finance — Article II of The Human Constitution.
  *
@@ -174,56 +175,56 @@ export function FamilyFinanceScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { flex: 1, paddingHorizontal: 16 },
     subtitle: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 11, fontWeight: '600' },
+    tabText: { color: t.text.secondary, fontSize: 11, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
     label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 8, marginBottom: 8 },
+    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 8, marginBottom: 8 },
     summaryRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
     summaryCard: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' },
-    summaryNum: { fontSize: 20, fontWeight: '800', marginBottom: 2 },
-    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: '600', textAlign: 'center' },
+    summaryNum: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 2 },
+    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold, textAlign: 'center' },
     barContainer: { height: 8, backgroundColor: t.border, borderRadius: 4, marginVertical: 4, overflow: 'hidden' },
     barFill: { height: 8, borderRadius: 4 },
     memberRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: t.border },
     memberAvatar: { fontSize: 28 },
-    memberName: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
+    memberName: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
     memberRole: { color: t.text.muted, fontSize: 11, textTransform: 'capitalize' },
-    memberAmount: { color: t.accent.green, fontSize: 14, fontWeight: '700', marginLeft: 'auto' },
+    memberAmount: { color: t.accent.green, fontSize: 14, fontWeight: fonts.bold, marginLeft: 'auto' },
     txRow: { paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: t.border },
-    txDesc: { color: t.text.primary, fontSize: 13, fontWeight: '600' },
+    txDesc: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold },
     txMeta: { color: t.text.muted, fontSize: 11, marginTop: 2 },
-    txAmount: { fontSize: 14, fontWeight: '700' },
+    txAmount: { fontSize: 14, fontWeight: fonts.bold },
     goalCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
     goalHeader: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 8 },
     goalIcon: { fontSize: 28 },
-    goalLabel: { color: t.text.primary, fontSize: 15, fontWeight: '700', flex: 1 },
-    goalPriority: { fontSize: 10, fontWeight: '700', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, overflow: 'hidden', color: '#fff' },
+    goalLabel: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, flex: 1 },
+    goalPriority: { fontSize: 10, fontWeight: fonts.bold, paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, overflow: 'hidden', color: '#fff' },
     goalNumbers: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 },
     goalStat: { alignItems: 'center' },
-    goalStatNum: { color: t.text.primary, fontSize: 14, fontWeight: '700' },
+    goalStatNum: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
     goalStatLabel: { color: t.text.muted, fontSize: 10 },
     allowanceCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
     allowanceHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
-    allowanceName: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
-    allowanceAmount: { color: t.accent.green, fontSize: 18, fontWeight: '800' },
+    allowanceName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
+    allowanceAmount: { color: t.accent.green, fontSize: 18, fontWeight: fonts.heavy },
     allowanceFreq: { color: t.text.muted, fontSize: 11 },
     statusBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8, overflow: 'hidden' },
-    statusText: { fontSize: 10, fontWeight: '700', color: '#fff' },
+    statusText: { fontSize: 10, fontWeight: fonts.bold, color: '#fff' },
     tipCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
     tipHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
-    tipTitle: { color: t.text.primary, fontSize: 14, fontWeight: '700', flex: 1 },
-    tipAge: { color: t.text.muted, fontSize: 10, fontWeight: '600' },
-    tipCategory: { fontSize: 10, fontWeight: '700', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, overflow: 'hidden', color: '#fff' },
+    tipTitle: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, flex: 1 },
+    tipAge: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold },
+    tipCategory: { fontSize: 10, fontWeight: fonts.bold, paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, overflow: 'hidden', color: '#fff' },
     tipContent: { color: t.text.secondary, fontSize: 12, lineHeight: 18, marginTop: 4 },
     empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 12 },
@@ -273,7 +274,7 @@ export function FamilyFinanceScreen({ onClose }: Props) {
         return (
           <View key={cat.key} style={st.card}>
             <View style={st.row}>
-              <Text style={{ color: t.text.primary, fontSize: 13, fontWeight: '600' }}>
+              <Text style={{ color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold }}>
                 {cat.icon}  {cat.label}
               </Text>
               <Text style={[st.val, { color: progressColor(pct) }]}>{pct}%</Text>
@@ -514,7 +515,7 @@ export function FamilyFinanceScreen({ onClose }: Props) {
       {/* Key Principles */}
       <Text style={st.section}>Key Principles</Text>
       <View style={[st.highlightCard, { backgroundColor: t.accent.green + '10', borderColor: t.accent.green + '30' }]}>
-        <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: '700', marginBottom: 6 }}>
+        <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: fonts.bold, marginBottom: 6 }}>
           Start Early, Start Simple
         </Text>
         <Text style={{ color: t.text.secondary, fontSize: 12, lineHeight: 18 }}>
@@ -525,7 +526,7 @@ export function FamilyFinanceScreen({ onClose }: Props) {
         </Text>
       </View>
       <View style={[st.highlightCard, { backgroundColor: t.accent.blue + '10', borderColor: t.accent.blue + '30' }]}>
-        <Text style={{ color: t.accent.blue, fontSize: 13, fontWeight: '700', marginBottom: 6 }}>
+        <Text style={{ color: t.accent.blue, fontSize: 13, fontWeight: fonts.bold, marginBottom: 6 }}>
           Model Transparency
         </Text>
         <Text style={{ color: t.text.secondary, fontSize: 12, lineHeight: 18 }}>
@@ -535,7 +536,7 @@ export function FamilyFinanceScreen({ onClose }: Props) {
         </Text>
       </View>
       <View style={[st.highlightCard, { backgroundColor: t.accent.yellow + '10', borderColor: t.accent.yellow + '30' }]}>
-        <Text style={{ color: t.accent.yellow, fontSize: 13, fontWeight: '700', marginBottom: 6 }}>
+        <Text style={{ color: t.accent.yellow, fontSize: 13, fontWeight: fonts.bold, marginBottom: 6 }}>
           Let Them Fail Small
         </Text>
         <Text style={{ color: t.text.secondary, fontSize: 12, lineHeight: 18 }}>

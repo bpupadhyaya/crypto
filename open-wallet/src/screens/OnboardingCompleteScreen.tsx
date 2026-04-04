@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Onboarding Complete Screen — Congratulations after persona onboarding.
  *
@@ -104,7 +105,7 @@ export function OnboardingCompleteScreen({ onClose }: Props) {
       paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1,
       borderBottomColor: t.border,
     },
-    title: { fontSize: 18, fontWeight: '700', color: t.text.primary },
+    title: { fontSize: 18, fontWeight: fonts.bold, color: t.text.primary },
     closeBtn: { fontSize: 16, color: t.accent.green },
     scroll: { flex: 1 },
     heroSection: {
@@ -113,11 +114,11 @@ export function OnboardingCompleteScreen({ onClose }: Props) {
     },
     heroIcon: { fontSize: 64, marginBottom: 12 },
     congratsText: {
-      fontSize: 24, fontWeight: '800', color: t.accent.green,
+      fontSize: 24, fontWeight: fonts.heavy, color: t.accent.green,
       textAlign: 'center', marginBottom: 8,
     },
     personaLabel: {
-      fontSize: 16, fontWeight: '600', color: t.text.primary,
+      fontSize: 16, fontWeight: fonts.semibold, color: t.text.primary,
       textAlign: 'center', marginBottom: 12,
     },
     greetingText: {
@@ -125,12 +126,12 @@ export function OnboardingCompleteScreen({ onClose }: Props) {
       lineHeight: 22, paddingHorizontal: 8,
     },
     section: { padding: 16, borderBottomWidth: 1, borderBottomColor: t.border },
-    sectionTitle: { fontSize: 16, fontWeight: '600', color: t.text.primary, marginBottom: 10 },
+    sectionTitle: { fontSize: 16, fontWeight: fonts.semibold, color: t.text.primary, marginBottom: 10 },
     tipBox: {
       backgroundColor: '#f0fdf4', borderRadius: 12, padding: 16,
       borderWidth: 1, borderColor: '#bbf7d0',
     },
-    tipLabel: { fontSize: 12, fontWeight: '700', color: '#16a34a', marginBottom: 6 },
+    tipLabel: { fontSize: 12, fontWeight: fonts.bold, color: '#16a34a', marginBottom: 6 },
     tipText: { fontSize: 14, color: '#166534', lineHeight: 22 },
     featureCard: {
       backgroundColor: t.bg.card, borderRadius: 12, padding: 14,
@@ -140,7 +141,7 @@ export function OnboardingCompleteScreen({ onClose }: Props) {
       flexDirection: 'row', alignItems: 'center',
     },
     featureIcon: { fontSize: 28, marginRight: 12 },
-    featureName: { fontSize: 15, fontWeight: '600', color: t.text.primary },
+    featureName: { fontSize: 15, fontWeight: fonts.semibold, color: t.text.primary },
     featureScreen: { fontSize: 11, color: t.text.secondary },
     featureDesc: {
       fontSize: 13, color: t.text.secondary, lineHeight: 20,
@@ -157,7 +158,7 @@ export function OnboardingCompleteScreen({ onClose }: Props) {
       borderWidth: 2, borderColor: t.accent.green, alignItems: 'center',
     },
     tourIcon: { fontSize: 48, marginBottom: 10 },
-    tourTitle: { fontSize: 18, fontWeight: '700', color: t.text.primary, marginBottom: 6 },
+    tourTitle: { fontSize: 18, fontWeight: fonts.bold, color: t.text.primary, marginBottom: 6 },
     tourDesc: {
       fontSize: 14, color: t.text.secondary, textAlign: 'center',
       lineHeight: 22, marginBottom: 16,
@@ -168,12 +169,12 @@ export function OnboardingCompleteScreen({ onClose }: Props) {
     tourBtn: {
       paddingVertical: 8, paddingHorizontal: 16, borderRadius: 8,
     },
-    tourBtnText: { fontSize: 14, fontWeight: '600', color: t.accent.green },
+    tourBtnText: { fontSize: 14, fontWeight: fonts.semibold, color: t.accent.green },
     startButton: {
       backgroundColor: t.accent.green, borderRadius: 14, paddingVertical: 16,
       alignItems: 'center', marginHorizontal: 16, marginVertical: 16,
     },
-    startButtonText: { color: '#fff', fontWeight: '700', fontSize: 18 },
+    startButtonText: { color: '#fff', fontWeight: fonts.bold, fontSize: 18 },
     personaGrid: {
       flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center',
     },

@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Changelog Screen — App version changelog with all releases.
  *
@@ -116,19 +117,19 @@ export function ChangelogScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeText: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
     releaseCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 14 },
     versionRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
-    versionText: { color: t.text.primary, fontSize: 18, fontWeight: '800' },
-    dateText: { color: t.text.muted, fontSize: 12, fontWeight: '600' },
+    versionText: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
+    dateText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
     currentBadge: { backgroundColor: t.accent.green + '30', borderRadius: 6, paddingVertical: 2, paddingHorizontal: 8, marginLeft: 8 },
-    currentBadgeText: { color: t.accent.green, fontSize: 10, fontWeight: '700' },
-    highlight: { color: t.text.secondary, fontSize: 14, fontWeight: '600', marginBottom: 12, lineHeight: 20 },
+    currentBadgeText: { color: t.accent.green, fontSize: 10, fontWeight: fonts.bold },
+    highlight: { color: t.text.secondary, fontSize: 14, fontWeight: fonts.semibold, marginBottom: 12, lineHeight: 20 },
     changeRow: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 6, paddingLeft: 4 },
     changeIcon: { fontSize: 12, marginRight: 8, marginTop: 2 },
-    changeType: { fontSize: 11, fontWeight: '700', width: 64, marginRight: 4, marginTop: 1 },
+    changeType: { fontSize: 11, fontWeight: fonts.bold, width: 64, marginRight: 4, marginTop: 1 },
     changeText: { color: t.text.secondary, fontSize: 13, flex: 1, lineHeight: 18 },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 8 },
     footerText: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginTop: 20, fontStyle: 'italic' },

@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Transport Screen — Community transport, ride sharing, accessible mobility.
  *
@@ -161,33 +162,33 @@ export function TransportScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingBottom: 40 },
     tabRow: { flexDirection: 'row', paddingHorizontal: 12, marginBottom: 12 },
     tabBtn: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 16, marginHorizontal: 4 },
     tabActive: { backgroundColor: t.accent.green + '20' },
-    tabText: { color: t.text.muted, fontSize: 12, fontWeight: '600' },
+    tabText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
     tabTextActive: { color: t.accent.green },
     card: { backgroundColor: t.bg.secondary, borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16 },
-    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: '700', marginBottom: 12, marginHorizontal: 20 },
+    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 12, marginHorizontal: 20 },
     statRow: { flexDirection: 'row', justifyContent: 'space-around', flexWrap: 'wrap', gap: 12 },
     statItem: { alignItems: 'center', minWidth: 80 },
-    statValue: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    statValue: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     statLabel: { color: t.text.muted, fontSize: 11, marginTop: 2, textAlign: 'center' },
     impactCard: { backgroundColor: t.accent.green + '12', borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16, alignItems: 'center' },
-    impactText: { color: t.text.primary, fontSize: 15, fontWeight: '600', textAlign: 'center', lineHeight: 22 },
+    impactText: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold, textAlign: 'center', lineHeight: 22 },
     rideCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
     rideHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    rideDriver: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
+    rideDriver: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
     rideAccessibleBadge: { backgroundColor: t.accent.blue + '20', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 6 },
-    rideAccessibleText: { color: t.accent.blue, fontSize: 10, fontWeight: '700' },
-    rideRoute: { color: t.text.primary, fontSize: 14, fontWeight: '600', marginTop: 8 },
+    rideAccessibleText: { color: t.accent.blue, fontSize: 10, fontWeight: fonts.bold },
+    rideRoute: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, marginTop: 8 },
     rideMeta: { color: t.text.muted, fontSize: 12, marginTop: 4 },
     rideFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 12 },
-    rideCO2: { color: t.accent.green, fontSize: 13, fontWeight: '600' },
+    rideCO2: { color: t.accent.green, fontSize: 13, fontWeight: fonts.semibold },
     rideRequestBtn: { backgroundColor: t.accent.blue, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 10 },
-    rideRequestText: { color: '#fff', fontSize: 13, fontWeight: '600' },
+    rideRequestText: { color: '#fff', fontSize: 13, fontWeight: fonts.semibold },
     seatsRow: { flexDirection: 'row', alignItems: 'center', marginTop: 6 },
     seatDot: { width: 10, height: 10, borderRadius: 5, marginRight: 4 },
     seatAvailable: { backgroundColor: t.accent.green },
@@ -196,17 +197,17 @@ export function TransportScreen({ onClose }: Props) {
     typeGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 12 },
     typeChip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 12, borderWidth: 1, borderColor: t.bg.primary },
     typeChipSelected: { backgroundColor: t.accent.green + '20', borderColor: t.accent.green },
-    typeChipText: { color: t.text.muted, fontSize: 13, fontWeight: '600' },
+    typeChipText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
     typeChipTextSelected: { color: t.accent.green },
     accessibleToggle: { flexDirection: 'row', alignItems: 'center', marginBottom: 12, paddingVertical: 8 },
-    accessibleToggleText: { color: t.text.primary, fontSize: 14, fontWeight: '600', marginLeft: 8 },
+    accessibleToggleText: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, marginLeft: 8 },
     checkBox: { width: 24, height: 24, borderRadius: 6, borderWidth: 2, borderColor: t.text.muted, justifyContent: 'center', alignItems: 'center' },
     checkBoxActive: { backgroundColor: t.accent.blue, borderColor: t.accent.blue },
-    checkMark: { color: '#fff', fontSize: 14, fontWeight: '700' },
+    checkMark: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
     submitBtn: { backgroundColor: t.accent.green, borderRadius: 14, paddingVertical: 14, alignItems: 'center', marginTop: 8 },
-    submitText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+    submitText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
     routeCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    routeName: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
+    routeName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
     routeMeta: { color: t.text.muted, fontSize: 12, marginTop: 4 },
     routeStops: { marginTop: 10 },
     stopRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 6 },
@@ -214,19 +215,19 @@ export function TransportScreen({ onClose }: Props) {
     stopLine: { width: 2, height: 12, backgroundColor: t.accent.blue + '40', marginLeft: 3, marginBottom: 2 },
     stopText: { color: t.text.primary, fontSize: 13 },
     routeFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10, paddingTop: 10, borderTopWidth: 1, borderTopColor: t.bg.primary },
-    nextDeparture: { color: t.accent.green, fontSize: 14, fontWeight: '700' },
+    nextDeparture: { color: t.accent.green, fontSize: 14, fontWeight: fonts.bold },
     riderCount: { color: t.text.muted, fontSize: 12 },
     accessCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    accessType: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
-    accessProvider: { color: t.accent.blue, fontSize: 13, fontWeight: '600', marginTop: 2 },
+    accessType: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
+    accessProvider: { color: t.accent.blue, fontSize: 13, fontWeight: fonts.semibold, marginTop: 2 },
     accessDesc: { color: t.text.muted, fontSize: 13, marginTop: 6 },
     featureList: { marginTop: 8 },
     featureItem: { color: t.text.primary, fontSize: 12, marginBottom: 2 },
     accessMeta: { color: t.text.muted, fontSize: 12, marginTop: 8 },
     bookBtn: { backgroundColor: t.accent.blue, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 10, alignSelf: 'flex-start', marginTop: 10 },
-    bookBtnText: { color: '#fff', fontSize: 13, fontWeight: '600' },
+    bookBtnText: { color: '#fff', fontSize: 13, fontWeight: fonts.semibold },
     demoTag: { backgroundColor: t.accent.orange + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'center', marginBottom: 12 },
-    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: '700' },
+    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: fonts.bold },
   }), [t]);
 
   // ─── Tabs ───
@@ -449,7 +450,7 @@ export function TransportScreen({ onClose }: Props) {
               <Text style={s.bookBtnText}>Book Now</Text>
             </TouchableOpacity>
           ) : (
-            <Text style={[s.accessMeta, { color: t.accent.green, fontWeight: '600' }]}>No booking required — just show up!</Text>
+            <Text style={[s.accessMeta, { color: t.accent.green, fontWeight: fonts.semibold }]}>No booking required — just show up!</Text>
           )}
         </View>
       ))}

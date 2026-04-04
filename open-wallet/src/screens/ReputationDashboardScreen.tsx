@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Reputation Dashboard Screen — Art II enrichment.
  *
@@ -123,24 +124,24 @@ export function ReputationDashboardScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
 
     // Overall score card
     scoreCard: { borderRadius: 24, padding: 28, marginHorizontal: 20, alignItems: 'center', marginTop: 8 },
-    scoreValue: { fontSize: 56, fontWeight: '900', marginTop: 8 },
+    scoreValue: { fontSize: 56, fontWeight: fonts.heavy, marginTop: 8 },
     scoreMax: { color: t.text.muted, fontSize: 14, marginTop: 2 },
     levelBadge: { paddingHorizontal: 16, paddingVertical: 6, borderRadius: 20, marginTop: 12 },
-    levelText: { color: '#fff', fontSize: 14, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 1 },
+    levelText: { color: '#fff', fontSize: 14, fontWeight: fonts.heavy, textTransform: 'uppercase', letterSpacing: 1 },
 
     // Section
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 28 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 28 },
 
     // Component breakdown
     compCard: { backgroundColor: t.bg.secondary, borderRadius: 16, marginHorizontal: 20, padding: 16, marginBottom: 8 },
     compHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
-    compLabel: { color: t.text.primary, fontSize: 14, fontWeight: '700', flex: 1 },
-    compValue: { color: t.text.primary, fontSize: 14, fontWeight: '800' },
+    compLabel: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, flex: 1 },
+    compValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.heavy },
     compBarBg: { height: 8, borderRadius: 4, backgroundColor: t.border, overflow: 'hidden' as const },
     compBarFill: { height: 8, borderRadius: 4 },
     compDesc: { color: t.text.muted, fontSize: 11, marginTop: 6 },
@@ -151,13 +152,13 @@ export function ReputationDashboardScreen({ onClose }: Props) {
     chartBar: { alignItems: 'center', flex: 1 },
     chartBarInner: { width: 16, borderRadius: 4 },
     chartLabel: { color: t.text.muted, fontSize: 10, marginTop: 4 },
-    chartValue: { color: t.text.primary, fontSize: 9, fontWeight: '700', marginBottom: 2 },
+    chartValue: { color: t.text.primary, fontSize: 9, fontWeight: fonts.bold, marginBottom: 2 },
 
     // Community comparison
     comparisonCard: { backgroundColor: t.bg.secondary, borderRadius: 16, marginHorizontal: 20, padding: 20 },
     compRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 },
     compRowLabel: { color: t.text.muted, fontSize: 13 },
-    compRowValue: { color: t.text.primary, fontSize: 13, fontWeight: '700' },
+    compRowValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.bold },
     percentileBar: { height: 10, borderRadius: 5, backgroundColor: t.border, marginTop: 4, overflow: 'hidden' as const },
     percentileFill: { height: 10, borderRadius: 5 },
     percentileLabel: { color: t.text.muted, fontSize: 11, marginTop: 6 },
@@ -170,15 +171,15 @@ export function ReputationDashboardScreen({ onClose }: Props) {
 
     // Cross-chain
     chainRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 12, paddingHorizontal: 20 },
-    chainName: { color: t.text.primary, fontSize: 14, fontWeight: '600', flex: 1 },
-    chainScore: { color: t.text.primary, fontSize: 14, fontWeight: '800', marginRight: 12 },
+    chainName: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, flex: 1 },
+    chainScore: { color: t.text.primary, fontSize: 14, fontWeight: fonts.heavy, marginRight: 12 },
     chainLevel: { paddingHorizontal: 10, paddingVertical: 3, borderRadius: 10 },
-    chainLevelText: { color: '#fff', fontSize: 11, fontWeight: '700' },
+    chainLevelText: { color: '#fff', fontSize: 11, fontWeight: fonts.bold },
     divider: { height: 1, backgroundColor: t.border, marginHorizontal: 20 },
 
     // Attestation button
     attestBtn: { backgroundColor: t.accent.blue, borderRadius: 16, paddingVertical: 16, marginHorizontal: 20, alignItems: 'center', marginTop: 20, marginBottom: 40 },
-    attestBtnText: { color: '#fff', fontSize: 16, fontWeight: '800' },
+    attestBtnText: { color: '#fff', fontSize: 16, fontWeight: fonts.heavy },
     attestNote: { color: t.text.muted, fontSize: 11, textAlign: 'center', marginHorizontal: 40, marginTop: 8, marginBottom: 40 },
   }), [t]);
 

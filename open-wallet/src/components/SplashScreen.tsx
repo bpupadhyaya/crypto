@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Splash Screen — Shown during app initialization.
  * Displays the "OW" logo with a fade-in animation, then fades out
@@ -82,14 +83,14 @@ const styles = StyleSheet.create({
   },
   logoText: {
     fontSize: 72,
-    fontWeight: '900',
+    fontWeight: fonts.heavy,
     color: '#22c55e',
     letterSpacing: 4,
     textAlign: 'center',
   },
   appName: {
     fontSize: 20,
-    fontWeight: '600',
+    fontWeight: fonts.semibold,
     color: '#22c55e',
     opacity: 0.7,
     marginTop: 12,

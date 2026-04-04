@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Privacy Policy Screen — Full in-app privacy policy text.
  *
@@ -24,16 +25,16 @@ export function PrivacyPolicyScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingHorizontal: 24, paddingBottom: 40 },
-    heading: { color: t.text.primary, fontSize: 16, fontWeight: '700', marginTop: 24, marginBottom: 8 },
+    heading: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginTop: 24, marginBottom: 8 },
     body: { color: t.text.secondary, fontSize: 14, lineHeight: 22 },
     bullet: { color: t.text.secondary, fontSize: 14, lineHeight: 22, paddingLeft: 16, marginBottom: 4 },
     date: { color: t.text.muted, fontSize: 13, marginTop: 8, marginBottom: 16 },
     link: { color: t.accent.blue, fontSize: 14, textDecorationLine: 'underline' },
     externalBtn: { backgroundColor: t.accent.blue + '15', borderRadius: 12, padding: 16, marginTop: 24, alignItems: 'center' },
-    externalText: { color: t.accent.blue, fontSize: 14, fontWeight: '600' },
+    externalText: { color: t.accent.blue, fontSize: 14, fontWeight: fonts.semibold },
   }), [t]);
 
   return (

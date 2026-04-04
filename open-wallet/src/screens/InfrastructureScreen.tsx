@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Community Infrastructure — Article I of The Human Constitution.
  *
@@ -151,52 +152,52 @@ export function InfrastructureScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { flex: 1, paddingHorizontal: 16 },
     subtitle: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 11, fontWeight: '600' },
+    tabText: { color: t.text.secondary, fontSize: 11, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
-    cardTitle: { color: t.text.primary, fontSize: 16, fontWeight: '700', marginBottom: 4 },
+    cardTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 4 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
     label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     summaryRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
     summaryCard: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' },
-    summaryNum: { fontSize: 22, fontWeight: '800', marginBottom: 2 },
-    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: '600', textAlign: 'center' },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 8, marginBottom: 8 },
+    summaryNum: { fontSize: 22, fontWeight: fonts.heavy, marginBottom: 2 },
+    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold, textAlign: 'center' },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 8, marginBottom: 8 },
     categoryRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 12 },
     categoryIcon: { width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center', backgroundColor: t.bg.card },
     categoryIconText: { fontSize: 20 },
-    categoryLabel: { color: t.text.primary, fontSize: 14, fontWeight: '600', flex: 1 },
+    categoryLabel: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, flex: 1 },
     scoreBar: { height: 6, backgroundColor: t.border, borderRadius: 3, marginTop: 4, overflow: 'hidden' },
     scoreFill: { height: 6, borderRadius: 3 },
     badge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
-    badgeText: { fontSize: 10, fontWeight: '700', color: '#fff' },
+    badgeText: { fontSize: 10, fontWeight: fonts.bold, color: '#fff' },
     statusRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 8 },
     statusDot: { width: 8, height: 8, borderRadius: 4 },
     statusStep: { flex: 1, alignItems: 'center' },
     statusLine: { height: 2, flex: 1 },
     statusLabel: { fontSize: 9, marginTop: 2 },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 8 },
-    issueTitle: { color: t.text.primary, fontSize: 14, fontWeight: '700', marginBottom: 2 },
+    issueTitle: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, marginBottom: 2 },
     issueDesc: { color: t.text.muted, fontSize: 12, lineHeight: 17, marginBottom: 4 },
     issueLocation: { color: t.text.secondary, fontSize: 11 },
     reportOption: { backgroundColor: t.bg.card, borderRadius: 12, padding: 14, marginBottom: 8, flexDirection: 'row', alignItems: 'center', gap: 12 },
-    reportOptionText: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
+    reportOptionText: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
     reportOptionIcon: { fontSize: 22 },
     backBtn: { paddingVertical: 12, alignItems: 'center' },
     backText: { color: t.accent.blue, fontSize: 15 },
     empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
     confirmCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 20, marginBottom: 12, alignItems: 'center' },
-    confirmText: { color: t.text.primary, fontSize: 15, fontWeight: '600', textAlign: 'center', marginTop: 8 },
+    confirmText: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold, textAlign: 'center', marginTop: 8 },
     confirmSub: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginTop: 4 },
-    scheduleDate: { color: t.accent.blue, fontSize: 14, fontWeight: '700', marginBottom: 2 },
+    scheduleDate: { color: t.accent.blue, fontSize: 14, fontWeight: fonts.bold, marginBottom: 2 },
     scheduleDuration: { color: t.text.secondary, fontSize: 12, marginBottom: 4 },
     scheduleImpact: { color: t.text.muted, fontSize: 11, lineHeight: 16 },
     progressTrack: { flexDirection: 'row', alignItems: 'center', marginTop: 10, marginBottom: 4 },
@@ -280,7 +281,7 @@ export function InfrastructureScreen({ onClose }: Props) {
               <Text style={st.categoryIconText}>{cat.icon}</Text>
               <Text style={st.categoryLabel}>{cat.label}</Text>
             </View>
-            <Text style={[st.val, { color: scoreColor(cat.score), fontSize: 16, fontWeight: '800' }]}>{cat.score}</Text>
+            <Text style={[st.val, { color: scoreColor(cat.score), fontSize: 16, fontWeight: fonts.heavy }]}>{cat.score}</Text>
           </View>
           <View style={st.scoreBar}>
             <View style={[st.scoreFill, { width: `${cat.score}%`, backgroundColor: scoreColor(cat.score) }]} />

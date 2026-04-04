@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Liquidity Pool Screen — Manage AMM liquidity pools on Open Chain DEX.
  *
@@ -77,49 +78,49 @@ export function LiquidityScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingHorizontal: 20, paddingBottom: 40 },
     summaryCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 16 },
-    summaryTitle: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12 },
+    summaryTitle: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12 },
     summaryRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
     summaryLabel: { color: t.text.muted, fontSize: 14 },
-    summaryValue: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
-    summaryValueGreen: { color: t.accent.green, fontSize: 14, fontWeight: '600' },
+    summaryValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
+    summaryValueGreen: { color: t.accent.green, fontSize: 14, fontWeight: fonts.semibold },
     poolCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     poolHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
-    poolPair: { color: t.text.primary, fontSize: 16, fontWeight: '700' },
-    poolApy: { color: t.accent.green, fontSize: 14, fontWeight: '700' },
+    poolPair: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
+    poolApy: { color: t.accent.green, fontSize: 14, fontWeight: fonts.bold },
     poolStats: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
     poolStatLabel: { color: t.text.muted, fontSize: 12 },
-    poolStatValue: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    poolStatValue: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     positionRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 6, paddingTop: 8, borderTopWidth: 1, borderTopColor: t.border },
     positionLabel: { color: t.accent.green, fontSize: 12 },
-    positionValue: { color: t.accent.green, fontSize: 12, fontWeight: '600' },
+    positionValue: { color: t.accent.green, fontSize: 12, fontWeight: fonts.semibold },
     actionRow: { flexDirection: 'row', gap: 8, marginTop: 10 },
     actionBtn: { flex: 1, paddingVertical: 10, borderRadius: 10, alignItems: 'center' },
     addBtn: { backgroundColor: t.accent.green + '20' },
     removeBtn: { backgroundColor: t.accent.red + '20' },
-    addBtnText: { color: t.accent.green, fontSize: 13, fontWeight: '700' },
-    removeBtnText: { color: t.accent.red, fontSize: 13, fontWeight: '700' },
+    addBtnText: { color: t.accent.green, fontSize: 13, fontWeight: fonts.bold },
+    removeBtnText: { color: t.accent.red, fontSize: 13, fontWeight: fonts.bold },
     modalCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 16 },
-    modalTitle: { color: t.text.primary, fontSize: 18, fontWeight: '800', marginBottom: 16 },
+    modalTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, marginBottom: 16 },
     inputLabel: { color: t.text.muted, fontSize: 12, marginBottom: 4 },
     input: { backgroundColor: t.bg.primary, borderRadius: 10, padding: 14, color: t.text.primary, fontSize: 16, marginBottom: 12, borderWidth: 1, borderColor: t.border },
     submitBtn: { backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginTop: 8 },
-    submitBtnText: { color: '#000', fontSize: 16, fontWeight: '800' },
+    submitBtnText: { color: '#000', fontSize: 16, fontWeight: fonts.heavy },
     cancelBtn: { paddingVertical: 14, alignItems: 'center', marginTop: 8 },
     cancelBtnText: { color: t.accent.blue, fontSize: 15 },
     warning: { backgroundColor: t.accent.yellow + '15', borderRadius: 10, padding: 12, marginBottom: 16 },
     warningText: { color: t.accent.yellow, fontSize: 12, lineHeight: 18 },
     createBtn: { backgroundColor: t.accent.purple + '20', borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 16 },
-    createBtnText: { color: t.accent.purple, fontSize: 15, fontWeight: '700' },
+    createBtnText: { color: t.accent.purple, fontSize: 15, fontWeight: fonts.bold },
     feeTag: { backgroundColor: t.border, borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 },
-    feeText: { color: t.text.muted, fontSize: 10, fontWeight: '600' },
-    sectionTitle: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 8, marginTop: 16 },
+    feeText: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold },
+    sectionTitle: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 8, marginTop: 16 },
     lpRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4 },
     lpLabel: { color: t.text.muted, fontSize: 13 },
-    lpValue: { color: t.text.primary, fontSize: 13, fontWeight: '600' },
+    lpValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold },
   }), [t]);
 
   const handleAddLiquidity = useCallback(() => {
@@ -290,7 +291,7 @@ export function LiquidityScreen({ onClose }: Props) {
                   style={{ flex: 1, paddingVertical: 8, borderRadius: 8, backgroundColor: t.border, alignItems: 'center' }}
                   onPress={() => setRemovePercent(String(pct))}
                 >
-                  <Text style={{ color: t.text.secondary, fontSize: 13, fontWeight: '600' }}>{pct}%</Text>
+                  <Text style={{ color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold }}>{pct}%</Text>
                 </TouchableOpacity>
               ))}
             </View>

@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Token Launch Pad — Create custom tokens on Open Chain.
  *
@@ -43,37 +44,37 @@ export function TokenLaunchScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingHorizontal: 20, paddingBottom: 40 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 16 },
-    cardTitle: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12 },
+    cardTitle: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12 },
     inputGroup: { marginBottom: 16 },
-    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: '600', marginBottom: 6 },
+    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 6 },
     input: { backgroundColor: t.bg.secondary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, borderWidth: 1, borderColor: t.border },
     inputHint: { color: t.text.muted, fontSize: 11, marginTop: 4 },
     row: { flexDirection: 'row', gap: 12 },
     halfInput: { flex: 1 },
     createBtn: { backgroundColor: t.accent.green, borderRadius: 14, paddingVertical: 16, alignItems: 'center', marginTop: 8 },
     createBtnDisabled: { opacity: 0.5 },
-    createBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+    createBtnText: { color: '#fff', fontSize: 16, fontWeight: fonts.bold },
     previewRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: t.border },
     previewLabel: { color: t.text.muted, fontSize: 14 },
-    previewValue: { color: t.text.primary, fontSize: 14, fontWeight: '600', maxWidth: '60%', textAlign: 'right' },
+    previewValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, maxWidth: '60%', textAlign: 'right' },
     tokenCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     tokenHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
-    tokenSymbol: { color: t.accent.green, fontSize: 18, fontWeight: '800' },
-    tokenName: { color: t.text.primary, fontSize: 15, fontWeight: '600' },
+    tokenSymbol: { color: t.accent.green, fontSize: 18, fontWeight: fonts.heavy },
+    tokenName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold },
     tokenDetail: { color: t.text.muted, fontSize: 12, marginTop: 2 },
     tokenDenom: { color: t.text.muted, fontSize: 11, marginTop: 6, fontFamily: 'monospace' },
     emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', paddingVertical: 40 },
     badge: { backgroundColor: t.accent.purple + '20', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
-    badgeText: { color: t.accent.purple, fontSize: 11, fontWeight: '700' },
+    badgeText: { color: t.accent.purple, fontSize: 11, fontWeight: fonts.bold },
     economicsCard: { backgroundColor: t.accent.blue + '10', borderRadius: 12, padding: 16, marginTop: 12 },
-    economicsTitle: { color: t.accent.blue, fontSize: 13, fontWeight: '700', marginBottom: 8 },
+    economicsTitle: { color: t.accent.blue, fontSize: 13, fontWeight: fonts.bold, marginBottom: 8 },
     economicsRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 },
     economicsLabel: { color: t.text.muted, fontSize: 12 },
-    economicsValue: { color: t.text.primary, fontSize: 12, fontWeight: '600' },
+    economicsValue: { color: t.text.primary, fontSize: 12, fontWeight: fonts.semibold },
     backBtn: { flexDirection: 'row', alignItems: 'center', marginBottom: 16 },
     backText: { color: t.accent.blue, fontSize: 15 },
   }), [t]);
@@ -353,7 +354,7 @@ export function TokenLaunchScreen({ onClose }: Props) {
         >
           <View style={{ alignItems: 'center', paddingVertical: 12 }}>
             <Text style={{ color: t.accent.green, fontSize: 32, marginBottom: 8 }}>+</Text>
-            <Text style={{ color: t.text.primary, fontSize: 17, fontWeight: '700', marginBottom: 4 }}>Create New Token</Text>
+            <Text style={{ color: t.text.primary, fontSize: 17, fontWeight: fonts.bold, marginBottom: 4 }}>Create New Token</Text>
             <Text style={{ color: t.text.muted, fontSize: 13, textAlign: 'center' }}>
               Launch your own token on Open Chain with custom supply, decimals, and metadata
             </Text>

@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Transaction Notes Screen — manage personal notes, tags, and categories on transactions.
  * Demo mode provides sample data. Filter by tag, category, or free-text search.
@@ -129,35 +130,35 @@ export function TxNotesScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     backText: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingHorizontal: 16 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    label: { color: t.text.primary, fontSize: 15, fontWeight: '600' },
+    label: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold },
     muted: { color: t.text.muted, fontSize: 13 },
     noteText: { color: t.text.secondary, fontSize: 14, marginTop: 6, lineHeight: 20 },
     hashText: { color: t.text.muted, fontSize: 12, fontFamily: 'Courier', marginTop: 4 },
     tagRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 8 },
     tag: { paddingVertical: 3, paddingHorizontal: 10, borderRadius: 12, backgroundColor: t.accent.blue + '20' },
     tagActive: { backgroundColor: t.accent.blue },
-    tagText: { color: t.accent.blue, fontSize: 12, fontWeight: '600' },
+    tagText: { color: t.accent.blue, fontSize: 12, fontWeight: fonts.semibold },
     tagTextActive: { color: '#fff' },
     categoryBadge: { paddingVertical: 2, paddingHorizontal: 8, borderRadius: 8 },
-    categoryText: { fontSize: 11, fontWeight: '700', textTransform: 'uppercase' },
+    categoryText: { fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase' },
     searchBox: { backgroundColor: t.bg.card, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10, color: t.text.primary, fontSize: 15, marginBottom: 12 },
     input: { backgroundColor: t.bg.card, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12, color: t.text.primary, fontSize: 15, marginBottom: 12, borderWidth: 1, borderColor: t.border },
     multilineInput: { minHeight: 80, textAlignVertical: 'top' },
     filterRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 12 },
     filterChip: { paddingVertical: 4, paddingHorizontal: 10, borderRadius: 12, backgroundColor: t.border },
     filterChipActive: { backgroundColor: t.accent.green },
-    filterChipText: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    filterChipText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     filterChipTextActive: { color: '#fff' },
     addBtn: { backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 16 },
-    addBtnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+    addBtnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
     deleteBtn: { marginTop: 8 },
-    deleteText: { color: t.accent.red, fontSize: 13, fontWeight: '600' },
+    deleteText: { color: t.accent.red, fontSize: 13, fontWeight: fonts.semibold },
     emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
     actionRow: { flexDirection: 'row', gap: 12, marginTop: 10 },
   }), [t]);
@@ -186,7 +187,7 @@ export function TxNotesScreen({ onClose }: Props) {
           </TouchableOpacity>
           <Text style={st.title}>{viewMode === 'add' ? 'Add Note' : 'Edit Note'}</Text>
           <TouchableOpacity onPress={handleSave}>
-            <Text style={[st.backText, { fontWeight: '700' }]}>Save</Text>
+            <Text style={[st.backText, { fontWeight: fonts.bold }]}>Save</Text>
           </TouchableOpacity>
         </View>
         <ScrollView contentContainerStyle={st.scroll}>
@@ -265,7 +266,7 @@ export function TxNotesScreen({ onClose }: Props) {
         </TouchableOpacity>
         <Text style={st.title}>Transaction Notes</Text>
         <TouchableOpacity onPress={openAdd}>
-          <Text style={[st.backText, { fontWeight: '700' }]}>+ Add</Text>
+          <Text style={[st.backText, { fontWeight: fonts.bold }]}>+ Add</Text>
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={st.scroll}>

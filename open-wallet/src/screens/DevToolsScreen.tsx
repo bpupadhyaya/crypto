@@ -26,6 +26,7 @@ import { resetTutorial } from './TutorialScreen';
 import { resetAllTooltips } from '../components/FeatureTooltip';
 import { nodeRunner } from '../core/p2p/nodeRunner';
 import type { Theme } from '../utils/theme';
+import { fonts } from '../utils/theme';
 
 // ─── Network Request Log ───
 
@@ -101,19 +102,19 @@ export function DevToolsScreen({ onClose }: Props) {
     container: { flex: 1, backgroundColor: t.bg.primary },
     scroll: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 40 },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     backText: { color: t.accent.blue, fontSize: 16 },
     sectionHeader: {
       flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
       backgroundColor: t.bg.card, borderRadius: 12, padding: 16, marginTop: 12,
     },
-    sectionTitle: { color: t.text.primary, fontSize: 15, fontWeight: '600' },
+    sectionTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold },
     sectionArrow: { color: t.text.muted, fontSize: 14 },
     sectionContent: { backgroundColor: t.bg.card, borderRadius: 12, padding: 16, marginTop: 4 },
     codeBlock: { fontFamily: 'Courier', fontSize: 11, color: t.text.secondary, lineHeight: 16 },
     row: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6 },
     label: { color: t.text.muted, fontSize: 13 },
-    value: { color: t.text.primary, fontSize: 13, fontWeight: '500' },
+    value: { color: t.text.primary, fontSize: 13, fontWeight: fonts.medium },
     actionBtn: {
       backgroundColor: t.bg.card, borderRadius: 12, padding: 14, marginTop: 8,
       flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
@@ -126,15 +127,15 @@ export function DevToolsScreen({ onClose }: Props) {
       paddingHorizontal: 8, paddingVertical: 2, borderRadius: 6,
       backgroundColor: t.accent.green + '20',
     },
-    badgeText: { color: t.accent.green, fontSize: 11, fontWeight: '600' },
+    badgeText: { color: t.accent.green, fontSize: 11, fontWeight: fonts.semibold },
     badgeOff: { backgroundColor: t.accent.red + '20' },
     badgeTextOff: { color: t.accent.red },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 8 },
     netEntry: { paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: t.border },
-    netUrl: { color: t.text.primary, fontSize: 12, fontWeight: '500' },
+    netUrl: { color: t.text.primary, fontSize: 12, fontWeight: fonts.medium },
     netMeta: { color: t.text.muted, fontSize: 11, marginTop: 2 },
     refreshBtn: { paddingHorizontal: 12, paddingVertical: 4, borderRadius: 8, backgroundColor: t.accent.blue + '20' },
-    refreshText: { color: t.accent.blue, fontSize: 12, fontWeight: '600' },
+    refreshText: { color: t.accent.blue, fontSize: 12, fontWeight: fonts.semibold },
   }), [t]);
 
   const toggleSection = (s: Section) => {

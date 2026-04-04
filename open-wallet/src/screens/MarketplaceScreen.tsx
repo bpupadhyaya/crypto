@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Marketplace Screen — Local goods and services exchange.
  *
@@ -239,79 +240,79 @@ export function MarketplaceScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: t.border },
-    headerTitle: { fontSize: 18, fontWeight: '700', color: t.text.primary },
+    headerTitle: { fontSize: 18, fontWeight: fonts.bold, color: t.text.primary },
     closeBtn: { paddingHorizontal: 12, paddingVertical: 6 },
     closeTxt: { fontSize: 16, color: t.accent.blue },
     tabBar: { flexDirection: 'row', borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: t.border },
     tabBtn: { flex: 1, paddingVertical: 10, alignItems: 'center' },
     tabBtnActive: { borderBottomWidth: 2, borderBottomColor: t.accent.blue },
     tabTxt: { fontSize: 13, color: t.text.muted },
-    tabTxtActive: { fontSize: 13, color: t.accent.blue, fontWeight: '600' },
+    tabTxtActive: { fontSize: 13, color: t.accent.blue, fontWeight: fonts.semibold },
     scroll: { flex: 1 },
     pad: { padding: 16 },
-    sectionTitle: { fontSize: 16, fontWeight: '700', color: t.text.primary, marginBottom: 12 },
-    subTitle: { fontSize: 14, fontWeight: '600', color: t.text.primary, marginBottom: 8, marginTop: 12 },
+    sectionTitle: { fontSize: 16, fontWeight: fonts.bold, color: t.text.primary, marginBottom: 12 },
+    subTitle: { fontSize: 14, fontWeight: fonts.semibold, color: t.text.primary, marginBottom: 8, marginTop: 12 },
 
     // Filter row
     filterRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 12 },
     filterChip: { paddingHorizontal: 10, paddingVertical: 5, borderRadius: 14, borderWidth: 1, borderColor: t.border, backgroundColor: t.bg.secondary },
     filterChipActive: { backgroundColor: t.accent.blue, borderColor: t.accent.blue },
     filterChipTxt: { fontSize: 12, color: t.text.muted },
-    filterChipTxtActive: { fontSize: 12, color: '#FFFFFF', fontWeight: '600' },
+    filterChipTxtActive: { fontSize: 12, color: '#FFFFFF', fontWeight: fonts.semibold },
 
     // Listing card
     listingCard: { backgroundColor: t.bg.secondary, borderRadius: 12, padding: 14, marginBottom: 10, borderWidth: StyleSheet.hairlineWidth, borderColor: t.border },
-    listingTitle: { fontSize: 15, fontWeight: '700', color: t.text.primary, marginBottom: 4 },
+    listingTitle: { fontSize: 15, fontWeight: fonts.bold, color: t.text.primary, marginBottom: 4 },
     listingSeller: { fontSize: 13, color: t.accent.blue, marginBottom: 6 },
     listingDesc: { fontSize: 13, color: t.text.secondary, marginBottom: 8, lineHeight: 18 },
     listingMeta: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 8 },
     listingTag: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10, backgroundColor: t.bg.primary },
     listingTagTxt: { fontSize: 11, color: t.text.muted },
     listingFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    listingPrice: { fontSize: 14, fontWeight: '700', color: '#34C759' },
+    listingPrice: { fontSize: 14, fontWeight: fonts.bold, color: '#34C759' },
     listingViews: { fontSize: 12, color: t.text.muted },
     contactBtn: { backgroundColor: t.accent.blue, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 8 },
-    contactBtnTxt: { fontSize: 13, fontWeight: '600', color: '#FFFFFF' },
+    contactBtnTxt: { fontSize: 13, fontWeight: fonts.semibold, color: '#FFFFFF' },
     freeTag: { backgroundColor: '#AF52DE', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10 },
-    freeTagTxt: { fontSize: 11, fontWeight: '600', color: '#FFFFFF' },
+    freeTagTxt: { fontSize: 11, fontWeight: fonts.semibold, color: '#FFFFFF' },
 
     // Transaction card
     txCard: { backgroundColor: t.bg.secondary, borderRadius: 12, padding: 14, marginBottom: 10, borderWidth: StyleSheet.hairlineWidth, borderColor: t.border },
-    txTitle: { fontSize: 15, fontWeight: '700', color: t.text.primary, marginBottom: 2 },
+    txTitle: { fontSize: 15, fontWeight: fonts.bold, color: t.text.primary, marginBottom: 2 },
     txParty: { fontSize: 13, color: t.text.secondary, marginBottom: 6 },
     txRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
     txDate: { fontSize: 12, color: t.text.muted },
-    txPrice: { fontSize: 13, fontWeight: '700', color: t.text.primary },
-    txRating: { fontSize: 13, fontWeight: '600', letterSpacing: 2 },
+    txPrice: { fontSize: 13, fontWeight: fonts.bold, color: t.text.primary },
+    txRating: { fontSize: 13, fontWeight: fonts.semibold, letterSpacing: 2 },
     txReview: { fontSize: 13, color: t.text.secondary, fontStyle: 'italic', marginTop: 6, lineHeight: 18 },
     txRole: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 8, backgroundColor: t.bg.primary },
-    txRoleTxt: { fontSize: 11, fontWeight: '600', color: t.text.muted },
+    txRoleTxt: { fontSize: 11, fontWeight: fonts.semibold, color: t.text.muted },
 
     // Sell form
-    label: { fontSize: 13, fontWeight: '600', color: t.text.secondary, marginBottom: 4, marginTop: 12 },
+    label: { fontSize: 13, fontWeight: fonts.semibold, color: t.text.secondary, marginBottom: 4, marginTop: 12 },
     input: { backgroundColor: t.bg.secondary, borderRadius: 10, paddingHorizontal: 14, paddingVertical: 10, fontSize: 15, color: t.text.primary, borderWidth: StyleSheet.hairlineWidth, borderColor: t.border },
     inputMulti: { height: 80, textAlignVertical: 'top' },
     pickerRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 4 },
     pickerChip: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 14, borderWidth: 1, borderColor: t.border, backgroundColor: t.bg.secondary },
     pickerChipActive: { backgroundColor: t.accent.blue, borderColor: t.accent.blue },
     pickerChipTxt: { fontSize: 12, color: t.text.muted },
-    pickerChipTxtActive: { fontSize: 12, color: '#FFFFFF', fontWeight: '600' },
+    pickerChipTxtActive: { fontSize: 12, color: '#FFFFFF', fontWeight: fonts.semibold },
     postBtn: { backgroundColor: '#34C759', paddingVertical: 14, borderRadius: 12, alignItems: 'center', marginTop: 20 },
-    postBtnTxt: { fontSize: 16, fontWeight: '700', color: '#FFFFFF' },
+    postBtnTxt: { fontSize: 16, fontWeight: fonts.bold, color: '#FFFFFF' },
 
     // Stats
     statsCard: { backgroundColor: t.bg.secondary, borderRadius: 12, padding: 16, marginBottom: 12, borderWidth: StyleSheet.hairlineWidth, borderColor: t.border },
-    statsRegion: { fontSize: 16, fontWeight: '700', color: t.text.primary, marginBottom: 12, textAlign: 'center' },
+    statsRegion: { fontSize: 16, fontWeight: fonts.bold, color: t.text.primary, marginBottom: 12, textAlign: 'center' },
     statsRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
     statsLabel: { fontSize: 13, color: t.text.secondary },
-    statsValue: { fontSize: 13, fontWeight: '700', color: t.text.primary },
+    statsValue: { fontSize: 13, fontWeight: fonts.bold, color: t.text.primary },
     statsBar: { height: 6, borderRadius: 3, backgroundColor: t.bg.primary, marginTop: 2, marginBottom: 8 },
     statsBarFill: { height: 6, borderRadius: 3 },
-    statsHighlight: { fontSize: 14, fontWeight: '700', color: '#AF52DE', textAlign: 'center', marginTop: 8 },
+    statsHighlight: { fontSize: 14, fontWeight: fonts.bold, color: '#AF52DE', textAlign: 'center', marginTop: 8 },
 
     empty: { fontSize: 14, color: t.text.muted, textAlign: 'center', marginTop: 40 },
     demoBanner: { backgroundColor: '#FF9500', paddingVertical: 4, alignItems: 'center' },
-    demoBannerTxt: { fontSize: 11, fontWeight: '600', color: '#FFFFFF' },
+    demoBannerTxt: { fontSize: 11, fontWeight: fonts.semibold, color: '#FFFFFF' },
   }), [t]);
 
   // ─── Tabs ───

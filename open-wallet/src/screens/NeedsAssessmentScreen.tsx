@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Needs Assessment Screen — Article I, Section 3 of The Human Constitution.
  *
@@ -178,60 +179,60 @@ export function NeedsAssessmentScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { flex: 1, paddingHorizontal: 16 },
     subtitle: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 11, fontWeight: '600' },
+    tabText: { color: t.text.secondary, fontSize: 11, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
     label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 8, marginBottom: 8 },
+    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 8, marginBottom: 8 },
     heroCard: { backgroundColor: t.accent.green + '10', borderRadius: 20, padding: 20, marginBottom: 16, alignItems: 'center' },
     heroIcon: { fontSize: 40, marginBottom: 8 },
-    heroTitle: { color: t.text.primary, fontSize: 17, fontWeight: '800', textAlign: 'center' },
+    heroTitle: { color: t.text.primary, fontSize: 17, fontWeight: fonts.heavy, textAlign: 'center' },
     heroSubtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 4, lineHeight: 20 },
     needRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 14 },
     needIcon: { fontSize: 24, width: 36 },
     needInfo: { flex: 1, marginLeft: 8 },
-    needLabel: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
+    needLabel: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
     needDesc: { color: t.text.muted, fontSize: 11, marginTop: 1 },
     scoreRow: { flexDirection: 'row', gap: 6 },
     scoreBtn: { width: 32, height: 32, borderRadius: 8, alignItems: 'center', justifyContent: 'center', backgroundColor: t.border },
     scoreBtnActive: { backgroundColor: t.accent.green },
-    scoreBtnText: { color: t.text.secondary, fontSize: 14, fontWeight: '700' },
+    scoreBtnText: { color: t.text.secondary, fontSize: 14, fontWeight: fonts.bold },
     scoreBtnTextActive: { color: '#fff' },
     submitBtn: { backgroundColor: t.accent.green, borderRadius: 14, paddingVertical: 16, alignItems: 'center', marginTop: 16, marginBottom: 16 },
-    submitBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
-    regionName: { color: t.text.primary, fontSize: 16, fontWeight: '700', marginBottom: 4 },
+    submitBtnText: { color: '#fff', fontSize: 16, fontWeight: fonts.bold },
+    regionName: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 4 },
     barContainer: { height: 8, backgroundColor: t.border, borderRadius: 4, marginVertical: 4, overflow: 'hidden' },
     barFill: { height: 8, borderRadius: 4 },
     alertCard: { backgroundColor: t.accent.red + '10', borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: t.accent.red + '30' },
-    alertTitle: { color: t.accent.red, fontSize: 14, fontWeight: '700', marginBottom: 4 },
+    alertTitle: { color: t.accent.red, fontSize: 14, fontWeight: fonts.bold, marginBottom: 4 },
     alertDesc: { color: t.text.muted, fontSize: 12, lineHeight: 18 },
     empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
     input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginTop: 8 },
-    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 1, marginTop: 12 },
+    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1, marginTop: 12 },
     chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 8 },
     chip: { paddingVertical: 8, paddingHorizontal: 14, borderRadius: 10, backgroundColor: t.border },
     chipActive: { backgroundColor: t.accent.blue },
-    chipText: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
+    chipText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
     chipTextActive: { color: '#fff' },
     statusBadge: { paddingHorizontal: 10, paddingVertical: 3, borderRadius: 6, alignSelf: 'flex-start', marginBottom: 6 },
-    statusText: { fontSize: 10, fontWeight: '700', color: '#fff', textTransform: 'uppercase' },
+    statusText: { fontSize: 10, fontWeight: fonts.bold, color: '#fff', textTransform: 'uppercase' },
     summaryRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
     summaryCard: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' },
-    summaryNum: { fontSize: 20, fontWeight: '800', marginBottom: 2 },
-    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: '600', textAlign: 'center' },
+    summaryNum: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 2 },
+    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold, textAlign: 'center' },
     progressRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: t.border },
-    progressMonth: { color: t.text.secondary, fontSize: 13, fontWeight: '600', flex: 1 },
-    progressScore: { fontSize: 13, fontWeight: '700', width: 50, textAlign: 'center' },
-    progressPeace: { fontSize: 13, fontWeight: '700', width: 50, textAlign: 'center' },
+    progressMonth: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, flex: 1 },
+    progressScore: { fontSize: 13, fontWeight: fonts.bold, width: 50, textAlign: 'center' },
+    progressPeace: { fontSize: 13, fontWeight: fonts.bold, width: 50, textAlign: 'center' },
     correlationCard: { backgroundColor: t.accent.blue + '10', borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: t.accent.blue + '30' },
   }), [t]);
 
@@ -346,7 +347,7 @@ export function NeedsAssessmentScreen({ onClose }: Props) {
                     </TouchableOpacity>
                   ))}
                   {scores[cat.key] ? (
-                    <Text style={{ color: SCORE_COLORS[scores[cat.key]], fontSize: 12, fontWeight: '600', marginLeft: 8, alignSelf: 'center' }}>
+                    <Text style={{ color: SCORE_COLORS[scores[cat.key]], fontSize: 12, fontWeight: fonts.semibold, marginLeft: 8, alignSelf: 'center' }}>
                       {SCORE_LABELS[scores[cat.key]]}
                     </Text>
                   ) : null}
@@ -357,8 +358,8 @@ export function NeedsAssessmentScreen({ onClose }: Props) {
             {Object.keys(scores).length > 0 && (
               <View style={st.card}>
                 <View style={st.row}>
-                  <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: '700' }}>Your Average</Text>
-                  <Text style={{ color: scoreColor(userAvg), fontSize: 20, fontWeight: '800' }}>{userAvg.toFixed(1)}/5.0</Text>
+                  <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: fonts.bold }}>Your Average</Text>
+                  <Text style={{ color: scoreColor(userAvg), fontSize: 20, fontWeight: fonts.heavy }}>{userAvg.toFixed(1)}/5.0</Text>
                 </View>
                 <View style={[st.barContainer, { marginTop: 8 }]}>
                   <View style={[st.barFill, { width: `${(userAvg / 5) * 100}%`, backgroundColor: scoreColor(userAvg) }]} />
@@ -374,7 +375,7 @@ export function NeedsAssessmentScreen({ onClose }: Props) {
 
             {submitted && (
               <View style={[st.card, { alignItems: 'center' }]}>
-                <Text style={{ color: t.accent.green, fontSize: 15, fontWeight: '700', marginBottom: 4 }}>Assessment Submitted</Text>
+                <Text style={{ color: t.accent.green, fontSize: 15, fontWeight: fonts.bold, marginBottom: 4 }}>Assessment Submitted</Text>
                 <Text style={{ color: t.text.muted, fontSize: 13, textAlign: 'center' }}>
                   Your anonymous assessment helps your community identify where support is needed. Thank you.
                 </Text>
@@ -395,7 +396,7 @@ export function NeedsAssessmentScreen({ onClose }: Props) {
                 <View key={r.code} style={st.alertCard}>
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Text style={st.alertTitle}>{r.name}</Text>
-                    <Text style={{ color: t.accent.red, fontSize: 18, fontWeight: '800' }}>{r.avgScore.toFixed(1)}/5.0</Text>
+                    <Text style={{ color: t.accent.red, fontSize: 18, fontWeight: fonts.heavy }}>{r.avgScore.toFixed(1)}/5.0</Text>
                   </View>
                   <Text style={st.alertDesc}>
                     Population: {r.population.toLocaleString()} {'\u2022'} Peace Index: {r.peaceIndex}/100 {'\u2022'} Trend: {TREND_ICONS[r.trend]} {r.trend}
@@ -411,7 +412,7 @@ export function NeedsAssessmentScreen({ onClose }: Props) {
                           <View key={key} style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4 }}>
                             <Text style={{ fontSize: 14, width: 24 }}>{cat.icon}</Text>
                             <Text style={{ color: t.text.secondary, fontSize: 12, flex: 1 }}>{cat.label}</Text>
-                            <Text style={{ color: scoreColor(score), fontSize: 12, fontWeight: '700' }}>{score.toFixed(1)}</Text>
+                            <Text style={{ color: scoreColor(score), fontSize: 12, fontWeight: fonts.bold }}>{score.toFixed(1)}</Text>
                           </View>
                         ) : null;
                       })}
@@ -425,7 +426,7 @@ export function NeedsAssessmentScreen({ onClose }: Props) {
                 <View key={r.code} style={st.card}>
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                     <Text style={st.regionName}>{r.name}</Text>
-                    <Text style={{ color: scoreColor(r.avgScore), fontSize: 18, fontWeight: '800' }}>{r.avgScore.toFixed(1)}</Text>
+                    <Text style={{ color: scoreColor(r.avgScore), fontSize: 18, fontWeight: fonts.heavy }}>{r.avgScore.toFixed(1)}</Text>
                   </View>
                   <View style={[st.barContainer, { marginBottom: 8 }]}>
                     <View style={[st.barFill, { width: `${(r.avgScore / 5) * 100}%`, backgroundColor: scoreColor(r.avgScore) }]} />
@@ -440,7 +441,7 @@ export function NeedsAssessmentScreen({ onClose }: Props) {
                   </View>
                   <View style={st.row}>
                     <Text style={st.label}>Trend</Text>
-                    <Text style={{ color: trendColors[r.trend], fontSize: 12, fontWeight: '700' }}>
+                    <Text style={{ color: trendColors[r.trend], fontSize: 12, fontWeight: fonts.bold }}>
                       {TREND_ICONS[r.trend]} {r.trend.charAt(0).toUpperCase() + r.trend.slice(1)}
                     </Text>
                   </View>
@@ -455,7 +456,7 @@ export function NeedsAssessmentScreen({ onClose }: Props) {
                           <View style={[st.barContainer, { flex: 1, marginHorizontal: 8, marginVertical: 0 }]}>
                             <View style={[st.barFill, { width: `${(score / 5) * 100}%`, backgroundColor: scoreColor(score) }]} />
                           </View>
-                          <Text style={{ color: scoreColor(score), fontSize: 11, fontWeight: '700', width: 24, textAlign: 'right' }}>{score.toFixed(1)}</Text>
+                          <Text style={{ color: scoreColor(score), fontSize: 11, fontWeight: fonts.bold, width: 24, textAlign: 'right' }}>{score.toFixed(1)}</Text>
                         </View>
                       );
                     })}
@@ -465,7 +466,7 @@ export function NeedsAssessmentScreen({ onClose }: Props) {
 
               {/* Correlation insight */}
               <View style={st.correlationCard}>
-                <Text style={{ color: t.accent.blue, fontSize: 14, fontWeight: '700', marginBottom: 6 }}>
+                <Text style={{ color: t.accent.blue, fontSize: 14, fontWeight: fonts.bold, marginBottom: 6 }}>
                   Needs Fulfillment and Peace Correlation
                 </Text>
                 <Text style={{ color: t.text.muted, fontSize: 12, lineHeight: 18 }}>
@@ -541,7 +542,7 @@ export function NeedsAssessmentScreen({ onClose }: Props) {
                       </View>
                       <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4 }}>
                         <Text style={{ fontSize: 16, marginRight: 6 }}>{cat?.icon ?? '\u{2753}'}</Text>
-                        <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: '600', flex: 1 }}>{cat?.label ?? need.category}</Text>
+                        <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, flex: 1 }}>{cat?.label ?? need.category}</Text>
                       </View>
                       <Text style={{ color: t.text.secondary, fontSize: 13, lineHeight: 19, marginBottom: 6 }}>{need.description}</Text>
                       <View style={st.row}>
@@ -593,11 +594,11 @@ export function NeedsAssessmentScreen({ onClose }: Props) {
               </View>
 
               <View style={st.card}>
-                <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: '700', marginBottom: 12 }}>Monthly Trend</Text>
+                <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, marginBottom: 12 }}>Monthly Trend</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8, borderBottomWidth: 1, borderBottomColor: t.border, paddingBottom: 6 }}>
-                  <Text style={{ color: t.text.muted, fontSize: 11, fontWeight: '600', flex: 1 }}>Month</Text>
-                  <Text style={{ color: t.text.muted, fontSize: 11, fontWeight: '600', width: 50, textAlign: 'center' }}>Needs</Text>
-                  <Text style={{ color: t.text.muted, fontSize: 11, fontWeight: '600', width: 50, textAlign: 'center' }}>Peace</Text>
+                  <Text style={{ color: t.text.muted, fontSize: 11, fontWeight: fonts.semibold, flex: 1 }}>Month</Text>
+                  <Text style={{ color: t.text.muted, fontSize: 11, fontWeight: fonts.semibold, width: 50, textAlign: 'center' }}>Needs</Text>
+                  <Text style={{ color: t.text.muted, fontSize: 11, fontWeight: fonts.semibold, width: 50, textAlign: 'center' }}>Peace</Text>
                 </View>
                 {progress.map((p, i) => (
                   <View key={p.month} style={st.progressRow}>
@@ -610,12 +611,12 @@ export function NeedsAssessmentScreen({ onClose }: Props) {
 
               {/* Bar chart representation */}
               <View style={st.card}>
-                <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: '700', marginBottom: 12 }}>Score Trend</Text>
+                <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, marginBottom: 12 }}>Score Trend</Text>
                 {progress.map(p => (
                   <View key={p.month} style={{ marginBottom: 8 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 2 }}>
                       <Text style={{ color: t.text.muted, fontSize: 10 }}>{p.month}</Text>
-                      <Text style={{ color: scoreColor(p.avgScore), fontSize: 10, fontWeight: '700' }}>{p.avgScore.toFixed(2)}</Text>
+                      <Text style={{ color: scoreColor(p.avgScore), fontSize: 10, fontWeight: fonts.bold }}>{p.avgScore.toFixed(2)}</Text>
                     </View>
                     <View style={st.barContainer}>
                       <View style={[st.barFill, { width: `${(p.avgScore / 5) * 100}%`, backgroundColor: scoreColor(p.avgScore) }]} />
@@ -625,7 +626,7 @@ export function NeedsAssessmentScreen({ onClose }: Props) {
               </View>
 
               <View style={st.correlationCard}>
-                <Text style={{ color: t.accent.blue, fontSize: 14, fontWeight: '700', marginBottom: 6 }}>
+                <Text style={{ color: t.accent.blue, fontSize: 14, fontWeight: fonts.bold, marginBottom: 6 }}>
                   The Connection: Needs Met = Peace
                 </Text>
                 <Text style={{ color: t.text.muted, fontSize: 12, lineHeight: 18 }}>

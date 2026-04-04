@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Onboarding Screen — First-time wallet setup.
  * Create new wallet or restore from seed phrase.
@@ -78,14 +79,14 @@ export function OnboardingScreen() {
     logo: {
       color: t.accent.green,
       fontSize: 48,
-      fontWeight: '900',
+      fontWeight: fonts.heavy,
       textAlign: 'center',
       marginBottom: 8,
     },
     title: {
       color: t.text.primary,
       fontSize: 32,
-      fontWeight: '800',
+      fontWeight: fonts.heavy,
       textAlign: 'center',
     },
     subtitle: {
@@ -117,7 +118,7 @@ export function OnboardingScreen() {
     primaryButtonText: {
       color: t.bg.primary,
       fontSize: 17,
-      fontWeight: '700',
+      fontWeight: fonts.bold,
     },
     secondaryButton: {
       borderWidth: 1,
@@ -130,7 +131,7 @@ export function OnboardingScreen() {
     secondaryButtonText: {
       color: t.text.secondary,
       fontSize: 17,
-      fontWeight: '600',
+      fontWeight: fonts.semibold,
     },
     footer: {
       color: t.text.muted,
@@ -141,7 +142,7 @@ export function OnboardingScreen() {
     stepTitle: {
       color: t.text.primary,
       fontSize: 24,
-      fontWeight: '800',
+      fontWeight: fonts.heavy,
       marginBottom: 12,
     },
     stepDesc: {
@@ -174,7 +175,7 @@ export function OnboardingScreen() {
     wordText: {
       color: t.text.primary,
       fontSize: 14,
-      fontWeight: '500',
+      fontWeight: fonts.medium,
     },
     textArea: {
       backgroundColor: t.bg.card,
@@ -216,7 +217,7 @@ export function OnboardingScreen() {
     selectedWordText: {
       color: t.accent.green,
       fontSize: 13,
-      fontWeight: '600',
+      fontWeight: fonts.semibold,
     },
     wordPool: {
       flexDirection: 'row',
@@ -236,7 +237,7 @@ export function OnboardingScreen() {
     poolWordText: {
       color: t.text.primary,
       fontSize: 13,
-      fontWeight: '500',
+      fontWeight: fonts.medium,
     },
     checkboxRow: {
       flexDirection: 'row',
@@ -262,7 +263,7 @@ export function OnboardingScreen() {
     checkboxMark: {
       color: '#fff',
       fontSize: 14,
-      fontWeight: '800',
+      fontWeight: fonts.heavy,
     },
     checkboxLabel: {
       color: t.text.secondary,
@@ -282,7 +283,7 @@ export function OnboardingScreen() {
       color: t.accent.yellow,
       fontSize: 13,
       lineHeight: 20,
-      fontWeight: '500',
+      fontWeight: fonts.medium,
     },
     spotCheckCard: {
       backgroundColor: t.bg.card,
@@ -293,7 +294,7 @@ export function OnboardingScreen() {
     spotCheckLabel: {
       color: t.text.secondary,
       fontSize: 13,
-      fontWeight: '700',
+      fontWeight: fonts.bold,
       marginBottom: 8,
     },
     spotCheckInput: {
@@ -673,7 +674,7 @@ export function OnboardingScreen() {
             backgroundColor: t.bg.card, borderRadius: 12, padding: 12, marginBottom: 12,
             borderWidth: 1, borderColor: t.accent.green,
           }}>
-            <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: '700', textAlign: 'center', marginBottom: 6 }}>
+            <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 6 }}>
               Biometric Quick Unlock
             </Text>
             <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
@@ -719,7 +720,7 @@ export function OnboardingScreen() {
 
           {/* ─── Hardware Wallets (always visible) ─── */}
           <Text style={{
-            color: t.text.secondary, fontSize: 11, fontWeight: '700',
+            color: t.text.secondary, fontSize: 11, fontWeight: fonts.bold,
             textTransform: 'uppercase', letterSpacing: 1.2,
             marginTop: 16, marginBottom: 8, textAlign: 'center',
           }}>

@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * What's New Screen — In-app release notes for current version.
  */
@@ -52,16 +53,16 @@ export function WhatsNewScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingHorizontal: 24, paddingBottom: 40 },
     versionCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 16 },
     versionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
-    versionText: { color: t.accent.green, fontSize: 16, fontWeight: '800' },
+    versionText: { color: t.accent.green, fontSize: 16, fontWeight: fonts.heavy },
     dateText: { color: t.text.muted, fontSize: 13 },
     item: { color: t.text.secondary, fontSize: 14, lineHeight: 22, marginBottom: 4 },
     externalBtn: { backgroundColor: t.accent.blue + '15', borderRadius: 12, padding: 16, marginTop: 8, alignItems: 'center' },
-    externalText: { color: t.accent.blue, fontSize: 14, fontWeight: '600' },
+    externalText: { color: t.accent.blue, fontSize: 14, fontWeight: fonts.semibold },
   }), [t]);
 
   return (

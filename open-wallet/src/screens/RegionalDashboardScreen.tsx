@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Regional Dashboard Screen — Dashboard for your specific region's metrics.
  *
@@ -81,36 +82,36 @@ export function RegionalDashboardScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingBottom: 40 },
     tabRow: { flexDirection: 'row', paddingHorizontal: 12, marginBottom: 12 },
     tabBtn: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 16, marginHorizontal: 4 },
     tabActive: { backgroundColor: t.accent.blue + '20' },
-    tabText: { color: t.text.muted, fontSize: 13, fontWeight: '600' },
+    tabText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
     tabTextActive: { color: t.accent.blue },
     card: { backgroundColor: t.bg.secondary, borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16 },
-    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: '700', marginBottom: 12, marginHorizontal: 20 },
-    regionName: { color: t.accent.blue, fontSize: 14, fontWeight: '700', textAlign: 'center', marginBottom: 16 },
+    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 12, marginHorizontal: 20 },
+    regionName: { color: t.accent.blue, fontSize: 14, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 16 },
     metricRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, borderBottomColor: t.bg.primary, borderBottomWidth: 1 },
     metricLabel: { color: t.text.secondary, fontSize: 14 },
     metricRight: { flexDirection: 'row', alignItems: 'center' },
-    metricValue: { color: t.text.primary, fontSize: 16, fontWeight: '800', marginRight: 8 },
-    metricChange: { fontSize: 12, fontWeight: '600' },
+    metricValue: { color: t.text.primary, fontSize: 16, fontWeight: fonts.heavy, marginRight: 8 },
+    metricChange: { fontSize: 12, fontWeight: fonts.semibold },
     channelRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 12, borderBottomColor: t.bg.primary, borderBottomWidth: 1 },
     channelDot: { width: 12, height: 12, borderRadius: 6, marginRight: 12 },
     channelInfo: { flex: 1 },
-    channelName: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
+    channelName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
     channelMeta: { color: t.text.muted, fontSize: 12, marginTop: 2 },
-    channelOtk: { color: t.accent.green, fontSize: 15, fontWeight: '800' },
+    channelOtk: { color: t.accent.green, fontSize: 15, fontWeight: fonts.heavy },
     rankRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 12, borderBottomColor: t.bg.primary, borderBottomWidth: 1 },
-    rankNum: { width: 32, color: t.text.muted, fontSize: 16, fontWeight: '800', textAlign: 'center' },
+    rankNum: { width: 32, color: t.text.muted, fontSize: 16, fontWeight: fonts.heavy, textAlign: 'center' },
     rankInfo: { flex: 1, marginLeft: 8 },
-    rankName: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
+    rankName: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
     rankMeta: { color: t.text.muted, fontSize: 12, marginTop: 2 },
-    rankScore: { color: t.accent.blue, fontSize: 18, fontWeight: '800' },
+    rankScore: { color: t.accent.blue, fontSize: 18, fontWeight: fonts.heavy },
     demoTag: { backgroundColor: t.accent.orange + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'center', marginBottom: 12 },
-    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: '700' },
+    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: fonts.bold },
   }), [t]);
 
   const tabs: Array<{ key: Tab; label: string }> = [

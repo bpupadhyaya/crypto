@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Balance display — adapts to Simple and Pro mode.
  * Simple: Large total, token count
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   simpleLabel: { color: '#a0a0b0', fontSize: 16, marginBottom: 8 },
-  simpleAmount: { color: '#f0f0f5', fontSize: 48, fontWeight: '800' },
+  simpleAmount: { color: '#f0f0f5', fontSize: 48, fontWeight: fonts.heavy },
   simpleHint: { color: '#606070', fontSize: 14, marginTop: 8 },
   proCard: {
     backgroundColor: '#16161f',
@@ -81,14 +82,14 @@ const styles = StyleSheet.create({
   },
   proHeader: { marginBottom: 16 },
   proLabel: { color: '#a0a0b0', fontSize: 13, textTransform: 'uppercase', letterSpacing: 1 },
-  proAmount: { color: '#f0f0f5', fontSize: 32, fontWeight: '700', marginTop: 4 },
+  proAmount: { color: '#f0f0f5', fontSize: 32, fontWeight: fonts.bold, marginTop: 4 },
   proBreakdown: {
     borderTopWidth: 1,
     borderTopColor: 'rgba(255,255,255,0.06)',
     paddingTop: 12,
   },
   proRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 8 },
-  proTokenSymbol: { color: '#f0f0f5', fontSize: 14, fontWeight: '600', width: 60 },
+  proTokenSymbol: { color: '#f0f0f5', fontSize: 14, fontWeight: fonts.semibold, width: 60 },
   proTokenChain: { color: '#606070', fontSize: 12, width: 80 },
   proTokenValue: { color: '#a0a0b0', fontSize: 14, flex: 1, textAlign: 'right' },
   proTokenAllocation: { color: '#606070', fontSize: 12, width: 50, textAlign: 'right' },

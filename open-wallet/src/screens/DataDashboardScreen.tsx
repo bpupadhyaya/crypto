@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Data Dashboard Screen — Personal analytics across all 300 screens.
  *
@@ -145,27 +146,27 @@ export function DataDashboardScreen({ onClose }: Props) {
       paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1,
       borderBottomColor: t.border,
     },
-    title: { fontSize: 18, fontWeight: '700', color: t.text.primary },
+    title: { fontSize: 18, fontWeight: fonts.bold, color: t.text.primary },
     closeBtn: { fontSize: 16, color: t.accent.green },
     scroll: { flex: 1 },
     section: { padding: 16, borderBottomWidth: 1, borderBottomColor: t.border },
-    sectionTitle: { fontSize: 16, fontWeight: '600', color: t.text.primary, marginBottom: 10 },
+    sectionTitle: { fontSize: 16, fontWeight: fonts.semibold, color: t.text.primary, marginBottom: 10 },
     scoreBox: {
       backgroundColor: t.bg.card, borderRadius: 16, padding: 20,
       alignItems: 'center', borderWidth: 1, borderColor: t.border,
     },
-    bigScore: { fontSize: 48, fontWeight: '800', color: t.accent.green },
+    bigScore: { fontSize: 48, fontWeight: fonts.heavy, color: t.accent.green },
     scoreLabel: { fontSize: 14, color: t.text.secondary, marginTop: 4 },
     metricsRow: { flexDirection: 'row', marginTop: 16 },
     metric: { flex: 1, alignItems: 'center' },
-    metricValue: { fontSize: 18, fontWeight: '700', color: t.text.primary },
+    metricValue: { fontSize: 18, fontWeight: fonts.bold, color: t.text.primary },
     metricLabel: { fontSize: 11, color: t.text.secondary, marginTop: 2 },
     card: {
       backgroundColor: t.bg.card, borderRadius: 10, padding: 12,
       marginBottom: 8, borderWidth: 1, borderColor: t.border,
     },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    value: { fontSize: 14, color: t.text.primary, fontWeight: '500' },
+    value: { fontSize: 14, color: t.text.primary, fontWeight: fonts.medium },
     label: { fontSize: 12, color: t.text.secondary },
     heatDot: {
       width: 10, height: 10, borderRadius: 5, marginRight: 8,
@@ -177,7 +178,7 @@ export function DataDashboardScreen({ onClose }: Props) {
       paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: t.border,
     },
     flowLabel: { fontSize: 13, color: t.text.primary, width: 80 },
-    flowValue: { fontSize: 13, fontWeight: '600', width: 60, textAlign: 'right' },
+    flowValue: { fontSize: 13, fontWeight: fonts.semibold, width: 60, textAlign: 'right' },
     earnedColor: { color: '#22c55e' },
     givenColor: { color: '#ef4444' },
     receivedColor: { color: '#3b82f6' },
@@ -186,7 +187,7 @@ export function DataDashboardScreen({ onClose }: Props) {
       borderBottomWidth: 1, borderBottomColor: t.border,
     },
     channelName: { fontSize: 14, color: t.text.primary, width: 90 },
-    channelPct: { fontSize: 14, fontWeight: '600', width: 45, textAlign: 'right' },
+    channelPct: { fontSize: 14, fontWeight: fonts.semibold, width: 45, textAlign: 'right' },
     infoText: { fontSize: 13, color: t.text.secondary, lineHeight: 20 },
   }), [t]);
 
@@ -246,7 +247,7 @@ export function DataDashboardScreen({ onClose }: Props) {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>OTK Flow (6 Months)</Text>
           <View style={[styles.flowRow, { borderBottomWidth: 2 }]}>
-            <Text style={[styles.flowLabel, { fontWeight: '600' }]}>Month</Text>
+            <Text style={[styles.flowLabel, { fontWeight: fonts.semibold }]}>Month</Text>
             <Text style={[styles.flowValue, styles.earnedColor]}>Earned</Text>
             <Text style={[styles.flowValue, styles.givenColor]}>Given</Text>
             <Text style={[styles.flowValue, styles.receivedColor]}>Received</Text>
@@ -260,10 +261,10 @@ export function DataDashboardScreen({ onClose }: Props) {
             </View>
           ))}
           <View style={[styles.flowRow, { borderTopWidth: 2, borderTopColor: t.text.primary }]}>
-            <Text style={[styles.flowLabel, { fontWeight: '700' }]}>Total</Text>
-            <Text style={[styles.flowValue, styles.earnedColor, { fontWeight: '700' }]}>{totalEarned}</Text>
-            <Text style={[styles.flowValue, styles.givenColor, { fontWeight: '700' }]}>{totalGiven}</Text>
-            <Text style={[styles.flowValue, styles.receivedColor, { fontWeight: '700' }]}>{totalReceived}</Text>
+            <Text style={[styles.flowLabel, { fontWeight: fonts.bold }]}>Total</Text>
+            <Text style={[styles.flowValue, styles.earnedColor, { fontWeight: fonts.bold }]}>{totalEarned}</Text>
+            <Text style={[styles.flowValue, styles.givenColor, { fontWeight: fonts.bold }]}>{totalGiven}</Text>
+            <Text style={[styles.flowValue, styles.receivedColor, { fontWeight: fonts.bold }]}>{totalReceived}</Text>
           </View>
         </View>
 

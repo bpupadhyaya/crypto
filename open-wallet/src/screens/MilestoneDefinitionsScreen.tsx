@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Milestone Definitions Screen — Browse and submit regional milestones.
  *
@@ -87,40 +88,40 @@ export function MilestoneDefinitionsScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
-    closeBtn: { color: t.accent.blue, fontSize: 16, fontWeight: '600' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
+    closeBtn: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
     tabRow: { flexDirection: 'row', marginHorizontal: 16, marginBottom: 12, gap: 8 },
     tabBtn: { flex: 1, paddingVertical: 10, borderRadius: 10, alignItems: 'center', backgroundColor: t.border },
     tabBtnActive: { backgroundColor: t.accent.green },
-    tabText: { color: t.text.secondary, fontSize: 14, fontWeight: '600' },
+    tabText: { color: t.text.secondary, fontSize: 14, fontWeight: fonts.semibold },
     tabTextActive: { color: t.bg.primary },
     filterRow: { flexDirection: 'row', paddingHorizontal: 16, marginBottom: 8, gap: 6 },
     filterChip: { paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: t.border },
     filterChipActive: { backgroundColor: t.accent.blue },
-    filterText: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    filterText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     filterTextActive: { color: '#fff' },
-    sectionLabel: { color: t.text.muted, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1, marginLeft: 16, marginTop: 12, marginBottom: 6 },
+    sectionLabel: { color: t.text.muted, fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1, marginLeft: 16, marginTop: 12, marginBottom: 6 },
     card: { backgroundColor: t.bg.card, marginHorizontal: 16, borderRadius: 14, padding: 14, marginBottom: 10 },
-    cardTitle: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
+    cardTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
     cardDesc: { color: t.text.muted, fontSize: 13, marginTop: 4, lineHeight: 18 },
     cardFooter: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 10, alignItems: 'center' },
     mintBadge: { backgroundColor: t.accent.green + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
-    mintText: { color: t.accent.green, fontSize: 12, fontWeight: '700' },
+    mintText: { color: t.accent.green, fontSize: 12, fontWeight: fonts.bold },
     verifyBadge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8 },
-    verifyText: { fontSize: 11, fontWeight: '600' },
+    verifyText: { fontSize: 11, fontWeight: fonts.semibold },
     channelIcon: { fontSize: 18, marginRight: 6 },
     submitBtn: { backgroundColor: t.accent.green, borderRadius: 10, paddingVertical: 12, alignItems: 'center', marginTop: 12 },
-    submitBtnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+    submitBtnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
     disabledBtn: { backgroundColor: t.border },
     input: { backgroundColor: t.bg.card, borderRadius: 10, padding: 12, color: t.text.primary, fontSize: 14, marginTop: 8, minHeight: 60, textAlignVertical: 'top' },
     statusDot: { width: 8, height: 8, borderRadius: 4, marginRight: 6 },
     emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
     detailOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: t.bg.primary, padding: 16 },
-    detailTitle: { color: t.text.primary, fontSize: 22, fontWeight: '800', marginTop: 16, marginBottom: 8 },
+    detailTitle: { color: t.text.primary, fontSize: 22, fontWeight: fonts.heavy, marginTop: 16, marginBottom: 8 },
     detailDesc: { color: t.text.secondary, fontSize: 15, lineHeight: 22, marginBottom: 16 },
     detailMeta: { flexDirection: 'row', gap: 12, marginBottom: 16 },
     metaChip: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: t.border },
-    metaText: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
+    metaText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
   }), [t]);
 
   const handleSubmit = useCallback((milestone: MilestoneDefinition) => {
@@ -178,7 +179,7 @@ export function MilestoneDefinitionsScreen({ onClose }: Props) {
               </View>
             ) : (
               <>
-                <Text style={{ color: t.text.secondary, fontSize: 14, fontWeight: '600', marginTop: 8 }}>
+                <Text style={{ color: t.text.secondary, fontSize: 14, fontWeight: fonts.semibold, marginTop: 8 }}>
                   Describe your evidence:
                 </Text>
                 <TextInput
@@ -351,7 +352,7 @@ export function MilestoneDefinitionsScreen({ onClose }: Props) {
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                       <View style={[s.statusDot, { backgroundColor: statusColor(sub.status) }]} />
-                      <Text style={{ color: statusColor(sub.status), fontSize: 13, fontWeight: '700' }}>
+                      <Text style={{ color: statusColor(sub.status), fontSize: 13, fontWeight: fonts.bold }}>
                         {statusLabel(sub.status)}
                       </Text>
                     </View>

@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Dispute Resolution Screen — For arbiters to resolve escrow disputes.
  *
@@ -101,34 +102,34 @@ export function DisputeScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingHorizontal: 16 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
     label: { color: t.text.secondary, fontSize: 13 },
-    value: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
+    value: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
     statusBadge: { paddingHorizontal: 10, paddingVertical: 3, borderRadius: 8 },
-    statusText: { fontSize: 11, fontWeight: '700', textTransform: 'uppercase', color: '#fff' },
-    amountText: { color: t.text.primary, fontSize: 22, fontWeight: '700', marginBottom: 4 },
+    statusText: { fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase', color: '#fff' },
+    amountText: { color: t.text.primary, fontSize: 22, fontWeight: fonts.bold, marginBottom: 4 },
     descText: { color: t.text.secondary, fontSize: 13, marginBottom: 8, lineHeight: 18 },
     tabRow: { flexDirection: 'row', gap: 8, marginBottom: 16 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, alignItems: 'center', backgroundColor: t.bg.card },
     tabActive: { backgroundColor: t.accent.green },
-    tabText: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
+    tabText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', paddingVertical: 40 },
     messageCard: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, marginBottom: 12, borderLeftWidth: 3 },
-    messageSender: { fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 },
+    messageSender: { fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 },
     messageText: { color: t.text.primary, fontSize: 14, lineHeight: 20 },
     detailRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: t.border },
     detailLabel: { color: t.text.secondary, fontSize: 13 },
-    detailValue: { color: t.text.primary, fontSize: 13, fontWeight: '600', maxWidth: '60%', textAlign: 'right' },
+    detailValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold, maxWidth: '60%', textAlign: 'right' },
     btn: { borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 10 },
     btnPrimary: { backgroundColor: t.accent.green },
     btnDanger: { backgroundColor: t.accent.red },
-    btnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+    btnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
     actionRow: { flexDirection: 'row', gap: 10, marginTop: 16 },
     warningCard: { backgroundColor: t.accent.yellow + '15', borderRadius: 12, padding: 14, marginBottom: 16 },
     warningText: { color: t.accent.yellow, fontSize: 13, lineHeight: 18, textAlign: 'center' },
@@ -282,7 +283,7 @@ export function DisputeScreen({ onClose }: Props) {
 
           {d.status !== 'pending' && (
             <View style={[st.card, { backgroundColor: (STATUS_COLORS[d.status] || '#666') + '20' }]}>
-              <Text style={{ color: STATUS_COLORS[d.status], fontSize: 14, fontWeight: '600', textAlign: 'center' }}>
+              <Text style={{ color: STATUS_COLORS[d.status], fontSize: 14, fontWeight: fonts.semibold, textAlign: 'center' }}>
                 {d.status === 'resolved_seller'
                   ? 'Resolved: Funds released to seller'
                   : 'Resolved: Funds refunded to buyer'}

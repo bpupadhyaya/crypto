@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Toast — In-app notification that auto-dismisses.
  * Appears at the top of the screen with a slide animation.
@@ -43,9 +44,9 @@ export const ToastContainer = React.memo(() => {
   const s = useMemo(() => StyleSheet.create({
     container: { position: 'absolute', top: 60, left: 16, right: 16, zIndex: 9999 },
     toast: { flexDirection: 'row', alignItems: 'center', borderRadius: 12, padding: 14, marginBottom: 8, borderLeftWidth: 4 },
-    icon: { fontSize: 18, fontWeight: '700', marginRight: 12 },
+    icon: { fontSize: 18, fontWeight: fonts.bold, marginRight: 12 },
     textContainer: { flex: 1 },
-    title: { color: t.text.primary, fontSize: 14, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
     message: { color: t.text.secondary, fontSize: 12, marginTop: 2 },
   }), [t]);
 

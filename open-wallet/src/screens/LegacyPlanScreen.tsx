@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Legacy Plan Screen — Plan your digital legacy comprehensively.
  *
@@ -118,26 +119,26 @@ export function LegacyPlanScreen({ onClose }: Props) {
       paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1,
       borderBottomColor: t.border,
     },
-    title: { fontSize: 18, fontWeight: '700', color: t.text.primary },
+    title: { fontSize: 18, fontWeight: fonts.bold, color: t.text.primary },
     closeBtn: { fontSize: 16, color: t.accent.green },
     tabRow: { flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: t.border },
     tab: { flex: 1, paddingVertical: 10, alignItems: 'center' },
     tabActive: { borderBottomWidth: 2, borderBottomColor: t.accent.green },
     tabText: { fontSize: 13, color: t.text.secondary },
-    tabTextActive: { color: t.accent.green, fontWeight: '600' },
+    tabTextActive: { color: t.accent.green, fontWeight: fonts.semibold },
     scroll: { flex: 1 },
     section: { padding: 16, borderBottomWidth: 1, borderBottomColor: t.border },
-    sectionTitle: { fontSize: 16, fontWeight: '600', color: t.text.primary, marginBottom: 8 },
+    sectionTitle: { fontSize: 16, fontWeight: fonts.semibold, color: t.text.primary, marginBottom: 8 },
     card: {
       backgroundColor: t.bg.card, borderRadius: 12, padding: 14,
       marginBottom: 10, borderWidth: 1, borderColor: t.border,
     },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
     label: { fontSize: 13, color: t.text.secondary, marginBottom: 2 },
-    value: { fontSize: 15, color: t.text.primary, fontWeight: '500' },
+    value: { fontSize: 15, color: t.text.primary, fontWeight: fonts.medium },
     subtext: { fontSize: 12, color: t.text.secondary },
     badge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8 },
-    badgeText: { fontSize: 11, fontWeight: '600', color: '#fff' },
+    badgeText: { fontSize: 11, fontWeight: fonts.semibold, color: '#fff' },
     assetChip: {
       paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6,
       backgroundColor: t.bg.primary, marginRight: 6, marginBottom: 4,
@@ -153,7 +154,7 @@ export function LegacyPlanScreen({ onClose }: Props) {
       backgroundColor: t.accent.green, borderRadius: 10, paddingVertical: 12,
       alignItems: 'center', marginTop: 8,
     },
-    buttonText: { color: '#fff', fontWeight: '600', fontSize: 15 },
+    buttonText: { color: '#fff', fontWeight: fonts.semibold, fontSize: 15 },
     buttonDisabled: { opacity: 0.5 },
     lockBox: {
       backgroundColor: '#fef3c7', borderRadius: 10, padding: 12, marginBottom: 12,
@@ -164,7 +165,7 @@ export function LegacyPlanScreen({ onClose }: Props) {
       paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4,
       backgroundColor: t.bg.primary, marginTop: 4, alignSelf: 'flex-start',
     },
-    triggerText: { fontSize: 10, color: t.text.secondary, fontWeight: '600' },
+    triggerText: { fontSize: 10, color: t.text.secondary, fontWeight: fonts.semibold },
     switchRow: {
       flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
       paddingVertical: 10,

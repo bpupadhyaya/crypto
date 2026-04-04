@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Ancestry Screen — Deep genealogy tracking and ancestry exploration.
  *
@@ -300,12 +301,12 @@ export function AncestryScreen({ onClose }: Props) {
       paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1,
       borderBottomColor: t.border,
     },
-    title: { fontSize: 20, fontWeight: '700', color: t.text.primary },
+    title: { fontSize: 20, fontWeight: fonts.bold, color: t.text.primary },
     closeBtn: {
       paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8,
       backgroundColor: t.bg.card,
     },
-    closeTxt: { color: t.text.secondary, fontSize: 14, fontWeight: '600' },
+    closeTxt: { color: t.text.secondary, fontSize: 14, fontWeight: fonts.semibold },
 
     tabs: {
       flexDirection: 'row', paddingHorizontal: 12, paddingVertical: 8, gap: 8,
@@ -315,14 +316,14 @@ export function AncestryScreen({ onClose }: Props) {
       backgroundColor: t.bg.card,
     },
     tabActive: { backgroundColor: t.accent.green },
-    tabTxt: { fontSize: 13, fontWeight: '600', color: t.text.secondary },
+    tabTxt: { fontSize: 13, fontWeight: fonts.semibold, color: t.text.secondary },
     tabTxtActive: { color: '#fff' },
 
     notkBanner: {
       flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
       paddingVertical: 8, backgroundColor: t.accent + '12', gap: 8,
     },
-    notkTxt: { fontSize: 13, fontWeight: '700', color: t.accent.green },
+    notkTxt: { fontSize: 13, fontWeight: fonts.bold, color: t.accent.green },
     notkSub: { fontSize: 11, color: t.text.secondary },
 
     statsRow: {
@@ -332,7 +333,7 @@ export function AncestryScreen({ onClose }: Props) {
       flex: 1, padding: 10, borderRadius: 10, backgroundColor: t.bg.card,
       alignItems: 'center',
     },
-    statVal: { fontSize: 18, fontWeight: '700', color: t.accent.green },
+    statVal: { fontSize: 18, fontWeight: fonts.bold, color: t.accent.green },
     statLabel: { fontSize: 10, color: t.text.secondary, marginTop: 2, textAlign: 'center' },
 
     scroll: { flex: 1 },
@@ -344,7 +345,7 @@ export function AncestryScreen({ onClose }: Props) {
       paddingTop: 14, paddingBottom: 6, gap: 8,
     },
     genIcon: { fontSize: 20 },
-    genLabel: { fontSize: 14, fontWeight: '700', color: t.text.secondary },
+    genLabel: { fontSize: 14, fontWeight: fonts.bold, color: t.text.secondary },
     genLine: { height: 1, flex: 1, backgroundColor: t.border, marginLeft: 8 },
 
     memberCard: {
@@ -352,7 +353,7 @@ export function AncestryScreen({ onClose }: Props) {
       backgroundColor: t.bg.card, borderLeftWidth: 4, flexDirection: 'row',
     },
     memberInfo: { flex: 1 },
-    memberName: { fontSize: 15, fontWeight: '600', color: t.text.primary },
+    memberName: { fontSize: 15, fontWeight: fonts.semibold, color: t.text.primary },
     memberRel: { fontSize: 12, color: t.text.secondary, marginTop: 2 },
     memberDates: { fontSize: 11, color: t.text.secondary, marginTop: 2 },
     memberRegion: { fontSize: 12, color: t.accent.green, marginTop: 4 },
@@ -377,7 +378,7 @@ export function AncestryScreen({ onClose }: Props) {
       marginHorizontal: 16, marginBottom: 12, padding: 16, borderRadius: 12,
       backgroundColor: t.bg.card, borderLeftWidth: 4, borderLeftColor: '#f59e0b',
     },
-    storyTitle: { fontSize: 15, fontWeight: '600', color: t.text.primary },
+    storyTitle: { fontSize: 15, fontWeight: fonts.semibold, color: t.text.primary },
     storyEra: { fontSize: 12, color: t.text.secondary, marginTop: 2 },
     storyAncestor: { fontSize: 12, color: t.accent.green, marginTop: 2 },
     storyContent: { fontSize: 14, color: t.text.primary, lineHeight: 21, marginTop: 8 },
@@ -388,8 +389,8 @@ export function AncestryScreen({ onClose }: Props) {
       backgroundColor: t.bg.card,
     },
     heritageRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 6 },
-    heritageRegion: { fontSize: 15, fontWeight: '600', color: t.text.primary, flex: 1 },
-    heritagePct: { fontSize: 16, fontWeight: '700', color: t.accent.green },
+    heritageRegion: { fontSize: 15, fontWeight: fonts.semibold, color: t.text.primary, flex: 1 },
+    heritagePct: { fontSize: 16, fontWeight: fonts.bold, color: t.accent.green },
     heritageBar: {
       height: 6, borderRadius: 3, backgroundColor: t.border, marginBottom: 6,
     },
@@ -398,14 +399,14 @@ export function AncestryScreen({ onClose }: Props) {
 
     // Milestones
     milestoneSection: { paddingHorizontal: 16, paddingTop: 14, paddingBottom: 6 },
-    milestoneSectionTitle: { fontSize: 15, fontWeight: '700', color: t.text.primary, marginBottom: 8 },
+    milestoneSectionTitle: { fontSize: 15, fontWeight: fonts.bold, color: t.text.primary, marginBottom: 8 },
     milestoneCard: {
       marginHorizontal: 16, marginBottom: 8, padding: 12, borderRadius: 10,
       backgroundColor: t.bg.card, flexDirection: 'row', gap: 10,
     },
     msIcon: { fontSize: 22, marginTop: 2 },
     msInfo: { flex: 1 },
-    msTitle: { fontSize: 14, fontWeight: '600', color: t.text.primary },
+    msTitle: { fontSize: 14, fontWeight: fonts.semibold, color: t.text.primary },
     msYear: { fontSize: 12, color: t.accent.green, marginTop: 2 },
     msDesc: { fontSize: 12, color: t.text.secondary, marginTop: 4, lineHeight: 18 },
 
@@ -417,7 +418,7 @@ export function AncestryScreen({ onClose }: Props) {
     modalCard: {
       backgroundColor: t.bg.primary, borderRadius: 16, padding: 20,
     },
-    modalTitle: { fontSize: 18, fontWeight: '700', color: t.text.primary, marginBottom: 4 },
+    modalTitle: { fontSize: 18, fontWeight: fonts.bold, color: t.text.primary, marginBottom: 4 },
     modalSub: { fontSize: 13, color: t.text.secondary, marginBottom: 12 },
     modalBody: { fontSize: 14, color: t.text.primary, lineHeight: 21, marginBottom: 12 },
     modalInfo: { fontSize: 13, color: t.text.secondary, marginBottom: 4 },
@@ -425,11 +426,11 @@ export function AncestryScreen({ onClose }: Props) {
       marginTop: 12, paddingVertical: 10, borderRadius: 10,
       backgroundColor: t.bg.card, alignItems: 'center',
     },
-    modalCloseTxt: { fontWeight: '600', color: t.text.secondary, fontSize: 14 },
+    modalCloseTxt: { fontWeight: fonts.semibold, color: t.text.secondary, fontSize: 14 },
 
     // Form
     formSection: { paddingHorizontal: 16, paddingTop: 12 },
-    formLabel: { fontSize: 13, fontWeight: '600', color: t.text.secondary, marginBottom: 4, marginTop: 12 },
+    formLabel: { fontSize: 13, fontWeight: fonts.semibold, color: t.text.secondary, marginBottom: 4, marginTop: 12 },
     formInput: {
       borderWidth: 1, borderColor: t.border, borderRadius: 10, padding: 10,
       fontSize: 14, color: t.text.primary, backgroundColor: t.bg.card,
@@ -443,12 +444,12 @@ export function AncestryScreen({ onClose }: Props) {
       borderWidth: 1, borderColor: t.border,
     },
     relOptionActive: { borderWidth: 2 },
-    relOptionTxt: { fontSize: 12, fontWeight: '600' },
+    relOptionTxt: { fontSize: 12, fontWeight: fonts.semibold },
     addBtn: {
       marginTop: 20, marginBottom: 20, paddingVertical: 14, borderRadius: 12,
       backgroundColor: t.accent.green, alignItems: 'center',
     },
-    addBtnTxt: { color: '#fff', fontWeight: '700', fontSize: 15 },
+    addBtnTxt: { color: '#fff', fontWeight: fonts.bold, fontSize: 15 },
 
     divider: { height: 1, backgroundColor: t.border, marginHorizontal: 16, marginVertical: 16 },
 
@@ -459,7 +460,7 @@ export function AncestryScreen({ onClose }: Props) {
     demoBar: {
       backgroundColor: '#fef3c7', paddingVertical: 6, alignItems: 'center',
     },
-    demoTxt: { fontSize: 11, color: '#92400e', fontWeight: '600' },
+    demoTxt: { fontSize: 11, color: '#92400e', fontWeight: fonts.semibold },
   }), [t]);
 
   // --- Render helpers ---
@@ -830,7 +831,7 @@ export function AncestryScreen({ onClose }: Props) {
             )}
             {ancestorStories.length > 0 && (
               <>
-                <Text style={[styles.modalInfo, { fontWeight: '700', marginTop: 8 }]}>
+                <Text style={[styles.modalInfo, { fontWeight: fonts.bold, marginTop: 8 }]}>
                   Stories ({ancestorStories.length}):
                 </Text>
                 {ancestorStories.map(s => (

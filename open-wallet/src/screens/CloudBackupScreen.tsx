@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Cloud Backup Screen — Encrypted backup of wallet settings.
  *
@@ -64,10 +65,10 @@ export const CloudBackupScreen = React.memo(({ onClose }: Props) => {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     scroll: { padding: 20, paddingBottom: 40 },
-    title: { color: t.text.primary, fontSize: 24, fontWeight: '800', marginBottom: 4 },
+    title: { color: t.text.primary, fontSize: 24, fontWeight: fonts.heavy, marginBottom: 4 },
     subtitle: { color: t.text.secondary, fontSize: 14, marginBottom: 24 },
     sectionTitle: {
-      color: t.text.secondary, fontSize: 12, fontWeight: '700',
+      color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold,
       textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 10, marginLeft: 4,
     },
     card: { backgroundColor: t.bg.card, borderRadius: 16, overflow: 'hidden' },
@@ -77,7 +78,7 @@ export const CloudBackupScreen = React.memo(({ onClose }: Props) => {
     },
     label: { color: t.text.primary, fontSize: 15 },
     value: { color: t.text.secondary, fontSize: 14 },
-    valueGreen: { color: t.accent.green, fontSize: 14, fontWeight: '600' },
+    valueGreen: { color: t.accent.green, fontSize: 14, fontWeight: fonts.semibold },
     divider: { height: 1, backgroundColor: t.border, marginHorizontal: 16 },
     infoBox: {
       backgroundColor: t.accent.green + '10', borderRadius: 12,
@@ -105,12 +106,12 @@ export const CloudBackupScreen = React.memo(({ onClose }: Props) => {
       paddingVertical: 18, alignItems: 'center', marginTop: 16,
     },
     actionBtnDisabled: { opacity: 0.5 },
-    actionBtnText: { color: '#fff', fontSize: 17, fontWeight: '700' },
+    actionBtnText: { color: '#fff', fontSize: 17, fontWeight: fonts.bold },
     secondaryBtn: {
       backgroundColor: t.accent.blue + '15', borderRadius: 16,
       paddingVertical: 16, alignItems: 'center', marginTop: 12,
     },
-    secondaryBtnText: { color: t.accent.blue, fontSize: 16, fontWeight: '600' },
+    secondaryBtnText: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
     backBtn: { paddingVertical: 20, alignItems: 'center' },
     backText: { color: t.accent.blue, fontSize: 16 },
     passwordHint: { color: t.text.muted, fontSize: 12, marginBottom: 16, marginLeft: 4 },

@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Meditation Screen — Spiritual wellness, meditation, mindfulness retreats.
  *
@@ -234,23 +235,23 @@ export function MeditationScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingBottom: 40 },
     tabRow: { flexDirection: 'row', paddingHorizontal: 12, marginBottom: 12 },
     tabBtn: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 16, marginHorizontal: 4 },
     tabActive: { backgroundColor: t.accent.purple + '20' },
-    tabText: { color: t.text.muted, fontSize: 12, fontWeight: '600' },
+    tabText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
     tabTextActive: { color: t.accent.purple },
 
     // Streak & stats
     streakCard: { backgroundColor: t.accent.purple + '12', borderRadius: 20, padding: 24, marginHorizontal: 20, marginBottom: 16, alignItems: 'center' },
-    streakNumber: { color: t.accent.purple, fontSize: 56, fontWeight: '900' },
+    streakNumber: { color: t.accent.purple, fontSize: 56, fontWeight: fonts.heavy },
     streakLabel: { color: t.text.muted, fontSize: 13, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 2 },
     streakSubtext: { color: t.text.secondary, fontSize: 13, marginTop: 8 },
     statRow: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 16, width: '100%' },
     statItem: { alignItems: 'center' },
-    statValue: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    statValue: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     statLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
 
     // Wisdom quote
@@ -260,69 +261,69 @@ export function MeditationScreen({ onClose }: Props) {
 
     // Timer
     timerSection: { alignItems: 'center', marginBottom: 20 },
-    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: '700', marginBottom: 12, marginHorizontal: 20 },
+    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 12, marginHorizontal: 20 },
     presetRow: { flexDirection: 'row', justifyContent: 'center', gap: 10, marginBottom: 20, paddingHorizontal: 20 },
     presetBtn: { width: 56, height: 56, borderRadius: 28, backgroundColor: t.bg.secondary, justifyContent: 'center', alignItems: 'center' },
     presetBtnActive: { backgroundColor: t.accent.purple },
-    presetText: { color: t.text.muted, fontSize: 16, fontWeight: '700' },
+    presetText: { color: t.text.muted, fontSize: 16, fontWeight: fonts.bold },
     presetTextActive: { color: '#fff' },
     presetLabel: { color: t.text.muted, fontSize: 10, marginTop: 2 },
     presetLabelActive: { color: '#fff' },
     startBtn: { backgroundColor: t.accent.purple, borderRadius: 40, width: 160, height: 160, justifyContent: 'center', alignItems: 'center', marginBottom: 16, shadowColor: t.accent.purple, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 12, elevation: 8 },
-    startBtnText: { color: '#fff', fontSize: 20, fontWeight: '800' },
+    startBtnText: { color: '#fff', fontSize: 20, fontWeight: fonts.heavy },
     startBtnSub: { color: '#fff', fontSize: 13, opacity: 0.8, marginTop: 4 },
     hotkHint: { color: t.text.muted, fontSize: 12, marginTop: 8 },
 
     // History
-    historyTitle: { color: t.text.primary, fontSize: 16, fontWeight: '700', marginHorizontal: 20, marginTop: 8, marginBottom: 12 },
+    historyTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginHorizontal: 20, marginTop: 8, marginBottom: 12 },
     historyRow: { flexDirection: 'row', backgroundColor: t.bg.secondary, borderRadius: 12, padding: 14, marginHorizontal: 20, marginBottom: 8, alignItems: 'center' },
     historyDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: t.accent.purple, marginRight: 12 },
     historyInfo: { flex: 1 },
-    historyDate: { color: t.text.primary, fontSize: 13, fontWeight: '600' },
+    historyDate: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold },
     historyMeta: { color: t.text.muted, fontSize: 12, marginTop: 2 },
-    historyHotk: { color: t.accent.purple, fontSize: 13, fontWeight: '700' },
+    historyHotk: { color: t.accent.purple, fontSize: 13, fontWeight: fonts.bold },
 
     // Guided
     categoryRow: { flexDirection: 'row', paddingHorizontal: 16, gap: 8, marginBottom: 16, flexWrap: 'wrap' },
     categoryChip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 12, backgroundColor: t.bg.secondary },
     categoryChipActive: { backgroundColor: t.accent.purple + '20' },
-    categoryText: { color: t.text.muted, fontSize: 12, fontWeight: '600' },
+    categoryText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
     categoryTextActive: { color: t.accent.purple },
     guidedCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
     guidedHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 },
-    guidedTitle: { color: t.text.primary, fontSize: 15, fontWeight: '700', flex: 1 },
-    guidedDuration: { color: t.accent.purple, fontSize: 13, fontWeight: '700' },
+    guidedTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, flex: 1 },
+    guidedDuration: { color: t.accent.purple, fontSize: 13, fontWeight: fonts.bold },
     guidedDesc: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 10 },
     guidedFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
     guidedTradition: { color: t.text.secondary, fontSize: 12 },
     guidedCompleted: { color: t.text.muted, fontSize: 11 },
-    guidedHotk: { color: t.accent.purple, fontSize: 12, fontWeight: '600' },
+    guidedHotk: { color: t.accent.purple, fontSize: 12, fontWeight: fonts.semibold },
     playBtn: { backgroundColor: t.accent.purple, borderRadius: 10, paddingHorizontal: 16, paddingVertical: 8 },
-    playBtnText: { color: '#fff', fontSize: 13, fontWeight: '700' },
+    playBtnText: { color: '#fff', fontSize: 13, fontWeight: fonts.bold },
 
     // Community
     communityCard: { backgroundColor: t.bg.secondary, borderRadius: 16, padding: 18, marginHorizontal: 20, marginBottom: 12 },
-    communityTitle: { color: t.text.primary, fontSize: 16, fontWeight: '700', marginBottom: 4 },
+    communityTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 4 },
     communityHost: { color: t.text.secondary, fontSize: 13, marginBottom: 8 },
     communityMeta: { color: t.text.muted, fontSize: 12, lineHeight: 18, marginBottom: 12 },
     communityFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
     communityParticipants: { color: t.text.muted, fontSize: 12 },
-    communityBonus: { color: t.accent.purple, fontSize: 13, fontWeight: '700' },
+    communityBonus: { color: t.accent.purple, fontSize: 13, fontWeight: fonts.bold },
     joinBtn: { backgroundColor: t.accent.purple, borderRadius: 12, paddingHorizontal: 20, paddingVertical: 10 },
-    joinBtnText: { color: '#fff', fontSize: 14, fontWeight: '700' },
+    joinBtnText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
 
     // Retreats
     retreatCard: { backgroundColor: t.bg.secondary, borderRadius: 16, padding: 18, marginHorizontal: 20, marginBottom: 14 },
     retreatType: { paddingHorizontal: 10, paddingVertical: 3, borderRadius: 8, alignSelf: 'flex-start', marginBottom: 10 },
-    retreatTypeText: { color: '#fff', fontSize: 11, fontWeight: '700', textTransform: 'uppercase' },
-    retreatTitle: { color: t.text.primary, fontSize: 16, fontWeight: '700', marginBottom: 6 },
+    retreatTypeText: { color: '#fff', fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase' },
+    retreatTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 6 },
     retreatDesc: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 10 },
     retreatMeta: { color: t.text.secondary, fontSize: 12, marginBottom: 4 },
     retreatFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 },
     retreatSpots: { color: t.text.muted, fontSize: 12 },
-    retreatHotk: { color: t.accent.purple, fontSize: 13, fontWeight: '700' },
+    retreatHotk: { color: t.accent.purple, fontSize: 13, fontWeight: fonts.bold },
     viewBtn: { backgroundColor: t.accent.purple + '20', borderRadius: 10, paddingHorizontal: 16, paddingVertical: 8 },
-    viewBtnText: { color: t.accent.purple, fontSize: 13, fontWeight: '700' },
+    viewBtnText: { color: t.accent.purple, fontSize: 13, fontWeight: fonts.bold },
 
     // Wisdom section (in retreats tab)
     wisdomSection: { marginTop: 16 },

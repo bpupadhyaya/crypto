@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Airdrop Screen — Track and claim token airdrops.
  *
@@ -129,41 +130,41 @@ export function AirdropScreen({ onClose }: Props) {
     container: { flex: 1, backgroundColor: t.bg.primary },
     scroll: { paddingHorizontal: 16, paddingTop: 8, paddingBottom: 40 },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeText: { color: t.accent.blue, fontSize: 16 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
 
     // Stats
     statsCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16 },
     statsRow: { flexDirection: 'row', justifyContent: 'space-around' },
     statBox: { alignItems: 'center' },
-    statNumber: { color: t.text.primary, fontSize: 24, fontWeight: '700' },
+    statNumber: { color: t.text.primary, fontSize: 24, fontWeight: fonts.bold },
     statLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
 
     // Tabs
     tabRow: { flexDirection: 'row', gap: 8, marginTop: 20, marginBottom: 12 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 12, alignItems: 'center', backgroundColor: t.bg.card },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
+    tabText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
     tabTextActive: { color: '#ffffff' },
 
     // Cards
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 14, marginBottom: 10 },
     cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
     tokenRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-    tokenName: { color: t.text.primary, fontSize: 16, fontWeight: '700' },
-    amountBadge: { color: t.accent.green, fontSize: 15, fontWeight: '700' },
+    tokenName: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
+    amountBadge: { color: t.accent.green, fontSize: 15, fontWeight: fonts.bold },
     criteria: { color: t.text.secondary, fontSize: 13, marginBottom: 6 },
     deadline: { color: t.text.muted, fontSize: 11 },
     eligibleBadge: { flexDirection: 'row', alignItems: 'center', backgroundColor: t.accent.green + '18', borderRadius: 8, paddingVertical: 4, paddingHorizontal: 10, alignSelf: 'flex-start', marginTop: 6 },
-    eligibleText: { color: t.accent.green, fontSize: 12, fontWeight: '600', marginLeft: 4 },
-    notEligible: { color: t.text.muted, fontSize: 12, fontWeight: '500', marginTop: 6 },
+    eligibleText: { color: t.accent.green, fontSize: 12, fontWeight: fonts.semibold, marginLeft: 4 },
+    notEligible: { color: t.text.muted, fontSize: 12, fontWeight: fonts.medium, marginTop: 6 },
 
     // Claim button
     claimBtn: { backgroundColor: t.accent.blue, borderRadius: 10, paddingVertical: 10, alignItems: 'center', marginTop: 10 },
     claimBtnDisabled: { backgroundColor: t.bg.primary, borderRadius: 10, paddingVertical: 10, alignItems: 'center', marginTop: 10 },
-    claimText: { color: '#ffffff', fontSize: 14, fontWeight: '700' },
-    claimTextDisabled: { color: t.text.muted, fontSize: 14, fontWeight: '700' },
+    claimText: { color: '#ffffff', fontSize: 14, fontWeight: fonts.bold },
+    claimTextDisabled: { color: t.text.muted, fontSize: 14, fontWeight: fonts.bold },
 
     // Claimed
     claimedDate: { color: t.text.muted, fontSize: 11, marginTop: 4 },
@@ -174,7 +175,7 @@ export function AirdropScreen({ onClose }: Props) {
 
     // Demo banner
     demoBanner: { backgroundColor: t.accent.orange + '20', borderRadius: 10, padding: 10, alignItems: 'center', marginBottom: 12 },
-    demoText: { color: t.accent.orange, fontSize: 12, fontWeight: '600' },
+    demoText: { color: t.accent.orange, fontSize: 12, fontWeight: fonts.semibold },
 
     empty: { alignItems: 'center', paddingVertical: 40 },
     emptyIcon: { fontSize: 40, marginBottom: 12 },

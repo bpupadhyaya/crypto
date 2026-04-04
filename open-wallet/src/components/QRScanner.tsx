@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * QR Scanner — Camera-based QR code reader for recipient addresses.
  */
@@ -81,19 +82,19 @@ export const QRScanner = React.memo(({ onScan, onClose }: Props) => {
 const s = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0a0a0f' },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-  closeBtn: { color: '#3b82f6', fontSize: 16, fontWeight: '600' },
-  headerTitle: { color: '#f0f0f5', fontSize: 18, fontWeight: '800' },
+  closeBtn: { color: '#3b82f6', fontSize: 16, fontWeight: fonts.semibold },
+  headerTitle: { color: '#f0f0f5', fontSize: 18, fontWeight: fonts.heavy },
   cameraContainer: { flex: 1, marginHorizontal: 16, borderRadius: 20, overflow: 'hidden', position: 'relative' },
   camera: { flex: 1 },
   overlay: { ...StyleSheet.absoluteFillObject, justifyContent: 'center', alignItems: 'center' },
   scanFrame: { width: 250, height: 250, borderWidth: 2, borderColor: '#22c55e', borderRadius: 20 },
   hint: { color: '#a0a0b0', fontSize: 14, textAlign: 'center', marginTop: 16, marginBottom: 8 },
-  title: { color: '#f0f0f5', fontSize: 22, fontWeight: '800', textAlign: 'center', marginTop: 100 },
+  title: { color: '#f0f0f5', fontSize: 22, fontWeight: fonts.heavy, textAlign: 'center', marginTop: 100 },
   text: { color: '#a0a0b0', fontSize: 15, textAlign: 'center', marginTop: 12, marginHorizontal: 40 },
   grantBtn: { backgroundColor: '#22c55e', borderRadius: 16, paddingVertical: 16, marginHorizontal: 40, marginTop: 24, alignItems: 'center' },
-  grantText: { color: '#0a0a0f', fontSize: 16, fontWeight: '700' },
+  grantText: { color: '#0a0a0f', fontSize: 16, fontWeight: fonts.bold },
   cancelBtn: { paddingVertical: 16, alignItems: 'center', marginTop: 8 },
   cancelText: { color: '#606070', fontSize: 16 },
   rescanBtn: { backgroundColor: '#16161f', borderRadius: 12, paddingVertical: 12, marginHorizontal: 40, marginBottom: 20, alignItems: 'center' },
-  rescanText: { color: '#22c55e', fontSize: 15, fontWeight: '700' },
+  rescanText: { color: '#22c55e', fontSize: 15, fontWeight: fonts.bold },
 });

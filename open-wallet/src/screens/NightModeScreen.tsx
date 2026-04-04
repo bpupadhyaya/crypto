@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Night Mode Screen — Blue light filter and night reading settings.
  *
@@ -60,29 +61,29 @@ export function NightModeScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeText: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8 },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 10 },
     masterRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 16 },
-    masterLabel: { color: t.text.primary, fontSize: 17, fontWeight: '700' },
+    masterLabel: { color: t.text.primary, fontSize: 17, fontWeight: fonts.bold },
     masterStatus: { color: t.text.muted, fontSize: 12, marginTop: 2 },
     previewCard: { borderRadius: 14, padding: 20, alignItems: 'center', marginBottom: 16 },
-    previewText: { fontSize: 14, fontWeight: '600', marginTop: 8 },
+    previewText: { fontSize: 14, fontWeight: fonts.semibold, marginTop: 8 },
     previewMoon: { fontSize: 36 },
     warmthRow: { flexDirection: 'row', justifyContent: 'space-between', gap: 6 },
     warmthBtn: { flex: 1, paddingVertical: 12, borderRadius: 10, alignItems: 'center', borderWidth: 2 },
-    warmthLabel: { fontSize: 11, fontWeight: '700', marginTop: 4 },
+    warmthLabel: { fontSize: 11, fontWeight: fonts.bold, marginTop: 4 },
     warmthDot: { width: 20, height: 20, borderRadius: 10 },
     settingRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 4 },
-    settingLabel: { color: t.text.primary, fontSize: 14, fontWeight: '600', flex: 1 },
+    settingLabel: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, flex: 1 },
     settingDesc: { color: t.text.muted, fontSize: 11, marginTop: 2 },
     scheduleCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 8, borderWidth: 2 },
-    scheduleLabel: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
+    scheduleLabel: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
     scheduleDesc: { color: t.text.muted, fontSize: 12, marginTop: 4, lineHeight: 17 },
     tipCard: { backgroundColor: t.accent.blue + '15', borderRadius: 14, padding: 16, marginTop: 12 },
-    tipTitle: { color: t.accent.blue, fontSize: 13, fontWeight: '700', marginBottom: 4 },
+    tipTitle: { color: t.accent.blue, fontSize: 13, fontWeight: fonts.bold, marginBottom: 4 },
     tipText: { color: t.text.secondary, fontSize: 12, lineHeight: 18 },
   }), [t]);
 

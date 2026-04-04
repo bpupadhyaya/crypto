@@ -1,3 +1,4 @@
+import { fonts } from '../../utils/theme';
 /**
  * Tab Layout — Static, memoized. Zero re-renders.
  */
@@ -34,11 +35,11 @@ const TabIcon = React.memo(({ label, focused }: { label: string; focused: boolea
 const SCREEN_OPTIONS = {
   headerStyle: { backgroundColor: '#0a0a0f', elevation: 0, shadowOpacity: 0 },
   headerTintColor: '#f0f0f5',
-  headerTitleStyle: { fontWeight: '800' as const, fontSize: 18 },
+  headerTitleStyle: { fontWeight: fonts.heavy as const, fontSize: 18 },
   tabBarStyle: { backgroundColor: '#0a0a0f', borderTopColor: 'rgba(255,255,255,0.06)', borderTopWidth: 1, paddingTop: 8, height: 85 },
   tabBarActiveTintColor: '#22c55e',
   tabBarInactiveTintColor: '#606070',
-  tabBarLabelStyle: { fontSize: 11, fontWeight: '600' as const },
+  tabBarLabelStyle: { fontSize: 11, fontWeight: fonts.semibold as const },
   animation: 'none' as const,
   lazy: true,
 };

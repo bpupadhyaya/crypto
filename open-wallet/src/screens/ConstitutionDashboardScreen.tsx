@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Constitution Dashboard Screen — Overview of all 10 Articles implementation status.
  *
@@ -129,20 +130,20 @@ export function ConstitutionDashboardScreen({ onClose }: Props) {
       paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1,
       borderBottomColor: t.border,
     },
-    title: { fontSize: 18, fontWeight: '700', color: t.text.primary },
+    title: { fontSize: 18, fontWeight: fonts.bold, color: t.text.primary },
     closeBtn: { fontSize: 16, color: t.accent.green },
     scroll: { flex: 1 },
     section: { padding: 16, borderBottomWidth: 1, borderBottomColor: t.border },
-    sectionTitle: { fontSize: 16, fontWeight: '600', color: t.text.primary, marginBottom: 10 },
+    sectionTitle: { fontSize: 16, fontWeight: fonts.semibold, color: t.text.primary, marginBottom: 10 },
     healthBox: {
       backgroundColor: t.bg.card, borderRadius: 16, padding: 20,
       alignItems: 'center', borderWidth: 1, borderColor: t.border,
     },
-    healthScore: { fontSize: 48, fontWeight: '800' },
+    healthScore: { fontSize: 48, fontWeight: fonts.heavy },
     healthLabel: { fontSize: 14, color: t.text.secondary, marginTop: 4 },
     metricsRow: { flexDirection: 'row', marginTop: 16 },
     metric: { flex: 1, alignItems: 'center' },
-    metricValue: { fontSize: 18, fontWeight: '700', color: t.text.primary },
+    metricValue: { fontSize: 18, fontWeight: fonts.bold, color: t.text.primary },
     metricLabel: { fontSize: 11, color: t.text.secondary, marginTop: 2 },
     articleCard: {
       backgroundColor: t.bg.card, borderRadius: 12, padding: 14,
@@ -152,9 +153,9 @@ export function ConstitutionDashboardScreen({ onClose }: Props) {
       flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
       marginBottom: 6,
     },
-    articleNumber: { fontSize: 13, fontWeight: '700', color: t.accent.green },
-    articleTitle: { fontSize: 15, fontWeight: '600', color: t.text.primary, flex: 1, marginLeft: 8 },
-    pctText: { fontSize: 16, fontWeight: '700' },
+    articleNumber: { fontSize: 13, fontWeight: fonts.bold, color: t.accent.green },
+    articleTitle: { fontSize: 15, fontWeight: fonts.semibold, color: t.text.primary, flex: 1, marginLeft: 8 },
+    pctText: { fontSize: 16, fontWeight: fonts.bold },
     progressBar: {
       height: 6, backgroundColor: t.border, borderRadius: 3, marginVertical: 8,
     },
@@ -172,7 +173,7 @@ export function ConstitutionDashboardScreen({ onClose }: Props) {
       paddingVertical: 6, paddingHorizontal: 12, borderRadius: 6,
       backgroundColor: t.accent.green, alignSelf: 'flex-start', marginTop: 6,
     },
-    navBtnText: { color: '#fff', fontSize: 12, fontWeight: '600' },
+    navBtnText: { color: '#fff', fontSize: 12, fontWeight: fonts.semibold },
     infoText: { fontSize: 13, color: t.text.secondary, lineHeight: 20 },
   }), [t]);
 

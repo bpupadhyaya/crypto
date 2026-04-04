@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Oracle Screen — Milestone verification network.
  *
@@ -56,34 +57,34 @@ export function OracleScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     heroCard: { backgroundColor: t.accent.orange + '10', borderRadius: 24, padding: 24, marginHorizontal: 20, alignItems: 'center' },
-    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: '800', textAlign: 'center' },
+    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, textAlign: 'center' },
     heroSub: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 8, lineHeight: 20 },
     regBtn: { backgroundColor: t.accent.orange, borderRadius: 12, paddingVertical: 12, paddingHorizontal: 24, marginTop: 16 },
-    regBtnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
+    regBtnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    msTitle: { color: t.text.primary, fontSize: 14, fontWeight: '700' },
-    msChannel: { fontSize: 12, fontWeight: '600', marginTop: 4 },
+    msTitle: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
+    msChannel: { fontSize: 12, fontWeight: fonts.semibold, marginTop: 4 },
     msUid: { color: t.text.muted, fontSize: 11, marginTop: 2 },
-    msMint: { color: t.accent.green, fontSize: 13, fontWeight: '600', marginTop: 6 },
-    msStatus: { fontSize: 12, fontWeight: '700', marginTop: 4 },
+    msMint: { color: t.accent.green, fontSize: 13, fontWeight: fonts.semibold, marginTop: 6 },
+    msStatus: { fontSize: 12, fontWeight: fonts.bold, marginTop: 4 },
     attestRow: { flexDirection: 'row', gap: 8, marginTop: 12 },
     attestBtn: { flex: 1, borderRadius: 10, paddingVertical: 10, alignItems: 'center' },
-    attestText: { color: '#fff', fontSize: 14, fontWeight: '700' },
+    attestText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
     attestCount: { color: t.text.muted, fontSize: 11, marginTop: 8 },
     inputCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginTop: 12 },
-    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: '600', marginBottom: 8 },
+    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8 },
     input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15 },
     chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 8 },
     chip: { paddingVertical: 8, paddingHorizontal: 14, borderRadius: 20, backgroundColor: t.bg.card },
     chipActive: { backgroundColor: t.accent.orange },
     chipText: { color: t.text.secondary, fontSize: 13 },
-    chipTextActive: { color: '#fff', fontWeight: '700' },
+    chipTextActive: { color: '#fff', fontWeight: fonts.bold },
     submitBtn: { backgroundColor: t.accent.orange, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginHorizontal: 20, marginTop: 24 },
-    submitText: { color: '#fff', fontSize: 17, fontWeight: '700' },
+    submitText: { color: '#fff', fontSize: 17, fontWeight: fonts.bold },
   }), [t]);
 
   const fetchMilestones = useCallback(async () => {

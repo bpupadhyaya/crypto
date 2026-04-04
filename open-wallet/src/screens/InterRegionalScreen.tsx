@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Inter-Regional Cooperation Screen — The Human Constitution, Article VI.
  *
@@ -238,63 +239,63 @@ export function InterRegionalScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { flex: 1, paddingHorizontal: 16 },
     subtitle: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
-    cardTitle: { color: t.text.primary, fontSize: 16, fontWeight: '700', marginBottom: 2 },
+    cardTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 2 },
     row: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 },
     label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
-    connectionLine: { color: t.accent.purple, fontSize: 14, fontWeight: '800', textAlign: 'center', marginBottom: 6 },
+    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    connectionLine: { color: t.accent.purple, fontSize: 14, fontWeight: fonts.heavy, textAlign: 'center', marginBottom: 6 },
     regionPair: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 8 },
     regionChip: { backgroundColor: t.accent.blue + '15', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 10 },
-    regionChipText: { color: t.accent.blue, fontSize: 13, fontWeight: '700' },
-    connector: { color: t.accent.purple, fontSize: 18, fontWeight: '900' },
+    regionChipText: { color: t.accent.blue, fontSize: 13, fontWeight: fonts.bold },
+    connector: { color: t.accent.purple, fontSize: 18, fontWeight: fonts.heavy },
     typeBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'center', marginBottom: 8 },
-    typeBadgeText: { fontSize: 11, fontWeight: '700', color: '#fff' },
+    typeBadgeText: { fontSize: 11, fontWeight: fonts.bold, color: '#fff' },
     statusBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'flex-start', marginBottom: 8 },
-    statusText: { fontSize: 11, fontWeight: '700', color: '#fff' },
-    bigNum: { fontSize: 20, fontWeight: '800', marginBottom: 2 },
+    statusText: { fontSize: 11, fontWeight: fonts.bold, color: '#fff' },
+    bigNum: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 2 },
     desc: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 10 },
     summaryRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
     summaryCard: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' },
-    summaryNum: { fontSize: 20, fontWeight: '800', marginBottom: 2 },
-    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: '600', textAlign: 'center' },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 12, marginBottom: 8 },
+    summaryNum: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 2 },
+    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold, textAlign: 'center' },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 12, marginBottom: 8 },
     milestoneCard: { backgroundColor: t.bg.primary, borderRadius: 10, padding: 12, marginBottom: 8, borderLeftWidth: 3, borderLeftColor: t.accent.green },
     milestoneDate: { color: t.text.muted, fontSize: 11, marginBottom: 2 },
-    milestoneText: { color: t.text.primary, fontSize: 13, fontWeight: '600', marginBottom: 2 },
-    milestoneOTK: { color: t.accent.green, fontSize: 12, fontWeight: '700' },
+    milestoneText: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 2 },
+    milestoneOTK: { color: t.accent.green, fontSize: 12, fontWeight: fonts.bold },
     exchangeCard: { backgroundColor: t.bg.primary, borderRadius: 10, padding: 12, marginBottom: 8 },
-    exchangeTitle: { color: t.text.primary, fontSize: 13, fontWeight: '700', marginBottom: 2 },
+    exchangeTitle: { color: t.text.primary, fontSize: 13, fontWeight: fonts.bold, marginBottom: 2 },
     exchangeMeta: { color: t.text.muted, fontSize: 11, marginBottom: 2 },
     resourceCard: { backgroundColor: t.bg.primary, borderRadius: 10, padding: 12, marginBottom: 8, borderLeftWidth: 3, borderLeftColor: t.accent.purple },
-    resourceName: { color: t.text.primary, fontSize: 13, fontWeight: '700', marginBottom: 2 },
-    resourceFlow: { color: t.accent.blue, fontSize: 11, fontWeight: '600', marginBottom: 2 },
+    resourceName: { color: t.text.primary, fontSize: 13, fontWeight: fonts.bold, marginBottom: 2 },
+    resourceFlow: { color: t.accent.blue, fontSize: 11, fontWeight: fonts.semibold, marginBottom: 2 },
     inputCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
-    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: '600', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 },
+    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 },
     input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15 },
     textArea: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, minHeight: 100, textAlignVertical: 'top' },
     typeRow: { flexDirection: 'row', gap: 8, flexWrap: 'wrap', marginBottom: 12 },
     typeChip: { paddingVertical: 10, paddingHorizontal: 14, borderRadius: 12, backgroundColor: t.bg.card, alignItems: 'center', flexDirection: 'row', gap: 6 },
     typeChipActive: { backgroundColor: t.accent.purple },
-    typeLabel: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
+    typeLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
     typeLabelActive: { color: '#fff' },
     submitBtn: { backgroundColor: t.accent.purple, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginTop: 8, marginBottom: 16 },
-    submitBtnText: { color: '#fff', fontSize: 17, fontWeight: '700' },
+    submitBtnText: { color: '#fff', fontSize: 17, fontWeight: fonts.bold },
     empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
     impactCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12, alignItems: 'center' },
     impactRow: { flexDirection: 'row', gap: 8, marginBottom: 12, flexWrap: 'wrap' },
     impactChip: { backgroundColor: t.bg.primary, borderRadius: 10, padding: 12, alignItems: 'center', minWidth: 90 },
-    impactNum: { fontSize: 18, fontWeight: '800', marginBottom: 2 },
-    impactLabel: { color: t.text.muted, fontSize: 10, fontWeight: '600', textAlign: 'center' },
+    impactNum: { fontSize: 18, fontWeight: fonts.heavy, marginBottom: 2 },
+    impactLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold, textAlign: 'center' },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 10 },
     barContainer: { height: 6, backgroundColor: t.border, borderRadius: 3, marginVertical: 4, overflow: 'hidden' },
     barFill: { height: 6, borderRadius: 3 },
@@ -428,7 +429,7 @@ export function InterRegionalScreen({ onClose }: Props) {
                   <Text style={st.resourceFlow}>{rs.fromRegion} {'\u2192'} {rs.toRegion}</Text>
                   <View style={st.row}>
                     <Text style={st.label}>Quantity: {rs.quantity}</Text>
-                    <Text style={{ color: t.accent.green, fontSize: 12, fontWeight: '700' }}>{formatOTK(rs.otkValue)} OTK</Text>
+                    <Text style={{ color: t.accent.green, fontSize: 12, fontWeight: fonts.bold }}>{formatOTK(rs.otkValue)} OTK</Text>
                   </View>
                 </View>
               ))}
@@ -510,7 +511,7 @@ export function InterRegionalScreen({ onClose }: Props) {
                 </View>
                 <View style={st.row}>
                   <Text style={st.label}>OTK Exchanged</Text>
-                  <Text style={{ color: t.accent.green, fontSize: 12, fontWeight: '700' }}>{formatOTK(p.otkExchanged)}</Text>
+                  <Text style={{ color: t.accent.green, fontSize: 12, fontWeight: fonts.bold }}>{formatOTK(p.otkExchanged)}</Text>
                 </View>
                 <View style={st.row}>
                   <Text style={st.label}>Beneficiaries</Text>
@@ -679,7 +680,7 @@ export function InterRegionalScreen({ onClose }: Props) {
                     </View>
                     <View style={st.row}>
                       <Text style={st.label}>OTK Exchanged</Text>
-                      <Text style={{ color: t.accent.green, fontSize: 12, fontWeight: '700' }}>{formatOTK(typeOTK)}</Text>
+                      <Text style={{ color: t.accent.green, fontSize: 12, fontWeight: fonts.bold }}>{formatOTK(typeOTK)}</Text>
                     </View>
                     <View style={st.row}>
                       <Text style={st.label}>Beneficiaries</Text>
@@ -700,7 +701,7 @@ export function InterRegionalScreen({ onClose }: Props) {
                   <Text style={st.resourceFlow}>{rs.fromRegion} {'\u2192'} {rs.toRegion}</Text>
                   <View style={st.row}>
                     <Text style={st.label}>{rs.quantity}</Text>
-                    <Text style={{ color: t.accent.green, fontSize: 12, fontWeight: '700' }}>{formatOTK(rs.otkValue)} OTK</Text>
+                    <Text style={{ color: t.accent.green, fontSize: 12, fontWeight: fonts.bold }}>{formatOTK(rs.otkValue)} OTK</Text>
                   </View>
                 </View>
               ))}

@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Pie Chart — Shows token allocation as a donut chart.
  * Pure React Native + SVG, no heavy chart library.
@@ -73,5 +74,5 @@ const s = StyleSheet.create({
   container: { alignItems: 'center', justifyContent: 'center' },
   centerText: { position: 'absolute', alignItems: 'center' },
   centerLabel: { color: '#a0a0b0', fontSize: 11 },
-  centerValue: { color: '#f0f0f5', fontSize: 20, fontWeight: '800', marginTop: 2 },
+  centerValue: { color: '#f0f0f5', fontSize: 20, fontWeight: fonts.heavy, marginTop: 2 },
 });

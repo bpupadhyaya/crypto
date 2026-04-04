@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Escrow Screen — Create, fund, release, and manage on-chain escrows.
  *
@@ -106,39 +107,39 @@ export function EscrowScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingHorizontal: 16 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
     label: { color: t.text.secondary, fontSize: 13 },
-    value: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
+    value: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
     statusBadge: { paddingHorizontal: 10, paddingVertical: 3, borderRadius: 8 },
-    statusText: { fontSize: 11, fontWeight: '700', textTransform: 'uppercase', color: '#fff' },
+    statusText: { fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase', color: '#fff' },
     descText: { color: t.text.secondary, fontSize: 13, marginBottom: 8, lineHeight: 18 },
-    amountText: { color: t.text.primary, fontSize: 22, fontWeight: '700', marginBottom: 4 },
+    amountText: { color: t.text.primary, fontSize: 22, fontWeight: fonts.bold, marginBottom: 4 },
     input: { backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginBottom: 12, borderWidth: 1, borderColor: t.border },
-    inputLabel: { color: t.text.secondary, fontSize: 12, fontWeight: '600', marginBottom: 4, marginLeft: 4 },
+    inputLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold, marginBottom: 4, marginLeft: 4 },
     btn: { borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 10 },
     btnPrimary: { backgroundColor: t.accent.green },
     btnDanger: { backgroundColor: t.accent.red },
     btnSecondary: { backgroundColor: t.accent.blue },
-    btnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+    btnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
     tabRow: { flexDirection: 'row', gap: 8, marginBottom: 16 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, alignItems: 'center', backgroundColor: t.bg.card },
     tabActive: { backgroundColor: t.accent.green },
-    tabText: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
+    tabText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     denomRow: { flexDirection: 'row', gap: 6, marginBottom: 12 },
     denomChip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 8, backgroundColor: t.bg.card, borderWidth: 1, borderColor: t.border },
     denomActive: { backgroundColor: t.accent.green, borderColor: t.accent.green },
-    denomText: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
+    denomText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
     denomTextActive: { color: '#fff' },
     emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', paddingVertical: 40 },
     detailRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: t.border },
     detailLabel: { color: t.text.secondary, fontSize: 13 },
-    detailValue: { color: t.text.primary, fontSize: 13, fontWeight: '600', maxWidth: '60%', textAlign: 'right' },
+    detailValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold, maxWidth: '60%', textAlign: 'right' },
     actionRow: { flexDirection: 'row', gap: 10, marginTop: 16 },
   }), [t]);
 
@@ -315,7 +316,7 @@ export function EscrowScreen({ onClose }: Props) {
           )}
           {e.status === 'disputed' && (
             <View style={[st.card, { backgroundColor: STATUS_COLORS.disputed + '20' }]}>
-              <Text style={{ color: STATUS_COLORS.disputed, fontSize: 14, fontWeight: '600', textAlign: 'center' }}>
+              <Text style={{ color: STATUS_COLORS.disputed, fontSize: 14, fontWeight: fonts.semibold, textAlign: 'center' }}>
                 Dispute in progress — awaiting arbiter resolution
               </Text>
             </View>
@@ -404,7 +405,7 @@ export function EscrowScreen({ onClose }: Props) {
         </TouchableOpacity>
         <Text style={st.title}>Escrow</Text>
         <TouchableOpacity onPress={() => setView('create')}>
-          <Text style={[st.closeBtn, { fontWeight: '700' }]}>+ New</Text>
+          <Text style={[st.closeBtn, { fontWeight: fonts.bold }]}>+ New</Text>
         </TouchableOpacity>
       </View>
 

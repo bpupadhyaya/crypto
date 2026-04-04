@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Global Impact Screen — Worldwide impact of Open Chain.
  *
@@ -142,7 +143,7 @@ function AnimatedCounter({ counter }: { counter: GlobalCounter }) {
   return (
     <View style={{ width: '48%' as unknown as number, marginBottom: 16 }}>
       <Text style={{ fontSize: 24, textAlign: 'center' }}>{counter.icon}</Text>
-      <Text style={{ color: t.accent.green, fontSize: 22, fontWeight: '900', textAlign: 'center', marginTop: 4 }}>
+      <Text style={{ color: t.accent.green, fontSize: 22, fontWeight: fonts.heavy, textAlign: 'center', marginTop: 4 }}>
         {formatNumber(animated)}{counter.suffix ? ` ${counter.suffix}` : ''}
       </Text>
       <Text style={{ color: t.text.muted, fontSize: 11, textAlign: 'center', marginTop: 2 }}>
@@ -170,26 +171,26 @@ export function GlobalImpactScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
     card: { backgroundColor: t.bg.card, borderRadius: 20, padding: 20, marginHorizontal: 20, marginTop: 8 },
     quote: { color: t.text.muted, fontSize: 12, fontStyle: 'italic', textAlign: 'center', marginHorizontal: 24, marginTop: 8, lineHeight: 18 },
     attribution: { color: t.text.muted, fontSize: 10, textAlign: 'center', marginTop: 4, marginBottom: 8 },
-    demoTag: { color: t.accent.orange, fontSize: 10, fontWeight: '700', textAlign: 'center', marginTop: 12 },
+    demoTag: { color: t.accent.orange, fontSize: 10, fontWeight: fonts.bold, textAlign: 'center', marginTop: 12 },
     // Map
     mapContainer: { marginHorizontal: 20, marginTop: 8 },
     regionRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10, paddingHorizontal: 16 },
     regionDot: { width: 12, height: 12, borderRadius: 6, marginRight: 12 },
-    regionName: { color: t.text.primary, fontSize: 14, fontWeight: '600', flex: 1 },
-    regionScore: { fontSize: 13, fontWeight: '700' },
+    regionName: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, flex: 1 },
+    regionScore: { fontSize: 13, fontWeight: fonts.bold },
     regionMeta: { color: t.text.muted, fontSize: 11, marginLeft: 12 },
     divider: { height: 1, backgroundColor: t.border, marginHorizontal: 16 },
     // Counters
     countersGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingHorizontal: 20, marginTop: 12 },
     // Channel bar chart
     barRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-    barLabel: { color: t.text.primary, fontSize: 12, fontWeight: '600', width: 80 },
+    barLabel: { color: t.text.primary, fontSize: 12, fontWeight: fonts.semibold, width: 80 },
     barTrack: { flex: 1, height: 20, backgroundColor: t.border, borderRadius: 10, overflow: 'hidden', marginHorizontal: 8 },
     barFill: { height: 20, borderRadius: 10 },
     barValue: { color: t.text.muted, fontSize: 11, width: 50, textAlign: 'right' },
@@ -197,9 +198,9 @@ export function GlobalImpactScreen({ onClose }: Props) {
     causationStep: { flexDirection: 'row', alignItems: 'center', paddingVertical: 12 },
     causationIcon: { fontSize: 24, width: 40, textAlign: 'center' },
     causationContent: { flex: 1, marginLeft: 8 },
-    causationLabel: { color: t.text.primary, fontSize: 14, fontWeight: '700' },
+    causationLabel: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
     causationMetric: { color: t.text.muted, fontSize: 12, marginTop: 2 },
-    causationValue: { color: t.accent.green, fontWeight: '700' },
+    causationValue: { color: t.accent.green, fontWeight: fonts.bold },
     arrow: { color: t.text.muted, fontSize: 20, textAlign: 'center', marginVertical: -4 },
     // Legend
     legendRow: { flexDirection: 'row', justifyContent: 'center', gap: 16, marginTop: 12 },

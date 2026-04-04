@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Token Swap History Screen — Full swap history across all 8 providers.
  * Filterable by provider, token pair, with volume stats and provider analytics.
@@ -129,64 +130,64 @@ export function TokenSwapHistoryScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    back: { color: t.accent.blue, fontSize: 16, fontWeight: '600' },
-    title: { color: t.text.primary, fontSize: 18, fontWeight: '800' },
+    back: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
+    title: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
     placeholder: { width: 60 },
     scroll: { paddingHorizontal: 20, paddingBottom: 40 },
     tabRow: { flexDirection: 'row', marginHorizontal: 20, marginBottom: 16, backgroundColor: t.bg.card, borderRadius: 12, padding: 3 },
     tabBtn: { flex: 1, paddingVertical: 10, borderRadius: 10, alignItems: 'center' },
     tabBtnActive: { backgroundColor: t.accent.purple },
-    tabText: { color: t.text.muted, fontSize: 13, fontWeight: '600' },
-    tabTextActive: { color: '#fff', fontWeight: '700' },
-    sectionLabel: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 16, marginBottom: 10 },
+    tabText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
+    tabTextActive: { color: '#fff', fontWeight: fonts.bold },
+    sectionLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 16, marginBottom: 10 },
     filterRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 12 },
     filterChip: { paddingVertical: 6, paddingHorizontal: 10, borderRadius: 14, backgroundColor: t.bg.card },
     filterChipActive: { backgroundColor: t.accent.purple },
-    filterText: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
-    filterTextActive: { color: '#fff', fontWeight: '700' },
+    filterText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    filterTextActive: { color: '#fff', fontWeight: fonts.bold },
     // Volume summary
     volumeCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 16, alignItems: 'center' },
     volumeLabel: { color: t.text.muted, fontSize: 12, textTransform: 'uppercase', letterSpacing: 1 },
-    volumeValue: { color: t.accent.green, fontSize: 28, fontWeight: '800', marginTop: 4 },
+    volumeValue: { color: t.accent.green, fontSize: 28, fontWeight: fonts.heavy, marginTop: 4 },
     volumeCount: { color: t.text.muted, fontSize: 13, marginTop: 4 },
     // Swap cards
     swapCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 10 },
     swapHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
-    swapRoute: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
-    swapAmount: { color: t.accent.green, fontSize: 14, fontWeight: '700' },
+    swapRoute: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
+    swapAmount: { color: t.accent.green, fontSize: 14, fontWeight: fonts.bold },
     swapDate: { color: t.text.muted, fontSize: 12, marginBottom: 6 },
     swapRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 3 },
     swapLabel: { color: t.text.muted, fontSize: 11 },
-    swapValue: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
-    hashText: { color: t.accent.blue, fontSize: 12, fontWeight: '500' },
+    swapValue: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    hashText: { color: t.accent.blue, fontSize: 12, fontWeight: fonts.medium },
     statusBadge: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 8, alignSelf: 'flex-start', marginTop: 6 },
     statusCompleted: { backgroundColor: t.accent.green + '20' },
     statusPending: { backgroundColor: (t.accent.orange || '#f0a030') + '20' },
     statusFailed: { backgroundColor: '#ff444420' },
-    statusText: { fontSize: 11, fontWeight: '700' },
+    statusText: { fontSize: 11, fontWeight: fonts.bold },
     statusTextCompleted: { color: t.accent.green },
     statusTextPending: { color: t.accent.orange || '#f0a030' },
     statusTextFailed: { color: '#ff4444' },
-    savedText: { color: t.accent.green, fontSize: 12, fontWeight: '700' },
+    savedText: { color: t.accent.green, fontSize: 12, fontWeight: fonts.bold },
     savedNeg: { color: '#ff4444' },
     // Provider section
     providerGroup: { marginBottom: 16 },
-    providerGroupTitle: { color: t.text.primary, fontSize: 15, fontWeight: '700', marginBottom: 8 },
-    providerGroupCount: { color: t.text.muted, fontSize: 13, fontWeight: '600' },
+    providerGroupTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, marginBottom: 8 },
+    providerGroupCount: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
     // Stats
     statsCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 10 },
     statsHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
-    statsName: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
-    statsCount: { color: t.accent.purple, fontSize: 14, fontWeight: '800' },
+    statsName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
+    statsCount: { color: t.accent.purple, fontSize: 14, fontWeight: fonts.heavy },
     statsRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 6 },
     statsLabel: { color: t.text.muted, fontSize: 12 },
-    statsValue: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
+    statsValue: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
     barContainer: { height: 8, backgroundColor: t.bg.primary, borderRadius: 4, marginTop: 8 },
     barFill: { height: 8, borderRadius: 4, backgroundColor: t.accent.purple },
     mostUsedBadge: { backgroundColor: t.accent.green + '20', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 8 },
-    mostUsedText: { color: t.accent.green, fontSize: 10, fontWeight: '700' },
+    mostUsedText: { color: t.accent.green, fontSize: 10, fontWeight: fonts.bold },
     emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
-    demoTag: { color: t.accent.orange || '#f0a030', fontSize: 11, fontWeight: '700', textAlign: 'center', marginBottom: 8 },
+    demoTag: { color: t.accent.orange || '#f0a030', fontSize: 11, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 8 },
   }), [t]);
 
   const TABS: { key: Tab; label: string }[] = [
@@ -319,11 +320,11 @@ export function TokenSwapHistoryScreen({ onClose }: Props) {
         <View style={{ flexDirection: 'row', gap: 10, marginBottom: 16 }}>
           <View style={[s.statsCard, { flex: 1 }]}>
             <Text style={s.statsLabel}>Total Fees</Text>
-            <Text style={[s.statsValue, { fontSize: 18, fontWeight: '800' }]}>${totalFees.toFixed(2)}</Text>
+            <Text style={[s.statsValue, { fontSize: 18, fontWeight: fonts.heavy }]}>${totalFees.toFixed(2)}</Text>
           </View>
           <View style={[s.statsCard, { flex: 1 }]}>
             <Text style={s.statsLabel}>Net Savings</Text>
-            <Text style={[s.savedText, { fontSize: 18, fontWeight: '800' }]}>+${totalSaved.toFixed(2)}</Text>
+            <Text style={[s.savedText, { fontSize: 18, fontWeight: fonts.heavy }]}>+${totalSaved.toFixed(2)}</Text>
           </View>
         </View>
 

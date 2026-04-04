@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Offline/Network Status Banner — shown at top of screen.
  *
@@ -113,7 +114,7 @@ export const OfflineBanner = React.memo(() => {
     text: {
       color: '#fff',
       fontSize: 13,
-      fontWeight: '600',
+      fontWeight: fonts.semibold,
     },
     onlineBanner: {
       backgroundColor: t.bg.card,
@@ -151,12 +152,12 @@ export const OfflineBanner = React.memo(() => {
     modalTitle: {
       color: t.text.primary,
       fontSize: 18,
-      fontWeight: '700',
+      fontWeight: fonts.bold,
     },
     closeBtn: {
       color: t.accent.orange,
       fontSize: 15,
-      fontWeight: '600',
+      fontWeight: fonts.semibold,
     },
     section: {
       paddingHorizontal: 20,
@@ -165,7 +166,7 @@ export const OfflineBanner = React.memo(() => {
     sectionTitle: {
       color: t.text.secondary,
       fontSize: 13,
-      fontWeight: '600',
+      fontWeight: fonts.semibold,
       textTransform: 'uppercase',
       letterSpacing: 1,
       marginBottom: 12,
@@ -199,7 +200,7 @@ export const OfflineBanner = React.memo(() => {
     chainName: {
       color: t.text.primary,
       fontSize: 15,
-      fontWeight: '600',
+      fontWeight: fonts.semibold,
     },
     latencyText: {
       color: t.text.muted,
@@ -217,12 +218,12 @@ export const OfflineBanner = React.memo(() => {
     peerLabel: {
       color: t.text.primary,
       fontSize: 15,
-      fontWeight: '600',
+      fontWeight: fonts.semibold,
     },
     peerCount: {
       color: t.accent.blue,
       fontSize: 15,
-      fontWeight: '700',
+      fontWeight: fonts.bold,
     },
     refreshBtn: {
       backgroundColor: t.accent.orange,
@@ -235,7 +236,7 @@ export const OfflineBanner = React.memo(() => {
     refreshBtnText: {
       color: t.bg.primary,
       fontSize: 15,
-      fontWeight: '700',
+      fontWeight: fonts.bold,
     },
     checkingText: {
       color: t.text.muted,

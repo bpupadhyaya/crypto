@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * PIN Setup Screen — Shown after wallet creation.
  * Sets up 6-digit PIN + auto-enables biometric if available.
@@ -84,7 +85,7 @@ export function PinSetupScreen() {
           onPress={handleDevAutoPin}
           style={{ alignItems: 'center', paddingVertical: 12, paddingBottom: 24 }}
         >
-          <Text style={{ color: '#f59e0b', fontSize: 13, fontWeight: '600' }}>⚡ Dev: Set PIN 123456 & Continue</Text>
+          <Text style={{ color: '#f59e0b', fontSize: 13, fontWeight: fonts.semibold }}>⚡ Dev: Set PIN 123456 & Continue</Text>
         </TouchableOpacity>
       )}
     </SafeAreaView>

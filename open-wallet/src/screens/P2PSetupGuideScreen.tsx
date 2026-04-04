@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * P2P Setup Guide Screen — step-by-step walkthrough for setting up
  * the 10-phone P2P testnet on a local WiFi network.
@@ -166,7 +167,7 @@ export function P2PSetupGuideScreen({ onClose }: P2PSetupGuideScreenProps) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
-    header: { color: t.text.primary, fontSize: 22, fontWeight: '700', textAlign: 'center', marginTop: 16, marginBottom: 4 },
+    header: { color: t.text.primary, fontSize: 22, fontWeight: fonts.bold, textAlign: 'center', marginTop: 16, marginBottom: 4 },
     subtitle: { color: t.text.secondary, fontSize: 14, textAlign: 'center', marginBottom: 20 },
     progressContainer: { height: 6, backgroundColor: t.border, borderRadius: 3, marginHorizontal: 16, marginBottom: 20 },
     progressBar: { height: 6, backgroundColor: t.accent.green, borderRadius: 3 },
@@ -178,26 +179,26 @@ export function P2PSetupGuideScreen({ onClose }: P2PSetupGuideScreenProps) {
     stepNumber: { width: 32, height: 32, borderRadius: 16, backgroundColor: t.border, justifyContent: 'center', alignItems: 'center', marginRight: 12 },
     stepNumberActive: { backgroundColor: t.accent.blue },
     stepNumberDone: { backgroundColor: t.accent.green },
-    stepNumberText: { color: t.text.muted, fontSize: 14, fontWeight: '700' },
+    stepNumberText: { color: t.text.muted, fontSize: 14, fontWeight: fonts.bold },
     stepNumberTextActive: { color: '#fff' },
-    stepTitle: { color: t.text.primary, fontSize: 15, fontWeight: '600', flex: 1 },
+    stepTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold, flex: 1 },
     stepDescription: { color: t.text.secondary, fontSize: 13, paddingHorizontal: 16, paddingBottom: 12 },
     stepDetail: { color: t.text.muted, fontSize: 13, lineHeight: 19, paddingHorizontal: 16, paddingBottom: 16 },
     commandBox: { backgroundColor: t.bg.primary, borderRadius: 8, marginHorizontal: 16, marginBottom: 16, padding: 12 },
     commandText: { color: t.accent.green, fontSize: 12, fontFamily: 'monospace', lineHeight: 18 },
     checkRow: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingBottom: 16 },
     checkDot: { width: 10, height: 10, borderRadius: 5, marginRight: 8 },
-    checkText: { fontSize: 12, fontWeight: '600' },
+    checkText: { fontSize: 12, fontWeight: fonts.semibold },
     checkTextPass: { color: t.accent.green },
     checkTextWait: { color: t.text.muted },
     demoBtn: { backgroundColor: t.accent.blue + '20', borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginTop: 8, marginBottom: 16 },
-    demoBtnText: { color: t.accent.blue, fontSize: 15, fontWeight: '700' },
+    demoBtnText: { color: t.accent.blue, fontSize: 15, fontWeight: fonts.bold },
     demoBtnActive: { backgroundColor: t.accent.green + '20' },
     demoBtnTextActive: { color: t.accent.green },
     backBtn: { paddingVertical: 20, alignItems: 'center' },
     backText: { color: t.accent.blue, fontSize: 16 },
     statusBanner: { backgroundColor: t.accent.green + '15', borderRadius: 12, padding: 16, marginBottom: 16, alignItems: 'center' },
-    statusBannerText: { color: t.accent.green, fontSize: 16, fontWeight: '700' },
+    statusBannerText: { color: t.accent.green, fontSize: 16, fontWeight: fonts.bold },
     statusBannerSub: { color: t.accent.green, fontSize: 12, marginTop: 4, opacity: 0.8 },
   }), [t]);
 

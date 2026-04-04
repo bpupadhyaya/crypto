@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * DeFi Dashboard — All positions at a glance.
  *
@@ -50,21 +51,21 @@ export function DeFiScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingHorizontal: 20, paddingBottom: 40 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 16 },
-    cardTitle: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12 },
+    cardTitle: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12 },
     statRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 },
     statLabel: { color: t.text.muted, fontSize: 14 },
-    statValue: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
-    statValueGreen: { color: t.accent.green, fontSize: 14, fontWeight: '600' },
+    statValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
+    statValueGreen: { color: t.accent.green, fontSize: 14, fontWeight: fonts.semibold },
     bigStat: { alignItems: 'center', paddingVertical: 12 },
-    bigNumber: { color: t.accent.green, fontSize: 36, fontWeight: '900' },
+    bigNumber: { color: t.accent.green, fontSize: 36, fontWeight: fonts.heavy },
     bigLabel: { color: t.text.muted, fontSize: 13, marginTop: 4 },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 10 },
     stakingRow: { marginBottom: 8 },
-    validatorName: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
+    validatorName: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
     stakingDetail: { color: t.text.muted, fontSize: 12, marginTop: 2 },
     emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', paddingVertical: 16 },
   }), [t]);

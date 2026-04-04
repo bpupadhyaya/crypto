@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Appeal Screen — Article V of The Human Constitution: Contest/Appeal for Correction Reports.
  *
@@ -234,34 +235,34 @@ export function AppealScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { flex: 1, paddingHorizontal: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 6 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
-    cardTitle: { color: t.text.primary, fontSize: 15, fontWeight: '700', marginBottom: 4 },
+    cardTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, marginBottom: 4 },
     cardDesc: { color: t.text.secondary, fontSize: 13, lineHeight: 19, marginBottom: 8 },
     statusBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'flex-start', marginBottom: 8 },
-    statusText: { fontSize: 11, fontWeight: '700', color: '#fff' },
+    statusText: { fontSize: 11, fontWeight: fonts.bold, color: '#fff' },
     row: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 },
     label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
-    negOTK: { color: t.accent.red, fontSize: 16, fontWeight: '800' },
+    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    negOTK: { color: t.accent.red, fontSize: 16, fontWeight: fonts.heavy },
     channelChip: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'flex-start', marginBottom: 8 },
-    channelText: { fontSize: 11, fontWeight: '700', color: '#fff' },
+    channelText: { fontSize: 11, fontWeight: fonts.bold, color: '#fff' },
     info: { backgroundColor: t.accent.blue + '15', borderRadius: 12, padding: 14, marginBottom: 16, borderWidth: 1, borderColor: t.accent.blue + '30' },
-    infoText: { color: t.accent.blue, fontSize: 13, lineHeight: 19, fontWeight: '600' },
+    infoText: { color: t.accent.blue, fontSize: 13, lineHeight: 19, fontWeight: fonts.semibold },
     input: { backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 14, marginBottom: 12, borderWidth: 1, borderColor: t.border },
-    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: '600', marginBottom: 6 },
+    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 6 },
     submitBtn: { backgroundColor: t.accent.purple, borderRadius: 14, paddingVertical: 16, alignItems: 'center', marginTop: 8, marginBottom: 20 },
-    submitBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+    submitBtnText: { color: '#fff', fontSize: 16, fontWeight: fonts.bold },
     addBtn: { backgroundColor: t.accent.blue, borderRadius: 12, paddingVertical: 12, alignItems: 'center', marginTop: 4, marginBottom: 12 },
-    addBtnText: { color: '#fff', fontSize: 14, fontWeight: '700' },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 12, marginBottom: 6 },
+    addBtnText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginTop: 12, marginBottom: 6 },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 10 },
     empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
     backBtn: { paddingVertical: 16, alignItems: 'center' },
@@ -278,25 +279,25 @@ export function AppealScreen({ onClose }: Props) {
     timelineLineCompleted: { backgroundColor: t.accent.green },
     timelineLinePending: { backgroundColor: t.text.muted + '40' },
     timelineContent: { flex: 1, paddingBottom: 16, paddingLeft: 8 },
-    timelineLabel: { color: t.text.primary, fontSize: 13, fontWeight: '600' },
+    timelineLabel: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold },
     timelineDate: { color: t.text.muted, fontSize: 11, marginTop: 2 },
     // Evidence and witness items
     evidenceItem: { backgroundColor: t.bg.primary, borderRadius: 10, padding: 12, marginBottom: 8 },
-    evidenceType: { fontSize: 10, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 4 },
-    evidenceLabel: { color: t.text.primary, fontSize: 13, fontWeight: '600' },
+    evidenceType: { fontSize: 10, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 4 },
+    evidenceLabel: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold },
     evidenceHash: { color: t.text.muted, fontSize: 11, fontFamily: 'Courier', marginTop: 2 },
     witnessItem: { backgroundColor: t.bg.primary, borderRadius: 10, padding: 12, marginBottom: 8 },
-    witnessUID: { color: t.text.primary, fontSize: 13, fontWeight: '600' },
-    witnessStatus: { fontSize: 11, fontWeight: '700', marginTop: 2 },
+    witnessUID: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold },
+    witnessStatus: { fontSize: 11, fontWeight: fonts.bold, marginTop: 2 },
     witnessStatement: { color: t.text.secondary, fontSize: 12, lineHeight: 17, marginTop: 4, fontStyle: 'italic' },
     // Hearing card
     hearingCard: { backgroundColor: t.accent.blue + '10', borderRadius: 12, padding: 14, marginBottom: 12, borderWidth: 1, borderColor: t.accent.blue + '25' },
-    hearingTitle: { color: t.accent.blue, fontSize: 14, fontWeight: '700', marginBottom: 8 },
+    hearingTitle: { color: t.accent.blue, fontSize: 14, fontWeight: fonts.bold, marginBottom: 8 },
     // Summary stats
     statsRow: { flexDirection: 'row', gap: 8, marginBottom: 16 },
     statCard: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 12, alignItems: 'center' },
-    statNum: { fontSize: 20, fontWeight: '800', marginBottom: 2 },
-    statLabel: { color: t.text.muted, fontSize: 10, fontWeight: '600', textTransform: 'uppercase' },
+    statNum: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 2 },
+    statLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold, textTransform: 'uppercase' },
   }), [t]);
 
   const appeals = demoMode ? DEMO_APPEALS : [];
@@ -579,7 +580,7 @@ export function AppealScreen({ onClose }: Props) {
                           { width: 10, height: 10, borderRadius: 5, marginBottom: 4 },
                           { backgroundColor: step.completed ? t.accent.green : t.text.muted + '40' },
                         ]} />
-                        <Text style={{ color: step.completed ? t.text.secondary : t.text.muted, fontSize: 9, fontWeight: '600' }}>
+                        <Text style={{ color: step.completed ? t.text.secondary : t.text.muted, fontSize: 9, fontWeight: fonts.semibold }}>
                           {step.stage.charAt(0).toUpperCase() + step.stage.slice(1)}
                         </Text>
                       </View>

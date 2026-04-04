@@ -20,6 +20,7 @@ import { useWalletStore } from '../store/walletStore';
 import { useTheme } from '../hooks/useTheme';
 import type { Transaction, ChainId } from '../core/abstractions/types';
 import type { Theme } from '../utils/theme';
+import { fonts } from '../utils/theme';
 
 const CHAIN_COLORS: Record<string, string> = {
   bitcoin: '#f7931a',
@@ -66,7 +67,7 @@ function TransactionItem({ tx, mode, t }: { tx: Transaction; mode: string; t: Th
     txItem: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 14 },
     txLeft: { flexDirection: 'row', alignItems: 'center', flex: 1 },
     txChainDot: { width: 8, height: 8, borderRadius: 4, marginRight: 12 },
-    txType: { color: t.text.primary, fontSize: 15, fontWeight: '600' },
+    txType: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold },
     txAddress: { color: t.text.muted, fontSize: 12, marginTop: 2, maxWidth: 160 },
     txRight: { alignItems: 'flex-end' },
     txMeta: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 2 },
@@ -109,11 +110,11 @@ function TransactionItem({ tx, mode, t }: { tx: Transaction; mode: string; t: Th
         </View>
       </View>
       <View style={s.txRight}>
-        <Text style={[{ fontSize: 15, fontWeight: '700' }, { color: isSent ? t.accent.red : t.accent.green }]}>
+        <Text style={[{ fontSize: 15, fontWeight: fonts.bold }, { color: isSent ? t.accent.red : t.accent.green }]}>
           {isSent ? '-' : '+'}{formatAmount(tx.amount, tx.token.decimals)} {tx.token.symbol}
         </Text>
         <View style={s.txMeta}>
-          <Text style={[{ fontSize: 11, fontWeight: '600' }, { color: statusColor }]}>
+          <Text style={[{ fontSize: 11, fontWeight: fonts.semibold }, { color: statusColor }]}>
             {tx.status === 'confirmed' ? '✓' : tx.status === 'failed' ? '✗' : '○'}{' '}
             {tx.status}
           </Text>
@@ -140,7 +141,7 @@ export function HistoryScreen() {
     empty: { alignItems: 'center', paddingHorizontal: 40 },
     emptyContainer: { flex: 1, justifyContent: 'center' },
     emptyIcon: { color: t.text.muted, fontSize: 48, marginBottom: 16 },
-    emptyTitle: { color: t.text.secondary, fontSize: 18, fontWeight: '700', marginBottom: 8 },
+    emptyTitle: { color: t.text.secondary, fontSize: 18, fontWeight: fonts.bold, marginBottom: 8 },
     emptyDesc: { color: t.text.muted, fontSize: 14, textAlign: 'center', lineHeight: 20 },
   }), [t]);
 

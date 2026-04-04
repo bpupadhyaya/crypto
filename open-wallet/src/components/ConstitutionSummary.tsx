@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Constitution Summary Card — Reusable component for various screens.
  *
@@ -53,7 +54,7 @@ export function ConstitutionSummary({ initialExpanded = false, onReadFull }: Pro
     },
     compactIcon: { fontSize: 16, color: '#d4a017' },
     compactText: { color: t.text.secondary, fontSize: 13, flex: 1 },
-    compactBold: { color: t.text.primary, fontWeight: '700' },
+    compactBold: { color: t.text.primary, fontWeight: fonts.bold },
     expandIcon: { color: t.text.muted, fontSize: 14 },
     expandedCard: {
       backgroundColor: t.bg.card,
@@ -63,15 +64,15 @@ export function ConstitutionSummary({ initialExpanded = false, onReadFull }: Pro
       borderLeftColor: '#d4a017',
     },
     expandedHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
-    expandedTitle: { color: '#d4a017', fontSize: 14, fontWeight: '800' },
+    expandedTitle: { color: '#d4a017', fontSize: 14, fontWeight: fonts.heavy },
     collapseBtn: { color: t.text.muted, fontSize: 14 },
     principleRow: { flexDirection: 'row', gap: 10, marginBottom: 12, alignItems: 'flex-start' },
     principleIcon: { fontSize: 16, marginTop: 2 },
     principleInfo: { flex: 1 },
-    principleTitle: { color: t.text.primary, fontSize: 13, fontWeight: '700', marginBottom: 2 },
+    principleTitle: { color: t.text.primary, fontSize: 13, fontWeight: fonts.bold, marginBottom: 2 },
     principleText: { color: t.text.secondary, fontSize: 12, lineHeight: 18 },
     readBtn: { backgroundColor: '#d4a017' + '15', borderRadius: 10, paddingVertical: 10, alignItems: 'center', marginTop: 4 },
-    readBtnText: { color: '#d4a017', fontSize: 13, fontWeight: '700' },
+    readBtnText: { color: '#d4a017', fontSize: 13, fontWeight: fonts.bold },
   }), [t]);
 
   if (!isExpanded) {

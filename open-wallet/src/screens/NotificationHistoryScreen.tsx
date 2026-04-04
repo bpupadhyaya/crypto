@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Notification History Screen — shows past transaction notification alerts.
  *
@@ -30,18 +31,18 @@ export function NotificationHistoryScreen({ onClose }: NotificationHistoryScreen
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     scroll: { paddingHorizontal: 16, paddingTop: 8 },
-    header: { color: t.text.primary, fontSize: 20, fontWeight: '700', textAlign: 'center', marginVertical: 16 },
+    header: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold, textAlign: 'center', marginVertical: 16 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 10 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    chain: { color: t.accent.blue, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1 },
+    chain: { color: t.accent.blue, fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1 },
     timestamp: { color: t.text.muted, fontSize: 11 },
-    amount: { color: t.accent.green, fontSize: 18, fontWeight: '700', marginTop: 6 },
+    amount: { color: t.accent.green, fontSize: 18, fontWeight: fonts.bold, marginTop: 6 },
     sender: { color: t.text.secondary, fontSize: 13, fontFamily: 'monospace', marginTop: 4 },
     senderLabel: { color: t.text.muted, fontSize: 11, marginTop: 8 },
     txHash: { color: t.text.muted, fontSize: 11, fontFamily: 'monospace', marginTop: 4 },
     emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', paddingVertical: 60, lineHeight: 22 },
     clearBtn: { backgroundColor: t.accent.red + '20', borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginTop: 16 },
-    clearText: { color: t.accent.red, fontSize: 15, fontWeight: '700' },
+    clearText: { color: t.accent.red, fontSize: 15, fontWeight: fonts.bold },
     backBtn: { paddingVertical: 20, alignItems: 'center' },
     backText: { color: t.accent.blue, fontSize: 16 },
   }), [t]);

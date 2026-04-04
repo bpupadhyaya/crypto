@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Backup Verify Screen — Verify wallet backup integrity.
  *
@@ -96,37 +97,37 @@ export function BackupVerifyScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeText: { color: t.accent.blue, fontSize: 16 },
     tabRow: { flexDirection: 'row', marginHorizontal: 16, marginBottom: 12, borderRadius: 10, backgroundColor: t.bg.card, overflow: 'hidden' },
     tabBtn: { flex: 1, paddingVertical: 10, alignItems: 'center' },
     tabBtnActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.muted, fontSize: 13, fontWeight: '600' },
+    tabText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 16, marginBottom: 8 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 16, marginBottom: 8 },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 10 },
     checkRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-    checkLabel: { color: t.text.primary, fontSize: 14, fontWeight: '600', flex: 1 },
+    checkLabel: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, flex: 1 },
     checkIcon: { fontSize: 18, marginRight: 10 },
     checkDesc: { color: t.text.muted, fontSize: 12, lineHeight: 17, marginTop: 6 },
     runBtn: { backgroundColor: t.accent.blue, borderRadius: 8, paddingVertical: 8, paddingHorizontal: 14 },
-    runBtnText: { color: '#fff', fontSize: 12, fontWeight: '600' },
+    runBtnText: { color: '#fff', fontSize: 12, fontWeight: fonts.semibold },
     runAllBtn: { backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginTop: 16 },
-    runAllText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+    runAllText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
     scheduleRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    scheduleLabel: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
+    scheduleLabel: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
     scheduleInterval: { color: t.text.muted, fontSize: 12, marginTop: 2 },
     scheduleDot: { width: 12, height: 12, borderRadius: 6 },
     historyCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 10, flexDirection: 'row', alignItems: 'center' },
     historyIcon: { fontSize: 20, marginRight: 12 },
     historyInfo: { flex: 1 },
-    historyDate: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
+    historyDate: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
     historyMethod: { color: t.text.muted, fontSize: 12, marginTop: 2 },
-    historyDuration: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    historyDuration: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     warnCard: { backgroundColor: t.accent.yellow + '20', borderRadius: 14, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: t.accent.yellow + '40' },
     warnText: { color: t.text.secondary, fontSize: 12, lineHeight: 18 },
-    warnTitle: { color: t.accent.yellow, fontSize: 13, fontWeight: '700', marginBottom: 4 },
+    warnTitle: { color: t.accent.yellow, fontSize: 13, fontWeight: fonts.bold, marginBottom: 4 },
   }), [t]);
 
   const passedChecks = checks.filter(c => c.status === 'pass').length;

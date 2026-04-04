@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Chain Info Screen — Information about each supported blockchain.
  * Shows chain details, network status, block height, and explorer links.
@@ -105,20 +106,20 @@ export const ChainInfoScreen = React.memo(({ onClose }: Props) => {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     scroll: { paddingHorizontal: 16, paddingTop: 16 },
-    title: { color: t.text.primary, fontSize: 22, fontWeight: '800', textAlign: 'center', marginBottom: 4 },
+    title: { color: t.text.primary, fontSize: 22, fontWeight: fonts.heavy, textAlign: 'center', marginBottom: 4 },
     subtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginBottom: 20 },
     // Chain card
     chainCard: { backgroundColor: t.bg.card, borderRadius: 20, padding: 18, marginBottom: 12 },
     chainHeader: { flexDirection: 'row', alignItems: 'center', gap: 14 },
     chainIcon: { width: 48, height: 48, borderRadius: 24, justifyContent: 'center', alignItems: 'center' },
-    chainIconText: { fontSize: 18, fontWeight: '800', color: '#fff' },
-    chainName: { color: t.text.primary, fontSize: 17, fontWeight: '700' },
+    chainIconText: { fontSize: 18, fontWeight: fonts.heavy, color: '#fff' },
+    chainName: { color: t.text.primary, fontSize: 17, fontWeight: fonts.bold },
     chainConsensus: { color: t.text.muted, fontSize: 12, marginTop: 2 },
     // Status row
     statusRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 14, paddingTop: 14, borderTopWidth: 1, borderTopColor: t.border },
     statusItem: { alignItems: 'center', flex: 1 },
     statusLabel: { color: t.text.muted, fontSize: 10, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 4 },
-    statusValue: { color: t.text.primary, fontSize: 13, fontWeight: '600' },
+    statusValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold },
     statusDot: { width: 8, height: 8, borderRadius: 4, marginBottom: 4 },
     statusOnline: { backgroundColor: t.accent.green },
     statusOffline: { backgroundColor: t.accent.red },
@@ -127,15 +128,15 @@ export const ChainInfoScreen = React.memo(({ onClose }: Props) => {
     detailSection: { marginTop: 14, paddingTop: 14, borderTopWidth: 1, borderTopColor: t.border },
     detailRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8 },
     detailLabel: { color: t.text.muted, fontSize: 13 },
-    detailValue: { color: t.text.secondary, fontSize: 13, fontWeight: '600', maxWidth: '55%', textAlign: 'right' },
+    detailValue: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, maxWidth: '55%', textAlign: 'right' },
     description: { color: t.text.secondary, fontSize: 13, lineHeight: 20, marginTop: 12 },
     explorerBtn: { backgroundColor: t.accent.blue + '15', borderRadius: 12, paddingVertical: 10, alignItems: 'center', marginTop: 12 },
-    explorerBtnText: { color: t.accent.blue, fontSize: 13, fontWeight: '600' },
+    explorerBtnText: { color: t.accent.blue, fontSize: 13, fontWeight: fonts.semibold },
     // Toggle
-    expandText: { color: t.accent.blue, fontSize: 13, fontWeight: '600', marginTop: 10, textAlign: 'center' },
+    expandText: { color: t.accent.blue, fontSize: 13, fontWeight: fonts.semibold, marginTop: 10, textAlign: 'center' },
     // Network badge
     networkBadge: { alignSelf: 'center', backgroundColor: isTestnet() ? t.accent.yellow + '20' : t.accent.green + '20', borderRadius: 12, paddingVertical: 4, paddingHorizontal: 12, marginBottom: 16 },
-    networkBadgeText: { fontSize: 12, fontWeight: '600', color: isTestnet() ? t.accent.yellow : t.accent.green },
+    networkBadgeText: { fontSize: 12, fontWeight: fonts.semibold, color: isTestnet() ? t.accent.yellow : t.accent.green },
     // Back
     backBtn: { paddingVertical: 16, alignItems: 'center' },
     backText: { color: t.accent.blue, fontSize: 16 },

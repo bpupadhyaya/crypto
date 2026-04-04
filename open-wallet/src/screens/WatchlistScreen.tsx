@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Watchlist — Track tokens you don't hold but want to monitor.
  * Price alerts, 24h/7d change, persisted in AsyncStorage.
@@ -240,25 +241,25 @@ export const WatchlistScreen = React.memo(({ onClose }: Props) => {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    back: { color: t.accent.blue, fontSize: 16, fontWeight: '600' },
-    title: { color: t.text.primary, fontSize: 18, fontWeight: '800' },
-    addBtnHeader: { color: t.accent.green, fontSize: 15, fontWeight: '700' },
+    back: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
+    title: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
+    addBtnHeader: { color: t.accent.green, fontSize: 15, fontWeight: fonts.bold },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
     sortRow: { flexDirection: 'row', gap: 6, marginBottom: 12 },
     sortChip: { paddingVertical: 6, paddingHorizontal: 12, borderRadius: 8, backgroundColor: t.border },
     sortChipActive: { backgroundColor: t.accent.green },
-    sortText: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
-    sortTextActive: { color: t.bg.primary, fontWeight: '700' },
+    sortText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    sortTextActive: { color: t.bg.primary, fontWeight: fonts.bold },
     card: { backgroundColor: t.bg.card, borderRadius: 16, overflow: 'hidden', marginBottom: 12 },
     tokenRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 14, paddingHorizontal: 16, borderBottomWidth: 1, borderBottomColor: t.border },
     tokenDot: { width: 32, height: 32, borderRadius: 16, justifyContent: 'center', alignItems: 'center', marginRight: 12 },
-    tokenSymbol: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
+    tokenSymbol: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
     tokenName: { color: t.text.muted, fontSize: 12, marginTop: 1 },
     priceCol: { alignItems: 'flex-end', marginLeft: 'auto' },
-    priceText: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
+    priceText: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
     changeRow: { flexDirection: 'row', gap: 8, marginTop: 2 },
     alertBadge: { backgroundColor: t.accent.orange + '20', borderRadius: 6, paddingVertical: 2, paddingHorizontal: 6, marginTop: 4 },
-    alertBadgeText: { color: t.accent.orange, fontSize: 10, fontWeight: '600' },
+    alertBadgeText: { color: t.accent.orange, fontSize: 10, fontWeight: fonts.semibold },
     actionsRow: { flexDirection: 'row', gap: 8, marginLeft: 8 },
     actionBtn: { padding: 4 },
     actionText: { fontSize: 16, color: t.text.muted },
@@ -267,23 +268,23 @@ export const WatchlistScreen = React.memo(({ onClose }: Props) => {
     searchInput: { backgroundColor: t.bg.primary, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10, color: t.text.primary, fontSize: 14, marginBottom: 12, borderWidth: 1, borderColor: t.border },
     addTokenRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: t.border },
     addTokenBtn: { marginLeft: 'auto', backgroundColor: t.accent.green, borderRadius: 8, paddingVertical: 4, paddingHorizontal: 12 },
-    addTokenBtnText: { color: '#fff', fontSize: 12, fontWeight: '700' },
+    addTokenBtnText: { color: '#fff', fontSize: 12, fontWeight: fonts.bold },
     // Alert form
     alertForm: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: t.accent.orange + '30' },
-    alertTitle: { color: t.accent.orange, fontSize: 14, fontWeight: '700', marginBottom: 12 },
+    alertTitle: { color: t.accent.orange, fontSize: 14, fontWeight: fonts.bold, marginBottom: 12 },
     alertInput: { backgroundColor: t.bg.primary, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 8, color: t.text.primary, fontSize: 14, marginBottom: 10, borderWidth: 1, borderColor: t.border },
     dirRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
     dirChip: { paddingVertical: 6, paddingHorizontal: 14, borderRadius: 8, backgroundColor: t.border },
     dirActive: { backgroundColor: t.accent.orange },
-    dirText: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
-    dirTextActive: { color: '#fff', fontWeight: '700' },
+    dirText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    dirTextActive: { color: '#fff', fontWeight: fonts.bold },
     setAlertBtn: { backgroundColor: t.accent.orange, borderRadius: 10, paddingVertical: 10, alignItems: 'center' },
-    setAlertText: { color: '#fff', fontSize: 14, fontWeight: '700' },
+    setAlertText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
     cancelBtn: { paddingVertical: 10, alignItems: 'center' },
     cancelText: { color: t.text.muted, fontSize: 14 },
     emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', paddingVertical: 40 },
     demoTag: { backgroundColor: t.accent.purple + '20', borderRadius: 8, paddingVertical: 4, paddingHorizontal: 10, alignSelf: 'flex-start', marginBottom: 12 },
-    demoText: { color: t.accent.purple, fontSize: 12, fontWeight: '600' },
+    demoText: { color: t.accent.purple, fontSize: 12, fontWeight: fonts.semibold },
   }), [t]);
 
   const getTokenInfo = useCallback((symbol: string): TokenInfo | undefined => {
@@ -335,7 +336,7 @@ export const WatchlistScreen = React.memo(({ onClose }: Props) => {
         {/* Add Token Form */}
         {showAddToken && (
           <View style={s.addOverlay}>
-            <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: '700', marginBottom: 10 }}>
+            <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, marginBottom: 10 }}>
               Add Token to Watchlist
             </Text>
             <TextInput
@@ -350,7 +351,7 @@ export const WatchlistScreen = React.memo(({ onClose }: Props) => {
               {availableTokens.map((tok) => (
                 <View key={tok.symbol} style={s.addTokenRow}>
                   <View style={[s.tokenDot, { backgroundColor: tok.color + '30' }]}>
-                    <Text style={{ color: tok.color, fontSize: 12, fontWeight: '800' }}>
+                    <Text style={{ color: tok.color, fontSize: 12, fontWeight: fonts.heavy }}>
                       {tok.symbol.slice(0, 2)}
                     </Text>
                   </View>
@@ -424,7 +425,7 @@ export const WatchlistScreen = React.memo(({ onClose }: Props) => {
               return (
                 <View key={item.symbol} style={s.tokenRow}>
                   <View style={[s.tokenDot, { backgroundColor: color + '30' }]}>
-                    <Text style={{ color, fontSize: 12, fontWeight: '800' }}>
+                    <Text style={{ color, fontSize: 12, fontWeight: fonts.heavy }}>
                       {item.symbol.slice(0, 2)}
                     </Text>
                   </View>
@@ -442,10 +443,10 @@ export const WatchlistScreen = React.memo(({ onClose }: Props) => {
                   <View style={s.priceCol}>
                     <Text style={s.priceText}>{fmtPrice(price)}</Text>
                     <View style={s.changeRow}>
-                      <Text style={{ color: change24h >= 0 ? t.accent.green : t.accent.red, fontSize: 11, fontWeight: '600' }}>
+                      <Text style={{ color: change24h >= 0 ? t.accent.green : t.accent.red, fontSize: 11, fontWeight: fonts.semibold }}>
                         24h: {fmtChange(change24h)}
                       </Text>
-                      <Text style={{ color: change7d >= 0 ? t.accent.green : t.accent.red, fontSize: 11, fontWeight: '600' }}>
+                      <Text style={{ color: change7d >= 0 ? t.accent.green : t.accent.red, fontSize: 11, fontWeight: fonts.semibold }}>
                         7d: {fmtChange(change7d)}
                       </Text>
                     </View>

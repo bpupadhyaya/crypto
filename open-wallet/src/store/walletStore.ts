@@ -7,7 +7,7 @@
 import { create } from 'zustand';
 import type { ChainId, Balance, BackendType } from '../core/abstractions/types';
 import { type NetworkMode, setNetworkMode } from '../core/network';
-import type { ThemeMode } from '../utils/theme';
+import { type ThemeMode, type DisplayScales, DEFAULT_DISPLAY_SCALES, applyDisplayScales } from '../utils/theme';
 
 export type AppMode = 'simple' | 'pro';
 export type WalletStatus = 'locked' | 'unlocked' | 'onboarding' | 'pin_setup';
@@ -112,6 +112,11 @@ interface WalletState {
   setPersonaLanguage: (language: string | null) => void;
   personaShortcuts: string[];
   setPersonaShortcuts: (shortcuts: string[]) => void;
+
+  // ─── Display Scales (user-adjustable font/icon sizing) ───
+  displayScales: DisplayScales;
+  setDisplayScale: (key: keyof DisplayScales, value: number) => void;
+  resetDisplayScales: () => void;
 }
 
 const DEFAULT_TOKENS = ['OTK', 'BTC', 'ETH', 'USDT', 'XRP', 'USDC', 'SOL', 'ADA', 'LINK', 'AVAX', 'SUI', 'POL', 'DOT', 'DOGE', 'BNB', 'TON'];
@@ -210,6 +215,20 @@ export const useWalletStore = create<WalletState>((set) => ({
   setPersonaLanguage: (language) => { set({ personaLanguage: language }); schedulePersist(); },
   personaShortcuts: [],
   setPersonaShortcuts: (shortcuts) => { set({ personaShortcuts: shortcuts }); schedulePersist(); },
+  displayScales: { ...DEFAULT_DISPLAY_SCALES },
+  setDisplayScale: (key, value) => {
+    set((s) => {
+      const updated = { ...s.displayScales, [key]: value };
+      applyDisplayScales(updated);
+      return { displayScales: updated };
+    });
+    schedulePersist();
+  },
+  resetDisplayScales: () => {
+    applyDisplayScales(DEFAULT_DISPLAY_SCALES);
+    set({ displayScales: { ...DEFAULT_DISPLAY_SCALES } });
+    schedulePersist();
+  },
 }));
 
 // ─── Non-blocking persistence ───
@@ -239,6 +258,7 @@ async function doPersist() {
       stablecoinChains: s.stablecoinChains,
       devBalances: s.devBalances,
       persona: s.persona, personaInterests: s.personaInterests, personaRegion: s.personaRegion, personaLanguage: s.personaLanguage, personaShortcuts: s.personaShortcuts,
+      displayScales: s.displayScales,
     }));
   } catch {}
 }
@@ -293,8 +313,12 @@ function ensureOTK(tokens: string[]): string[] {
         autoLockTimeout: d.autoLockTimeout ?? (5 * 60 * 1000),
         stablecoinChains: d.stablecoinChains ?? {},
         devBalances: d.devBalances ?? { ...DEFAULT_DEV_BALANCES },
+        displayScales: d.displayScales ?? { ...DEFAULT_DISPLAY_SCALES },
         ...(shouldSetStatus ? { status: d.hasVault ? 'locked' : 'onboarding' } : {}),
       });
+      // Apply restored display scales to the fonts system
+      const restoredScales = d.displayScales ?? DEFAULT_DISPLAY_SCALES;
+      applyDisplayScales(restoredScales);
     }
   } catch {}
 })();

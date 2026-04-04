@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * FAQ Screen — Frequently asked questions organized by category.
  *
@@ -86,7 +87,7 @@ export function FaqScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    headerTitle: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeText: { color: t.accent.blue, fontSize: 16 },
     tabRow: {
       flexDirection: 'row',
@@ -98,15 +99,15 @@ export function FaqScreen({ onClose }: Props) {
     },
     tabBtn: { flex: 1, paddingVertical: 10, alignItems: 'center' },
     tabBtnActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.muted, fontSize: 12, fontWeight: '600' },
+    tabText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 8, marginBottom: 12 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 8, marginBottom: 12 },
     faqCard: { backgroundColor: t.bg.card, borderRadius: 14, marginBottom: 10, overflow: 'hidden' },
     faqHeader: { flexDirection: 'row', alignItems: 'center', padding: 16 },
     faqIcon: { fontSize: 16, marginRight: 10 },
-    faqQuestion: { color: t.text.primary, fontSize: 14, fontWeight: '600', flex: 1 },
-    faqArrow: { color: t.text.muted, fontSize: 16, fontWeight: '700' },
+    faqQuestion: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, flex: 1 },
+    faqArrow: { color: t.text.muted, fontSize: 16, fontWeight: fonts.bold },
     faqAnswer: { paddingHorizontal: 16, paddingBottom: 16, paddingTop: 0 },
     faqAnswerText: { color: t.text.secondary, fontSize: 13, lineHeight: 20 },
     divider: { height: 1, backgroundColor: t.border, marginHorizontal: 16 },
@@ -162,7 +163,7 @@ export function FaqScreen({ onClose }: Props) {
           <Text style={{
             color: t.accent.blue,
             fontSize: 13,
-            fontWeight: '700',
+            fontWeight: fonts.bold,
             marginBottom: 4,
           }}>
             Still have questions?

@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Hardware Wallet Screen — Connect Ledger/Trezor via Bluetooth.
  *
@@ -48,31 +49,31 @@ export function HardwareWalletScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 12, marginTop: 24 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 12, marginTop: 24 },
     deviceCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 12, flexDirection: 'row', alignItems: 'center' },
     deviceCardActive: { borderWidth: 2, borderColor: t.accent.green },
     deviceCardDisabled: { opacity: 0.4 },
     deviceIcon: { fontSize: 32, marginRight: 16 },
     deviceInfo: { flex: 1 },
-    deviceName: { color: t.text.primary, fontSize: 17, fontWeight: '700' },
+    deviceName: { color: t.text.primary, fontSize: 17, fontWeight: fonts.bold },
     deviceModels: { color: t.text.muted, fontSize: 13, marginTop: 2 },
-    comingSoon: { color: t.accent.yellow, fontSize: 11, fontWeight: '700', marginTop: 4 },
+    comingSoon: { color: t.accent.yellow, fontSize: 11, fontWeight: fonts.bold, marginTop: 4 },
     scanBtn: { backgroundColor: t.accent.blue, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginHorizontal: 20, marginTop: 24 },
-    scanBtnText: { color: '#fff', fontSize: 17, fontWeight: '700' },
+    scanBtnText: { color: '#fff', fontSize: 17, fontWeight: fonts.bold },
     discoveredCard: { backgroundColor: t.bg.card, borderRadius: 12, padding: 16, marginHorizontal: 20, marginBottom: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-    discoveredName: { color: t.text.primary, fontSize: 15, fontWeight: '600' },
+    discoveredName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold },
     discoveredModel: { color: t.text.muted, fontSize: 13 },
     connectBtn: { backgroundColor: t.accent.green, borderRadius: 8, paddingVertical: 8, paddingHorizontal: 16 },
-    connectBtnText: { color: '#fff', fontSize: 13, fontWeight: '700' },
+    connectBtnText: { color: '#fff', fontSize: 13, fontWeight: fonts.bold },
     statusCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 24, marginHorizontal: 20, marginTop: 24, alignItems: 'center' },
     statusIcon: { fontSize: 48, marginBottom: 12 },
-    statusText: { color: t.text.primary, fontSize: 18, fontWeight: '700' },
+    statusText: { color: t.text.primary, fontSize: 18, fontWeight: fonts.bold },
     statusSub: { color: t.text.muted, fontSize: 14, marginTop: 8, textAlign: 'center', lineHeight: 20 },
     actionRow: { flexDirection: 'row', gap: 12, marginTop: 20 },
     actionBtn: { flex: 1, borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
-    actionBtnText: { color: '#fff', fontSize: 14, fontWeight: '700' },
+    actionBtnText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
     instructions: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginHorizontal: 24, marginTop: 24, lineHeight: 20 },
   }), [t]);
 

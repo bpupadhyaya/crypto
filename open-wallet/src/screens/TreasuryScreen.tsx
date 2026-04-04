@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Treasury Screen — Community fund overview.
  *
@@ -62,27 +63,27 @@ export function TreasuryScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingHorizontal: 20, paddingBottom: 40 },
     heroCard: { backgroundColor: t.accent.green + '10', borderRadius: 24, padding: 28, alignItems: 'center', marginBottom: 20 },
     heroLabel: { color: t.text.muted, fontSize: 13, textTransform: 'uppercase', letterSpacing: 1 },
-    heroValue: { color: t.accent.green, fontSize: 36, fontWeight: '900', marginTop: 4 },
+    heroValue: { color: t.accent.green, fontSize: 36, fontWeight: fonts.heavy, marginTop: 4 },
     heroSub: { color: t.text.muted, fontSize: 12, marginTop: 8, textAlign: 'center', lineHeight: 18 },
     statsRow: { flexDirection: 'row', gap: 12, marginBottom: 16 },
     statCard: { flex: 1, backgroundColor: t.bg.card, borderRadius: 16, padding: 16, alignItems: 'center' },
     statLabel: { color: t.text.muted, fontSize: 11 },
-    statValue: { color: t.text.primary, fontSize: 16, fontWeight: '700', marginTop: 4 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 10, marginTop: 8 },
+    statValue: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginTop: 4 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 10, marginTop: 8 },
     channelRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10 },
     channelDot: { width: 10, height: 10, borderRadius: 5, marginRight: 8 },
-    channelName: { color: t.text.primary, fontSize: 14, fontWeight: '600', flex: 1 },
+    channelName: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, flex: 1 },
     channelAmount: { color: t.text.secondary, fontSize: 14 },
     bar: { height: 6, backgroundColor: t.border, borderRadius: 3, marginTop: 4, marginBottom: 12 },
     barFill: { height: 6, borderRadius: 3 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     distRow: { marginBottom: 12 },
-    distProposal: { color: t.accent.blue, fontSize: 13, fontWeight: '600' },
+    distProposal: { color: t.accent.blue, fontSize: 13, fontWeight: fonts.semibold },
     distDetail: { color: t.text.muted, fontSize: 12, marginTop: 2 },
   }), [t]);
 

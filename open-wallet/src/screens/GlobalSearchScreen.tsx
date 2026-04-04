@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Global Search Screen — Find anything across all 246 screens.
  *
@@ -391,7 +392,7 @@ export function GlobalSearchScreen({ onClose, onNavigate }: Props & { onNavigate
     clearBtn: { padding: 4 },
     clearText: { color: t.text.muted, fontSize: 18 },
     closeBtn: { paddingVertical: 4 },
-    closeBtnText: { color: t.accent.blue, fontSize: 16, fontWeight: '600' },
+    closeBtnText: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
 
     // Category chips
     chipRow: { paddingHorizontal: 12, paddingBottom: 12 },
@@ -402,13 +403,13 @@ export function GlobalSearchScreen({ onClose, onNavigate }: Props & { onNavigate
     },
     chipActive: { backgroundColor: t.accent.blue },
     chipEmoji: { fontSize: 14 },
-    chipLabel: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
+    chipLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
     chipLabelActive: { color: '#fff' },
 
     // Empty state
     emptyContainer: { paddingHorizontal: 20, paddingTop: 16 },
     sectionHeader: {
-      color: t.text.secondary, fontSize: 12, fontWeight: '700',
+      color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold,
       textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12, marginTop: 8,
     },
     suggestionChip: {
@@ -426,7 +427,7 @@ export function GlobalSearchScreen({ onClose, onNavigate }: Props & { onNavigate
     // Results
     resultsList: { flex: 1, paddingHorizontal: 16 },
     categoryHeader: {
-      color: t.text.secondary, fontSize: 12, fontWeight: '700',
+      color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold,
       textTransform: 'uppercase', letterSpacing: 1.5,
       marginTop: 20, marginBottom: 8, paddingLeft: 4,
     },
@@ -437,11 +438,11 @@ export function GlobalSearchScreen({ onClose, onNavigate }: Props & { onNavigate
     resultEmoji: { fontSize: 28, marginRight: 14, width: 36, textAlign: 'center' },
     resultContent: { flex: 1 },
     resultTop: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 2 },
-    resultName: { color: t.text.primary, fontSize: 16, fontWeight: '700' },
+    resultName: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
     categoryBadge: {
       paddingHorizontal: 8, paddingVertical: 2, borderRadius: 8,
     },
-    categoryBadgeText: { color: '#fff', fontSize: 10, fontWeight: '700', textTransform: 'uppercase' },
+    categoryBadgeText: { color: '#fff', fontSize: 10, fontWeight: fonts.bold, textTransform: 'uppercase' },
     resultDesc: { color: t.text.muted, fontSize: 13, lineHeight: 18 },
     resultArrow: { color: t.text.muted, fontSize: 18, marginLeft: 8 },
 
@@ -452,14 +453,14 @@ export function GlobalSearchScreen({ onClose, onNavigate }: Props & { onNavigate
     },
     noResults: { alignItems: 'center', paddingTop: 60 },
     noResultsEmoji: { fontSize: 48, marginBottom: 12 },
-    noResultsTitle: { color: t.text.primary, fontSize: 18, fontWeight: '700' },
+    noResultsTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.bold },
     noResultsSub: { color: t.text.muted, fontSize: 14, marginTop: 4 },
 
     demoTag: {
       backgroundColor: t.accent.purple + '20', paddingHorizontal: 8,
       paddingVertical: 2, borderRadius: 8, alignSelf: 'center', marginBottom: 4,
     },
-    demoText: { color: t.accent.purple, fontSize: 11, fontWeight: '700' },
+    demoText: { color: t.accent.purple, fontSize: 11, fontWeight: fonts.bold },
   }), [t]);
 
   const renderEmpty = () => (

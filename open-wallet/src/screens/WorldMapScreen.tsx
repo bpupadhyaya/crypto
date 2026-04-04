@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * World Map Screen — Global text-based map of Open Chain regions.
  *
@@ -109,39 +110,39 @@ export function WorldMapScreen({ onClose }: Props) {
       paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1,
       borderBottomColor: t.border,
     },
-    title: { fontSize: 18, fontWeight: '700', color: t.text.primary },
+    title: { fontSize: 18, fontWeight: fonts.bold, color: t.text.primary },
     closeBtn: { fontSize: 16, color: t.accent.green },
     tabRow: { flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: t.border },
     tab: { flex: 1, paddingVertical: 10, alignItems: 'center' },
     tabActive: { borderBottomWidth: 2, borderBottomColor: t.accent.green },
     tabText: { fontSize: 14, color: t.text.secondary },
-    tabTextActive: { color: t.accent.green, fontWeight: '600' },
+    tabTextActive: { color: t.accent.green, fontWeight: fonts.semibold },
     scroll: { flex: 1 },
     section: { padding: 16, borderBottomWidth: 1, borderBottomColor: t.border },
-    sectionTitle: { fontSize: 16, fontWeight: '600', color: t.text.primary, marginBottom: 10 },
+    sectionTitle: { fontSize: 16, fontWeight: fonts.semibold, color: t.text.primary, marginBottom: 10 },
     card: {
       backgroundColor: t.bg.card, borderRadius: 12, padding: 14,
       marginBottom: 10, borderWidth: 1, borderColor: t.border,
     },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
     label: { fontSize: 13, color: t.text.secondary },
-    value: { fontSize: 15, color: t.text.primary, fontWeight: '500' },
+    value: { fontSize: 15, color: t.text.primary, fontWeight: fonts.medium },
     subtext: { fontSize: 12, color: t.text.secondary },
-    peaceScore: { fontSize: 20, fontWeight: '800' },
-    trendText: { fontSize: 14, fontWeight: '600' },
+    peaceScore: { fontSize: 20, fontWeight: fonts.heavy },
+    trendText: { fontSize: 14, fontWeight: fonts.semibold },
     statsGrid: {
       flexDirection: 'row', flexWrap: 'wrap', marginTop: 8,
     },
     statBox: { width: '50%', paddingVertical: 4 },
-    statValue: { fontSize: 14, fontWeight: '600', color: t.text.primary },
+    statValue: { fontSize: 14, fontWeight: fonts.semibold, color: t.text.primary },
     statLabel: { fontSize: 11, color: t.text.secondary },
     rankBadge: {
       width: 28, height: 28, borderRadius: 14, alignItems: 'center',
       justifyContent: 'center', marginRight: 10,
     },
-    rankText: { fontSize: 13, fontWeight: '700', color: '#fff' },
+    rankText: { fontSize: 13, fontWeight: fonts.bold, color: '#fff' },
     compareCol: { flex: 1, padding: 8 },
-    compareHeader: { fontSize: 14, fontWeight: '700', color: t.accent.green, marginBottom: 8 },
+    compareHeader: { fontSize: 14, fontWeight: fonts.bold, color: t.accent.green, marginBottom: 8 },
     compareDivider: { width: 1, backgroundColor: t.border },
     compareRow: {
       flexDirection: 'row', paddingVertical: 8, borderBottomWidth: 1,

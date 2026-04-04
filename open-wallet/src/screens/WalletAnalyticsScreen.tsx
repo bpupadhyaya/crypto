@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Wallet Analytics — Deep analytics about wallet activity across all chains.
  * Transaction breakdowns, gas analysis, frequency trends, and usage patterns.
@@ -94,7 +95,7 @@ function HorizontalBar({ label, value, maxValue, color, theme }: {
           paddingLeft: 6,
         }}>
           {pct >= 12 && (
-            <Text style={{ color: '#fff', fontSize: 10, fontWeight: '700' }}>{value}</Text>
+            <Text style={{ color: '#fff', fontSize: 10, fontWeight: fonts.bold }}>{value}</Text>
           )}
         </View>
       </View>
@@ -124,36 +125,36 @@ export const WalletAnalyticsScreen = React.memo(({ onClose }: Props) => {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    back: { color: t.accent.blue, fontSize: 16, fontWeight: '600' },
-    title: { color: t.text.primary, fontSize: 18, fontWeight: '800' },
+    back: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
+    title: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
     placeholder: { width: 50 },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 8 },
     label: { color: t.text.secondary, fontSize: 14 },
-    value: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
-    valueGreen: { color: t.accent.green, fontSize: 14, fontWeight: '700' },
+    value: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
+    valueGreen: { color: t.accent.green, fontSize: 14, fontWeight: fonts.bold },
     highlightCard: { backgroundColor: t.accent.green + '10', borderRadius: 16, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: t.accent.green + '25' },
-    bigNum: { color: t.accent.green, fontSize: 28, fontWeight: '800' },
+    bigNum: { color: t.accent.green, fontSize: 28, fontWeight: fonts.heavy },
     bigLabel: { color: t.text.secondary, fontSize: 13, marginTop: 4 },
     chipRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
     chip: { paddingVertical: 6, paddingHorizontal: 14, borderRadius: 10, backgroundColor: t.border },
     chipActive: { backgroundColor: t.accent.green },
-    chipText: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
-    chipTextActive: { color: t.bg.primary, fontWeight: '700' },
+    chipText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    chipTextActive: { color: t.bg.primary, fontWeight: fonts.bold },
     statGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
     statBox: { flex: 1, minWidth: '45%' as unknown as number, backgroundColor: t.bg.card, borderRadius: 14, padding: 14 },
-    statValue: { color: t.text.primary, fontSize: 18, fontWeight: '800' },
+    statValue: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
     statLabel: { color: t.text.muted, fontSize: 12, marginTop: 4 },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 6 },
     gasRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: t.border },
-    gasChain: { color: t.text.primary, fontSize: 14, fontWeight: '600', width: 80 },
-    gasFee: { color: t.accent.orange, fontSize: 13, fontWeight: '600', width: 70, textAlign: 'right' },
+    gasChain: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold, width: 80 },
+    gasFee: { color: t.accent.orange, fontSize: 13, fontWeight: fonts.semibold, width: 70, textAlign: 'right' },
     gasAvg: { color: t.text.muted, fontSize: 12, width: 70, textAlign: 'right' },
     gasTxCount: { color: t.text.secondary, fontSize: 12, width: 40, textAlign: 'right' },
     demoTag: { backgroundColor: t.accent.purple + '20', borderRadius: 8, paddingVertical: 4, paddingHorizontal: 10, alignSelf: 'flex-start', marginBottom: 12 },
-    demoText: { color: t.accent.purple, fontSize: 12, fontWeight: '600' },
+    demoText: { color: t.accent.purple, fontSize: 12, fontWeight: fonts.semibold },
   }), [t]);
 
   return (
@@ -277,8 +278,8 @@ export const WalletAnalyticsScreen = React.memo(({ onClose }: Props) => {
           ))}
           <View style={[s.divider, { marginTop: 8 }]} />
           <View style={[s.row, { paddingTop: 10 }]}>
-            <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: '700' }}>Total Gas Spent</Text>
-            <Text style={{ color: t.accent.orange, fontSize: 16, fontWeight: '800' }}>
+            <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: fonts.bold }}>Total Gas Spent</Text>
+            <Text style={{ color: t.accent.orange, fontSize: 16, fontWeight: fonts.heavy }}>
               ${data.totalGasSpent.toFixed(2)}
             </Text>
           </View>

@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Parenting Journey Screen — Track and celebrate parenting milestones.
  *
@@ -70,21 +71,21 @@ export function ParentingJourneyScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     heroCard: { backgroundColor: t.accent.purple + '10', borderRadius: 24, padding: 24, marginHorizontal: 20, marginTop: 8, alignItems: 'center' },
     heroIcon: { fontSize: 48, marginBottom: 8 },
-    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: '800', textAlign: 'center' },
+    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, textAlign: 'center' },
     heroSubtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 4, lineHeight: 20, fontStyle: 'italic' },
     // Score card
     scoreCard: { backgroundColor: t.bg.card, borderRadius: 20, padding: 20, marginHorizontal: 20, marginTop: 16, flexDirection: 'row', justifyContent: 'space-around' },
     scoreItem: { alignItems: 'center' },
-    scoreValue: { color: t.accent.purple, fontSize: 24, fontWeight: '800' },
-    scoreLabel: { color: t.text.muted, fontSize: 11, fontWeight: '600', marginTop: 4, textTransform: 'uppercase', letterSpacing: 1 },
+    scoreValue: { color: t.accent.purple, fontSize: 24, fontWeight: fonts.heavy },
+    scoreLabel: { color: t.text.muted, fontSize: 11, fontWeight: fonts.semibold, marginTop: 4, textTransform: 'uppercase', letterSpacing: 1 },
     // Child selector
     childBadge: { backgroundColor: t.accent.green + '20', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 16, alignSelf: 'center', marginTop: 16 },
-    childBadgeText: { color: t.accent.green, fontSize: 14, fontWeight: '700' },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
+    childBadgeText: { color: t.accent.green, fontSize: 14, fontWeight: fonts.bold },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
     // Timeline
     timelineItem: { flexDirection: 'row', marginHorizontal: 20, marginBottom: 4 },
     timelineLine: { width: 2, backgroundColor: t.accent.purple + '40', marginRight: 16 },
@@ -92,30 +93,30 @@ export function ParentingJourneyScreen({ onClose }: Props) {
     timelineDotUnverified: { backgroundColor: t.accent.yellow },
     timelineContent: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, flex: 1, marginBottom: 12 },
     timelineBadge: { fontSize: 28 },
-    timelineTitle: { color: t.text.primary, fontSize: 15, fontWeight: '700', marginTop: 4 },
+    timelineTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, marginTop: 4 },
     timelineDesc: { color: t.text.muted, fontSize: 13, marginTop: 2 },
     timelineDate: { color: t.text.secondary, fontSize: 12, marginTop: 6 },
-    timelineOTK: { color: t.accent.green, fontSize: 13, fontWeight: '700', marginTop: 4 },
-    timelineStatus: { fontSize: 11, fontWeight: '600', marginTop: 4 },
+    timelineOTK: { color: t.accent.green, fontSize: 13, fontWeight: fonts.bold, marginTop: 4 },
+    timelineStatus: { fontSize: 11, fontWeight: fonts.semibold, marginTop: 4 },
     statusVerified: { color: t.accent.green },
     statusPending: { color: t.accent.yellow },
     // Upcoming
     upcomingCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 14, marginHorizontal: 20, marginBottom: 8, flexDirection: 'row', alignItems: 'center', gap: 12 },
     upcomingBadge: { fontSize: 28 },
     upcomingInfo: { flex: 1 },
-    upcomingTitle: { color: t.text.primary, fontSize: 14, fontWeight: '700' },
+    upcomingTitle: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
     upcomingAge: { color: t.text.muted, fontSize: 12, marginTop: 2 },
-    upcomingOTK: { color: t.accent.orange, fontSize: 13, fontWeight: '700' },
+    upcomingOTK: { color: t.accent.orange, fontSize: 13, fontWeight: fonts.bold },
     // Community comparison
     communityCard: { backgroundColor: t.accent.blue + '10', borderRadius: 16, padding: 16, marginHorizontal: 20, marginTop: 8 },
     communityRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 },
     communityLabel: { color: t.text.secondary, fontSize: 13 },
-    communityValue: { color: t.text.primary, fontSize: 13, fontWeight: '700' },
-    communityYou: { color: t.accent.purple, fontSize: 13, fontWeight: '700' },
+    communityValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.bold },
+    communityYou: { color: t.accent.purple, fontSize: 13, fontWeight: fonts.bold },
     // Sleepless nights message
     sleeplessCard: { backgroundColor: t.accent.purple + '15', borderRadius: 20, padding: 24, marginHorizontal: 20, marginTop: 24, alignItems: 'center' },
     sleeplessIcon: { fontSize: 40, marginBottom: 8 },
-    sleeplessTitle: { color: t.text.primary, fontSize: 16, fontWeight: '800', textAlign: 'center' },
+    sleeplessTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.heavy, textAlign: 'center' },
     sleeplessSubtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 8, lineHeight: 20 },
     note: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginHorizontal: 24, marginTop: 16, lineHeight: 18 },
   }), [t]);

@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Innovation Screen — Community innovation hub and startup incubator.
  *
@@ -151,42 +152,42 @@ export function InnovationScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingBottom: 40 },
     tabRow: { flexDirection: 'row', paddingHorizontal: 12, marginBottom: 12 },
     tabBtn: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 16, marginHorizontal: 4 },
     tabActive: { backgroundColor: t.accent.purple + '20' },
-    tabText: { color: t.text.muted, fontSize: 12, fontWeight: '600' },
+    tabText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
     tabTextActive: { color: t.accent.purple },
     card: { backgroundColor: t.bg.secondary, borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16 },
-    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: '700', marginBottom: 12, marginHorizontal: 20 },
+    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 12, marginHorizontal: 20 },
     // Idea cards
     ideaCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    ideaTitle: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
+    ideaTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
     ideaDesc: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginTop: 6 },
     ideaMeta: { color: t.text.muted, fontSize: 12, marginTop: 8 },
     ideaFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 12 },
     ideaStats: { flexDirection: 'row', gap: 12 },
     statBox: { alignItems: 'center' as const },
-    statNum: { color: t.text.primary, fontSize: 14, fontWeight: '700' },
+    statNum: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
     statLabel: { color: t.text.muted, fontSize: 10, marginTop: 2 },
     tagRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 8 },
     tag: { backgroundColor: t.accent.blue + '15', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8 },
-    tagText: { color: t.accent.blue, fontSize: 10, fontWeight: '600' },
+    tagText: { color: t.accent.blue, fontSize: 10, fontWeight: fonts.semibold },
     statusBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
-    statusText: { fontSize: 11, fontWeight: '700' },
+    statusText: { fontSize: 11, fontWeight: fonts.bold },
     upvoteBtn: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 10, borderWidth: 1, borderColor: t.accent.green + '40' },
-    upvoteText: { color: t.accent.green, fontSize: 13, fontWeight: '600' },
+    upvoteText: { color: t.accent.green, fontSize: 13, fontWeight: fonts.semibold },
     pledgeBtn: { backgroundColor: t.accent.purple + '20', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 10 },
-    pledgeText: { color: t.accent.purple, fontSize: 12, fontWeight: '600' },
-    xotkAmount: { color: t.accent.green, fontSize: 14, fontWeight: '700' },
+    pledgeText: { color: t.accent.purple, fontSize: 12, fontWeight: fonts.semibold },
+    xotkAmount: { color: t.accent.green, fontSize: 14, fontWeight: fonts.bold },
     // Challenge cards
     challengeCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    challengeReward: { color: t.accent.green, fontSize: 16, fontWeight: '800' },
-    challengeDeadline: { color: t.accent.orange, fontSize: 12, fontWeight: '600' },
+    challengeReward: { color: t.accent.green, fontSize: 16, fontWeight: fonts.heavy },
+    challengeDeadline: { color: t.accent.orange, fontSize: 12, fontWeight: fonts.semibold },
     submitChallengeBtn: { backgroundColor: t.accent.blue, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 10, marginTop: 12, alignSelf: 'flex-start' as const },
-    submitChallengeText: { color: '#fff', fontSize: 13, fontWeight: '600' },
+    submitChallengeText: { color: '#fff', fontSize: 13, fontWeight: fonts.semibold },
     // Incubator
     milestoneRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 8 },
     milestoneCheck: { width: 20, height: 20, borderRadius: 10, borderWidth: 2, alignItems: 'center' as const, justifyContent: 'center' as const },
@@ -195,23 +196,23 @@ export function InnovationScreen({ onClose }: Props) {
     progressFill: { height: 8, borderRadius: 4, backgroundColor: t.accent.green },
     // Success stories
     successCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    successTitle: { color: t.text.primary, fontSize: 16, fontWeight: '700' },
+    successTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
     successDesc: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginTop: 8 },
-    successImpact: { color: t.accent.green, fontSize: 13, fontWeight: '600', marginTop: 8 },
+    successImpact: { color: t.accent.green, fontSize: 13, fontWeight: fonts.semibold, marginTop: 8 },
     // Form
     input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginBottom: 12 },
     submitBtn: { backgroundColor: t.accent.purple, borderRadius: 14, paddingVertical: 14, alignItems: 'center', marginTop: 8 },
-    submitText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+    submitText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
     newIdeaBtn: { backgroundColor: t.accent.purple, borderRadius: 14, paddingVertical: 12, alignItems: 'center', marginHorizontal: 20, marginBottom: 16 },
-    newIdeaBtnText: { color: '#fff', fontSize: 14, fontWeight: '700' },
+    newIdeaBtnText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
     demoTag: { backgroundColor: t.accent.orange + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'center', marginBottom: 12 },
-    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: '700' },
+    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: fonts.bold },
     patentFree: { backgroundColor: t.accent.green + '15', borderRadius: 12, padding: 14, marginHorizontal: 20, marginBottom: 16, alignItems: 'center' as const },
-    patentFreeText: { color: t.accent.green, fontSize: 12, fontWeight: '700', textAlign: 'center' },
+    patentFreeText: { color: t.accent.green, fontSize: 12, fontWeight: fonts.bold, textAlign: 'center' },
     pledgeInput: { backgroundColor: t.bg.primary, borderRadius: 10, padding: 10, color: t.text.primary, fontSize: 14, marginTop: 8, flex: 1 },
     pledgeRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 8 },
     pledgeConfirmBtn: { backgroundColor: t.accent.purple, paddingHorizontal: 14, paddingVertical: 10, borderRadius: 10, marginTop: 8 },
-    pledgeConfirmText: { color: '#fff', fontSize: 13, fontWeight: '600' },
+    pledgeConfirmText: { color: '#fff', fontSize: 13, fontWeight: fonts.semibold },
   }), [t]);
 
   const statusColor = (status: string) => {
@@ -419,11 +420,11 @@ export function InnovationScreen({ onClose }: Props) {
             {prog.progress}% complete
           </Text>
 
-          <Text style={{ color: t.text.primary, fontSize: 13, fontWeight: '600', marginBottom: 8 }}>Milestones</Text>
+          <Text style={{ color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8 }}>Milestones</Text>
           {prog.milestones.map((ms, idx) => (
             <View key={idx} style={s.milestoneRow}>
               <View style={[s.milestoneCheck, { borderColor: ms.completed ? t.accent.green : t.text.muted, backgroundColor: ms.completed ? t.accent.green : 'transparent' }]}>
-                {ms.completed && <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700' }}>{'✓'}</Text>}
+                {ms.completed && <Text style={{ color: '#fff', fontSize: 12, fontWeight: fonts.bold }}>{'✓'}</Text>}
               </View>
               <Text style={[s.milestoneLabel, ms.completed && { color: t.text.muted }]}>
                 {ms.label}
@@ -434,7 +435,7 @@ export function InnovationScreen({ onClose }: Props) {
       ))}
 
       <View style={[s.card, { alignItems: 'center' }]}>
-        <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: '600' }}>Want to incubate your idea?</Text>
+        <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold }}>Want to incubate your idea?</Text>
         <Text style={{ color: t.text.muted, fontSize: 12, marginTop: 4, textAlign: 'center' }}>
           Post it on the Ideas tab, gather community support, and apply when your idea reaches 100+ upvotes.
         </Text>
@@ -467,7 +468,7 @@ export function InnovationScreen({ onClose }: Props) {
       ))}
 
       <View style={[s.card, { alignItems: 'center' }]}>
-        <Text style={{ color: t.text.primary, fontSize: 22, fontWeight: '800' }}>
+        <Text style={{ color: t.text.primary, fontSize: 22, fontWeight: fonts.heavy }}>
           {DEMO_SUCCESS.reduce((sum, s) => sum + s.xotkGenerated, 0).toLocaleString()}
         </Text>
         <Text style={{ color: t.text.muted, fontSize: 12, marginTop: 4 }}>

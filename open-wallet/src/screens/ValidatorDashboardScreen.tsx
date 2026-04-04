@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Validator Dashboard — for users running a validator node.
  *
@@ -58,20 +59,20 @@ export function ValidatorDashboardScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingHorizontal: 20, paddingBottom: 40 },
     statusCard: { borderRadius: 24, padding: 24, alignItems: 'center', marginBottom: 16 },
     statusIcon: { fontSize: 48, marginBottom: 8 },
-    statusText: { fontSize: 18, fontWeight: '800' },
+    statusText: { fontSize: 18, fontWeight: fonts.heavy },
     statusSub: { color: t.text.muted, fontSize: 13, marginTop: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 12 },
-    cardTitle: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12 },
+    cardTitle: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 },
     label: { color: t.text.muted, fontSize: 14 },
-    value: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
-    valueGreen: { color: t.accent.green, fontSize: 14, fontWeight: '600' },
-    valueRed: { color: t.accent.red, fontSize: 14, fontWeight: '600' },
+    value: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
+    valueGreen: { color: t.accent.green, fontSize: 14, fontWeight: fonts.semibold },
+    valueRed: { color: t.accent.red, fontSize: 14, fontWeight: fonts.semibold },
     uptimeBar: { height: 8, backgroundColor: t.border, borderRadius: 4, marginTop: 4, marginBottom: 8 },
     uptimeFill: { height: 8, borderRadius: 4 },
   }), [t]);

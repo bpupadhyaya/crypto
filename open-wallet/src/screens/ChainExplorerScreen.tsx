@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Chain Explorer — On-chain block and transaction explorer.
  *
@@ -104,43 +105,43 @@ export function ChainExplorerScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { flex: 1, paddingHorizontal: 16 },
     subtitle: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
     label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
     summaryRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
     summaryCard: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' },
-    summaryNum: { fontSize: 20, fontWeight: '800', marginBottom: 2 },
-    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: '600', textAlign: 'center' },
-    blockHeight: { color: t.accent.blue, fontSize: 18, fontWeight: '900' },
+    summaryNum: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 2 },
+    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold, textAlign: 'center' },
+    blockHeight: { color: t.accent.blue, fontSize: 18, fontWeight: fonts.heavy },
     blockHash: { color: t.text.muted, fontSize: 11, fontFamily: 'monospace', marginTop: 2 },
     txHash: { color: t.accent.blue, fontSize: 11, fontFamily: 'monospace' },
-    txAmount: { fontSize: 15, fontWeight: '800' },
+    txAmount: { fontSize: 15, fontWeight: fonts.heavy },
     typeBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
-    typeText: { fontSize: 10, fontWeight: '700', color: '#fff' },
+    typeText: { fontSize: 10, fontWeight: fonts.bold, color: '#fff' },
     statusDot: { width: 8, height: 8, borderRadius: 4, marginRight: 6 },
     statusRow: { flexDirection: 'row', alignItems: 'center' },
-    statusText: { fontSize: 11, fontWeight: '600' },
+    statusText: { fontSize: 11, fontWeight: fonts.semibold },
     channelPills: { flexDirection: 'row', flexWrap: 'wrap', gap: 4, marginTop: 6 },
     channelPill: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 6, backgroundColor: t.border },
-    channelPillText: { color: t.text.secondary, fontSize: 10, fontWeight: '600' },
+    channelPillText: { color: t.text.secondary, fontSize: 10, fontWeight: fonts.semibold },
     liveIndicator: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
     liveDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#22c55e', marginRight: 6 },
-    liveText: { color: '#22c55e', fontSize: 12, fontWeight: '700' },
+    liveText: { color: '#22c55e', fontSize: 12, fontWeight: fonts.bold },
     backBtn: { paddingVertical: 10, alignItems: 'center' },
     backText: { color: t.accent.blue, fontSize: 15 },
     searchHint: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 20, lineHeight: 19 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.2, marginBottom: 8, marginTop: 8 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.2, marginBottom: 8, marginTop: 8 },
   }), [t]);
 
   const blocks = demoMode ? DEMO_BLOCKS : [];
@@ -166,8 +167,8 @@ export function ChainExplorerScreen({ onClose }: Props) {
             <View style={st.row}><Text style={st.label}>Validator</Text><Text style={st.val}>{b.validator}</Text></View>
             <View style={st.row}><Text style={st.label}>Transactions</Text><Text style={st.val}>{b.txCount}</Text></View>
             <View style={st.row}><Text style={st.label}>Size</Text><Text style={st.val}>{formatSize(b.size)}</Text></View>
-            <View style={st.row}><Text style={st.label}>OTK Minted</Text><Text style={{ color: t.accent.green, fontSize: 12, fontWeight: '700' }}>+{b.totalOTKMinted.toLocaleString()}</Text></View>
-            <View style={st.row}><Text style={st.label}>OTK Burned</Text><Text style={{ color: t.accent.red, fontSize: 12, fontWeight: '700' }}>-{b.totalOTKBurned.toLocaleString()}</Text></View>
+            <View style={st.row}><Text style={st.label}>OTK Minted</Text><Text style={{ color: t.accent.green, fontSize: 12, fontWeight: fonts.bold }}>+{b.totalOTKMinted.toLocaleString()}</Text></View>
+            <View style={st.row}><Text style={st.label}>OTK Burned</Text><Text style={{ color: t.accent.red, fontSize: 12, fontWeight: fonts.bold }}>-{b.totalOTKBurned.toLocaleString()}</Text></View>
           </View>
           {blockTxs.length > 0 && (
             <>

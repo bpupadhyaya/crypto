@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Retirement Screen — Retirement planning with OTK staking projections.
  *
@@ -127,45 +128,45 @@ export function RetirementScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingBottom: 40 },
     tabRow: { flexDirection: 'row', paddingHorizontal: 12, marginBottom: 12 },
     tabBtn: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 16, marginHorizontal: 4 },
     tabActive: { backgroundColor: t.accent.blue + '20' },
-    tabText: { color: t.text.muted, fontSize: 13, fontWeight: '600' },
+    tabText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
     tabTextActive: { color: t.accent.blue },
     card: { backgroundColor: t.bg.secondary, borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16 },
-    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: '700', marginBottom: 12, marginHorizontal: 20 },
-    bigNumber: { color: t.text.primary, fontSize: 42, fontWeight: '900', textAlign: 'center' },
+    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 12, marginHorizontal: 20 },
+    bigNumber: { color: t.text.primary, fontSize: 42, fontWeight: fonts.heavy, textAlign: 'center' },
     label: { color: t.text.muted, fontSize: 12, textTransform: 'uppercase', letterSpacing: 1, textAlign: 'center', marginTop: 4 },
     progressBar: { height: 8, backgroundColor: t.bg.primary, borderRadius: 4, marginTop: 16, overflow: 'hidden' },
     progressFill: { height: 8, backgroundColor: t.accent.green, borderRadius: 4 },
     statRow: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 16 },
     statItem: { alignItems: 'center' },
-    statValue: { color: t.text.primary, fontSize: 18, fontWeight: '800' },
+    statValue: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
     statLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
     input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginBottom: 12 },
     apyRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 12 },
     apyChip: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, borderWidth: 1, borderColor: t.bg.primary },
     apyChipActive: { backgroundColor: t.accent.blue + '20', borderColor: t.accent.blue },
-    apyText: { color: t.text.muted, fontSize: 12, fontWeight: '600' },
+    apyText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
     apyTextActive: { color: t.accent.blue },
     projRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, borderBottomColor: t.bg.primary, borderBottomWidth: 1 },
     projLabel: { color: t.text.muted, fontSize: 13 },
-    projValue: { color: t.text.primary, fontSize: 13, fontWeight: '700' },
+    projValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.bold },
     milestoneCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12, flexDirection: 'row', alignItems: 'center' },
     milestoneIcon: { width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center', marginRight: 14 },
     milestoneInfo: { flex: 1 },
-    milestoneName: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
+    milestoneName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
     milestoneMeta: { color: t.text.muted, fontSize: 12, marginTop: 2 },
-    milestoneStatus: { fontSize: 11, fontWeight: '700', marginTop: 4 },
+    milestoneStatus: { fontSize: 11, fontWeight: fonts.bold, marginTop: 4 },
     submitBtn: { backgroundColor: t.accent.blue, borderRadius: 14, paddingVertical: 14, alignItems: 'center', marginTop: 8 },
-    submitText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+    submitText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
     incomeCard: { backgroundColor: t.accent.green + '12', borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16, alignItems: 'center' },
-    incomeText: { color: t.text.primary, fontSize: 15, fontWeight: '600', textAlign: 'center', lineHeight: 22 },
+    incomeText: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold, textAlign: 'center', lineHeight: 22 },
     demoTag: { backgroundColor: t.accent.orange + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'center', marginBottom: 12 },
-    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: '700' },
+    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: fonts.bold },
   }), [t]);
 
   const tabs: Array<{ key: Tab; label: string }> = [
@@ -242,9 +243,9 @@ export function RetirementScreen({ onClose }: Props) {
       <Text style={s.sectionTitle}>Yearly Projections</Text>
       <View style={s.card}>
         <View style={s.projRow}>
-          <Text style={[s.projLabel, { fontWeight: '700' }]}>Age</Text>
-          <Text style={[s.projLabel, { fontWeight: '700' }]}>Balance</Text>
-          <Text style={[s.projLabel, { fontWeight: '700' }]}>Earned</Text>
+          <Text style={[s.projLabel, { fontWeight: fonts.bold }]}>Age</Text>
+          <Text style={[s.projLabel, { fontWeight: fonts.bold }]}>Balance</Text>
+          <Text style={[s.projLabel, { fontWeight: fonts.bold }]}>Earned</Text>
         </View>
         {projections.filter((_, i) => i % 5 === 4 || i === 0).map((p) => (
           <View key={p.year} style={s.projRow}>
@@ -255,7 +256,7 @@ export function RetirementScreen({ onClose }: Props) {
         ))}
         {projections.length > 0 && (
           <View style={[s.projRow, { borderBottomWidth: 0, marginTop: 8 }]}>
-            <Text style={[s.projLabel, { fontWeight: '700' }]}>Final</Text>
+            <Text style={[s.projLabel, { fontWeight: fonts.bold }]}>Final</Text>
             <Text style={[s.projValue, { fontSize: 16, color: t.accent.green }]}>{projections[projections.length - 1].balance.toLocaleString()} OTK</Text>
           </View>
         )}
@@ -274,7 +275,7 @@ export function RetirementScreen({ onClose }: Props) {
         return (
           <View key={ms.id} style={s.milestoneCard}>
             <View style={[s.milestoneIcon, { backgroundColor: reached ? t.accent.green + '20' : t.bg.primary }]}>
-              <Text style={{ color: reached ? t.accent.green : t.text.muted, fontSize: 16, fontWeight: '800' }}>
+              <Text style={{ color: reached ? t.accent.green : t.text.muted, fontSize: 16, fontWeight: fonts.heavy }}>
                 {ms.percentOfGoal}%
               </Text>
             </View>

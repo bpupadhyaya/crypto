@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Conflict Prevention Screen — Early warning systems, conflict prevention before escalation.
  *
@@ -261,70 +262,70 @@ export function ConflictPreventionScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingBottom: 40 },
     tabRow: { flexDirection: 'row', paddingHorizontal: 12, marginBottom: 12 },
     tabBtn: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 16, marginHorizontal: 4 },
     tabActive: { backgroundColor: t.accent.purple + '20' },
-    tabText: { color: t.text.muted, fontSize: 12, fontWeight: '600' },
+    tabText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
     tabTextActive: { color: t.accent.purple },
     card: { backgroundColor: t.bg.secondary, borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16 },
-    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: '700', marginBottom: 12, marginHorizontal: 20 },
+    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 12, marginHorizontal: 20 },
     demoTag: { backgroundColor: t.accent.orange + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'center', marginBottom: 12 },
-    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: '700' },
+    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: fonts.bold },
     heroCard: { backgroundColor: t.accent.purple + '10', borderRadius: 24, padding: 24, marginHorizontal: 20, marginTop: 4, marginBottom: 16, alignItems: 'center' },
     heroIcon: { fontSize: 48, marginBottom: 8 },
-    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: '800', textAlign: 'center' },
+    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, textAlign: 'center' },
     heroSubtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 4, lineHeight: 20 },
     indicatorCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
     indicatorHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
-    indicatorRegion: { color: t.text.primary, fontSize: 15, fontWeight: '700', flex: 1 },
+    indicatorRegion: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, flex: 1 },
     levelBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
-    levelText: { fontSize: 11, fontWeight: '700', textTransform: 'uppercase' },
+    levelText: { fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase' },
     indicatorSummary: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 10 },
     metricRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
     metricBox: { alignItems: 'center', flex: 1 },
-    metricValue: { color: t.text.primary, fontSize: 16, fontWeight: '700' },
+    metricValue: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
     metricLabel: { color: t.text.muted, fontSize: 10, marginTop: 2, textAlign: 'center' },
     triggerRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 8 },
     triggerChip: { backgroundColor: t.bg.primary, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
-    triggerText: { color: t.text.secondary, fontSize: 11, fontWeight: '600' },
+    triggerText: { color: t.text.secondary, fontSize: 11, fontWeight: fonts.semibold },
     toolCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
     toolHeader: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 8 },
     toolIcon: { fontSize: 28 },
-    toolName: { color: t.text.primary, fontSize: 15, fontWeight: '700', flex: 1 },
+    toolName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, flex: 1 },
     toolDesc: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 8 },
     toolMeta: { color: t.text.muted, fontSize: 12, marginBottom: 4 },
     statusBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'flex-start', marginBottom: 8 },
-    statusText: { fontSize: 11, fontWeight: '700' },
+    statusText: { fontSize: 11, fontWeight: fonts.bold },
     joinBtn: { backgroundColor: t.accent.blue, borderRadius: 12, paddingVertical: 12, alignItems: 'center', marginTop: 8 },
-    joinBtnText: { color: '#fff', fontSize: 14, fontWeight: '700' },
+    joinBtnText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
     ambassadorCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    ambassadorName: { color: t.text.primary, fontSize: 16, fontWeight: '700' },
-    ambassadorSpec: { color: t.accent.purple, fontSize: 13, fontWeight: '600', marginTop: 2 },
+    ambassadorName: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
+    ambassadorSpec: { color: t.accent.purple, fontSize: 13, fontWeight: fonts.semibold, marginTop: 2 },
     ambassadorBio: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginTop: 8 },
     ambassadorMeta: { color: t.text.muted, fontSize: 12, marginTop: 4 },
     statRow: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 12, paddingTop: 12, borderTopColor: t.bg.primary, borderTopWidth: 1 },
     statBox: { alignItems: 'center' },
-    statValue: { color: t.text.primary, fontSize: 18, fontWeight: '700' },
+    statValue: { color: t.text.primary, fontSize: 18, fontWeight: fonts.bold },
     statLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
     langRow: { flexDirection: 'row', gap: 6, marginTop: 8, flexWrap: 'wrap' },
     langChip: { backgroundColor: t.bg.primary, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
-    langText: { color: t.text.secondary, fontSize: 11, fontWeight: '600' },
+    langText: { color: t.text.secondary, fontSize: 11, fontWeight: fonts.semibold },
     availBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'flex-start', marginTop: 8 },
     contactBtn: { backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 12, alignItems: 'center', marginTop: 12 },
-    contactBtnText: { color: '#fff', fontSize: 14, fontWeight: '700' },
+    contactBtnText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
     historyCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    historyTitle: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
+    historyTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
     historyMeta: { color: t.text.muted, fontSize: 12, marginTop: 4 },
     historySummary: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginTop: 8 },
     tensionChange: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 10 },
-    tensionLabel: { color: t.text.muted, fontSize: 11, fontWeight: '600' },
+    tensionLabel: { color: t.text.muted, fontSize: 11, fontWeight: fonts.semibold },
     outcomeBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'flex-start', marginTop: 8 },
-    outcomeText: { fontSize: 11, fontWeight: '700' },
+    outcomeText: { fontSize: 11, fontWeight: fonts.bold },
     reportBtn: { backgroundColor: t.accent.orange, borderRadius: 14, paddingVertical: 14, alignItems: 'center', marginHorizontal: 20, marginTop: 12, marginBottom: 8 },
-    reportBtnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+    reportBtnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
     note: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginHorizontal: 24, marginTop: 12, lineHeight: 18 },
   }), [t]);
 
@@ -475,7 +476,7 @@ export function ConflictPreventionScreen({ onClose }: Props) {
           </View>
 
           <View style={[s.availBadge, { backgroundColor: amb.available ? t.accent.green + '20' : t.accent.orange + '20' }]}>
-            <Text style={{ color: amb.available ? t.accent.green : t.accent.orange, fontSize: 11, fontWeight: '700' }}>
+            <Text style={{ color: amb.available ? t.accent.green : t.accent.orange, fontSize: 11, fontWeight: fonts.bold }}>
               {amb.available ? 'AVAILABLE' : 'BUSY'}
             </Text>
           </View>
@@ -530,7 +531,7 @@ export function ConflictPreventionScreen({ onClose }: Props) {
       ))}
 
       <View style={[s.card, { alignItems: 'center' }]}>
-        <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: '600' }}>
+        <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold }}>
           {DEMO_HISTORY.filter((h) => h.outcome === 'resolved').length} Resolved | {DEMO_HISTORY.filter((h) => h.outcome === 'de_escalated').length} De-escalated
         </Text>
         <Text style={{ color: t.text.muted, fontSize: 12, marginTop: 4 }}>

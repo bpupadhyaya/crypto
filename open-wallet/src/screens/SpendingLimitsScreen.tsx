@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Spending Limits Screen — Configure and monitor per-token spending limits.
  *
@@ -44,41 +45,41 @@ export const SpendingLimitsScreen = React.memo(({ onClose }: Props) => {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     scroll: { padding: 20, paddingBottom: 40 },
-    title: { color: t.text.primary, fontSize: 24, fontWeight: '800', marginBottom: 4 },
+    title: { color: t.text.primary, fontSize: 24, fontWeight: fonts.heavy, marginBottom: 4 },
     subtitle: { color: t.text.muted, fontSize: 14, marginBottom: 20 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
-    tokenName: { color: t.text.primary, fontSize: 18, fontWeight: '800' },
+    tokenName: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
     chainBadge: { backgroundColor: t.border, borderRadius: 8, paddingVertical: 2, paddingHorizontal: 8 },
-    chainText: { color: t.text.secondary, fontSize: 11, fontWeight: '600' },
+    chainText: { color: t.text.secondary, fontSize: 11, fontWeight: fonts.semibold },
     periodBadge: { borderRadius: 8, paddingVertical: 2, paddingHorizontal: 8, marginLeft: 6 },
-    periodText: { fontSize: 11, fontWeight: '700' },
+    periodText: { fontSize: 11, fontWeight: fonts.bold },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
     label: { color: t.text.secondary, fontSize: 13 },
-    value: { color: t.text.primary, fontSize: 13, fontWeight: '600' },
+    value: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold },
     progressContainer: { height: 10, backgroundColor: t.border, borderRadius: 5, marginTop: 8, marginBottom: 4, overflow: 'hidden' },
     progressFill: { height: 10, borderRadius: 5 },
-    warningText: { color: t.accent.orange, fontSize: 12, fontWeight: '600', marginTop: 4 },
-    blockedText: { color: t.accent.red, fontSize: 12, fontWeight: '700', marginTop: 4 },
-    statusText: { color: t.accent.green, fontSize: 12, fontWeight: '600', marginTop: 4 },
+    warningText: { color: t.accent.orange, fontSize: 12, fontWeight: fonts.semibold, marginTop: 4 },
+    blockedText: { color: t.accent.red, fontSize: 12, fontWeight: fonts.bold, marginTop: 4 },
+    statusText: { color: t.accent.green, fontSize: 12, fontWeight: fonts.semibold, marginTop: 4 },
     btnRow: { flexDirection: 'row', gap: 10, marginTop: 10 },
     btnGreen: { flex: 1, backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 12, alignItems: 'center' },
     btnRed: { flex: 1, backgroundColor: t.accent.red + '20', borderRadius: 12, paddingVertical: 12, alignItems: 'center' },
     btnBlue: { backgroundColor: t.accent.blue, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 16 },
-    btnText: { color: '#fff', fontSize: 14, fontWeight: '700' },
-    btnTextRed: { color: t.accent.red, fontSize: 14, fontWeight: '700' },
+    btnText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
+    btnTextRed: { color: t.accent.red, fontSize: 14, fontWeight: fonts.bold },
     input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 14, marginBottom: 12, borderWidth: 1, borderColor: t.border },
-    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: '600', marginBottom: 6 },
+    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 6 },
     periodRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
     periodBtn: { flex: 1, paddingVertical: 10, borderRadius: 10, alignItems: 'center', backgroundColor: t.border },
     periodBtnActive: { backgroundColor: t.accent.blue },
-    periodBtnText: { color: t.text.secondary, fontSize: 14, fontWeight: '600' },
+    periodBtnText: { color: t.text.secondary, fontSize: 14, fontWeight: fonts.semibold },
     periodBtnTextActive: { color: '#fff' },
     backBtn: { paddingVertical: 20, alignItems: 'center' },
     backText: { color: t.accent.blue, fontSize: 16 },
     empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
     demoTag: { backgroundColor: t.accent.purple + '20', borderRadius: 8, paddingVertical: 2, paddingHorizontal: 8, alignSelf: 'flex-start', marginBottom: 12 },
-    demoText: { color: t.accent.purple, fontSize: 11, fontWeight: '700' },
+    demoText: { color: t.accent.purple, fontSize: 11, fontWeight: fonts.bold },
     disabledOverlay: { opacity: 0.5 },
     toggleRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 },
   }), [t]);
@@ -216,7 +217,7 @@ export const SpendingLimitsScreen = React.memo(({ onClose }: Props) => {
           </TouchableOpacity>
         ) : (
           <View style={[s.card, { marginBottom: 20 }]}>
-            <Text style={{ color: t.text.primary, fontSize: 16, fontWeight: '700', marginBottom: 12 }}>
+            <Text style={{ color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 12 }}>
               {editIndex !== null ? 'Edit Limit' : 'New Spending Limit'}
             </Text>
 

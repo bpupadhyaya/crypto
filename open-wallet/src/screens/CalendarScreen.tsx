@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Calendar Screen — Unified community events calendar.
  *
@@ -302,12 +303,12 @@ export function CalendarScreen({ onClose }: Props) {
       paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1,
       borderBottomColor: t.border,
     },
-    title: { fontSize: 20, fontWeight: '700', color: t.text.primary },
+    title: { fontSize: 20, fontWeight: fonts.bold, color: t.text.primary },
     closeBtn: {
       paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8,
       backgroundColor: t.bg.card,
     },
-    closeTxt: { color: t.text.secondary, fontSize: 14, fontWeight: '600' },
+    closeTxt: { color: t.text.secondary, fontSize: 14, fontWeight: fonts.semibold },
 
     tabs: {
       flexDirection: 'row', paddingHorizontal: 12, paddingVertical: 8, gap: 8,
@@ -317,7 +318,7 @@ export function CalendarScreen({ onClose }: Props) {
       backgroundColor: t.bg.card,
     },
     tabActive: { backgroundColor: t.accent.green },
-    tabTxt: { fontSize: 13, fontWeight: '600', color: t.text.secondary },
+    tabTxt: { fontSize: 13, fontWeight: fonts.semibold, color: t.text.secondary },
     tabTxtActive: { color: '#fff' },
 
     filterRow: {
@@ -338,14 +339,14 @@ export function CalendarScreen({ onClose }: Props) {
       flex: 1, padding: 10, borderRadius: 10, backgroundColor: t.bg.card,
       alignItems: 'center',
     },
-    statVal: { fontSize: 18, fontWeight: '700', color: t.accent.green },
+    statVal: { fontSize: 18, fontWeight: fonts.bold, color: t.accent.green },
     statLabel: { fontSize: 11, color: t.text.secondary, marginTop: 2 },
 
     scroll: { flex: 1 },
     dateHeader: {
       paddingHorizontal: 16, paddingTop: 14, paddingBottom: 6,
     },
-    dateTxt: { fontSize: 14, fontWeight: '700', color: t.text.secondary },
+    dateTxt: { fontSize: 14, fontWeight: fonts.bold, color: t.text.secondary },
 
     card: {
       marginHorizontal: 16, marginBottom: 8, padding: 14, borderRadius: 12,
@@ -353,7 +354,7 @@ export function CalendarScreen({ onClose }: Props) {
     },
     cardRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 4 },
     cardIcon: { fontSize: 18, marginRight: 8 },
-    cardTitle: { fontSize: 15, fontWeight: '600', color: t.text.primary, flex: 1 },
+    cardTitle: { fontSize: 15, fontWeight: fonts.semibold, color: t.text.primary, flex: 1 },
     cardTime: { fontSize: 12, color: t.text.secondary },
     cardLoc: { fontSize: 12, color: t.text.secondary, marginTop: 2 },
     cardBottom: {
@@ -363,7 +364,7 @@ export function CalendarScreen({ onClose }: Props) {
     rsvpBadge: {
       paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8,
     },
-    rsvpTxt: { fontSize: 11, fontWeight: '600' },
+    rsvpTxt: { fontSize: 11, fontWeight: fonts.semibold },
     rsvpCount: { fontSize: 11, color: t.text.secondary },
     personalBadge: {
       flexDirection: 'row', alignItems: 'center', backgroundColor: t.bg.primary,
@@ -383,7 +384,7 @@ export function CalendarScreen({ onClose }: Props) {
     modalCard: {
       backgroundColor: t.bg.primary, borderRadius: 16, padding: 20, borderLeftWidth: 5,
     },
-    modalTitle: { fontSize: 18, fontWeight: '700', color: t.text.primary, marginBottom: 4 },
+    modalTitle: { fontSize: 18, fontWeight: fonts.bold, color: t.text.primary, marginBottom: 4 },
     modalCat: { fontSize: 13, color: t.text.secondary, marginBottom: 12 },
     modalDesc: { fontSize: 14, color: t.text.primary, lineHeight: 20, marginBottom: 12 },
     modalInfo: { fontSize: 13, color: t.text.secondary, marginBottom: 4 },
@@ -391,11 +392,11 @@ export function CalendarScreen({ onClose }: Props) {
     modalBtn: {
       flex: 1, paddingVertical: 10, borderRadius: 10, alignItems: 'center',
     },
-    modalBtnTxt: { fontWeight: '600', fontSize: 14 },
+    modalBtnTxt: { fontWeight: fonts.semibold, fontSize: 14 },
 
     // Add event form
     formSection: { paddingHorizontal: 16, paddingTop: 12 },
-    formLabel: { fontSize: 13, fontWeight: '600', color: t.text.secondary, marginBottom: 4, marginTop: 12 },
+    formLabel: { fontSize: 13, fontWeight: fonts.semibold, color: t.text.secondary, marginBottom: 4, marginTop: 12 },
     formInput: {
       borderWidth: 1, borderColor: t.border, borderRadius: 10, padding: 10,
       fontSize: 14, color: t.text.primary, backgroundColor: t.bg.card,
@@ -409,17 +410,17 @@ export function CalendarScreen({ onClose }: Props) {
       borderWidth: 1, borderColor: t.border,
     },
     catOptionActive: { borderWidth: 2 },
-    catOptionTxt: { fontSize: 12, fontWeight: '600' },
+    catOptionTxt: { fontSize: 12, fontWeight: fonts.semibold },
     addBtn: {
       marginTop: 20, marginBottom: 40, paddingVertical: 14, borderRadius: 12,
       backgroundColor: t.accent.green, alignItems: 'center',
     },
-    addBtnTxt: { color: '#fff', fontWeight: '700', fontSize: 15 },
+    addBtnTxt: { color: '#fff', fontWeight: fonts.bold, fontSize: 15 },
 
     demoBar: {
       backgroundColor: '#fef3c7', paddingVertical: 6, alignItems: 'center',
     },
-    demoTxt: { fontSize: 11, color: '#92400e', fontWeight: '600' },
+    demoTxt: { fontSize: 11, color: '#92400e', fontWeight: fonts.semibold },
   }), [t]);
 
   // --- Render helpers ---
@@ -456,7 +457,7 @@ export function CalendarScreen({ onClose }: Props) {
           style={[styles.filterChip, !filterCategory && { backgroundColor: t.accent + '22' }]}
           onPress={() => setFilterCategory(null)}
         >
-          <Text style={[styles.filterChipTxt, !filterCategory && { color: t.accent.green, fontWeight: '700' }]}>
+          <Text style={[styles.filterChipTxt, !filterCategory && { color: t.accent.green, fontWeight: fonts.bold }]}>
             All
           </Text>
         </TouchableOpacity>
@@ -473,7 +474,7 @@ export function CalendarScreen({ onClose }: Props) {
               onPress={() => setFilterCategory(active ? null : cat)}
             >
               <Text style={{ fontSize: 12 }}>{CATEGORY_ICONS[cat]}</Text>
-              <Text style={[styles.filterChipTxt, active && { color: CATEGORY_COLORS[cat], fontWeight: '700' }]}>
+              <Text style={[styles.filterChipTxt, active && { color: CATEGORY_COLORS[cat], fontWeight: fonts.bold }]}>
                 {cat.charAt(0).toUpperCase() + cat.slice(1)}
               </Text>
             </TouchableOpacity>

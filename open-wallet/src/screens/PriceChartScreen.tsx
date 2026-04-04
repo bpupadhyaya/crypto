@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Price Chart -- Detailed price charts for any token.
  * Token selector, time ranges, ASCII bar chart, price alerts, market info.
@@ -232,62 +233,62 @@ export function PriceChartScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    back: { color: t.accent.blue, fontSize: 16, fontWeight: '600' },
-    title: { color: t.text.primary, fontSize: 18, fontWeight: '800' },
+    back: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
+    title: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
     // Token selector
     tokenRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 16, paddingHorizontal: 16 },
     tokenChip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: t.bg.card },
     tokenChipActive: { backgroundColor: t.accent.blue },
-    tokenChipText: { color: t.text.muted, fontSize: 13, fontWeight: '700' },
+    tokenChipText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.bold },
     tokenChipTextActive: { color: '#fff' },
     // Tabs
     tabRow: { flexDirection: 'row', marginHorizontal: 16, marginBottom: 16, gap: 6 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 12, alignItems: 'center', backgroundColor: t.bg.card },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.muted, fontSize: 12, fontWeight: '700', textTransform: 'uppercase' },
+    tabText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase' },
     tabTextActive: { color: '#fff' },
     // Time range
     timeRow: { flexDirection: 'row', gap: 6, marginBottom: 16 },
     timeBtn: { flex: 1, paddingVertical: 8, borderRadius: 10, alignItems: 'center', backgroundColor: t.bg.card },
     timeBtnActive: { backgroundColor: t.accent.blue + '30' },
-    timeBtnText: { color: t.text.muted, fontSize: 11, fontWeight: '700' },
+    timeBtnText: { color: t.text.muted, fontSize: 11, fontWeight: fonts.bold },
     timeBtnTextActive: { color: t.accent.blue },
     // Price display
     priceCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 16 },
-    priceMain: { color: t.text.primary, fontSize: 32, fontWeight: '800' },
-    priceChange: { fontSize: 16, fontWeight: '700', marginTop: 4 },
+    priceMain: { color: t.text.primary, fontSize: 32, fontWeight: fonts.heavy },
+    priceChange: { fontSize: 16, fontWeight: fonts.bold, marginTop: 4 },
     priceRow: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 16 },
     priceStat: { alignItems: 'center' },
     priceStatLabel: { color: t.text.muted, fontSize: 11, marginBottom: 2 },
-    priceStatValue: { color: t.text.primary, fontSize: 14, fontWeight: '700' },
+    priceStatValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
     // Chart area
     chartCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 16 },
     // Section
-    sectionLabel: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 10, marginLeft: 4 },
+    sectionLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 10, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16 },
     metricRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10 },
     metricLabel: { color: t.text.muted, fontSize: 14 },
-    metricValue: { color: t.text.primary, fontSize: 14, fontWeight: '700' },
+    metricValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
     divider: { height: 1, backgroundColor: t.border },
     // Alerts
     alertCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 14, marginBottom: 10 },
     alertRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    alertText: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
+    alertText: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
     alertMeta: { color: t.text.muted, fontSize: 12, marginTop: 4 },
     alertToggle: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8 },
-    alertToggleText: { fontSize: 12, fontWeight: '700' },
+    alertToggleText: { fontSize: 12, fontWeight: fonts.bold },
     // New alert
     newAlertRow: { flexDirection: 'row', gap: 8, marginTop: 12 },
     alertInput: { flex: 1, backgroundColor: t.bg.primary, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10, color: t.text.primary, fontSize: 14 },
     directionBtn: { paddingHorizontal: 14, paddingVertical: 10, borderRadius: 12, backgroundColor: t.bg.primary },
     directionBtnActive: { backgroundColor: t.accent.blue + '30' },
-    directionBtnText: { color: t.text.muted, fontSize: 13, fontWeight: '600' },
+    directionBtnText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
     directionBtnTextActive: { color: t.accent.blue },
     addAlertBtn: { backgroundColor: t.accent.blue, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 10, justifyContent: 'center' },
-    addAlertBtnText: { color: '#fff', fontSize: 13, fontWeight: '700' },
+    addAlertBtnText: { color: '#fff', fontSize: 13, fontWeight: fonts.bold },
     demoBanner: { backgroundColor: t.accent.yellow + '20', borderRadius: 12, padding: 12, marginBottom: 16 },
-    demoText: { color: t.accent.yellow, fontSize: 13, fontWeight: '600', textAlign: 'center' },
+    demoText: { color: t.accent.yellow, fontSize: 13, fontWeight: fonts.semibold, textAlign: 'center' },
     placeholder: { color: t.text.muted, fontSize: 14 },
   }), [t]);
 
@@ -415,7 +416,7 @@ export function PriceChartScreen({ onClose }: Props) {
 
       {/* Price chart */}
       <View style={s.chartCard}>
-        <Text style={{ color: t.text.secondary, fontSize: 13, fontWeight: '600', marginBottom: 4 }}>
+        <Text style={{ color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 4 }}>
           {token.symbol} Price -- {timeRange}
         </Text>
         {priceData.length > 0 ? (

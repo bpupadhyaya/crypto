@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Portfolio Rebalance -- Suggest and execute rebalancing across chains.
  * Current vs target allocation, drift analysis, rebalance preview, execution.
@@ -79,7 +80,7 @@ function AllocationBar({ items, theme }: {
     <View style={{ gap: 8 }}>
       {items.map((item) => (
         <View key={item.symbol} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-          <Text style={{ color: theme.text.secondary, fontSize: 13, width: 48, textAlign: 'right', fontWeight: '600' }}>
+          <Text style={{ color: theme.text.secondary, fontSize: 13, width: 48, textAlign: 'right', fontWeight: fonts.semibold }}>
             {item.symbol}
           </Text>
           <View style={{ flex: 1, height: 26, backgroundColor: theme.border, borderRadius: 6, overflow: 'hidden' }}>
@@ -92,7 +93,7 @@ function AllocationBar({ items, theme }: {
               paddingLeft: 6,
             }}>
               {item.pct >= 8 && (
-                <Text style={{ color: '#fff', fontSize: 11, fontWeight: '700' }}>
+                <Text style={{ color: '#fff', fontSize: 11, fontWeight: fonts.bold }}>
                   {item.pct.toFixed(1)}%
                 </Text>
               )}
@@ -120,50 +121,50 @@ export function PortfolioRebalanceScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    back: { color: t.accent.blue, fontSize: 16, fontWeight: '600' },
-    title: { color: t.text.primary, fontSize: 18, fontWeight: '800' },
+    back: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
+    title: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
     tabRow: { flexDirection: 'row', marginHorizontal: 16, marginBottom: 16, gap: 6 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 12, alignItems: 'center', backgroundColor: t.bg.card },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.muted, fontSize: 12, fontWeight: '700', textTransform: 'uppercase' },
+    tabText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase' },
     tabTextActive: { color: '#fff' },
-    sectionLabel: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 10, marginLeft: 4 },
+    sectionLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 10, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16 },
     metricRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10 },
     metricLabel: { color: t.text.muted, fontSize: 14 },
-    metricValue: { color: t.text.primary, fontSize: 14, fontWeight: '700' },
+    metricValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
     divider: { height: 1, backgroundColor: t.border },
     // Drift
     driftRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: t.border },
-    driftSymbol: { color: t.text.primary, fontSize: 15, fontWeight: '700', width: 50 },
-    driftPct: { fontSize: 14, fontWeight: '600' },
+    driftSymbol: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, width: 50 },
+    driftPct: { fontSize: 14, fontWeight: fonts.semibold },
     // Trade
     tradeCard: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, marginBottom: 10 },
-    tradeAction: { fontSize: 13, fontWeight: '800', letterSpacing: 1 },
+    tradeAction: { fontSize: 13, fontWeight: fonts.heavy, letterSpacing: 1 },
     tradeDetail: { color: t.text.secondary, fontSize: 13, marginTop: 4 },
     // Execute button
     executeBtn: { backgroundColor: t.accent.green, borderRadius: 14, paddingVertical: 16, alignItems: 'center', marginTop: 20 },
-    executeBtnText: { color: '#fff', fontSize: 16, fontWeight: '800' },
+    executeBtnText: { color: '#fff', fontSize: 16, fontWeight: fonts.heavy },
     executeBtnDisabled: { opacity: 0.5 },
     // Target input row
     targetRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: t.border },
-    targetSymbol: { color: t.text.primary, fontSize: 15, fontWeight: '700', width: 50 },
+    targetSymbol: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, width: 50 },
     targetPctGroup: { flexDirection: 'row', alignItems: 'center', gap: 10 },
     targetBtn: { width: 32, height: 32, borderRadius: 16, backgroundColor: t.bg.primary, justifyContent: 'center', alignItems: 'center' },
-    targetBtnText: { color: t.accent.blue, fontSize: 18, fontWeight: '700' },
-    targetPct: { color: t.text.primary, fontSize: 16, fontWeight: '700', width: 48, textAlign: 'center' },
+    targetBtnText: { color: t.accent.blue, fontSize: 18, fontWeight: fonts.bold },
+    targetPct: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, width: 48, textAlign: 'center' },
     // History
     historyCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 14, marginBottom: 10 },
-    historyDate: { color: t.text.primary, fontSize: 14, fontWeight: '700' },
+    historyDate: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
     historyMeta: { color: t.text.muted, fontSize: 13, marginTop: 4 },
     statusBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'flex-start', marginTop: 8 },
-    statusText: { fontSize: 11, fontWeight: '700', textTransform: 'uppercase' },
+    statusText: { fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase' },
     demoBanner: { backgroundColor: t.accent.yellow + '20', borderRadius: 12, padding: 12, marginBottom: 16 },
-    demoText: { color: t.accent.yellow, fontSize: 13, fontWeight: '600', textAlign: 'center' },
+    demoText: { color: t.accent.yellow, fontSize: 13, fontWeight: fonts.semibold, textAlign: 'center' },
     totalRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8 },
-    totalLabel: { color: t.text.muted, fontSize: 13, fontWeight: '600' },
-    totalValue: { color: t.text.primary, fontSize: 13, fontWeight: '700' },
+    totalLabel: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
+    totalValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.bold },
     placeholder: { color: t.text.muted, fontSize: 14 },
   }), [t]);
 
@@ -264,7 +265,7 @@ export function PortfolioRebalanceScreen({ onClose }: Props) {
         {currentAllocations.map((alloc, i) => (
           <View key={alloc.symbol}>
             <View style={s.metricRow}>
-              <Text style={[s.metricLabel, { fontWeight: '600', color: TOKEN_COLORS[alloc.symbol] ?? t.text.primary }]}>
+              <Text style={[s.metricLabel, { fontWeight: fonts.semibold, color: TOKEN_COLORS[alloc.symbol] ?? t.text.primary }]}>
                 {alloc.symbol}
               </Text>
               <View style={{ alignItems: 'flex-end' }}>
@@ -364,7 +365,7 @@ export function PortfolioRebalanceScreen({ onClose }: Props) {
                 }]}>
                   {trade.action}
                 </Text>
-                <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: '700' }}>
+                <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: fonts.bold }}>
                   {trade.symbol}
                 </Text>
               </View>

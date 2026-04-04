@@ -23,6 +23,7 @@ import { useAnimatedNumber } from '../utils/animations';
 import { formatCryptoAmount } from '../core/currency/formatter';
 import { ConstitutionSummary } from '../components/ConstitutionSummary';
 import type { Theme } from '../utils/theme';
+import { fonts } from '../utils/theme';
 import { CHAIN_COLORS, CHAIN_ICONS } from '../core/chains/addressDetection';
 
 // Fallback allocations when no portfolio data
@@ -140,14 +141,14 @@ const TokenRow = React.memo(({
     tokenIconText: {
       color: tokenColor,
       fontSize: 15,
-      fontWeight: '700',
+      fontWeight: fonts.bold,
     },
     tokenInfo: { flex: 1 },
-    tokenSymbol: { color: t.text.primary, fontSize: 15, fontWeight: '600' },
+    tokenSymbol: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold },
     tokenName: { color: t.text.muted, fontSize: 12, marginTop: 1 },
     sparklineWrap: { marginRight: 12 },
     tokenValues: { alignItems: 'flex-end' },
-    tokenBalance: { color: t.text.secondary, fontSize: 14, fontWeight: '500' },
+    tokenBalance: { color: t.text.secondary, fontSize: 14, fontWeight: fonts.medium },
     tokenPriceRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 1 },
     tokenUsd: { color: t.text.muted, fontSize: 12 },
   }), [t, tokenColor]);
@@ -166,7 +167,7 @@ const TokenRow = React.memo(({
             <Text style={s.tokenSymbol}>{token.symbol}</Text>
             {chainLabel && chainColor && (
               <View style={{ backgroundColor: chainColor + '25', borderRadius: 8, paddingHorizontal: 6, paddingVertical: 2 }}>
-                <Text style={{ color: chainColor, fontSize: 10, fontWeight: '700' }}>{chainLabel}</Text>
+                <Text style={{ color: chainColor, fontSize: 10, fontWeight: fonts.bold }}>{chainLabel}</Text>
               </View>
             )}
           </View>
@@ -186,7 +187,7 @@ const TokenRow = React.memo(({
               {price ? `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '\u2014'}
             </Text>
             {change != null && (
-              <Text style={{ color: changeColor, fontSize: 11, fontWeight: '600' }}>
+              <Text style={{ color: changeColor, fontSize: 11, fontWeight: fonts.semibold }}>
                 {change >= 0 ? '+' : ''}{change.toFixed(1)}%
               </Text>
             )}
@@ -243,8 +244,8 @@ const ActionBtn = React.memo(({ icon, label, color, t }: { icon: string; label: 
   const s = useMemo(() => StyleSheet.create({
     actionBtn: { alignItems: 'center', flex: 1 },
     actionCircle: { width: 56, height: 56, borderRadius: 28, justifyContent: 'center', alignItems: 'center', marginBottom: 6 },
-    actionIcon: { fontSize: 24, fontWeight: '700' },
-    actionLabel: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
+    actionIcon: { fontSize: 24, fontWeight: fonts.bold },
+    actionLabel: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
   }), [t]);
 
   return (
@@ -326,7 +327,7 @@ const ChartHeader = React.memo(function ChartHeader({
         />
         <Legend t={t} data={allocations} />
         {portfolioChange != null && (
-          <Text style={{ color: portfolioChange >= 0 ? t.accent.green : t.accent.red, fontSize: 14, fontWeight: '700', marginTop: 8 }}>
+          <Text style={{ color: portfolioChange >= 0 ? t.accent.green : t.accent.red, fontSize: 14, fontWeight: fonts.bold, marginTop: 8 }}>
             {portfolioChange >= 0 ? '+' : ''}{portfolioChange.toFixed(2)}% (24h)
           </Text>
         )}
@@ -337,9 +338,9 @@ const ChartHeader = React.memo(function ChartHeader({
         <ActionBtn icon="⇄" label="Swap" color={t.accent.blue} t={t} />
         <TouchableOpacity style={{ alignItems: 'center', flex: 1 }} onPress={onBuySell}>
           <View style={{ width: 56, height: 56, borderRadius: 28, justifyContent: 'center', alignItems: 'center', marginBottom: 6, backgroundColor: t.accent.purple + '20' }}>
-            <Text style={{ fontSize: 24, fontWeight: '700', color: t.accent.purple }}>$</Text>
+            <Text style={{ fontSize: 24, fontWeight: fonts.bold, color: t.accent.purple }}>$</Text>
           </View>
-          <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: '600' }}>Buy</Text>
+          <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold }}>Buy</Text>
         </TouchableOpacity>
       </View>
       <View style={s.sectionHeader}>
@@ -410,15 +411,15 @@ export function HomeScreen() {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     testnetBanner: { backgroundColor: t.accent.yellow + '20', paddingVertical: 6, alignItems: 'center', marginHorizontal: 16, borderRadius: 8, marginTop: 8 },
-    testnetText: { color: t.accent.yellow, fontSize: 12, fontWeight: '700', letterSpacing: 1 },
+    testnetText: { color: t.accent.yellow, fontSize: 12, fontWeight: fonts.bold, letterSpacing: 1 },
     demoBanner: { backgroundColor: t.accent.purple + '20', paddingVertical: 6, alignItems: 'center', marginHorizontal: 16, borderRadius: 8, marginTop: 8 },
-    demoText: { color: t.accent.purple, fontSize: 12, fontWeight: '700', letterSpacing: 1 },
+    demoText: { color: t.accent.purple, fontSize: 12, fontWeight: fonts.bold, letterSpacing: 1 },
     list: { paddingBottom: 100 },
     chartCard: { backgroundColor: t.bg.card, borderRadius: 24, padding: 24, alignItems: 'center', marginHorizontal: 16, marginTop: 16 },
     actions: { flexDirection: 'row', justifyContent: 'space-evenly', paddingHorizontal: 16, marginTop: 20 },
     sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 24, marginBottom: 8, marginHorizontal: 16 },
-    sectionTitle: { color: t.text.secondary, fontSize: 13, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 1 },
-    manageLink: { color: t.accent.blue, fontSize: 13, fontWeight: '600' },
+    sectionTitle: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1 },
+    manageLink: { color: t.accent.blue, fontSize: 13, fontWeight: fonts.semibold },
     searchInput: { backgroundColor: t.bg.card, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 10, marginHorizontal: 16, marginBottom: 8, color: t.text.primary, fontSize: 14 },
     lastUpdated: { color: t.text.muted, fontSize: 11, marginLeft: 16, marginBottom: 4 },
     refreshStatus: {
@@ -430,7 +431,7 @@ export function HomeScreen() {
       marginHorizontal: 16,
       marginTop: 4,
     },
-    refreshText: { color: t.accent.green, fontSize: 12, fontWeight: '600' },
+    refreshText: { color: t.accent.green, fontSize: 12, fontWeight: fonts.semibold },
   }), [t]);
 
   const filteredTokens = useMemo(() => {

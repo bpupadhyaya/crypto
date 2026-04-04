@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Impact Report Screen — Annual personal impact report.
  *
@@ -166,61 +167,61 @@ export function ImpactReportScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
     card: { backgroundColor: t.bg.card, borderRadius: 20, padding: 20, marginHorizontal: 20, marginTop: 8 },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 12 },
-    demoTag: { color: t.accent.orange, fontSize: 10, fontWeight: '700', textAlign: 'center', marginTop: 12 },
+    demoTag: { color: t.accent.orange, fontSize: 10, fontWeight: fonts.bold, textAlign: 'center', marginTop: 12 },
     // Hero
     heroCard: { backgroundColor: t.accent.purple + '10', borderRadius: 24, padding: 24, marginHorizontal: 20, marginTop: 8, alignItems: 'center' },
     heroIcon: { fontSize: 48, marginBottom: 8 },
-    heroTitle: { color: t.text.primary, fontSize: 22, fontWeight: '900', textAlign: 'center' },
+    heroTitle: { color: t.text.primary, fontSize: 22, fontWeight: fonts.heavy, textAlign: 'center' },
     heroSubtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 6, lineHeight: 20 },
     summaryRow: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 20, width: '100%' },
     summaryItem: { alignItems: 'center' },
-    summaryValue: { color: t.accent.green, fontSize: 22, fontWeight: '900' },
+    summaryValue: { color: t.accent.green, fontSize: 22, fontWeight: fonts.heavy },
     summaryLabel: { color: t.text.muted, fontSize: 10, marginTop: 2 },
     // Channel breakdown
     barRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-    barLabel: { color: t.text.primary, fontSize: 12, fontWeight: '600', width: 80 },
+    barLabel: { color: t.text.primary, fontSize: 12, fontWeight: fonts.semibold, width: 80 },
     barTrack: { flex: 1, height: 18, backgroundColor: t.border, borderRadius: 9, overflow: 'hidden', marginHorizontal: 8 },
     barFill: { height: 18, borderRadius: 9 },
     barValue: { color: t.text.muted, fontSize: 11, width: 50, textAlign: 'right' },
     channelDetail: { flexDirection: 'row', justifyContent: 'space-around', paddingTop: 8 },
     channelDetailItem: { alignItems: 'center' },
-    channelDetailValue: { fontSize: 13, fontWeight: '700' },
+    channelDetailValue: { fontSize: 13, fontWeight: fonts.bold },
     channelDetailLabel: { color: t.text.muted, fontSize: 10, marginTop: 2 },
     // Milestones
     milestoneRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10 },
     milestoneIcon: { fontSize: 24, width: 36, textAlign: 'center' },
     milestoneContent: { flex: 1, marginLeft: 10 },
-    milestoneTitle: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
+    milestoneTitle: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
     milestoneDate: { color: t.text.muted, fontSize: 11, marginTop: 2 },
     // Metric grid
     metricGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' },
     metricItem: { width: '48%', backgroundColor: t.bg.primary, borderRadius: 16, padding: 16, marginBottom: 10, alignItems: 'center' },
     metricIcon: { fontSize: 28, marginBottom: 6 },
-    metricValue: { color: t.text.primary, fontSize: 20, fontWeight: '900' },
+    metricValue: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     metricLabel: { color: t.text.muted, fontSize: 11, textAlign: 'center', marginTop: 4 },
     // Gratitude
     gratRow: { flexDirection: 'row', justifyContent: 'space-around', marginBottom: 16 },
     gratItem: { alignItems: 'center' },
-    gratValue: { fontSize: 28, fontWeight: '900' },
+    gratValue: { fontSize: 28, fontWeight: fonts.heavy },
     gratLabel: { color: t.text.muted, fontSize: 11, marginTop: 4 },
     gratConnection: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8, paddingHorizontal: 8 },
-    gratConnLabel: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
-    gratConnValue: { color: t.text.primary, fontSize: 13, fontWeight: '700' },
+    gratConnLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
+    gratConnValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.bold },
     // YoY
     yoyRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 10 },
-    yoyLabel: { color: t.text.primary, fontSize: 13, fontWeight: '600', flex: 1 },
+    yoyLabel: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold, flex: 1 },
     yoyValues: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-    yoyThisYear: { color: t.text.primary, fontSize: 14, fontWeight: '700', width: 60, textAlign: 'right' },
+    yoyThisYear: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, width: 60, textAlign: 'right' },
     yoyLastYear: { color: t.text.muted, fontSize: 12, width: 60, textAlign: 'right' },
-    yoyChange: { fontSize: 13, fontWeight: '800', width: 60, textAlign: 'right' },
+    yoyChange: { fontSize: 13, fontWeight: fonts.heavy, width: 60, textAlign: 'right' },
     // Share
     shareBtn: { backgroundColor: t.accent.purple, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginHorizontal: 20, marginTop: 24 },
-    shareBtnText: { color: '#fff', fontSize: 17, fontWeight: '700' },
+    shareBtnText: { color: '#fff', fontSize: 17, fontWeight: fonts.bold },
     footer: { height: 40 },
   }), [t]);
 

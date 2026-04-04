@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * My Day Screen — Single dashboard aggregating today's relevant info
  * from across all 246 screens into one scrollable view.
@@ -102,7 +103,7 @@ export function MyDayScreen({ onClose }: Props) {
       flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
       paddingHorizontal: 20, paddingVertical: 16,
     },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingBottom: 40 },
 
@@ -111,18 +112,18 @@ export function MyDayScreen({ onClose }: Props) {
       backgroundColor: t.accent.blue + '10', borderRadius: 24, padding: 24,
       marginHorizontal: 20, marginTop: 8,
     },
-    greetingText: { color: t.text.primary, fontSize: 26, fontWeight: '800' },
+    greetingText: { color: t.text.primary, fontSize: 26, fontWeight: fonts.heavy },
     dateText: { color: t.text.secondary, fontSize: 14, marginTop: 4 },
     weatherRow: {
       flexDirection: 'row', alignItems: 'center', marginTop: 12, gap: 8,
     },
     weatherIcon: { fontSize: 28 },
-    weatherText: { color: t.text.primary, fontSize: 16, fontWeight: '600' },
+    weatherText: { color: t.text.primary, fontSize: 16, fontWeight: fonts.semibold },
     weatherSub: { color: t.text.muted, fontSize: 13 },
 
     // Sections
     sectionHeader: {
-      color: t.text.secondary, fontSize: 12, fontWeight: '700',
+      color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold,
       textTransform: 'uppercase', letterSpacing: 1.5,
       marginLeft: 24, marginBottom: 10, marginTop: 28,
     },
@@ -136,7 +137,7 @@ export function MyDayScreen({ onClose }: Props) {
       flexDirection: 'row', alignItems: 'center', paddingVertical: 10, gap: 12,
     },
     cardIcon: { fontSize: 22, width: 32, textAlign: 'center' },
-    cardTextPrimary: { color: t.text.primary, fontSize: 15, fontWeight: '600', flex: 1 },
+    cardTextPrimary: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold, flex: 1 },
     cardTextSecondary: { color: t.text.muted, fontSize: 13 },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 2 },
 
@@ -145,20 +146,20 @@ export function MyDayScreen({ onClose }: Props) {
       backgroundColor: t.accent.green + '10', borderRadius: 16, padding: 20,
       marginHorizontal: 20, marginTop: 8,
     },
-    healthPrompt: { color: t.text.primary, fontSize: 16, fontWeight: '700' },
+    healthPrompt: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
     healthSub: { color: t.text.secondary, fontSize: 13, marginTop: 4 },
     healthRow: {
       flexDirection: 'row', justifyContent: 'space-around', marginTop: 16,
     },
     moodBtn: { alignItems: 'center', gap: 4 },
     moodIcon: { fontSize: 32 },
-    moodLabel: { color: t.text.muted, fontSize: 11, fontWeight: '600' },
+    moodLabel: { color: t.text.muted, fontSize: 11, fontWeight: fonts.semibold },
     healthStats: {
       flexDirection: 'row', justifyContent: 'space-around', marginTop: 16,
       paddingTop: 16, borderTopWidth: 1, borderTopColor: t.border,
     },
     healthStat: { alignItems: 'center' },
-    healthStatValue: { color: t.text.primary, fontSize: 18, fontWeight: '800' },
+    healthStatValue: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
     healthStatLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
 
     // Streaks
@@ -167,7 +168,7 @@ export function MyDayScreen({ onClose }: Props) {
     },
     streakItem: { alignItems: 'center', gap: 4 },
     streakIcon: { fontSize: 28 },
-    streakDays: { color: t.text.primary, fontSize: 18, fontWeight: '800' },
+    streakDays: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
     streakLabel: { color: t.text.muted, fontSize: 11 },
     streakBar: { width: 48, height: 4, borderRadius: 2, marginTop: 4 },
 
@@ -179,13 +180,13 @@ export function MyDayScreen({ onClose }: Props) {
     otkHeaderRow: {
       flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline',
     },
-    otkTotal: { color: t.text.primary, fontSize: 28, fontWeight: '800' },
+    otkTotal: { color: t.text.primary, fontSize: 28, fontWeight: fonts.heavy },
     otkLabel: { color: t.text.muted, fontSize: 12, marginTop: 2 },
-    otkEarned: { color: t.accent.green, fontSize: 16, fontWeight: '700' },
+    otkEarned: { color: t.accent.green, fontSize: 16, fontWeight: fonts.bold },
     otkEarnedLabel: { color: t.text.muted, fontSize: 11 },
     channelRow: { marginTop: 16, gap: 10 },
     channelItem: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-    channelLabel: { color: t.text.secondary, fontSize: 12, fontWeight: '600', width: 70 },
+    channelLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold, width: 70 },
     channelBarBg: {
       flex: 1, height: 8, borderRadius: 4, backgroundColor: t.bg.primary,
     },
@@ -202,7 +203,7 @@ export function MyDayScreen({ onClose }: Props) {
       alignItems: 'center', justifyContent: 'center', gap: 6,
     },
     quickIcon: { fontSize: 24 },
-    quickLabel: { color: t.text.secondary, fontSize: 11, fontWeight: '600' },
+    quickLabel: { color: t.text.secondary, fontSize: 11, fontWeight: fonts.semibold },
 
     // Wisdom
     wisdomCard: {
@@ -210,7 +211,7 @@ export function MyDayScreen({ onClose }: Props) {
       marginHorizontal: 20, marginTop: 8,
     },
     wisdomQuote: {
-      color: t.text.primary, fontSize: 15, fontWeight: '600',
+      color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold,
       fontStyle: 'italic', lineHeight: 22,
     },
     wisdomSource: { color: t.text.muted, fontSize: 12, marginTop: 8 },

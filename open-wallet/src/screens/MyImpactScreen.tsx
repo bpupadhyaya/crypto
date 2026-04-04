@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * My Impact Screen — Personal impact visualization across all value channels.
  *
@@ -102,45 +103,45 @@ export function MyImpactScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
     card: { backgroundColor: t.bg.card, borderRadius: 20, padding: 20, marginHorizontal: 20, marginTop: 8 },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 12 },
-    demoTag: { color: t.accent.orange, fontSize: 10, fontWeight: '700', textAlign: 'center', marginTop: 12 },
+    demoTag: { color: t.accent.orange, fontSize: 10, fontWeight: fonts.bold, textAlign: 'center', marginTop: 12 },
     // Story
     storyCard: { backgroundColor: t.accent.green + '10', borderRadius: 20, padding: 24, marginHorizontal: 20, marginTop: 12 },
-    storyTitle: { color: t.accent.green, fontSize: 16, fontWeight: '800', marginBottom: 12 },
+    storyTitle: { color: t.accent.green, fontSize: 16, fontWeight: fonts.heavy, marginBottom: 12 },
     storyText: { color: t.text.primary, fontSize: 14, lineHeight: 22 },
     storySummary: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 16, paddingTop: 16, borderTopWidth: 1, borderTopColor: t.accent.green + '30' },
     summaryItem: { alignItems: 'center' },
-    summaryValue: { color: t.accent.green, fontSize: 20, fontWeight: '900' },
+    summaryValue: { color: t.accent.green, fontSize: 20, fontWeight: fonts.heavy },
     summaryLabel: { color: t.text.muted, fontSize: 10, marginTop: 2 },
     // Impact rings
     ringsContainer: { alignItems: 'center', paddingVertical: 20, marginHorizontal: 20, marginTop: 8 },
     ringWrapper: { alignItems: 'center', justifyContent: 'center' },
     ringRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
     ringBar: { height: 24, borderRadius: 12, marginRight: 8 },
-    ringLabel: { fontSize: 12, fontWeight: '700', width: 50 },
-    ringPercent: { fontSize: 12, fontWeight: '600', width: 40, textAlign: 'right' },
+    ringLabel: { fontSize: 12, fontWeight: fonts.bold, width: 50 },
+    ringPercent: { fontSize: 12, fontWeight: fonts.semibold, width: 40, textAlign: 'right' },
     ringBalance: { color: t.text.muted, fontSize: 11, width: 60, textAlign: 'right' },
     // Ripple
     rippleContainer: { marginHorizontal: 20, marginTop: 8 },
     rippleRing: { flexDirection: 'row', alignItems: 'center', paddingVertical: 14, paddingHorizontal: 16 },
     rippleIcon: { fontSize: 28, width: 44, textAlign: 'center' },
     rippleContent: { flex: 1, marginLeft: 8 },
-    rippleLabel: { color: t.text.primary, fontSize: 14, fontWeight: '700' },
+    rippleLabel: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
     rippleDesc: { color: t.text.muted, fontSize: 12, marginTop: 2 },
     rippleCount: { backgroundColor: t.accent.green + '20', borderRadius: 16, paddingHorizontal: 12, paddingVertical: 4 },
-    rippleCountText: { color: t.accent.green, fontSize: 14, fontWeight: '800' },
+    rippleCountText: { color: t.accent.green, fontSize: 14, fontWeight: fonts.heavy },
     rippleLine: { width: 2, height: 16, backgroundColor: t.accent.green + '30', marginLeft: 21 },
     // Badges
     badgeGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, paddingHorizontal: 20, marginTop: 8 },
     badgeCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, width: '47%' as unknown as number, alignItems: 'center' },
     badgeIcon: { fontSize: 32, marginBottom: 8 },
-    badgeName: { color: t.text.primary, fontSize: 13, fontWeight: '700', textAlign: 'center' },
+    badgeName: { color: t.text.primary, fontSize: 13, fontWeight: fonts.bold, textAlign: 'center' },
     badgeDesc: { color: t.text.muted, fontSize: 10, textAlign: 'center', marginTop: 4, lineHeight: 14 },
-    badgeRarity: { fontSize: 10, fontWeight: '800', textTransform: 'uppercase', letterSpacing: 1, marginTop: 6 },
+    badgeRarity: { fontSize: 10, fontWeight: fonts.heavy, textTransform: 'uppercase', letterSpacing: 1, marginTop: 6 },
     badgeDate: { color: t.text.muted, fontSize: 9, marginTop: 2 },
     // Footer
     footer: { marginTop: 32, marginBottom: 20, paddingHorizontal: 40, alignItems: 'center' },

@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Community Radio Screen — Community announcements and broadcasts.
  *
@@ -199,20 +200,20 @@ export function CommunityRadioScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingBottom: 40 },
     tabRow: { flexDirection: 'row', paddingHorizontal: 12, marginBottom: 12 },
     tabBtn: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 16, marginHorizontal: 4 },
     tabActive: { backgroundColor: t.accent.purple + '20' },
-    tabText: { color: t.text.muted, fontSize: 12, fontWeight: '600' },
+    tabText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
     tabTextActive: { color: t.accent.purple },
 
     // Filter chips
     filterRow: { flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 16, gap: 6, marginBottom: 12 },
     filterChip: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12, borderWidth: 1, borderColor: t.bg.secondary },
     filterActive: { backgroundColor: t.accent.purple + '20', borderColor: t.accent.purple },
-    filterText: { color: t.text.muted, fontSize: 12, fontWeight: '600' },
+    filterText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
     filterTextActive: { color: t.accent.purple },
 
     // Cards
@@ -221,46 +222,46 @@ export function CommunityRadioScreen({ onClose }: Props) {
     pinnedBorder: { borderLeftWidth: 3, borderLeftColor: t.accent.yellow || '#F5A623' },
     emergencyBorder: { borderLeftWidth: 3, borderLeftColor: t.accent.red || '#FF3B30' },
 
-    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: '700', marginBottom: 12, marginHorizontal: 20 },
-    cardTitle: { color: t.text.primary, fontSize: 15, fontWeight: '700', marginBottom: 4 },
+    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 12, marginHorizontal: 20 },
+    cardTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, marginBottom: 4 },
     cardBody: { color: t.text.secondary, fontSize: 13, lineHeight: 19, marginBottom: 8 },
     metaRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
     metaText: { color: t.text.muted, fontSize: 11 },
     badge: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 8 },
-    badgeText: { fontSize: 10, fontWeight: '700' },
+    badgeText: { fontSize: 10, fontWeight: fonts.bold },
     readReceipt: { color: t.text.muted, fontSize: 11, marginTop: 6 },
 
     // Stat row
     statRow: { flexDirection: 'row', justifyContent: 'space-around', marginBottom: 16 },
     statBox: { alignItems: 'center' },
-    statNum: { color: t.text.primary, fontSize: 22, fontWeight: '800' },
+    statNum: { color: t.text.primary, fontSize: 22, fontWeight: fonts.heavy },
     statLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
 
     // Events
     eventCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    eventDate: { color: t.accent.blue, fontSize: 13, fontWeight: '700', marginBottom: 2 },
+    eventDate: { color: t.accent.blue, fontSize: 13, fontWeight: fonts.bold, marginBottom: 2 },
     eventTime: { color: t.text.muted, fontSize: 12, marginBottom: 4 },
     eventLocation: { color: t.text.secondary, fontSize: 12 },
-    eventAttendees: { color: t.accent.green, fontSize: 12, fontWeight: '600', marginTop: 4 },
+    eventAttendees: { color: t.accent.green, fontSize: 12, fontWeight: fonts.semibold, marginTop: 4 },
 
     // Celebrations
     celebCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    celebType: { fontSize: 10, fontWeight: '700', textTransform: 'uppercase', marginBottom: 4 },
-    celebCotk: { color: t.accent.green, fontSize: 13, fontWeight: '700', marginTop: 6 },
+    celebType: { fontSize: 10, fontWeight: fonts.bold, textTransform: 'uppercase', marginBottom: 4 },
+    celebCotk: { color: t.accent.green, fontSize: 13, fontWeight: fonts.bold, marginTop: 6 },
     celebrant: { color: t.text.muted, fontSize: 12, marginTop: 2 },
 
     // Form
-    label: { color: t.text.secondary, fontSize: 13, fontWeight: '600', marginBottom: 6, marginHorizontal: 20 },
+    label: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 6, marginHorizontal: 20 },
     input: { backgroundColor: t.bg.secondary, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 14, color: t.text.primary, fontSize: 15, marginHorizontal: 20, marginBottom: 12 },
     textArea: { minHeight: 100, textAlignVertical: 'top' },
     optionRow: { flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 16, gap: 8, marginBottom: 16 },
     optionChip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 12, borderWidth: 1, borderColor: t.bg.secondary },
     optionActive: { backgroundColor: t.accent.blue + '20', borderColor: t.accent.blue },
-    optionText: { color: t.text.muted, fontSize: 13, fontWeight: '600' },
+    optionText: { color: t.text.muted, fontSize: 13, fontWeight: fonts.semibold },
     optionTextActive: { color: t.accent.blue },
     submitBtn: { backgroundColor: t.accent.purple, borderRadius: 14, paddingVertical: 16, marginHorizontal: 20, alignItems: 'center', marginTop: 8 },
-    submitText: { color: '#fff', fontSize: 16, fontWeight: '700' },
-    pinnedTag: { color: t.accent.yellow || '#F5A623', fontSize: 10, fontWeight: '700', marginBottom: 4 },
+    submitText: { color: '#fff', fontSize: 16, fontWeight: fonts.bold },
+    pinnedTag: { color: t.accent.yellow || '#F5A623', fontSize: 10, fontWeight: fonts.bold, marginBottom: 4 },
   }), [t]);
 
   // ─── Category badge color ───

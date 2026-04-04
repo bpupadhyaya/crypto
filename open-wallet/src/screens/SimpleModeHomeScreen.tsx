@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Simple Mode Home Screen — Icon-driven, accessible to anyone.
  *
@@ -50,17 +51,17 @@ export function SimpleModeHomeScreen({ onSwitchToPro }: Props) {
       backgroundColor: t.accent.yellow + '20', paddingVertical: 8,
       alignItems: 'center', marginHorizontal: 24, borderRadius: 12, marginTop: 12,
     },
-    testnetText: { color: t.accent.yellow, fontSize: 14, fontWeight: '700', letterSpacing: 1 },
+    testnetText: { color: t.accent.yellow, fontSize: 14, fontWeight: fonts.bold, letterSpacing: 1 },
     balanceContainer: {
       alignItems: 'center', justifyContent: 'center',
       paddingVertical: 40, paddingHorizontal: 24,
     },
     balanceLabel: {
-      color: t.text.muted, fontSize: 16, fontWeight: '500',
+      color: t.text.muted, fontSize: 16, fontWeight: fonts.medium,
       marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1,
     },
     balanceValue: {
-      color: t.text.primary, fontSize: 56, fontWeight: '800',
+      color: t.text.primary, fontSize: 56, fontWeight: fonts.heavy,
       letterSpacing: -1,
     },
     actionsGrid: {
@@ -76,13 +77,13 @@ export function SimpleModeHomeScreen({ onSwitchToPro }: Props) {
       shadowOpacity: 0.2, shadowRadius: 8, elevation: 6,
     },
     actionIcon: { fontSize: 48, marginBottom: 4 },
-    actionLabel: { fontSize: 14, fontWeight: '700', marginTop: 4 },
+    actionLabel: { fontSize: 14, fontWeight: fonts.bold, marginTop: 4 },
     switchModeBtn: {
       alignSelf: 'center', marginTop: 40,
       paddingVertical: 12, paddingHorizontal: 24,
       borderRadius: 12, backgroundColor: t.border,
     },
-    switchModeText: { color: t.text.secondary, fontSize: 14, fontWeight: '600' },
+    switchModeText: { color: t.text.secondary, fontSize: 14, fontWeight: fonts.semibold },
   }), [t]);
 
   const handleSend = useCallback(() => {

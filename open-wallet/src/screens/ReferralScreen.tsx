@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Referral Screen — Invite friends, ambassador tracking, community growth.
  *
@@ -167,7 +168,7 @@ export function ReferralScreen({ onClose }: Props) {
           <Text style={{ color: t.text.muted, fontSize: 13, fontFamily: 'monospace' }}>{connector}</Text>
           <View style={{ backgroundColor: depth === 0 ? t.accent.purple + '20' : t.bg.card, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 6, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
             <Text style={{ fontSize: 14 }}>{depth === 0 ? '\u{1F451}' : '\u{1F464}'}</Text>
-            <Text style={{ color: t.text.primary, fontSize: 13, fontWeight: '600' }}>{node.name}</Text>
+            <Text style={{ color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold }}>{node.name}</Text>
             <Text style={{ color: t.text.muted, fontSize: 11 }}>{node.joined}</Text>
           </View>
         </View>
@@ -179,58 +180,58 @@ export function ReferralScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     tabBar: { flexDirection: 'row', marginHorizontal: 20, backgroundColor: t.bg.card, borderRadius: 14, padding: 4, marginBottom: 16 },
     tab: { flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 10 },
     tabActive: { backgroundColor: t.accent.purple },
-    tabText: { color: t.text.muted, fontSize: 12, fontWeight: '600' },
+    tabText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     heroCard: { backgroundColor: t.accent.purple + '10', borderRadius: 24, padding: 24, marginHorizontal: 20, marginBottom: 16, alignItems: 'center' },
     heroIcon: { fontSize: 48, marginBottom: 8 },
-    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: '800', textAlign: 'center' },
+    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, textAlign: 'center' },
     heroSubtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 4, lineHeight: 20 },
     codeCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16, alignItems: 'center' },
-    codeLabel: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 8 },
-    codeText: { color: t.accent.purple, fontSize: 28, fontWeight: '900', letterSpacing: 2 },
+    codeLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 8 },
+    codeText: { color: t.accent.purple, fontSize: 28, fontWeight: fonts.heavy, letterSpacing: 2 },
     linkText: { color: t.text.muted, fontSize: 11, marginTop: 8, textAlign: 'center' },
     actionRow: { flexDirection: 'row', gap: 12, marginHorizontal: 20, marginBottom: 16 },
     actionBtn: { flex: 1, backgroundColor: t.accent.purple, borderRadius: 14, paddingVertical: 14, alignItems: 'center' },
     actionBtnSecondary: { flex: 1, backgroundColor: t.bg.card, borderRadius: 14, paddingVertical: 14, alignItems: 'center' },
-    actionBtnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
-    actionBtnTextSecondary: { color: t.accent.purple, fontSize: 15, fontWeight: '700' },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 8 },
+    actionBtnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
+    actionBtnTextSecondary: { color: t.accent.purple, fontSize: 15, fontWeight: fonts.bold },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 8 },
     statGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, paddingHorizontal: 20, marginBottom: 16 },
     statCard: { width: '47%' as any, backgroundColor: t.bg.card, borderRadius: 16, padding: 16 },
-    statValue: { color: t.text.primary, fontSize: 24, fontWeight: '800' },
+    statValue: { color: t.text.primary, fontSize: 24, fontWeight: fonts.heavy },
     statLabel: { color: t.text.muted, fontSize: 12, marginTop: 4 },
     tierCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16 },
     tierRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 12 },
     tierBadge: { width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center' },
-    tierName: { color: t.text.primary, fontSize: 18, fontWeight: '800' },
+    tierName: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
     tierSub: { color: t.text.muted, fontSize: 12, marginTop: 2 },
     progressBar: { height: 8, backgroundColor: t.bg.primary, borderRadius: 4, overflow: 'hidden' },
     progressFill: { height: 8, borderRadius: 4 },
     tierSteps: { marginTop: 16 },
     tierStep: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 10, paddingVertical: 8, paddingHorizontal: 12, borderRadius: 10 },
-    tierStepName: { color: t.text.primary, fontSize: 14, fontWeight: '700', flex: 1 },
+    tierStepName: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, flex: 1 },
     tierStepRange: { color: t.text.muted, fontSize: 12 },
-    tierStepReward: { color: t.accent.green, fontSize: 12, fontWeight: '600' },
+    tierStepReward: { color: t.accent.green, fontSize: 12, fontWeight: fonts.semibold },
     treeContainer: { paddingHorizontal: 20, marginBottom: 16 },
     leaderRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: t.bg.card, borderRadius: 14, padding: 14, marginHorizontal: 20, marginBottom: 8 },
     leaderRank: { width: 32, alignItems: 'center' },
-    leaderRankText: { color: t.text.muted, fontSize: 16, fontWeight: '800' },
+    leaderRankText: { color: t.text.muted, fontSize: 16, fontWeight: fonts.heavy },
     leaderInfo: { flex: 1, marginLeft: 12 },
-    leaderName: { color: t.text.primary, fontSize: 14, fontWeight: '700' },
+    leaderName: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
     leaderDetail: { color: t.text.muted, fontSize: 12, marginTop: 2 },
     leaderOtk: { alignItems: 'flex-end' },
-    leaderOtkValue: { color: t.accent.green, fontSize: 14, fontWeight: '700' },
+    leaderOtkValue: { color: t.accent.green, fontSize: 14, fontWeight: fonts.bold },
     leaderOtkLabel: { color: t.text.muted, fontSize: 10 },
     highlightRow: { backgroundColor: t.accent.purple + '15' },
     qrPlaceholder: { width: 160, height: 160, borderRadius: 16, backgroundColor: t.bg.primary, alignItems: 'center', justifyContent: 'center', marginVertical: 16 },
     qrText: { color: t.text.muted, fontSize: 12, marginTop: 8 },
     demoTag: { backgroundColor: t.accent.orange + '20', borderRadius: 8, paddingHorizontal: 10, paddingVertical: 4, alignSelf: 'center', marginBottom: 12 },
-    demoTagText: { color: t.accent.orange, fontSize: 11, fontWeight: '700' },
+    demoTagText: { color: t.accent.orange, fontSize: 11, fontWeight: fonts.bold },
   }), [t]);
 
   // --- Tab content ---
@@ -334,7 +335,7 @@ export function ReferralScreen({ onClose }: Props) {
 
         <Text style={s.section}>Conversion Rate</Text>
         <View style={[s.tierCard, { alignItems: 'center' as const }]}>
-          <Text style={{ color: t.accent.purple, fontSize: 36, fontWeight: '900' }}>
+          <Text style={{ color: t.accent.purple, fontSize: 36, fontWeight: fonts.heavy }}>
             {Math.round((DEMO_STATS.joined / DEMO_STATS.invited) * 100)}%
           </Text>
           <Text style={{ color: t.text.muted, fontSize: 13, marginTop: 4 }}>

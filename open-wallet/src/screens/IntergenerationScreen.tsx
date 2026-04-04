@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Intergenerational Screen — Visualize value flowing across generations.
  *
@@ -102,30 +103,30 @@ export function IntergenerationScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     heroCard: { backgroundColor: t.accent.blue + '10', borderRadius: 24, padding: 24, marginHorizontal: 20, marginTop: 8, alignItems: 'center' },
     heroIcon: { fontSize: 48, marginBottom: 8 },
-    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: '800', textAlign: 'center' },
+    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, textAlign: 'center' },
     heroSubtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 4, lineHeight: 20, fontStyle: 'italic' },
     tabRow: { flexDirection: 'row', paddingHorizontal: 12, marginTop: 16, gap: 4 },
     tabBtn: { flex: 1, paddingVertical: 10, borderRadius: 12, alignItems: 'center', backgroundColor: t.bg.card },
     tabBtnActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: '700' },
+    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold },
     tabTextActive: { color: '#fff' },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 24, marginBottom: 10, marginTop: 24 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20, marginTop: 8 },
     // Generation chain styles
     genGroup: { marginHorizontal: 20, marginTop: 16 },
-    genLabel: { color: t.text.muted, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 6 },
+    genLabel: { color: t.text.muted, fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 6 },
     genNode: { backgroundColor: t.bg.card, borderRadius: 14, padding: 14, marginBottom: 8 },
     genNodeSelf: { backgroundColor: t.accent.blue + '20', borderWidth: 2, borderColor: t.accent.blue },
     genNodeHeader: { flexDirection: 'row', alignItems: 'center', gap: 10 },
     genBadge: { fontSize: 28 },
-    genName: { color: t.text.primary, fontSize: 15, fontWeight: '700', flex: 1 },
+    genName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, flex: 1 },
     genStats: { flexDirection: 'row', gap: 16, marginTop: 8 },
     genStat: { alignItems: 'center' },
-    genStatValue: { color: t.text.primary, fontSize: 14, fontWeight: '700' },
+    genStatValue: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
     genStatLabel: { color: t.text.muted, fontSize: 10 },
     genDeceasedBadge: { color: t.text.muted, fontSize: 10, fontStyle: 'italic', marginTop: 4 },
     // Arrow connector
@@ -135,29 +136,29 @@ export function IntergenerationScreen({ onClose }: Props) {
     // Cascade styles
     cascadeCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginHorizontal: 20, marginTop: 8 },
     cascadeHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    cascadeFrom: { color: t.accent.purple, fontSize: 14, fontWeight: '700' },
+    cascadeFrom: { color: t.accent.purple, fontSize: 14, fontWeight: fonts.bold },
     cascadeDate: { color: t.text.muted, fontSize: 12 },
     cascadeArrow: { color: t.text.muted, fontSize: 12, marginTop: 4 },
-    cascadeTo: { color: t.accent.blue, fontSize: 14, fontWeight: '700', marginTop: 2 },
+    cascadeTo: { color: t.accent.blue, fontSize: 14, fontWeight: fonts.bold, marginTop: 2 },
     cascadeMessage: { color: t.text.secondary, fontSize: 13, marginTop: 8, fontStyle: 'italic', lineHeight: 19 },
     cascadeFooter: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 },
-    cascadeAmount: { color: t.accent.green, fontSize: 13, fontWeight: '700' },
-    cascadeDepth: { color: t.accent.orange, fontSize: 12, fontWeight: '600' },
+    cascadeAmount: { color: t.accent.green, fontSize: 13, fontWeight: fonts.bold },
+    cascadeDepth: { color: t.accent.orange, fontSize: 12, fontWeight: fonts.semibold },
     // Impact styles
     impactCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginHorizontal: 20, marginTop: 8 },
     impactRow: { flexDirection: 'row', gap: 12, alignItems: 'center' },
     impactBadge: { fontSize: 28 },
-    impactAncestor: { color: t.text.primary, fontSize: 14, fontWeight: '700' },
+    impactAncestor: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
     impactDesc: { color: t.text.secondary, fontSize: 13, marginTop: 6, lineHeight: 19 },
-    impactGen: { color: t.accent.blue, fontSize: 12, fontWeight: '700', marginTop: 6 },
+    impactGen: { color: t.accent.blue, fontSize: 12, fontWeight: fonts.bold, marginTop: 6 },
     // Legacy styles
     legacyCard: { backgroundColor: t.accent.purple + '10', borderRadius: 20, padding: 24, marginHorizontal: 20, marginTop: 12, alignItems: 'center' },
-    legacyScore: { color: t.accent.purple, fontSize: 36, fontWeight: '800' },
-    legacyLabel: { color: t.text.primary, fontSize: 16, fontWeight: '700', marginTop: 4 },
+    legacyScore: { color: t.accent.purple, fontSize: 36, fontWeight: fonts.heavy },
+    legacyLabel: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginTop: 4 },
     legacySub: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 8, lineHeight: 20 },
     legacyRow: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 16, width: '100%' },
     legacyItem: { alignItems: 'center' },
-    legacyItemValue: { color: t.text.primary, fontSize: 18, fontWeight: '800' },
+    legacyItemValue: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
     legacyItemLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
   }), [t]);
 
@@ -298,19 +299,19 @@ export function IntergenerationScreen({ onClose }: Props) {
             <View style={s.card}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6 }}>
                 <Text style={{ color: t.text.secondary, fontSize: 13 }}>Generations Represented</Text>
-                <Text style={{ color: t.text.primary, fontSize: 13, fontWeight: '700' }}>4</Text>
+                <Text style={{ color: t.text.primary, fontSize: 13, fontWeight: fonts.bold }}>4</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6 }}>
                 <Text style={{ color: t.text.secondary, fontSize: 13 }}>Total Family Members</Text>
-                <Text style={{ color: t.text.primary, fontSize: 13, fontWeight: '700' }}>8</Text>
+                <Text style={{ color: t.text.primary, fontSize: 13, fontWeight: fonts.bold }}>8</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6 }}>
                 <Text style={{ color: t.text.secondary, fontSize: 13 }}>Gratitude Transactions</Text>
-                <Text style={{ color: t.text.primary, fontSize: 13, fontWeight: '700' }}>731</Text>
+                <Text style={{ color: t.text.primary, fontSize: 13, fontWeight: fonts.bold }}>731</Text>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6 }}>
                 <Text style={{ color: t.text.secondary, fontSize: 13 }}>Oldest Record</Text>
-                <Text style={{ color: t.text.primary, fontSize: 13, fontWeight: '700' }}>Great-Grandmother Amara</Text>
+                <Text style={{ color: t.text.primary, fontSize: 13, fontWeight: fonts.bold }}>Great-Grandmother Amara</Text>
               </View>
             </View>
           </>
@@ -348,12 +349,12 @@ export function IntergenerationScreen({ onClose }: Props) {
               const totalGratitude = group.members.reduce((s, m) => s + m.gratitudeCount, 0);
               return (
                 <View key={group.generation} style={s.card}>
-                  <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: '700' }}>{group.label}</Text>
+                  <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: fonts.bold }}>{group.label}</Text>
                   <View style={{ flexDirection: 'row', gap: 20, marginTop: 8 }}>
-                    <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: '600' }}>
+                    <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: fonts.semibold }}>
                       {(totalGiven / 1000).toFixed(1)}k OTK given
                     </Text>
-                    <Text style={{ color: t.accent.purple, fontSize: 13, fontWeight: '600' }}>
+                    <Text style={{ color: t.accent.purple, fontSize: 13, fontWeight: fonts.semibold }}>
                       {totalGratitude} gratitude
                     </Text>
                     <Text style={{ color: t.text.muted, fontSize: 13 }}>

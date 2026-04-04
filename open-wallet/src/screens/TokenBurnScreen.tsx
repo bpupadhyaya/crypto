@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Token Burn — Transparent OTK burn tracking for negative value corrections.
  *
@@ -98,39 +99,39 @@ export function TokenBurnScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { flex: 1, paddingHorizontal: 16 },
     subtitle: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
     label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
     summaryRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
     summaryCard: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' },
-    summaryNum: { fontSize: 20, fontWeight: '800', marginBottom: 2 },
-    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: '600', textAlign: 'center' },
-    burnAmount: { color: t.accent.red, fontSize: 18, fontWeight: '900' },
+    summaryNum: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 2 },
+    summaryLabel: { color: t.text.muted, fontSize: 10, fontWeight: fonts.semibold, textAlign: 'center' },
+    burnAmount: { color: t.accent.red, fontSize: 18, fontWeight: fonts.heavy },
     burnReason: { color: t.text.secondary, fontSize: 12, lineHeight: 17, marginTop: 4 },
     burnMeta: { color: t.text.muted, fontSize: 11, marginTop: 2 },
     barContainer: { height: 8, backgroundColor: t.border, borderRadius: 4, marginVertical: 6, overflow: 'hidden' },
     barFill: { height: 8, borderRadius: 4 },
-    reasonTitle: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
+    reasonTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
     reasonDesc: { color: t.text.muted, fontSize: 12, lineHeight: 17, marginTop: 4 },
-    reasonCount: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    reasonCount: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     statCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12, flexDirection: 'row', alignItems: 'center' },
     statIcon: { fontSize: 24, marginRight: 12 },
     statLabel: { color: t.text.muted, fontSize: 12 },
-    statValue: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
-    statChange: { fontSize: 12, fontWeight: '700' },
+    statValue: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
+    statChange: { fontSize: 12, fontWeight: fonts.bold },
     verifiedBadge: { flexDirection: 'row', alignItems: 'center', marginTop: 6 },
-    verifiedText: { color: t.accent.green, fontSize: 11, fontWeight: '600' },
+    verifiedText: { color: t.accent.green, fontSize: 11, fontWeight: fonts.semibold },
     txHash: { color: t.accent.blue, fontSize: 11, fontFamily: 'monospace' },
     transparencyNote: { color: t.text.muted, fontSize: 11, textAlign: 'center', fontStyle: 'italic', marginBottom: 16 },
   }), [t]);
@@ -223,7 +224,7 @@ export function TokenBurnScreen({ onClose }: Props) {
                   <Text style={st.reasonTitle}>{r.category}</Text>
                   <Text style={st.reasonCount}>{r.count} events | {formatOTK(r.totalBurned)} OTK burned</Text>
                 </View>
-                <Text style={{ color: r.color, fontSize: 16, fontWeight: '800' }}>{r.percentage}%</Text>
+                <Text style={{ color: r.color, fontSize: 16, fontWeight: fonts.heavy }}>{r.percentage}%</Text>
               </View>
               <View style={st.barContainer}>
                 <View style={[st.barFill, { width: `${r.percentage}%`, backgroundColor: r.color }]} />

@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Hardware Key Screen — Manage hardware wallet connections.
  *
@@ -63,11 +64,11 @@ export function HardwareKeyScreen({ onClose }: Props) {
       flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
       paddingHorizontal: 20, paddingVertical: 16,
     },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
 
     sectionHeader: {
-      color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase',
+      color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase',
       letterSpacing: 1.5, marginLeft: 24, marginBottom: 12, marginTop: 28,
     },
 
@@ -80,9 +81,9 @@ export function HardwareKeyScreen({ onClose }: Props) {
     coldStorageDot: {
       width: 12, height: 12, borderRadius: 6, backgroundColor: t.accent.green, marginRight: 10,
     },
-    coldStorageTitle: { color: t.text.primary, fontSize: 18, fontWeight: '800', flex: 1 },
+    coldStorageTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, flex: 1 },
     coldStorageProvider: {
-      color: t.accent.green, fontSize: 14, fontWeight: '600', marginBottom: 8,
+      color: t.accent.green, fontSize: 14, fontWeight: fonts.semibold, marginBottom: 8,
     },
     coldStorageDesc: { color: t.text.muted, fontSize: 13, lineHeight: 20, marginBottom: 16 },
 
@@ -96,11 +97,11 @@ export function HardwareKeyScreen({ onClose }: Props) {
       width: 48, height: 48, borderRadius: 12, backgroundColor: t.border,
       justifyContent: 'center', alignItems: 'center', marginRight: 16,
     },
-    providerIconText: { fontSize: 20, fontWeight: '700', color: t.text.primary },
+    providerIconText: { fontSize: 20, fontWeight: fonts.bold, color: t.text.primary },
     providerInfo: { flex: 1 },
-    providerName: { color: t.text.primary, fontSize: 16, fontWeight: '700' },
+    providerName: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
     providerMethod: { color: t.text.muted, fontSize: 12, marginTop: 2 },
-    providerStatusText: { fontSize: 12, fontWeight: '600', marginTop: 4 },
+    providerStatusText: { fontSize: 12, fontWeight: fonts.semibold, marginTop: 4 },
 
     // ─── Section 3: Security Enhancement ───
     securityCard: {
@@ -110,7 +111,7 @@ export function HardwareKeyScreen({ onClose }: Props) {
     securityRow: {
       flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
     },
-    securityLabel: { color: t.text.primary, fontSize: 15, fontWeight: '600', flex: 1 },
+    securityLabel: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold, flex: 1 },
     securitySub: { color: t.text.muted, fontSize: 12, marginTop: 2 },
     securityInfo: {
       color: t.text.muted, fontSize: 13, lineHeight: 20, marginHorizontal: 24,
@@ -120,7 +121,7 @@ export function HardwareKeyScreen({ onClose }: Props) {
     // ─── Shared ───
     actionBtn: { borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginTop: 8 },
     actionBtnFull: { borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginHorizontal: 20, marginTop: 8 },
-    actionBtnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+    actionBtnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
     greenBtn: { backgroundColor: t.accent.green },
     blueBtn: { backgroundColor: t.accent.blue },
 
@@ -129,14 +130,14 @@ export function HardwareKeyScreen({ onClose }: Props) {
       backgroundColor: t.border, borderRadius: 8, paddingVertical: 4,
       paddingHorizontal: 10, marginRight: 6, marginBottom: 6,
     },
-    chainChipText: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    chainChipText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
 
     addressCard: {
       backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 20,
       marginBottom: 12,
     },
     addressChain: {
-      color: t.accent.green, fontSize: 12, fontWeight: '700',
+      color: t.accent.green, fontSize: 12, fontWeight: fonts.bold,
       textTransform: 'uppercase', letterSpacing: 1,
     },
     addressValue: {
@@ -147,7 +148,7 @@ export function HardwareKeyScreen({ onClose }: Props) {
       backgroundColor: t.bg.card, borderRadius: 16, padding: 24, marginHorizontal: 20,
       marginTop: 24, alignItems: 'center',
     },
-    statusText: { color: t.text.primary, fontSize: 16, fontWeight: '700', marginTop: 12 },
+    statusText: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginTop: 12 },
     statusSub: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 8, lineHeight: 20 },
 
     bottomPadding: { height: 40 },
@@ -454,17 +455,17 @@ export function HardwareKeyScreen({ onClose }: Props) {
                         onPress={() => handleExternalImport(p.id)}
                         style={{ marginBottom: 8 }}
                       >
-                        <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: '600' }}>Import</Text>
+                        <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: fonts.semibold }}>Import</Text>
                       </TouchableOpacity>
                       <TouchableOpacity onPress={() => handleDisconnect(p.id)}>
-                        <Text style={{ color: t.accent.red, fontSize: 13, fontWeight: '600' }}>Disconnect</Text>
+                        <Text style={{ color: t.accent.red, fontSize: 13, fontWeight: fonts.semibold }}>Disconnect</Text>
                       </TouchableOpacity>
                     </View>
                   ) : status === 'scanning' ? (
                     <ActivityIndicator color={t.accent.blue} size="small" />
                   ) : (
                     <TouchableOpacity onPress={handleLedgerScan}>
-                      <Text style={{ color: t.accent.blue, fontSize: 13, fontWeight: '600' }}>Scan</Text>
+                      <Text style={{ color: t.accent.blue, fontSize: 13, fontWeight: fonts.semibold }}>Scan</Text>
                     </TouchableOpacity>
                   )}
                 </View>
@@ -492,17 +493,17 @@ export function HardwareKeyScreen({ onClose }: Props) {
                         onPress={() => handleExternalImport(p.id)}
                         style={{ marginBottom: 8 }}
                       >
-                        <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: '600' }}>Import</Text>
+                        <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: fonts.semibold }}>Import</Text>
                       </TouchableOpacity>
                       <TouchableOpacity onPress={() => handleDisconnect(p.id)}>
-                        <Text style={{ color: t.accent.red, fontSize: 13, fontWeight: '600' }}>Disconnect</Text>
+                        <Text style={{ color: t.accent.red, fontSize: 13, fontWeight: fonts.semibold }}>Disconnect</Text>
                       </TouchableOpacity>
                     </View>
                   ) : status === 'connecting' ? (
                     <ActivityIndicator color={t.accent.blue} size="small" />
                   ) : (
                     <TouchableOpacity onPress={handleTrezorConnect}>
-                      <Text style={{ color: t.accent.blue, fontSize: 13, fontWeight: '600' }}>Connect</Text>
+                      <Text style={{ color: t.accent.blue, fontSize: 13, fontWeight: fonts.semibold }}>Connect</Text>
                     </TouchableOpacity>
                   )}
                 </View>
@@ -530,17 +531,17 @@ export function HardwareKeyScreen({ onClose }: Props) {
                         onPress={() => handleExternalImport(p.id)}
                         style={{ marginBottom: 8 }}
                       >
-                        <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: '600' }}>Import</Text>
+                        <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: fonts.semibold }}>Import</Text>
                       </TouchableOpacity>
                       <TouchableOpacity onPress={() => handleDisconnect(p.id)}>
-                        <Text style={{ color: t.accent.red, fontSize: 13, fontWeight: '600' }}>Disconnect</Text>
+                        <Text style={{ color: t.accent.red, fontSize: 13, fontWeight: fonts.semibold }}>Disconnect</Text>
                       </TouchableOpacity>
                     </View>
                   ) : status === 'scanning' ? (
                     <ActivityIndicator color={t.accent.blue} size="small" />
                   ) : (
                     <TouchableOpacity onPress={handleKeystoneScan}>
-                      <Text style={{ color: t.accent.blue, fontSize: 13, fontWeight: '600' }}>Scan QR</Text>
+                      <Text style={{ color: t.accent.blue, fontSize: 13, fontWeight: fonts.semibold }}>Scan QR</Text>
                     </TouchableOpacity>
                   )}
                 </View>
@@ -579,7 +580,7 @@ export function HardwareKeyScreen({ onClose }: Props) {
                     <Text style={s.securityLabel}>Apple Secure Enclave</Text>
                     <Text style={s.securitySub}>Biometric vault encryption</Text>
                   </View>
-                  <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: '600' }}>
+                  <Text style={{ color: t.accent.green, fontSize: 13, fontWeight: fonts.semibold }}>
                     Active
                   </Text>
                 </View>

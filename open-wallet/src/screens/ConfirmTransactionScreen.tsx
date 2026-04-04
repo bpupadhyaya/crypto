@@ -13,6 +13,7 @@ import { PinPad } from '../components/PinPad';
 import { useTheme } from '../hooks/useTheme';
 import { TransactionPipeline, getPipelineSteps, type PipelineStep, type StepStatus } from '../components/TransactionPipeline';
 import type { Theme } from '../utils/theme';
+import { fonts } from '../utils/theme';
 
 interface TxDetails {
   type: 'send' | 'swap' | 'bridge';
@@ -65,11 +66,11 @@ export const ConfirmTransactionScreen = React.memo(({ tx, onConfirm, onCancel }:
     container: { flex: 1, backgroundColor: t.bg.primary },
     content: { flex: 1, justifyContent: 'center', paddingHorizontal: 24 },
     typeBadge: { alignSelf: 'center', paddingVertical: 6, paddingHorizontal: 20, borderRadius: 20, marginBottom: 16 },
-    typeText: { fontSize: 14, fontWeight: '700' },
-    title: { color: t.text.primary, fontSize: 24, fontWeight: '800', textAlign: 'center', marginBottom: 24 },
+    typeText: { fontSize: 14, fontWeight: fonts.bold },
+    title: { color: t.text.primary, fontSize: 24, fontWeight: fonts.heavy, textAlign: 'center', marginBottom: 24 },
     amountCard: { backgroundColor: t.bg.card, borderRadius: 20, padding: 24, alignItems: 'center', marginBottom: 16 },
     amountLabel: { color: t.text.muted, fontSize: 13, textTransform: 'uppercase', letterSpacing: 1 },
-    amount: { color: t.text.primary, fontSize: 28, fontWeight: '800', marginTop: 4 },
+    amount: { color: t.text.primary, fontSize: 28, fontWeight: fonts.heavy, marginTop: 4 },
     arrow: { color: t.text.muted, fontSize: 20, marginVertical: 8 },
     detailsCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 4, marginBottom: 16 },
     detailRow: { flexDirection: 'row', justifyContent: 'space-between', padding: 14, borderBottomWidth: 1, borderBottomColor: t.border },
@@ -77,7 +78,7 @@ export const ConfirmTransactionScreen = React.memo(({ tx, onConfirm, onCancel }:
     detailValue: { color: t.text.secondary, fontSize: 14, maxWidth: '60%', textAlign: 'right' },
     warning: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginBottom: 24, lineHeight: 18 },
     confirmBtn: { borderRadius: 16, paddingVertical: 18, alignItems: 'center' },
-    confirmText: { color: '#ffffff', fontSize: 17, fontWeight: '700' },
+    confirmText: { color: '#ffffff', fontSize: 17, fontWeight: fonts.bold },
     cancelBtn: { paddingVertical: 16, alignItems: 'center' },
     cancelText: { color: t.text.muted, fontSize: 16 },
     executing: { flex: 1, justifyContent: 'center', alignItems: 'center' },

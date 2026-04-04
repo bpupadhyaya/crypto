@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Skill Tree — Visual progression tree for all life skills across OTK channels.
  *
@@ -85,36 +86,36 @@ export function SkillTreeScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, paddingTop: 8 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { flex: 1, paddingHorizontal: 16 },
     subtitle: { color: t.text.muted, fontSize: 13, lineHeight: 19, marginBottom: 16 },
     tabRow: { flexDirection: 'row', marginBottom: 16, gap: 4 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, backgroundColor: t.bg.card, alignItems: 'center' },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    tabText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 14, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
     label: { color: t.text.muted, fontSize: 12 },
-    val: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    val: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     empty: { color: t.text.muted, fontSize: 14, textAlign: 'center', marginTop: 40 },
     channelRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 16 },
     channelChip: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 10, backgroundColor: t.bg.card },
     channelChipActive: { backgroundColor: t.accent.blue },
-    channelChipText: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    channelChipText: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     channelChipTextActive: { color: '#fff' },
-    skillName: { color: t.text.primary, fontSize: 14, fontWeight: '700', marginBottom: 2 },
+    skillName: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold, marginBottom: 2 },
     skillDesc: { color: t.text.muted, fontSize: 12, lineHeight: 17, marginTop: 4 },
     barContainer: { height: 8, backgroundColor: t.border, borderRadius: 4, marginVertical: 6, overflow: 'hidden' },
     barFill: { height: 8, borderRadius: 4 },
-    levelText: { color: t.text.secondary, fontSize: 11, fontWeight: '700' },
+    levelText: { color: t.text.secondary, fontSize: 11, fontWeight: fonts.bold },
     lockIcon: { fontSize: 20, marginRight: 10 },
-    progressNum: { fontSize: 24, fontWeight: '800', marginBottom: 2 },
-    progressLabel: { color: t.text.muted, fontSize: 11, fontWeight: '600' },
+    progressNum: { fontSize: 24, fontWeight: fonts.heavy, marginBottom: 2 },
+    progressLabel: { color: t.text.muted, fontSize: 11, fontWeight: fonts.semibold },
     summaryRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
     summaryCard: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, padding: 14, alignItems: 'center' },
-    unlockReq: { color: t.accent.yellow, fontSize: 12, fontWeight: '700', marginTop: 4 },
+    unlockReq: { color: t.accent.yellow, fontSize: 12, fontWeight: fonts.bold, marginTop: 4 },
   }), [t]);
 
   const skills = demoMode ? DEMO_SKILLS : [];
@@ -200,7 +201,7 @@ export function SkillTreeScreen({ onClose }: Props) {
                         <Text style={st.skillName}>{skill.name}</Text>
                         <Text style={st.levelText}>Level {skill.level}/{skill.maxLevel}</Text>
                       </View>
-                      <Text style={{ color: meta?.color || t.text.muted, fontSize: 12, fontWeight: '700' }}>
+                      <Text style={{ color: meta?.color || t.text.muted, fontSize: 12, fontWeight: fonts.bold }}>
                         {skill.otkEarned}/{skill.otkRequired} OTK
                       </Text>
                     </View>
@@ -224,8 +225,8 @@ export function SkillTreeScreen({ onClose }: Props) {
               <View key={cp.channel} style={st.card}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
                   <Text style={{ fontSize: 20, marginRight: 10 }}>{cp.icon}</Text>
-                  <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: '700', flex: 1 }}>{cp.label}</Text>
-                  <Text style={{ color: cp.color, fontSize: 14, fontWeight: '800' }}>{cp.unlockedSkills}/{cp.totalSkills}</Text>
+                  <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, flex: 1 }}>{cp.label}</Text>
+                  <Text style={{ color: cp.color, fontSize: 14, fontWeight: fonts.heavy }}>{cp.unlockedSkills}/{cp.totalSkills}</Text>
                 </View>
                 <View style={st.barContainer}>
                   <View style={[st.barFill, { width: `${pct}%`, backgroundColor: cp.color }]} />
@@ -242,7 +243,7 @@ export function SkillTreeScreen({ onClose }: Props) {
         {activeTab === 'unlock' && (
           lockedSkills.length === 0 ? (
             <View style={st.card}>
-              <Text style={{ color: t.accent.green, fontSize: 15, fontWeight: '700', textAlign: 'center' }}>All Skills Unlocked!</Text>
+              <Text style={{ color: t.accent.green, fontSize: 15, fontWeight: fonts.bold, textAlign: 'center' }}>All Skills Unlocked!</Text>
               <Text style={{ color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 4 }}>You have unlocked every available skill.</Text>
             </View>
           ) : lockedSkills.map(skill => {

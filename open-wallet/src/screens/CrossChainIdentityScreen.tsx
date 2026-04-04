@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Cross-Chain Identity Screen — Article II: Identity Linking.
  *
@@ -61,38 +62,38 @@ export function CrossChainIdentityScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8 },
-    title: { color: t.text.primary, fontSize: 22, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 22, fontWeight: fonts.heavy },
     close: { color: t.accent.blue, fontSize: 16 },
     tabs: { flexDirection: 'row', paddingHorizontal: 16, gap: 8, marginBottom: 16 },
     tab: { paddingVertical: 8, paddingHorizontal: 14, borderRadius: 20, backgroundColor: t.bg.card },
     tabActive: { backgroundColor: t.accent.blue },
-    tabText: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
+    tabText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 16, marginBottom: 12 },
     chainRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
     chainIcon: { width: 44, height: 44, borderRadius: 22, backgroundColor: t.border, alignItems: 'center', justifyContent: 'center' },
-    chainIconText: { color: t.text.primary, fontSize: 14, fontWeight: '800' },
-    chainName: { color: t.text.primary, fontSize: 16, fontWeight: '700' },
+    chainIconText: { color: t.text.primary, fontSize: 14, fontWeight: fonts.heavy },
+    chainName: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold },
     chainAddr: { color: t.text.secondary, fontSize: 13, fontFamily: 'monospace' },
     verifiedBadge: { flexDirection: 'row', alignItems: 'center', gap: 4 },
     verifiedDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: t.accent.green },
     unverifiedDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: t.text.muted },
-    verifiedText: { color: t.accent.green, fontSize: 12, fontWeight: '600' },
+    verifiedText: { color: t.accent.green, fontSize: 12, fontWeight: fonts.semibold },
     metaRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 10, paddingTop: 10, borderTopWidth: 1, borderTopColor: t.border },
     metaLabel: { color: t.text.muted, fontSize: 12 },
-    metaValue: { color: t.text.primary, fontSize: 13, fontWeight: '600' },
+    metaValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold },
     privacyChip: { paddingVertical: 2, paddingHorizontal: 8, borderRadius: 8 },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 20, marginTop: 16, marginBottom: 8 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 20, marginTop: 16, marginBottom: 8 },
     input: { backgroundColor: t.bg.card, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginHorizontal: 16, marginBottom: 12 },
     chainGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, paddingHorizontal: 16, marginBottom: 16 },
     chainTile: { width: '22%' as any, paddingVertical: 12, borderRadius: 12, backgroundColor: t.bg.card, alignItems: 'center' },
     chainTileActive: { borderWidth: 2, borderColor: t.accent.blue },
-    chainTileIcon: { fontSize: 20, fontWeight: '800', marginBottom: 4 },
-    chainTileName: { color: t.text.secondary, fontSize: 10, fontWeight: '600' },
+    chainTileIcon: { fontSize: 20, fontWeight: fonts.heavy, marginBottom: 4 },
+    chainTileName: { color: t.text.secondary, fontSize: 10, fontWeight: fonts.semibold },
     verifyBtn: { marginHorizontal: 16, paddingVertical: 14, borderRadius: 12, backgroundColor: t.accent.blue, alignItems: 'center', marginTop: 8 },
-    btnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+    btnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
     repCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginHorizontal: 16, marginBottom: 12, alignItems: 'center' },
-    repScore: { color: t.accent.green, fontSize: 48, fontWeight: '800' },
+    repScore: { color: t.accent.green, fontSize: 48, fontWeight: fonts.heavy },
     repLabel: { color: t.text.secondary, fontSize: 13 },
     repBreakdown: { marginTop: 12, width: '100%' },
     repRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6 },
@@ -162,7 +163,7 @@ export function CrossChainIdentityScreen({ onClose }: Props) {
                     <View><Text style={st.metaLabel}>Linked</Text><Text style={st.metaValue}>{id.linkedAt}</Text></View>
                     <View><Text style={st.metaLabel}>Privacy</Text>
                       <View style={[st.privacyChip, { backgroundColor: privacyColor(id.privacy) + '20' }]}>
-                        <Text style={{ color: privacyColor(id.privacy), fontSize: 11, fontWeight: '700' }}>{id.privacy}</Text>
+                        <Text style={{ color: privacyColor(id.privacy), fontSize: 11, fontWeight: fonts.bold }}>{id.privacy}</Text>
                       </View>
                     </View>
                   </View>

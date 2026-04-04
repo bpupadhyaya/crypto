@@ -12,6 +12,7 @@ import { LineChart } from '../components/LineChart';
 import { useTheme } from '../hooks/useTheme';
 import type { TokenInfo } from '../core/tokens/registry';
 import type { Theme } from '../utils/theme';
+import { fonts } from '../utils/theme';
 
 const COINGECKO_API = 'https://api.coingecko.com/api/v3';
 const TIMEFRAMES = [
@@ -38,31 +39,31 @@ export const TokenDetailScreen = React.memo(({ token, price, onClose, onSend }: 
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    backBtn: { color: t.accent.blue, fontSize: 16, fontWeight: '600' },
+    backBtn: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
     headerTitle: { flexDirection: 'row', alignItems: 'center', gap: 8 },
     dot: { width: 12, height: 12, borderRadius: 6 },
-    tokenName: { color: t.text.primary, fontSize: 18, fontWeight: '800' },
+    tokenName: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
     priceSection: { alignItems: 'center', paddingTop: 8, paddingBottom: 16 },
-    price: { color: t.text.primary, fontSize: 36, fontWeight: '800' },
-    change: { fontSize: 16, fontWeight: '700', marginTop: 4 },
+    price: { color: t.text.primary, fontSize: 36, fontWeight: fonts.heavy },
+    change: { fontSize: 16, fontWeight: fonts.bold, marginTop: 4 },
     fullName: { color: t.text.muted, fontSize: 14, marginTop: 4 },
     chartContainer: { marginHorizontal: 16 },
     chartLoading: { width: '100%', height: 200, justifyContent: 'center', alignItems: 'center', backgroundColor: t.bg.card, borderRadius: 12 },
     timeframes: { flexDirection: 'row', justifyContent: 'center', gap: 8, marginTop: 16, marginBottom: 24 },
     tfBtn: { paddingVertical: 6, paddingHorizontal: 16, borderRadius: 20, backgroundColor: t.bg.card },
     tfBtnActive: { backgroundColor: t.accent.green },
-    tfText: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
+    tfText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
     tfTextActive: { color: t.bg.primary },
     balanceCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginHorizontal: 16, alignItems: 'center' },
     balanceLabel: { color: t.text.muted, fontSize: 13, textTransform: 'uppercase', letterSpacing: 1 },
-    balanceAmount: { color: t.text.primary, fontSize: 24, fontWeight: '700', marginTop: 8 },
+    balanceAmount: { color: t.text.primary, fontSize: 24, fontWeight: fonts.bold, marginTop: 8 },
     balanceUsd: { color: t.text.secondary, fontSize: 16, marginTop: 4 },
     actions: { flexDirection: 'row', gap: 12, marginHorizontal: 16, marginTop: 16 },
     actionBtn: { flex: 1, paddingVertical: 14, borderRadius: 12, alignItems: 'center' },
-    actionText: { fontSize: 15, fontWeight: '700' },
+    actionText: { fontSize: 15, fontWeight: fonts.bold },
     stakingCard: { backgroundColor: t.accent.green + '10', borderRadius: 16, padding: 20, marginHorizontal: 16, marginTop: 16, alignItems: 'center' },
-    stakingLabel: { color: t.accent.green, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1 },
-    stakingApy: { color: t.accent.green, fontSize: 32, fontWeight: '800', marginTop: 4 },
+    stakingLabel: { color: t.accent.green, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1 },
+    stakingApy: { color: t.accent.green, fontSize: 32, fontWeight: fonts.heavy, marginTop: 4 },
     stakingNote: { color: t.text.muted, fontSize: 12, marginTop: 4 },
     infoCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 4, marginHorizontal: 16, marginTop: 16 },
     infoRow: { flexDirection: 'row', justifyContent: 'space-between', padding: 14, borderBottomWidth: 1, borderBottomColor: t.border },

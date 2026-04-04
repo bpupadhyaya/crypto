@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Gardening Screen — Personal gardening tracker, plant care, garden community.
  *
@@ -164,73 +165,73 @@ export function GardeningScreen({ onClose }: Props) {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingBottom: 40 },
     tabRow: { flexDirection: 'row', paddingHorizontal: 12, marginBottom: 12 },
     tabBtn: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 16, marginHorizontal: 4 },
     tabActive: { backgroundColor: t.accent.green + '20' },
-    tabText: { color: t.text.muted, fontSize: 12, fontWeight: '600' },
+    tabText: { color: t.text.muted, fontSize: 12, fontWeight: fonts.semibold },
     tabTextActive: { color: t.accent.green },
     card: { backgroundColor: t.bg.secondary, borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16 },
-    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: '700', marginBottom: 12, marginHorizontal: 20 },
+    sectionTitle: { color: t.text.primary, fontSize: 16, fontWeight: fonts.bold, marginBottom: 12, marginHorizontal: 20 },
     // Garden
     plantCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
     plantRow: { flexDirection: 'row', alignItems: 'center' },
     plantIcon: { width: 40, height: 40, borderRadius: 20, backgroundColor: t.accent.green + '20', justifyContent: 'center', alignItems: 'center', marginRight: 12 },
-    plantIconText: { color: t.accent.green, fontSize: 16, fontWeight: '700' },
+    plantIconText: { color: t.accent.green, fontSize: 16, fontWeight: fonts.bold },
     plantInfo: { flex: 1 },
-    plantName: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
+    plantName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
     plantSpecies: { color: t.text.muted, fontSize: 12, fontStyle: 'italic', marginTop: 1 },
     plantMeta: { color: t.text.muted, fontSize: 12, marginTop: 4 },
     stageBadge: { paddingHorizontal: 10, paddingVertical: 3, borderRadius: 8, alignSelf: 'flex-start', marginTop: 6 },
-    stageText: { color: '#fff', fontSize: 11, fontWeight: '700', textTransform: 'uppercase' },
+    stageText: { color: '#fff', fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase' },
     summaryCard: { backgroundColor: t.accent.green + '12', borderRadius: 16, padding: 20, marginHorizontal: 20, marginBottom: 16, alignItems: 'center' },
-    summaryText: { color: t.text.primary, fontSize: 15, fontWeight: '600', textAlign: 'center', lineHeight: 22 },
+    summaryText: { color: t.text.primary, fontSize: 15, fontWeight: fonts.semibold, textAlign: 'center', lineHeight: 22 },
     statRow: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 12, width: '100%' },
     statItem: { alignItems: 'center' },
-    statValue: { color: t.text.primary, fontSize: 20, fontWeight: '800' },
+    statValue: { color: t.text.primary, fontSize: 20, fontWeight: fonts.heavy },
     statLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
     // Care
     reminderCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
     reminderRow: { flexDirection: 'row', alignItems: 'center' },
     reminderIcon: { width: 36, height: 36, borderRadius: 18, justifyContent: 'center', alignItems: 'center', marginRight: 12 },
-    reminderIconText: { color: '#fff', fontSize: 14, fontWeight: '700' },
+    reminderIconText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
     reminderInfo: { flex: 1 },
-    reminderTitle: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
+    reminderTitle: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
     reminderMeta: { color: t.text.muted, fontSize: 12, marginTop: 2 },
     reminderDone: { backgroundColor: t.accent.green, paddingHorizontal: 14, paddingVertical: 8, borderRadius: 10 },
-    reminderDoneText: { color: '#fff', fontSize: 13, fontWeight: '600' },
+    reminderDoneText: { color: '#fff', fontSize: 13, fontWeight: fonts.semibold },
     // Journal
     journalCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    journalDate: { color: t.accent.blue, fontSize: 12, fontWeight: '700' },
+    journalDate: { color: t.accent.blue, fontSize: 12, fontWeight: fonts.bold },
     journalNote: { color: t.text.primary, fontSize: 14, marginTop: 6, lineHeight: 20 },
     journalMeta: { color: t.text.muted, fontSize: 11, marginTop: 6 },
     journalTags: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 8 },
     journalTag: { backgroundColor: t.accent.green + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
-    journalTagText: { color: t.accent.green, fontSize: 11, fontWeight: '600' },
+    journalTagText: { color: t.accent.green, fontSize: 11, fontWeight: fonts.semibold },
     addJournalBtn: { backgroundColor: t.accent.green, borderRadius: 14, paddingVertical: 14, alignItems: 'center', marginHorizontal: 20, marginBottom: 16 },
-    addJournalText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+    addJournalText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
     // Harvest
     harvestCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    harvestName: { color: t.text.primary, fontSize: 14, fontWeight: '700' },
+    harvestName: { color: t.text.primary, fontSize: 14, fontWeight: fonts.bold },
     harvestMeta: { color: t.text.muted, fontSize: 12, marginTop: 4 },
-    harvestShared: { color: t.accent.green, fontSize: 13, fontWeight: '600', marginTop: 4 },
-    harvestEotk: { color: t.accent.green, fontSize: 14, fontWeight: '700', marginTop: 2 },
+    harvestShared: { color: t.accent.green, fontSize: 13, fontWeight: fonts.semibold, marginTop: 4 },
+    harvestEotk: { color: t.accent.green, fontSize: 14, fontWeight: fonts.bold, marginTop: 2 },
     // Tips
     tipCard: { backgroundColor: t.bg.secondary, borderRadius: 14, padding: 16, marginHorizontal: 20, marginBottom: 12 },
-    tipTitle: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
-    tipCategory: { color: t.accent.blue, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', marginTop: 2 },
+    tipTitle: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
+    tipCategory: { color: t.accent.blue, fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase', marginTop: 2 },
     tipContent: { color: t.text.secondary, fontSize: 13, marginTop: 8, lineHeight: 19 },
     tipFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 },
     tipAuthor: { color: t.text.muted, fontSize: 12 },
-    tipLikes: { color: t.accent.orange, fontSize: 13, fontWeight: '600' },
+    tipLikes: { color: t.accent.orange, fontSize: 13, fontWeight: fonts.semibold },
     // Seed bank
     seedBtn: { backgroundColor: t.accent.blue + '15', borderRadius: 14, paddingVertical: 14, alignItems: 'center', marginHorizontal: 20, marginBottom: 16, borderWidth: 1, borderColor: t.accent.blue + '30' },
-    seedBtnText: { color: t.accent.blue, fontSize: 15, fontWeight: '700' },
+    seedBtnText: { color: t.accent.blue, fontSize: 15, fontWeight: fonts.bold },
     // Demo
     demoTag: { backgroundColor: t.accent.orange + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, alignSelf: 'center', marginBottom: 12 },
-    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: '700' },
+    demoText: { color: t.accent.orange, fontSize: 11, fontWeight: fonts.bold },
   }), [t]);
 
   const tabs: Array<{ key: Tab; label: string }> = [
@@ -346,7 +347,7 @@ export function GardeningScreen({ onClose }: Props) {
       <View style={s.card}>
         {DEMO_PLANTS.map((pl) => (
           <View key={pl.id} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8, borderBottomColor: t.bg.primary, borderBottomWidth: 1 }}>
-            <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: '600' }}>{pl.icon} {pl.name}</Text>
+            <Text style={{ color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold }}>{pl.icon} {pl.name}</Text>
             <Text style={{ color: t.text.muted, fontSize: 12 }}>Watered: {pl.lastWatered}</Text>
           </View>
         ))}

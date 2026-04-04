@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Offline Queue Screen — View and manage pending offline transactions.
  *
@@ -181,12 +182,12 @@ export function OfflineQueueScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     statusBar: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 12, marginHorizontal: 16, borderRadius: 12, marginBottom: 16 },
     statusOffline: { backgroundColor: t.accent.red + '20' },
     statusOnline: { backgroundColor: t.accent.green + '20' },
-    statusText: { fontSize: 14, fontWeight: '600' },
+    statusText: { fontSize: 14, fontWeight: fonts.semibold },
     statusTextOffline: { color: t.accent.red },
     statusTextOnline: { color: t.accent.green },
     lastOnlineText: { color: t.text.muted, fontSize: 12 },
@@ -195,21 +196,21 @@ export function OfflineQueueScreen({ onClose }: Props) {
     txRowLast: { marginBottom: 0 },
     txHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
     txChainBadge: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 6 },
-    txChainText: { fontSize: 11, fontWeight: '700', color: '#fff' },
+    txChainText: { fontSize: 11, fontWeight: fonts.bold, color: '#fff' },
     txTime: { color: t.text.muted, fontSize: 12 },
     txDescription: { color: t.text.primary, fontSize: 14, marginBottom: 8 },
     txActions: { flexDirection: 'row', justifyContent: 'flex-end' },
     deleteBtn: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8, backgroundColor: t.accent.red + '20' },
-    deleteText: { color: t.accent.red, fontSize: 12, fontWeight: '600' },
+    deleteText: { color: t.accent.red, fontSize: 12, fontWeight: fonts.semibold },
     divider: { height: 1, backgroundColor: t.border, marginVertical: 12 },
     broadcastBtn: { backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginHorizontal: 16, marginTop: 8, marginBottom: 16 },
     broadcastBtnDisabled: { opacity: 0.5 },
-    broadcastText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+    broadcastText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
     emptyContainer: { alignItems: 'center', paddingTop: 80 },
     emptyText: { color: t.text.muted, fontSize: 16 },
     emptySubtext: { color: t.text.muted, fontSize: 13, marginTop: 8, textAlign: 'center', paddingHorizontal: 40 },
     countBadge: { backgroundColor: t.accent.orange + '20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 10 },
-    countText: { color: t.accent.orange, fontSize: 13, fontWeight: '700' },
+    countText: { color: t.accent.orange, fontSize: 13, fontWeight: fonts.bold },
   }), [t]);
 
   return (
@@ -246,7 +247,7 @@ export function OfflineQueueScreen({ onClose }: Props) {
           <>
             {/* Queue Count */}
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, marginBottom: 12 }}>
-              <Text style={{ color: t.text.secondary, fontSize: 13, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 1 }}>
+              <Text style={{ color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1 }}>
                 Pending Transactions
               </Text>
               <View style={st.countBadge}>

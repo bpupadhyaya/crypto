@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Simple ⇄ Pro mode toggle.
  * Appears in the header. One tap to switch the entire UI.
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
   label: {
     color: '#a0a0b0',
     fontSize: 11,
-    fontWeight: '700',
+    fontWeight: fonts.bold,
     letterSpacing: 1,
   },
 });

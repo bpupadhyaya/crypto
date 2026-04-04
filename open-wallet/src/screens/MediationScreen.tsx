@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Mediation Screen — Conflict Resolution & Mediation between parties.
  *
@@ -157,67 +158,67 @@ export function MediationScreen({ onClose }: Props) {
   const st = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16 },
-    title: { color: t.text.primary, fontSize: 20, fontWeight: '700' },
+    title: { color: t.text.primary, fontSize: 20, fontWeight: fonts.bold },
     closeBtn: { color: t.accent.blue, fontSize: 16 },
     scroll: { paddingHorizontal: 16 },
     tabRow: { flexDirection: 'row', gap: 8, paddingHorizontal: 16, marginBottom: 16 },
     tab: { flex: 1, paddingVertical: 10, borderRadius: 10, alignItems: 'center', backgroundColor: t.bg.card },
     tabActive: { backgroundColor: t.accent.purple },
-    tabText: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
+    tabText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
     tabTextActive: { color: '#fff' },
-    section: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
+    section: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 20, marginBottom: 8, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
     label: { color: t.text.secondary, fontSize: 13 },
-    value: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
+    value: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
     statusBadge: { paddingHorizontal: 10, paddingVertical: 3, borderRadius: 8 },
-    statusText: { fontSize: 11, fontWeight: '700', textTransform: 'uppercase', color: '#fff' },
+    statusText: { fontSize: 11, fontWeight: fonts.bold, textTransform: 'uppercase', color: '#fff' },
     descText: { color: t.text.secondary, fontSize: 13, marginBottom: 8, lineHeight: 18 },
     emptyText: { color: t.text.muted, fontSize: 14, textAlign: 'center', paddingVertical: 40 },
     heroCard: { backgroundColor: t.accent.purple + '10', borderRadius: 24, padding: 24, marginBottom: 16, alignItems: 'center' },
     heroIcon: { fontSize: 48, marginBottom: 8 },
-    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: '800', textAlign: 'center' },
+    heroTitle: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy, textAlign: 'center' },
     heroSubtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginTop: 4, lineHeight: 20 },
     inputCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 12 },
-    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: '600', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 },
+    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 },
     input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15 },
     messageInput: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, minHeight: 100, textAlignVertical: 'top' },
     typeRow: { flexDirection: 'row', gap: 8, flexWrap: 'wrap', marginBottom: 12 },
     typeChip: { paddingVertical: 10, paddingHorizontal: 14, borderRadius: 12, backgroundColor: t.bg.card, alignItems: 'center', minWidth: 80 },
     typeChipActive: { backgroundColor: t.accent.purple },
     typeIcon: { fontSize: 24, marginBottom: 4 },
-    typeLabel: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    typeLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     typeLabelActive: { color: '#fff' },
     btn: { borderRadius: 12, paddingVertical: 14, alignItems: 'center', marginBottom: 10 },
     btnPrimary: { backgroundColor: t.accent.purple },
     btnSecondary: { backgroundColor: t.bg.card },
     btnSuccess: { backgroundColor: t.accent.green },
-    btnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
-    btnTextSecondary: { color: t.accent.purple, fontSize: 15, fontWeight: '700' },
+    btnText: { color: '#fff', fontSize: 15, fontWeight: fonts.bold },
+    btnTextSecondary: { color: t.accent.purple, fontSize: 15, fontWeight: fonts.bold },
     noteCard: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, marginBottom: 10, borderLeftWidth: 3 },
-    noteAuthor: { fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 },
+    noteAuthor: { fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 },
     noteText: { color: t.text.primary, fontSize: 14, lineHeight: 20 },
     noteTime: { color: t.text.muted, fontSize: 11, marginTop: 6 },
     detailRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: t.border },
     detailLabel: { color: t.text.secondary, fontSize: 13 },
-    detailValue: { color: t.text.primary, fontSize: 13, fontWeight: '600', maxWidth: '60%', textAlign: 'right' },
+    detailValue: { color: t.text.primary, fontSize: 13, fontWeight: fonts.semibold, maxWidth: '60%', textAlign: 'right' },
     mediatorCard: { backgroundColor: t.bg.card, borderRadius: 14, padding: 14, marginBottom: 10, flexDirection: 'row', alignItems: 'center', gap: 12 },
     mediatorAvatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: t.accent.purple + '20', alignItems: 'center', justifyContent: 'center' },
     mediatorAvatarText: { fontSize: 20 },
     mediatorInfo: { flex: 1 },
-    mediatorName: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
-    mediatorScore: { color: t.accent.green, fontSize: 12, fontWeight: '600', marginTop: 2 },
+    mediatorName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
+    mediatorScore: { color: t.accent.green, fontSize: 12, fontWeight: fonts.semibold, marginTop: 2 },
     mediatorExpertise: { color: t.text.muted, fontSize: 11, marginTop: 2 },
     selectBtn: { backgroundColor: t.accent.purple, borderRadius: 8, paddingHorizontal: 14, paddingVertical: 8 },
-    selectBtnText: { color: '#fff', fontSize: 12, fontWeight: '700' },
+    selectBtnText: { color: '#fff', fontSize: 12, fontWeight: fonts.bold },
     agreementCard: { backgroundColor: t.accent.green + '10', borderRadius: 16, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: t.accent.green + '30' },
-    agreementTitle: { color: t.accent.green, fontSize: 14, fontWeight: '700', marginBottom: 8 },
+    agreementTitle: { color: t.accent.green, fontSize: 14, fontWeight: fonts.bold, marginBottom: 8 },
     agreementTerms: { color: t.text.primary, fontSize: 14, lineHeight: 22 },
     signatureRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 },
     signatureBadge: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-    signatureText: { fontSize: 12, fontWeight: '600' },
+    signatureText: { fontSize: 12, fontWeight: fonts.semibold },
     chainBadge: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 8 },
-    chainText: { color: t.accent.green, fontSize: 11, fontWeight: '600' },
+    chainText: { color: t.accent.green, fontSize: 11, fontWeight: fonts.semibold },
     warningCard: { backgroundColor: t.accent.yellow + '15', borderRadius: 12, padding: 14, marginBottom: 16 },
     warningText: { color: t.accent.yellow, fontSize: 13, lineHeight: 18, textAlign: 'center' },
   }), [t]);
@@ -379,7 +380,7 @@ export function MediationScreen({ onClose }: Props) {
           {/* Status & type */}
           <View style={st.card}>
             <View style={st.row}>
-              <Text style={{ color: t.text.primary, fontSize: 16, fontWeight: '700' }}>
+              <Text style={{ color: t.text.primary, fontSize: 16, fontWeight: fonts.bold }}>
                 {DISPUTE_TYPES.find((d) => d.key === m.disputeType)?.icon}{' '}
                 {DISPUTE_TYPES.find((d) => d.key === m.disputeType)?.label} Dispute
               </Text>
@@ -590,7 +591,7 @@ export function MediationScreen({ onClose }: Props) {
                   activeOpacity={0.7}
                 >
                   <View style={st.row}>
-                    <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: '700', flex: 1 }}>
+                    <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, flex: 1 }}>
                       {DISPUTE_TYPES.find((d) => d.key === m.disputeType)?.icon}{' '}
                       {DISPUTE_TYPES.find((d) => d.key === m.disputeType)?.label}
                     </Text>
@@ -710,7 +711,7 @@ export function MediationScreen({ onClose }: Props) {
                   activeOpacity={0.7}
                 >
                   <View style={st.row}>
-                    <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: '700', flex: 1 }}>
+                    <Text style={{ color: t.text.primary, fontSize: 15, fontWeight: fonts.bold, flex: 1 }}>
                       {DISPUTE_TYPES.find((d) => d.key === m.disputeType)?.icon}{' '}
                       {DISPUTE_TYPES.find((d) => d.key === m.disputeType)?.label}
                     </Text>
@@ -736,7 +737,7 @@ export function MediationScreen({ onClose }: Props) {
                   {m.agreement?.recordedOnChain && (
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                       <Text style={{ fontSize: 11 }}>{'\u{1F517}'}</Text>
-                      <Text style={{ color: t.accent.green, fontSize: 11, fontWeight: '600' }}>Recorded on-chain</Text>
+                      <Text style={{ color: t.accent.green, fontSize: 11, fontWeight: fonts.semibold }}>Recorded on-chain</Text>
                     </View>
                   )}
                 </TouchableOpacity>

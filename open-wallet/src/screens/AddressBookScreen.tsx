@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Address Book — Save and manage frequent recipient addresses.
  */
@@ -35,25 +36,25 @@ export const AddressBookScreen = React.memo(({ onSelect, onClose }: Props) => {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    back: { color: t.accent.blue, fontSize: 16, fontWeight: '600' },
-    title: { color: t.text.primary, fontSize: 18, fontWeight: '800' },
-    addBtn: { color: t.accent.green, fontSize: 15, fontWeight: '700' },
+    back: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
+    title: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
+    addBtn: { color: t.accent.green, fontSize: 15, fontWeight: fonts.bold },
     addForm: { backgroundColor: t.bg.card, marginHorizontal: 16, borderRadius: 16, padding: 16, marginBottom: 16 },
     input: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginBottom: 10 },
     chainRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
     chainChip: { backgroundColor: t.bg.primary, borderRadius: 20, paddingVertical: 6, paddingHorizontal: 14 },
     chainActive: { backgroundColor: t.accent.green },
     chainText: { color: t.text.secondary, fontSize: 13 },
-    chainTextActive: { color: t.bg.primary, fontWeight: '700' },
+    chainTextActive: { color: t.bg.primary, fontWeight: fonts.bold },
     saveBtn: { backgroundColor: t.accent.green, borderRadius: 12, paddingVertical: 14, alignItems: 'center' },
-    saveBtnText: { color: t.bg.primary, fontSize: 15, fontWeight: '700' },
+    saveBtnText: { color: t.bg.primary, fontSize: 15, fontWeight: fonts.bold },
     contactRow: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: t.border },
     contactInfo: { flex: 1 },
-    contactName: { color: t.text.primary, fontSize: 16, fontWeight: '600' },
+    contactName: { color: t.text.primary, fontSize: 16, fontWeight: fonts.semibold },
     contactAddress: { color: t.text.muted, fontSize: 12, marginTop: 2, maxWidth: 250 },
-    contactChain: { color: t.text.secondary, fontSize: 12, fontWeight: '600' },
+    contactChain: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.semibold },
     empty: { alignItems: 'center' },
-    emptyText: { color: t.text.secondary, fontSize: 16, fontWeight: '600' },
+    emptyText: { color: t.text.secondary, fontSize: 16, fontWeight: fonts.semibold },
     emptyHint: { color: t.text.muted, fontSize: 13, marginTop: 4 },
   }), [t]);
 

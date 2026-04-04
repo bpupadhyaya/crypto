@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Token Comparison Screen — Compare two tokens side by side.
  * Price overlay chart (normalized), correlation, relative performance,
@@ -313,36 +314,36 @@ export const TokenCompareScreen = React.memo(({ onClose }: Props) => {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    back: { color: t.accent.blue, fontSize: 16, fontWeight: '600' },
-    title: { color: t.text.primary, fontSize: 18, fontWeight: '800' },
+    back: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
+    title: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
     scroll: { paddingHorizontal: 16, paddingBottom: 40 },
-    demoTag: { color: t.accent.yellow, fontSize: 11, fontWeight: '700', textAlign: 'center', marginBottom: 8 },
+    demoTag: { color: t.accent.yellow, fontSize: 11, fontWeight: fonts.bold, textAlign: 'center', marginBottom: 8 },
     selectorSection: { marginBottom: 16 },
-    selectorLabel: { color: t.text.muted, fontSize: 12, fontWeight: '700', marginBottom: 6 },
+    selectorLabel: { color: t.text.muted, fontSize: 12, fontWeight: fonts.bold, marginBottom: 6 },
     tokenRow: { flexDirection: 'row', gap: 6, flexWrap: 'wrap' },
     tokenChip: { borderRadius: 20, paddingVertical: 8, paddingHorizontal: 14, borderWidth: 2, borderColor: 'transparent' },
-    tokenText: { fontSize: 14, fontWeight: '700' },
-    sectionLabel: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 10, marginLeft: 4 },
+    tokenText: { fontSize: 14, fontWeight: fonts.bold },
+    sectionLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginTop: 24, marginBottom: 10, marginLeft: 4 },
     card: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16 },
     chartLegend: { flexDirection: 'row', justifyContent: 'center', gap: 20, marginBottom: 12 },
     legendItem: { flexDirection: 'row', alignItems: 'center', gap: 6 },
     legendDot: { width: 10, height: 10, borderRadius: 5 },
-    legendText: { fontSize: 13, fontWeight: '600' },
+    legendText: { fontSize: 13, fontWeight: fonts.semibold },
     touchInfo: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 8 },
-    touchVal: { fontSize: 13, fontWeight: '700' },
+    touchVal: { fontSize: 13, fontWeight: fonts.bold },
     metricRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10 },
     metricLabel: { color: t.text.muted, fontSize: 14, flex: 1.2 },
-    metricValA: { fontSize: 13, fontWeight: '700', flex: 1, textAlign: 'right' },
-    metricValB: { fontSize: 13, fontWeight: '700', flex: 1, textAlign: 'right' },
+    metricValA: { fontSize: 13, fontWeight: fonts.bold, flex: 1, textAlign: 'right' },
+    metricValB: { fontSize: 13, fontWeight: fonts.bold, flex: 1, textAlign: 'right' },
     divider: { height: 1, backgroundColor: t.border },
     correlationRow: { alignItems: 'center', paddingVertical: 16 },
-    correlationValue: { fontSize: 36, fontWeight: '800' },
+    correlationValue: { fontSize: 36, fontWeight: fonts.heavy },
     correlationLabel: { color: t.text.muted, fontSize: 13, marginTop: 4 },
     correlationDesc: { color: t.text.secondary, fontSize: 12, marginTop: 8, textAlign: 'center', paddingHorizontal: 20 },
     perfRow: { flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 16 },
     perfItem: { alignItems: 'center' },
-    perfSymbol: { fontSize: 14, fontWeight: '700', marginBottom: 4 },
-    perfValue: { fontSize: 22, fontWeight: '800' },
+    perfSymbol: { fontSize: 14, fontWeight: fonts.bold, marginBottom: 4 },
+    perfValue: { fontSize: 22, fontWeight: fonts.heavy },
     perfLabel: { color: t.text.muted, fontSize: 11, marginTop: 2 },
   }), [t]);
 
@@ -482,7 +483,7 @@ export const TokenCompareScreen = React.memo(({ onClose }: Props) => {
           <View style={s.divider} />
           <View style={{ alignItems: 'center', paddingTop: 12 }}>
             <Text style={{ color: t.text.muted, fontSize: 12 }}>Outperformer</Text>
-            <Text style={{ color: perfA > perfB ? colorA : colorB, fontSize: 16, fontWeight: '800', marginTop: 4 }}>
+            <Text style={{ color: perfA > perfB ? colorA : colorB, fontSize: 16, fontWeight: fonts.heavy, marginTop: 4 }}>
               {perfA > perfB ? tokenA : tokenB} by {Math.abs(perfA - perfB).toFixed(2)}%
             </Text>
           </View>
@@ -493,7 +494,7 @@ export const TokenCompareScreen = React.memo(({ onClose }: Props) => {
         <View style={s.card}>
           {/* Header */}
           <View style={s.metricRow}>
-            <Text style={[s.metricLabel, { fontWeight: '700', color: t.text.secondary }]}>Metric</Text>
+            <Text style={[s.metricLabel, { fontWeight: fonts.bold, color: t.text.secondary }]}>Metric</Text>
             <Text style={[s.metricValA, { color: colorA }]}>{tokenA}</Text>
             <Text style={[s.metricValB, { color: colorB }]}>{tokenB}</Text>
           </View>

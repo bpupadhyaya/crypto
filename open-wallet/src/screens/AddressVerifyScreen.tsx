@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Address Verification Screen — Verify recipient address before first-time sends.
  * Character-by-character highlighting, chain detection, checksum validation,
@@ -161,33 +162,33 @@ export const AddressVerifyScreen = React.memo(({ address: initialAddress, chain:
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     scroll: { paddingHorizontal: 20, paddingTop: 16 },
-    title: { color: t.text.primary, fontSize: 22, fontWeight: '800', textAlign: 'center', marginBottom: 4 },
+    title: { color: t.text.primary, fontSize: 22, fontWeight: fonts.heavy, textAlign: 'center', marginBottom: 4 },
     subtitle: { color: t.text.muted, fontSize: 13, textAlign: 'center', marginBottom: 24 },
-    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 },
+    inputLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 },
     input: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, color: t.text.primary, fontSize: 14, fontFamily: 'monospace', borderWidth: 1, borderColor: 'transparent', marginBottom: 16, minHeight: 80, textAlignVertical: 'top' },
     inputValid: { borderColor: t.accent.green + '40' },
     inputInvalid: { borderColor: t.accent.red + '40' },
     // Chain detection card
     chainCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 16, flexDirection: 'row', alignItems: 'center', gap: 12 },
     chainIcon: { width: 40, height: 40, borderRadius: 20, backgroundColor: t.accent.blue + '20', justifyContent: 'center', alignItems: 'center' },
-    chainIconText: { fontSize: 16, fontWeight: '800', color: t.accent.blue },
-    chainName: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
+    chainIconText: { fontSize: 16, fontWeight: fonts.heavy, color: t.accent.blue },
+    chainName: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
     chainConfidence: { color: t.text.muted, fontSize: 12 },
     // Visual address display
     addressCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 20, marginBottom: 16 },
     addressGroupRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, justifyContent: 'center' },
     addressGroup: { backgroundColor: t.bg.primary, borderRadius: 8, paddingVertical: 6, paddingHorizontal: 8 },
-    addressGroupText: { fontFamily: 'monospace', fontSize: 15, fontWeight: '600', color: t.text.primary, letterSpacing: 1 },
+    addressGroupText: { fontFamily: 'monospace', fontSize: 15, fontWeight: fonts.semibold, color: t.text.primary, letterSpacing: 1 },
     addressGroupAlt: { backgroundColor: t.accent.blue + '10' },
     // Validation
     validationCard: { borderRadius: 12, padding: 14, marginBottom: 16, flexDirection: 'row', alignItems: 'center', gap: 10 },
     validationSuccess: { backgroundColor: t.accent.green + '15' },
     validationError: { backgroundColor: t.accent.red + '15' },
-    validationIcon: { fontSize: 20, fontWeight: '700' },
+    validationIcon: { fontSize: 20, fontWeight: fonts.bold },
     validationText: { fontSize: 14, flex: 1 },
     // Warning
     warningCard: { backgroundColor: t.accent.red + '10', borderRadius: 12, padding: 16, marginBottom: 20, borderLeftWidth: 3, borderLeftColor: t.accent.red },
-    warningTitle: { color: t.accent.red, fontSize: 14, fontWeight: '700', marginBottom: 4 },
+    warningTitle: { color: t.accent.red, fontSize: 14, fontWeight: fonts.bold, marginBottom: 4 },
     warningText: { color: t.text.secondary, fontSize: 13, lineHeight: 20 },
     // Checkbox row
     checkboxRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 20, paddingHorizontal: 4 },
@@ -195,19 +196,19 @@ export const AddressVerifyScreen = React.memo(({ address: initialAddress, chain:
     checkboxUnchecked: { borderColor: t.text.muted },
     checkboxChecked: { borderColor: t.accent.green, backgroundColor: t.accent.green },
     checkboxText: { color: t.text.primary, fontSize: 14, flex: 1 },
-    checkmark: { color: '#fff', fontSize: 14, fontWeight: '800' },
+    checkmark: { color: '#fff', fontSize: 14, fontWeight: fonts.heavy },
     // Quick-add contact
     addContactCard: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, marginBottom: 16 },
     addContactBtn: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 8 },
-    addContactLabel: { color: t.accent.blue, fontSize: 14, fontWeight: '600' },
+    addContactLabel: { color: t.accent.blue, fontSize: 14, fontWeight: fonts.semibold },
     contactInput: { backgroundColor: t.bg.primary, borderRadius: 12, padding: 14, color: t.text.primary, fontSize: 15, marginBottom: 10 },
     saveBtn: { backgroundColor: t.accent.blue, borderRadius: 12, paddingVertical: 12, alignItems: 'center' },
-    saveBtnText: { color: '#fff', fontSize: 14, fontWeight: '700' },
+    saveBtnText: { color: '#fff', fontSize: 14, fontWeight: fonts.bold },
     // Buttons
     confirmBtn: { borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginBottom: 10 },
     confirmBtnEnabled: { backgroundColor: t.accent.green },
     confirmBtnDisabled: { backgroundColor: t.accent.green + '40' },
-    confirmBtnText: { color: '#fff', fontSize: 17, fontWeight: '700' },
+    confirmBtnText: { color: '#fff', fontSize: 17, fontWeight: fonts.bold },
     backBtn: { paddingVertical: 16, alignItems: 'center' },
     backText: { color: t.accent.blue, fontSize: 16 },
   }), [t]);

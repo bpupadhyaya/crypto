@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Market Screen — Top tokens by market cap, search, trending.
  * Fetches from CoinGecko with 5s timeout and caching.
@@ -80,24 +81,24 @@ export const MarketScreen = React.memo(({ onClose }: Props) => {
   const s = useMemo(() => StyleSheet.create({
     container: { flex: 1, backgroundColor: t.bg.primary },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
-    back: { color: t.accent.blue, fontSize: 16, fontWeight: '600' },
-    title: { color: t.text.primary, fontSize: 18, fontWeight: '800' },
+    back: { color: t.accent.blue, fontSize: 16, fontWeight: fonts.semibold },
+    title: { color: t.text.primary, fontSize: 18, fontWeight: fonts.heavy },
     searchBox: { marginHorizontal: 16, marginBottom: 12, backgroundColor: t.bg.card, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10, color: t.text.primary, fontSize: 15 },
-    sectionLabel: { color: t.text.secondary, fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 20, marginTop: 16, marginBottom: 8 },
+    sectionLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, textTransform: 'uppercase', letterSpacing: 1.5, marginLeft: 20, marginTop: 16, marginBottom: 8 },
     trendingRow: { flexDirection: 'row', gap: 8, paddingHorizontal: 16, marginBottom: 8 },
     trendingChip: { backgroundColor: t.bg.card, borderRadius: 20, paddingVertical: 6, paddingHorizontal: 14 },
     trendingChipActive: { backgroundColor: t.accent.green + '20' },
-    trendingText: { color: t.text.secondary, fontSize: 13, fontWeight: '600' },
-    trendingTextActive: { color: t.accent.green, fontWeight: '700' },
+    trendingText: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold },
+    trendingTextActive: { color: t.accent.green, fontWeight: fonts.bold },
     tokenRow: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: t.border },
     rank: { width: 28, color: t.text.muted, fontSize: 12, textAlign: 'center' },
     dot: { width: 10, height: 10, borderRadius: 5, marginRight: 10 },
     tokenInfo: { flex: 1 },
-    tokenSymbol: { color: t.text.primary, fontSize: 15, fontWeight: '700' },
+    tokenSymbol: { color: t.text.primary, fontSize: 15, fontWeight: fonts.bold },
     tokenName: { color: t.text.muted, fontSize: 12, marginTop: 1 },
     priceCol: { alignItems: 'flex-end' },
-    price: { color: t.text.primary, fontSize: 14, fontWeight: '600' },
-    change: { fontSize: 12, fontWeight: '700', marginTop: 2 },
+    price: { color: t.text.primary, fontSize: 14, fontWeight: fonts.semibold },
+    change: { fontSize: 12, fontWeight: fonts.bold, marginTop: 2 },
     marketCap: { color: t.text.muted, fontSize: 10, marginTop: 1 },
     loadingWrap: { paddingVertical: 40, alignItems: 'center' },
     emptyText: { color: t.text.muted, textAlign: 'center', paddingVertical: 40, fontSize: 14 },

@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Send Screen — Send tokens to another address.
  * Wired to real transaction signers (BTC/ETH/SOL).
@@ -91,37 +92,37 @@ export function SendScreen() {
     chainButton: { backgroundColor: t.bg.card, borderRadius: 20, paddingVertical: 8, paddingHorizontal: 16 },
     chainButtonActive: { backgroundColor: t.accent.orange },
     chainButtonText: { color: t.text.secondary, fontSize: 14 },
-    chainButtonTextActive: { color: t.bg.primary, fontWeight: '700' },
+    chainButtonTextActive: { color: t.bg.primary, fontWeight: fonts.bold },
     fromCard: { backgroundColor: t.bg.card, borderRadius: 12, padding: 12, marginBottom: 16 },
     fromAddress: { color: t.text.muted, fontSize: 12, fontFamily: 'monospace' },
-    fieldLabel: { color: t.text.secondary, fontSize: 13, fontWeight: '600', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 },
+    fieldLabel: { color: t.text.secondary, fontSize: 13, fontWeight: fonts.semibold, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 },
     inputWrapper: { position: 'relative', marginBottom: 16 },
     input: { backgroundColor: t.bg.card, borderRadius: 16, padding: 16, color: t.text.primary, fontSize: 16, borderWidth: 1, borderColor: 'transparent' },
     inputError: { borderColor: t.accent.red + '40' },
     inputValid: { borderColor: t.accent.green + '40' },
-    validIcon: { position: 'absolute', right: 16, top: 16, color: t.accent.green, fontSize: 18, fontWeight: '700' },
-    invalidIcon: { position: 'absolute', right: 16, top: 16, color: t.accent.red, fontSize: 18, fontWeight: '700' },
+    validIcon: { position: 'absolute', right: 16, top: 16, color: t.accent.green, fontSize: 18, fontWeight: fonts.bold },
+    invalidIcon: { position: 'absolute', right: 16, top: 16, color: t.accent.red, fontSize: 18, fontWeight: fonts.bold },
     amountRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 16 },
     tokenBadge: { backgroundColor: t.bg.card, borderRadius: 12, paddingVertical: 16, paddingHorizontal: 16 },
-    tokenBadgeText: { color: t.text.secondary, fontSize: 14, fontWeight: '700' },
+    tokenBadgeText: { color: t.text.secondary, fontSize: 14, fontWeight: fonts.bold },
     feeCard: { backgroundColor: t.bg.card, borderRadius: 12, padding: 16, marginBottom: 16 },
     feeRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4 },
     feeLabel: { color: t.text.muted, fontSize: 13 },
     feeValue: { color: t.text.secondary, fontSize: 13 },
-    feeValueBold: { color: t.text.primary, fontSize: 13, fontWeight: '700' },
+    feeValueBold: { color: t.text.primary, fontSize: 13, fontWeight: fonts.bold },
     sendButton: { backgroundColor: t.accent.orange, borderRadius: 16, paddingVertical: 18, alignItems: 'center', marginTop: 8 },
     sendButtonDisabled: { opacity: 0.6 },
-    sendButtonText: { color: t.bg.primary, fontSize: 17, fontWeight: '700' },
+    sendButtonText: { color: t.bg.primary, fontSize: 17, fontWeight: fonts.bold },
     hint: { color: t.text.muted, fontSize: 12, textAlign: 'center', marginTop: 16, lineHeight: 18 },
     feeSpeedRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
     feeSpeedBtn: { flex: 1, backgroundColor: t.bg.card, borderRadius: 12, paddingVertical: 10, paddingHorizontal: 8, alignItems: 'center', borderWidth: 1.5, borderColor: 'transparent' },
     feeSpeedBtnActive: { borderColor: t.accent.orange },
-    feeSpeedLabel: { color: t.text.secondary, fontSize: 12, fontWeight: '700', marginBottom: 2 },
+    feeSpeedLabel: { color: t.text.secondary, fontSize: 12, fontWeight: fonts.bold, marginBottom: 2 },
     feeSpeedLabelActive: { color: t.accent.orange },
     feeSpeedFee: { color: t.text.muted, fontSize: 10 },
     feeSpeedTime: { color: t.text.muted, fontSize: 10, marginTop: 1 },
     feeUsd: { color: t.text.muted, fontSize: 11, marginTop: 4, textAlign: 'right' },
-    nearZeroFee: { color: t.accent.green, fontSize: 13, fontWeight: '600', textAlign: 'center', paddingVertical: 8 },
+    nearZeroFee: { color: t.accent.green, fontSize: 13, fontWeight: fonts.semibold, textAlign: 'center', paddingVertical: 8 },
   }), [t]);
 
   const senderAddress = addresses[selectedChain] ?? '';
@@ -431,11 +432,11 @@ export function SendScreen() {
           <View style={{ flexDirection: 'row', gap: 12 }}>
             {isTestnet() && (
               <TouchableOpacity onPress={fillTestAddress}>
-                <Text style={{ color: t.accent.yellow, fontSize: 13, fontWeight: '600' }}>Test Address</Text>
+                <Text style={{ color: t.accent.yellow, fontSize: 13, fontWeight: fonts.semibold }}>Test Address</Text>
               </TouchableOpacity>
             )}
             <TouchableOpacity onPress={() => setShowScanner(true)}>
-              <Text style={{ color: t.accent.blue, fontSize: 13, fontWeight: '600' }}>Scan QR</Text>
+              <Text style={{ color: t.accent.blue, fontSize: 13, fontWeight: fonts.semibold }}>Scan QR</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -465,7 +466,7 @@ export function SendScreen() {
         )}
         {resolvedAddr && !isResolving && (
           <View style={{ backgroundColor: t.bg.card, borderRadius: 8, padding: 10, marginBottom: 12 }}>
-            <Text style={{ color: t.accent.green, fontSize: 12, fontWeight: '600', marginBottom: 2 }}>
+            <Text style={{ color: t.accent.green, fontSize: 12, fontWeight: fonts.semibold, marginBottom: 2 }}>
               Resolved via {resolvedAddr.nameService}
             </Text>
             <Text style={{ color: t.text.secondary, fontSize: 12, fontFamily: 'monospace' }} numberOfLines={1} ellipsizeMode="middle">

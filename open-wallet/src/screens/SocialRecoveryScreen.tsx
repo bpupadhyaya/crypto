@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Social Recovery Screen — Set up social recovery with trusted guardians.
  *
@@ -111,7 +112,7 @@ export function SocialRecoveryScreen({ onClose }: Props) {
       paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1,
       borderBottomColor: t.border,
     },
-    title: { fontSize: 18, fontWeight: '700', color: t.text.primary },
+    title: { fontSize: 18, fontWeight: fonts.bold, color: t.text.primary },
     closeBtn: { fontSize: 16, color: t.accent.green },
     tabRow: {
       flexDirection: 'row', borderBottomWidth: 1,
@@ -120,12 +121,12 @@ export function SocialRecoveryScreen({ onClose }: Props) {
     tab: { flex: 1, paddingVertical: 10, alignItems: 'center' },
     tabActive: { borderBottomWidth: 2, borderBottomColor: t.accent.green },
     tabText: { fontSize: 14, color: t.text.secondary },
-    tabTextActive: { color: t.accent.green, fontWeight: '600' },
+    tabTextActive: { color: t.accent.green, fontWeight: fonts.semibold },
     scroll: { flex: 1 },
     section: { padding: 16, borderBottomWidth: 1, borderBottomColor: t.border },
-    sectionTitle: { fontSize: 16, fontWeight: '600', color: t.text.primary, marginBottom: 8 },
+    sectionTitle: { fontSize: 16, fontWeight: fonts.semibold, color: t.text.primary, marginBottom: 8 },
     label: { fontSize: 13, color: t.text.secondary, marginBottom: 4 },
-    value: { fontSize: 15, color: t.text.primary, fontWeight: '500' },
+    value: { fontSize: 15, color: t.text.primary, fontWeight: fonts.medium },
     card: {
       backgroundColor: t.bg.card, borderRadius: 12, padding: 14,
       marginBottom: 10, borderWidth: 1, borderColor: t.border,
@@ -134,7 +135,7 @@ export function SocialRecoveryScreen({ onClose }: Props) {
     badge: {
       paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8, alignSelf: 'flex-start',
     },
-    badgeText: { fontSize: 11, fontWeight: '600', color: '#fff' },
+    badgeText: { fontSize: 11, fontWeight: fonts.semibold, color: '#fff' },
     input: {
       borderWidth: 1, borderColor: t.border, borderRadius: 8,
       padding: 10, fontSize: 14, color: t.text.primary, marginBottom: 10,
@@ -144,11 +145,11 @@ export function SocialRecoveryScreen({ onClose }: Props) {
       backgroundColor: t.accent.green, borderRadius: 10, paddingVertical: 12,
       alignItems: 'center', marginTop: 8,
     },
-    buttonText: { color: '#fff', fontWeight: '600', fontSize: 15 },
+    buttonText: { color: '#fff', fontWeight: fonts.semibold, fontSize: 15 },
     buttonDisabled: { opacity: 0.5 },
     infoText: { fontSize: 13, color: t.text.secondary, lineHeight: 20, marginTop: 4 },
     metric: { alignItems: 'center', flex: 1 },
-    metricValue: { fontSize: 22, fontWeight: '700', color: t.text.primary },
+    metricValue: { fontSize: 22, fontWeight: fonts.bold, color: t.text.primary },
     metricLabel: { fontSize: 11, color: t.text.secondary, marginTop: 2 },
     warningBox: {
       backgroundColor: '#fef3c7', borderRadius: 10, padding: 12, marginTop: 10,

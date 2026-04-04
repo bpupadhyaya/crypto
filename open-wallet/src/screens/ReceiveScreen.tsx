@@ -1,3 +1,4 @@
+import { fonts } from '../utils/theme';
 /**
  * Receive Screen — Display wallet address and QR code.
  * Simple mode: Big QR, one address
@@ -53,7 +54,7 @@ export function ReceiveScreen() {
     title: {
       color: t.text.primary,
       fontSize: 24,
-      fontWeight: '800',
+      fontWeight: fonts.heavy,
       marginTop: 16,
       marginBottom: 20,
     },
@@ -78,7 +79,7 @@ export function ReceiveScreen() {
     },
     chainButtonTextActive: {
       color: t.bg.primary,
-      fontWeight: '700',
+      fontWeight: fonts.bold,
     },
     qrContainer: {
       alignItems: 'center',
@@ -118,7 +119,7 @@ export function ReceiveScreen() {
     copyHint: {
       color: t.accent.green,
       fontSize: 13,
-      fontWeight: '600',
+      fontWeight: fonts.semibold,
     },
     warningText: {
       color: t.accent.orange,
