@@ -114,28 +114,31 @@ export function UnlockScreen() {
   }, []);
 
   const initBiometric = async () => {
-    const hasHardware = await LocalAuthentication.hasHardwareAsync();
-    if (!hasHardware) return;
-    const isEnrolled = await LocalAuthentication.isEnrolledAsync();
-    if (!isEnrolled) return;
+    try {
+      const hasHardware = await LocalAuthentication.hasHardwareAsync();
+      if (!hasHardware) return;
+      const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+      if (!isEnrolled) return;
 
-    setBioAvailable(true);
+      setBioAvailable(true);
 
-    // Detect type — show the best available biometric
-    const types = await LocalAuthentication.supportedAuthenticationTypesAsync();
-    if (types.includes(LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION)) {
-      setBioLabel('Face ID');
-    } else if (types.includes(LocalAuthentication.AuthenticationType.IRIS)) {
-      setBioLabel('Iris Scan');
-    } else if (types.includes(LocalAuthentication.AuthenticationType.FINGERPRINT)) {
-      setBioLabel('Fingerprint');
-    } else {
-      setBioLabel('Biometrics');
+      // Detect type label for the button — NO auto-trigger, NO auth calls
+      const types = await LocalAuthentication.supportedAuthenticationTypesAsync();
+      if (types.includes(LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION)) {
+        setBioLabel('Face ID');
+      } else if (types.includes(LocalAuthentication.AuthenticationType.IRIS)) {
+        setBioLabel('Iris Scan');
+      } else if (types.includes(LocalAuthentication.AuthenticationType.FINGERPRINT)) {
+        setBioLabel('Fingerprint');
+      } else {
+        setBioLabel('Biometrics');
+      }
+      // IMPORTANT: Do NOT call handleBiometricUnlock(), triggerBiometric(),
+      // getVaultPasswordBiometric(), or any authentication function here.
+      // User must explicitly tap the biometric button to unlock.
+    } catch {
+      // Biometric detection failed — PIN pad is the default
     }
-
-    // Do NOT auto-trigger biometric on unlock screen.
-    // User should see the PIN pad first and choose to use biometrics manually.
-    // This prevents Face ID from instantly unlocking after a deliberate lock.
   };
 
   const detectBuiltinKeyAsync = async () => {
