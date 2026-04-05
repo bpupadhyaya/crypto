@@ -286,64 +286,90 @@ export function SendScreen() {
         return;
       }
 
-      // Use password passed from auth flow, fall back to store
       const store = useWalletStore.getState();
-      const password = vaultPassword ?? store.tempVaultPassword;
-      if (!password) throw new Error('Wallet not unlocked. Please sign in again.');
-
-      // 1. Unlock vault → get mnemonic (cached after first unlock)
-      let mnemonic: string;
-      if (cachedVaultContents && cachedVaultContents.password === password) {
-        mnemonic = cachedVaultContents.mnemonic;
-      } else {
-        const VaultClass = prewarmedModules.Vault ?? (await import('../core/vault/vault')).Vault;
-        const vault = new VaultClass();
-        const contents = await vault.unlock(password);
-        mnemonic = contents.mnemonic;
-        cachedVaultContents = { mnemonic, password };
-      }
-
-      // 2. Restore HD wallet
-      const HDWalletClass = prewarmedModules.HDWallet ?? (await import('../core/wallet/hdwallet')).HDWallet;
-      const wallet = HDWalletClass.fromMnemonic(mnemonic);
-
       let txHash: string;
 
-      // 3. Sign & broadcast based on chain
-      if (selectedChain === 'ethereum') {
-        const EthSigner = prewarmedModules.EthereumSigner ?? (await import('../core/chains/ethereum-signer')).EthereumSigner;
-        const signer = EthSigner.fromWallet(wallet, store.activeAccountIndex);
-        txHash = await signer.sendTransaction(effectiveRecipient.trim(), amount.trim());
-      } else if (selectedChain === 'solana') {
-        const SolSigner = prewarmedModules.SolanaSigner ?? (await import('../core/chains/solana-signer')).SolanaSigner;
-        const signer = SolSigner.fromWallet(wallet, store.activeAccountIndex);
-        txHash = await signer.sendSOL(effectiveRecipient.trim(), parseFloat(amount));
-      } else if (selectedChain === 'bitcoin') {
-        const BtcSigner = prewarmedModules.BitcoinSigner ?? (await import('../core/chains/bitcoin-signer')).BitcoinSigner;
-        const signer = BtcSigner.fromWallet(wallet, store.activeAccountIndex);
-        const decimals = 8;
-        const amountSats = BigInt(Math.round(parseFloat(amount) * 10 ** decimals));
-        // Use medium fee rate (10 sat/vbyte for testnet, real estimate for mainnet)
-        const feeRate = isTestnet() ? 10 : 20;
-        const rawTx = await signer.createTransaction(effectiveRecipient.trim(), amountSats, feeRate);
-        // Broadcast via provider
-        const provider = registry.getChainProvider('bitcoin');
-        txHash = await provider.broadcastTransaction({
-          chainId: 'bitcoin',
-          rawTransaction: rawTx,
-          hash: '',
-        });
-      } else if (selectedChain === 'openchain' || selectedChain === 'cosmos') {
-        // Cosmos SDK chains (Open Chain, Cosmos Hub) — use @cosmjs/stargate
-        const { CosmosSigner } = await import('../core/chains/cosmos-signer');
-        const signer = CosmosSigner.fromWallet(wallet, store.activeAccountIndex, selectedChain as 'openchain' | 'cosmos');
-        txHash = await signer.sendTokens(effectiveRecipient.trim(), amount.trim());
-      } else {
-        throw new Error(`Unsupported chain: ${selectedChain}`);
-      }
+      if (store.walletProvider === 'seed-vault') {
+        // ─── Seed Vault: sign via hardware secure element ───
+        if (selectedChain === 'solana') {
+          const { Connection, PublicKey, SystemProgram, Transaction, LAMPORTS_PER_SOL } = await import('@solana/web3.js');
+          const { getNetworkConfig } = await import('../core/network');
+          const config = getNetworkConfig();
+          const connection = new Connection(config.solana.rpcUrl, 'confirmed');
 
-      // 4. Clean up private key material
-      wallet.destroy();
+          const fromPubkey = new PublicKey(store.addresses.solana!);
+          const toPubkey = new PublicKey(effectiveRecipient.trim());
+          const lamports = Math.round(parseFloat(amount) * LAMPORTS_PER_SOL);
+
+          const tx = new Transaction().add(
+            SystemProgram.transfer({ fromPubkey, toPubkey, lamports }),
+          );
+          tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
+          tx.feePayer = fromPubkey;
+
+          // Serialize unsigned transaction and send to Seed Vault for signing
+          const txBytes = tx.serializeMessage();
+          const b64 = btoa(String.fromCharCode(...txBytes));
+
+          const { signWithSeedVault } = await import('../core/hardware/seedVaultBridge');
+          const signature = await signWithSeedVault(b64);
+          if (!signature) throw new Error('Seed Vault signing failed or was cancelled.');
+
+          // Decode signature and add to transaction
+          const sigBytes = Uint8Array.from(atob(signature), c => c.charCodeAt(0));
+          tx.addSignature(fromPubkey, Buffer.from(sigBytes));
+
+          // Broadcast
+          const rawTx = tx.serialize();
+          txHash = await connection.sendRawTransaction(rawTx);
+        } else {
+          throw new Error(`Seed Vault currently supports Solana transactions only. For ${selectedChain}, please use a software wallet.`);
+        }
+      } else {
+        // ─── Software wallet: unlock vault → get mnemonic → sign ───
+        const password = vaultPassword ?? store.tempVaultPassword;
+        if (!password) throw new Error('Wallet not unlocked. Please sign in again.');
+
+        let mnemonic: string;
+        if (cachedVaultContents && cachedVaultContents.password === password) {
+          mnemonic = cachedVaultContents.mnemonic;
+        } else {
+          const VaultClass = prewarmedModules.Vault ?? (await import('../core/vault/vault')).Vault;
+          const vault = new VaultClass();
+          const contents = await vault.unlock(password);
+          mnemonic = contents.mnemonic;
+          cachedVaultContents = { mnemonic, password };
+        }
+
+        const HDWalletClass = prewarmedModules.HDWallet ?? (await import('../core/wallet/hdwallet')).HDWallet;
+        const wallet = HDWalletClass.fromMnemonic(mnemonic);
+
+        if (selectedChain === 'ethereum') {
+          const EthSigner = prewarmedModules.EthereumSigner ?? (await import('../core/chains/ethereum-signer')).EthereumSigner;
+          const signer = EthSigner.fromWallet(wallet, store.activeAccountIndex);
+          txHash = await signer.sendTransaction(effectiveRecipient.trim(), amount.trim());
+        } else if (selectedChain === 'solana') {
+          const SolSigner = prewarmedModules.SolanaSigner ?? (await import('../core/chains/solana-signer')).SolanaSigner;
+          const signer = SolSigner.fromWallet(wallet, store.activeAccountIndex);
+          txHash = await signer.sendSOL(effectiveRecipient.trim(), parseFloat(amount));
+        } else if (selectedChain === 'bitcoin') {
+          const BtcSigner = prewarmedModules.BitcoinSigner ?? (await import('../core/chains/bitcoin-signer')).BitcoinSigner;
+          const signer = BtcSigner.fromWallet(wallet, store.activeAccountIndex);
+          const amountSats = BigInt(Math.round(parseFloat(amount) * 1e8));
+          const feeRate = isTestnet() ? 10 : 20;
+          const rawTx = await signer.createTransaction(effectiveRecipient.trim(), amountSats, feeRate);
+          const provider = registry.getChainProvider('bitcoin');
+          txHash = await provider.broadcastTransaction({ chainId: 'bitcoin', rawTransaction: rawTx, hash: '' });
+        } else if (selectedChain === 'openchain' || selectedChain === 'cosmos') {
+          const { CosmosSigner } = await import('../core/chains/cosmos-signer');
+          const signer = CosmosSigner.fromWallet(wallet, store.activeAccountIndex, selectedChain as 'openchain' | 'cosmos');
+          txHash = await signer.sendTokens(effectiveRecipient.trim(), amount.trim());
+        } else {
+          throw new Error(`Unsupported chain: ${selectedChain}`);
+        }
+
+        wallet.destroy();
+      }
 
       // 5. Show success
       Alert.alert(

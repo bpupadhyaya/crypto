@@ -884,11 +884,23 @@ async function executeJupiterSwap(params: {
       return { success: false, message: `${fromSymbol} or ${toSymbol} not supported on Jupiter.`, provider: 'Jupiter' };
     }
 
-    const { HDWallet } = await import('../wallet/hdwallet');
-    const { SolanaSigner } = await import('../chains/solana-signer');
-    const wallet = HDWallet.fromMnemonic(mnemonic);
-    const signer = SolanaSigner.fromWallet(wallet, accountIndex);
-    const address = signer.getAddress();
+    const isSeedVault = mnemonic === '__SEED_VAULT__';
+    let address: string;
+    let wallet: any = null;
+    let signer: any = null;
+
+    if (isSeedVault) {
+      // Seed Vault: get address from store, sign via hardware
+      const { useWalletStore } = await import('../../store/walletStore');
+      address = useWalletStore.getState().addresses.solana ?? '';
+      if (!address) { p({ stepId: 'vault', status: 'failed' }); return { success: false, message: 'No Solana address from Seed Vault.', provider: 'Jupiter' }; }
+    } else {
+      const { HDWallet } = await import('../wallet/hdwallet');
+      const { SolanaSigner } = await import('../chains/solana-signer');
+      wallet = HDWallet.fromMnemonic(mnemonic);
+      signer = SolanaSigner.fromWallet(wallet, accountIndex);
+      address = signer.getAddress();
+    }
 
     const decimals = fromSymbol === 'SOL' ? 9 : 6;
     const lamports = Math.round(fromAmount * 10 ** decimals);
@@ -896,7 +908,7 @@ async function executeJupiterSwap(params: {
     p({ stepId: 'vault', status: 'complete' });
     p({ stepId: 'quote', status: 'active' });
     const quoteResponse = await fetch(`https://quote-api.jup.ag/v6/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${lamports}&slippageBps=50`);
-    if (!quoteResponse.ok) { wallet.destroy(); p({ stepId: 'quote', status: 'failed' }); return { success: false, message: `Jupiter quote failed: ${quoteResponse.status}`, provider: 'Jupiter' }; }
+    if (!quoteResponse.ok) { wallet?.destroy(); p({ stepId: 'quote', status: 'failed' }); return { success: false, message: `Jupiter quote failed: ${quoteResponse.status}`, provider: 'Jupiter' }; }
     const quoteData = await quoteResponse.json();
     p({ stepId: 'quote', status: 'complete' });
 
@@ -906,16 +918,48 @@ async function executeJupiterSwap(params: {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ quoteResponse: quoteData, userPublicKey: address, wrapAndUnwrapSol: true }),
     });
-    if (!swapResponse.ok) { wallet.destroy(); p({ stepId: 'build', status: 'failed' }); return { success: false, message: `Jupiter swap build failed: ${swapResponse.status}`, provider: 'Jupiter' }; }
+    if (!swapResponse.ok) { wallet?.destroy(); p({ stepId: 'build', status: 'failed' }); return { success: false, message: `Jupiter swap build failed: ${swapResponse.status}`, provider: 'Jupiter' }; }
     p({ stepId: 'build', status: 'complete' });
 
     const { swapTransaction } = await swapResponse.json();
     p({ stepId: 'sign', status: 'active' });
-    p({ stepId: 'sign', status: 'complete' });
-    p({ stepId: 'broadcast', status: 'active' });
-    const txHash = await signer.signAndSendSerializedTransaction(swapTransaction);
+
+    let txHash: string;
+    if (isSeedVault) {
+      // Sign via Seed Vault hardware
+      const { signWithSeedVault } = await import('../hardware/seedVaultBridge');
+      const { Connection, VersionedTransaction } = await import('@solana/web3.js');
+      const { getNetworkConfig } = await import('../network');
+      const config = getNetworkConfig();
+      const connection = new Connection(config.solana.rpcUrl, 'confirmed');
+
+      // Decode the serialized transaction from Jupiter
+      const txBuffer = Buffer.from(swapTransaction, 'base64');
+      const txMessage = VersionedTransaction.deserialize(txBuffer);
+
+      // Get the message bytes for signing
+      const messageBytes = txMessage.message.serialize();
+      const b64Message = btoa(String.fromCharCode(...messageBytes));
+
+      const signature = await signWithSeedVault(b64Message);
+      if (!signature) { p({ stepId: 'sign', status: 'failed' }); return { success: false, message: 'Seed Vault signing cancelled or failed.', provider: 'Jupiter' }; }
+
+      const sigBytes = Uint8Array.from(atob(signature), c => c.charCodeAt(0));
+      txMessage.addSignature(txMessage.message.getAccountKeys().get(0)!, sigBytes);
+
+      p({ stepId: 'sign', status: 'complete', detail: 'Signed by Seed Vault hardware' });
+      p({ stepId: 'broadcast', status: 'active' });
+
+      const rawTx = txMessage.serialize();
+      txHash = await connection.sendRawTransaction(rawTx);
+    } else {
+      p({ stepId: 'sign', status: 'complete' });
+      p({ stepId: 'broadcast', status: 'active' });
+      txHash = await signer.signAndSendSerializedTransaction(swapTransaction);
+      wallet?.destroy();
+    }
+
     p({ stepId: 'broadcast', status: 'complete', info: `Tx: ${txHash.slice(0, 16)}...` });
-    wallet.destroy();
 
     const outDecimals = toSymbol === 'SOL' ? 9 : 6;
     const expectedOutput = Number(quoteData.outAmount) / 10 ** outDecimals;

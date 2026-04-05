@@ -326,23 +326,40 @@ export function SwapScreen() {
         );
       } else {
       // Real swap execution
-      const password = vaultPassword ?? useWalletStore.getState().tempVaultPassword;
-      if (!password) {
-        Alert.alert('Error', 'Wallet not unlocked. Please sign in again.');
-        throw new Error('Wallet not unlocked');
+      const swapStore = useWalletStore.getState();
+
+      if (swapStore.walletProvider === 'seed-vault') {
+        // Seed Vault: only Solana swaps supported via hardware signing
+        if (fromSymbol !== 'SOL' && toSymbol !== 'SOL') {
+          Alert.alert('Seed Vault Limitation', 'Seed Vault hardware signing currently supports Solana transactions only. For other chains, please import a software wallet.');
+          throw new Error('Seed Vault: unsupported chain for swap');
+        }
       }
 
       try {
-        const { Vault } = await import('../core/vault/vault');
-        const vault = new Vault();
-        const contents = await vault.unlock(password);
+        let mnemonic: string;
+        if (swapStore.walletProvider === 'seed-vault') {
+          // Seed Vault swaps go through Jupiter (Solana DEX) which needs the Seed Vault signer
+          // For now, we pass a placeholder — the executor will need to be extended for hardware signing
+          mnemonic = '__SEED_VAULT__';
+        } else {
+          const password = vaultPassword ?? swapStore.tempVaultPassword;
+          if (!password) {
+            Alert.alert('Error', 'Wallet not unlocked. Please sign in again.');
+            throw new Error('Wallet not unlocked');
+          }
+          const { Vault } = await import('../core/vault/vault');
+          const vault = new Vault();
+          const contents = await vault.unlock(password);
+          mnemonic = contents.mnemonic;
+        }
 
         const result = await executeSwapTransaction({
           option: selectedOption!,
           fromAmount: parseFloat(amountStr),
           fromSymbol, toSymbol,
-          mnemonic: contents.mnemonic,
-          accountIndex: useWalletStore.getState().activeAccountIndex,
+          mnemonic,
+          accountIndex: swapStore.activeAccountIndex,
           fromAddress: addresses.bitcoin ?? addresses.ethereum ?? '',
           toAddress: destAddress.trim() || (addresses.ethereum ?? ''),
           onProgress,

@@ -53,6 +53,10 @@ interface WalletState {
   tempVaultPassword: string | null;
   setTempVaultPassword: (pw: string | null) => void;
 
+  // ─── Wallet Provider ───
+  walletProvider: 'software' | 'seed-vault';
+  setWalletProvider: (provider: 'software' | 'seed-vault') => void;
+
   // ─── Address Book ───
   contacts: Array<{ id: string; name: string; address: string; chain: string }>;
   addContact: (contact: { id: string; name: string; address: string; chain: string }) => void;
@@ -171,6 +175,8 @@ export const useWalletStore = create<WalletState>((set) => ({
   updateDevBalance: (symbol, delta) => { set((s) => ({ devBalances: { ...s.devBalances, [symbol]: Math.max(0, (s.devBalances[symbol] ?? 0) + delta) } })); schedulePersist(); },
   tempVaultPassword: null,
   setTempVaultPassword: (pw) => set({ tempVaultPassword: pw }),
+  walletProvider: 'software' as const,
+  setWalletProvider: (provider) => { set({ walletProvider: provider }); schedulePersist(); },
   contacts: [],
   addContact: (contact) => { set((s) => ({ contacts: [...s.contacts, contact] })); schedulePersist(); },
   removeContact: (id) => { set((s) => ({ contacts: s.contacts.filter((c) => c.id !== id) })); schedulePersist(); },

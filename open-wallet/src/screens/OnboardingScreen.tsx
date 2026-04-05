@@ -63,7 +63,7 @@ export function OnboardingScreen() {
   const [spotCheckIndices, setSpotCheckIndices] = useState<number[]>([]);
   const [spotCheckAnswers, setSpotCheckAnswers] = useState<Record<number, string>>({});
 
-  const { setStatus, setHasVault, setAddresses, setTempVaultPassword } = useWalletStore();
+  const { setStatus, setHasVault, setAddresses, setTempVaultPassword, setWalletProvider } = useWalletStore();
   const t = useTheme();
 
   const styles = useMemo(() => StyleSheet.create({
@@ -349,8 +349,10 @@ export function OnboardingScreen() {
           setAddresses({ [chain]: addr } as any);
         });
         setHasVault(true);
-        setStatus('unlocked');
-        Alert.alert('Seed Vault Connected', result.message);
+        setWalletProvider('seed-vault');
+        // Seed Vault users still need PIN for app lock (keys stay in hardware)
+        setStatus('pin_setup' as any);
+        Alert.alert('Seed Vault Connected', result.message + '\n\nNext: Set up a PIN to lock the app.');
         return;
       }
 
