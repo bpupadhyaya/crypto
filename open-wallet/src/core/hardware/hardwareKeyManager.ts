@@ -110,18 +110,12 @@ const DEMO_ADDRESSES: Record<string, string> = {
 
 const DEMO_SIGNATURE = new Uint8Array(64).fill(0xDE);
 
-// ─── Provider Implementations (imported from dedicated files) ───
-
-// Re-export the real providers from their dedicated implementation files
-export { createLedgerProvider } from './ledgerProvider';
-export { createTrezorProvider } from './trezorProvider';
-export { createKeystoneProvider } from './keystoneProvider';
-
-/**
- * LEGACY STUBS BELOW — kept as fallback reference.
- * The real implementations are in ledgerProvider.ts, trezorProvider.ts, keystoneProvider.ts.
- * getAllProviders() now imports from those files.
- */
+// ─── Provider Implementations ───
+//
+// These stub providers handle detection and user messaging.
+// The real signing implementations in ledgerProvider.ts, trezorProvider.ts,
+// keystoneProvider.ts are loaded lazily ONLY when the user connects a device,
+// to prevent Metro from resolving @ledgerhq/*, @trezor/*, @keystonehq/* at bundle time.
 
 /**
  * Ledger Nano X / Stax / Flex — connects via Bluetooth Low Energy.
@@ -821,15 +815,15 @@ let _providers: HardwareWalletProvider[] | null = null;
 
 function getAllProviders(): HardwareWalletProvider[] {
   if (!_providers) {
-    // Import real implementations from dedicated provider files
-    const { createLedgerProvider: ledger } = require('./ledgerProvider');
-    const { createTrezorProvider: trezor } = require('./trezorProvider');
-    const { createKeystoneProvider: keystone } = require('./keystoneProvider');
+    // External hardware wallets use stub entries here.
+    // Real provider code loads lazily when user taps "Connect" —
+    // see ledgerProvider.ts, trezorProvider.ts, keystoneProvider.ts.
+    // This prevents Metro from resolving @ledgerhq/*, @trezor/*, @keystonehq/*
+    // at bundle time when those packages may not be installed.
     _providers = [
-      // External hardware wallets (real implementations)
-      ledger(),
-      trezor(),
-      keystone(),
+      createLedgerProvider(),
+      createTrezorProvider(),
+      createKeystoneProvider(),
       // Phone cold storage
       createSolanaSagaProvider(),
       createSolanaSeekerProvider(),
