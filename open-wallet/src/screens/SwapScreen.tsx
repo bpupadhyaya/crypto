@@ -124,6 +124,7 @@ export function SwapScreen() {
         const results = await getAllSwapOptions({
           fromToken: fromSymbol, toToken: toSymbol,
           fromAmount: amount, fromAddress: fromAddr, toAddress: effectiveToAddr,
+          slippageBps,
         });
         setOptions(results);
       } catch {
@@ -133,7 +134,7 @@ export function SwapScreen() {
     }, 600);
 
     return () => clearTimeout(timer);
-  }, [amountStr, fromSymbol, toSymbol, addresses, destAddress]);
+  }, [amountStr, fromSymbol, toSymbol, addresses, destAddress, slippageBps]);
 
   const flipTokens = useCallback(() => {
     setFromSymbol(toSymbol);
@@ -182,6 +183,16 @@ export function SwapScreen() {
     }
   }, [toSymbol]);
 
+  // Slippage tolerance
+  const [slippageBps, setSlippageBps] = useState(50); // 0.5% default
+  const SLIPPAGE_OPTIONS = [
+    { label: '0.1%', value: 10 },
+    { label: '0.5%', value: 50 },
+    { label: '1%', value: 100 },
+    { label: '3%', value: 300 },
+    { label: '5%', value: 500 },
+  ];
+
   const [isPaperSwap, setIsPaperSwap] = useState(false);
 
   const handleSwap = useCallback(async (paperMode: boolean = false) => {
@@ -198,9 +209,22 @@ export function SwapScreen() {
     }
 
     // Balance check — prevent attempting a swap with insufficient funds
-    if (demoMode || isTestnet()) {
-      const { devBalances: liveBalances } = useWalletStore.getState();
-      const available = liveBalances[fromSymbol] ?? 0;
+    {
+      let available = 0;
+      if (demoMode || isTestnet()) {
+        const { devBalances: liveBalances } = useWalletStore.getState();
+        available = liveBalances[fromSymbol] ?? 0;
+      } else {
+        // Real balance check on mainnet
+        try {
+          const { fetchAllBalances } = await import('../core/balances/balanceFetcher');
+          const realBalances = await fetchAllBalances(addresses);
+          available = realBalances[fromSymbol] ?? 0;
+        } catch {
+          // If balance fetch fails, allow the swap attempt — the chain will reject if insufficient
+          available = Infinity;
+        }
+      }
       if (amountNum > available) {
         Alert.alert(
           'Insufficient Balance',
@@ -265,6 +289,15 @@ export function SwapScreen() {
         updateDevBalance(fromSymbol, -parseFloat(amountStr));
         updateDevBalance(toSymbol, toAmount);
       }
+      // Record paper swap to history
+      const { recordSwap } = await import('../core/swap/swapHistory');
+      await recordSwap({
+        from: fromSymbol, to: toSymbol,
+        fromAmount: parseFloat(amountStr), toAmount: selectedOption?.toAmount ?? 0,
+        provider: selectedOption?.name ?? 'Unknown', status: 'completed',
+        isPaper: true, chain: confirmedChain ?? undefined,
+      });
+
       Alert.alert(
         `${getTrafficLightEmoji(status.light)} Practice Swap Complete`,
         `${amountStr} ${fromSymbol} → ${selectedOption?.toAmount.toFixed(4)} ${toSymbol} (simulated)\n\nVia: ${selectedOption?.name}${confirmedChain ? `\nChain: ${CHAIN_ICONS[confirmedChain]} ${confirmedChain}` : ''}\nPractice trades completed: ${status.count}/3 recommended\n\n${status.light === 'green' ? 'Wonderful! You\'re now cleared for real transactions. The path is verified and you\'re ready to go.' : `We recommend ${3 - status.count} more practice trade${3 - status.count > 1 ? 's' : ''} to fully verify this transaction path. Each one helps ensure your real funds will arrive safely.`}`
@@ -278,6 +311,15 @@ export function SwapScreen() {
         if (isStablecoinSwap && confirmedChain) setStablecoinChain(toSymbol, confirmedChain);
         updateDevBalance(fromSymbol, -parseFloat(amountStr));
         updateDevBalance(toSymbol, toAmount);
+        // Record dev swap to history
+        const { recordSwap: recordDevSwap } = await import('../core/swap/swapHistory');
+        await recordDevSwap({
+          from: fromSymbol, to: toSymbol,
+          fromAmount: parseFloat(amountStr), toAmount,
+          provider: selectedOption?.name ?? 'Unknown', txHash: fakeTxHash,
+          status: 'completed', isPaper: false, chain: confirmedChain ?? undefined,
+        });
+
         Alert.alert(
           '✅ Swap Executed (Dev Mode)',
           `${amountStr} ${fromSymbol} → ~${selectedOption?.toAmount.toFixed(4)} ${toSymbol}\n\nVia: ${selectedOption?.name}${confirmedChain ? `\nChain: ${CHAIN_ICONS[confirmedChain]} ${confirmedChain}` : ''}\n\nTx: ${fakeTxHash.slice(0, 16)}...${fakeTxHash.slice(-8)}\n\n⚡ Simulated in dev/testnet mode. No real funds moved.`,
@@ -309,6 +351,16 @@ export function SwapScreen() {
         if (result.success && isStablecoinSwap && confirmedChain) {
           setStablecoinChain(toSymbol, confirmedChain);
         }
+
+        // Record real swap to history
+        const { recordSwap: recordRealSwap } = await import('../core/swap/swapHistory');
+        await recordRealSwap({
+          from: fromSymbol, to: toSymbol,
+          fromAmount: parseFloat(amountStr), toAmount: selectedOption?.toAmount ?? 0,
+          provider: result.provider, txHash: result.txHash,
+          status: result.success ? 'completed' : 'failed',
+          isPaper: false, chain: confirmedChain ?? undefined,
+        });
 
         Alert.alert(
           result.success ? 'Swap Initiated' : 'Swap Failed',
@@ -612,6 +664,35 @@ export function SwapScreen() {
             <Text style={s.fallbackText}>
               🔐 Open Wallet Atomic Swap is ALWAYS available as fallback. It uses pure cryptography — no external service, protocol, or API can shut it down.
             </Text>
+          </View>
+        )}
+
+        {/* Slippage Tolerance */}
+        {options.length > 0 && (
+          <View style={{ marginTop: 16 }}>
+            <Text style={[s.sectionTitle, { marginBottom: 8 }]}>Slippage Tolerance</Text>
+            <View style={{ flexDirection: 'row', gap: 8 }}>
+              {SLIPPAGE_OPTIONS.map((opt) => (
+                <TouchableOpacity
+                  key={opt.value}
+                  onPress={() => setSlippageBps(opt.value)}
+                  style={[
+                    s.tokenChip,
+                    slippageBps === opt.value && s.tokenChipActive,
+                  ]}
+                >
+                  <Text style={[
+                    s.tokenChipText,
+                    slippageBps === opt.value && s.tokenChipTextActive,
+                  ]}>{opt.label}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+            {slippageBps >= 300 && (
+              <Text style={{ color: t.accent.yellow, fontSize: fonts.xs, marginTop: 6 }}>
+                High slippage — you may receive significantly less than quoted.
+              </Text>
+            )}
           </View>
         )}
 

@@ -61,6 +61,7 @@ export interface SwapExecutionResult {
 /**
  * Execute a swap using the selected option.
  * This is the real deal — it moves actual funds.
+ * Includes retry logic with exponential backoff for network failures.
  */
 export async function executeSwapTransaction(params: {
   option: SwapOption;
@@ -72,38 +73,180 @@ export async function executeSwapTransaction(params: {
   fromAddress: string;
   toAddress: string;
   onProgress?: OnProgress;
+  maxRetries?: number;
 }): Promise<SwapExecutionResult> {
-  const { option, fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, fromAddress, toAddress, onProgress } = params;
+  const { option, fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, fromAddress, toAddress, onProgress, maxRetries = 2 } = params;
   const p = onProgress ?? (() => {});
 
-  switch (option.id) {
-    case 'ext-thorchain':
-      return executeTHORChainSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, toAddress, p });
+  const executeOnce = (): Promise<SwapExecutionResult> => {
+    switch (option.id) {
+      case 'ext-thorchain':
+        return executeTHORChainSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, toAddress, p });
 
-    case 'ow-atomic':
-      return executeAtomicSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, toAddress, p });
+      case 'ow-atomic':
+        return executeAtomicSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, toAddress, p });
 
-    case 'ow-dex':
-      return executeOpenChainDEXSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, p });
+      case 'ow-dex':
+        return executeOpenChainDEXSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, p });
 
-    case 'ow-orderbook':
-      return executeOrderBookSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, p });
+      case 'ow-orderbook':
+        return executeOrderBookSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, p });
 
-    case 'ext-1inch':
-      return execute1inchSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, fromAddress, toAddress, p });
+      case 'ext-1inch':
+        return execute1inchSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, fromAddress, toAddress, p });
 
-    case 'ext-jupiter':
-      return executeJupiterSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, p });
+      case 'ext-jupiter':
+        return executeJupiterSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, p });
 
-    case 'ext-li.fi-bridge':
-      return executeLiFiBridgeSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, fromAddress, toAddress, p });
+      case 'ext-li.fi-bridge':
+        return executeLiFiBridgeSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, fromAddress, toAddress, p });
 
-    case 'ext-osmosis-(ibc)':
-      return executeOsmosisSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, p });
+      case 'ext-osmosis-(ibc)':
+        return executeOsmosisSwap({ fromAmount, fromSymbol, toSymbol, mnemonic, accountIndex, p });
 
-    default:
-      return { success: false, message: 'Unknown swap option.', provider: 'Unknown' };
+      default:
+        return Promise.resolve({ success: false, message: 'Unknown swap option.', provider: 'Unknown' });
+    }
+  };
+
+  // Execute with retry for network/transient failures
+  return executeWithRetry(executeOnce, maxRetries, p);
+}
+
+/**
+ * Retry wrapper with exponential backoff.
+ * Only retries on network failures — NOT on user errors or insufficient funds.
+ */
+async function executeWithRetry(
+  fn: () => Promise<SwapExecutionResult>,
+  maxRetries: number,
+  p: OnProgress,
+): Promise<SwapExecutionResult> {
+  let lastResult: SwapExecutionResult | null = null;
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const result = await fn();
+
+      // Don't retry user/logic errors — only network failures
+      if (result.success) return result;
+
+      lastResult = result;
+      const isRetryable = isRetryableError(result.message);
+
+      if (!isRetryable || attempt >= maxRetries) {
+        return result;
+      }
+
+      // Exponential backoff: 2s, 4s
+      const delay = Math.pow(2, attempt + 1) * 1000;
+      p({ stepId: 'retry', status: 'delayed', detail: `Retrying in ${delay / 1000}s... (attempt ${attempt + 2}/${maxRetries + 1})` });
+      await new Promise(r => setTimeout(r, delay));
+      p({ stepId: 'retry', status: 'active', detail: `Retry attempt ${attempt + 2}` });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      lastResult = { success: false, message: msg, provider: 'Unknown' };
+
+      if (!isRetryableError(msg) || attempt >= maxRetries) {
+        return lastResult;
+      }
+
+      const delay = Math.pow(2, attempt + 1) * 1000;
+      p({ stepId: 'retry', status: 'delayed', detail: `Network error. Retrying in ${delay / 1000}s...` });
+      await new Promise(r => setTimeout(r, delay));
+    }
   }
+
+  return lastResult ?? { success: false, message: 'Swap failed after retries.', provider: 'Unknown' };
+}
+
+/** Determine if an error is transient and worth retrying. */
+function isRetryableError(message: string): boolean {
+  const retryablePatterns = [
+    'network', 'timeout', 'ETIMEDOUT', 'ECONNREFUSED', 'ECONNRESET',
+    'fetch failed', 'Failed to fetch', 'aborted', 'socket hang up',
+    '502', '503', '504', 'rate limit', 'too many requests',
+  ];
+  const lower = message.toLowerCase();
+  return retryablePatterns.some(p => lower.includes(p.toLowerCase()));
+}
+
+/**
+ * Check if a broadcast transaction is stuck in the mempool.
+ * Returns the transaction status if found.
+ */
+export async function checkTransactionStatus(params: {
+  txHash: string;
+  chain: string;
+}): Promise<{ confirmed: boolean; pending: boolean; failed: boolean; confirmations?: number }> {
+  const { txHash, chain } = params;
+  const { getNetworkConfig } = await import('../network');
+  const config = getNetworkConfig();
+
+  try {
+    if (chain === 'bitcoin') {
+      const res = await fetch(`${config.bitcoin.apiBase}/tx/${txHash}`, {
+        signal: AbortSignal.timeout(5000),
+      });
+      if (!res.ok) return { confirmed: false, pending: false, failed: true };
+      const data = await res.json();
+      return {
+        confirmed: data.status?.confirmed ?? false,
+        pending: !data.status?.confirmed,
+        failed: false,
+        confirmations: data.status?.block_height ? 1 : 0,
+      };
+    }
+
+    if (chain === 'ethereum') {
+      const res = await fetch(config.ethereum.rpcUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          jsonrpc: '2.0', id: 1,
+          method: 'eth_getTransactionReceipt',
+          params: [txHash],
+        }),
+        signal: AbortSignal.timeout(5000),
+      });
+      if (!res.ok) return { confirmed: false, pending: false, failed: true };
+      const data = await res.json();
+      if (!data.result) return { confirmed: false, pending: true, failed: false };
+      const status = parseInt(data.result.status, 16);
+      return {
+        confirmed: status === 1,
+        pending: false,
+        failed: status === 0,
+        confirmations: data.result.blockNumber ? 1 : 0,
+      };
+    }
+
+    if (chain === 'solana') {
+      const res = await fetch(config.solana.rpcUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          jsonrpc: '2.0', id: 1,
+          method: 'getTransaction',
+          params: [txHash, { encoding: 'json' }],
+        }),
+        signal: AbortSignal.timeout(5000),
+      });
+      if (!res.ok) return { confirmed: false, pending: false, failed: true };
+      const data = await res.json();
+      if (!data.result) return { confirmed: false, pending: true, failed: false };
+      return {
+        confirmed: !data.result.meta?.err,
+        pending: false,
+        failed: !!data.result.meta?.err,
+        confirmations: data.result.slot ? 1 : 0,
+      };
+    }
+  } catch {
+    return { confirmed: false, pending: false, failed: true };
+  }
+
+  return { confirmed: false, pending: false, failed: true };
 }
 
 // ─── THORChain Execution (BTC/ETH/USDT/USDC) ───

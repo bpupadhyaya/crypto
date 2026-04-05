@@ -106,6 +106,7 @@ export function useAllBalances(addresses: Partial<Record<ChainId, string>>) {
     return { balances: buildDemoBalances(devBalances), isLoading: false, isError: false };
   }
 
+  // If registry queries returned results, use them
   const balances = queries
     .map((q) => q.data)
     .filter((b): b is Balance => b != null && b.token != null);
@@ -114,6 +115,27 @@ export function useAllBalances(addresses: Partial<Record<ChainId, string>>) {
   const isError = queries.some((q) => q.isError);
 
   return { balances, isLoading, isError };
+}
+
+/**
+ * Hook that returns real on-chain balances as a simple symbol → amount map.
+ * Used by SwapScreen for balance validation on mainnet.
+ * Falls back to devBalances in demo/testnet mode.
+ */
+export function useRealBalances(addresses: Partial<Record<string, string>>) {
+  const demoMode = useWalletStore((s) => s.demoMode);
+  const devBalances = useWalletStore((s) => s.devBalances);
+
+  return useQuery({
+    queryKey: ['realBalances', demoMode, ...Object.values(addresses)],
+    queryFn: async (): Promise<Record<string, number>> => {
+      if (demoMode) return devBalances;
+      const { fetchAllBalances } = await import('../core/balances/balanceFetcher');
+      return fetchAllBalances(addresses);
+    },
+    staleTime: 15_000,
+    refetchInterval: 30_000,
+  });
 }
 
 // ─── Price Hook ───

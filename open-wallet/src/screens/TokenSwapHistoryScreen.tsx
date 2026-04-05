@@ -4,13 +4,14 @@ import { fonts } from '../utils/theme';
  * Filterable by provider, token pair, with volume stats and provider analytics.
  */
 
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   View, Text, TouchableOpacity, ScrollView,
-  StyleSheet, SafeAreaView,
+  StyleSheet, SafeAreaView, ActivityIndicator,
 } from 'react-native';
 import { useWalletStore } from '../store/walletStore';
 import { useTheme } from '../hooks/useTheme';
+import { getSwapHistory, type SwapRecord as StoredSwapRecord } from '../core/swap/swapHistory';
 
 type Tab = 'all' | 'by-provider' | 'stats';
 
@@ -87,9 +88,38 @@ export function TokenSwapHistoryScreen({ onClose }: Props) {
   const [tab, setTab] = useState<Tab>('all');
   const [filterProvider, setFilterProvider] = useState<string>('All');
   const [filterPair, setFilterPair] = useState<string>('All');
+  const [realSwaps, setRealSwaps] = useState<SwapRecord[]>([]);
+  const [loadingHistory, setLoadingHistory] = useState(true);
+
+  // Load real swap history on mount
+  useEffect(() => {
+    (async () => {
+      try {
+        const history = await getSwapHistory();
+        const formatted: SwapRecord[] = history.map(h => ({
+          id: h.id,
+          date: new Date(h.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+          from: h.from,
+          to: h.to,
+          fromAmount: h.fromAmount.toString(),
+          toAmount: h.toAmount.toLocaleString(),
+          provider: h.provider,
+          txHash: h.txHash ?? '',
+          status: h.status,
+          fee: '',
+          savedVsAvg: h.isPaper ? '(practice)' : '',
+        }));
+        setRealSwaps(formatted);
+      } catch {
+        setRealSwaps([]);
+      }
+      setLoadingHistory(false);
+    })();
+  }, []);
 
   const filteredSwaps = useMemo(() => {
-    let swaps = DEMO_SWAPS;
+    // Use real history if available, fall back to demo data
+    let swaps = realSwaps.length > 0 ? realSwaps : DEMO_SWAPS;
     if (filterProvider !== 'All') {
       swaps = swaps.filter(s => s.provider === filterProvider);
     }

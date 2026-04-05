@@ -789,7 +789,7 @@ export function OnboardingScreen() {
             </TouchableOpacity>
           )}
 
-          {(
+          {__DEV__ && (
             <TouchableOpacity
               style={[styles.secondaryButton, { marginTop: 16, borderColor: '#f59e0b', borderStyle: 'dashed' }]}
               onPress={handleDevQuickstart}
