@@ -28,6 +28,7 @@ import {
 import { useWalletStore } from '../store/walletStore';
 import { useTheme } from '../hooks/useTheme';
 import { getProvider } from '../core/hardware/hardwareKeyManager';
+import { useScreenProtection } from '../core/security/screenProtection';
 
 type OnboardingStep =
   | 'welcome'
@@ -39,6 +40,9 @@ type OnboardingStep =
   | 'password';
 
 export function OnboardingScreen() {
+  // Prevent screenshots when seed phrase is displayed
+  useScreenProtection();
+
   const [step, setStep] = useState<OnboardingStep>('welcome');
   const [mnemonic, setMnemonic] = useState('');
   const [restoreInput, setRestoreInput] = useState('');
@@ -852,7 +856,7 @@ export function OnboardingScreen() {
           {(
             <TouchableOpacity
               style={[styles.secondaryButton, { marginBottom: 6 }]}
-              onPress={async () => { const Clipboard = await import('expo-clipboard'); Clipboard.setStringAsync(mnemonic); Alert.alert('Copied', 'Seed phrase copied (dev only)'); }}
+              onPress={async () => { const { secureCopy } = await import('../core/security/secureClipboard'); await secureCopy(mnemonic, 'Seed phrase', 30000); }}
             >
               <Text style={[styles.secondaryButtonText, { color: t.accent.yellow }]}>Copy (Dev Only)</Text>
             </TouchableOpacity>

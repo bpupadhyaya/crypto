@@ -53,12 +53,27 @@ export interface IKeyDerivation {
   deriveKey(password: string, salt: Uint8Array): Promise<Uint8Array>;
 }
 
-// ─── PBKDF2 Key Derivation (@noble/hashes — audited, pure JS) ───
+// ─── Argon2id Key Derivation (@noble/hashes — audited, pure JS, PQC-resistant) ───
+
+class NobleArgon2idKeyDerivation implements IKeyDerivation {
+  // Argon2id is the recommended KDF for password hashing (RFC 9106).
+  // Memory-hard: resistant to GPU/ASIC brute force attacks.
+  // Parameters tuned for mobile: 64 MiB memory, 3 iterations.
+  async deriveKey(password: string, salt: Uint8Array): Promise<Uint8Array> {
+    const { argon2id } = await import('@noble/hashes/argon2.js');
+    const encoder = new TextEncoder();
+    return argon2id(encoder.encode(password), salt, {
+      t: 3,          // 3 iterations (time cost)
+      m: 65536,      // 64 MiB memory cost
+      p: 1,          // 1 lane (parallelism)
+      dkLen: 32,     // 256-bit output
+    });
+  }
+}
+
+// ─── PBKDF2 Key Derivation (legacy fallback for vaults created before Argon2id) ───
 
 class NoblePbkdf2KeyDerivation implements IKeyDerivation {
-  // 10K iterations for pure-JS on mobile. Combined with AES-256-GCM
-  // (quantum-safe) and the vault stored in OS Keychain (hardware-backed),
-  // this is secure. Will upgrade to native Argon2id via Rust for 600K+.
   private iterations = 10_000;
 
   async deriveKey(password: string, salt: Uint8Array): Promise<Uint8Array> {
@@ -99,7 +114,7 @@ export class Vault {
 
   constructor(cryptoImpl?: IVaultCrypto, kdf?: IKeyDerivation) {
     this.cryptoImpl = cryptoImpl ?? new NobleAesGcmCrypto();
-    this.kdf = kdf ?? new NoblePbkdf2KeyDerivation();
+    this.kdf = kdf ?? new NobleArgon2idKeyDerivation();
   }
 
   upgradeCrypto(cryptoImpl: IVaultCrypto): void { this.cryptoImpl = cryptoImpl; }
@@ -115,12 +130,12 @@ export class Vault {
     this.masterKey = masterKey;
 
     const vaultData: VaultData = {
-      version: 3,
+      version: 4,
       salt: toHex(salt),
       iv: toHex(iv),
       ciphertext: toHex(ciphertext),
-      kdf: 'pbkdf2',
-      kdfParams: { iterations: 600_000, hash: 'SHA-256' },
+      kdf: 'argon2id',
+      kdfParams: { iterations: 3, hash: 'argon2id', memory: 65536, parallelism: 1 },
       pqcWrapped: false,
       createdAt: Date.now(),
       lastUnlockedAt: Date.now(),
@@ -137,8 +152,13 @@ export class Vault {
       vaultData = JSON.parse(stored);
     }
 
+    // Auto-detect KDF from vault data (backwards compatible with PBKDF2 vaults)
+    const kdf = vaultData!.kdf === 'argon2id'
+      ? new NobleArgon2idKeyDerivation()
+      : new NoblePbkdf2KeyDerivation();
+
     const salt = fromHex(vaultData!.salt);
-    const masterKey = await this.kdf.deriveKey(password, salt);
+    const masterKey = await kdf.deriveKey(password, salt);
 
     const ciphertext = fromHex(vaultData!.ciphertext);
     const iv = fromHex(vaultData!.iv);

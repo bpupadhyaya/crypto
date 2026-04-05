@@ -15,6 +15,8 @@ import { TransactionPipeline, getPipelineSteps, type PipelineStep, type StepStat
 import type { Theme } from '../utils/theme';
 import { fonts } from '../utils/theme';
 
+type FeePriority = 'slow' | 'medium' | 'fast';
+
 interface TxDetails {
   type: 'send' | 'swap' | 'bridge';
   fromSymbol: string;
@@ -28,6 +30,12 @@ interface TxDetails {
   swapProviderId?: string;
   /** Swap provider name for display */
   swapProviderName?: string;
+  /** Fee estimates for priority selector */
+  feeEstimates?: {
+    slow: { fee: string; time: string };
+    medium: { fee: string; time: string };
+    fast: { fee: string; time: string };
+  };
 }
 
 interface Props {
@@ -41,6 +49,7 @@ export const ConfirmTransactionScreen = React.memo(({ tx, onConfirm, onCancel }:
   const [pinError, setPinError] = useState<string | null>(null);
   const [pipelineSteps, setPipelineSteps] = useState<PipelineStep[]>([]);
   const [executionDone, setExecutionDone] = useState(false);
+  const [feePriority, setFeePriority] = useState<FeePriority>('medium');
   const t = useTheme();
 
   // Initialize pipeline steps when we have a swap provider
@@ -216,9 +225,44 @@ export const ConfirmTransactionScreen = React.memo(({ tx, onConfirm, onCancel }:
           {tx.recipient && (
             <DetailRow label="To" value={`${tx.recipient.slice(0, 12)}...${tx.recipient.slice(-8)}`} />
           )}
-          {tx.fee && <DetailRow label="Network Fee" value={tx.fee} />}
+          {tx.fee && !tx.feeEstimates && <DetailRow label="Network Fee" value={tx.fee} />}
           {tx.route && <DetailRow label="Route" value={tx.route} />}
         </View>
+
+        {/* Fee Priority Selector */}
+        {tx.feeEstimates && (
+          <View style={{ marginBottom: 16 }}>
+            <Text style={{ color: t.text.muted, fontSize: fonts.sm, textTransform: 'uppercase' as const, letterSpacing: 1, marginBottom: 8 }}>
+              Fee Priority
+            </Text>
+            <View style={{ flexDirection: 'row', gap: 8 }}>
+              {([
+                { key: 'slow' as FeePriority, label: 'Slow', icon: '🐢', data: tx.feeEstimates.slow },
+                { key: 'medium' as FeePriority, label: 'Medium', icon: '⚡', data: tx.feeEstimates.medium },
+                { key: 'fast' as FeePriority, label: 'Fast', icon: '🚀', data: tx.feeEstimates.fast },
+              ]).map(opt => (
+                <TouchableOpacity
+                  key={opt.key}
+                  onPress={() => setFeePriority(opt.key)}
+                  style={{
+                    flex: 1, padding: 12, borderRadius: 12,
+                    backgroundColor: feePriority === opt.key ? t.accent.green + '20' : t.bg.card,
+                    borderWidth: 1,
+                    borderColor: feePriority === opt.key ? t.accent.green : 'transparent',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text style={{ fontSize: fonts.lg }}>{opt.icon}</Text>
+                  <Text style={{ color: feePriority === opt.key ? t.accent.green : t.text.secondary, fontSize: fonts.sm, fontWeight: fonts.bold as any, marginTop: 2 }}>
+                    {opt.label}
+                  </Text>
+                  <Text style={{ color: t.text.muted, fontSize: fonts.xs, marginTop: 2 }}>{opt.data.fee}</Text>
+                  <Text style={{ color: t.text.muted, fontSize: fonts.xs }}>{opt.data.time}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        )}
 
         <Text style={s.warning}>
           This transaction is irreversible. Verify all details before confirming.

@@ -131,8 +131,8 @@ export function ReceiveScreen() {
   }), [t]);
 
   const copyAddress = async () => {
-    await Clipboard.setStringAsync(address);
-    Alert.alert('Copied', 'Address copied to clipboard');
+    const { secureCopy } = await import('../core/security/secureClipboard');
+    await secureCopy(address, 'Address', 60000);
   };
 
   const shareAddress = async () => {
