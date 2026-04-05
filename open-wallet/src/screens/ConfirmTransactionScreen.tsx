@@ -8,7 +8,9 @@ import {
   View, Text, TouchableOpacity, StyleSheet,
   SafeAreaView, Alert, ActivityIndicator, ScrollView,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { authManager } from '../core/auth/auth';
+import { decodeTransaction, type DecodedTransaction } from '../core/transactions/decoder';
 import { PinPad } from '../components/PinPad';
 import { useTheme } from '../hooks/useTheme';
 import { TransactionPipeline, getPipelineSteps, type PipelineStep, type StepStatus } from '../components/TransactionPipeline';
@@ -36,6 +38,8 @@ interface TxDetails {
     medium: { fee: string; time: string };
     fast: { fee: string; time: string };
   };
+  /** Raw transaction data for simulation/decoding */
+  txData?: { chain: string; to?: string; value?: string; data?: string };
 }
 
 interface Props {
@@ -263,6 +267,31 @@ export const ConfirmTransactionScreen = React.memo(({ tx, onConfirm, onCancel }:
             </View>
           </View>
         )}
+
+        {/* Transaction Simulation */}
+        {tx.txData && (() => {
+          const decoded = decodeTransaction(tx.txData);
+          const riskColor = decoded.risk === 'danger' ? t.accent.red
+            : decoded.risk === 'warning' ? t.accent.yellow
+            : t.accent.green;
+          return (
+            <View style={{ backgroundColor: riskColor + '10', borderRadius: 12, padding: 14, marginBottom: 16, borderWidth: 1, borderColor: riskColor + '40' }}>
+              <Text style={{ color: riskColor, fontSize: fonts.sm, fontWeight: fonts.bold as any, marginBottom: 6 }}>
+                {decoded.risk === 'danger' ? 'DANGER' : decoded.risk === 'warning' ? 'REVIEW CAREFULLY' : 'SAFE'}
+              </Text>
+              {decoded.actions.map((action, i) => (
+                <Text key={i} style={{ color: t.text.secondary, fontSize: fonts.sm, lineHeight: 18 }}>
+                  • {action}
+                </Text>
+              ))}
+              {decoded.warnings.map((w, i) => (
+                <Text key={`w${i}`} style={{ color: riskColor, fontSize: fonts.xs, marginTop: 4, lineHeight: 16 }}>
+                  ⚠ {w}
+                </Text>
+              ))}
+            </View>
+          );
+        })()}
 
         <Text style={s.warning}>
           This transaction is irreversible. Verify all details before confirming.

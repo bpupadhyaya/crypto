@@ -25,6 +25,7 @@ import {
   Platform,
   StatusBar,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useWalletStore } from '../store/walletStore';
 import { useTheme } from '../hooks/useTheme';
 import { getProvider } from '../core/hardware/hardwareKeyManager';
@@ -42,6 +43,7 @@ type OnboardingStep =
 export function OnboardingScreen() {
   // Prevent screenshots when seed phrase is displayed
   useScreenProtection();
+  const { t } = useTranslation();
 
   const [step, setStep] = useState<OnboardingStep>('welcome');
   const [mnemonic, setMnemonic] = useState('');
@@ -688,10 +690,9 @@ export function OnboardingScreen() {
       <SafeAreaView style={styles.container}>
         <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight ?? 0) + 8 : 8, paddingBottom: 30 }}>
           <Text style={[styles.logo, { fontSize: fonts.xxxl, marginBottom: 0 }]}>OW</Text>
-          <Text style={[styles.title, { fontSize: fonts.xl }]}>Open Wallet</Text>
+          <Text style={[styles.title, { fontSize: fonts.xl }]}>{t('onboarding.title')}</Text>
           <Text style={[styles.subtitle, { fontSize: fonts.sm, marginTop: 4, lineHeight: 18 }]}>
-            Your money. Your control.{'\n'}
-            Every token. Every chain. One app.
+            {t('onboarding.subtitle')}
           </Text>
 
           <View style={{
@@ -730,7 +731,7 @@ export function OnboardingScreen() {
               {loading ? (
                 <ActivityIndicator color={t.bg.primary} />
               ) : (
-                <Text style={styles.primaryButtonText}>Create New Wallet</Text>
+                <Text style={styles.primaryButtonText}>{t('onboarding.createWallet')}</Text>
               )}
             </TouchableOpacity>
 
@@ -738,7 +739,7 @@ export function OnboardingScreen() {
               style={styles.secondaryButton}
               onPress={() => setStep('restore')}
             >
-              <Text style={styles.secondaryButtonText}>Restore Existing Wallet</Text>
+              <Text style={styles.secondaryButtonText}>{t('onboarding.restoreWallet')}</Text>
             </TouchableOpacity>
           </View>
 

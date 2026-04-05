@@ -205,10 +205,29 @@ export function NFTGalleryScreen({ onClose }: Props) {
 
   const loadNFTs = async () => {
     setLoading(true);
-    // In demo mode or when APIs are not configured, use sample data
-    // Real mode would query Alchemy (Ethereum) and Helius (Solana)
-    await new Promise((r) => setTimeout(r, 500)); // Simulate loading
-    setNfts(DEMO_NFTS);
+    try {
+      const { fetchNFTs } = await import('../core/nft/nftFetcher');
+      const { useWalletStore } = await import('../store/walletStore');
+      const addresses = useWalletStore.getState().addresses;
+      const realNfts = await fetchNFTs({
+        ethereum: addresses.ethereum,
+        solana: addresses.solana,
+      });
+      if (realNfts.length > 0) {
+        setNfts(realNfts.map(n => ({
+          id: n.id,
+          name: n.name,
+          collection: n.collection ?? 'Unknown',
+          chain: n.chain,
+          image: n.image,
+          tokenId: n.tokenId,
+        })));
+      } else {
+        setNfts(DEMO_NFTS);
+      }
+    } catch {
+      setNfts(DEMO_NFTS);
+    }
     setLoading(false);
   };
 

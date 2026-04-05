@@ -17,6 +17,7 @@ import {
   View, Text, TextInput, TouchableOpacity, ScrollView,
   StyleSheet, SafeAreaView, Alert, ActivityIndicator, Modal,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useWalletStore } from '../store/walletStore';
 import { ConfirmTransactionScreen } from './ConfirmTransactionScreen';
 import { useTheme } from '../hooks/useTheme';
@@ -30,6 +31,7 @@ import { detectChainFromAddress, STABLECOIN_CHAINS, CHAIN_ICONS, CHAIN_COLORS, t
 const SWAP_TOKENS = ['BTC', 'ETH', 'SOL', 'USDT', 'USDC', 'OTK', 'ATOM'];
 
 export function SwapScreen() {
+  const { t } = useTranslation();
   const { mode, addresses, setStablecoinChain, demoMode, updateDevBalance, devBalances } = useWalletStore();
   const [fromSymbol, setFromSymbol] = useState('BTC');
   const [toSymbol, setToSymbol] = useState('USDT');
