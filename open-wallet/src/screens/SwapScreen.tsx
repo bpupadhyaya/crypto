@@ -31,7 +31,7 @@ import { detectChainFromAddress, STABLECOIN_CHAINS, CHAIN_ICONS, CHAIN_COLORS, t
 const SWAP_TOKENS = ['BTC', 'ETH', 'SOL', 'USDT', 'USDC', 'OTK', 'ATOM'];
 
 export function SwapScreen() {
-  const { t } = useTranslation();
+  const { t: tr } = useTranslation();
   const { mode, addresses, setStablecoinChain, demoMode, updateDevBalance, devBalances } = useWalletStore();
   const [fromSymbol, setFromSymbol] = useState('BTC');
   const [toSymbol, setToSymbol] = useState('USDT');
