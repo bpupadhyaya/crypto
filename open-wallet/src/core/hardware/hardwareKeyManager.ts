@@ -91,11 +91,12 @@ const DERIVATION_PATHS: Record<string, string> = {
 // Since hardware wallet libraries are optional (not installed by default),
 // we return null and show install instructions when the user tries to use them.
 
-function tryLoadModule(_moduleName: string): any | null {
-  // Hardware wallet native modules are not pre-installed.
-  // When user tries to connect a device, they'll get clear instructions.
-  // To enable: npm install <module> and rebuild.
-  return null;
+function tryLoadModule(moduleName: string): any | null {
+  try {
+    return require(moduleName);
+  } catch {
+    return null;
+  }
 }
 
 // ─── Demo Mode Addresses ───
