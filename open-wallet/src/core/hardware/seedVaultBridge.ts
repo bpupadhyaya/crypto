@@ -249,37 +249,37 @@ export async function connectSeedVault(): Promise<{
     }
   }
 
-  // Step 4: Get public key — try multiple approaches for compatibility
+  // Step 4: Get public key
   let pubkey: string;
+
+  // Try getUserWallets first (already configured wallets on the device)
   try {
-    // First try: get existing user wallets/accounts
-    // getAccounts requires 3 args: (authToken, filterColumn, filterValue)
-    const accounts = await SeedVault.getAccounts(authToken, '', '').catch(() => []);
-    const userWallets = await SeedVault.getUserWallets(authToken).catch(() => []);
-
-    const existingAccount = userWallets[0] ?? accounts[0];
-
-    if (existingAccount && existingAccount.publicKeyEncoded) {
-      pubkey = keyResultToBase58({ publicKeyEncoded: existingAccount.publicKeyEncoded });
+    const userWallets = await SeedVault.getUserWallets(authToken);
+    if (userWallets.length > 0 && userWallets[0].publicKeyEncoded) {
+      pubkey = keyResultToBase58({ publicKeyEncoded: userWallets[0].publicKeyEncoded });
     } else {
-      // No existing accounts — derive from path
+      throw new Error('no user wallets');
+    }
+  } catch {
+    // Fall back to direct key derivation
+    try {
+      const keyResult = await SeedVault.getPublicKey(authToken, SOLANA_DERIVATION_PATH);
+      pubkey = keyResultToBase58(keyResult);
+    } catch (e1: any) {
+      // Try resolveDerivationPath first, then getPublicKey
       try {
-        const keyResult = await SeedVault.getPublicKey(authToken, SOLANA_DERIVATION_PATH);
+        const resolved = await SeedVault.resolveDerivationPath(SOLANA_DERIVATION_PATH);
+        const keyResult = await SeedVault.getPublicKey(authToken, resolved);
         pubkey = keyResultToBase58(keyResult);
-      } catch (keyErr: any) {
-        // Error 1007 = no account at path. Try getPublicKeys (plural) as fallback
-        try {
-          const keyResults = await SeedVault.getPublicKeys(authToken, [SOLANA_DERIVATION_PATH]);
-          pubkey = keyResultToBase58(keyResults[0]);
-        } catch {
-          throw new Error(`Seed Vault key derivation failed (${keyErr?.message ?? 'unknown'}). Please ensure Seed Vault is set up in your device settings.`);
-        }
+      } catch {
+        // Last resort: open Seed Vault settings
+        try { await SeedVault.showSeedSettings(authToken); } catch {}
+        return {
+          success: false, addresses: {}, model: 'unknown',
+          message: `Seed Vault could not derive a key (error: ${e1?.message ?? 'unknown'}).\n\nPlease open Seed Vault in your device Settings, create or import a seed, then try again.`,
+        };
       }
     }
-  } catch (err: any) {
-    // Last resort: show Seed Vault settings so user can configure
-    try { await SeedVault.showSeedSettings(authToken); } catch {}
-    throw new Error(`Could not retrieve public key: ${err?.message ?? 'unknown error'}. Please set up a wallet in Seed Vault settings and try again.`);
   }
 
   const constants = (Platform as any).constants || {};
