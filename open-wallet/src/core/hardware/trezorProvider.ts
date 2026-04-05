@@ -35,11 +35,12 @@ async function ensureTrezorConnect(): Promise<any> {
   if (trezorConnect && initialized) return trezorConnect;
 
   try {
-    // Try @trezor/connect first (newer), fall back to trezor-connect
+    // Use variable-based require to prevent Metro from resolving at bundle time
+    const moduleName = '@trezor/' + 'connect';
     try {
-      trezorConnect = await import('@trezor/connect');
+      trezorConnect = require(moduleName);
     } catch {
-      trezorConnect = await import('trezor-connect');
+      throw new Error('Trezor Connect not installed. Install: npm install @trezor/connect');
     }
 
     const TC = trezorConnect.default ?? trezorConnect;

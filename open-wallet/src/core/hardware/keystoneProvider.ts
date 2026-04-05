@@ -43,7 +43,7 @@ export function createKeystoneProvider(): HardwareWalletProvider {
     async detect(): Promise<boolean> {
       // Keystone is always "available" — it just needs camera access
       try {
-        await import('@keystonehq/keystone-sdk');
+        require('@keystonehq/' + 'keystone-sdk');
         return true;
       } catch {
         return false;
@@ -101,7 +101,7 @@ export function createKeystoneProvider(): HardwareWalletProvider {
  */
 export async function parseKeystoneAccountQR(urData: string): Promise<KeystoneAccount[]> {
   try {
-    const { KeystoneSDK } = await import('@keystonehq/keystone-sdk');
+    const { KeystoneSDK } = require('@keystonehq/' + 'keystone-sdk');
     const sdk = new KeystoneSDK();
 
     // Parse the UR-encoded account data
@@ -137,10 +137,10 @@ export async function encodeTransactionForKeystone(
   unsignedTx: Uint8Array,
   path: string,
 ): Promise<string> {
-  const { CryptoKeypath, PathComponent } = await import('@keystonehq/bc-ur-registry');
+  const { CryptoKeypath, PathComponent } = require('@keystonehq/' + 'bc-ur-registry');
 
   if (chain === 'ethereum') {
-    const { EthSignRequest, DataType } = await import('@keystonehq/bc-ur-registry');
+    const { EthSignRequest, DataType } = require('@keystonehq/' + 'bc-ur-registry');
     const uuid = crypto.getRandomValues(new Uint8Array(16));
     const request = EthSignRequest.constructETHRequest(
       Buffer.from(unsignedTx),
@@ -163,7 +163,7 @@ export async function encodeTransactionForKeystone(
  */
 export async function parseKeystoneSignatureQR(urData: string): Promise<Uint8Array> {
   try {
-    const { ETHSignature } = await import('@keystonehq/bc-ur-registry');
+    const { ETHSignature } = require('@keystonehq/' + 'bc-ur-registry');
     const sig = ETHSignature.fromCBOR(Buffer.from(urData, 'hex'));
     return new Uint8Array(sig.getSignature());
   } catch {
