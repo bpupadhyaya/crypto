@@ -91,12 +91,43 @@ const DERIVATION_PATHS: Record<string, string> = {
 // Since hardware wallet libraries are optional (not installed by default),
 // we return null and show install instructions when the user tries to use them.
 
+// Metro requires string literals in require() — no variables allowed.
+// Each module gets its own try/catch with a literal string.
+const _moduleCache: Record<string, any> = {};
+
 function tryLoadModule(moduleName: string): any | null {
+  if (_moduleCache[moduleName] !== undefined) return _moduleCache[moduleName];
+
+  let mod: any = null;
   try {
-    return require(moduleName);
+    switch (moduleName) {
+      case '@ledgerhq/react-native-hw-transport-ble':
+        mod = require('@ledgerhq/react-native-hw-transport-ble'); break;
+      case '@ledgerhq/hw-app-eth':
+        mod = require('@ledgerhq/hw-app-eth'); break;
+      case '@ledgerhq/hw-app-btc':
+        mod = require('@ledgerhq/hw-app-btc'); break;
+      case '@ledgerhq/hw-app-solana':
+        mod = require('@ledgerhq/hw-app-solana'); break;
+      case '@trezor/connect-mobile':
+        mod = require('@trezor/connect-mobile'); break;
+      case '@keystonehq/keystone-sdk':
+        mod = require('@keystonehq/keystone-sdk'); break;
+      case '@keystonehq/animated-qr':
+        mod = require('@keystonehq/animated-qr'); break;
+      case '@solana-mobile/seed-vault-lib':
+        mod = require('@solana-mobile/seed-vault-lib'); break;
+      case 'react-native-keychain':
+        mod = require('react-native-keychain'); break;
+      default:
+        mod = null;
+    }
   } catch {
-    return null;
+    mod = null;
   }
+
+  _moduleCache[moduleName] = mod;
+  return mod;
 }
 
 // ─── Demo Mode Addresses ───
