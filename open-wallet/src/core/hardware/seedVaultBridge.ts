@@ -239,13 +239,47 @@ export async function connectSeedVault(): Promise<{
   if (existing.length > 0) {
     authToken = existing[0].authToken;
   } else {
-    const result = await SeedVault.authorizeNewSeed();
-    authToken = result.authToken;
+    // Try authorizeNewSeed first (creates new seed), fall back to createNewSeed
+    try {
+      const result = await SeedVault.authorizeNewSeed();
+      authToken = result.authToken;
+    } catch {
+      const result = await SeedVault.createNewSeed();
+      authToken = result.authToken;
+    }
   }
 
-  // Step 4: Get public key
-  const keyResult = await SeedVault.getPublicKey(authToken, SOLANA_DERIVATION_PATH);
-  const pubkey = keyResultToBase58(keyResult);
+  // Step 4: Get public key — try multiple approaches for compatibility
+  let pubkey: string;
+  try {
+    // First try: get existing user wallets/accounts
+    const accounts = await SeedVault.getAccounts(authToken).catch(() => []);
+    const userWallets = await SeedVault.getUserWallets(authToken).catch(() => []);
+
+    const existingAccount = userWallets[0] ?? accounts[0];
+
+    if (existingAccount && existingAccount.publicKeyEncoded) {
+      pubkey = keyResultToBase58({ publicKeyEncoded: existingAccount.publicKeyEncoded });
+    } else {
+      // No existing accounts — derive from path
+      try {
+        const keyResult = await SeedVault.getPublicKey(authToken, SOLANA_DERIVATION_PATH);
+        pubkey = keyResultToBase58(keyResult);
+      } catch (keyErr: any) {
+        // Error 1007 = no account at path. Try getPublicKeys (plural) as fallback
+        try {
+          const keyResults = await SeedVault.getPublicKeys(authToken, [SOLANA_DERIVATION_PATH]);
+          pubkey = keyResultToBase58(keyResults[0]);
+        } catch {
+          throw new Error(`Seed Vault key derivation failed (${keyErr?.message ?? 'unknown'}). Please ensure Seed Vault is set up in your device settings.`);
+        }
+      }
+    }
+  } catch (err: any) {
+    // Last resort: show Seed Vault settings so user can configure
+    try { await SeedVault.showSeedSettings(authToken); } catch {}
+    throw new Error(`Could not retrieve public key: ${err?.message ?? 'unknown error'}. Please set up a wallet in Seed Vault settings and try again.`);
+  }
 
   const constants = (Platform as any).constants || {};
   const model = (constants.Model || '').toLowerCase();
