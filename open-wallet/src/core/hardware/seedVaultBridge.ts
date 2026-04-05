@@ -253,7 +253,8 @@ export async function connectSeedVault(): Promise<{
   let pubkey: string;
   try {
     // First try: get existing user wallets/accounts
-    const accounts = await SeedVault.getAccounts(authToken).catch(() => []);
+    // getAccounts requires 3 args: (authToken, filterColumn, filterValue)
+    const accounts = await SeedVault.getAccounts(authToken, '', '').catch(() => []);
     const userWallets = await SeedVault.getUserWallets(authToken).catch(() => []);
 
     const existingAccount = userWallets[0] ?? accounts[0];
