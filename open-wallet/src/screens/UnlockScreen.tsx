@@ -133,12 +133,9 @@ export function UnlockScreen() {
       setBioLabel('Biometrics');
     }
 
-    // Only auto-trigger if keychain is set up — avoids blocking the screen
-    // when biometrics are enrolled but keychain hasn't been configured yet.
-    const isKeychainReady = await authManager.isBiometricKeychainReady();
-    if (isKeychainReady) {
-      handleBiometricUnlock();
-    }
+    // Do NOT auto-trigger biometric on unlock screen.
+    // User should see the PIN pad first and choose to use biometrics manually.
+    // This prevents Face ID from instantly unlocking after a deliberate lock.
   };
 
   const detectBuiltinKeyAsync = async () => {
@@ -430,7 +427,7 @@ export function UnlockScreen() {
         />
         {renderAllBiometricOptions()}
         {renderAltMethods('pin')}
-        {(
+        {__DEV__ && (
           <TouchableOpacity
             onPress={handleDevAutoUnlock}
             style={{ alignItems: 'center', paddingVertical: 10, paddingBottom: 20 }}
