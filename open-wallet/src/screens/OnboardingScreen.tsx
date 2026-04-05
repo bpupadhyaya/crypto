@@ -764,35 +764,41 @@ export function OnboardingScreen() {
             </TouchableOpacity>
           )}
 
-          {/* Ledger — Coming Soon */}
-          <View
-            style={[styles.secondaryButton, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6, opacity: 0.5 }]}
+          {/* Ledger */}
+          <TouchableOpacity
+            style={[styles.secondaryButton, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }]}
+            onPress={() => handleHardwareWallet('ledger')}
+            disabled={loading}
           >
             <View>
-              <Text style={styles.secondaryButtonText}>Ledger <Text style={{ color: t.accent.yellow, fontSize: fonts.xs }}>Coming Soon</Text></Text>
+              <Text style={styles.secondaryButtonText}>Ledger</Text>
               <Text style={{ color: t.text.muted, fontSize: fonts.xs }}>Nano S Plus / Nano X / Stax — via Bluetooth</Text>
             </View>
-          </View>
+          </TouchableOpacity>
 
-          {/* Trezor — Coming Soon */}
-          <View
-            style={[styles.secondaryButton, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6, opacity: 0.5 }]}
+          {/* Trezor */}
+          <TouchableOpacity
+            style={[styles.secondaryButton, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }]}
+            onPress={() => handleHardwareWallet('trezor')}
+            disabled={loading}
           >
             <View>
-              <Text style={styles.secondaryButtonText}>Trezor <Text style={{ color: t.accent.yellow, fontSize: fonts.xs }}>Coming Soon</Text></Text>
+              <Text style={styles.secondaryButtonText}>Trezor</Text>
               <Text style={{ color: t.text.muted, fontSize: fonts.xs }}>Model T / Model One / Safe 3 — via USB-C</Text>
             </View>
-          </View>
+          </TouchableOpacity>
 
-          {/* Keystone — Coming Soon */}
-          <View
-            style={[styles.secondaryButton, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6, opacity: 0.5 }]}
+          {/* Keystone */}
+          <TouchableOpacity
+            style={[styles.secondaryButton, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }]}
+            onPress={() => handleHardwareWallet('keystone')}
+            disabled={loading}
           >
             <View>
-              <Text style={styles.secondaryButtonText}>Keystone <Text style={{ color: t.accent.yellow, fontSize: fonts.xs }}>Coming Soon</Text></Text>
+              <Text style={styles.secondaryButtonText}>Keystone</Text>
               <Text style={{ color: t.text.muted, fontSize: fonts.xs }}>Air-gapped — via QR code scan</Text>
             </View>
-          </View>
+          </TouchableOpacity>
 
           {/* Solana Saga / Seeker shown for iOS too (won't detect but explains) */}
           {!seedVaultAvailable && (
