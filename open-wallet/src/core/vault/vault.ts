@@ -90,6 +90,7 @@ class NobleAesGcmCrypto implements IVaultCrypto {
 
 const SECURE_STORE_VAULT_KEY = 'open_wallet_vault';
 const SECURE_STORE_BIOMETRIC_KEY = 'open_wallet_biometric_key';
+const SECURE_STORE_IMPORTED_KEYS = 'open_wallet_imported_keys';
 
 export class Vault {
   private cryptoImpl: IVaultCrypto;
@@ -215,6 +216,57 @@ export class Vault {
     const contents = await this.unlock(oldPassword, vaultData);
     this.lock();
     return this.create(newPassword, contents);
+  }
+
+  /**
+   * Store an imported key (seed phrase or private key) encrypted in secure storage.
+   * Each imported wallet gets its own entry keyed by wallet ID.
+   */
+  async addImportedKey(walletId: string, keyData: { type: 'seed' | 'private-key'; data: string; chain: string }): Promise<void> {
+    if (!this.masterKey) throw new Error('Vault must be unlocked to store imported keys');
+
+    // Load existing imported keys
+    const existing = await SecureStore.getItemAsync(SECURE_STORE_IMPORTED_KEYS);
+    const importedKeys: Record<string, string> = existing ? JSON.parse(existing) : {};
+
+    // Encrypt the key data with the master key
+    const plaintext = new TextEncoder().encode(JSON.stringify(keyData));
+    const { ciphertext, iv } = await this.cryptoImpl.encrypt(plaintext, this.masterKey);
+
+    importedKeys[walletId] = JSON.stringify({ ciphertext: toHex(ciphertext), iv: toHex(iv) });
+
+    await SecureStore.setItemAsync(SECURE_STORE_IMPORTED_KEYS, JSON.stringify(importedKeys));
+  }
+
+  /**
+   * Retrieve a decrypted imported key by wallet ID.
+   */
+  async getImportedKey(walletId: string): Promise<{ type: 'seed' | 'private-key'; data: string; chain: string } | null> {
+    if (!this.masterKey) throw new Error('Vault must be unlocked to read imported keys');
+
+    const existing = await SecureStore.getItemAsync(SECURE_STORE_IMPORTED_KEYS);
+    if (!existing) return null;
+
+    const importedKeys: Record<string, string> = JSON.parse(existing);
+    const entry = importedKeys[walletId];
+    if (!entry) return null;
+
+    const { ciphertext, iv } = JSON.parse(entry);
+    const plaintext = await this.cryptoImpl.decrypt(fromHex(ciphertext), this.masterKey, fromHex(iv));
+    return JSON.parse(new TextDecoder().decode(plaintext));
+  }
+
+  /**
+   * Remove an imported key from secure storage.
+   */
+  async removeImportedKey(walletId: string): Promise<void> {
+    const existing = await SecureStore.getItemAsync(SECURE_STORE_IMPORTED_KEYS);
+    if (!existing) return;
+
+    const importedKeys: Record<string, string> = JSON.parse(existing);
+    delete importedKeys[walletId];
+
+    await SecureStore.setItemAsync(SECURE_STORE_IMPORTED_KEYS, JSON.stringify(importedKeys));
   }
 }
 
