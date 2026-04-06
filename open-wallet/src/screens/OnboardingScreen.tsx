@@ -54,52 +54,50 @@ export function OnboardingScreen() {
   });
   const [devWalletProgress, setDevWalletProgress] = useState('');
   const [devLoading, setDevLoading] = useState(false);
-  const [createdDevWallets, setCreatedDevWallets] = useState<Record<string, boolean>>({});
-
-  // Load which dev wallets have been created
-  useEffect(() => {
-    (async () => {
-      try {
-        const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
-        const stored = await AsyncStorage.getItem('dev_wallets_created');
-        if (stored) setCreatedDevWallets(JSON.parse(stored));
-      } catch {}
-    })();
-  }, []);
 
   const handleDevWallet = async (w: any) => {
-    // If wallet already created, just unlock it
-    if (createdDevWallets[w.id]) {
-      setDevWalletProgress(`${w.label}: Switching...`);
-      useWalletStore.getState().setActiveDevWallet(w.id);
-      setHasVault(true);
-      setStatus('locked'); // Go to unlock screen where dev PIN button shows
+    // Check if this wallet was already created (vault exists with this wallet's data)
+    const store = useWalletStore.getState();
+    if (store.hasVault && store.activeDevWallet === w.id) {
+      // Already created — go to unlock screen
+      store.setActiveDevWallet(w.id);
+      setStatus('locked');
       return;
     }
 
+    // Create the wallet using the SAME code path as production
+    // Pre-fill the inputs and call the same functions
     setDevLoading(true);
     const yieldUI = () => new Promise<void>(r => setTimeout(r, 50));
 
     try {
-      setDevWalletProgress(`${w.label}: Encrypting...`);
+      // === Same as handleSetPassword (production flow) ===
+
+      setDevWalletProgress(`${w.label}: Encrypting wallet...`);
       await yieldUI();
 
-      // Step 1: Create vault with full encryption
+      // Step 1: Create and encrypt vault (identical to production)
       const { Vault } = await import('../core/vault/vault');
       const vaultInstance = new Vault();
       await vaultInstance.create(w.password, {
         mnemonic: w.mnemonic,
-        accounts: [{ id: 'default', name: `Dev ${w.label}`, derivationPaths: {
-          bitcoin: "m/44'/0'/0'/0/0", ethereum: "m/44'/60'/0'/0/0",
-          solana: "m/44'/501'/0'/0'", cosmos: "m/44'/118'/0'/0/0",
-        }}],
+        accounts: [{
+          id: 'default',
+          name: 'Main Account',
+          derivationPaths: {
+            bitcoin: "m/44'/0'/0'/0/0",
+            ethereum: "m/44'/60'/0'/0/0",
+            solana: "m/44'/501'/0'/0'",
+            cosmos: "m/44'/118'/0'/0/0",
+          },
+        }],
         settings: {},
       });
 
-      setDevWalletProgress(`${w.label}: Deriving keys...`);
+      setDevWalletProgress(`${w.label}: Deriving addresses...`);
       await yieldUI();
 
-      // Step 2: Derive all chain addresses
+      // Step 2: Derive addresses (identical to production)
       const { HDWallet } = await import('../core/wallet/hdwallet');
       const wallet = HDWallet.fromMnemonic(w.mnemonic);
       const derived: Partial<Record<string, string>> = {};
@@ -116,39 +114,31 @@ export function OnboardingScreen() {
       setAddresses(derived);
       wallet.destroy();
 
-      setDevWalletProgress(`${w.label}: Setting up PIN...`);
+      setDevWalletProgress(`${w.label}: Setting up security...`);
       await yieldUI();
 
-      // Step 3: Set up PIN
+      // Step 3: Setup PIN (identical to PinSetupScreen production flow)
       const { authManager } = await import('../core/auth/auth');
       await authManager.setupPin(w.pin, w.password);
 
-      // Enable biometric unlock for dev wallet
+      // Step 4: Enable biometric (identical to PinSetupScreen autoEnableBiometric)
       try {
         await authManager.storeVaultPasswordBiometric(w.password);
-      } catch { /* biometric not available on this device */ }
+      } catch {}
 
-      // Step 4: Set demo balances
+      // Step 5: Set state (identical to production)
+      setHasVault(true);
+      setTempVaultPassword(w.password);
+      setWalletProvider('software');
+      store.setActiveDevWallet(w.id);
+
+      // Step 6: Set demo balances (only difference from production)
       try {
         const { DEV_TEST_BALANCES } = await import('../config/devWallets');
-        const store = useWalletStore.getState();
         Object.entries(DEV_TEST_BALANCES).forEach(([sym, amt]) => {
           store.updateDevBalance(sym, amt - (store.devBalances[sym] ?? 0));
         });
         store.setDemoMode(true);
-      } catch {}
-
-      setHasVault(true);
-      setTempVaultPassword(w.password);
-      setWalletProvider('software');
-      useWalletStore.getState().setActiveDevWallet(w.id);
-
-      // Mark this dev wallet as created (persistent)
-      try {
-        const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
-        const updated = { ...createdDevWallets, [w.id]: true };
-        await AsyncStorage.setItem('dev_wallets_created', JSON.stringify(updated));
-        setCreatedDevWallets(updated);
       } catch {}
 
       setDevWalletProgress(`${w.label}: Ready!`);
@@ -987,16 +977,11 @@ export function OnboardingScreen() {
                     activeOpacity={0.5}
                     style={{
                       paddingVertical: 5, paddingHorizontal: 10, borderRadius: 8,
-                      backgroundColor: createdDevWallets[w.id] ? '#22c55e20' : '#f59e0b20',
-                      borderWidth: 1,
-                      borderColor: createdDevWallets[w.id] ? '#22c55e60' : '#f59e0b40',
+                      backgroundColor: '#f59e0b20',
+                      borderWidth: 1, borderColor: '#f59e0b40',
                     }}
                   >
-                    <Text style={{
-                      color: createdDevWallets[w.id] ? '#22c55e' : '#f59e0b',
-                      fontSize: fonts.xxs,
-                      fontWeight: fonts.semibold as any,
-                    }}>{createdDevWallets[w.id] ? '✓' : ''}{w.label}</Text>
+                    <Text style={{ color: '#f59e0b', fontSize: fonts.xxs, fontWeight: fonts.semibold as any }}>{w.label}</Text>
                   </TouchableOpacity>
                 ))}
               </View>

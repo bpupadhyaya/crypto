@@ -2944,23 +2944,20 @@ export function SettingsScreen() {
                 style={st.row}
                 onPress={() => {
                   Alert.alert(
-                    'Delete All Dev Wallets',
-                    'This will remove all dev wallet data. You can recreate them by tapping W1-W10 on the onboarding screen.',
+                    'Reset Dev Wallet',
+                    'This will sign out and take you back to the wallet setup screen. Your current wallet will be removed from this device.',
                     [
                       { text: 'Cancel', style: 'cancel' },
-                      { text: 'Delete All', style: 'destructive', onPress: async () => {
-                        try {
-                          const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
-                          await AsyncStorage.removeItem('dev_wallets_created');
-                          useWalletStore.getState().setActiveDevWallet(null);
-                          Alert.alert('Done', 'All dev wallets deleted. Sign out to see the onboarding screen.');
-                        } catch {}
+                      { text: 'Reset', style: 'destructive', onPress: () => {
+                        useWalletStore.getState().setActiveDevWallet(null);
+                        setHasVault(false);
+                        setStatus('onboarding');
                       }},
                     ],
                   );
                 }}
               >
-                <Text style={[st.label, { color: t.accent.red }]}>Delete All Dev Wallets</Text>
+                <Text style={[st.label, { color: t.accent.red }]}>Reset Wallet (back to setup)</Text>
               </TouchableOpacity>
             </View>
             <View style={{ height: 40 }} />

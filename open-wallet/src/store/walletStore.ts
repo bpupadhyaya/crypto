@@ -188,7 +188,7 @@ export const useWalletStore = create<WalletState>((set) => ({
   tempVaultPassword: null,
   setTempVaultPassword: (pw) => set({ tempVaultPassword: pw }),
   activeDevWallet: null,
-  setActiveDevWallet: (id) => set({ activeDevWallet: id }),
+  setActiveDevWallet: (id) => { set({ activeDevWallet: id }); schedulePersist(); },
   walletProvider: 'software' as const,
   setWalletProvider: (provider) => { set({ walletProvider: provider }); schedulePersist(); },
   contacts: [],
