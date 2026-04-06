@@ -252,83 +252,90 @@ export async function connectSeedVault(): Promise<{
   }
 
   // Step 4: Get public key
-  // Each app has its own isolated account space in Seed Vault.
-  // Try every known path format and API method until one works.
+  // Use the native module directly to avoid path parsing issues.
+  // The @solana-mobile/seed-vault-lib NativeModule handles the actual
+  // communication with the Seed Vault content provider.
   let pubkey: string;
-  const errors: string[] = [];
 
-  // All known derivation path formats for Solana on Seed Vault
-  const pathsToTry = [
-    // URI formats (Seed Vault native format)
-    "bip44:501'/0'/0'",
-    "bip44:501'",
-    "bip44:501'/0'",
-    // Standard BIP-44
-    "m/44'/501'/0'/0'",
-    "44'/501'/0'/0'",
-    // Simple indices
-    "0",
-    "",
-  ];
+  const { NativeModules: NM } = require('react-native');
+  const nativeSV = NM.SolanaMobileSeedVaultLib;
 
-  // Method 1: resolveDerivationPathForPurpose → getPublicKey
-  for (const path of pathsToTry) {
-    try {
-      const resolved = await SeedVault.resolveDerivationPathForPurpose(path, 0);
-      const keyResult = await SeedVault.getPublicKey(authToken, resolved);
-      pubkey = keyResultToBase58(keyResult);
-      break;
-    } catch (e: any) {
-      errors.push(`resolve(${path}): ${e?.message?.slice(0, 60) ?? 'failed'}`);
-    }
-  }
-
-  // Method 2: getPublicKey directly with each path
-  if (!pubkey!) {
-    for (const path of pathsToTry) {
-      try {
-        const keyResult = await SeedVault.getPublicKey(authToken, path);
-        pubkey = keyResultToBase58(keyResult);
-        break;
-      } catch (e: any) {
-        errors.push(`getPubKey(${path}): ${e?.message?.slice(0, 60) ?? 'failed'}`);
-      }
-    }
-  }
-
-  // Method 3: getPublicKeys (plural)
-  if (!pubkey!) {
-    for (const path of pathsToTry) {
-      try {
-        const keyResults = await SeedVault.getPublicKeys(authToken, [path]);
-        if (keyResults.length > 0) {
-          pubkey = keyResultToBase58(keyResults[0]);
-          break;
-        }
-      } catch (e: any) {
-        errors.push(`getPubKeys(${path}): ${e?.message?.slice(0, 60) ?? 'failed'}`);
-      }
-    }
-  }
-
-  // Method 4: resolveDerivationPath (without purpose)
-  if (!pubkey!) {
-    for (const path of pathsToTry) {
-      try {
-        const resolved = await SeedVault.resolveDerivationPath(path);
-        const keyResult = await SeedVault.getPublicKey(authToken, resolved);
-        pubkey = keyResultToBase58(keyResult);
-        break;
-      } catch { /* continue */ }
-    }
-  }
-
-  if (!pubkey!) {
-    // Show first 5 unique errors for debugging
-    const uniqueErrors = [...new Set(errors)].slice(0, 5);
+  if (!nativeSV) {
     return {
       success: false, addresses: {}, model: 'unknown',
-      message: `Seed Vault connected but no path format worked.\n\n${uniqueErrors.join('\n')}\n\nPlease share this with the developer.`,
+      message: 'Seed Vault native module not found. Please rebuild the app.',
+    };
+  }
+
+  // Dump all available methods to find the right one
+  const methods = Object.keys(nativeSV).filter(k => typeof nativeSV[k] === 'function');
+
+  // Try to get accounts first (no path needed)
+  const tryResults: string[] = [];
+
+  // Approach A: Call requestPublicKeys if available (newer Seed Vault API)
+  if (nativeSV.requestPublicKeys) {
+    try {
+      const result = await nativeSV.requestPublicKeys(authToken);
+      if (result && result.length > 0) {
+        pubkey = keyResultToBase58(result[0]);
+      }
+    } catch (e: any) {
+      tryResults.push(`requestPublicKeys: ${e?.message?.slice(0, 80)}`);
+    }
+  }
+
+  // Approach B: getAccounts with null filters
+  if (!pubkey!) {
+    try {
+      const accounts = await nativeSV.getAccounts(authToken, null, null);
+      if (accounts && accounts.length > 0 && accounts[0].publicKeyEncoded) {
+        pubkey = keyResultToBase58({ publicKeyEncoded: accounts[0].publicKeyEncoded });
+      } else {
+        tryResults.push(`getAccounts(null,null): ${accounts?.length ?? 0} accounts`);
+      }
+    } catch (e: any) {
+      tryResults.push(`getAccounts(null,null): ${e?.message?.slice(0, 80)}`);
+    }
+  }
+
+  // Approach C: getUserWallets
+  if (!pubkey!) {
+    try {
+      const wallets = await nativeSV.getUserWallets(authToken);
+      if (wallets && wallets.length > 0 && wallets[0].publicKeyEncoded) {
+        pubkey = keyResultToBase58({ publicKeyEncoded: wallets[0].publicKeyEncoded });
+      } else {
+        tryResults.push(`getUserWallets: ${wallets?.length ?? 0} wallets`);
+      }
+    } catch (e: any) {
+      tryResults.push(`getUserWallets: ${e?.message?.slice(0, 80)}`);
+    }
+  }
+
+  // Approach D: Use Android URI object via the native module
+  // Pass derivation path as a content URI that Android can parse
+  if (!pubkey!) {
+    const uriPaths = [
+      'bip44:501%27/0%27/0%27',     // URL-encoded single quotes
+      'bip44:501h/0h/0h',            // 'h' for hardened (alternative notation)
+      'bip44:501H/0H/0H',            // 'H' for hardened
+    ];
+    for (const path of uriPaths) {
+      try {
+        const keyResult = await nativeSV.getPublicKey(authToken, path);
+        pubkey = keyResultToBase58(keyResult);
+        break;
+      } catch (e: any) {
+        tryResults.push(`getPubKey(${path}): ${e?.message?.slice(0, 60)}`);
+      }
+    }
+  }
+
+  if (!pubkey!) {
+    return {
+      success: false, addresses: {}, model: 'unknown',
+      message: `Seed Vault: authorization OK but key retrieval failed.\n\nAvailable methods: ${methods.join(', ')}\n\nResults:\n${tryResults.slice(0, 6).join('\n')}`,
     };
   }
 
