@@ -18,6 +18,14 @@
 
 import { Platform } from 'react-native';
 import { getNetworkConfig } from '../network';
+import {
+  isNativeChainAvailable,
+  startNativeNode,
+  stopNativeNode,
+  getNativeNodeStatus,
+  broadcastNativeTx,
+  queryNativeBalance,
+} from './nativeBridge';
 
 export interface ChainNodeStatus {
   running: boolean;
@@ -32,10 +40,60 @@ const CHAIN_NODE_PORT = 26657;
 const CHAIN_REST_PORT = 1317;
 
 let nodeRunning = false;
+let nodeStarted = false;
 let statusPollInterval: ReturnType<typeof setInterval> | null = null;
 let lastStatus: ChainNodeStatus = {
   running: false, height: 0, peers: 0, syncing: false, chainId: '', nodeId: '',
 };
+
+/**
+ * Start the embedded chain node.
+ * Uses gomobile native bridge if available (production),
+ * falls back to assuming an external openchaind process (development).
+ */
+export async function startChainNode(): Promise<string | null> {
+  if (nodeStarted) return lastStatus.nodeId || null;
+
+  if (isNativeChainAvailable()) {
+    try {
+      const peerId = await startNativeNode({
+        chainId: 'openchain-p2p-1',
+        enableMDNS: true,
+      });
+      nodeStarted = true;
+      nodeRunning = true;
+      console.log('[ChainNode] Started embedded node, peer ID:', peerId);
+      return peerId;
+    } catch (err) {
+      console.warn('[ChainNode] Failed to start embedded node:', err);
+      return null;
+    }
+  } else {
+    // Development mode: assume openchaind is running externally (via ADB)
+    const status = await getChainNodeStatus();
+    if (status.running) {
+      nodeStarted = true;
+      console.log('[ChainNode] External node detected at localhost:26657');
+      return status.nodeId;
+    }
+    console.warn('[ChainNode] No chain node available (native module not linked, no external process)');
+    return null;
+  }
+}
+
+/**
+ * Stop the embedded chain node.
+ */
+export async function stopChainNode(): Promise<void> {
+  if (!nodeStarted) return;
+  if (isNativeChainAvailable()) {
+    try {
+      await stopNativeNode();
+    } catch { /* ignore */ }
+  }
+  nodeStarted = false;
+  nodeRunning = false;
+}
 
 /**
  * Check if the local chain node is running by querying its RPC.

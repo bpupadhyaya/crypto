@@ -1,0 +1,8 @@
+framework module "OpenChain" {
+	header "ref.h"
+    header "Mobile.objc.h"
+    header "Universe.objc.h"
+    header "OpenChain.h"
+
+    export *
+}

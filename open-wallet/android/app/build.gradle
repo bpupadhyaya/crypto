@@ -157,6 +157,9 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
 
+    // Open Chain — embedded P2P validator node (gomobile)
+    implementation fileTree(dir: 'libs', include: ['*.aar'])
+
     // Solana Seed Vault — registered by Expo autolinking as underscore project name
     implementation project(':solana-mobile_seed-vault-lib')
 

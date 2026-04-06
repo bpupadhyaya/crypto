@@ -80,6 +80,8 @@ export default function RootLayout() {
   useEffect(() => {
     if (status === 'unlocked') {
       startSession(autoLockTimeout);
+      // Auto-start the embedded P2P chain node
+      import('../core/chain/chainService').then(m => m.startChainNode()).catch(() => {});
     } else if (status === 'locked') {
       endSession();
     }
