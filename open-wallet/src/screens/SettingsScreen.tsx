@@ -3157,14 +3157,7 @@ export function SettingsScreen() {
           <TouchableOpacity
             style={st.signOutBtn}
             onPress={() => {
-              Alert.alert('Sign Out', 'Lock wallet or sign out completely?', [
-                { text: 'Lock (keep wallet)', onPress: () => setStatus('locked') },
-                { text: 'Sign Out (reset)', style: 'destructive', onPress: () => {
-                  setStatus('onboarding');
-                  setHasVault(false);
-                }},
-                { text: 'Cancel', style: 'cancel' },
-              ]);
+              setStatus('locked');
             }}
           >
             <Text style={st.signOutText}>Sign Out</Text>
