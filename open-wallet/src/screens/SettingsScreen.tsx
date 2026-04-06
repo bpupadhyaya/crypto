@@ -378,7 +378,7 @@ type SettingsView = 'main' | 'change-pin' | 'enable-biometric-pin' | 'new-pin' |
 type SettingsCategory = 'account' | 'network' | 'wallet' | 'exchange' | 'chain' | 'tools' | 'about' | 'support' | 'developer';
 
 export function SettingsScreen() {
-  const { mode, setMode, demoMode, setDemoMode, setStatus, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode, autoLockTimeout, setAutoLockTimeout } = useWalletStore();
+  const { mode, setMode, demoMode, setDemoMode, setStatus, setHasVault, biometricEnabled, setBiometricEnabled, currency, setCurrency, networkMode, setNetworkMode: setNetwork, themeMode, setThemeMode, autoLockTimeout, setAutoLockTimeout } = useWalletStore();
   const [view, setView] = useState<SettingsView>('main');
   const [category, setCategory] = useState<SettingsCategory | null>(null);
   const [chainGroup, setChainGroup] = useState<string | null>(null);
@@ -3130,7 +3130,16 @@ export function SettingsScreen() {
           <Text style={st.headerTitle}>Settings</Text>
           <TouchableOpacity
             style={st.signOutBtn}
-            onPress={() => setTimeout(() => setStatus('locked'), 0)}
+            onPress={() => {
+              Alert.alert('Sign Out', 'Lock wallet or sign out completely?', [
+                { text: 'Lock (keep wallet)', onPress: () => setStatus('locked') },
+                { text: 'Sign Out (reset)', style: 'destructive', onPress: () => {
+                  setStatus('onboarding');
+                  setHasVault(false);
+                }},
+                { text: 'Cancel', style: 'cancel' },
+              ]);
+            }}
           >
             <Text style={st.signOutText}>Sign Out</Text>
           </TouchableOpacity>
