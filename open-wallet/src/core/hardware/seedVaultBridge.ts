@@ -253,57 +253,83 @@ export async function connectSeedVault(): Promise<{
 
   // Step 4: Get public key
   // Each app has its own isolated account space in Seed Vault.
-  // We use resolveDerivationPathForPurpose to let the Seed Vault
-  // resolve and create the Solana account for our app.
+  // Try every known path format and API method until one works.
   let pubkey: string;
+  const errors: string[] = [];
 
-  try {
-    // Use purpose=0 (SignSolanaTransaction) to resolve the Solana derivation path.
-    // This is the correct Seed Vault API — it creates the account if needed.
-    const resolvedPath = await SeedVault.resolveDerivationPathForPurpose(
-      SOLANA_DERIVATION_PATH,
-      0, // SeedPurpose.SignSolanaTransaction
-    );
+  // All known derivation path formats for Solana on Seed Vault
+  const pathsToTry = [
+    // URI formats (Seed Vault native format)
+    "bip44:501'/0'/0'",
+    "bip44:501'",
+    "bip44:501'/0'",
+    // Standard BIP-44
+    "m/44'/501'/0'/0'",
+    "44'/501'/0'/0'",
+    // Simple indices
+    "0",
+    "",
+  ];
 
-    const keyResult = await SeedVault.getPublicKey(authToken, resolvedPath);
-    pubkey = keyResultToBase58(keyResult);
-  } catch (e1: any) {
-    // Fallback: try getPublicKeys (plural) which may auto-create
+  // Method 1: resolveDerivationPathForPurpose → getPublicKey
+  for (const path of pathsToTry) {
     try {
-      const keyResults = await SeedVault.getPublicKeys(authToken, [SOLANA_DERIVATION_PATH]);
-      if (keyResults.length > 0) {
-        pubkey = keyResultToBase58(keyResults[0]);
-      } else {
-        throw new Error('empty result');
-      }
-    } catch (e2: any) {
-      // Last fallback: try with purpose-resolved path using raw URI format
+      const resolved = await SeedVault.resolveDerivationPathForPurpose(path, 0);
+      const keyResult = await SeedVault.getPublicKey(authToken, resolved);
+      pubkey = keyResultToBase58(keyResult);
+      break;
+    } catch (e: any) {
+      errors.push(`resolve(${path}): ${e?.message?.slice(0, 60) ?? 'failed'}`);
+    }
+  }
+
+  // Method 2: getPublicKey directly with each path
+  if (!pubkey!) {
+    for (const path of pathsToTry) {
       try {
-        // The Seed Vault URI format: "bip44:501'/0'/0'"
-        // Some versions need just the coin path after bip44:
-        const altPaths = [
-          "bip44:501'/0'/0'",
-          "bip44:501'",
-          "m/44'/501'/0'/0'",
-        ];
-        let found = false;
-        for (const path of altPaths) {
-          try {
-            const resolved = await SeedVault.resolveDerivationPathForPurpose(path, 0);
-            const keyResult = await SeedVault.getPublicKey(authToken, resolved);
-            pubkey = keyResultToBase58(keyResult);
-            found = true;
-            break;
-          } catch { /* try next */ }
-        }
-        if (!found) throw new Error('all paths failed');
-      } catch (e3: any) {
-        return {
-          success: false, addresses: {}, model: 'unknown',
-          message: `Seed Vault connected but could not derive a Solana key.\n\nError: ${e1?.message ?? 'unknown'}\n\nThis may be a Seed Vault API version issue. Please try:\n1. Open Seed Vault in device Settings\n2. Check that a seed exists\n3. Try again`,
-        };
+        const keyResult = await SeedVault.getPublicKey(authToken, path);
+        pubkey = keyResultToBase58(keyResult);
+        break;
+      } catch (e: any) {
+        errors.push(`getPubKey(${path}): ${e?.message?.slice(0, 60) ?? 'failed'}`);
       }
     }
+  }
+
+  // Method 3: getPublicKeys (plural)
+  if (!pubkey!) {
+    for (const path of pathsToTry) {
+      try {
+        const keyResults = await SeedVault.getPublicKeys(authToken, [path]);
+        if (keyResults.length > 0) {
+          pubkey = keyResultToBase58(keyResults[0]);
+          break;
+        }
+      } catch (e: any) {
+        errors.push(`getPubKeys(${path}): ${e?.message?.slice(0, 60) ?? 'failed'}`);
+      }
+    }
+  }
+
+  // Method 4: resolveDerivationPath (without purpose)
+  if (!pubkey!) {
+    for (const path of pathsToTry) {
+      try {
+        const resolved = await SeedVault.resolveDerivationPath(path);
+        const keyResult = await SeedVault.getPublicKey(authToken, resolved);
+        pubkey = keyResultToBase58(keyResult);
+        break;
+      } catch { /* continue */ }
+    }
+  }
+
+  if (!pubkey!) {
+    // Show first 5 unique errors for debugging
+    const uniqueErrors = [...new Set(errors)].slice(0, 5);
+    return {
+      success: false, addresses: {}, model: 'unknown',
+      message: `Seed Vault connected but no path format worked.\n\n${uniqueErrors.join('\n')}\n\nPlease share this with the developer.`,
+    };
   }
 
   const constants = (Platform as any).constants || {};
