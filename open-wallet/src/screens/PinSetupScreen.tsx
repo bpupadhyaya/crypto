@@ -55,12 +55,18 @@ export function PinSetupScreen() {
     }
 
     setError(null);
-    setStatus('unlocked');
 
-    // Store PIN + enable biometric in background
+    // Store PIN + encrypted vault password BEFORE unlocking
+    // Must complete before user can access Send/Swap (they need the vault password)
     const pw = tempVaultPassword;
-    setTempVaultPassword(null);
-    authManager.setupPin(pin, pw ?? undefined).then(() => autoEnableBiometric()).catch(() => {});
+    try {
+      await authManager.setupPin(pin, pw ?? undefined);
+      await autoEnableBiometric();
+    } catch { /* PIN setup failed — user can still unlock but signing may fail */ }
+
+    // Keep tempVaultPassword available for the session (SendScreen needs it)
+    // It will be cleared on next lock
+    setStatus('unlocked');
   };
 
   const handleDevAutoPin = async () => {
