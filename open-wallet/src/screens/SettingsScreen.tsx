@@ -2938,14 +2938,101 @@ export function SettingsScreen() {
             {/* Dev Testing Wallets — REMOVE BEFORE PRODUCTION */}
             <View style={[st.card, { marginTop: 12 }]}>
               <Text style={{ color: '#f59e0b', fontSize: fonts.sm, fontWeight: fonts.bold as any, padding: 14, borderBottomWidth: 1, borderBottomColor: t.border }}>
-                Dev Test Wallets
+                Dev Test Wallets — Switch Wallet
               </Text>
+              <Text style={{ color: t.text.muted, fontSize: fonts.xs, paddingHorizontal: 14, paddingBottom: 8 }}>
+                Active: {useWalletStore.getState().activeDevWallet?.toUpperCase() ?? 'None'}. Tap to switch:
+              </Text>
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, paddingHorizontal: 14, paddingBottom: 14 }}>
+                {(() => {
+                  try {
+                    const { DEV_WALLETS, DEV_TESTING_ENABLED } = require('../config/devWallets');
+                    if (!DEV_TESTING_ENABLED) return null;
+                    const activeId = useWalletStore.getState().activeDevWallet;
+                    return DEV_WALLETS.map((w: any) => (
+                      <TouchableOpacity
+                        key={w.id}
+                        onPress={async () => {
+                          // Switch wallet in-place without logging out
+                          try {
+                            const { Vault } = await import('../core/vault/vault');
+                            const vault = new Vault();
+
+                            // Try unlocking with this wallet's password
+                            let contents: any;
+                            try {
+                              contents = await vault.unlock(w.password);
+                            } catch {
+                              // Vault doesn't exist for this wallet — create it
+                              await vault.create(w.password, {
+                                mnemonic: w.mnemonic,
+                                accounts: [{ id: 'default', name: 'Main Account', derivationPaths: {
+                                  bitcoin: "m/44'/0'/0'/0/0", ethereum: "m/44'/60'/0'/0/0",
+                                  solana: "m/44'/501'/0'/0'", cosmos: "m/44'/118'/0'/0/0",
+                                }}],
+                                settings: {},
+                              });
+                              contents = { mnemonic: w.mnemonic };
+                              const { authManager } = await import('../core/auth/auth');
+                              await authManager.setupPin(w.pin, w.password);
+                              try { await authManager.storeVaultPasswordBiometric(w.password); } catch {}
+                            }
+
+                            // Derive addresses
+                            const { HDWallet } = await import('../core/wallet/hdwallet');
+                            const hdw = HDWallet.fromMnemonic(contents.mnemonic);
+                            const derived: any = {};
+                            try { const { EthereumSigner } = await import('../core/chains/ethereum-signer'); derived.ethereum = EthereumSigner.fromWallet(hdw).getAddress(); } catch {}
+                            try { const { BitcoinSigner } = await import('../core/chains/bitcoin-signer'); derived.bitcoin = BitcoinSigner.fromWallet(hdw).getAddress(); } catch {}
+                            try { const { SolanaSigner } = await import('../core/chains/solana-signer'); derived.solana = SolanaSigner.fromWallet(hdw).getAddress(); } catch {}
+                            try {
+                              const { CosmosSigner } = await import('../core/chains/cosmos-signer');
+                              const addr = await CosmosSigner.fromWallet(hdw, 0, 'openchain').getAddress();
+                              derived.openchain = addr; derived.cosmos = addr;
+                            } catch {}
+                            hdw.destroy();
+
+                            const store = useWalletStore.getState();
+                            store.setAddresses(derived);
+                            store.setTempVaultPassword(w.password);
+                            store.setActiveDevWallet(w.id);
+                            store.setHasVault(true);
+                            store.setDemoMode(true);
+
+                            // Load demo balances
+                            const { DEV_TEST_BALANCES } = require('../config/devWallets');
+                            Object.entries(DEV_TEST_BALANCES).forEach(([sym, amt]: [string, any]) => {
+                              store.updateDevBalance(sym, amt - (store.devBalances[sym] ?? 0));
+                            });
+
+                            Alert.alert('Switched', `Now using ${w.label}`);
+                            setCategory(null); // Go back to settings grid
+                          } catch (err: any) {
+                            Alert.alert('Switch Failed', err?.message ?? 'Unknown error');
+                          }
+                        }}
+                        style={{
+                          paddingVertical: 6, paddingHorizontal: 12, borderRadius: 8,
+                          backgroundColor: activeId === w.id ? '#22c55e20' : '#f59e0b20',
+                          borderWidth: 1,
+                          borderColor: activeId === w.id ? '#22c55e' : '#f59e0b40',
+                        }}
+                      >
+                        <Text style={{
+                          color: activeId === w.id ? '#22c55e' : '#f59e0b',
+                          fontSize: fonts.xs, fontWeight: fonts.bold as any,
+                        }}>{activeId === w.id ? '● ' : ''}{w.label}</Text>
+                      </TouchableOpacity>
+                    ));
+                  } catch { return null; }
+                })()}
+              </View>
               <TouchableOpacity
-                style={st.row}
+                style={[st.row, { borderTopWidth: 1, borderTopColor: t.border }]}
                 onPress={() => {
                   Alert.alert(
-                    'Reset Dev Wallet',
-                    'This will sign out and take you back to the wallet setup screen. Your current wallet will be removed from this device.',
+                    'Reset Wallet',
+                    'Go back to wallet setup screen.',
                     [
                       { text: 'Cancel', style: 'cancel' },
                       { text: 'Reset', style: 'destructive', onPress: () => {
@@ -2957,7 +3044,7 @@ export function SettingsScreen() {
                   );
                 }}
               >
-                <Text style={[st.label, { color: t.accent.red }]}>Reset Wallet (back to setup)</Text>
+                <Text style={[st.label, { color: t.accent.red }]}>Reset (back to setup)</Text>
               </TouchableOpacity>
             </View>
             <View style={{ height: 40 }} />
