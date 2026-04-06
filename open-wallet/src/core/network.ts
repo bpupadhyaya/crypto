@@ -31,7 +31,7 @@ const TESTNET_CONFIG: NetworkConfig = {
   openchain: {
     rpcUrl: 'http://localhost:26657',
     restUrl: 'http://localhost:1317',
-    chainId: 'openchain-testnet-1',
+    chainId: 'openchain-p2p-1',
     addressPrefix: 'openchain',
   },
 };
@@ -51,9 +51,9 @@ const MAINNET_CONFIG: NetworkConfig = {
     cluster: 'mainnet-beta',
   },
   openchain: {
-    rpcUrl: 'https://rpc.openchain.network', // future mainnet RPC
-    restUrl: 'https://api.openchain.network', // future mainnet REST
-    chainId: 'openchain-1',
+    rpcUrl: 'http://localhost:26657',  // P2P — each phone runs its own node
+    restUrl: 'http://localhost:1317',
+    chainId: 'openchain-p2p-1',
     addressPrefix: 'openchain',
   },
 };
