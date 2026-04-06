@@ -102,6 +102,11 @@ export function OnboardingScreen() {
       const { authManager } = await import('../core/auth/auth');
       await authManager.setupPin(w.pin, w.password);
 
+      // Enable biometric unlock for dev wallet
+      try {
+        await authManager.storeVaultPasswordBiometric(w.password);
+      } catch { /* biometric not available on this device */ }
+
       // Step 4: Set demo balances
       try {
         const { DEV_TEST_BALANCES } = await import('../config/devWallets');
