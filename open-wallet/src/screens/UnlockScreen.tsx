@@ -422,13 +422,21 @@ export function UnlockScreen() {
   if (mode === 'pin') {
     return (
       <SafeAreaView style={styles.container}>
+        {/* Biometric button ABOVE PIN pad — easy to reach */}
+        {bioAvailable && (
+          <TouchableOpacity
+            style={[styles.biometricButton, { marginTop: 16 }]}
+            onPress={triggerBiometric}
+          >
+            <Text style={styles.biometricButtonText}>Unlock with {bioLabel}</Text>
+          </TouchableOpacity>
+        )}
         <PinPad
           title="Enter PIN"
           subtitle="Unlock your wallet"
           onComplete={handlePinUnlock}
           error={pinError}
         />
-        {renderAllBiometricOptions()}
         {renderAltMethods('pin')}
         {__DEV__ && (
           <TouchableOpacity
