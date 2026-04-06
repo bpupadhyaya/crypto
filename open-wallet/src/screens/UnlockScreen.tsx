@@ -196,12 +196,12 @@ export function UnlockScreen() {
         return;
       }
 
-      // No keychain password — fall back to PIN
+      // No keychain password stored yet — need PIN first to set up biometric keychain
       setMode('pin');
+      setPinError('Biometric not set up yet. Unlock with PIN first — biometric will be enabled automatically for next time.');
     } catch {
-      // Biometric failed — fall back to PIN immediately
+      // Biometric failed — fall back to PIN
       setMode('pin');
-      setPinError('Biometric unavailable. Use PIN instead.');
     }
   };
 
@@ -377,10 +377,23 @@ export function UnlockScreen() {
 
       // No keychain password — fall back to PIN immediately
       setMode('pin');
-    } catch {
-      // Biometric failed — fall back to PIN immediately, no alert loop
+    } catch (err: any) {
+      // Determine why biometric failed and give actionable message
+      const msg = err?.message?.toLowerCase?.() ?? '';
+      let reason: string;
+      if (msg.includes('not enrolled') || msg.includes('no biometric')) {
+        reason = 'No biometrics enrolled. Go to your phone Settings > Security > Fingerprint/Face to set up biometrics first.';
+      } else if (msg.includes('not available') || msg.includes('no hardware')) {
+        reason = 'This device does not have biometric hardware. Use PIN to unlock.';
+      } else if (msg.includes('cancel')) {
+        reason = 'Biometric cancelled. Use PIN to unlock.';
+      } else if (msg.includes('locked') || msg.includes('too many')) {
+        reason = 'Biometric locked due to too many attempts. Use PIN to unlock, then try biometric again.';
+      } else {
+        reason = 'Biometric authentication failed. Make sure biometrics are set up in your phone Settings > Security. Use PIN for now.';
+      }
       setMode('pin');
-      setPinError('Biometric unavailable. Use PIN instead.');
+      setPinError(reason);
     }
   };
 
