@@ -49,7 +49,7 @@ export function UnlockScreen() {
   const [builtinKey, setBuiltinKey] = useState<BuiltinKeyInfo | null>(null);
   const [bioAvailable, setBioAvailable] = useState(false);
   const [bioLabel, setBioLabel] = useState('Fingerprint');
-  const { setStatus, setAddresses, setTempVaultPassword, biometricEnabled, demoMode } = useWalletStore();
+  const { setStatus, setAddresses, setTempVaultPassword, setHasVault, biometricEnabled, demoMode } = useWalletStore();
   const t = useTheme();
 
   const styles = useMemo(() => StyleSheet.create({
@@ -293,10 +293,11 @@ export function UnlockScreen() {
     }
 
     setLoading(true);
-    setUnlockProgress('Encrypting wallet...');
-    setMode('loading');
+    setUnlockProgress('Validating seed phrase...');
+    // Stay on seed-recovery screen so user sees button progress
     try {
       const mnemonic = words.join(' ');
+      setUnlockProgress('Encrypting wallet...');
       const { Vault } = await import('../core/vault/vault');
       const vault = new Vault();
       await vault.create(recoveryPassword, {
@@ -315,8 +316,10 @@ export function UnlockScreen() {
       });
 
       setUnlockProgress('Deriving addresses...');
+      setMode('loading'); // Now switch to loading screen for derivation
       await deriveAddresses(mnemonic);
       setTempVaultPassword(recoveryPassword);
+      setHasVault(true);
       setUnlockProgress('Almost ready...');
       setStatus('unlocked');
     } catch (err) {
@@ -572,12 +575,16 @@ export function UnlockScreen() {
           />
 
           <TouchableOpacity
-            style={[styles.unlockButton, loading && styles.buttonDisabled]}
+            style={[styles.unlockButton, loading && { opacity: 0.7 }]}
             onPress={handleSeedRecovery}
             disabled={loading}
+            activeOpacity={0.6}
           >
             {loading ? (
-              <ActivityIndicator color={t.bg.primary} />
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                <ActivityIndicator color={t.bg.primary} />
+                <Text style={[styles.unlockButtonText, { fontSize: fonts.md }]}>{unlockProgress || 'Recovering...'}</Text>
+              </View>
             ) : (
               <Text style={styles.unlockButtonText}>Recover & Unlock</Text>
             )}
