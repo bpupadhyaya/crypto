@@ -251,35 +251,67 @@ export async function connectSeedVault(): Promise<{
     }
   }
 
-  // Step 4: Get public key
+  // Step 4: Get public key — use existing accounts (like Phantom does)
   let pubkey: string;
 
-  // Try getUserWallets first (already configured wallets on the device)
+  // Method 1: getAccounts — get ALL accounts already configured in Seed Vault
+  // This is what Phantom does: read existing accounts, don't derive new ones.
   try {
-    const userWallets = await SeedVault.getUserWallets(authToken);
-    if (userWallets.length > 0 && userWallets[0].publicKeyEncoded) {
-      pubkey = keyResultToBase58({ publicKeyEncoded: userWallets[0].publicKeyEncoded });
+    const allAccounts = await SeedVault.getAccounts(
+      authToken,
+      'BIP32_DERIVATION_PATH',  // filter column
+      SOLANA_DERIVATION_PATH,   // filter value — match Solana derivation path
+    );
+
+    if (allAccounts.length > 0 && allAccounts[0].publicKeyEncoded) {
+      pubkey = keyResultToBase58({ publicKeyEncoded: allAccounts[0].publicKeyEncoded });
     } else {
-      throw new Error('no user wallets');
+      // No account with that path — try unfiltered
+      const unfilteredAccounts = await SeedVault.getAccounts(authToken, '', '');
+      if (unfilteredAccounts.length > 0 && unfilteredAccounts[0].publicKeyEncoded) {
+        pubkey = keyResultToBase58({ publicKeyEncoded: unfilteredAccounts[0].publicKeyEncoded });
+      } else {
+        throw new Error('no accounts found');
+      }
     }
-  } catch {
-    // Fall back to direct key derivation
+  } catch (accErr: any) {
+    // Method 2: getUserWallets — subset of accounts marked as "user wallet"
     try {
-      const keyResult = await SeedVault.getPublicKey(authToken, SOLANA_DERIVATION_PATH);
-      pubkey = keyResultToBase58(keyResult);
-    } catch (e1: any) {
-      // Try resolveDerivationPath first, then getPublicKey
+      const userWallets = await SeedVault.getUserWallets(authToken);
+      if (userWallets.length > 0 && userWallets[0].publicKeyEncoded) {
+        pubkey = keyResultToBase58({ publicKeyEncoded: userWallets[0].publicKeyEncoded });
+      } else {
+        throw new Error('no user wallets');
+      }
+    } catch (walletErr: any) {
+      // Method 3: resolveDerivationPath then getPublicKey
       try {
         const resolved = await SeedVault.resolveDerivationPath(SOLANA_DERIVATION_PATH);
         const keyResult = await SeedVault.getPublicKey(authToken, resolved);
         pubkey = keyResultToBase58(keyResult);
-      } catch {
-        // Last resort: open Seed Vault settings
-        try { await SeedVault.showSeedSettings(authToken); } catch {}
-        return {
-          success: false, addresses: {}, model: 'unknown',
-          message: `Seed Vault could not derive a key (error: ${e1?.message ?? 'unknown'}).\n\nPlease open Seed Vault in your device Settings, create or import a seed, then try again.`,
-        };
+      } catch (deriveErr: any) {
+        // Method 4: getPublicKey with raw path formats
+        const pathFormats = [
+          SOLANA_DERIVATION_PATH,         // bip44:501'/0'/0'
+          "m/44'/501'/0'/0'",             // standard BIP-44
+          "44'/501'/0'/0'",               // without m/
+        ];
+        let found = false;
+        for (const path of pathFormats) {
+          try {
+            const keyResult = await SeedVault.getPublicKey(authToken, path);
+            pubkey = keyResultToBase58(keyResult);
+            found = true;
+            break;
+          } catch { /* try next */ }
+        }
+        if (!found) {
+          // All methods failed — show detailed error
+          return {
+            success: false, addresses: {}, model: 'unknown',
+            message: `Seed Vault connected but could not read your Solana key.\n\nErrors:\n• getAccounts: ${accErr?.message ?? 'failed'}\n• getUserWallets: ${walletErr?.message ?? 'failed'}\n• deriveKey: ${deriveErr?.message ?? 'failed'}\n\nPlease ensure a Solana wallet exists in Seed Vault (check Phantom can access it).`,
+          };
+        }
       }
     }
   }
