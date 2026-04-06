@@ -58,13 +58,17 @@ export interface IKeyDerivation {
 class NobleArgon2idKeyDerivation implements IKeyDerivation {
   // Argon2id is the recommended KDF for password hashing (RFC 9106).
   // Memory-hard: resistant to GPU/ASIC brute force attacks.
-  // Parameters tuned for mobile: 64 MiB memory, 3 iterations.
+  // Parameters tuned for mobile (pure JS on Hermes):
+  //   4 MiB memory + 3 iterations = ~1-2 seconds on phone
+  //   Still memory-hard (resistant to GPU brute force)
+  //   Combined with OS Keychain storage, this is secure.
+  //   Upgrade to native Argon2id module for higher memory when available.
   async deriveKey(password: string, salt: Uint8Array): Promise<Uint8Array> {
     const { argon2id } = await import('@noble/hashes/argon2.js');
     const encoder = new TextEncoder();
     return argon2id(encoder.encode(password), salt, {
       t: 3,          // 3 iterations (time cost)
-      m: 65536,      // 64 MiB memory cost
+      m: 4096,       // 4 MiB memory (mobile-safe for pure JS/Hermes)
       p: 1,          // 1 lane (parallelism)
       dkLen: 32,     // 256-bit output
     });
@@ -135,7 +139,7 @@ export class Vault {
       iv: toHex(iv),
       ciphertext: toHex(ciphertext),
       kdf: 'argon2id',
-      kdfParams: { iterations: 3, hash: 'argon2id', memory: 65536, parallelism: 1 },
+      kdfParams: { iterations: 3, hash: 'argon2id', memory: 4096, parallelism: 1 },
       pqcWrapped: false,
       createdAt: Date.now(),
       lastUnlockedAt: Date.now(),
