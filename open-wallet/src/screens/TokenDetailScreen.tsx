@@ -8,9 +8,12 @@ import {
   View, Text, TouchableOpacity, ScrollView,
   StyleSheet, SafeAreaView, ActivityIndicator, Alert,
 } from 'react-native';
+import { useRouter } from 'expo-router';
 import { LineChart } from '../components/LineChart';
 import { useTheme } from '../hooks/useTheme';
+import { useWalletStore } from '../store/walletStore';
 import type { TokenInfo } from '../core/tokens/registry';
+import type { ChainId } from '../core/abstractions/types';
 import type { Theme } from '../utils/theme';
 import { fonts } from '../utils/theme';
 
@@ -30,6 +33,8 @@ interface Props {
 }
 
 export const TokenDetailScreen = React.memo(({ token, price, onClose, onSend }: Props) => {
+  const router = useRouter();
+  const setSelectedTokenContext = useWalletStore((s) => s.setSelectedTokenContext);
   const [chartData, setChartData] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedTimeframe, setSelectedTimeframe] = useState(7);
@@ -176,14 +181,24 @@ export const TokenDetailScreen = React.memo(({ token, price, onClose, onSend }: 
         {/* Quick Actions */}
         <View style={s.actions}>
           <TouchableOpacity style={[s.actionBtn, { backgroundColor: t.accent.orange + '20' }]} onPress={() => {
-            if (onSend) { onSend(token.chainId); } else { Alert.alert('Send', `Go to the Send tab and select ${token.symbol} to send.`); }
+            setSelectedTokenContext(token.symbol, token.chainId as ChainId);
+            onClose();
+            setTimeout(() => router.navigate('/send'), 100);
           }}>
             <Text style={[s.actionText, { color: t.accent.orange }]}>Send</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[s.actionBtn, { backgroundColor: t.accent.green + '20' }]} onPress={() => Alert.alert('Receive', `Go to the Receive tab to see your ${token.symbol} address.`)}>
+          <TouchableOpacity style={[s.actionBtn, { backgroundColor: t.accent.green + '20' }]} onPress={() => {
+            setSelectedTokenContext(token.symbol, token.chainId as ChainId);
+            onClose();
+            setTimeout(() => router.navigate('/receive'), 100);
+          }}>
             <Text style={[s.actionText, { color: t.accent.green }]}>Receive</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[s.actionBtn, { backgroundColor: t.accent.blue + '20' }]} onPress={() => Alert.alert('Swap', `Go to the Swap tab to exchange ${token.symbol}.`)}>
+          <TouchableOpacity style={[s.actionBtn, { backgroundColor: t.accent.blue + '20' }]} onPress={() => {
+            setSelectedTokenContext(token.symbol, token.chainId as ChainId);
+            onClose();
+            setTimeout(() => router.navigate('/swap'), 100);
+          }}>
             <Text style={[s.actionText, { color: t.accent.blue }]}>Swap</Text>
           </TouchableOpacity>
         </View>

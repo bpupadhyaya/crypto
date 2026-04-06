@@ -28,6 +28,11 @@ interface WalletState {
   totalUsdValue: number;
   activeChainId: ChainId | 'all';
   setActiveChain: (chainId: ChainId | 'all') => void;
+
+  // Cross-screen context: set by TokenDetailScreen, read by Send/Receive/Swap
+  selectedTokenSymbol: string | null;
+  selectedTokenChain: ChainId | null;
+  setSelectedTokenContext: (symbol: string | null, chain: ChainId | null) => void;
   addresses: Partial<Record<ChainId, string>>;
   setAddresses: (addresses: Partial<Record<ChainId, string>>) => void;
   locale: string;
@@ -148,6 +153,9 @@ export const useWalletStore = create<WalletState>((set) => ({
   totalUsdValue: 0,
   activeChainId: 'all',
   setActiveChain: (chainId) => set({ activeChainId: chainId }),
+  selectedTokenSymbol: null,
+  selectedTokenChain: null,
+  setSelectedTokenContext: (symbol, chain) => set({ selectedTokenSymbol: symbol, selectedTokenChain: chain }),
   addresses: {},
   setAddresses: (addresses) => { set({ addresses }); schedulePersist(); },
   locale: 'en',

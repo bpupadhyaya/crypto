@@ -32,9 +32,22 @@ const SWAP_TOKENS = ['BTC', 'ETH', 'SOL', 'USDT', 'USDC', 'OTK', 'ATOM'];
 
 export function SwapScreen() {
   const { t: tr } = useTranslation();
-  const { mode, addresses, setStablecoinChain, demoMode, updateDevBalance, devBalances } = useWalletStore();
-  const [fromSymbol, setFromSymbol] = useState('BTC');
-  const [toSymbol, setToSymbol] = useState('USDT');
+  const { mode, addresses, setStablecoinChain, demoMode, updateDevBalance, devBalances, selectedTokenSymbol, setSelectedTokenContext } = useWalletStore();
+
+  // Pre-select fromToken from token context
+  const initialFrom = selectedTokenSymbol && SWAP_TOKENS.includes(selectedTokenSymbol) ? selectedTokenSymbol : 'BTC';
+  const [fromSymbol, setFromSymbol] = useState(initialFrom);
+  const [toSymbol, setToSymbol] = useState(initialFrom === 'USDT' ? 'BTC' : 'USDT');
+
+  React.useEffect(() => {
+    if (selectedTokenSymbol) {
+      if (SWAP_TOKENS.includes(selectedTokenSymbol)) {
+        setFromSymbol(selectedTokenSymbol);
+        setToSymbol(selectedTokenSymbol === 'USDT' ? 'BTC' : 'USDT');
+      }
+      setSelectedTokenContext(null, null);
+    }
+  }, []);
   const [amountStr, setAmountStr] = useState('');
   const [options, setOptions] = useState<SwapOption[]>([]);
   const [loading, setLoading] = useState(false);

@@ -37,9 +37,23 @@ const CHAIN_SYMBOLS: Record<string, string> = {
   openchain: 'OTK',
 };
 
+const SYMBOL_TO_CHAIN: Record<string, ChainId> = {
+  BTC: 'bitcoin', ETH: 'ethereum', SOL: 'solana', ATOM: 'cosmos',
+  OTK: 'openchain', USDT: 'ethereum', USDC: 'ethereum',
+};
+
 export function ReceiveScreen() {
-  const { mode, supportedChains, addresses } = useWalletStore();
-  const [selectedChain, setSelectedChain] = useState<ChainId>('solana');
+  const { mode, supportedChains, addresses, selectedTokenSymbol, selectedTokenChain, setSelectedTokenContext } = useWalletStore();
+  const initialChain = selectedTokenChain ?? (selectedTokenSymbol ? SYMBOL_TO_CHAIN[selectedTokenSymbol] : null) ?? 'solana';
+  const [selectedChain, setSelectedChain] = useState<ChainId>(initialChain);
+
+  React.useEffect(() => {
+    if (selectedTokenSymbol || selectedTokenChain) {
+      if (selectedTokenChain) setSelectedChain(selectedTokenChain);
+      else if (selectedTokenSymbol && SYMBOL_TO_CHAIN[selectedTokenSymbol]) setSelectedChain(SYMBOL_TO_CHAIN[selectedTokenSymbol]);
+      setSelectedTokenContext(null, null);
+    }
+  }, []);
   const t = useTheme();
 
   // Use real derived addresses from wallet, fallback to "not available"

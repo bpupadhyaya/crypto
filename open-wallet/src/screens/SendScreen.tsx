@@ -36,9 +36,29 @@ let cachedVaultContents: { mnemonic: string; password: string } | null = null;
 // Uses pre-warmed modules from global prewarmer (started during lock screen)
 // Falls back to dynamic import if prewarmer hasn't finished yet
 
+// Map token symbols to chain IDs for pre-selection
+const SYMBOL_TO_CHAIN: Record<string, ChainId> = {
+  BTC: 'bitcoin', ETH: 'ethereum', SOL: 'solana', ATOM: 'cosmos',
+  OTK: 'openchain', USDT: 'ethereum', USDC: 'ethereum',
+  ADA: 'cardano', DOT: 'polkadot', AVAX: 'avalanche', LINK: 'ethereum',
+  DOGE: 'dogecoin', XRP: 'xrp', BNB: 'bsc', TON: 'ton', SUI: 'sui', POL: 'polygon',
+};
+
 export function SendScreen() {
-  const { mode, supportedChains, addresses } = useWalletStore();
-  const [selectedChain, setSelectedChain] = useState<ChainId>('ethereum');
+  const { mode, supportedChains, addresses, selectedTokenSymbol, selectedTokenChain, setSelectedTokenContext } = useWalletStore();
+
+  // Pre-select chain from token context (set by TokenDetailScreen)
+  const initialChain = selectedTokenChain ?? (selectedTokenSymbol ? SYMBOL_TO_CHAIN[selectedTokenSymbol] : null) ?? 'ethereum';
+  const [selectedChain, setSelectedChain] = useState<ChainId>(initialChain);
+
+  // Clear context after reading it (one-time use)
+  React.useEffect(() => {
+    if (selectedTokenSymbol || selectedTokenChain) {
+      if (selectedTokenChain) setSelectedChain(selectedTokenChain);
+      else if (selectedTokenSymbol && SYMBOL_TO_CHAIN[selectedTokenSymbol]) setSelectedChain(SYMBOL_TO_CHAIN[selectedTokenSymbol]);
+      setSelectedTokenContext(null, null);
+    }
+  }, []);
   const [recipient, setRecipient] = useState('');
   const [amount, setAmount] = useState('');
   const [sending, setSending] = useState(false);
