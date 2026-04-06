@@ -251,67 +251,57 @@ export async function connectSeedVault(): Promise<{
     }
   }
 
-  // Step 4: Get public key — use existing accounts (like Phantom does)
+  // Step 4: Get public key
+  // Each app has its own isolated account space in Seed Vault.
+  // We use resolveDerivationPathForPurpose to let the Seed Vault
+  // resolve and create the Solana account for our app.
   let pubkey: string;
 
-  // Method 1: getAccounts — get ALL accounts already configured in Seed Vault
-  // This is what Phantom does: read existing accounts, don't derive new ones.
   try {
-    const allAccounts = await SeedVault.getAccounts(
-      authToken,
-      'BIP32_DERIVATION_PATH',  // filter column
-      SOLANA_DERIVATION_PATH,   // filter value — match Solana derivation path
+    // Use purpose=0 (SignSolanaTransaction) to resolve the Solana derivation path.
+    // This is the correct Seed Vault API — it creates the account if needed.
+    const resolvedPath = await SeedVault.resolveDerivationPathForPurpose(
+      SOLANA_DERIVATION_PATH,
+      0, // SeedPurpose.SignSolanaTransaction
     );
 
-    if (allAccounts.length > 0 && allAccounts[0].publicKeyEncoded) {
-      pubkey = keyResultToBase58({ publicKeyEncoded: allAccounts[0].publicKeyEncoded });
-    } else {
-      // No account with that path — try unfiltered
-      const unfilteredAccounts = await SeedVault.getAccounts(authToken, '', '');
-      if (unfilteredAccounts.length > 0 && unfilteredAccounts[0].publicKeyEncoded) {
-        pubkey = keyResultToBase58({ publicKeyEncoded: unfilteredAccounts[0].publicKeyEncoded });
-      } else {
-        throw new Error('no accounts found');
-      }
-    }
-  } catch (accErr: any) {
-    // Method 2: getUserWallets — subset of accounts marked as "user wallet"
+    const keyResult = await SeedVault.getPublicKey(authToken, resolvedPath);
+    pubkey = keyResultToBase58(keyResult);
+  } catch (e1: any) {
+    // Fallback: try getPublicKeys (plural) which may auto-create
     try {
-      const userWallets = await SeedVault.getUserWallets(authToken);
-      if (userWallets.length > 0 && userWallets[0].publicKeyEncoded) {
-        pubkey = keyResultToBase58({ publicKeyEncoded: userWallets[0].publicKeyEncoded });
+      const keyResults = await SeedVault.getPublicKeys(authToken, [SOLANA_DERIVATION_PATH]);
+      if (keyResults.length > 0) {
+        pubkey = keyResultToBase58(keyResults[0]);
       } else {
-        throw new Error('no user wallets');
+        throw new Error('empty result');
       }
-    } catch (walletErr: any) {
-      // Method 3: resolveDerivationPath then getPublicKey
+    } catch (e2: any) {
+      // Last fallback: try with purpose-resolved path using raw URI format
       try {
-        const resolved = await SeedVault.resolveDerivationPath(SOLANA_DERIVATION_PATH);
-        const keyResult = await SeedVault.getPublicKey(authToken, resolved);
-        pubkey = keyResultToBase58(keyResult);
-      } catch (deriveErr: any) {
-        // Method 4: getPublicKey with raw path formats
-        const pathFormats = [
-          SOLANA_DERIVATION_PATH,         // bip44:501'/0'/0'
-          "m/44'/501'/0'/0'",             // standard BIP-44
-          "44'/501'/0'/0'",               // without m/
+        // The Seed Vault URI format: "bip44:501'/0'/0'"
+        // Some versions need just the coin path after bip44:
+        const altPaths = [
+          "bip44:501'/0'/0'",
+          "bip44:501'",
+          "m/44'/501'/0'/0'",
         ];
         let found = false;
-        for (const path of pathFormats) {
+        for (const path of altPaths) {
           try {
-            const keyResult = await SeedVault.getPublicKey(authToken, path);
+            const resolved = await SeedVault.resolveDerivationPathForPurpose(path, 0);
+            const keyResult = await SeedVault.getPublicKey(authToken, resolved);
             pubkey = keyResultToBase58(keyResult);
             found = true;
             break;
           } catch { /* try next */ }
         }
-        if (!found) {
-          // All methods failed — show detailed error
-          return {
-            success: false, addresses: {}, model: 'unknown',
-            message: `Seed Vault connected but could not read your Solana key.\n\nErrors:\n• getAccounts: ${accErr?.message ?? 'failed'}\n• getUserWallets: ${walletErr?.message ?? 'failed'}\n• deriveKey: ${deriveErr?.message ?? 'failed'}\n\nPlease ensure a Solana wallet exists in Seed Vault (check Phantom can access it).`,
-          };
-        }
+        if (!found) throw new Error('all paths failed');
+      } catch (e3: any) {
+        return {
+          success: false, addresses: {}, model: 'unknown',
+          message: `Seed Vault connected but could not derive a Solana key.\n\nError: ${e1?.message ?? 'unknown'}\n\nThis may be a Seed Vault API version issue. Please try:\n1. Open Seed Vault in device Settings\n2. Check that a seed exists\n3. Try again`,
+        };
       }
     }
   }
