@@ -175,20 +175,23 @@ export function UnlockScreen() {
     try {
       const vaultPassword = await authManager.getVaultPasswordBiometric('Unlock Open Wallet');
       if (vaultPassword) {
-        setUnlockProgress('Decrypting wallet...');
+        setUnlockProgress('Unlocking...');
         setMode('loading');
 
-        try {
-          const { Vault } = await import('../core/vault/vault');
-          const v = new Vault();
-          setUnlockProgress('Unlocking vault...');
-          const contents = await v.unlock(vaultPassword);
-          setUnlockProgress('Deriving addresses...');
-          await deriveAddresses(contents.mnemonic);
-        } catch {}
-
         setTempVaultPassword(vaultPassword);
-        setUnlockProgress('Loading prices...');
+
+        // Only derive if addresses not already stored
+        const existingAddresses = useWalletStore.getState().addresses;
+        if (!existingAddresses.ethereum && !existingAddresses.bitcoin && !existingAddresses.solana) {
+          setUnlockProgress('Deriving addresses...');
+          try {
+            const { Vault } = await import('../core/vault/vault');
+            const v = new Vault();
+            const contents = await v.unlock(vaultPassword);
+            await deriveAddresses(contents.mnemonic);
+          } catch {}
+        }
+
         setStatus('unlocked');
         return;
       }
@@ -224,22 +227,26 @@ export function UnlockScreen() {
       const valid = await authManager.verifyPin(pin);
       if (valid) {
         setPinError(null);
-        setUnlockProgress('Decrypting wallet...');
+        setUnlockProgress('Unlocking...');
         setMode('loading');
 
         try {
           const vaultPassword = await authManager.getVaultPassword(pin);
           if (vaultPassword) {
-            setUnlockProgress('Deriving addresses...');
-            try {
-              const { Vault } = await import('../core/vault/vault');
-              const v = new Vault();
-              const contents = await v.unlock(vaultPassword);
-              await deriveAddresses(contents.mnemonic);
-            } catch {}
-
-            // Store vault password for session
+            // Store vault password for session (needed for Send/Swap signing)
             setTempVaultPassword(vaultPassword);
+
+            // Only derive addresses if they're not already stored
+            const existingAddresses = useWalletStore.getState().addresses;
+            if (!existingAddresses.ethereum && !existingAddresses.bitcoin && !existingAddresses.solana) {
+              setUnlockProgress('Deriving addresses...');
+              try {
+                const { Vault } = await import('../core/vault/vault');
+                const v = new Vault();
+                const contents = await v.unlock(vaultPassword);
+                await deriveAddresses(contents.mnemonic);
+              } catch {}
+            }
 
             // Migration: store biometric keychain entry
             const isBioEnabled = await authManager.isBiometricEnabled();
@@ -249,7 +256,6 @@ export function UnlockScreen() {
           }
         } catch {}
 
-        setUnlockProgress('Loading prices...');
         setStatus('unlocked');
       } else {
         const remaining = await authManager.getRemainingAttempts();
@@ -359,20 +365,23 @@ export function UnlockScreen() {
     try {
       const vaultPassword = await authManager.getVaultPasswordBiometric('Unlock Open Wallet');
       if (vaultPassword) {
-        setUnlockProgress('Decrypting wallet...');
+        setUnlockProgress('Unlocking...');
         setMode('loading');
 
-        try {
-          const { Vault } = await import('../core/vault/vault');
-          const v = new Vault();
-          setUnlockProgress('Unlocking vault...');
-          const contents = await v.unlock(vaultPassword);
-          setUnlockProgress('Deriving addresses...');
-          await deriveAddresses(contents.mnemonic);
-        } catch {}
-
         setTempVaultPassword(vaultPassword);
-        setUnlockProgress('Loading prices...');
+
+        // Only derive if addresses not already stored
+        const existingAddresses = useWalletStore.getState().addresses;
+        if (!existingAddresses.ethereum && !existingAddresses.bitcoin && !existingAddresses.solana) {
+          setUnlockProgress('Deriving addresses...');
+          try {
+            const { Vault } = await import('../core/vault/vault');
+            const v = new Vault();
+            const contents = await v.unlock(vaultPassword);
+            await deriveAddresses(contents.mnemonic);
+          } catch {}
+        }
+
         setStatus('unlocked');
         return;
       }
