@@ -233,10 +233,11 @@ export function SendScreen() {
         const demoAmounts: Record<string, number> = { bitcoin: 0.5, ethereum: 5, solana: 1000, cosmos: 100, openchain: 10000 };
         humanBalance = demoAmounts[selectedChain] ?? 0;
       } else if (senderAddress) {
-        // For Open Chain / Cosmos, use local chain node REST API
+        // For Open Chain / Cosmos, skip client-side balance check.
+        // The chain node will reject if insufficient funds.
+        // This avoids issues with localhost REST API connectivity.
         if (selectedChain === 'openchain' || selectedChain === 'cosmos') {
-          const { queryLocalBalance } = await import('../core/chain/chainService');
-          humanBalance = await queryLocalBalance(senderAddress);
+          humanBalance = Infinity; // Let the chain validate
         } else {
           try {
             const provider = registry.getChainProvider(selectedChain);
