@@ -233,9 +233,22 @@ export function SendScreen() {
         const demoAmounts: Record<string, number> = { bitcoin: 0.5, ethereum: 5, solana: 1000, cosmos: 100, openchain: 10000 };
         humanBalance = demoAmounts[selectedChain] ?? 0;
       } else if (senderAddress) {
-        const provider = registry.getChainProvider(selectedChain);
-        const balance = await provider.getBalance(senderAddress);
-        humanBalance = Number(balance.amount) / 10 ** decimals;
+        // For Open Chain / Cosmos, use local chain node REST API
+        if (selectedChain === 'openchain' || selectedChain === 'cosmos') {
+          const { queryLocalBalance } = await import('../core/chain/chainService');
+          humanBalance = await queryLocalBalance(senderAddress);
+        } else {
+          try {
+            const provider = registry.getChainProvider(selectedChain);
+            const balance = await provider.getBalance(senderAddress);
+            humanBalance = Number(balance.amount) / 10 ** decimals;
+          } catch {
+            // Provider not available — try balance fetcher
+            const { fetchAllBalances } = await import('../core/balances/balanceFetcher');
+            const balances = await fetchAllBalances({ [selectedChain]: senderAddress });
+            humanBalance = balances[chainSymbol] ?? 0;
+          }
+        }
       }
       if (humanBalance < parseFloat(amount)) {
         Alert.alert(
