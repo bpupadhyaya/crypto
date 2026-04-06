@@ -690,9 +690,9 @@ export function OnboardingScreen() {
       <SafeAreaView style={styles.container}>
         <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight ?? 0) + 8 : 8, paddingBottom: 30 }}>
           <Text style={[styles.logo, { fontSize: fonts.xxxl, marginBottom: 0 }]}>OW</Text>
-          <Text style={[styles.title, { fontSize: fonts.xl }]}>{tr('onboarding.title')}</Text>
+          <Text style={[styles.title, { fontSize: fonts.xl }]}>Open Wallet</Text>
           <Text style={[styles.subtitle, { fontSize: fonts.sm, marginTop: 4, lineHeight: 18 }]}>
-            {tr('onboarding.subtitle')}
+            Your money. Your control.{'\n'}Every token. Every chain. One app.
           </Text>
 
           <View style={{
@@ -731,7 +731,7 @@ export function OnboardingScreen() {
               {loading ? (
                 <ActivityIndicator color={t.bg.primary} />
               ) : (
-                <Text style={styles.primaryButtonText}>{tr('onboarding.createWallet')}</Text>
+                <Text style={styles.primaryButtonText}>Create New Wallet</Text>
               )}
             </TouchableOpacity>
 
@@ -739,7 +739,7 @@ export function OnboardingScreen() {
               style={styles.secondaryButton}
               onPress={() => setStep('restore')}
             >
-              <Text style={styles.secondaryButtonText}>{tr('onboarding.restoreWallet')}</Text>
+              <Text style={styles.secondaryButtonText}>Restore Existing Wallet</Text>
             </TouchableOpacity>
           </View>
 
