@@ -154,19 +154,20 @@ export function UnlockScreen() {
 
   const deriveAddresses = async (mnemonic: string) => {
     const { HDWallet } = await import('../core/wallet/hdwallet');
-    const { EthereumSigner } = await import('../core/chains/ethereum-signer');
-    const { BitcoinSigner } = await import('../core/chains/bitcoin-signer');
-    const { SolanaSigner } = await import('../core/chains/solana-signer');
-
     const wallet = HDWallet.fromMnemonic(mnemonic);
-    const ethSigner = EthereumSigner.fromWallet(wallet);
-    const btcSigner = BitcoinSigner.fromWallet(wallet);
-    const solSigner = SolanaSigner.fromWallet(wallet);
-    setAddresses({
-      ethereum: ethSigner.getAddress(),
-      bitcoin: btcSigner.getAddress(),
-      solana: solSigner.getAddress(),
-    });
+    const derived: Partial<Record<string, string>> = {};
+
+    try { const { EthereumSigner } = await import('../core/chains/ethereum-signer'); derived.ethereum = EthereumSigner.fromWallet(wallet).getAddress(); } catch {}
+    try { const { BitcoinSigner } = await import('../core/chains/bitcoin-signer'); derived.bitcoin = BitcoinSigner.fromWallet(wallet).getAddress(); } catch {}
+    try { const { SolanaSigner } = await import('../core/chains/solana-signer'); derived.solana = SolanaSigner.fromWallet(wallet).getAddress(); } catch {}
+    try {
+      const { CosmosSigner } = await import('../core/chains/cosmos-signer');
+      const cosmosAddr = await CosmosSigner.fromWallet(wallet, 0, 'openchain').getAddress();
+      derived.openchain = cosmosAddr;
+      derived.cosmos = cosmosAddr;
+    } catch {}
+
+    setAddresses(derived);
     wallet.destroy();
   };
 
@@ -292,6 +293,8 @@ export function UnlockScreen() {
     }
 
     setLoading(true);
+    setUnlockProgress('Encrypting wallet...');
+    setMode('loading');
     try {
       const mnemonic = words.join(' ');
       const { Vault } = await import('../core/vault/vault');
@@ -311,9 +314,13 @@ export function UnlockScreen() {
         settings: {},
       });
 
+      setUnlockProgress('Deriving addresses...');
       await deriveAddresses(mnemonic);
+      setTempVaultPassword(recoveryPassword);
+      setUnlockProgress('Almost ready...');
       setStatus('unlocked');
     } catch (err) {
+      setMode('pin');
       Alert.alert('Recovery Failed', err instanceof Error ? err.message : 'Could not recover wallet.');
     } finally {
       setLoading(false);
