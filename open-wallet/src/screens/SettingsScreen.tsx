@@ -2934,6 +2934,35 @@ export function SettingsScreen() {
                 <Text style={{ color: t.accent.purple, fontSize: fonts.md }}>Debug</Text>
               </TouchableOpacity>
             </View>
+
+            {/* Dev Testing Wallets — REMOVE BEFORE PRODUCTION */}
+            <View style={[st.card, { marginTop: 12 }]}>
+              <Text style={{ color: '#f59e0b', fontSize: fonts.sm, fontWeight: fonts.bold as any, padding: 14, borderBottomWidth: 1, borderBottomColor: t.border }}>
+                Dev Test Wallets
+              </Text>
+              <TouchableOpacity
+                style={st.row}
+                onPress={() => {
+                  Alert.alert(
+                    'Delete All Dev Wallets',
+                    'This will remove all dev wallet data. You can recreate them by tapping W1-W10 on the onboarding screen.',
+                    [
+                      { text: 'Cancel', style: 'cancel' },
+                      { text: 'Delete All', style: 'destructive', onPress: async () => {
+                        try {
+                          const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
+                          await AsyncStorage.removeItem('dev_wallets_created');
+                          useWalletStore.getState().setActiveDevWallet(null);
+                          Alert.alert('Done', 'All dev wallets deleted. Sign out to see the onboarding screen.');
+                        } catch {}
+                      }},
+                    ],
+                  );
+                }}
+              >
+                <Text style={[st.label, { color: t.accent.red }]}>Delete All Dev Wallets</Text>
+              </TouchableOpacity>
+            </View>
             <View style={{ height: 40 }} />
           </ScrollView>
         </SafeAreaView>
