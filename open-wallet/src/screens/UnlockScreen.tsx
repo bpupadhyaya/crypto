@@ -49,7 +49,7 @@ export function UnlockScreen() {
   const [builtinKey, setBuiltinKey] = useState<BuiltinKeyInfo | null>(null);
   const [bioAvailable, setBioAvailable] = useState(false);
   const [bioLabel, setBioLabel] = useState('Fingerprint');
-  const { setStatus, setAddresses, biometricEnabled, demoMode } = useWalletStore();
+  const { setStatus, setAddresses, setTempVaultPassword, biometricEnabled, demoMode } = useWalletStore();
   const t = useTheme();
 
   const styles = useMemo(() => StyleSheet.create({
