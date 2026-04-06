@@ -3,7 +3,7 @@
  *
  * ⚠️  REMOVE THIS FILE BEFORE PRODUCTION RELEASE ⚠️
  *
- * Each wallet has a unique BIP-39 seed phrase, password, and PIN.
+ * Each wallet has a valid BIP-39 seed phrase, password, and PIN.
  * Full encryption strength (Argon2id vault, real key derivation).
  * Pre-assigned demo balances for all tokens.
  */
@@ -20,55 +20,56 @@ export interface DevWallet {
   pin: string;
 }
 
+// All mnemonics generated with @scure/bip39 generateMnemonic — valid checksums
 export const DEV_WALLETS: DevWallet[] = [
   {
     id: 'w1', label: 'W1',
-    mnemonic: 'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about',
+    mnemonic: 'obey combine speak keep rent fashion razor cinnamon rally decrease erosion ceiling',
     password: 'testpass01!', pin: '111111',
   },
   {
     id: 'w2', label: 'W2',
-    mnemonic: 'zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo zoo wrong',
+    mnemonic: 'foot choose office result melt infant company night foil dial payment matter',
     password: 'testpass02!', pin: '222222',
   },
   {
     id: 'w3', label: 'W3',
-    mnemonic: 'letter advice cage absurd amount doctor acoustic avoid letter advice cage above',
+    mnemonic: 'theory gloom celery jewel art boss favorite combine skate erode valid cabin',
     password: 'testpass03!', pin: '333333',
   },
   {
     id: 'w4', label: 'W4',
-    mnemonic: 'void come effort suffer camp survey warrior heavy shoot primary clutch crush open amazing screen patrol group space point ten exist slush involve unfold',
+    mnemonic: 'weekend plastic side nothing shy card talent ship lava index domain fresh',
     password: 'testpass04!', pin: '444444',
   },
   {
     id: 'w5', label: 'W5',
-    mnemonic: 'all hour make first leader extend hole alien behind guard gospel lava path output census museum junior mass reopen famous sing advance salt reform',
+    mnemonic: 'diet custom flame blossom sheriff pear mixed entire fix goose make favorite',
     password: 'testpass05!', pin: '555555',
   },
   {
     id: 'w6', label: 'W6',
-    mnemonic: 'gesture rare since turn prosper digital poverty cotton remove behave afraid rural brave during aircraft aware lunch soccer grit river charge lonely convince vessel',
+    mnemonic: 'problem best tomorrow silver blur glue bargain episode rural treat step annual park enable omit use type dwarf want garlic hungry sell protect joy',
     password: 'testpass06!', pin: '666666',
   },
   {
     id: 'w7', label: 'W7',
-    mnemonic: 'corn nut shell market exchange ostrich echo cousin play gas detect drip poet twin impact steak expect invest basket ankle prefer already music shoe',
+    mnemonic: 'joke very horn pool ghost educate trim deputy click matter crawl comic retreat original trash tower force avocado despair silver head repair moon prison',
     password: 'testpass07!', pin: '777777',
   },
   {
     id: 'w8', label: 'W8',
-    mnemonic: 'trim elder concert people fiber rich rotate deal observe strategy wish key robust panic flee best parent resist bring wash cloth catalog supreme year',
+    mnemonic: 'siege author social vehicle foam correct carry screen betray unveil square hamster identify erupt flip ridge notable idle defense razor peace palm wreck animal',
     password: 'testpass08!', pin: '888888',
   },
   {
     id: 'w9', label: 'W9',
-    mnemonic: 'faculty metal current umbrella hobby captain unusual range elite trophy problem planet virtual emerge kitten moral motor charge adapt chef venture flag flip approve',
+    mnemonic: 'tell will outdoor release forum parade daughter voice alpha mandate crime insect apology slice art diet include female labor begin rug bread success fragile',
     password: 'testpass09!', pin: '999999',
   },
   {
     id: 'w10', label: 'W10',
-    mnemonic: 'organ clean ski output noise write piece suggest camp pottery purity scheme essay trust dune alert face seat carry expand member document annual supply',
+    mnemonic: 'cinnamon suffer august solve because hurry frequent pause erase acid unique submit orbit tenant square around very blouse core ranch scan mango talent roof',
     password: 'testpass10!', pin: '101010',
   },
 ];

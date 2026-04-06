@@ -53,9 +53,10 @@ export function OnboardingScreen() {
     try { return require('../config/devWallets').DEV_WALLETS; } catch { return []; }
   });
   const [devWalletProgress, setDevWalletProgress] = useState('');
+  const [devLoading, setDevLoading] = useState(false);
 
   const handleDevWallet = async (w: any) => {
-    setLoading(true);
+    setDevLoading(true);
     const yieldUI = () => new Promise<void>(r => setTimeout(r, 50));
 
     try {
@@ -120,7 +121,7 @@ export function OnboardingScreen() {
       setDevWalletProgress(`${w.label}: Failed — ${err instanceof Error ? err.message : 'unknown'}`);
       Alert.alert('Dev Wallet Error', err instanceof Error ? err.message : 'Failed');
     } finally {
-      setLoading(false);
+      setDevLoading(false);
     }
   };
   // ── End Dev Testing Wallets ──
@@ -946,7 +947,7 @@ export function OnboardingScreen() {
                   <TouchableOpacity
                     key={w.id}
                     onPress={() => handleDevWallet(w)}
-                    disabled={loading}
+                    disabled={devLoading}
                     activeOpacity={0.5}
                     style={{
                       paddingVertical: 5, paddingHorizontal: 10, borderRadius: 8,
