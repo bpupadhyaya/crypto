@@ -55,6 +55,9 @@ export function OnboardingScreen() {
   const seedVaultAvailable = Platform.OS === 'android';
   const seedVaultName = 'Solana Seed Vault';
 
+  // Progress message for wallet creation
+  const [progressMsg, setProgressMsg] = useState('');
+
   // Shuffle verification state
   const [shuffledWords, setShuffledWords] = useState<string[]>([]);
   const [selectedWords, setSelectedWords] = useState<string[]>([]);
@@ -487,6 +490,9 @@ export function OnboardingScreen() {
     );
   };
 
+  // Yield to let UI render between heavy operations
+  const yieldToUI = () => new Promise<void>(r => setTimeout(r, 50));
+
   const handleSetPassword = async () => {
     if (password.length < 8) {
       Alert.alert('Weak Password', 'Password must be at least 8 characters.');
@@ -498,6 +504,9 @@ export function OnboardingScreen() {
     }
 
     setLoading(true);
+    setProgressMsg('Encrypting wallet...');
+    await yieldToUI();
+
     const phraseToUse = step === 'password' && restoreInput ? restoreInput : mnemonic;
 
     try {
@@ -524,6 +533,9 @@ export function OnboardingScreen() {
       setLoading(false);
       return;
     }
+
+    setProgressMsg('Deriving addresses...');
+    await yieldToUI();
 
     try {
       // Step 2: Derive addresses (lazy import — heavy libs loaded only here)
@@ -724,12 +736,16 @@ export function OnboardingScreen() {
           {/* ─── Software Wallet ─── */}
           <View style={styles.buttonGroup}>
             <TouchableOpacity
-              style={styles.primaryButton}
+              style={[styles.primaryButton, loading && { opacity: 0.7 }]}
               onPress={handleCreateWallet}
               disabled={loading}
+              activeOpacity={0.6}
             >
               {loading ? (
-                <ActivityIndicator color={t.bg.primary} />
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                  <ActivityIndicator color={t.bg.primary} />
+                  <Text style={[styles.primaryButtonText, { fontSize: fonts.md }]}>Generating seed phrase...</Text>
+                </View>
               ) : (
                 <Text style={styles.primaryButtonText}>Create New Wallet</Text>
               )}
@@ -1126,12 +1142,16 @@ export function OnboardingScreen() {
         />
 
         <TouchableOpacity
-          style={styles.primaryButton}
+          style={[styles.primaryButton, loading && { opacity: 0.7 }]}
           onPress={handleSetPassword}
           disabled={loading}
+          activeOpacity={0.6}
         >
           {loading ? (
-            <ActivityIndicator color={t.bg.primary} />
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+              <ActivityIndicator color={t.bg.primary} />
+              <Text style={[styles.primaryButtonText, { fontSize: fonts.md }]}>{progressMsg || 'Creating wallet...'}</Text>
+            </View>
           ) : (
             <Text style={styles.primaryButtonText}>Create Wallet</Text>
           )}
