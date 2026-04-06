@@ -264,13 +264,23 @@ export function UnlockScreen() {
   const handlePasswordUnlock = async () => {
     if (!password.trim()) return;
     setLoading(true);
+    setUnlockProgress('Unlocking vault...');
+    setMode('loading');
     try {
       const { Vault } = await import('../core/vault/vault');
       const vault = new Vault();
       const contents = await vault.unlock(password);
-      await deriveAddresses(contents.mnemonic);
+      setTempVaultPassword(password);
+
+      const existingAddresses = useWalletStore.getState().addresses;
+      const needsDerivation = !existingAddresses.ethereum || !existingAddresses.bitcoin || !existingAddresses.solana || !existingAddresses.openchain;
+      if (needsDerivation) {
+        setUnlockProgress('Deriving addresses...');
+        await deriveAddresses(contents.mnemonic);
+      }
       setStatus('unlocked');
     } catch {
+      setMode('password');
       Alert.alert('Wrong Password', 'The password you entered is incorrect.');
     } finally {
       setLoading(false);
@@ -294,10 +304,13 @@ export function UnlockScreen() {
 
     setLoading(true);
     setUnlockProgress('Validating seed phrase...');
+    const yieldUI = () => new Promise<void>(r => setTimeout(r, 50));
+    await yieldUI();
     // Stay on seed-recovery screen so user sees button progress
     try {
       const mnemonic = words.join(' ');
       setUnlockProgress('Encrypting wallet...');
+      await yieldUI();
       const { Vault } = await import('../core/vault/vault');
       const vault = new Vault();
       await vault.create(recoveryPassword, {
@@ -341,6 +354,8 @@ export function UnlockScreen() {
   const handleBuiltinKeyUnlock = async () => {
     if (!builtinKey) return;
     setLoading(true);
+    setUnlockProgress('Accessing secure element...');
+    setMode('loading');
     try {
       let addresses: Record<string, string>;
       if (demoMode) {
@@ -556,12 +571,16 @@ export function UnlockScreen() {
           />
 
           <TouchableOpacity
-            style={[styles.unlockButton, loading && styles.buttonDisabled]}
+            style={[styles.unlockButton, loading && { opacity: 0.7 }]}
             onPress={handlePasswordUnlock}
             disabled={loading}
+            activeOpacity={0.6}
           >
             {loading ? (
-              <ActivityIndicator color={t.bg.primary} />
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                <ActivityIndicator color={t.bg.primary} />
+                <Text style={[styles.unlockButtonText, { fontSize: fonts.md }]}>{unlockProgress || 'Unlocking...'}</Text>
+              </View>
             ) : (
               <Text style={styles.unlockButtonText}>Unlock</Text>
             )}

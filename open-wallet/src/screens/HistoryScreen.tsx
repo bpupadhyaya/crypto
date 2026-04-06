@@ -13,6 +13,7 @@ import {
   StyleSheet,
   SafeAreaView,
   RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import { registry } from '../core/abstractions/registry';
@@ -159,13 +160,20 @@ export function HistoryScreen() {
           />
         }
         ListEmptyComponent={
-          <View style={styles.empty}>
-            <Text style={styles.emptyIcon}>☰</Text>
-            <Text style={styles.emptyTitle}>No transactions yet</Text>
-            <Text style={styles.emptyDesc}>
-              Your transaction history will appear here once you send or receive tokens.
-            </Text>
-          </View>
+          isLoading ? (
+            <View style={styles.empty}>
+              <ActivityIndicator color={t.accent.green} size="large" />
+              <Text style={[styles.emptyTitle, { marginTop: 16 }]}>Loading transaction history...</Text>
+            </View>
+          ) : (
+            <View style={styles.empty}>
+              <Text style={styles.emptyIcon}>☰</Text>
+              <Text style={styles.emptyTitle}>No transactions yet</Text>
+              <Text style={styles.emptyDesc}>
+                Your transaction history will appear here once you send or receive tokens.
+              </Text>
+            </View>
+          )
         }
         contentContainerStyle={transactions?.length === 0 ? styles.emptyContainer : undefined}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
