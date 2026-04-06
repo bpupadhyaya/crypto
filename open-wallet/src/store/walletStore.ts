@@ -58,9 +58,13 @@ interface WalletState {
   tempVaultPassword: string | null;
   setTempVaultPassword: (pw: string | null) => void;
 
-  // ─── Active Dev Wallet (REMOVE BEFORE PRODUCTION) ───
-  activeDevWallet: string | null;  // e.g. 'w1', 'w2', etc.
+  // ─── Practice Wallets ───
+  activeDevWallet: string | null;
   setActiveDevWallet: (id: string | null) => void;
+  practiceWalletsHidden: boolean;
+  setPracticeWalletsHidden: (hidden: boolean) => void;
+  practiceProgress: { walletsCreated: string[]; walletsSwitched: string[]; walletsTransacted: string[] };
+  updatePracticeProgress: (field: 'walletsCreated' | 'walletsSwitched' | 'walletsTransacted', id: string) => void;
 
   // ─── Wallet Provider ───
   walletProvider: 'software' | 'seed-vault';
@@ -189,6 +193,17 @@ export const useWalletStore = create<WalletState>((set) => ({
   setTempVaultPassword: (pw) => set({ tempVaultPassword: pw }),
   activeDevWallet: null,
   setActiveDevWallet: (id) => { set({ activeDevWallet: id }); schedulePersist(); },
+  practiceWalletsHidden: false,
+  setPracticeWalletsHidden: (hidden) => { set({ practiceWalletsHidden: hidden }); schedulePersist(); },
+  practiceProgress: { walletsCreated: [], walletsSwitched: [], walletsTransacted: [] },
+  updatePracticeProgress: (field, id) => {
+    set((s) => {
+      const arr = [...s.practiceProgress[field]];
+      if (!arr.includes(id)) arr.push(id);
+      return { practiceProgress: { ...s.practiceProgress, [field]: arr } };
+    });
+    schedulePersist();
+  },
   walletProvider: 'software' as const,
   setWalletProvider: (provider) => { set({ walletProvider: provider }); schedulePersist(); },
   contacts: [],

@@ -45,13 +45,18 @@ export function OnboardingScreen() {
   useScreenProtection();
   const { t: tr } = useTranslation();
 
-  // ── Dev Testing Wallets (REMOVE BEFORE PRODUCTION) ──
-  const [devTestingEnabled] = useState(() => {
-    try { return require('../config/devWallets').DEV_TESTING_ENABLED; } catch { return false; }
+  // ── Practice/Test Wallets (production feature) ──
+  const practiceWalletsHidden = useWalletStore((s) => s.practiceWalletsHidden);
+  const [practiceWalletList] = useState(() => {
+    try { return require('../config/practiceWallets').PRACTICE_WALLETS; } catch { return []; }
   });
-  const [devWalletList] = useState(() => {
-    try { return require('../config/devWallets').DEV_WALLETS; } catch { return []; }
+  const [practiceInstructions] = useState(() => {
+    try { return require('../config/practiceWallets').PRACTICE_INSTRUCTIONS; } catch { return null; }
   });
+  const [instructionsExpanded, setInstructionsExpanded] = useState(false);
+  // Backward compat
+  const devTestingEnabled = !practiceWalletsHidden && practiceWalletList.length > 0;
+  const devWalletList = practiceWalletList;
   const [devWalletProgress, setDevWalletProgress] = useState('');
   const [devLoading, setDevLoading] = useState(false);
   const [devPopupVisible, setDevPopupVisible] = useState(false);
@@ -92,6 +97,7 @@ export function OnboardingScreen() {
           setWalletProvider('software');
           useWalletStore.getState().setActiveDevWallet(w.id);
           useWalletStore.getState().setDemoMode(true);
+          useWalletStore.getState().updatePracticeProgress('walletsSwitched', w.id);
 
           setDevPopupMessages(prev => [...prev, `✅ ${w.label} ready!`]);
           await new Promise(r => setTimeout(r, 500));
@@ -176,10 +182,13 @@ export function OnboardingScreen() {
       setWalletProvider('software');
       store.setActiveDevWallet(w.id);
 
-      // Step 6: Set demo balances (only difference from production)
+      // Track practice progress
+      store.updatePracticeProgress('walletsCreated', w.id);
+
+      // Step 6: Set practice balances (only difference from production)
       try {
-        const { DEV_TEST_BALANCES } = await import('../config/devWallets');
-        Object.entries(DEV_TEST_BALANCES).forEach(([sym, amt]) => {
+        const { PRACTICE_BALANCES } = await import('../config/practiceWallets');
+        Object.entries(PRACTICE_BALANCES).forEach(([sym, amt]) => {
           store.updateDevBalance(sym, amt - (store.devBalances[sym] ?? 0));
         });
         store.setDemoMode(true);
@@ -1024,7 +1033,7 @@ export function OnboardingScreen() {
                 maxHeight: '60%', borderWidth: 1, borderColor: '#f59e0b40',
               }}>
                 <Text style={{ color: '#f59e0b', fontSize: fonts.lg, fontWeight: fonts.bold as any, marginBottom: 16 }}>
-                  Creating Dev Wallet
+                  Setting Up Practice Wallet
                 </Text>
                 <ScrollView style={{ maxHeight: 250 }}>
                   {devPopupMessages.map((msg, i) => (
@@ -1039,26 +1048,81 @@ export function OnboardingScreen() {
             </View>
           )}
 
-          {/* ── Dev Testing Wallets (REMOVE BEFORE PRODUCTION) ── */}
+          {/* ── Test & Practice Wallets (production feature) ── */}
           {devTestingEnabled && (
-            <View style={{ marginTop: 16, paddingVertical: 8, borderTopWidth: 1, borderTopColor: '#333' }}>
-              <Text style={{ color: '#f59e0b', fontSize: fonts.xxs, textAlign: 'center', marginBottom: 6 }}>
-                Dev: {devWalletProgress || 'tap to create test wallet instantly'}
+            <View style={{ marginTop: 20, paddingTop: 16, borderTopWidth: 1, borderTopColor: '#333' }}>
+              <Text style={{ color: t.accent.green, fontSize: fonts.md, fontWeight: fonts.bold as any, textAlign: 'center', marginBottom: 4 }}>
+                Test & Practice Wallets
               </Text>
-              <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 6 }}>
-                {devWalletList.map((w) => (
+              <Text style={{ color: t.text.muted, fontSize: fonts.xs, textAlign: 'center', marginBottom: 10, paddingHorizontal: 10 }}>
+                {practiceInstructions?.purpose ?? 'Practice every feature safely before creating your real wallet.'}
+              </Text>
+
+              {/* Collapsible Instructions */}
+              <TouchableOpacity
+                onPress={() => setInstructionsExpanded(!instructionsExpanded)}
+                style={{ paddingVertical: 6, paddingHorizontal: 12 }}
+              >
+                <Text style={{ color: t.accent.blue, fontSize: fonts.xs, textAlign: 'center' }}>
+                  {instructionsExpanded ? '▼ Hide Instructions' : '▶ How it works & why'}
+                </Text>
+              </TouchableOpacity>
+
+              {instructionsExpanded && practiceInstructions && (
+                <View style={{ backgroundColor: t.bg.card, borderRadius: 12, padding: 14, marginHorizontal: 4, marginBottom: 12 }}>
+                  <Text style={{ color: t.text.secondary, fontSize: fonts.xs, lineHeight: 18, marginBottom: 10 }}>
+                    {practiceInstructions.intro}
+                  </Text>
+
+                  <Text style={{ color: t.accent.green, fontSize: fonts.xs, fontWeight: fonts.bold as any, marginBottom: 4 }}>How it works:</Text>
+                  {practiceInstructions.howItWorks.map((item: string, i: number) => (
+                    <Text key={i} style={{ color: t.text.muted, fontSize: fonts.xxs, lineHeight: 16, marginBottom: 2 }}>• {item}</Text>
+                  ))}
+
+                  <Text style={{ color: t.accent.yellow, fontSize: fonts.xs, fontWeight: fonts.bold as any, marginTop: 8, marginBottom: 4 }}>Practice vs Real:</Text>
+                  {practiceInstructions.differences.map((item: string, i: number) => (
+                    <Text key={i} style={{ color: t.text.muted, fontSize: fonts.xxs, lineHeight: 16, marginBottom: 2 }}>• {item}</Text>
+                  ))}
+
+                  <Text style={{ color: t.accent.blue, fontSize: fonts.xs, fontWeight: fonts.bold as any, marginTop: 8, marginBottom: 4 }}>What's identical:</Text>
+                  {practiceInstructions.similarities.map((item: string, i: number) => (
+                    <Text key={i} style={{ color: t.text.muted, fontSize: fonts.xxs, lineHeight: 16, marginBottom: 2 }}>• {item}</Text>
+                  ))}
+
+                  <Text style={{ color: t.text.secondary, fontSize: fonts.xxs, lineHeight: 16, marginTop: 8, fontStyle: 'italic' }}>
+                    {practiceInstructions.verification}
+                  </Text>
+
+                  <Text style={{ color: t.text.muted, fontSize: fonts.xxs, lineHeight: 16, marginTop: 8 }}>
+                    {practiceInstructions.disableNote}
+                  </Text>
+                </View>
+              )}
+
+              {/* Practice Wallet Buttons — bigger, bolder for easy tapping */}
+              <Text style={{ color: t.text.muted, fontSize: fonts.xxs, textAlign: 'center', marginBottom: 8 }}>
+                {devWalletProgress || 'Tap any wallet to start practicing instantly:'}
+              </Text>
+              <View style={{ gap: 8, paddingHorizontal: 4 }}>
+                {devWalletList.map((w: any, i: number) => (
                   <TouchableOpacity
                     key={w.id}
                     onPress={() => handleDevWallet(w)}
                     disabled={devLoading}
-                    activeOpacity={0.5}
+                    activeOpacity={0.6}
                     style={{
-                      paddingVertical: 5, paddingHorizontal: 10, borderRadius: 8,
-                      backgroundColor: '#f59e0b20',
-                      borderWidth: 1, borderColor: '#f59e0b40',
+                      paddingVertical: 14, paddingHorizontal: 16, borderRadius: 12,
+                      backgroundColor: t.bg.card, borderWidth: 1, borderColor: t.accent.green + '40',
+                      flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
                     }}
                   >
-                    <Text style={{ color: '#f59e0b', fontSize: fonts.xxs, fontWeight: fonts.semibold as any }}>{w.label}</Text>
+                    <View>
+                      <Text style={{ color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold as any }}>{w.label}</Text>
+                      <Text style={{ color: t.text.muted, fontSize: fonts.xxs, marginTop: 2 }}>
+                        {w.mnemonic.split(' ').length} words · PIN {w.pin}
+                      </Text>
+                    </View>
+                    <Text style={{ color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.semibold as any }}>Start →</Text>
                   </TouchableOpacity>
                 ))}
               </View>
