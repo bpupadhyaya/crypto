@@ -67,6 +67,10 @@ export default function RootLayout() {
   const [showSplash, setShowSplash] = useState(true);
 
   if (status === 'unlocked') hasBeenUnlocked.current = true;
+  // Reset when user signs out (goes back to onboarding)
+  if (status === 'onboarding' || (!hasVault && status !== 'unlocked' && status !== 'pin_setup')) {
+    hasBeenUnlocked.current = false;
+  }
 
   // ─── Session Manager: auto-lock on inactivity ───
   useEffect(() => {
