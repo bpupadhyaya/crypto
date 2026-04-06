@@ -755,12 +755,14 @@ export function OnboardingScreen() {
           {/* Built-in Seed Vault (Seeker/Saga) */}
           {seedVaultAvailable && (
             <TouchableOpacity
-              style={[styles.primaryButton, { backgroundColor: t.accent.purple, marginBottom: 6, paddingVertical: 12 }]}
+              style={[styles.primaryButton, { backgroundColor: t.accent.purple, marginBottom: 6, paddingVertical: 14 }]}
               onPress={() => handleHardwareWallet('seed-vault')}
               disabled={loading}
             >
               <Text style={[styles.primaryButtonText, { fontSize: fonts.md }]}>Solana Seeker / Saga Seed Vault</Text>
-              <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: fonts.xs, marginTop: 1 }}>Built-in secure element — keys never leave hardware</Text>
+              <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: fonts.xs, marginTop: 4, paddingHorizontal: 12, textAlign: 'center' }}>
+                Built-in secure element — keys never leave hardware
+              </Text>
             </TouchableOpacity>
           )}
 
