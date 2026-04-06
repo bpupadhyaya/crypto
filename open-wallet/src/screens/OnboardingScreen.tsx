@@ -45,6 +45,86 @@ export function OnboardingScreen() {
   useScreenProtection();
   const { t: tr } = useTranslation();
 
+  // ── Dev Testing Wallets (REMOVE BEFORE PRODUCTION) ──
+  const [devTestingEnabled] = useState(() => {
+    try { return require('../config/devWallets').DEV_TESTING_ENABLED; } catch { return false; }
+  });
+  const [devWalletList] = useState(() => {
+    try { return require('../config/devWallets').DEV_WALLETS; } catch { return []; }
+  });
+  const [devWalletProgress, setDevWalletProgress] = useState('');
+
+  const handleDevWallet = async (w: any) => {
+    setLoading(true);
+    const yieldUI = () => new Promise<void>(r => setTimeout(r, 50));
+
+    try {
+      setDevWalletProgress(`${w.label}: Encrypting...`);
+      await yieldUI();
+
+      // Step 1: Create vault with full encryption
+      const { Vault } = await import('../core/vault/vault');
+      const vaultInstance = new Vault();
+      await vaultInstance.create(w.password, {
+        mnemonic: w.mnemonic,
+        accounts: [{ id: 'default', name: `Dev ${w.label}`, derivationPaths: {
+          bitcoin: "m/44'/0'/0'/0/0", ethereum: "m/44'/60'/0'/0/0",
+          solana: "m/44'/501'/0'/0'", cosmos: "m/44'/118'/0'/0/0",
+        }}],
+        settings: {},
+      });
+
+      setDevWalletProgress(`${w.label}: Deriving keys...`);
+      await yieldUI();
+
+      // Step 2: Derive all chain addresses
+      const { HDWallet } = await import('../core/wallet/hdwallet');
+      const wallet = HDWallet.fromMnemonic(w.mnemonic);
+      const derived: Partial<Record<string, string>> = {};
+
+      try { const { EthereumSigner } = await import('../core/chains/ethereum-signer'); derived.ethereum = EthereumSigner.fromWallet(wallet).getAddress(); } catch {}
+      try { const { BitcoinSigner } = await import('../core/chains/bitcoin-signer'); derived.bitcoin = BitcoinSigner.fromWallet(wallet).getAddress(); } catch {}
+      try { const { SolanaSigner } = await import('../core/chains/solana-signer'); derived.solana = SolanaSigner.fromWallet(wallet).getAddress(); } catch {}
+      try {
+        const { CosmosSigner } = await import('../core/chains/cosmos-signer');
+        const addr = await CosmosSigner.fromWallet(wallet, 0, 'openchain').getAddress();
+        derived.openchain = addr; derived.cosmos = addr;
+      } catch {}
+
+      setAddresses(derived);
+      wallet.destroy();
+
+      setDevWalletProgress(`${w.label}: Setting up PIN...`);
+      await yieldUI();
+
+      // Step 3: Set up PIN
+      const { authManager } = await import('../core/auth/auth');
+      await authManager.setupPin(w.pin, w.password);
+
+      // Step 4: Set demo balances
+      try {
+        const { DEV_TEST_BALANCES } = await import('../config/devWallets');
+        const store = useWalletStore.getState();
+        Object.entries(DEV_TEST_BALANCES).forEach(([sym, amt]) => {
+          store.updateDevBalance(sym, amt - (store.devBalances[sym] ?? 0));
+        });
+        store.setDemoMode(true);
+      } catch {}
+
+      setHasVault(true);
+      setTempVaultPassword(w.password);
+      setWalletProvider('software');
+      setDevWalletProgress(`${w.label}: Ready!`);
+      setStatus('unlocked');
+    } catch (err) {
+      setDevWalletProgress(`${w.label}: Failed — ${err instanceof Error ? err.message : 'unknown'}`);
+      Alert.alert('Dev Wallet Error', err instanceof Error ? err.message : 'Failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+  // ── End Dev Testing Wallets ──
+
   const [step, setStep] = useState<OnboardingStep>('welcome');
   const [mnemonic, setMnemonic] = useState('');
   const [restoreInput, setRestoreInput] = useState('');
@@ -68,7 +148,7 @@ export function OnboardingScreen() {
   const [spotCheckIndices, setSpotCheckIndices] = useState<number[]>([]);
   const [spotCheckAnswers, setSpotCheckAnswers] = useState<Record<number, string>>({});
 
-  const { setStatus, setHasVault, setAddresses, setTempVaultPassword, setWalletProvider } = useWalletStore();
+  const { setStatus, setHasVault, setAddresses, setTempVaultPassword, setWalletProvider, setDemoMode } = useWalletStore();
   const t = useTheme();
 
   const styles = useMemo(() => StyleSheet.create({
@@ -853,6 +933,31 @@ export function OnboardingScreen() {
               <Text style={[styles.secondaryButtonText, { color: '#f59e0b', fontSize: fonts.sm }]}>⚡ Dev Quickstart</Text>
               <Text style={{ color: '#f59e0b88', fontSize: fonts.xs, marginTop: 2 }}>test seed · devpassword123 · PIN 123456</Text>
             </TouchableOpacity>
+          )}
+
+          {/* ── Dev Testing Wallets (REMOVE BEFORE PRODUCTION) ── */}
+          {devTestingEnabled && (
+            <View style={{ marginTop: 16, paddingVertical: 8, borderTopWidth: 1, borderTopColor: '#333' }}>
+              <Text style={{ color: '#f59e0b', fontSize: fonts.xxs, textAlign: 'center', marginBottom: 6 }}>
+                Dev: {devWalletProgress || 'tap to create test wallet instantly'}
+              </Text>
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 6 }}>
+                {devWalletList.map((w) => (
+                  <TouchableOpacity
+                    key={w.id}
+                    onPress={() => handleDevWallet(w)}
+                    disabled={loading}
+                    activeOpacity={0.5}
+                    style={{
+                      paddingVertical: 5, paddingHorizontal: 10, borderRadius: 8,
+                      backgroundColor: '#f59e0b20', borderWidth: 1, borderColor: '#f59e0b40',
+                    }}
+                  >
+                    <Text style={{ color: '#f59e0b', fontSize: fonts.xxs, fontWeight: fonts.semibold as any }}>{w.label}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
           )}
 
           <Text style={[styles.footer, { marginTop: 12, fontSize: fonts.xs }]}>
