@@ -196,22 +196,12 @@ export function UnlockScreen() {
         return;
       }
 
-      // No keychain entry yet (existing user) — fall back to LocalAuthentication directly.
-      const isBioEnabled = await authManager.isBiometricEnabled();
-      if (!isBioEnabled) return;
-      const result = await LocalAuthentication.authenticateAsync({
-        promptMessage: 'Unlock Open Wallet',
-        cancelLabel: 'Use PIN',
-        disableDeviceFallback: false,
-        requireConfirmation: false,
-      });
-      if (result.success) {
-        setUnlockProgress('Loading...');
-        setMode('loading');
-        setStatus('unlocked');
-      }
+      // No keychain password — fall back to PIN
+      setMode('pin');
     } catch {
-      // Biometric error — PIN pad is already shown
+      // Biometric failed — fall back to PIN immediately
+      setMode('pin');
+      setPinError('Biometric unavailable. Use PIN instead.');
     }
   };
 
@@ -370,7 +360,6 @@ export function UnlockScreen() {
 
         setTempVaultPassword(vaultPassword);
 
-        // Only derive if addresses not already stored
         const existingAddresses = useWalletStore.getState().addresses;
         if (!existingAddresses.ethereum && !existingAddresses.bitcoin && !existingAddresses.solana) {
           setUnlockProgress('Deriving addresses...');
@@ -386,20 +375,12 @@ export function UnlockScreen() {
         return;
       }
 
-      // No keychain entry yet — fall back to LocalAuthentication
-      const result = await LocalAuthentication.authenticateAsync({
-        promptMessage: 'Unlock Open Wallet',
-        cancelLabel: 'Cancel',
-        disableDeviceFallback: false,
-        requireConfirmation: false,
-      });
-      if (result.success) {
-        setUnlockProgress('Loading...');
-        setMode('loading');
-        setStatus('unlocked');
-      }
+      // No keychain password — fall back to PIN immediately
+      setMode('pin');
     } catch {
-      Alert.alert('Biometric Unavailable', 'Could not authenticate. Use PIN or enroll biometrics in device Settings.');
+      // Biometric failed — fall back to PIN immediately, no alert loop
+      setMode('pin');
+      setPinError('Biometric unavailable. Use PIN instead.');
     }
   };
 
