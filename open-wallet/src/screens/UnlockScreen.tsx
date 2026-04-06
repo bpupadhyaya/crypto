@@ -458,7 +458,7 @@ export function UnlockScreen() {
         {/* Biometric button ABOVE PIN pad — easy to reach */}
         {bioAvailable && (
           <TouchableOpacity
-            style={[styles.biometricButton, { marginTop: 16 }]}
+            style={[styles.biometricButton, { marginTop: 48, marginBottom: 8 }]}
             onPress={triggerBiometric}
           >
             <Text style={styles.biometricButtonText}>Unlock with {bioLabel}</Text>
