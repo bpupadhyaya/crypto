@@ -2938,7 +2938,7 @@ export function SettingsScreen() {
             {/* Dev Testing Wallets — REMOVE BEFORE PRODUCTION */}
             <View style={[st.card, { marginTop: 12 }]}>
               <Text style={{ color: '#f59e0b', fontSize: fonts.sm, fontWeight: fonts.bold as any, padding: 14, borderBottomWidth: 1, borderBottomColor: t.border }}>
-                Dev Test Wallets — Switch Wallet
+                Test & Practice Wallets
               </Text>
               <Text style={{ color: t.text.muted, fontSize: fonts.xs, paddingHorizontal: 14, paddingBottom: 8 }}>
                 Active: {useWalletStore.getState().activeDevWallet?.toUpperCase() ?? 'None'}. Tap to switch:
@@ -2946,10 +2946,10 @@ export function SettingsScreen() {
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, paddingHorizontal: 14, paddingBottom: 14 }}>
                 {(() => {
                   try {
-                    const { DEV_WALLETS, DEV_TESTING_ENABLED } = require('../config/devWallets');
-                    if (!DEV_TESTING_ENABLED) return null;
+                    const { PRACTICE_WALLETS, true /* practice wallets always enabled */ } = require('../config/practiceWallets');
+                    if (!true /* practice wallets always enabled */) return null;
                     const activeId = useWalletStore.getState().activeDevWallet;
-                    return DEV_WALLETS.map((w: any) => (
+                    return PRACTICE_WALLETS.map((w: any) => (
                       <TouchableOpacity
                         key={w.id}
                         onPress={async () => {
@@ -3000,8 +3000,8 @@ export function SettingsScreen() {
                             store.setDemoMode(true);
 
                             // Load demo balances
-                            const { DEV_TEST_BALANCES } = require('../config/devWallets');
-                            Object.entries(DEV_TEST_BALANCES).forEach(([sym, amt]: [string, any]) => {
+                            const { PRACTICE_BALANCES } = require('../config/practiceWallets');
+                            Object.entries(PRACTICE_BALANCES).forEach(([sym, amt]: [string, any]) => {
                               store.updateDevBalance(sym, amt - (store.devBalances[sym] ?? 0));
                             });
 

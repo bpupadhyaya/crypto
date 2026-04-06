@@ -63,53 +63,9 @@ export function OnboardingScreen() {
   const [devPopupMessages, setDevPopupMessages] = useState<string[]>([]);
 
   const handleDevWallet = async (w: any) => {
-    // Try to unlock existing vault with this wallet's password
-    // If it works, wallet was already created — just unlock it
-    try {
-      const { Vault } = await import('../core/vault/vault');
-      const vaultInstance = new Vault();
-      const exists = await vaultInstance.exists();
-      if (exists) {
-        setDevPopupVisible(true);
-        setDevPopupMessages([`${w.label}: Checking existing wallet...`]);
-        const contents = await vaultInstance.unlock(w.password);
-        if (contents.mnemonic === w.mnemonic) {
-          // Same wallet — just unlock
-          setDevPopupMessages(prev => [...prev, '✓ Wallet found, unlocking...']);
-
-          // Restore addresses
-          const { HDWallet } = await import('../core/wallet/hdwallet');
-          const wallet = HDWallet.fromMnemonic(w.mnemonic);
-          const derived: Partial<Record<string, string>> = {};
-          try { const { EthereumSigner } = await import('../core/chains/ethereum-signer'); derived.ethereum = EthereumSigner.fromWallet(wallet).getAddress(); } catch {}
-          try { const { BitcoinSigner } = await import('../core/chains/bitcoin-signer'); derived.bitcoin = BitcoinSigner.fromWallet(wallet).getAddress(); } catch {}
-          try { const { SolanaSigner } = await import('../core/chains/solana-signer'); derived.solana = SolanaSigner.fromWallet(wallet).getAddress(); } catch {}
-          try {
-            const { CosmosSigner } = await import('../core/chains/cosmos-signer');
-            const addr = await CosmosSigner.fromWallet(wallet, 0, 'openchain').getAddress();
-            derived.openchain = addr; derived.cosmos = addr;
-          } catch {}
-          setAddresses(derived);
-          wallet.destroy();
-
-          setHasVault(true);
-          setTempVaultPassword(w.password);
-          setWalletProvider('software');
-          useWalletStore.getState().setActiveDevWallet(w.id);
-          useWalletStore.getState().setDemoMode(true);
-          useWalletStore.getState().updatePracticeProgress('walletsSwitched', w.id);
-
-          setDevPopupMessages(prev => [...prev, `✅ ${w.label} ready!`]);
-          await new Promise(r => setTimeout(r, 500));
-          setDevPopupVisible(false);
-          setStatus('unlocked');
-          return;
-        }
-      }
-    } catch {
-      // Vault doesn't exist or password doesn't match — create new
-    }
-    setDevPopupVisible(false);
+    // Each practice wallet creates/overwrites the vault with its own credentials.
+    // This is the same as production — one vault per device, one active wallet.
+    // Switching wallets = creating a new vault (same as restoring with a different seed).
 
     // Create the wallet using the SAME code path as production
     setDevLoading(true);
@@ -1123,7 +1079,7 @@ export function OnboardingScreen() {
               {/* Practice Wallet Buttons — bigger, bolder for easy tapping */}
               <Text style={{ color: t.text.muted, fontSize: fonts.xxs, textAlign: 'center', marginBottom: 8 }}>
                 {devWalletProgress || (useWalletStore.getState().activeDevWallet
-                  ? `Active: ${useWalletStore.getState().activeDevWallet?.replace('p', 'Practice ')} · Tap any wallet to switch or start:`
+                  ? `Active: ${useWalletStore.getState().activeDevWallet?.toUpperCase()} · Tap any wallet to switch or start:`
                   : 'Tap any wallet to start practicing instantly:')}
               </Text>
               <View style={{ gap: 8, paddingHorizontal: 4 }}>

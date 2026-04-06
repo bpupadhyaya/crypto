@@ -22,52 +22,52 @@ export interface PracticeWallet {
 // All mnemonics generated with @scure/bip39 — valid BIP-39 checksums
 export const PRACTICE_WALLETS: PracticeWallet[] = [
   {
-    id: 'p1', label: 'Practice 1',
+    id: 'w1', label: 'W1',
     mnemonic: 'obey combine speak keep rent fashion razor cinnamon rally decrease erosion ceiling',
     password: 'practice01!', pin: '111111',
   },
   {
-    id: 'p2', label: 'Practice 2',
+    id: 'w2', label: 'W2',
     mnemonic: 'foot choose office result melt infant company night foil dial payment matter',
     password: 'practice02!', pin: '222222',
   },
   {
-    id: 'p3', label: 'Practice 3',
+    id: 'w3', label: 'W3',
     mnemonic: 'theory gloom celery jewel art boss favorite combine skate erode valid cabin',
     password: 'practice03!', pin: '333333',
   },
   {
-    id: 'p4', label: 'Practice 4',
+    id: 'w4', label: 'W4',
     mnemonic: 'weekend plastic side nothing shy card talent ship lava index domain fresh',
     password: 'practice04!', pin: '444444',
   },
   {
-    id: 'p5', label: 'Practice 5',
+    id: 'w5', label: 'W5',
     mnemonic: 'diet custom flame blossom sheriff pear mixed entire fix goose make favorite',
     password: 'practice05!', pin: '555555',
   },
   {
-    id: 'p6', label: 'Practice 6',
+    id: 'w6', label: 'W6',
     mnemonic: 'problem best tomorrow silver blur glue bargain episode rural treat step annual park enable omit use type dwarf want garlic hungry sell protect joy',
     password: 'practice06!', pin: '666666',
   },
   {
-    id: 'p7', label: 'Practice 7',
+    id: 'w7', label: 'W7',
     mnemonic: 'joke very horn pool ghost educate trim deputy click matter crawl comic retreat original trash tower force avocado despair silver head repair moon prison',
     password: 'practice07!', pin: '777777',
   },
   {
-    id: 'p8', label: 'Practice 8',
+    id: 'w8', label: 'W8',
     mnemonic: 'siege author social vehicle foam correct carry screen betray unveil square hamster identify erupt flip ridge notable idle defense razor peace palm wreck animal',
     password: 'practice08!', pin: '888888',
   },
   {
-    id: 'p9', label: 'Practice 9',
+    id: 'w9', label: 'W9',
     mnemonic: 'tell will outdoor release forum parade daughter voice alpha mandate crime insect apology slice art diet include female labor begin rug bread success fragile',
     password: 'practice09!', pin: '999999',
   },
   {
-    id: 'p10', label: 'Practice 10',
+    id: 'w10', label: 'W10',
     mnemonic: 'cinnamon suffer august solve because hurry frequent pause erase acid unique submit orbit tenant square around very blouse core ranch scan mango talent roof',
     password: 'practice10!', pin: '101010',
   },
