@@ -2946,8 +2946,7 @@ export function SettingsScreen() {
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, paddingHorizontal: 14, paddingBottom: 14 }}>
                 {(() => {
                   try {
-                    const { PRACTICE_WALLETS, true /* practice wallets always enabled */ } = require('../config/practiceWallets');
-                    if (!true /* practice wallets always enabled */) return null;
+                    const { PRACTICE_WALLETS } = require('../config/practiceWallets');
                     const activeId = useWalletStore.getState().activeDevWallet;
                     return PRACTICE_WALLETS.map((w: any) => (
                       <TouchableOpacity
