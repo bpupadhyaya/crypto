@@ -180,9 +180,10 @@ export function UnlockScreen() {
 
         setTempVaultPassword(vaultPassword);
 
-        // Only derive if addresses not already stored
+        // Derive addresses if any are missing (including openchain for OTK)
         const existingAddresses = useWalletStore.getState().addresses;
-        if (!existingAddresses.ethereum && !existingAddresses.bitcoin && !existingAddresses.solana) {
+        const needsDerivation = !existingAddresses.ethereum || !existingAddresses.bitcoin || !existingAddresses.solana || !existingAddresses.openchain;
+        if (needsDerivation) {
           setUnlockProgress('Deriving addresses...');
           try {
             const { Vault } = await import('../core/vault/vault');
