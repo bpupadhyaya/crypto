@@ -1079,9 +1079,30 @@ export function OnboardingScreen() {
                     <Text key={i} style={{ color: t.text.muted, fontSize: fonts.xxs, lineHeight: 16, marginBottom: 2 }}>• {item}</Text>
                   ))}
 
-                  <Text style={{ color: t.accent.yellow, fontSize: fonts.xs, fontWeight: fonts.bold as any, marginTop: 8, marginBottom: 4 }}>Practice vs Real:</Text>
-                  {practiceInstructions.differences.map((item: string, i: number) => (
-                    <Text key={i} style={{ color: t.text.muted, fontSize: fonts.xxs, lineHeight: 16, marginBottom: 2 }}>• {item}</Text>
+                  <Text style={{ color: t.accent.yellow, fontSize: fonts.xs, fontWeight: fonts.bold as any, marginTop: 8, marginBottom: 6 }}>Practice vs Real:</Text>
+                  {/* Table header */}
+                  <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: t.border, paddingBottom: 4, marginBottom: 4 }}>
+                    <Text style={{ flex: 1, color: t.text.secondary, fontSize: fonts.xxs, fontWeight: fonts.bold as any }}>Feature</Text>
+                    <Text style={{ flex: 1, color: t.accent.green, fontSize: fonts.xxs, fontWeight: fonts.bold as any, textAlign: 'center' }}>Practice</Text>
+                    <Text style={{ flex: 1, color: t.accent.blue, fontSize: fonts.xxs, fontWeight: fonts.bold as any, textAlign: 'center' }}>Real</Text>
+                  </View>
+                  {[
+                    ['Seed phrase', 'Pre-filled', 'You create (24 words)'],
+                    ['Password & PIN', 'Pre-filled', 'You choose'],
+                    ['Encryption', 'Argon2id + AES-256', 'Argon2id + AES-256'],
+                    ['Key derivation', 'BIP-39 → BIP-44', 'BIP-39 → BIP-44'],
+                    ['Signing', 'Real crypto signatures', 'Real crypto signatures'],
+                    ['Tokens', 'Simulated (not real)', 'Real cryptocurrency'],
+                    ['Transactions', 'Simulated', 'Irreversible, on-chain'],
+                    ['Code path', 'Same as real', 'Same as practice'],
+                    ['Recovery', 'Instant recreate', 'Need seed phrase'],
+                    ['UI & screens', 'Identical', 'Identical'],
+                  ].map(([feature, practice, real], i) => (
+                    <View key={i} style={{ flexDirection: 'row', paddingVertical: 3, borderBottomWidth: i < 9 ? 0.5 : 0, borderBottomColor: t.border + '40' }}>
+                      <Text style={{ flex: 1, color: t.text.muted, fontSize: fonts.xxs }}>{feature}</Text>
+                      <Text style={{ flex: 1, color: t.text.secondary, fontSize: fonts.xxs, textAlign: 'center' }}>{practice}</Text>
+                      <Text style={{ flex: 1, color: t.text.secondary, fontSize: fonts.xxs, textAlign: 'center' }}>{real}</Text>
+                    </View>
                   ))}
 
                   <Text style={{ color: t.accent.blue, fontSize: fonts.xs, fontWeight: fonts.bold as any, marginTop: 8, marginBottom: 4 }}>What's identical:</Text>
