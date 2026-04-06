@@ -537,31 +537,43 @@ export function OnboardingScreen() {
     setProgressMsg('Deriving addresses...');
     await yieldToUI();
 
+    // Step 2: Derive addresses — resilient, derive what we can
     try {
-      // Step 2: Derive addresses (lazy import — heavy libs loaded only here)
       const { HDWallet } = await import('../core/wallet/hdwallet');
-      const { EthereumSigner } = await import('../core/chains/ethereum-signer');
-      const { BitcoinSigner } = await import('../core/chains/bitcoin-signer');
-      const { SolanaSigner } = await import('../core/chains/solana-signer');
-
       const wallet = HDWallet.fromMnemonic(phraseToUse);
-      const ethSigner = EthereumSigner.fromWallet(wallet);
-      const btcSigner = BitcoinSigner.fromWallet(wallet);
-      const solSigner = SolanaSigner.fromWallet(wallet);
+      const derived: Partial<Record<string, string>> = {};
 
-      // Derive Cosmos/OpenChain address
-      const { CosmosSigner } = await import('../core/chains/cosmos-signer');
-      const cosmosSigner = CosmosSigner.fromWallet(wallet, 0, 'openchain');
-      const cosmosAddr = await cosmosSigner.getAddress();
+      // Each chain in its own try/catch so one failure doesn't block others
+      try {
+        const { EthereumSigner } = await import('../core/chains/ethereum-signer');
+        derived.ethereum = EthereumSigner.fromWallet(wallet).getAddress();
+      } catch { /* ETH derivation failed */ }
 
-      setAddresses({
-        ethereum: ethSigner.getAddress(),
-        bitcoin: btcSigner.getAddress(),
-        solana: solSigner.getAddress(),
-        openchain: cosmosAddr,
-        cosmos: cosmosAddr,
-      });
+      try {
+        const { BitcoinSigner } = await import('../core/chains/bitcoin-signer');
+        derived.bitcoin = BitcoinSigner.fromWallet(wallet).getAddress();
+      } catch { /* BTC derivation failed */ }
+
+      try {
+        const { SolanaSigner } = await import('../core/chains/solana-signer');
+        derived.solana = SolanaSigner.fromWallet(wallet).getAddress();
+      } catch { /* SOL derivation failed */ }
+
+      try {
+        const { CosmosSigner } = await import('../core/chains/cosmos-signer');
+        const cosmosSigner = CosmosSigner.fromWallet(wallet, 0, 'openchain');
+        const cosmosAddr = await cosmosSigner.getAddress();
+        derived.openchain = cosmosAddr;
+        derived.cosmos = cosmosAddr;
+      } catch { /* Cosmos derivation failed */ }
+
+      setAddresses(derived);
       wallet.destroy();
+
+      const count = Object.keys(derived).length;
+      if (count === 0) {
+        Alert.alert('Warning', 'Wallet created but no addresses could be derived. Please try again.');
+      }
     } catch (error) {
       const msg = error instanceof Error ? error.message : String(error);
       Alert.alert('Key Error', `Address derivation failed: ${msg}`);
