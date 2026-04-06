@@ -58,6 +58,10 @@ interface WalletState {
   tempVaultPassword: string | null;
   setTempVaultPassword: (pw: string | null) => void;
 
+  // ─── Active Dev Wallet (REMOVE BEFORE PRODUCTION) ───
+  activeDevWallet: string | null;  // e.g. 'w1', 'w2', etc.
+  setActiveDevWallet: (id: string | null) => void;
+
   // ─── Wallet Provider ───
   walletProvider: 'software' | 'seed-vault';
   setWalletProvider: (provider: 'software' | 'seed-vault') => void;
@@ -183,6 +187,8 @@ export const useWalletStore = create<WalletState>((set) => ({
   updateDevBalance: (symbol, delta) => { set((s) => ({ devBalances: { ...s.devBalances, [symbol]: Math.max(0, (s.devBalances[symbol] ?? 0) + delta) } })); schedulePersist(); },
   tempVaultPassword: null,
   setTempVaultPassword: (pw) => set({ tempVaultPassword: pw }),
+  activeDevWallet: null,
+  setActiveDevWallet: (id) => set({ activeDevWallet: id }),
   walletProvider: 'software' as const,
   setWalletProvider: (provider) => { set({ walletProvider: provider }); schedulePersist(); },
   contacts: [],

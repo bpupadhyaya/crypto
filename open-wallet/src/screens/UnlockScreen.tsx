@@ -479,10 +479,34 @@ export function UnlockScreen() {
     </View>
   );
 
+  // ─── Dev Quick Unlock (REMOVE BEFORE PRODUCTION) ───
+  const activeDevWallet = useWalletStore((s) => s.activeDevWallet);
+  const devWalletPin = (() => {
+    if (!activeDevWallet) return null;
+    try {
+      const { DEV_WALLETS, DEV_TESTING_ENABLED } = require('../config/devWallets');
+      if (!DEV_TESTING_ENABLED) return null;
+      const w = DEV_WALLETS.find((dw: any) => dw.id === activeDevWallet);
+      return w ? w.pin : null;
+    } catch { return null; }
+  })();
+
   // ─── PIN Pad ───
   if (mode === 'pin') {
     return (
       <SafeAreaView style={styles.container}>
+        {/* Dev quick unlock — tap to auto-enter PIN */}
+        {devWalletPin && (
+          <TouchableOpacity
+            style={{ marginTop: 40, marginHorizontal: 24, paddingVertical: 14, borderRadius: 12, backgroundColor: '#f59e0b20', borderWidth: 1, borderColor: '#f59e0b40', alignItems: 'center' }}
+            onPress={() => handlePinUnlock(devWalletPin)}
+            activeOpacity={0.6}
+          >
+            <Text style={{ color: '#f59e0b', fontSize: fonts.sm, fontWeight: fonts.bold as any }}>
+              Dev: Tap to unlock ({activeDevWallet?.toUpperCase()} · PIN {devWalletPin})
+            </Text>
+          </TouchableOpacity>
+        )}
         {/* Biometric button ABOVE PIN pad — easy to reach */}
         {bioAvailable && (
           <TouchableOpacity

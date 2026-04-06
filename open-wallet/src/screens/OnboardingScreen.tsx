@@ -115,6 +115,8 @@ export function OnboardingScreen() {
       setHasVault(true);
       setTempVaultPassword(w.password);
       setWalletProvider('software');
+      // Store active dev wallet ID for quick unlock on lock screen
+      useWalletStore.getState().setActiveDevWallet(w.id);
       setDevWalletProgress(`${w.label}: Ready!`);
       setStatus('unlocked');
     } catch (err) {
