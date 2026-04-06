@@ -34,7 +34,9 @@ export interface SeedVaultAccount {
   chain: string;
 }
 
-const SOLANA_DERIVATION_PATH = "m/44'/501'/0'/0'";
+// Seed Vault uses BIP derivation URI format, NOT raw BIP-44 path.
+// Format: bip44:<coin_type>'/<account>'/<change>'
+const SOLANA_DERIVATION_PATH = "bip44:501'/0'/0'";
 const SEED_VAULT_PERMISSION = 'com.solanamobile.seedvault.ACCESS_SEED_VAULT';
 
 // ─── Lazy-load the native module ───
