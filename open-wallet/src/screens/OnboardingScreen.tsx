@@ -1122,30 +1122,41 @@ export function OnboardingScreen() {
 
               {/* Practice Wallet Buttons — bigger, bolder for easy tapping */}
               <Text style={{ color: t.text.muted, fontSize: fonts.xxs, textAlign: 'center', marginBottom: 8 }}>
-                {devWalletProgress || 'Tap any wallet to start practicing instantly:'}
+                {devWalletProgress || (useWalletStore.getState().activeDevWallet
+                  ? `Active: ${useWalletStore.getState().activeDevWallet?.replace('p', 'Practice ')} · Tap any wallet to switch or start:`
+                  : 'Tap any wallet to start practicing instantly:')}
               </Text>
               <View style={{ gap: 8, paddingHorizontal: 4 }}>
-                {devWalletList.map((w: any, i: number) => (
-                  <TouchableOpacity
-                    key={w.id}
-                    onPress={() => handleDevWallet(w)}
-                    disabled={devLoading}
-                    activeOpacity={0.6}
-                    style={{
-                      paddingVertical: 14, paddingHorizontal: 16, borderRadius: 12,
-                      backgroundColor: t.bg.card, borderWidth: 1, borderColor: t.accent.green + '40',
-                      flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-                    }}
-                  >
-                    <View>
-                      <Text style={{ color: t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold as any }}>{w.label}</Text>
-                      <Text style={{ color: t.text.muted, fontSize: fonts.xxs, marginTop: 2 }}>
-                        {w.mnemonic.split(' ').length} words · PIN {w.pin}
+                {devWalletList.map((w: any) => {
+                  const isActive = useWalletStore.getState().activeDevWallet === w.id;
+                  return (
+                    <TouchableOpacity
+                      key={w.id}
+                      onPress={() => handleDevWallet(w)}
+                      disabled={devLoading}
+                      activeOpacity={0.6}
+                      style={{
+                        paddingVertical: 14, paddingHorizontal: 16, borderRadius: 12,
+                        backgroundColor: isActive ? t.accent.green + '15' : t.bg.card,
+                        borderWidth: isActive ? 2 : 1,
+                        borderColor: isActive ? t.accent.green : t.accent.green + '40',
+                        flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+                      }}
+                    >
+                      <View>
+                        <Text style={{ color: isActive ? t.accent.green : t.text.primary, fontSize: fonts.md, fontWeight: fonts.bold as any }}>
+                          {isActive ? '● ' : ''}{w.label}
+                        </Text>
+                        <Text style={{ color: t.text.muted, fontSize: fonts.xxs, marginTop: 2 }}>
+                          {w.mnemonic.split(' ').length} words · PIN {w.pin}{isActive ? ' · Currently active' : ''}
+                        </Text>
+                      </View>
+                      <Text style={{ color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.semibold as any }}>
+                        {isActive ? 'Resume →' : 'Start →'}
                       </Text>
-                    </View>
-                    <Text style={{ color: t.accent.green, fontSize: fonts.sm, fontWeight: fonts.semibold as any }}>Start →</Text>
-                  </TouchableOpacity>
-                ))}
+                    </TouchableOpacity>
+                  );
+                })}
               </View>
             </View>
           )}
