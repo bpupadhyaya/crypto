@@ -461,6 +461,20 @@ export function UnlockScreen() {
             <Text style={[styles.altMethodText, styles.builtinText]}>Use Phone's Built-in Key</Text>
           </TouchableOpacity>
         )}
+        <TouchableOpacity
+          style={[styles.altMethodBtn, { borderColor: t.accent.red }]}
+          onPress={() => {
+            Alert.alert('Sign Out', 'This will take you back to wallet setup. Your wallet data on this device will be reset.', [
+              { text: 'Cancel', style: 'cancel' },
+              { text: 'Sign Out', style: 'destructive', onPress: () => {
+                setHasVault(false);
+                setStatus('onboarding');
+              }},
+            ]);
+          }}
+        >
+          <Text style={[styles.altMethodText, { color: t.accent.red }]}>Sign Out</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
