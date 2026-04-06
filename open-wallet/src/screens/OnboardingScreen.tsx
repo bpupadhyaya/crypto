@@ -54,6 +54,8 @@ export function OnboardingScreen() {
   });
   const [devWalletProgress, setDevWalletProgress] = useState('');
   const [devLoading, setDevLoading] = useState(false);
+  const [devPopupVisible, setDevPopupVisible] = useState(false);
+  const [devPopupMessages, setDevPopupMessages] = useState<string[]>([]);
 
   const handleDevWallet = async (w: any) => {
     // Check if this wallet was already created (vault exists with this wallet's data)
@@ -66,14 +68,16 @@ export function OnboardingScreen() {
     }
 
     // Create the wallet using the SAME code path as production
-    // Pre-fill the inputs and call the same functions
     setDevLoading(true);
+    setDevPopupVisible(true);
+    setDevPopupMessages([`Creating ${w.label}...`]);
     const yieldUI = () => new Promise<void>(r => setTimeout(r, 50));
+    const logMsg = (msg: string) => { setDevPopupMessages(prev => [...prev, msg]); };
 
     try {
       // === Same as handleSetPassword (production flow) ===
 
-      setDevWalletProgress(`${w.label}: Encrypting wallet...`);
+      logMsg('Encrypting wallet with Argon2id...');
       await yieldUI();
 
       // Step 1: Create and encrypt vault (identical to production)
@@ -94,7 +98,8 @@ export function OnboardingScreen() {
         settings: {},
       });
 
-      setDevWalletProgress(`${w.label}: Deriving addresses...`);
+      logMsg('✓ Vault created');
+      logMsg('Deriving BTC, ETH, SOL, OTK addresses...');
       await yieldUI();
 
       // Step 2: Derive addresses (identical to production)
@@ -114,7 +119,8 @@ export function OnboardingScreen() {
       setAddresses(derived);
       wallet.destroy();
 
-      setDevWalletProgress(`${w.label}: Setting up security...`);
+      logMsg('✓ Addresses derived');
+      logMsg('Setting up PIN + biometrics...');
       await yieldUI();
 
       // Step 3: Setup PIN (identical to PinSetupScreen production flow)
@@ -141,11 +147,17 @@ export function OnboardingScreen() {
         store.setDemoMode(true);
       } catch {}
 
-      setDevWalletProgress(`${w.label}: Ready!`);
+      logMsg('✓ Security configured');
+      logMsg('✓ Demo balances loaded');
+      logMsg('');
+      logMsg(`✅ ${w.label} wallet ready!`);
+      await new Promise(r => setTimeout(r, 1000)); // Show success briefly
+      setDevPopupVisible(false);
       setStatus('unlocked');
     } catch (err) {
-      setDevWalletProgress(`${w.label}: Failed — ${err instanceof Error ? err.message : 'unknown'}`);
-      Alert.alert('Dev Wallet Error', err instanceof Error ? err.message : 'Failed');
+      logMsg(`❌ Failed: ${err instanceof Error ? err.message : 'unknown'}`);
+      await new Promise(r => setTimeout(r, 3000)); // Show error for 3 seconds
+      setDevPopupVisible(false);
     } finally {
       setDevLoading(false);
     }
@@ -960,6 +972,33 @@ export function OnboardingScreen() {
               <Text style={[styles.secondaryButtonText, { color: '#f59e0b', fontSize: fonts.sm }]}>⚡ Dev Quickstart</Text>
               <Text style={{ color: '#f59e0b88', fontSize: fonts.xs, marginTop: 2 }}>test seed · devpassword123 · PIN 123456</Text>
             </TouchableOpacity>
+          )}
+
+          {/* Dev Wallet Creation Popup */}
+          {devPopupVisible && (
+            <View style={{
+              position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+              backgroundColor: 'rgba(0,0,0,0.85)', justifyContent: 'center', alignItems: 'center',
+              zIndex: 100, paddingHorizontal: 30,
+            }}>
+              <View style={{
+                backgroundColor: t.bg.card, borderRadius: 16, padding: 24, width: '100%',
+                maxHeight: '60%', borderWidth: 1, borderColor: '#f59e0b40',
+              }}>
+                <Text style={{ color: '#f59e0b', fontSize: fonts.lg, fontWeight: fonts.bold as any, marginBottom: 16 }}>
+                  Creating Dev Wallet
+                </Text>
+                <ScrollView style={{ maxHeight: 250 }}>
+                  {devPopupMessages.map((msg, i) => (
+                    <Text key={i} style={{
+                      color: msg.startsWith('✓') ? '#22c55e' : msg.startsWith('✅') ? '#22c55e' : msg.startsWith('❌') ? t.accent.red : t.text.secondary,
+                      fontSize: fonts.sm, lineHeight: 22,
+                    }}>{msg}</Text>
+                  ))}
+                </ScrollView>
+                <ActivityIndicator color="#f59e0b" style={{ marginTop: 12 }} />
+              </View>
+            </View>
           )}
 
           {/* ── Dev Testing Wallets (REMOVE BEFORE PRODUCTION) ── */}
