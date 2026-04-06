@@ -175,26 +175,38 @@ export function UnlockScreen() {
     try {
       const vaultPassword = await authManager.getVaultPasswordBiometric('Unlock Open Wallet');
       if (vaultPassword) {
-        setStatus('unlocked');
+        setUnlockProgress('Decrypting wallet...');
+        setMode('loading');
+
         try {
           const { Vault } = await import('../core/vault/vault');
           const v = new Vault();
+          setUnlockProgress('Unlocking vault...');
           const contents = await v.unlock(vaultPassword);
+          setUnlockProgress('Deriving addresses...');
           await deriveAddresses(contents.mnemonic);
         } catch {}
+
+        setTempVaultPassword(vaultPassword);
+        setUnlockProgress('Loading prices...');
+        setStatus('unlocked');
         return;
       }
 
       // No keychain entry yet (existing user) — fall back to LocalAuthentication directly.
-      // Keychain migration happens automatically on next PIN unlock.
       const isBioEnabled = await authManager.isBiometricEnabled();
-      if (!isBioEnabled) return;      const result = await LocalAuthentication.authenticateAsync({
+      if (!isBioEnabled) return;
+      const result = await LocalAuthentication.authenticateAsync({
         promptMessage: 'Unlock Open Wallet',
         cancelLabel: 'Use PIN',
         disableDeviceFallback: false,
         requireConfirmation: false,
       });
-      if (result.success) setStatus('unlocked');
+      if (result.success) {
+        setUnlockProgress('Loading...');
+        setMode('loading');
+        setStatus('unlocked');
+      }
     } catch {
       // Biometric error — PIN pad is already shown
     }
@@ -347,24 +359,36 @@ export function UnlockScreen() {
     try {
       const vaultPassword = await authManager.getVaultPasswordBiometric('Unlock Open Wallet');
       if (vaultPassword) {
-        setStatus('unlocked');
+        setUnlockProgress('Decrypting wallet...');
+        setMode('loading');
+
         try {
           const { Vault } = await import('../core/vault/vault');
           const v = new Vault();
+          setUnlockProgress('Unlocking vault...');
           const contents = await v.unlock(vaultPassword);
+          setUnlockProgress('Deriving addresses...');
           await deriveAddresses(contents.mnemonic);
         } catch {}
+
+        setTempVaultPassword(vaultPassword);
+        setUnlockProgress('Loading prices...');
+        setStatus('unlocked');
         return;
       }
 
-      // No keychain entry yet (existing user) — fall back to LocalAuthentication silently.
+      // No keychain entry yet — fall back to LocalAuthentication
       const result = await LocalAuthentication.authenticateAsync({
         promptMessage: 'Unlock Open Wallet',
         cancelLabel: 'Cancel',
         disableDeviceFallback: false,
         requireConfirmation: false,
       });
-      if (result.success) setStatus('unlocked');
+      if (result.success) {
+        setUnlockProgress('Loading...');
+        setMode('loading');
+        setStatus('unlocked');
+      }
     } catch {
       Alert.alert('Biometric Unavailable', 'Could not authenticate. Use PIN or enroll biometrics in device Settings.');
     }
