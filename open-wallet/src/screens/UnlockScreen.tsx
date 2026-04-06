@@ -205,16 +205,20 @@ export function UnlockScreen() {
     await handlePinUnlock(DEV_PIN);
   };
 
+  const [unlockProgress, setUnlockProgress] = useState('');
+
   const handlePinUnlock = async (pin: string) => {
     try {
       const valid = await authManager.verifyPin(pin);
       if (valid) {
         setPinError(null);
-        setStatus('unlocked');
+        setUnlockProgress('Decrypting wallet...');
+        setMode('loading');
 
-        // Vault decrypt + address refresh in background
-        authManager.getVaultPassword(pin).then(async (vaultPassword) => {
+        try {
+          const vaultPassword = await authManager.getVaultPassword(pin);
           if (vaultPassword) {
+            setUnlockProgress('Deriving addresses...');
             try {
               const { Vault } = await import('../core/vault/vault');
               const v = new Vault();
@@ -222,14 +226,19 @@ export function UnlockScreen() {
               await deriveAddresses(contents.mnemonic);
             } catch {}
 
-            // Migration: if biometric is enabled but keychain entry missing, store it now
-            // so subsequent unlocks can use biometrics without re-entering PIN.
+            // Store vault password for session
+            setTempVaultPassword(vaultPassword);
+
+            // Migration: store biometric keychain entry
             const isBioEnabled = await authManager.isBiometricEnabled();
             if (isBioEnabled) {
               authManager.storeVaultPasswordBiometric(vaultPassword).catch(() => {});
             }
           }
-        });
+        } catch {}
+
+        setUnlockProgress('Loading prices...');
+        setStatus('unlocked');
       } else {
         const remaining = await authManager.getRemainingAttempts();
         setPinError(`Wrong PIN. ${remaining} attempts remaining.`);
@@ -624,11 +633,15 @@ export function UnlockScreen() {
     );
   }
 
-  // ─── Fallback: Loading ───
+  // ─── Loading (after PIN/biometric verified, decrypting wallet) ───
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.center}>
-        <ActivityIndicator color={t.accent.green} size="large" />
+        <Text style={styles.logo}>OW</Text>
+        <ActivityIndicator color={t.accent.green} size="large" style={{ marginTop: 20 }} />
+        <Text style={{ color: t.text.secondary, fontSize: fonts.md, marginTop: 16 }}>
+          {unlockProgress || 'Unlocking...'}
+        </Text>
       </View>
     </SafeAreaView>
   );
