@@ -257,85 +257,78 @@ export async function connectSeedVault(): Promise<{
   // communication with the Seed Vault content provider.
   let pubkey: string;
 
-  const { NativeModules: NM } = require('react-native');
-  const nativeSV = NM.SolanaMobileSeedVaultLib;
-
-  if (!nativeSV) {
-    return {
-      success: false, addresses: {}, model: 'unknown',
-      message: 'Seed Vault native module not found. Please rebuild the app.',
-    };
-  }
-
-  // Dump all available methods to find the right one
-  const methods = Object.keys(nativeSV).filter(k => typeof nativeSV[k] === 'function');
-
-  // Try to get accounts first (no path needed)
+  // The native module uses Android Uri.parse() on the derivation path.
+  // authToken must be passed as String (the native module does .toLong() internally).
+  const authTokenStr = String(authToken);
   const tryResults: string[] = [];
 
-  // Approach A: Call requestPublicKeys if available (newer Seed Vault API)
-  if (nativeSV.requestPublicKeys) {
-    try {
-      const result = await nativeSV.requestPublicKeys(authToken);
-      if (result && result.length > 0) {
-        pubkey = keyResultToBase58(result[0]);
-      }
-    } catch (e: any) {
-      tryResults.push(`requestPublicKeys: ${e?.message?.slice(0, 80)}`);
-    }
+  // The Seed Vault expects getPublicKey to trigger an Activity for user confirmation.
+  // This is an Intent-based flow — the derivation path must be a valid Android URI.
+  // Format confirmed from native source: Uri.parse(derivationPath)
+  // The correct Solana derivation URI uses the bip44 scheme.
+
+  // Try resolveDerivationPath first — it adds PURPOSE_SIGN_SOLANA_TRANSACTION automatically
+  try {
+    const resolved = await SeedVault.resolveDerivationPath(SOLANA_DERIVATION_PATH);
+    tryResults.push(`resolved: ${resolved}`);
+    const keyResult = await SeedVault.getPublicKey(authTokenStr, resolved);
+    pubkey = keyResultToBase58(keyResult);
+  } catch (e: any) {
+    tryResults.push(`resolve+getPubKey: ${e?.message?.slice(0, 80)}`);
   }
 
-  // Approach B: getAccounts with null filters
+  // Try getPublicKey directly — this launches the Seed Vault Activity for confirmation
   if (!pubkey!) {
-    try {
-      const accounts = await nativeSV.getAccounts(authToken, null, null);
-      if (accounts && accounts.length > 0 && accounts[0].publicKeyEncoded) {
-        pubkey = keyResultToBase58({ publicKeyEncoded: accounts[0].publicKeyEncoded });
-      } else {
-        tryResults.push(`getAccounts(null,null): ${accounts?.length ?? 0} accounts`);
-      }
-    } catch (e: any) {
-      tryResults.push(`getAccounts(null,null): ${e?.message?.slice(0, 80)}`);
-    }
-  }
-
-  // Approach C: getUserWallets
-  if (!pubkey!) {
-    try {
-      const wallets = await nativeSV.getUserWallets(authToken);
-      if (wallets && wallets.length > 0 && wallets[0].publicKeyEncoded) {
-        pubkey = keyResultToBase58({ publicKeyEncoded: wallets[0].publicKeyEncoded });
-      } else {
-        tryResults.push(`getUserWallets: ${wallets?.length ?? 0} wallets`);
-      }
-    } catch (e: any) {
-      tryResults.push(`getUserWallets: ${e?.message?.slice(0, 80)}`);
-    }
-  }
-
-  // Approach D: Use Android URI object via the native module
-  // Pass derivation path as a content URI that Android can parse
-  if (!pubkey!) {
-    const uriPaths = [
-      'bip44:501%27/0%27/0%27',     // URL-encoded single quotes
-      'bip44:501h/0h/0h',            // 'h' for hardened (alternative notation)
-      'bip44:501H/0H/0H',            // 'H' for hardened
+    const paths = [
+      SOLANA_DERIVATION_PATH,
+      "bip44:501'/0'/0'",
+      "bip44:501%27/0%27/0%27",
+      "bip44:501h/0h/0h",
+      "bip44:501H/0H/0H",
     ];
-    for (const path of uriPaths) {
+    for (const path of paths) {
       try {
-        const keyResult = await nativeSV.getPublicKey(authToken, path);
+        const keyResult = await SeedVault.getPublicKey(authTokenStr, path);
         pubkey = keyResultToBase58(keyResult);
         break;
       } catch (e: any) {
-        tryResults.push(`getPubKey(${path}): ${e?.message?.slice(0, 60)}`);
+        tryResults.push(`getPK(${path.slice(0,20)}): ${e?.message?.slice(0, 60)}`);
       }
+    }
+  }
+
+  // Try requestPublicKey (singular) — launches Activity, returns via onActivityResult
+  if (!pubkey!) {
+    try {
+      // requestPublicKey is void — it fires an Activity and result comes via event
+      // This is the Intent-based flow that Phantom likely uses
+      const { NativeModules: NM } = require('react-native');
+      const nativeSV = NM.SolanaMobileSeedVaultLib;
+      if (nativeSV?.requestPublicKey) {
+        await new Promise<void>((resolve, reject) => {
+          // Fire the request and wait for the Activity result
+          nativeSV.requestPublicKey(authTokenStr, SOLANA_DERIVATION_PATH);
+          // The result comes back asynchronously — wait a bit for the UI
+          setTimeout(() => {
+            // After the user approves, try getUserWallets
+            SeedVault.getUserWallets(authTokenStr).then((wallets: any[]) => {
+              if (wallets.length > 0 && wallets[0].publicKeyEncoded) {
+                pubkey = keyResultToBase58({ publicKeyEncoded: wallets[0].publicKeyEncoded });
+              }
+              resolve();
+            }).catch(() => resolve());
+          }, 5000);
+        });
+      }
+    } catch (e: any) {
+      tryResults.push(`requestPublicKey: ${e?.message?.slice(0, 60)}`);
     }
   }
 
   if (!pubkey!) {
     return {
       success: false, addresses: {}, model: 'unknown',
-      message: `Seed Vault: authorization OK but key retrieval failed.\n\nAvailable methods: ${methods.join(', ')}\n\nResults:\n${tryResults.slice(0, 6).join('\n')}`,
+      message: `Seed Vault auth OK, key derivation failed.\n\n${tryResults.slice(0, 5).join('\n')}\n\nThe Seed Vault path parser rejected all formats. This may need a native code fix.`,
     };
   }
 
