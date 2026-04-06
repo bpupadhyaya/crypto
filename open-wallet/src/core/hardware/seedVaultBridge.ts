@@ -79,10 +79,45 @@ function decodeBase64PublicKey(b64: string): string {
 }
 
 function keyResultToBase58(keyResult: any): string {
-  if (keyResult.publicKey instanceof Uint8Array) {
-    return new PublicKey(keyResult.publicKey).toBase58();
+  // The native module can return publicKey as:
+  // 1. Uint8Array (rare)
+  // 2. Array of numbers (React Native ReadableArray)
+  // 3. publicKeyEncoded as base64 string
+
+  // Try publicKey array first
+  if (keyResult.publicKey) {
+    try {
+      let bytes: Uint8Array;
+      if (keyResult.publicKey instanceof Uint8Array) {
+        bytes = keyResult.publicKey;
+      } else if (Array.isArray(keyResult.publicKey)) {
+        bytes = new Uint8Array(keyResult.publicKey);
+      } else {
+        bytes = new Uint8Array(Object.values(keyResult.publicKey));
+      }
+      if (bytes.length === 32) {
+        return new PublicKey(bytes).toBase58();
+      }
+    } catch { /* fall through to base64 */ }
   }
-  return decodeBase64PublicKey(keyResult.publicKeyEncoded as string);
+
+  // Try publicKeyEncoded (base64)
+  if (keyResult.publicKeyEncoded) {
+    try {
+      return decodeBase64PublicKey(keyResult.publicKeyEncoded);
+    } catch { /* fall through */ }
+  }
+
+  // Try treating the entire result as a string (some APIs return just the address)
+  if (typeof keyResult === 'string') {
+    try {
+      return decodeBase64PublicKey(keyResult);
+    } catch {
+      return keyResult; // might already be base58
+    }
+  }
+
+  throw new Error(`Invalid public key format: ${JSON.stringify(keyResult).slice(0, 100)}`);
 }
 
 // ─── Detection ───
@@ -273,10 +308,37 @@ export async function connectSeedVault(): Promise<{
   try {
     const resolved = await SeedVault.resolveDerivationPath(SOLANA_DERIVATION_PATH);
     tryResults.push(`resolved: ${resolved}`);
-    const keyResult = await SeedVault.getPublicKey(authTokenStr, resolved);
-    pubkey = keyResultToBase58(keyResult);
+    try {
+      const keyResult = await SeedVault.getPublicKey(authTokenStr, resolved);
+      tryResults.push(`keyResult keys: ${Object.keys(keyResult ?? {})}`);
+      tryResults.push(`keyResult: ${JSON.stringify(keyResult).slice(0, 120)}`);
+      pubkey = keyResultToBase58(keyResult);
+    } catch (parseErr: any) {
+      tryResults.push(`getPubKey OK but parse failed: ${parseErr?.message?.slice(0, 80)}`);
+      // The getPublicKey might have returned data but keyResultToBase58 failed
+      // Try getting the result a different way — check getUserWallets after the key was created
+      try {
+        const wallets = await SeedVault.getUserWallets(authTokenStr);
+        tryResults.push(`wallets after resolve: ${wallets?.length}`);
+        if (wallets?.length > 0 && wallets[0].publicKeyEncoded) {
+          pubkey = keyResultToBase58({ publicKeyEncoded: wallets[0].publicKeyEncoded });
+        }
+      } catch { /* continue */ }
+      // Also try getAccounts
+      if (!pubkey) {
+        try {
+          const accts = await SeedVault.getAccounts(authTokenStr, null, null);
+          tryResults.push(`accounts: ${JSON.stringify(accts).slice(0, 120)}`);
+          if (accts?.length > 0 && accts[0].publicKeyEncoded) {
+            pubkey = keyResultToBase58({ publicKeyEncoded: accts[0].publicKeyEncoded });
+          }
+        } catch (accErr: any) {
+          tryResults.push(`getAccounts: ${accErr?.message?.slice(0, 60)}`);
+        }
+      }
+    }
   } catch (e: any) {
-    tryResults.push(`resolve+getPubKey: ${e?.message?.slice(0, 80)}`);
+    tryResults.push(`resolve failed: ${e?.message?.slice(0, 80)}`);
   }
 
   // Try getPublicKey directly — this launches the Seed Vault Activity for confirmation
