@@ -82,9 +82,50 @@ export function OnboardingScreen() {
       logMsg('Encrypting wallet with Argon2id...');
       await yieldUI();
 
-      // Step 1: Create and encrypt vault (identical to production)
+      // Step 1: Create and encrypt vault — each practice wallet gets its own vault slot
       const { Vault } = await import('../core/vault/vault');
-      const vaultInstance = new Vault();
+      const vaultInstance = new Vault(w.id);  // w.id = 'w1', 'w2', etc.
+
+      // Check if this wallet already exists (persistent)
+      const alreadyExists = await vaultInstance.exists();
+      if (alreadyExists) {
+        try {
+          logMsg('✓ Existing wallet found, unlocking...');
+          const contents = await vaultInstance.unlock(w.password);
+
+          // Derive addresses
+          logMsg('Restoring addresses...');
+          const { HDWallet } = await import('../core/wallet/hdwallet');
+          const wallet = HDWallet.fromMnemonic(contents.mnemonic);
+          const derived: Partial<Record<string, string>> = {};
+          try { const { EthereumSigner } = await import('../core/chains/ethereum-signer'); derived.ethereum = EthereumSigner.fromWallet(wallet).getAddress(); } catch {}
+          try { const { BitcoinSigner } = await import('../core/chains/bitcoin-signer'); derived.bitcoin = BitcoinSigner.fromWallet(wallet).getAddress(); } catch {}
+          try { const { SolanaSigner } = await import('../core/chains/solana-signer'); derived.solana = SolanaSigner.fromWallet(wallet).getAddress(); } catch {}
+          try {
+            const { CosmosSigner } = await import('../core/chains/cosmos-signer');
+            const addr = await CosmosSigner.fromWallet(wallet, 0, 'openchain').getAddress();
+            derived.openchain = addr; derived.cosmos = addr;
+          } catch {}
+          setAddresses(derived);
+          wallet.destroy();
+
+          setHasVault(true);
+          setTempVaultPassword(w.password);
+          setWalletProvider('software');
+          store.setActiveDevWallet(w.id);
+          store.setDemoMode(true);
+          store.updatePracticeProgress('walletsSwitched', w.id);
+
+          logMsg(`✅ ${w.label} ready!`);
+          await new Promise(r => setTimeout(r, 500));
+          setDevPopupVisible(false);
+          setDevLoading(false);
+          setStatus('unlocked');
+          return;
+        } catch {
+          logMsg('Wallet corrupted, recreating...');
+        }
+      }
       await vaultInstance.create(w.password, {
         mnemonic: w.mnemonic,
         accounts: [{

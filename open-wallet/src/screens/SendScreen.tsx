@@ -369,7 +369,7 @@ export function SendScreen() {
           mnemonic = cachedVaultContents.mnemonic;
         } else {
           const VaultClass = prewarmedModules.Vault ?? (await import('../core/vault/vault')).Vault;
-          const vault = new VaultClass();
+          const vault = new VaultClass(useWalletStore.getState().activeDevWallet ?? undefined);
           const contents = await vault.unlock(password);
           mnemonic = contents.mnemonic;
           cachedVaultContents = { mnemonic, password };

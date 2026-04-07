@@ -364,7 +364,7 @@ export function SwapScreen() {
             throw new Error('Wallet not unlocked');
           }
           const { Vault } = await import('../core/vault/vault');
-          const vault = new Vault();
+          const vault = new Vault(useWalletStore.getState().activeDevWallet ?? undefined);
           const contents = await vault.unlock(password);
           mnemonic = contents.mnemonic;
         }

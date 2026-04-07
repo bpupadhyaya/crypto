@@ -107,16 +107,22 @@ class NobleAesGcmCrypto implements IVaultCrypto {
 
 // ─── Vault ─────────────────────────────────────────────────
 
-const SECURE_STORE_VAULT_KEY = 'open_wallet_vault';
+const DEFAULT_VAULT_KEY = 'open_wallet_vault';
 const SECURE_STORE_BIOMETRIC_KEY = 'open_wallet_biometric_key';
 const SECURE_STORE_IMPORTED_KEYS = 'open_wallet_imported_keys';
 
 export class Vault {
+  private vaultKey: string;
   private cryptoImpl: IVaultCrypto;
   private kdf: IKeyDerivation;
   private masterKey: Uint8Array | null = null;
 
-  constructor(cryptoImpl?: IVaultCrypto, kdf?: IKeyDerivation) {
+  /**
+   * @param walletId Optional wallet ID for multi-wallet support (e.g., 'w1', 'w2').
+   *                 Each wallet gets its own SecureStore key. Default = production wallet.
+   */
+  constructor(walletId?: string, cryptoImpl?: IVaultCrypto, kdf?: IKeyDerivation) {
+    this.vaultKey = walletId ? `open_wallet_vault_${walletId}` : DEFAULT_VAULT_KEY;
     this.cryptoImpl = cryptoImpl ?? new NobleAesGcmCrypto();
     this.kdf = kdf ?? new NobleArgon2idKeyDerivation();
   }
@@ -145,13 +151,13 @@ export class Vault {
       lastUnlockedAt: Date.now(),
     };
 
-    await SecureStore.setItemAsync(SECURE_STORE_VAULT_KEY, JSON.stringify(vaultData));
+    await SecureStore.setItemAsync(this.vaultKey, JSON.stringify(vaultData));
     return vaultData;
   }
 
   async unlock(password: string, vaultData?: VaultData): Promise<VaultContents> {
     if (!vaultData) {
-      const stored = await SecureStore.getItemAsync(SECURE_STORE_VAULT_KEY);
+      const stored = await SecureStore.getItemAsync(this.vaultKey);
       if (!stored) throw new Error('No vault found on device');
       vaultData = JSON.parse(stored);
     }
@@ -204,7 +210,7 @@ export class Vault {
 
     this.masterKey = fromHex(masterKeyHex);
 
-    const stored = await SecureStore.getItemAsync(SECURE_STORE_VAULT_KEY);
+    const stored = await SecureStore.getItemAsync(this.vaultKey);
     if (!stored) throw new Error('No vault found on device');
 
     const vaultData: VaultData = JSON.parse(stored);
@@ -225,7 +231,7 @@ export class Vault {
   isUnlocked(): boolean { return this.masterKey !== null; }
 
   async exists(): Promise<boolean> {
-    const stored = await SecureStore.getItemAsync(SECURE_STORE_VAULT_KEY);
+    const stored = await SecureStore.getItemAsync(this.vaultKey);
     return stored !== null;
   }
 

@@ -188,7 +188,7 @@ export function UnlockScreen() {
           setUnlockProgress('Deriving addresses...');
           try {
             const { Vault } = await import('../core/vault/vault');
-            const v = new Vault();
+            const v = new Vault(useWalletStore.getState().activeDevWallet ?? undefined);
             const contents = await v.unlock(vaultPassword);
             await deriveAddresses(contents.mnemonic);
           } catch {}
@@ -234,7 +234,7 @@ export function UnlockScreen() {
               setUnlockProgress('Deriving addresses...');
               try {
                 const { Vault } = await import('../core/vault/vault');
-                const v = new Vault();
+                const v = new Vault(useWalletStore.getState().activeDevWallet ?? undefined);
                 const contents = await v.unlock(vaultPassword);
                 await deriveAddresses(contents.mnemonic);
               } catch {}
@@ -268,7 +268,7 @@ export function UnlockScreen() {
     setMode('loading');
     try {
       const { Vault } = await import('../core/vault/vault');
-      const vault = new Vault();
+      const vault = new Vault(useWalletStore.getState().activeDevWallet ?? undefined);
       const contents = await vault.unlock(password);
       setTempVaultPassword(password);
 
@@ -312,7 +312,7 @@ export function UnlockScreen() {
       setUnlockProgress('Encrypting wallet...');
       await yieldUI();
       const { Vault } = await import('../core/vault/vault');
-      const vault = new Vault();
+      const vault = new Vault(useWalletStore.getState().activeDevWallet ?? undefined);
       await vault.create(recoveryPassword, {
         mnemonic,
         accounts: [{
@@ -391,7 +391,7 @@ export function UnlockScreen() {
           setUnlockProgress('Deriving addresses...');
           try {
             const { Vault } = await import('../core/vault/vault');
-            const v = new Vault();
+            const v = new Vault(useWalletStore.getState().activeDevWallet ?? undefined);
             const contents = await v.unlock(vaultPassword);
             await deriveAddresses(contents.mnemonic);
           } catch {}
