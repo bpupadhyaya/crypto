@@ -87,6 +87,18 @@ export function useAllBalances(addresses: Partial<Record<ChainId, string>>) {
       queryKey: ['balance', chainId, address],
       queryFn: async (): Promise<Balance | null> => {
         try {
+          // For Open Chain / Cosmos, query local chain node directly
+          if (chainId === 'openchain' || chainId === 'cosmos') {
+            const { queryLocalBalance } = await import('../core/chain/chainService');
+            const otk = await queryLocalBalance(address);
+            if (otk > 0) {
+              const token = chainId === 'openchain'
+                ? { symbol: 'OTK', name: 'Open Token', chainId: 'openchain', decimals: 6 }
+                : { symbol: 'ATOM', name: 'Cosmos', chainId: 'cosmos', decimals: 6 };
+              return { token, amount: BigInt(Math.round(otk * 1e6)), usdValue: undefined };
+            }
+            return null;
+          }
           const provider = registry.getChainProvider(chainId);
           const result = await Promise.race([
             provider.getBalance(address),
