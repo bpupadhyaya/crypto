@@ -479,10 +479,9 @@ export function UnlockScreen() {
         <TouchableOpacity
           style={[styles.altMethodBtn, { borderColor: t.accent.red }]}
           onPress={() => {
-            Alert.alert('Sign Out', 'This will take you back to wallet setup. Your wallet data on this device will be reset.', [
+            Alert.alert('Sign Out', 'This will take you back to the wallet selection screen. Your wallets remain saved on this device.', [
               { text: 'Cancel', style: 'cancel' },
-              { text: 'Sign Out', style: 'destructive', onPress: () => {
-                setHasVault(false);
+              { text: 'Sign Out', onPress: () => {
                 setStatus('onboarding');
               }},
             ]);
