@@ -22,6 +22,7 @@ import {
   Alert,
   ActivityIndicator,
   ScrollView,
+  Modal,
   Platform,
   StatusBar,
 } from 'react-native';
@@ -1021,31 +1022,7 @@ export function OnboardingScreen() {
           )}
 
           {/* Dev Wallet Creation Popup */}
-          {devPopupVisible && (
-            <View style={{
-              position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-              backgroundColor: 'rgba(0,0,0,0.85)', justifyContent: 'center', alignItems: 'center',
-              zIndex: 100, paddingHorizontal: 30,
-            }}>
-              <View style={{
-                backgroundColor: t.bg.card, borderRadius: 16, padding: 24, width: '100%',
-                maxHeight: '60%', borderWidth: 1, borderColor: '#f59e0b40',
-              }}>
-                <Text style={{ color: '#f59e0b', fontSize: fonts.lg, fontWeight: fonts.bold as any, marginBottom: 16 }}>
-                  Setting Up Test & Practice Wallet
-                </Text>
-                <ScrollView style={{ maxHeight: 250 }}>
-                  {devPopupMessages.map((msg, i) => (
-                    <Text key={i} style={{
-                      color: msg.startsWith('✓') ? '#22c55e' : msg.startsWith('✅') ? '#22c55e' : msg.startsWith('❌') ? t.accent.red : t.text.secondary,
-                      fontSize: fonts.sm, lineHeight: 22,
-                    }}>{msg}</Text>
-                  ))}
-                </ScrollView>
-                <ActivityIndicator color="#f59e0b" style={{ marginTop: 12 }} />
-              </View>
-            </View>
-          )}
+          {/* Popup moved to Modal below — always visible regardless of scroll */}
 
           {/* ── Test & Practice Wallets (production feature) ── */}
           {devTestingEnabled && (
@@ -1167,6 +1144,32 @@ export function OnboardingScreen() {
             100% Open Source · Post-Quantum Encrypted
           </Text>
         </ScrollView>
+
+        {/* Practice wallet creation popup — Modal always visible on screen */}
+        <Modal visible={devPopupVisible} transparent animationType="fade">
+          <View style={{
+            flex: 1, backgroundColor: 'rgba(0,0,0,0.85)',
+            justifyContent: 'center', alignItems: 'center', paddingHorizontal: 30,
+          }}>
+            <View style={{
+              backgroundColor: t.bg.card, borderRadius: 16, padding: 24, width: '100%',
+              maxHeight: '60%', borderWidth: 1, borderColor: '#f59e0b40',
+            }}>
+              <Text style={{ color: '#f59e0b', fontSize: fonts.lg, fontWeight: fonts.bold as any, marginBottom: 16 }}>
+                Setting Up Test & Practice Wallet
+              </Text>
+              <ScrollView style={{ maxHeight: 250 }}>
+                {devPopupMessages.map((msg, i) => (
+                  <Text key={i} style={{
+                    color: msg.startsWith('✓') ? '#22c55e' : msg.startsWith('✅') ? '#22c55e' : msg.startsWith('❌') ? t.accent.red : t.text.secondary,
+                    fontSize: fonts.sm, lineHeight: 22,
+                  }}>{msg}</Text>
+                ))}
+              </ScrollView>
+              <ActivityIndicator color="#f59e0b" style={{ marginTop: 12 }} />
+            </View>
+          </View>
+        </Modal>
       </SafeAreaView>
     );
   }
