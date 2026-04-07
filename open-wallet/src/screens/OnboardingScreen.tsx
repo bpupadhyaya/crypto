@@ -47,6 +47,7 @@ export function OnboardingScreen() {
 
   // ── Practice/Test Wallets (production feature) ──
   const practiceWalletsHidden = useWalletStore((s) => s.practiceWalletsHidden);
+  const activeDevWalletId = useWalletStore((s) => s.activeDevWallet);
   const [practiceWalletList] = useState(() => {
     try { return require('../config/practiceWallets').PRACTICE_WALLETS; } catch { return []; }
   });
@@ -68,6 +69,7 @@ export function OnboardingScreen() {
     // Switching wallets = creating a new vault (same as restoring with a different seed).
 
     // Create the wallet using the SAME code path as production
+    const store = useWalletStore.getState();
     setDevLoading(true);
     setDevPopupVisible(true);
     setDevPopupMessages([`Creating ${w.label}...`]);
@@ -1078,13 +1080,13 @@ export function OnboardingScreen() {
 
               {/* Practice Wallet Buttons — bigger, bolder for easy tapping */}
               <Text style={{ color: t.text.muted, fontSize: fonts.xxs, textAlign: 'center', marginBottom: 8 }}>
-                {devWalletProgress || (useWalletStore.getState().activeDevWallet
-                  ? `Active: ${useWalletStore.getState().activeDevWallet?.toUpperCase()} · Tap any wallet to switch or start:`
+                {devWalletProgress || (activeDevWalletId
+                  ? `Active: ${activeDevWalletId?.toUpperCase()} · Tap any wallet to switch or start:`
                   : 'Tap any wallet to start practicing instantly:')}
               </Text>
               <View style={{ gap: 8, paddingHorizontal: 4 }}>
                 {devWalletList.map((w: any) => {
-                  const isActive = useWalletStore.getState().activeDevWallet === w.id;
+                  const isActive = activeDevWalletId === w.id;
                   return (
                     <TouchableOpacity
                       key={w.id}
