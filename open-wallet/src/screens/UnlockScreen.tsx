@@ -482,7 +482,7 @@ export function UnlockScreen() {
             Alert.alert('Sign Out', 'This will take you back to the wallet selection screen. Your wallets remain saved on this device.', [
               { text: 'Cancel', style: 'cancel' },
               { text: 'Sign Out', onPress: () => {
-                setStatus('onboarding');
+                try { setStatus('onboarding'); } catch { /* ignore SecureStore errors during transition */ }
               }},
             ]);
           }}

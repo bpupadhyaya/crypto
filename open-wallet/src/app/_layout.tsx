@@ -87,7 +87,7 @@ export default function RootLayout() {
       // Auto-start the embedded P2P chain node
       import('../core/chain/chainService').then(m => m.startChainNode()).catch(() => {});
     } else if (status === 'locked') {
-      endSession();
+      try { endSession(); } catch { /* ignore SecureStore errors during lock */ }
     }
   }, [status]);
 
