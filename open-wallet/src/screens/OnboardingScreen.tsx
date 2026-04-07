@@ -110,6 +110,12 @@ export function OnboardingScreen() {
           setAddresses(derived);
           wallet.destroy();
 
+          // Always reset PIN to match this practice wallet's PIN
+          logMsg('Syncing PIN...');
+          const { authManager } = await import('../core/auth/auth');
+          await authManager.setupPin(w.pin, w.password);
+          try { await authManager.storeVaultPasswordBiometric(w.password); } catch {}
+
           setHasVault(true);
           setTempVaultPassword(w.password);
           setWalletProvider('software');
