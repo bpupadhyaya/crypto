@@ -147,9 +147,9 @@ export default function RootLayout() {
   }, [status]);
 
   const isUnlocked = status === 'unlocked';
-  const needsOnboarding = !hasVault && status !== 'unlocked' && status !== 'pin_setup';
+  const needsOnboarding = status === 'onboarding' || (!hasVault && status !== 'unlocked' && status !== 'pin_setup');
   const needsPinSetup = status === 'pin_setup';
-  const needsUnlock = !isUnlocked && hasVault && !needsPinSetup;
+  const needsUnlock = !isUnlocked && !needsOnboarding && hasVault && !needsPinSetup;
 
   // Before first unlock: don't render tabs at all
   if (!hasBeenUnlocked.current) {
