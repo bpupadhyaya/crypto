@@ -2951,64 +2951,14 @@ export function SettingsScreen() {
                     return PRACTICE_WALLETS.map((w: any) => (
                       <TouchableOpacity
                         key={w.id}
-                        onPress={async () => {
-                          // Switch wallet in-place without logging out
-                          try {
-                            const { Vault } = await import('../core/vault/vault');
-                            const vault = new Vault();
-
-                            // Try unlocking with this wallet's password
-                            let contents: any;
-                            try {
-                              contents = await vault.unlock(w.password);
-                            } catch {
-                              // Vault doesn't exist for this wallet — create it
-                              await vault.create(w.password, {
-                                mnemonic: w.mnemonic,
-                                accounts: [{ id: 'default', name: 'Main Account', derivationPaths: {
-                                  bitcoin: "m/44'/0'/0'/0/0", ethereum: "m/44'/60'/0'/0/0",
-                                  solana: "m/44'/501'/0'/0'", cosmos: "m/44'/118'/0'/0/0",
-                                }}],
-                                settings: {},
-                              });
-                              contents = { mnemonic: w.mnemonic };
-                              const { authManager } = await import('../core/auth/auth');
-                              await authManager.setupPin(w.pin, w.password);
-                              try { await authManager.storeVaultPasswordBiometric(w.password); } catch {}
-                            }
-
-                            // Derive addresses
-                            const { HDWallet } = await import('../core/wallet/hdwallet');
-                            const hdw = HDWallet.fromMnemonic(contents.mnemonic);
-                            const derived: any = {};
-                            try { const { EthereumSigner } = await import('../core/chains/ethereum-signer'); derived.ethereum = EthereumSigner.fromWallet(hdw).getAddress(); } catch {}
-                            try { const { BitcoinSigner } = await import('../core/chains/bitcoin-signer'); derived.bitcoin = BitcoinSigner.fromWallet(hdw).getAddress(); } catch {}
-                            try { const { SolanaSigner } = await import('../core/chains/solana-signer'); derived.solana = SolanaSigner.fromWallet(hdw).getAddress(); } catch {}
-                            try {
-                              const { CosmosSigner } = await import('../core/chains/cosmos-signer');
-                              const addr = await CosmosSigner.fromWallet(hdw, 0, 'openchain').getAddress();
-                              derived.openchain = addr; derived.cosmos = addr;
-                            } catch {}
-                            hdw.destroy();
-
-                            const store = useWalletStore.getState();
-                            store.setAddresses(derived);
-                            store.setTempVaultPassword(w.password);
-                            store.setActiveDevWallet(w.id);
-                            store.setHasVault(true);
-                            store.setDemoMode(true);
-
-                            // Load demo balances
-                            const { PRACTICE_BALANCES } = require('../config/practiceWallets');
-                            Object.entries(PRACTICE_BALANCES).forEach(([sym, amt]: [string, any]) => {
-                              store.updateDevBalance(sym, amt - (store.devBalances[sym] ?? 0));
-                            });
-
-                            Alert.alert('Switched', `Now using ${w.label}`);
-                            setCategory(null); // Go back to settings grid
-                          } catch (err: any) {
-                            Alert.alert('Switch Failed', err?.message ?? 'Unknown error');
-                          }
+                        onPress={() => {
+                          // Quick switch — just update active wallet ID and go to onboarding
+                          // The onboarding screen will handle vault creation/unlock
+                          const store = useWalletStore.getState();
+                          if (store.activeDevWallet === w.id) return; // Already active
+                          store.setActiveDevWallet(w.id);
+                          store.setHasVault(false);
+                          setStatus('onboarding');
                         }}
                         style={{
                           paddingVertical: 6, paddingHorizontal: 12, borderRadius: 8,
