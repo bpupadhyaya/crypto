@@ -1032,7 +1032,7 @@ export function OnboardingScreen() {
                 maxHeight: '60%', borderWidth: 1, borderColor: '#f59e0b40',
               }}>
                 <Text style={{ color: '#f59e0b', fontSize: fonts.lg, fontWeight: fonts.bold as any, marginBottom: 16 }}>
-                  Setting Up Practice Wallet
+                  Setting Up Test & Practice Wallet
                 </Text>
                 <ScrollView style={{ maxHeight: 250 }}>
                   {devPopupMessages.map((msg, i) => (
